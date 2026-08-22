@@ -32,6 +32,7 @@ from .costmodel import (
 from .learn import DriftReport, LearningStore, seeded_store
 from .plan import PlanForecast, PlanForecaster, WorkItem, WorkPlan
 from .backtest import noise_floor  # NB: `backtest` stays a module, unshadowed
+from .duration import duration_selection, predict_hours, seconds_for
 
 __all__ = [
     # tier-based path (assumed multipliers)
@@ -64,4 +65,7 @@ __all__ = [
     "PlanForecast",
     "PlanForecaster",
     "noise_floor",
+    "duration_selection",
+    "predict_hours",
+    "seconds_for",
 ]

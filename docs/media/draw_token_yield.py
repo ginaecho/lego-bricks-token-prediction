@@ -398,7 +398,154 @@ def figures_data() -> dict:
         "selections": {k: store.selection_for(k) for k in store.kinds()},
         "coverage": coverage(mined, store.kinds()) if mined else None,
         "mined_n": len(mined),
+        "core": core_idea_numbers(store),
     }
+
+
+def core_idea_numbers(store) -> dict:
+    """A / B / C measured, then A+ / A++ / A+B+C inferred — all from the models."""
+    from token_yield.duration import duration_selection, seconds_for
+    from token_yield.plan import PlanForecaster, WorkPlan
+    from token_yield.probes import MEASURED
+
+    tok = {k: store.model_for(k) for k in store.kinds()}
+    dur = {k: duration_selection(k, MEASURED) for k in store.kinds()}
+
+    # every task carries all its signals; each model reads the one it selected
+    A = {"scope": 3, "bytes": 15_216, "output_units": 3}
+    Ap = {"scope": 6, "bytes": 30_432, "output_units": 6}
+    App = {"scope": 12, "bytes": 60_864, "output_units": 12}
+    B = {"scope": 3, "output_units": 3}
+    C = {"scope": 3, "bytes": 11_165, "output_units": 3}
+
+    def T(kind, sig):
+        m = tok[kind]
+        return m.predict(sig[m.signal])
+
+    def D(kind, sig):
+        return seconds_for(dur.get(kind), sig) or 0.0
+
+    at, bt, ct = T("comprehension", A), T("code_write", B), T("docs", C)
+    plan = (WorkPlan("ABC").add("comprehension", 3, bytes=15_216)
+            .add("code_write", 3).add("docs", 3))
+    batch = PlanForecaster(store).compare_batching(plan)
+
+    return {
+        "measured": [
+            ("A", "read 3 files", at, D("comprehension", A)),
+            ("B", "write 3 functions", bt, D("code_write", B)),
+            ("C", "document 3 functions", ct, D("docs", C)),
+        ],
+        "inferred": [
+            ("A+", "twice A's work", T("comprehension", Ap),
+             D("comprehension", Ap), 2 * at, "a 2× guess"),
+            ("A++", "four times A's work", T("comprehension", App),
+             D("comprehension", App), 4 * at, "a 4× guess"),
+            ("A+B+C", "all three, one agent", batch["batched_single_agent"],
+             D("comprehension", A) + D("code_write", B) + D("docs", C),
+             batch["separate_agents"], "adding them up"),
+        ],
+        "rules": [("A", tok["comprehension"].equation()),
+                  ("B", tok["code_write"].equation()),
+                  ("C", tok["docs"].equation())],
+    }
+
+
+# ── figure 0: the core idea ──────────────────────────────────────────────
+
+def draw_core_idea(data: dict, glyphs: Glyphs) -> str:
+    W, H = 1280, 700
+    p = Pen(W, H, glyphs, seed=8801)
+    core = data["core"]
+
+    p.text(W / 2, 52, "The core idea", 40, INK, "middle", bold=1.1)
+    p.line(W / 2 - 118, 63, W / 2 + 118, 63, INFERRED, 3, rough=1.4)
+    p.text(W / 2, 90, "measure a few task types for real — then price the ones "
+           "you have never run", 19, FAINT, "middle")
+
+    LX, LW = 36, 324
+    MX, MW = 392, 296
+    RX, RW = 720, 524
+    CARD_Y = [166, 292, 418]
+    CH = 108
+
+    p.text(LX + 4, 136, "1.  MEASURE", 20, MEASURED_C, bold=0.7)
+    p.text(LX + 150, 136, "you actually run these", 14, FAINT)
+    p.text(RX + 4, 136, "3.  INFER", 20, BUDGET, bold=0.7)
+    p.text(RX + 118, 136, "the machine answers these without running them",
+           14, FAINT)
+
+    # ── measured cards ───────────────────────────────────────────────────
+    for (letter, what, tokens, secs), cy in zip(core["measured"], CARD_Y):
+        p.solid_rect(LX, cy, LW, CH, MEASURED_C, 0.09, rx=8)
+        p.rect(LX, cy, LW, CH, MEASURED_C, 2.6, rough=1.0, r=8)
+        p.text(LX + 20, cy + 46, letter, 38, MEASURED_C, bold=1.0)
+        p.text(LX + 78, cy + 34, what, 16, INK)
+        p.text(LX + 78, cy + 62, f"{fmt(tokens)} tokens", 19, INK, bold=0.5)
+        p.text(LX + 78, cy + 86, f"{secs:.0f} s", 15, FAINT)
+        p.text(LX + LW - 16, cy + 24, "MEASURED", 11, MEASURED_C, anchor="end")
+        p.line(LX + LW + 2, cy + CH / 2, 376, cy + CH / 2, FAINT, 2.0)
+
+    # converge into the rule
+    p.line(376, CARD_Y[0] + CH / 2, 376, CARD_Y[2] + CH / 2, FAINT, 2.0)
+    p.arrow(376, 340, MX - 6, 340, FAINT, 2.4, 10)
+
+    # ── the rule ─────────────────────────────────────────────────────────
+    p.text(MX + 2, 136, "2.  FIT", 20, INFERRED, bold=0.7)
+    p.text(MX + 78, 136, "one curve per type", 14, FAINT)
+    p.solid_rect(MX, 250, MW, 182, INFERRED, 0.09, rx=8)
+    p.rect(MX, 250, MW, 182, INFERRED, 2.8, rough=1.0, r=8)
+    p.text(MX + MW / 2, 282, "cost = fixed + marginal × size", 19, INK,
+           "middle", bold=0.6)
+    p.line(MX + 24, 296, MX + MW - 24, 296, EDGE, 1.8, dash="4 4")
+    for i, (letter, eq) in enumerate(core["rules"]):
+        p.text(MX + 22, 322 + i * 26, letter, 16, INFERRED, bold=0.6)
+        p.text(MX + 58, 322 + i * 26, eq.replace("tokens = ", ""), 12, FAINT,
+               mono=True)
+    p.text(MX + MW / 2, 414, "fitted from the runs — not decided by you",
+           13, FAINT, "middle")
+
+    # fan out to the answers
+    p.arrow(MX + MW + 4, 340, 704, 340, FAINT, 2.4, 10)
+    p.line(704, CARD_Y[0] + CH / 2, 704, CARD_Y[2] + CH / 2, FAINT, 2.0)
+
+    # ── inferred cards ───────────────────────────────────────────────────
+    for (letter, what, tokens, secs, naive, naive_label), cy in zip(
+            core["inferred"], CARD_Y):
+        p.line(704, cy + CH / 2, RX - 6, cy + CH / 2, FAINT, 2.0)
+        p.solid_rect(RX, cy, RW, CH, BUDGET, 0.09, rx=8)
+        p.rect(RX, cy, RW, CH, BUDGET, 2.6, rough=1.0, r=8)
+        p.text(RX + 20, cy + 44, letter, 32, BUDGET, bold=1.0)
+        p.text(RX + 20, cy + 70, what, 14, FAINT)
+        p.text(RX + 196, cy + 50, f"{fmt(tokens)}", 30, BUDGET, bold=0.8)
+        p.text(RX + 196, cy + 74, f"tokens   ·   {secs:.0f} s", 13.5, FAINT)
+
+        # what a naive scaling would have said, struck through
+        bx = RX + 330
+        p.text(bx, cy + 34, naive_label, 12.5, ALERT)
+        p.text(bx, cy + 58, fmt(naive), 22, ALERT, bold=0.5)
+        w = p.g.measure(fmt(naive), 22, Pen.HAND)
+        p.line(bx - 3, cy + 52, bx + w + 3, cy + 52, ALERT, 2.2, rough=1.3)
+        p.text(bx, cy + 80, f"{naive / tokens:.1f}× too high", 12.5, ALERT)
+
+    # ── the honest footer ────────────────────────────────────────────────
+    p.line(LX, 556, W - LX, 556, EDGE, 2.0, dash="6 5")
+    p.text(LX + 4, 586, "How much to trust it", 18, INK, bold=0.6)
+    p.rows(LX + 4, 612,
+           ["Tokens: repeats of one task differ by 5%. The models sit at that floor.",
+            "Hours: repeats differ by 23% — nearly 5× noisier. Treat them as a range."],
+           14, FAINT, lh=22)
+    p.text(RX + 40, 586, "Checked against reality", 18, BUDGET, bold=0.6)
+    p.rows(RX + 40, 612,
+           ["A+B+C was measured for real after being predicted from A, B and C",
+            "alone. The prediction was 0.3% out — inside the noise floor."],
+           14, FAINT, lh=22)
+
+    return p.svg("The core idea: measure task types A, B and C, then infer "
+                 "A+, A++ and A+B+C")
+
+
+
 
 
 # ── figure 1: what the measurements said ─────────────────────────────────
@@ -631,7 +778,8 @@ def _glyphs() -> Glyphs:
 
 def main() -> None:
     data = figures_data()
-    for name, draw in [("token-yield-concept.svg", draw_concept),
+    for name, draw in [("token-yield-core-idea.svg", draw_core_idea),
+                       ("token-yield-concept.svg", draw_concept),
                        ("token-yield-architecture.svg", draw_architecture)]:
         svg = draw(data, _glyphs())
         path = os.path.join(_HERE, name)

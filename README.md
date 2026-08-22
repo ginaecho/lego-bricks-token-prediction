@@ -18,7 +18,36 @@ yet, and refit as real runs come back.
 
 ---
 
-## The idea in one picture
+## The core idea
+
+Run a few task types for real and record what they cost. Fit a curve to each.
+Then price the variants and combinations you have **never run** — a bigger `A`,
+a much bigger `A`, or `A` and `B` and `C` together.
+
+![The core idea: three measured task types A, B and C on the left feed a fitted curve in the middle, which answers A+, A++ and A+B+C on the right — each shown against the naive guess it replaces](docs/media/token-yield-core-idea.svg)
+
+The naive move is to scale: twice the work, twice the cost. Measurement says
+otherwise, because a large fixed cost is paid once per agent invocation
+whatever the task:
+
+| you ask for | naive guess | what the fitted curve says | |
+|---|---|---|---|
+| **A+** — twice `A`'s work | 87.2k | **49.9k** | guess 1.7× too high |
+| **A++** — four times `A`'s work | 174.4k | **62.5k** | guess 2.8× too high |
+| **A+B+C** — all three, one agent | 127.3k | **45.1k** | guess 2.8× too high |
+
+`A+B+C` was then **measured for real** after being predicted from `A`, `B` and
+`C` alone. The prediction was **0.3% out** — inside the 5% noise floor. That
+one number is the whole claim: a handful of measured task types really can
+price the work you have not done yet.
+
+Hours come out of the same machinery, and carry a bigger warning: repeat an
+identical task and tokens vary by ~5% but wall-clock by ~23%. Time is
+predicted, and reported as the wider range it honestly is.
+
+---
+
+## What that took to establish
 
 ![What the measurements said: four panels — MEASURE (28 runs from 3 repos, tokens against bytes on one line), THE UNIT (per-repo slopes disagree 7x by file but agree by byte), VALIDATE (predicted vs measured on held-out runs), THE GAP (32% coverage and the measurement backlog)](docs/media/token-yield-concept.svg)
 
@@ -332,7 +361,7 @@ what lifting it into a plugin layer unlocks.
 ## Layout
 
 ```
-token_yield/     fitted layer:      taxonomy · costmodel · probes · learn · backtest · plan · mine
+token_yield/     fitted layer:      taxonomy · costmodel · probes · learn · backtest · plan · mine · duration
                  asserted layer:    models · calibrate · predict · forecast · report
 openharness/     the measurement layer:  module · events · harness · checks · trace · card · dashboard · evaluate · adapters · skills · govern · agt · cli
 modules/         the starter materia medica (tdd, pii-guard, …)
@@ -341,9 +370,9 @@ benchmark/       L1 conformance + L2 ablation + reports/
 precedence/      L5 — precedence/conflict layer, the A–D skill family, live-agent + AGT demos + reports/
 integrations/    L3 — Claude Code hook + tool→event adapters
 examples/        calibration_demo.py (measure → fit → validate → refit) · token_yield_demo.py · demo_session.py
-tests/           pytest suite (175 tests: token yield, semantics, cards, benchmark, integration, precedence, AGT)
+tests/           pytest suite (186 tests: token yield, semantics, cards, benchmark, integration, precedence, AGT)
 docs/            calibration-findings · architecture · proving-it-works · how-it-was-tested · precedence · evaluation-methodology · agt-integration · zenodo
-docs/media/      draw_token_yield.py — regenerates the hand-drawn figures from the real engine
+docs/media/      draw_token_yield.py — regenerates the three hand-drawn figures from the real engine
 ```
 
 ## Citing & DOI
