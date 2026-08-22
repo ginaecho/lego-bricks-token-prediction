@@ -1,15 +1,15 @@
 # HarnessDose — Token Yield
 
-### Scope the project before you start: how many tokens, how many hours, how many dollars?
+### Scope the project before you start — with a cost model you measured, not one you guessed
 
 [![CI](https://github.com/ginaecho/open-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/ginaecho/open-harness/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/1314056228.svg)](https://zenodo.org/badge/latestdoi/1314056228)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Run a handful of representative tasks for real. Measure what they actually cost.
-Then **extrapolate to the project you haven't started yet** — a scaled variant, a
-different mix, ten times the volume — and get a token budget with a confidence
-interval instead of a guess.
+Fit a cost model to those measurements — **letting the data choose the model's
+shape, not just its coefficients** — then price the project you haven't started
+yet, and refit as real runs come back.
 
 > The Python package is `openharness`; **HarnessDose** is the project name — the
 > *materia medica* framing where every rule is characterized like a dose you can
@@ -20,7 +20,7 @@ interval instead of a guess.
 
 ## The idea in one picture
 
-![Token Yield: measure three doses, then prescribe any project — four panels showing MEASURE, SCALE, COMPOSE, BUDGET](docs/media/token-yield-concept.svg)
+![What the measurements said: four panels — MEASURE (11 real runs scattered by scope), FIT (cross-validated error by model form), VALIDATE (predicted vs measured on held-out runs), COMPOSE (batching saves 47%)](docs/media/token-yield-concept.svg)
 
 ---
 
@@ -31,140 +31,120 @@ this cost, and how long will it take?* With agents, cost is tokens — and the
 honest answer today is a shrug. So budgets get set by vibes, and the overrun is
 discovered halfway through, when the money is already spent.
 
-The reflex is to estimate each task and add them up. That is wrong twice over:
-you are guessing at each task, **and** the sum is systematically low, because
-combining task types costs more than running them in isolation.
+The first version of this package answered that with **asserted constants**: a
+harder task cost 2×, a much harder one 4×, and mixing task types added a 15%
+interaction surcharge. Those numbers were never measured. They were typed in.
 
-## The move: measure a few, infer the rest
+So we measured them.
 
-You don't need to predict every task. You need to **measure a small basis and
-extrapolate**, the way you'd estimate a building from a few material costs.
+## What the measurements said
 
-**① Measure.** Run task type A, B, C for real. Record tokens, wall-clock, and
-harness overhead per run. This is the only ground truth in the system, and it is
-the part people skip.
+Eleven real subagent runs, at graded scope, with replicates. Every constant the
+first version asserted turned out to be wrong — one of them backwards.
 
-**② Scale.** A harder variant of A is A times a multiplier. `A+` is 2×, `A++` is
-4× *by default* — but the multiplier is per task type and meant to be
-recalibrated from your own runs, not accepted as a law.
+| Asserted | Measured | Verdict |
+|---|---|---|
+| `A+ = 2×`, `A++ = 4×` — cost scales with work | 8× the scope moved tokens **1.39×** | wrong: a ~38k fixed cost dominates |
+| Mixing task types adds **+15%** | Batching two kinds into one agent cost **53%** of running them separately | **wrong sign** — it is a 47% *saving* |
+| Confidence from sample-mean error | Repeating the identical task varies by **~5%** | that noise floor is the real limit |
 
-**③ Compose.** `A + B + C` is **not** the sum. Every additional distinct task
-type in a project adds context switching, shared setup, and dependency chains.
-Token Yield prices that explicitly as an interaction overhead instead of
-pretending it away.
+The fixed cost is the *agent boot* — system prompt, tool schemas, scaffolding —
+paid once per invocation, before any of your work happens. Once you can see it,
+both corrections follow: doubling the work does not double the tokens, and
+combining work into one agent pays the boot cost once instead of twice.
 
-**④ Budget.** Out comes a token count, a dollar figure at your rate, an hour
-estimate, and a 95% confidence interval propagated from the measured σ. The band
-is wide when you have three samples and tightens as real runs land.
+## The move: fit the model, don't declare it
 
-### The headline the sum-of-parts method hides
+The fix is not better constants. It is refusing to have constants at all.
 
-For the worked example in [`examples/token_yield_demo.py`](examples/token_yield_demo.py)
-— 23 tasks across 5 types:
+**① Measure.** [`probes.py`](token_yield/probes.py) defines self-contained tasks
+at a stated *kind* and *scope*. Running one dispatches a fresh, memoryless
+subagent and records what it actually spent. Graded scope is what makes a slope
+estimable; replicates are what separate model error from run-to-run noise.
 
-| | Tokens |
-|---|---|
-| Naive Σ of the parts | 769.2k |
-| What it actually costs | **1.23M** |
-| **Interaction surcharge** | **+60%** |
+**② Fit.** [`costmodel.py`](token_yield/costmodel.py) fits four candidate shapes
+— constant, proportional, affine, power — and picks between them by
+leave-one-out cross-validation. **The data chooses the shape**, not just the
+coefficients. On the shipped measurements it chose `affine` for comprehension
+and `constant` for code_write, and put `proportional` — which *is* the old
+1×/2×/4× rule — last, at 49% and 90% error.
 
-A budget built by summing per-task estimates would have been low by 60%. That
-gap is the whole reason this exists.
+**③ Validate.** [`backtest.py`](token_yield/backtest.py) scores the winner
+against the **noise floor**: repeat a task and the counts still differ, so the
+useful number is `skill = cross-validated error ÷ noise floor`. At `skill ≈ 1`
+the model is as good as the process allows and more data will not help.
 
----
+**④ Forecast, then learn.** [`plan.py`](token_yield/plan.py) prices a plan from
+the fitted models, naming any kind it has no model for and flagging any scope
+outside the range it was fitted over. Then every finished task comes back as a
+record — and that closes the loop.
+
+### The loop is the point
+
+![The Token Yield calibration loop: probe suite and production runs feed a LearningStore, which selects a cost model, forecasts a plan, and refits from what it observes](docs/media/token-yield-architecture.svg)
+
+[`learn.py`](token_yield/learn.py) scores each new run **against the standing
+model before absorbing it**. That ordering is the whole discipline: once a
+record is folded into a fit it can no longer surprise it, and a model that
+silently absorbs contradicting data looks healthy forever.
+
+```python
+from token_yield import seeded_store, ScopedRecord, Provenance
+
+store = seeded_store()                       # the shipped probe measurements
+store.model_for("comprehension").equation()  # 'tokens = 37,571 + 2,305 × scope'
+
+# a real run comes back far more expensive than predicted
+report = store.observe(ScopedRecord("comprehension", 3, 88_000,
+                                    provenance=Provenance.PRODUCTION))
+print(report.summary())
+#   comprehension: 1 new records, MAPE 49.4%, bias +49.4%, 0% inside the
+#   interval → refit: far from the new runs, consistently under-predicting by 49%
+```
+
+The model then refits — and may change *shape*, not merely slope.
 
 ## Quick start
 
 ```bash
-pip install -e .          # no runtime dependencies; Python ≥ 3.9
-python -m examples.token_yield_demo
+pip install -e .                       # no runtime dependencies; Python ≥ 3.9
+python -m examples.calibration_demo    # the measured findings and the loop
 ```
-
-That calibrates on 21 measured runs across 5 task types, prints the complexity
-ladder, compares three project scenarios, and renders a full budget report.
 
 ```python
-from token_yield import (
-    CalibrationStore, CalibrationRecord, ComplexityTier,
-    ProjectSpec, ProjectForecaster,
-)
+from token_yield import seeded_store, WorkPlan, PlanForecaster
 
-# ① measure — one record per real run you actually did
-store = CalibrationStore()
-for tt, runs in {
-    "bug_fix": [(12_400, 180), (14_200, 210), (11_800, 165)],
-    "feature": [(28_000, 420), (32_000, 480), (25_500, 390)],
-    "docs":    [(4_500, 60), (5_000, 75), (4_200, 55)],
-}.items():
-    for tokens, seconds in runs:
-        store.add(CalibrationRecord(tt, tokens, duration_seconds=seconds))
+plan = (WorkPlan("Q3 audit")
+        .add("comprehension", scope=6, count=12)   # read 6 files, 12 times
+        .add("code_write", scope=4, count=8))
 
-# ②–③ scope the project: task type × complexity × count
-spec = (ProjectSpec("Q3 Platform Upgrade", interaction_overhead=0.15)
-        .add("bug_fix", ComplexityTier.PLUS, count=8)
-        .add("feature", ComplexityTier.PLUS, count=5)
-        .add("docs",    ComplexityTier.BASE, count=5))
-
-# ④ budget
-budget = ProjectForecaster(store).forecast_with_cost(spec, dollars_per_million_tokens=3.0)
-print(budget["total_tokens"], budget["estimated_cost"]["estimated"], budget["estimated_hours"])
-#   666419  1.9993  2.74
+fc = PlanForecaster(seeded_store()).forecast(plan)
+print(fc.summary())
+print(f"${fc.cost_at_rate(3.0):.2f}")
 ```
 
-Every task type you put in a spec must be one you have measured. If it isn't,
-Token Yield **will not quietly leave it out of the total** — it names it in
-`forecast.uncalibrated`, flips `forecast.is_complete` to `False`, and every
-report prints an `INCOMPLETE BUDGET` block. A budget missing a third of the
-project is worse than no budget at all.
+An unmeasured kind is **named, never dropped**; a scope outside the fitted
+range is **flagged as extrapolation** rather than silently answered.
 
-Already running the harness layer? Skip the manual bookkeeping — a trace is
-calibration data:
+## What this claims, and what it doesn't
 
-```python
-store.from_observations(harness.trace)     # tokens + task_type are already there
-```
-
----
-
-## Architecture
-
-![Token Yield architecture: two sources feed CalibrationStore, then TokenPredictor, ProjectForecaster, and ProjectForecast, with the methods on each stage](docs/media/token-yield-architecture.svg)
-
-Four stages, each a plain dataclass boundary you can test in isolation:
-
-| Stage | Module | Turns | Into |
-|-------|--------|-------|------|
-| **Calibrate** | [`calibrate.py`](token_yield/calibrate.py) | measured runs, or a harness trace | `TaskTypeStats` — n, mean, σ, min, max, success rate |
-| **Predict** | [`predict.py`](token_yield/predict.py) | stats × `ComplexityTier` | `TaskPrediction` — tokens, CI, duration |
-| **Forecast** | [`forecast.py`](token_yield/forecast.py) | predictions × `ProjectSpec` | `ProjectForecast` — totals, overhead, CI |
-| **Report** | [`report.py`](token_yield/report.py) | a forecast | text / Markdown / a plain dict |
-
-Both figures are generated by
-[`docs/media/draw_token_yield.py`](docs/media/draw_token_yield.py), which
-**computes every number in them from the real engine** — so the pictures cannot
-drift away from what the code predicts — and emits each glyph as an SVG path, so
-they render identically for every reader with no font dependency. Regenerate
-with `python docs/media/draw_token_yield.py`; the output is byte-identical.
-
-## What Token Yield claims, and what it doesn't
-
-Holding this to the same standard as the rest of the repo:
-
-- **The demo's calibration data is synthetic.** It shows the mechanism, not a
-  validated result. The engine is only as good as the runs you feed it, and
-  nothing here has yet been validated against a real business project. Treat the
-  worked example as a shape, not a benchmark.
-- **The 2× / 4× multipliers are a starting hypothesis**, not a measured law.
-  They are per-task-type and overridable
-  (`TokenPredictor(store, custom_multipliers=...)`, or `custom_multiplier=` on a
-  single call). Recalibrating them from your own `A+` runs is the point.
-- **The interaction model is deliberately simple**: overhead scales linearly in
-  the number of *distinct* task types, at a rate you set
-  (`interaction_overhead`, default `0.15`). It is a knob you tune against
-  outcomes, not a claim about how agents work.
-- **The confidence interval is honest about ignorance.** It is propagated from
-  the measured σ; below two samples it degrades to ±50% rather than inventing
-  precision.
+- **The measurements are real; the scope is small.** Eleven runs, two kinds,
+  scope 1–8, one harness, one model, one repository. Every fitted model records
+  the range it was fitted over. Predicting a 500-file refactor from these points
+  would repeat exactly the error being corrected — so the code flags it instead.
+- **The strongest claim is out-of-sample and pinned by a test.** The per-kind
+  models were fitted only on single-kind runs. They predicted the held-out
+  batching experiment to **3.8%**, inside the 5% noise floor, and
+  `test_fitted_models_predict_the_unseen_composition_experiment` fails if that
+  regresses.
+- **`code_write` chose `constant`, which means scope carried no signal** over
+  the range measured — not that writing code is free of scale effects. Its
+  slope is real but small enough to be invisible under the boot cost here.
+- **Duration does not track tokens.** Wall-clock varied far more than tokens
+  across replicates, so hours are reported but are the least trustworthy output.
+- **The tier-based API is still present** and still assumes its multipliers.
+  It is kept for the worked budgeting example and marked throughout as the
+  asserted path; the fitted path above is the one backed by measurement.
 
 ---
 
@@ -313,16 +293,17 @@ what lifting it into a plugin layer unlocks.
 ## Layout
 
 ```
-token_yield/     the prediction layer:  models · calibrate · predict · forecast · report
+token_yield/     fitted layer:      taxonomy · costmodel · probes · learn · backtest · plan
+                 asserted layer:    models · calibrate · predict · forecast · report
 openharness/     the measurement layer:  module · events · harness · checks · trace · card · dashboard · evaluate · adapters · skills · govern · agt · cli
 modules/         the starter materia medica (tdd, pii-guard, …)
 skills/          real agent skills; each module is a rule lifted from one
 benchmark/       L1 conformance + L2 ablation + reports/
 precedence/      L5 — precedence/conflict layer, the A–D skill family, live-agent + AGT demos + reports/
 integrations/    L3 — Claude Code hook + tool→event adapters
-examples/        token_yield_demo.py (budget a project) · demo_session.py (writes dashboard.html)
-tests/           pytest suite (83 tests: token yield, semantics, cards, benchmark, integration, precedence, AGT)
-docs/            architecture · proving-it-works · how-it-was-tested · precedence · evaluation-methodology · agt-integration · zenodo
+examples/        calibration_demo.py (measure → fit → validate → refit) · token_yield_demo.py · demo_session.py
+tests/           pytest suite (134 tests: token yield, semantics, cards, benchmark, integration, precedence, AGT)
+docs/            calibration-findings · architecture · proving-it-works · how-it-was-tested · precedence · evaluation-methodology · agt-integration · zenodo
 docs/media/      draw_token_yield.py — regenerates the hand-drawn figures from the real engine
 ```
 
