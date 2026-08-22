@@ -59,11 +59,12 @@ def score_against(model: CostModel, records: Iterable[ScopedRecord]) -> Optional
     if not rs:
         return None
 
-    rel = [(float(r.tokens) - model.predict(r.scope)) / float(r.tokens) for r in rs]
+    rel = [(float(r.tokens) - model.predict_for(r)) / float(r.tokens) for r in rs]
     mape = sum(abs(e) for e in rel) / len(rel)
     bias = sum(rel) / len(rel)
     inside = sum(1 for r in rs
-                 if model.interval(r.scope)[0] <= r.tokens <= model.interval(r.scope)[1])
+                 if model.interval(r.value(model.signal))[0] <= r.tokens
+                 <= model.interval(r.value(model.signal))[1])
     coverage = inside / len(rs)
 
     direction = "under" if bias > 0 else "over"
@@ -77,7 +78,7 @@ def score_against(model: CostModel, records: Iterable[ScopedRecord]) -> Optional
             verdict = "refit: far from the new runs, with no consistent direction"
     elif abs(bias) > BIAS_THRESHOLD:
         verdict = f"refit: consistently {direction}-predicting"
-    elif any(not model.in_regime(r.scope) for r in rs):
+    elif any(not model.in_regime(r.value(model.signal)) for r in rs):
         verdict = "refit: new runs fall outside the fitted scope range"
     else:
         verdict = "stable"
@@ -164,6 +165,15 @@ class LearningStore:
         m = self.model_for(kind)
         return m.predict(scope) if m else None
 
+    def noise_floor(self) -> Optional[float]:
+        """Pooled replicate spread across every kind — the irreducible error."""
+        from .backtest import noise_floor
+        return noise_floor(self.records)
+
+    def signal_for(self, kind: str) -> Optional[str]:
+        m = self.model_for(kind)
+        return m.signal if m else None
+
     def report(self) -> str:
         lines = ["Fitted cost models", "=" * 68]
         if not self.records:
@@ -177,8 +187,8 @@ class LearningStore:
             lines.append(f"  {sel.model.describe()}")
             lines.append(f"      form chosen: {sel.form} — {sel.reason}")
             if sel.scores:
-                ranked = sorted(sel.scores.items(), key=lambda kv: kv[1])
-                lines.append("      LOO MAPE by form: "
+                ranked = sorted(sel.scores.items(), key=lambda kv: kv[1])[:5]
+                lines.append("      best LOO MAPE: "
                              + ", ".join(f"{f} {s:.1%}" for f, s in ranked))
             ev = self.evidence(kind)
             lines.append(f"      evidence: " + ", ".join(

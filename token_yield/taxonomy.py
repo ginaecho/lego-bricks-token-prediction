@@ -102,8 +102,16 @@ class ScopedRecord:
 
     This is the atom the cost models are fitted on. Unlike the original
     ``CalibrationRecord`` it carries ``scope``, which is what makes a *slope*
-    estimable at all, and ``provenance``, which is what keeps a synthetic point
-    from silently becoming evidence.
+    estimable at all, and ``provenance``, which keeps a synthetic point from
+    silently becoming evidence.
+
+    ``signals`` carries *alternative* measures of the same work — bytes read,
+    functions written, files touched. Which one actually predicts cost is not
+    obvious in advance and must not be assumed: measuring scope in files gave
+    slopes that disagreed 7× across repositories, while measuring the same runs
+    in bytes gave one model that fitted all of them. So every candidate travels
+    with the record and :func:`~token_yield.costmodel.select_model` picks the
+    winner by cross-validation, exactly as it picks the model's shape.
     """
 
     kind: str
@@ -113,12 +121,36 @@ class ScopedRecord:
     tool_uses: int = 0
     provenance: Provenance = Provenance.SYNTHETIC
     label: str = ""
+    signals: dict = field(default_factory=dict)
+    repo: str = ""
 
     def __post_init__(self) -> None:
         if self.scope <= 0:
             raise ValueError(f"scope must be positive, got {self.scope}")
         if self.tokens < 0:
             raise ValueError(f"tokens must be non-negative, got {self.tokens}")
+        # the headline scope is always available as a candidate signal
+        merged = dict(self.signals)
+        merged.setdefault("scope", self.scope)
+        object.__setattr__(self, "signals", merged)
+
+    def value(self, signal: str) -> float:
+        """This record's value for one candidate signal."""
+        return self.signals.get(signal, self.scope if signal == "scope" else 0.0)
+
+    def has(self, signal: str) -> bool:
+        return signal in self.signals and self.signals[signal] > 0
+
+
+def common_signals(records) -> list:
+    """Signals present and positive on *every* record — the fittable candidates."""
+    rs = list(records)
+    if not rs:
+        return []
+    shared = set(rs[0].signals)
+    for r in rs[1:]:
+        shared &= set(r.signals)
+    return sorted(s for s in shared if all(r.has(s) for r in rs))
 
 
 def measured_only(records: Iterable[ScopedRecord]) -> list[ScopedRecord]:

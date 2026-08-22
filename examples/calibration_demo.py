@@ -65,26 +65,32 @@ def main() -> None:
     rule("4. WHAT THE HARDCODED CONSTANTS CLAIMED")
     print("  The first version asserted A+ = 2x and A++ = 4x. On measured data:")
     print()
-    print(f"  {'kind':<16}{'scope':>6}{'asserted':>12}{'fitted':>12}{'ratio':>9}")
+    print(f"  {'kind':<16}{'signal':>13}{'×k':>4}{'asserted':>12}"
+          f"{'fitted':>12}{'ratio':>9}")
     for kind in store.kinds():
         m = store.model_for(kind)
-        base = m.predict(1)
-        for scope in (2, 4, 8):
-            asserted = base * scope
-            fitted = m.predict(scope)
-            print(f"  {kind:<16}{scope:>6}{asserted:>12,.0f}{fitted:>12,.0f}"
-                  f"{asserted / fitted:>8.1f}x")
+        unit = m.scope_min                    # the smallest work actually measured
+        base = m.predict(unit)
+        for k in (2, 4, 8):
+            asserted = base * k               # what "k× the work costs k×" claims
+            fitted = m.predict(unit * k)
+            print(f"  {kind:<16}{m.signal:>13}{k:>4}{asserted:>12,.0f}"
+                  f"{fitted:>12,.0f}{asserted / fitted:>8.1f}x")
     print()
-    print("  The 'proportional' form IS that assumption. Its cross-validated error:")
+    print("  The 'proportional' form IS that assumption. Its cross-validated error,")
+    print("  scored on each kind's own chosen signal:")
     for kind in store.kinds():
         sel = store.selection_for(kind)
-        print(f"    {kind:<16} proportional {sel.scores['proportional']:>6.1%}   "
-              f"vs chosen {sel.form} {sel.scores[sel.form]:>6.1%}")
+        by_form = sel.scores_for_signal(sel.signal)
+        if "proportional" in by_form:
+            print(f"    {kind:<16} proportional {by_form['proportional']:>6.1%}   "
+                  f"vs chosen {sel.form} {by_form.get(sel.form, 0):>6.1%}")
 
     # ── 5. out-of-sample ─────────────────────────────────────────────────
     rule("5. OUT-OF-SAMPLE — predicting the held-out composition experiment")
     ev = composition_evidence()
-    plan = WorkPlan("replica").add("comprehension", 3).add("code_write", 3)
+    plan = (WorkPlan("replica").add("comprehension", 3, bytes=15_216)
+            .add("code_write", 3))
     pred = PlanForecaster(store).compare_batching(plan)
     print(f"  {len(COMPOSITION_MEASURED)} batched runs, never fitted on.")
     print()
@@ -107,16 +113,22 @@ def main() -> None:
     before = live.model_for("comprehension")
     print(f"  standing model: {before.equation()}   (n={before.n})")
 
-    print("\n  (a) new runs that agree with it")
-    agreeing = [ScopedRecord("comprehension", 4, 47_000, provenance=Provenance.PRODUCTION),
-                ScopedRecord("comprehension", 6, 51_500, provenance=Provenance.PRODUCTION)]
+    sig = before.signal
+    print(f"\n  (a) new runs that agree with it (priced by '{sig}')")
+    agreeing = [ScopedRecord("comprehension", 4, 45_400, signals={"bytes": 20_000},
+                             provenance=Provenance.PRODUCTION),
+                ScopedRecord("comprehension", 6, 49_600, signals={"bytes": 30_000},
+                             provenance=Provenance.PRODUCTION)]
     for kind, d in live.observe_many(agreeing).items():
         print(f"      {d.summary()}")
 
     print("\n  (b) new runs from a world that got more expensive")
-    shifted = [ScopedRecord("comprehension", 3, 88_000, provenance=Provenance.PRODUCTION),
-               ScopedRecord("comprehension", 5, 96_000, provenance=Provenance.PRODUCTION),
-               ScopedRecord("comprehension", 8, 112_000, provenance=Provenance.PRODUCTION)]
+    shifted = [ScopedRecord("comprehension", 3, 88_000, signals={"bytes": 15_216},
+                            provenance=Provenance.PRODUCTION),
+               ScopedRecord("comprehension", 5, 96_000, signals={"bytes": 24_644},
+                            provenance=Provenance.PRODUCTION),
+               ScopedRecord("comprehension", 8, 112_000, signals={"bytes": 35_518},
+                            provenance=Provenance.PRODUCTION)]
     for kind, d in live.observe_many(shifted).items():
         print(f"      {d.summary()}")
 

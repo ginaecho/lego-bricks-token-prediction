@@ -34,9 +34,14 @@ def noise_floor(records: Sequence[ScopedRecord]) -> Optional[float]:
     is itself the finding: without replicates there is no way to tell model
     error from run-to-run noise.
     """
-    groups: dict[tuple[str, float], list[float]] = {}
+    # Group by *identical task*. Grouping on (kind, scope) alone would pool a
+    # 3-file read of this repo with a 3-file read of click — different work at
+    # the same nominal scope — and report their difference as run-to-run noise.
+    # Across three repositories that inflated the floor from ~5% to 42%.
+    groups: dict[tuple, list[float]] = {}
     for r in records:
-        groups.setdefault((r.kind, r.scope), []).append(float(r.tokens))
+        key = (r.kind, r.repo, tuple(sorted(r.signals.items())))
+        groups.setdefault(key, []).append(float(r.tokens))
 
     num = den = 0.0
     grand: list[float] = []
@@ -65,6 +70,7 @@ class KindReport:
     chosen_form: str
     scores: dict[str, float]
     floor: Optional[float]
+    signal: str = "scope"
 
     @property
     def best_mape(self) -> Optional[float]:
@@ -92,7 +98,7 @@ class KindReport:
         mape = f"{self.best_mape:.1%}" if self.best_mape is not None else "n/a"
         floor = f"{self.floor:.1%}" if self.floor is not None else "n/a"
         skill = f"{self.skill_ratio:.2f}×" if self.skill_ratio is not None else "n/a"
-        return (f"{self.kind}: form={self.chosen_form}, n={self.n}, "
+        return (f"{self.kind}: {self.chosen_form}@{self.signal}, n={self.n}, "
                 f"LOO MAPE {mape} vs floor {floor} (skill {skill}) — {self.verdict}")
 
 
@@ -103,12 +109,13 @@ def backtest_kind(kind: str, records: Sequence[ScopedRecord]) -> Optional[KindRe
     sel = select_model(kind, rs)
     if sel is None:
         return None
+    # score every form on the SELECTED signal, so the comparison is like-for-like
     scores = {}
     for form in FORMS:
-        s = loo_mape(kind, rs, form)
-        if s is not None and math.isfinite(s):
-            scores[form] = s
-    return KindReport(kind, len(rs), sel.form, scores, noise_floor(rs))
+        v = loo_mape(kind, rs, form, sel.signal)
+        if v is not None and math.isfinite(v):
+            scores[form] = v
+    return KindReport(kind, len(rs), sel.form, scores, noise_floor(rs), sel.signal)
 
 
 def backtest(records: Iterable[ScopedRecord]) -> dict[str, KindReport]:
@@ -134,7 +141,7 @@ def learning_curve(kind: str, records: Sequence[ScopedRecord]) -> list[tuple[int
         sel = select_model(kind, prefix)
         if sel is None:
             continue
-        score = loo_mape(kind, prefix, sel.form)
+        score = loo_mape(kind, prefix, sel.form, sel.signal)
         if score is not None and math.isfinite(score):
             out.append((n, score))
     return out

@@ -26,11 +26,22 @@ from .learn import LearningStore
 
 @dataclass
 class WorkItem:
-    """``count`` tasks of ``kind``, each at this ``scope``."""
+    """``count`` tasks of ``kind``, each at this ``scope``.
+
+    ``signals`` supplies the other measures a fitted model might have chosen —
+    most importantly ``bytes``, which turned out to predict comprehension cost
+    far better than a file count.
+    """
 
     kind: str
     scope: float
     count: int = 1
+    signals: dict = field(default_factory=dict)
+
+    def value(self, signal: str) -> float:
+        if signal == "scope":
+            return self.signals.get("scope", self.scope)
+        return self.signals.get(signal, 0.0)
 
 
 @dataclass
@@ -40,8 +51,9 @@ class WorkPlan:
     name: str
     items: list[WorkItem] = field(default_factory=list)
 
-    def add(self, kind: str, scope: float, count: int = 1) -> "WorkPlan":
-        self.items.append(WorkItem(kind, scope, count))
+    def add(self, kind: str, scope: float, count: int = 1,
+            **signals: float) -> "WorkPlan":
+        self.items.append(WorkItem(kind, scope, count, dict(signals)))
         return self
 
     @property
@@ -62,6 +74,7 @@ class LineItem:
     form: str
     basis_n: int
     extrapolation: float      # 1.0 = inside the fitted range
+    signal: str = "scope"
 
     @property
     def is_extrapolated(self) -> bool:
@@ -77,10 +90,12 @@ class PlanForecast:
     unmodelled: tuple[str, ...]
     total_tokens: float
     total_sigma: float
+    missing_signal: tuple[tuple[str, str], ...] = ()
+    """(kind, signal) pairs the plan could not supply, so were left unpriced."""
 
     @property
     def is_complete(self) -> bool:
-        return not self.unmodelled
+        return not self.unmodelled and not self.missing_signal
 
     @property
     def extrapolated(self) -> tuple[LineItem, ...]:
@@ -110,6 +125,9 @@ class PlanForecast:
             lines.append("")
             lines.append("!! NOT IN THE TOTAL — no fitted model for: "
                          + ", ".join(self.unmodelled))
+        for kind, sig in self.missing_signal:
+            lines.append(f"!! NOT IN THE TOTAL — {kind} is priced by '{sig}', "
+                         f"which this plan did not supply")
         for li in self.extrapolated:
             lines.append(f"!! {li.kind} @ scope {li.scope:g} is "
                          f"{li.extrapolation:.1f}× outside the fitted range")
@@ -123,27 +141,44 @@ class PlanForecaster:
         self._store = store
 
     def _price(self, item: WorkItem, model: CostModel) -> LineItem:
-        per_task = model.predict(item.scope)
+        x = item.value(model.signal)
+        per_task = model.predict(x)
+        # A few near-collinear points can fit a line almost exactly and imply an
+        # interval of a handful of tokens. Repeating the identical task varies
+        # by several percent, so an interval tighter than that claims more
+        # precision than the process can deliver. Floor it at the noise floor.
+        sigma = model.residual_sigma
+        floor = self._store.noise_floor()
+        if floor:
+            sigma = max(sigma, floor * per_task)
         return LineItem(
             kind=item.kind,
             scope=item.scope,
             count=item.count,
             per_task_tokens=per_task,
             tokens=per_task * item.count,
-            sigma=model.residual_sigma,
+            sigma=sigma,
             form=model.form,
             basis_n=model.n,
-            extrapolation=model.extrapolation_factor(item.scope),
+            extrapolation=model.extrapolation_factor(x),
+            signal=model.signal,
         )
 
     def forecast(self, plan: WorkPlan) -> PlanForecast:
         priced: list[LineItem] = []
         unmodelled: list[str] = []
 
+        missing: list = []
         for item in plan.items:
             model = self._store.model_for(item.kind)
             if model is None:
                 unmodelled.append(item.kind)
+                continue
+            # The fitted model reads a particular signal. If the plan does not
+            # carry it, predicting anyway would quietly substitute zero and
+            # under-price the item — the same silent failure as a missing kind.
+            if model.signal != "scope" and item.value(model.signal) <= 0:
+                missing.append((item.kind, model.signal))
                 continue
             priced.append(self._price(item, model))
 
@@ -157,14 +192,18 @@ class PlanForecaster:
             unmodelled=tuple(dict.fromkeys(unmodelled)),
             total_tokens=total,
             total_sigma=math.sqrt(var),
+            missing_signal=tuple(dict.fromkeys(missing)),
         )
 
     def boot_cost(self) -> Optional[float]:
-        """The per-invocation fixed cost, pooled across kinds.
+        """The per-invocation fixed cost shared by every kind.
 
-        Every fitted model's fixed component is an estimate of the same
-        underlying quantity — what it costs to stand an agent up before it does
-        any of your work. Pooling across kinds uses all the evidence for it.
+        Each kind's fitted intercept is ``boot + that kind's own fixed work``:
+        a kind that always reads an 11 KB file before starting carries that
+        read inside its intercept. So the intercepts are *upper bounds* on the
+        shared floor, not independent estimates of it, and averaging them
+        overstates it. The smallest observed intercept is the tightest bound
+        the evidence supports.
         """
         fixed = []
         for kind in self._store.kinds():
@@ -174,7 +213,7 @@ class PlanForecaster:
             f, _ = model.decompose(model.scope_min)
             if f > 0:
                 fixed.append(f)
-        return sum(fixed) / len(fixed) if fixed else None
+        return min(fixed) if fixed else None
 
     def compare_batching(self, plan: WorkPlan) -> Optional[dict]:
         """Cost of running the plan as separate agents vs. batched into one.
@@ -198,7 +237,7 @@ class PlanForecaster:
             model = self._store.model_for(item.kind)
             if model is None:
                 continue
-            fixed, marginal = model.decompose(item.scope)
+            fixed, marginal = model.decompose(item.value(model.signal))
             separate += (fixed + marginal) * item.count
             marginal_total += marginal * item.count
             n_tasks += item.count

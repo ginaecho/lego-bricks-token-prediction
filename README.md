@@ -20,7 +20,7 @@ yet, and refit as real runs come back.
 
 ## The idea in one picture
 
-![What the measurements said: four panels — MEASURE (11 real runs scattered by scope), FIT (cross-validated error by model form), VALIDATE (predicted vs measured on held-out runs), COMPOSE (batching saves 47%)](docs/media/token-yield-concept.svg)
+![What the measurements said: four panels — MEASURE (28 runs from 3 repos, tokens against bytes on one line), THE UNIT (per-repo slopes disagree 7x by file but agree by byte), VALIDATE (predicted vs measured on held-out runs), THE GAP (32% coverage and the measurement backlog)](docs/media/token-yield-concept.svg)
 
 ---
 
@@ -39,14 +39,23 @@ So we measured them.
 
 ## What the measurements said
 
-Eleven real subagent runs, at graded scope, with replicates. Every constant the
-first version asserted turned out to be wrong — one of them backwards.
+28 real subagent runs across **three unrelated repositories** — this one,
+`psf/requests` and `pallets/click` — at graded scope, with replicates. Every
+constant the first version asserted turned out to be wrong, one of them
+backwards, and the *unit of measurement* was wrong too.
 
 | Asserted | Measured | Verdict |
 |---|---|---|
-| `A+ = 2×`, `A++ = 4×` — cost scales with work | 8× the scope moved tokens **1.39×** | wrong: a ~38k fixed cost dominates |
+| `A+ = 2×`, `A++ = 4×` — cost scales with work | 8× the scope moved tokens **1.39×** | wrong: a ~37k fixed cost dominates |
 | Mixing task types adds **+15%** | Batching two kinds into one agent cost **53%** of running them separately | **wrong sign** — it is a 47% *saving* |
+| Scope measured in **files** | Slope disagreed **7×** across repos (2,305 vs 3,265 vs 15,794 /file) | wrong unit — doesn't transfer |
+| — | Same runs in **bytes**: 0.418 / 0.389 / 0.419 per byte | one model fits all three at **2.8%** |
 | Confidence from sample-mean error | Repeating the identical task varies by **~5%** | that noise floor is the real limit |
+
+The cross-repo probe is what caught the last one. At eight files read, the three
+repos cost 57,732 · 59,851 · **149,655** tokens — same file count, because
+click's eight files are 272 KB against requests' 60 KB. A hardcoded scope unit
+would have hidden that exactly as the hardcoded multipliers hid the rest.
 
 The fixed cost is the *agent boot* — system prompt, tool schemas, scaffolding —
 paid once per invocation, before any of your work happens. Once you can see it,
@@ -63,11 +72,19 @@ subagent and records what it actually spent. Graded scope is what makes a slope
 estimable; replicates are what separate model error from run-to-run noise.
 
 **② Fit.** [`costmodel.py`](token_yield/costmodel.py) fits four candidate shapes
-— constant, proportional, affine, power — and picks between them by
-leave-one-out cross-validation. **The data chooses the shape**, not just the
-coefficients. On the shipped measurements it chose `affine` for comprehension
-and `constant` for code_write, and put `proportional` — which *is* the old
-1×/2×/4× rule — last, at 49% and 90% error.
+— constant, proportional, affine, power — against every candidate *signal* the
+records carry, and picks by leave-one-out cross-validation. **The data chooses
+the shape and the explanatory variable**, not just the coefficients. Each kind
+picked a different signal unprompted:
+
+```
+comprehension : 37,326 + 0.4131 × bytes    ← driven by what it reads
+test_write    : 43,424 + 1,161  × scope    ← driven by what it writes
+code_review   : 40,767 +     5  × scope    ← effectively flat
+```
+
+`proportional` — which *is* the old 1×/2×/4× rule — finishes last everywhere,
+at 81% and 90% error.
 
 **③ Validate.** [`backtest.py`](token_yield/backtest.py) scores the winner
 against the **noise floor**: repeat a task and the counts still differ, so the
@@ -75,13 +92,31 @@ useful number is `skill = cross-validated error ÷ noise floor`. At `skill ≈ 1
 the model is as good as the process allows and more data will not help.
 
 **④ Forecast, then learn.** [`plan.py`](token_yield/plan.py) prices a plan from
-the fitted models, naming any kind it has no model for and flagging any scope
-outside the range it was fitted over. Then every finished task comes back as a
-record — and that closes the loop.
+the fitted models, naming any kind it has no model for, any *signal* the plan
+failed to supply, and any scope outside the fitted range. Then every finished
+task comes back as a record — and that closes the loop.
+
+### Knowing what you have not measured
+
+[`mine.py`](token_yield/mine.py) reads a repository's history and classifies
+each commit into a kind through transparent, evidence-carrying rules. Crossing
+that against the kinds actually measured produces a **measurement backlog**:
+
+```
+Coverage: 32% of mined work is a kind we have measured
+  probe 'code_change' → would cover a further 23%
+  probe 'refactor'    → would cover a further 21%
+  probe 'feature'     → would cover a further 14%
+```
+
+Over 419 commits from the three repos the real work is 24% docs, 23%
+unclassifiable `code_change`, 21% refactor, 14% feature, 11% bug fix, 8% tests.
+Acting on that backlog took coverage from **8% to 32%** in three probes. Mining
+supplies the *what and how much*; only probes supply the *how expensive*.
 
 ### The loop is the point
 
-![The Token Yield calibration loop: probe suite and production runs feed a LearningStore, which selects a cost model, forecasts a plan, and refits from what it observes](docs/media/token-yield-architecture.svg)
+![How the machine works: a four-station flywheel — MEASURE, LEARN, QUOTE, SCORE — turning clockwise around the claim that it needs no constants to argue about](docs/media/token-yield-architecture.svg)
 
 [`learn.py`](token_yield/learn.py) scores each new run **against the standing
 model before absorbing it**. That ordering is the whole discipline: once a
@@ -92,14 +127,15 @@ silently absorbs contradicting data looks healthy forever.
 from token_yield import seeded_store, ScopedRecord, Provenance
 
 store = seeded_store()                       # the shipped probe measurements
-store.model_for("comprehension").equation()  # 'tokens = 37,571 + 2,305 × scope'
+store.model_for("comprehension").equation()  # 'tokens = 37,326 + 0.4131 × bytes'
 
 # a real run comes back far more expensive than predicted
 report = store.observe(ScopedRecord("comprehension", 3, 88_000,
+                                    signals={"bytes": 15_216},
                                     provenance=Provenance.PRODUCTION))
 print(report.summary())
-#   comprehension: 1 new records, MAPE 49.4%, bias +49.4%, 0% inside the
-#   interval → refit: far from the new runs, consistently under-predicting by 49%
+#   comprehension: 1 new records, MAPE 50.4%, bias +50.4%, 0% inside the
+#   interval → refit: far from the new runs, consistently under-predicting by 50%
 ```
 
 The model then refits — and may change *shape*, not merely slope.
@@ -109,13 +145,15 @@ The model then refits — and may change *shape*, not merely slope.
 ```bash
 pip install -e .                       # no runtime dependencies; Python ≥ 3.9
 python -m examples.calibration_demo    # the measured findings and the loop
+python -m examples.mining_demo         # mine repos, classify, see the gap
 ```
 
 ```python
 from token_yield import seeded_store, WorkPlan, PlanForecaster
 
 plan = (WorkPlan("Q3 audit")
-        .add("comprehension", scope=6, count=12)   # read 6 files, 12 times
+        # comprehension is priced by bytes, so supply bytes
+        .add("comprehension", scope=6, count=12, bytes=30_000)
         .add("code_write", scope=4, count=8))
 
 fc = PlanForecaster(seeded_store()).forecast(plan)
@@ -123,8 +161,9 @@ print(fc.summary())
 print(f"${fc.cost_at_rate(3.0):.2f}")
 ```
 
-An unmeasured kind is **named, never dropped**; a scope outside the fitted
-range is **flagged as extrapolation** rather than silently answered.
+An unmeasured kind is **named, never dropped**; a signal the plan fails to
+supply is **named too**, rather than silently read as zero; and a scope outside
+the fitted range is **flagged as extrapolation** rather than quietly answered.
 
 ## What this claims, and what it doesn't
 
@@ -293,7 +332,7 @@ what lifting it into a plugin layer unlocks.
 ## Layout
 
 ```
-token_yield/     fitted layer:      taxonomy · costmodel · probes · learn · backtest · plan
+token_yield/     fitted layer:      taxonomy · costmodel · probes · learn · backtest · plan · mine
                  asserted layer:    models · calibrate · predict · forecast · report
 openharness/     the measurement layer:  module · events · harness · checks · trace · card · dashboard · evaluate · adapters · skills · govern · agt · cli
 modules/         the starter materia medica (tdd, pii-guard, …)
@@ -302,7 +341,7 @@ benchmark/       L1 conformance + L2 ablation + reports/
 precedence/      L5 — precedence/conflict layer, the A–D skill family, live-agent + AGT demos + reports/
 integrations/    L3 — Claude Code hook + tool→event adapters
 examples/        calibration_demo.py (measure → fit → validate → refit) · token_yield_demo.py · demo_session.py
-tests/           pytest suite (134 tests: token yield, semantics, cards, benchmark, integration, precedence, AGT)
+tests/           pytest suite (175 tests: token yield, semantics, cards, benchmark, integration, precedence, AGT)
 docs/            calibration-findings · architecture · proving-it-works · how-it-was-tested · precedence · evaluation-methodology · agt-integration · zenodo
 docs/media/      draw_token_yield.py — regenerates the hand-drawn figures from the real engine
 ```

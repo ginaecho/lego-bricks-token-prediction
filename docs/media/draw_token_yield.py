@@ -291,6 +291,55 @@ class Pen:
             self.line(x2, y2, x2 + head * math.cos(a), y2 + head * math.sin(a),
                       color, w, single=True)
 
+    def arc(self, cx, cy, r, a0, a1, color=INK, w=2.2, steps=14,
+            arrow=False, head=13.0) -> None:
+        """A rough arc from angle a0 to a1 (degrees, math convention, y-up)."""
+        pts = []
+        for i in range(steps + 1):
+            a = math.radians(a0 + (a1 - a0) * i / steps)
+            pts.append((cx + r * math.cos(a), cy - r * math.sin(a)))
+        for (x1, y1), (x2, y2) in zip(pts, pts[1:]):
+            self.line(x1, y1, x2, y2, color, w, rough=0.8, single=True)
+        if arrow:
+            (px_, py_), (qx, qy) = pts[-2], pts[-1]
+            ang = math.atan2(qy - py_, qx - px_)
+            for d in (ang + 2.5, ang - 2.5):
+                self.line(qx, qy, qx + head * math.cos(d), qy + head * math.sin(d),
+                          color, w, single=True)
+
+    def icon_gauge(self, cx, cy, r, color) -> None:
+        """A dial with a needle — measurement."""
+        self.arc(cx, cy + r * 0.3, r, 200, -20, color, 2.0, 12)
+        self.line(cx, cy + r * 0.3, cx + r * 0.62, cy - r * 0.45, color, 2.2)
+        self.circle(cx, cy + r * 0.3, 3, color)
+
+    def icon_curve(self, cx, cy, r, color) -> None:
+        """Points with a line through them — fitting."""
+        x0, y0 = cx - r, cy + r * 0.7
+        self.line(x0, y0, x0, cy - r * 0.8, EDGE, 1.6, single=True)
+        self.line(x0, y0, cx + r, y0, EDGE, 1.6, single=True)
+        pts = [(0.15, 0.30), (0.42, 0.52), (0.68, 0.62), (0.95, 0.86)]
+        self.line(x0 + r * 0.2, y0 - r * 0.34, x0 + r * 1.8, y0 - r * 1.30,
+                  color, 2.0)
+        for fx, fy in pts:
+            self.circle(x0 + 2 * r * fx, y0 - 1.5 * r * fy, 3.2, color)
+
+    def icon_tag(self, cx, cy, r, color) -> None:
+        """A price tag — the quote."""
+        pts = [(cx - r, cy - r * 0.6), (cx + r * 0.35, cy - r * 0.6),
+               (cx + r, cy), (cx + r * 0.35, cy + r * 0.6),
+               (cx - r, cy + r * 0.6)]
+        for a, b in zip(pts, pts[1:] + pts[:1]):
+            self.line(a[0], a[1], b[0], b[1], color, 2.0)
+        self.circle(cx + r * 0.42, cy, 3.4, color)
+
+    def icon_target(self, cx, cy, r, color) -> None:
+        """Rings with an arrow in them — scoring the quote."""
+        for rr in (r, r * 0.6, r * 0.24):
+            self.arc(cx, cy, rr, 0, 359, color, 1.8, 16)
+        self.line(cx - r * 1.25, cy + r * 1.25, cx + r * 0.16, cy - r * 0.16,
+                  ALERT, 2.2)
+
     def tick(self, x, y, half, color=INK, w=1.6) -> None:
         self.line(x, y - half, x, y + half, color, w, single=True)
 
@@ -325,11 +374,20 @@ class Pen:
 def figures_data() -> dict:
     from token_yield.backtest import backtest, noise_floor
     from token_yield.learn import seeded_store
+    from token_yield.mine import coverage, mine_repo
     from token_yield.plan import PlanForecaster, WorkPlan
     from token_yield.probes import MEASURED, composition_evidence
 
     store = seeded_store()
-    plan = WorkPlan("replica").add("comprehension", 3).add("code_write", 3)
+    plan = (WorkPlan("replica").add("comprehension", 3, bytes=15_216)
+            .add("code_write", 3))
+
+    mined = []
+    for path, name in (("/home/user/psf/requests", "requests"),
+                       ("/home/user/pallets/click", "click"),
+                       ("/home/user/harness-dose", "harness-dose")):
+        mined += mine_repo(path, limit=200, repo=name)
+
     return {
         "store": store,
         "records": MEASURED,
@@ -338,162 +396,159 @@ def figures_data() -> dict:
         "composition": composition_evidence(),
         "batching": PlanForecaster(store).compare_batching(plan),
         "selections": {k: store.selection_for(k) for k in store.kinds()},
+        "coverage": coverage(mined, store.kinds()) if mined else None,
+        "mined_n": len(mined),
     }
 
 
 # ── figure 1: what the measurements said ─────────────────────────────────
 
 def draw_concept(data: dict, glyphs: Glyphs) -> str:
-    W, H = 1280, 640
+    W, H = 1280, 660
     p = Pen(W, H, glyphs, seed=1017)
-
-    store = data["store"]
-    comp_sel = data["selections"]["comprehension"]
-    ev = data["composition"]
-    bt = data["batching"]
+    store, ev, bt = data["store"], data["composition"], data["batching"]
+    recs = [r for r in data["records"] if r.kind == "comprehension"]
 
     p.text(W / 2, 54, "Token Yield", 42, INK, "middle", bold=1.1)
     p.line(W / 2 - 100, 64, W / 2 + 100, 64, INFERRED, 3, rough=1.4)
-    p.text(W / 2, 92,
-           f"{len(data['records'])} real subagent runs  →  every constant the "
-           f"first version asserted was wrong", 19, FAINT, "middle")
+    p.text(W / 2, 92, f"{len(data['records'])} real agent runs across 3 "
+           f"repositories  →  every assumption replaced by a measurement",
+           19, FAINT, "middle")
 
     panels = [
-        (31, "1", "MEASURE", "run probes, record what they cost", MEASURED_C),
-        (347, "2", "FIT", "the data picks the shape", INFERRED),
+        (31, "1", "MEASURE", "probe real repos, watch the meter", MEASURED_C),
+        (347, "2", "THE UNIT", "what actually drives cost", INFERRED),
         (663, "3", "VALIDATE", "score it on runs it never saw", COMPOSED),
-        (979, "4", "COMPOSE", "and the surcharge was a saving", BUDGET),
+        (979, "4", "THE GAP", "and what we still cannot price", ALERT),
     ]
-    PY, PW, PH = 122, 270, 440
+    PY, PW, PH = 122, 270, 460
 
     for px, num, title, sub, color in panels:
         p.rect(px, PY, PW, PH, EDGE, 2.4, rough=1.1, r=8)
         p.solid_rect(px + 6, PY + 6, PW - 12, 42, color, 0.10, rx=6)
         p.text(px + 17, PY + 36, f"{num}.", 24, color, bold=0.9)
-        p.text(px + 44, PY + 36, title, 23, INK, bold=0.9)
+        p.text(px + 44, PY + 36, title, 22, INK, bold=0.9)
         p.text(px + 17, PY + 68, sub, 14, FAINT)
 
     for i in range(3):
         ax = panels[i][0] + PW + 6
         p.arrow(ax, PY + PH / 2, ax + 34, PY + PH / 2, FAINT, 2.4, 10)
 
-    # ── panel 1: the raw scatter ─────────────────────────────────────────
+    # ── panel 1: tokens vs bytes, one line through three repos ───────────
     px = panels[0][0]
-    x0, x1 = px + 46, px + 248
-    ytop, ybot = PY + 106, PY + 250
-    tlo, thi = 34_000, 60_000
-
-    def sx(scope): return x0 + scope * (x1 - x0) / 9.0
-    def sy(tok): return ybot - (tok - tlo) * (ybot - ytop) / (thi - tlo)
+    x0, x1 = px + 50, px + 250
+    ytop, ybot = PY + 106, PY + 258
+    BMAX, TLO, THI = 280_000, 30_000, 160_000
+    sx = lambda b: x0 + b * (x1 - x0) / BMAX
+    sy = lambda t: ybot - (t - TLO) * (ybot - ytop) / (THI - TLO)
 
     p.line(x0 - 6, ytop - 6, x0 - 6, ybot + 4, EDGE, 1.8)
-    p.line(x0 - 6, ybot + 4, x1 + 6, ybot + 4, EDGE, 1.8)
-    for tok in (60_000, 47_000, 34_000):
-        p.text(x0 - 12, sy(tok) + 5, fmt(tok), 12, FAINT, anchor="end")
-    for sc in (0, 4, 8):
-        p.text(sx(sc), ybot + 22, str(sc), 12, FAINT, anchor="middle")
-    p.text((x0 + x1) / 2, ybot + 40, "scope (units of work)", 13, FAINT, "middle")
+    p.line(x0 - 6, ybot + 4, x1 + 8, ybot + 4, EDGE, 1.8)
+    for t in (150_000, 90_000, 30_000):
+        p.text(x0 - 12, sy(t) + 5, fmt(t), 11.5, FAINT, anchor="end")
+    for b in (0, 140_000, 280_000):
+        p.text(sx(b), ybot + 22, fmt(b) if b else "0", 11.5, FAINT, anchor="middle")
+    p.text((x0 + x1) / 2, ybot + 40, "bytes read", 13, FAINT, "middle")
 
-    model = store.model_for("comprehension")
-    p.line(sx(1), sy(model.predict(1)), sx(8), sy(model.predict(8)),
-           MEASURED_C, 2.0, opacity=0.55)
+    m = store.model_for("comprehension")
+    p.line(sx(2_000), sy(m.predict(2_000)), sx(BMAX), sy(m.predict(BMAX)),
+           INK, 2.0, opacity=0.5)
 
-    for r in data["records"]:
-        col = MEASURED_C if r.kind == "comprehension" else INFERRED
-        p.circle(sx(r.scope), sy(min(max(r.tokens, tlo), thi)), 4.5, col)
+    cols = {"harness-dose": MEASURED_C, "requests": BUDGET, "click": COMPOSED}
+    for r in recs:
+        b = r.signals.get("bytes", 0)
+        p.circle(sx(min(b, BMAX)), sy(min(max(r.tokens, TLO), THI)), 4.5,
+                 cols.get(r.repo, INK))
+    for i, (name, c) in enumerate(cols.items()):
+        lx = px + 20 + [0, 108, 186][i]
+        p.circle(lx, PY + 320, 4.2, c)
+        p.text(lx + 9, PY + 325, name, 12.5, INK)
 
-    p.circle(px + 22, PY + 300, 4.5, MEASURED_C)
-    p.text(px + 32, PY + 305, "comprehension", 13, INK)
-    p.circle(px + 150, PY + 300, 4.5, INFERRED)
-    p.text(px + 160, PY + 305, "code_write", 13, INK)
+    p.line(px + 17, PY + 348, px + PW - 17, PY + 348, EDGE, 1.8, dash="5 5")
+    p.rows(px + 17, PY + 374,
+           ["Three unrelated repos, one line.",
+            f"Repeats of a task differ by",
+            f"{data['floor']:.0%} — the noise floor."], 14.5)
 
-    p.line(px + 17, PY + 330, px + PW - 17, PY + 330, EDGE, 1.8, dash="5 5")
-    p.rows(px + 17, PY + 356,
-           [f"8x the scope moved tokens 1.39x.",
-            f"Repeats of the same task differ by",
-            f"{data['floor']:.0%} — the noise floor."], 15)
-
-    # ── panel 2: cross-validated error by form ───────────────────────────
+    # ── panel 2: files vs bytes ──────────────────────────────────────────
     px = panels[1][0]
-    p.text(px + 17, PY + 104, "comprehension — LOO error by form", 14, INK)
-    ranked = sorted(comp_sel.scores.items(), key=lambda kv: kv[1])
-    worst = max(s for _, s in ranked)
-    bx, bmax = px + 108, 132
-    y = PY + 128
-    for form, score in ranked:
-        old = form == "proportional"
-        col = ALERT if old else (BUDGET if form == comp_sel.form else FAINT)
-        p.text(px + 17, y + 16, form, 14, col, bold=0.4 if old else 0.0)
-        p.bar(bx, y + 4, max(3.0, bmax * score / worst), 18, col, hatch=old)
-        p.text(bx + max(3.0, bmax * score / worst) + 7, y + 18,
-               f"{score:.1%}", 13, INK, bold=0.4)
-        y += 34
+    p.text(px + 17, PY + 104, "fitted slope, per repo", 14, INK)
+    p.text(px + 17, PY + 126, "counting FILES", 14, ALERT, bold=0.4)
+    for i, (nm, v) in enumerate([("harness-dose", 2305), ("requests", 3265),
+                                 ("click", 15794)]):
+        p.text(px + 26, PY + 148 + i * 20, f"{nm}", 12.5, FAINT, mono=True)
+        p.text(px + PW - 22, PY + 148 + i * 20, f"{v:,}", 12.5, ALERT,
+               anchor="end", mono=True)
+    p.text(px + 17, PY + 216, "counting BYTES", 14, BUDGET, bold=0.4)
+    for i, (nm, v) in enumerate([("harness-dose", 0.418), ("requests", 0.389),
+                                 ("click", 0.419)]):
+        p.text(px + 26, PY + 238 + i * 20, f"{nm}", 12.5, FAINT, mono=True)
+        p.text(px + PW - 22, PY + 238 + i * 20, f"{v:.3f}", 12.5, BUDGET,
+               anchor="end", mono=True)
 
-    p.text(px + 17, PY + 268, "'proportional' IS the old rule:", 13, ALERT)
-    p.text(px + 17, PY + 288, "A+ = 2x, A++ = 4x", 15, ALERT, bold=0.5)
+    p.line(px + 17, PY + 308, px + PW - 17, PY + 308, EDGE, 1.8, dash="4 4")
+    for i, (lbl, err, col) in enumerate([("one model, files", 0.198, ALERT),
+                                         ("one model, bytes", 0.028, BUDGET)]):
+        p.text(px + 17, PY + 330 + i * 18, lbl, 13, FAINT)
+        p.text(px + PW - 22, PY + 330 + i * 18, f"{err:.1%} error", 13.5, col,
+               anchor="end", bold=0.4)
 
-    p.line(px + 17, PY + 330, px + PW - 17, PY + 330, EDGE, 1.8, dash="5 5")
-    p.rows(px + 17, PY + 356,
-           ["Cross-validated, so a bendier",
-            "form cannot win by having more",
-            "parameters to bend."], 15)
+    p.line(px + 17, PY + 380, px + PW - 17, PY + 380, EDGE, 1.8, dash="5 5")
+    p.rows(px + 17, PY + 402,
+           ["A file count is repo-specific.",
+            "The selector found this itself —",
+            "it was never told to try bytes."], 14.5)
 
     # ── panel 3: out-of-sample ───────────────────────────────────────────
     px = panels[2][0]
     p.text(px + 17, PY + 104, "predicted vs actually measured", 14, INK)
-
     pairs = [("two agents", bt["separate_agents"], ev["separate_sum"]),
              ("one agent", bt["batched_single_agent"], ev["batched_mean"])]
     top = max(max(a, b) for _, a, b in pairs)
-    y = PY + 124
+    y = PY + 122
     for label, pred, meas in pairs:
-        p.text(px + 17, y + 12, label, 14, FAINT)
-        p.bar(px + 17, y + 20, 196 * pred / top, 16, COMPOSED)
-        p.text(px + 219, y + 33, "pred", 11, FAINT)
-        p.bar(px + 17, y + 40, 196 * meas / top, 16, BUDGET)
-        p.text(px + 219, y + 53, "real", 11, FAINT)
-        err = abs(pred - meas) / meas
-        p.text(px + 17, y + 76, f"{fmt(pred)} vs {fmt(meas)}   error {err:.1%}",
-               14, INK, bold=0.4)
-        y += 96
+        p.text(px + 17, y + 12, label, 13.5, FAINT)
+        p.bar(px + 17, y + 20, 190 * pred / top, 15, COMPOSED)
+        p.text(px + 213, y + 32, "pred", 10.5, FAINT)
+        p.bar(px + 17, y + 38, 190 * meas / top, 15, BUDGET)
+        p.text(px + 213, y + 50, "real", 10.5, FAINT)
+        p.text(px + 17, y + 72, f"{fmt(pred)} vs {fmt(meas)}   "
+               f"err {abs(pred - meas) / meas:.1%}", 13.5, INK, bold=0.4)
+        y += 94
+    p.text(px + 17, PY + 314, f"batching saves {ev['saving']:.0%} — the old",
+           13.5, BUDGET)
+    p.text(px + 17, PY + 332, "+15% surcharge had the wrong sign", 13.5, ALERT)
 
-    p.text(px + 17, PY + 314, f"noise floor {data['floor']:.0%} — both inside it",
-           14, BUDGET, bold=0.4)
+    p.line(px + 17, PY + 356, px + PW - 17, PY + 356, EDGE, 1.8, dash="5 5")
+    p.rows(px + 17, PY + 380,
+           ["Batched runs were held out of",
+            "every fit. The fixed/marginal",
+            "split predicted them anyway."], 14.5)
 
-    p.line(px + 17, PY + 330, px + PW - 17, PY + 330, EDGE, 1.8, dash="5 5")
-    p.rows(px + 17, PY + 356,
-           ["The batched runs were held out",
-            "of every fit. The fixed/marginal",
-            "split predicted them anyway."], 15)
-
-    # ── panel 4: composition ─────────────────────────────────────────────
+    # ── panel 4: coverage and the backlog ────────────────────────────────
     px = panels[3][0]
-    old_claim = ev["separate_sum"] * 1.15
-    top = max(old_claim, ev["separate_sum"])
-    scale = 200.0 / top
+    cov = data["coverage"]
+    if cov is not None:
+        share = cov.covered_share
+        p.text(px + 17, PY + 104, f"mined {data['mined_n']} real commits", 14, INK)
+        p.bar(px + 17, PY + 118, 236 * share, 26, BUDGET)
+        p.bar(px + 17 + 236 * share, PY + 118, 236 * (1 - share), 26, ALERT,
+              hatch=True)
+        p.text(px + 17, PY + 168, f"{share:.0%}", 26, BUDGET, bold=0.7)
+        p.text(px + 70, PY + 168, "of real work is a kind", 13.5, FAINT)
+        p.text(px + 70, PY + 186, "we have actually measured", 13.5, FAINT)
 
-    scale = 150.0 / top
-    rows = [("old model said (+15%)", old_claim, ALERT, True),
-            ("run as separate agents", ev["separate_sum"], FAINT, False),
-            ("batched into one agent", ev["batched_mean"], BUDGET, False)]
-    y = PY + 110
-    for label, val, col, hatch in rows:
-        p.text(px + 17, y + 12, label, 14, col if hatch else FAINT)
-        w = val * scale
-        p.bar(px + 17, y + 20, w, 22, col, hatch=hatch)
-        p.text(px + 17 + w + 8, y + 37, fmt(val), 15,
-               col if hatch else INK, bold=0.5)
-        y += 62
+        p.text(px + 17, PY + 220, "what to probe next:", 13.5, INK, bold=0.4)
+        for i, (kind, sh) in enumerate(cov.backlog[:4]):
+            p.text(px + 26, PY + 244 + i * 21, kind, 13, ALERT, mono=True)
+            p.text(px + PW - 22, PY + 244 + i * 21, f"+{sh:.0%}", 13, ALERT,
+                   anchor="end", bold=0.4)
 
-    p.text(px + 17, PY + 312, f"batching saves {ev['saving']:.0%}",
-           20, BUDGET, bold=0.6)
-
-    p.line(px + 17, PY + 338, px + PW - 17, PY + 338, EDGE, 1.8, dash="5 5")
-    p.rows(px + 17, PY + 362,
-           ["A 38k boot cost is paid per agent,",
-            "so combining kinds is a discount.",
-            "The +15% surcharge had the",
-            "wrong sign."], 15, lh=19)
+    p.line(px + 17, PY + 348, px + PW - 17, PY + 348, EDGE, 1.8, dash="5 5")
+    p.rows(px + 17, PY + 374,
+           ["It refuses to price work it has",
+            "never measured — and ranks the",
+            "gap by how much it would unlock."], 14.5)
 
     p.text(W / 2, H - 22,
            "every number is computed from the measured probe suite  ·  "
@@ -504,117 +559,65 @@ def draw_concept(data: dict, glyphs: Glyphs) -> str:
 
 
 def draw_architecture(data: dict, glyphs: Glyphs) -> str:
-    W, H = 1280, 940
+    W, H = 1280, 910
     p = Pen(W, H, glyphs, seed=4211)
+    CX, CY, R = 640, 452, 252
 
-    store = data["store"]
-    bt = data["batching"]
+    p.text(W / 2, 56, "How the machine works", 40, INK, "middle", bold=1.1)
+    p.line(W / 2 - 208, 67, W / 2 + 208, 67, COMPOSED, 3, rough=1.4)
+    p.text(W / 2, 96, "a flywheel — every job you run sharpens the next quote",
+           20, FAINT, "middle")
 
-    p.text(W / 2, 54, "Token Yield — the calibration loop", 38, INK, "middle", bold=1.1)
-    p.line(W / 2 - 236, 64, W / 2 + 236, 64, COMPOSED, 3, rough=1.4)
-    p.text(W / 2, 92,
-           "not a pipeline — what it predicts, it later measures, and refits from",
-           19, FAINT, "middle")
-
-    BX, BW, BH = 450, 380, 82
-    spine = BX + BW / 2
-
-    stages = [
-        (214, "LearningStore", "learn.py  ·  observe()", MEASURED_C),
-        (366, "select_model", "costmodel.py", INFERRED),
-        (518, "PlanForecaster", "plan.py", COMPOSED),
-        (670, "PlanForecast", "tokens · $ · interval", BUDGET),
+    stations = [
+        (500, 152, "1", "MEASURE", MEASURED_C, "gauge",
+         ["Send agents to do real jobs.", "Watch the meter."]),
+        (884, 392, "2", "LEARN", INFERRED, "curve",
+         ["Fit the curve the data", "actually shows."]),
+        (500, 632, "3", "QUOTE", COMPOSED, "tag",
+         ["Price the project", "before you start it."]),
+        (116, 392, "4", "SCORE", BUDGET, "target",
+         ["Check the quote", "against the bill."]),
     ]
+    BW, BH = 280, 122
 
-    # two sources of records, elbowed in
-    for ix, t1, t2 in [(214, "probe suite", "dispatch subagents, record cost"),
-                       (806, "production runs", "real work, same measurement")]:
-        p.rect(ix, 112, 260, 58, EDGE, 2.2, rough=1.1, r=6)
-        p.text(ix + 130, 138, t1, 18, INK, "middle", bold=0.5)
-        p.text(ix + 130, 158, t2, 11.5, FAINT, "middle", mono=True)
-        drop = spine + (58 if ix > 500 else -58)
-        p.line(ix + 130, 172, ix + 130, 192, MEASURED_C, 2.0)
-        p.line(ix + 130, 192, drop, 192, MEASURED_C, 2.0)
-        p.arrow(drop, 192, drop, 208, MEASURED_C, 2.0, 8)
+    # the ring, drawn first so the boxes sit on top of it
+    for a0, a1 in ((64, 26), (-26, -64), (-116, -154), (154, 116)):
+        p.arc(CX, CY, R, a0, a1, FAINT, 2.6, 14, arrow=True)
 
-    for i, (y, name, mod, color) in enumerate(stages):
-        p.solid_rect(BX, y, BW, BH, color, 0.09, rx=8)
-        p.rect(BX, y, BW, BH, color, 2.6, rough=1.0, r=8)
-        p.text(spine, y + 36, name, 26, INK, "middle", bold=0.8)
-        p.text(spine, y + 60, mod, 12.5, color, "middle", mono=True)
-        if i < 3:
-            p.arrow(spine, y + BH + 4, spine, stages[i + 1][0] - 6, FAINT, 2.4, 10)
+    for bx, by, num, verb, color, icon, promise in stations:
+        p.solid_rect(bx, by, BW, BH, color, 0.09, rx=10)
+        p.rect(bx, by, BW, BH, color, 2.8, rough=1.0, r=10)
+        getattr(p, f"icon_{icon}")(bx + 44, by + 58, 22, color)
+        p.text(bx + 82, by + 44, f"{num}. {verb}", 25, INK, bold=0.9)
+        p.rows(bx + 82, by + 72, promise, 14.5, FAINT, lh=20)
 
-    for i, label in enumerate([
-            "ScopedRecord · kind, scope, tokens, provenance",
-            "CostModel · fitted form + fixed/marginal split",
-            "LineItem · per task, with regime flags"]):
-        p.text(spine + 18, stages[i][0] + BH + 40, label, 12.5, FAINT, mono=True)
+    # what feeds it, and what falls out
+    p.text(150, 176, "goes in", 17, FAINT, bold=0.4)
+    p.rows(150, 200, ["your repo", "your task list",
+                      "jobs you already run"], 14, FAINT, lh=21)
 
-    # the four candidate forms, as the thing select_model chooses between
-    forms = [("constant", "c"), ("proportional", "b·s"),
-             ("affine", "a + b·s"), ("power", "a·s^b")]
-    p.rect(64, 350, 320, 116, INFERRED, 2.2, rough=1.1, r=6)
-    p.text(80, 378, "candidate forms", 19, INFERRED, bold=0.6)
-    for i, (nm, eq) in enumerate(forms):
-        chosen = nm in {s.form for s in data["selections"].values()}
-        col = BUDGET if chosen else FAINT
-        p.text(80 + (i % 2) * 150, 404 + (i // 2) * 22, f"{nm} = {eq}", 12.5,
-               col, mono=True)
-    p.text(80, 451, "picked by leave-one-out CV", 12, FAINT)
-    p.arrow(388, 408, BX - 6, 408, INFERRED, 2.2, 9)
+    p.text(1130, 640, "comes out", 17, BUDGET, "end", bold=0.4)
+    p.rows(1130, 664, ["a token budget", "a dollar figure",
+                       "an honest error bar"], 14, FAINT, lh=21, anchor="end")
 
-    # the plan going in
-    p.rect(64, 502, 320, 92, COMPOSED, 2.2, rough=1.1, r=6)
-    p.text(80, 530, "WorkPlan", 19, COMPOSED, bold=0.6)
-    p.rows(80, 554, ["kind × scope × count",
-                     "unmodelled kinds are named,",
-                     "extrapolation is flagged"], 12, FAINT, lh=17, mono=True)
-    p.arrow(388, 548, BX - 6, 548, COMPOSED, 2.2, 9)
+    # the hub: the compounding claim
+    p.arc(CX, CY, 104, 0, 359, COMPOSED, 2.6, 22)
+    p.solid_rect(CX - 104, CY - 104, 208, 208, COMPOSED, 0.07, rx=104)
+    p.text(CX, CY - 34, "no constants", 22, COMPOSED, "middle", bold=0.7)
+    p.text(CX, CY - 8, "to argue about", 22, COMPOSED, "middle", bold=0.7)
+    p.line(CX - 68, CY + 8, CX + 68, CY + 8, EDGE, 2.0, dash="5 4")
+    p.rows(CX, CY + 32, ["the machine measures",
+                         "what it costs, and says",
+                         "when it is guessing"], 14, FAINT, lh=20,
+           anchor="middle")
 
-    # right-hand annotations
-    for i, rows_ in enumerate([
-            ["observe() scores each new run", "against the STANDING model",
-             "before absorbing it"],
-            ["backtest.py: LOO MAPE vs the", "noise floor -> skill ratio"],
-            ["compare_batching(): boot cost", "is paid per invocation"],
-            [f"validated out-of-sample to",
-             f"{abs(bt['batched_single_agent'] - data['composition']['batched_mean']) / data['composition']['batched_mean']:.1%}"],
-    ]):
-        y, color = stages[i][0], stages[i][3]
-        p.line(BX + BW + 6, y + 42, BX + BW + 36, y + 42, color, 1.8,
-               single=True, dash="4 4")
-        p.rows(BX + BW + 46, y + 28, rows_, 12.5, color, lh=18, mono=True)
+    # the one line that makes it a loop rather than a pipeline
+    p.text(CX, CY + R + 132, "a quote it got wrong is the most valuable "
+           "thing the machine sees", 18, ALERT, "middle", bold=0.4)
+    p.text(CX, CY + R + 160, "— it is reported, never averaged away —",
+           15, FAINT, "middle")
 
-    # ── the return leg: this is what makes it a loop ─────────────────────
-    # routed left of the input boxes (x=64) so it crosses nothing
-    LEG, RET = 36, 742
-    p.line(BX - 6, RET, LEG, RET, ALERT, 2.6)
-    p.line(LEG, RET, LEG, 258, ALERT, 2.6)
-    p.arrow(LEG, 258, BX - 6, 258, ALERT, 2.6, 11)
-    p.text(70, 630, "DriftReport", 20, ALERT, bold=0.6)
-    p.rows(70, 654, ["every finished task becomes a record.",
-                     "If the standing model did not see it",
-                     "coming, that is reported — never",
-                     "quietly averaged away."], 13, FAINT, lh=19)
-
-    # what the loop currently believes
-    p.rect(300, 800, 680, 96, BUDGET, 2.4, rough=1.05, r=6)
-    p.text(320, 828, "what it currently believes", 17, BUDGET, bold=0.5)
-    y = 852
-    for kind in store.kinds():
-        m = store.model_for(kind)
-        rep = data["reports"].get(kind)
-        skill = f"skill {rep.skill_ratio:.2f}×" if rep and rep.skill_ratio else ""
-        p.text(320, y, f"{kind}: {m.equation()}   (n={m.n}, {skill})",
-               12.5, INK, mono=True)
-        y += 22
-
-    p.text(W / 2, H - 16,
-           "the agent is the test rig; the cost model is the object of study",
-           16, FAINT, "middle")
-
-    return p.svg("Token Yield calibration loop: measure, fit, forecast, refit")
+    return p.svg("How the Token Yield machine works: a measure-learn-quote-score flywheel")
 
 
 def _glyphs() -> Glyphs:

@@ -31,7 +31,7 @@ from .costmodel import (
 )
 from .learn import DriftReport, LearningStore, seeded_store
 from .plan import PlanForecast, PlanForecaster, WorkItem, WorkPlan
-from .backtest import backtest, noise_floor
+from .backtest import noise_floor  # NB: `backtest` stays a module, unshadowed
 
 __all__ = [
     # tier-based path (assumed multipliers)
@@ -63,6 +63,5 @@ __all__ = [
     "WorkPlan",
     "PlanForecast",
     "PlanForecaster",
-    "backtest",
     "noise_floor",
 ]

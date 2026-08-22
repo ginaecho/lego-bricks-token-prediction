@@ -130,8 +130,8 @@ def test_selection_picks_constant_when_scope_carries_no_signal():
 def test_selection_reports_its_scores_and_reason():
     rs = [rec("k", x, 5000 + 100 * x) for x in (1, 2, 3, 5, 8)]
     sel = select_model("k", rs)
-    assert "proportional" in sel.scores
-    assert sel.scores["affine"] < sel.scores["proportional"]
+    by_form = sel.scores_for_signal("scope")
+    assert by_form["affine"] < by_form["proportional"]
     assert "MAPE" in sel.reason
 
 
@@ -311,7 +311,8 @@ def test_store_report_mentions_the_chosen_form():
 
 def test_plan_surfaces_unmodelled_kinds():
     s = seeded_store()
-    plan = WorkPlan("p").add("comprehension", 3).add("never_measured", 2)
+    plan = (WorkPlan("p").add("comprehension", 3, bytes=15_216)
+            .add("never_measured", 2))
     fc = PlanForecaster(s).forecast(plan)
     assert fc.unmodelled == ("never_measured",)
     assert not fc.is_complete
@@ -320,9 +321,12 @@ def test_plan_surfaces_unmodelled_kinds():
 
 def test_plan_flags_extrapolation():
     s = seeded_store()
-    fc = PlanForecaster(s).forecast(WorkPlan("p").add("comprehension", 400))
+    model = s.model_for("comprehension")
+    far = model.scope_max * 10
+    fc = PlanForecaster(s).forecast(
+        WorkPlan("p").add("comprehension", 400, bytes=far))
     assert fc.extrapolated
-    assert fc.extrapolated[0].extrapolation == pytest.approx(50.0)
+    assert fc.extrapolated[0].extrapolation == pytest.approx(10.0)
     assert "outside the fitted range" in fc.summary()
 
 
@@ -350,7 +354,8 @@ def test_plan_cost_at_rate():
 
 def test_probe_suite_is_reproducible_and_graded():
     kinds = {p.kind for p in PROBE_SUITE}
-    assert kinds == {"comprehension", "code_write"}
+    assert kinds == {"comprehension", "code_write", "test_write",
+                     "code_review", "docs"}
     scopes = sorted({p.scope for p in PROBE_SUITE if p.kind == "comprehension"})
     assert len(scopes) >= 3           # graded scope is what makes a slope fittable
     assert all(p.prompt for p in PROBE_SUITE)
@@ -374,17 +379,26 @@ def test_measured_data_selects_affine_for_comprehension():
 def test_measured_data_rejects_the_old_multiplicative_assumption():
     """The 1x/2x/4x model is `proportional`. It must lose, badly, on real data."""
     s = seeded_store()
-    for kind in ("comprehension", "code_write"):
-        scores = s.selection_for(kind).scores
-        assert scores["proportional"] > 0.4          # >40% error
-        assert scores[s.selection_for(kind).form] < 0.10
+    for kind in s.kinds():
+        sel = s.selection_for(kind)
+        by_form = sel.scores_for_signal(sel.signal)
+        assert by_form["proportional"] > 0.4         # >40% error
+        assert by_form[sel.form] < 0.10
 
 
 def test_fitted_models_sit_near_the_noise_floor():
     reps = backtest(MEASURED)
-    for kind, rep in reps.items():
-        assert rep.skill_ratio is not None
+    scored = {k: r for k, r in reps.items() if r.skill_ratio is not None}
+    assert scored, "no kind had replicates to score against"
+    for kind, rep in scored.items():
         assert rep.skill_ratio < 2.0, f"{kind} leaves real signal unmodelled"
+
+
+def test_kinds_without_replicates_say_so_rather_than_guessing():
+    reps = backtest(MEASURED)
+    for rep in reps.values():
+        if rep.floor is None:
+            assert "cannot separate" in rep.verdict
 
 
 # ── out-of-sample validation: composition ───────────────────────────────
@@ -397,7 +411,9 @@ def test_fitted_models_predict_the_unseen_composition_experiment():
     predict what batching costs — and it does, to inside the noise floor.
     """
     store = seeded_store()
-    plan = WorkPlan("replica").add("comprehension", 3).add("code_write", 3)
+    plan = (WorkPlan("replica")
+            .add("comprehension", 3, bytes=15_216)   # the files that probe read
+            .add("code_write", 3))
     predicted = PlanForecaster(store).compare_batching(plan)
     measured = composition_evidence()
 
@@ -423,8 +439,144 @@ def test_composition_measurements_are_held_out_of_the_per_kind_fits():
     assert not any(r.tokens in batched_tokens for r in MEASURED)
 
 
-def test_boot_cost_is_pooled_across_kinds():
+def test_boot_cost_is_the_tightest_bound_not_the_average():
+    """Intercepts bound the shared floor from above; the minimum is the bound."""
     store = seeded_store()
-    boot = PlanForecaster(store).boot_cost()
-    assert boot is not None
+    f = PlanForecaster(store)
+    boot = f.boot_cost()
+    intercepts = [f._store.model_for(k).decompose(
+        f._store.model_for(k).scope_min)[0] for k in store.kinds()]
+    intercepts = [i for i in intercepts if i > 0]
+    assert boot == pytest.approx(min(intercepts))
+    assert boot < sum(intercepts) / len(intercepts)
     assert 30_000 < boot < 45_000       # the measured per-invocation floor
+
+
+# ── multi-signal selection: the data picks the explanatory variable ─────
+
+def test_selection_picks_the_signal_that_actually_predicts():
+    """Two candidate signals; only one carries the relationship."""
+    rs = [ScopedRecord("k", i, 1000 + 10 * b, provenance=Provenance.PROBE,
+                       signals={"bytes": b})
+          for i, b in enumerate([100, 400, 900, 1600, 2500], start=1)]
+    sel = select_model("k", rs)
+    assert sel.signal == "bytes"
+    assert sel.form == "affine"
+
+
+def test_selection_prefers_plain_scope_when_signals_tie():
+    rs = [ScopedRecord("k", x, 1000 + 100 * x, provenance=Provenance.PROBE,
+                       signals={"mirror": x})
+          for x in (1, 2, 4, 8)]
+    assert select_model("k", rs).signal == "scope"
+
+
+def test_measured_comprehension_chooses_bytes_over_file_count():
+    """The cross-repo finding, discovered by the selector rather than asserted."""
+    s = seeded_store()
+    sel = s.selection_for("comprehension")
+    assert sel.signal == "bytes"
+    by_signal = {k.split("@")[1]: v for k, v in sel.scores.items()
+                 if k.startswith("affine@")}
+    assert by_signal["bytes"] < by_signal["scope"] / 3
+
+
+def test_probe_suite_spans_three_repositories():
+    from token_yield.probes import repos
+    assert set(repos()) == {"harness-dose", "requests", "click"}
+    assert len({r.repo for r in MEASURED if r.kind == "comprehension"}) == 3
+
+
+# ── the guards that keep a budget honest ───────────────────────────────
+
+def test_plan_names_a_signal_it_cannot_supply():
+    """A model priced by bytes must not silently read zero bytes."""
+    s = seeded_store()
+    fc = PlanForecaster(s).forecast(WorkPlan("p").add("comprehension", 3))
+    assert fc.missing_signal == (("comprehension", "bytes"),)
+    assert not fc.is_complete
+    assert fc.total_tokens == 0
+    assert "did not supply" in fc.summary()
+
+
+def test_supplying_the_signal_prices_the_item():
+    s = seeded_store()
+    fc = PlanForecaster(s).forecast(
+        WorkPlan("p").add("comprehension", 3, bytes=15_216))
+    assert fc.is_complete
+    assert fc.total_tokens > 0
+
+
+def test_noise_floor_does_not_pool_different_repos():
+    """3 files of one repo is not a replicate of 3 files of another."""
+    rs = [ScopedRecord("comprehension", 3, 42_000, provenance=Provenance.PROBE,
+                       signals={"bytes": 15_000}, repo="a"),
+          ScopedRecord("comprehension", 3, 43_000, provenance=Provenance.PROBE,
+                       signals={"bytes": 15_000}, repo="a"),
+          ScopedRecord("comprehension", 3, 140_000, provenance=Provenance.PROBE,
+                       signals={"bytes": 270_000}, repo="b")]
+    floor = noise_floor(rs)
+    assert floor is not None and floor < 0.10      # not inflated by repo b
+
+
+def test_measured_noise_floor_is_a_few_percent():
+    assert 0.01 < noise_floor(MEASURED) < 0.10
+
+
+def test_saturated_fit_does_not_claim_certainty():
+    """Two points fit a line exactly; the interval must not be zero-width."""
+    m = fit_affine("k", [rec("k", 1, 1000), rec("k", 2, 2000)])
+    assert m.saturated
+    lo, hi = m.interval(3)
+    assert hi - lo > 0.5 * m.predict(3)
+
+
+def test_unsaturated_fit_reports_real_spread():
+    m = fit_affine("k", [rec("k", x, 5000 + 100 * x) for x in (1, 2, 4, 8)])
+    assert not m.saturated
+
+
+def test_loo_skips_a_failed_fold_rather_than_dropping_the_form():
+    """One degenerate split must not remove a form from the comparison."""
+    rs = [rec("k", 1, 1000), rec("k", 1, 1010), rec("k", 4, 4000), rec("k", 8, 8000)]
+    assert loo_mape("k", rs, "affine") is not None
+
+
+def test_power_model_survives_a_zero_input():
+    m = fit_power("k", [rec("k", x, int(100 * x ** -0.5)) for x in (1, 4, 9)])
+    assert m.predict(0.0) == float("inf")           # flagged, not a crash
+
+
+def test_plan_interval_is_never_tighter_than_the_noise_floor():
+    s = seeded_store()
+    fc = PlanForecaster(s).forecast(WorkPlan("p").add("code_review", 3))
+    lo, hi = fc.interval()
+    assert (hi - lo) / fc.total_tokens > 0.05       # not the raw sigma=1 fit
+
+
+# ── mining feeds the loop back to measurement ──────────────────────────
+
+def test_coverage_backlog_names_kinds_we_have_not_measured():
+    """The framework must say what it cannot price, ranked by how much it matters."""
+    from token_yield.mine import coverage, mine_repo
+    mined = mine_repo("/home/user/harness-dose", limit=100)
+    if not mined:
+        pytest.skip("no history to mine")
+    store = seeded_store()
+    rep = coverage(mined, store.kinds())
+    assert 0.0 <= rep.covered_share <= 1.0
+    for kind, share in rep.backlog:
+        assert kind not in store.kinds()
+        assert share > 0
+
+
+def test_acting_on_the_backlog_raises_coverage():
+    """Measuring a kind on the backlog must move it out of the backlog."""
+    from token_yield.mine import coverage, mine_repo
+    mined = mine_repo("/home/user/harness-dose", limit=100)
+    if not mined:
+        pytest.skip("no history to mine")
+    before = coverage(mined, ["comprehension"])
+    after = coverage(mined, ["comprehension", "docs"])
+    assert after.covered_share >= before.covered_share
+    assert "docs" not in [k for k, _ in after.backlog]
