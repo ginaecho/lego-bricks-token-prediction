@@ -292,6 +292,112 @@ def test_complexity_multipliers():
     assert ComplexityTier.CUSTOM.default_multiplier == 1.0
 
 
+# ── Uncalibrated task types must never vanish silently ──────────────────
+
+def test_forecast_reports_uncalibrated_types():
+    store = _make_store()          # bug_fix, feature, docs
+    spec = ProjectSpec("Partly Known")
+    spec.add("bug_fix", count=2)
+    spec.add("mystery_work", count=5)     # never measured
+
+    fc = ProjectForecaster(store).forecast(spec)
+    assert fc.uncalibrated == ("mystery_work",)
+    assert fc.is_complete is False
+    assert len(fc.task_predictions) == 1
+
+
+def test_forecast_is_complete_when_everything_calibrated():
+    store = _make_store()
+    spec = ProjectSpec("Fully Known")
+    spec.add("bug_fix", count=2)
+    spec.add("docs", count=1)
+
+    fc = ProjectForecaster(store).forecast(spec)
+    assert fc.uncalibrated == ()
+    assert fc.is_complete is True
+
+
+def test_counts_stay_aligned_with_predictions_when_a_type_is_dropped():
+    """The report zips predictions with counts — a dropped type must not shift them."""
+    store = _make_store()
+    spec = ProjectSpec("Misalignment Guard")
+    spec.add("mystery_work", count=99)    # dropped; used to shift every count
+    spec.add("bug_fix", count=3)
+
+    fc = ProjectForecaster(store).forecast(spec)
+    assert len(fc.task_predictions) == len(fc.task_counts) == 1
+    assert fc.task_predictions[0].task_type == "bug_fix"
+    assert fc.task_counts[0] == 3
+
+
+def test_uncalibrated_types_are_deduplicated():
+    store = _make_store()
+    spec = ProjectSpec("Dupes")
+    spec.add("mystery_work", count=1)
+    spec.add("mystery_work", ComplexityTier.PLUS, count=2)
+    fc = ProjectForecaster(store).forecast(spec)
+    assert fc.uncalibrated == ("mystery_work",)
+
+
+def test_reports_shout_about_an_incomplete_budget():
+    store = _make_store()
+    spec = ProjectSpec("Loud")
+    spec.add("bug_fix", count=1)
+    spec.add("mystery_work", count=1)
+    fc = ProjectForecaster(store).forecast(spec)
+
+    assert "INCOMPLETE BUDGET" in text_report(fc)
+    assert "mystery_work" in text_report(fc)
+    assert "Incomplete budget" in markdown_report(fc)
+    assert "mystery_work" in markdown_report(fc)
+
+
+def test_complete_report_has_no_warning():
+    store = _make_store()
+    spec = ProjectSpec("Quiet")
+    spec.add("bug_fix", count=1)
+    fc = ProjectForecaster(store).forecast(spec)
+    assert "INCOMPLETE BUDGET" not in text_report(fc)
+    assert "Incomplete budget" not in markdown_report(fc)
+
+
+def test_forecast_with_cost_exposes_completeness():
+    store = _make_store()
+    spec = ProjectSpec("Dict Completeness")
+    spec.add("bug_fix", count=1)
+    spec.add("mystery_work", count=1)
+    result = ProjectForecaster(store).forecast_with_cost(spec)
+    assert result["complete"] is False
+    assert result["uncalibrated"] == ["mystery_work"]
+
+
+# ── A TaskUnit's custom multiplier must survive into the forecast ───────
+
+def test_task_unit_custom_multiplier_reaches_the_forecast():
+    store = _make_store()
+    spec = ProjectSpec("Custom Mult", interaction_overhead=0.0)
+    spec.add("bug_fix", ComplexityTier.CUSTOM, count=1, custom_multiplier=3.0)
+
+    fc = ProjectForecaster(store).forecast(spec)
+    assert fc.task_predictions[0].multiplier == 3.0
+    assert fc.task_predictions[0].predicted_tokens == int(1100 * 3.0)
+
+
+def test_predict_combined_accepts_a_custom_multiplier_element():
+    store = _make_store()
+    pred = TokenPredictor(store)
+    out = pred.predict_combined([("bug_fix", ComplexityTier.CUSTOM, 2, 2.5)])
+    assert out[0].multiplier == 2.5
+    assert out[0].predicted_tokens == int(1100 * 2.5) * 2
+
+
+def test_predict_combined_still_accepts_three_tuples():
+    store = _make_store()
+    pred = TokenPredictor(store)
+    out = pred.predict_combined([("bug_fix", ComplexityTier.PLUS, 1)])
+    assert out[0].multiplier == 2.0
+
+
 # ── Custom multipliers per task type ────────────────────────────────────
 
 def test_custom_multipliers_override():

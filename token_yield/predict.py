@@ -90,19 +90,27 @@ class TokenPredictor:
                 results[tier] = pred
         return results
 
-    def predict_combined(self, task_specs: list[tuple[str, ComplexityTier, int]],
+    def predict_combined(self, task_specs: list[tuple],
                          interaction_overhead: float = 0.15) -> list[TaskPrediction]:
         """Predict token usage for a combined workload.
 
-        Each spec is (task_type, complexity, count).  The interaction overhead
-        accounts for cross-task context: switching, shared setup, dependency
-        chains.  It is applied proportionally to distinct-type count.
+        Each spec is ``(task_type, complexity, count)``, optionally with a
+        fourth element carrying a custom multiplier that overrides the tier.
+        The interaction overhead accounts for cross-task context: switching,
+        shared setup, dependency chains.  It is applied proportionally to the
+        distinct-type count.
+
+        A task type with no calibration data is skipped — callers that need to
+        know about it should go through :class:`~token_yield.forecast.
+        ProjectForecaster`, which reports the omission rather than hiding it.
         """
         predictions = []
-        distinct_types = len(set(tt for tt, _, _ in task_specs))
+        distinct_types = len({spec[0] for spec in task_specs})
 
-        for task_type, complexity, count in task_specs:
-            base_pred = self.predict_single(task_type, complexity)
+        for spec in task_specs:
+            task_type, complexity, count = spec[0], spec[1], spec[2]
+            custom = spec[3] if len(spec) > 3 else None
+            base_pred = self.predict_single(task_type, complexity, custom)
             if base_pred is None:
                 continue
 

@@ -27,10 +27,21 @@ class ProjectForecaster:
         self._predictor = predictor or TokenPredictor(store)
 
     def forecast(self, spec: ProjectSpec) -> ProjectForecast:
-        """Produce a full forecast from a project specification."""
+        """Produce a full forecast from a project specification.
+
+        Task units whose type has no calibration data cannot be priced. They are
+        left out of the totals — and named in ``forecast.uncalibrated``, so an
+        incomplete budget can never be mistaken for a complete one.
+        """
+        usable, missing = [], []
+        for unit in spec.tasks:
+            priced = self._predictor.predict_single(
+                unit.task_type, unit.complexity, unit.custom_multiplier)
+            (usable if priced is not None else missing).append(unit)
+
         task_specs = [
-            (unit.task_type, unit.complexity, unit.count)
-            for unit in spec.tasks
+            (unit.task_type, unit.complexity, unit.count, unit.custom_multiplier)
+            for unit in usable
         ]
 
         predictions = self._predictor.predict_combined(
@@ -38,7 +49,8 @@ class ProjectForecaster:
             interaction_overhead=spec.interaction_overhead,
         )
 
-        counts = tuple(unit.count for unit in spec.tasks)
+        # built from ``usable``, so counts stay aligned with predictions
+        counts = tuple(unit.count for unit in usable)
 
         total = sum(p.total_predicted for p in predictions)
         total_low = sum(p.confidence_low for p in predictions)
@@ -58,6 +70,7 @@ class ProjectForecaster:
             total_tokens_high=total_high,
             estimated_duration_seconds=total_dur,
             interaction_overhead_tokens=overhead_tokens,
+            uncalibrated=tuple(dict.fromkeys(u.task_type for u in missing)),
         )
 
     def forecast_with_cost(self, spec: ProjectSpec,
@@ -69,6 +82,8 @@ class ProjectForecaster:
 
         return {
             "project": fc.project_name,
+            "complete": fc.is_complete,
+            "uncalibrated": list(fc.uncalibrated),
             "total_tokens": fc.total_with_overhead,
             "total_tokens_base": fc.total_tokens,
             "harness_overhead_tokens": fc.interaction_overhead_tokens,

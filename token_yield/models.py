@@ -151,6 +151,17 @@ class ProjectForecast:
     total_tokens_high: int
     estimated_duration_seconds: float
     interaction_overhead_tokens: int
+    uncalibrated: tuple[str, ...] = ()
+    """Task types in the spec with no calibration data, so absent from the totals.
+
+    A budget that quietly omits part of the project is worse than no budget, so
+    the omission travels with the forecast and every report prints it.
+    """
+
+    @property
+    def is_complete(self) -> bool:
+        """True when every task type in the spec could actually be priced."""
+        return not self.uncalibrated
 
     @property
     def total_with_overhead(self) -> int:

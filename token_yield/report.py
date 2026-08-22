@@ -60,6 +60,14 @@ def text_report(forecast: ProjectForecast,
     lines.append(f"  Cost range:         {_fmt_cost(cost_low)} – {_fmt_cost(cost_high)}")
     lines.append("")
 
+    if forecast.uncalibrated:
+        lines.append("!! INCOMPLETE BUDGET")
+        lines.append("-" * 60)
+        lines.append("  No calibration data for: " + ", ".join(forecast.uncalibrated))
+        lines.append("  Those tasks are NOT in the totals above. Measure them")
+        lines.append("  before treating this as the project's cost.")
+        lines.append("")
+
     return "\n".join(lines)
 
 
@@ -103,5 +111,15 @@ def markdown_report(forecast: ProjectForecast,
     lines.append(f"- Predicted: **{_fmt_cost(cost)}**")
     lines.append(f"- Range: {_fmt_cost(cost_low)} – {_fmt_cost(cost_high)}")
     lines.append("")
+
+    if forecast.uncalibrated:
+        lines.append("## ⚠️ Incomplete budget")
+        lines.append("")
+        lines.append("No calibration data for: "
+                     + ", ".join(f"`{t}`" for t in forecast.uncalibrated))
+        lines.append("")
+        lines.append("Those tasks are **not** included in the totals above. "
+                     "Measure them before treating this as the project's cost.")
+        lines.append("")
 
     return "\n".join(lines)
