@@ -26,6 +26,7 @@ from __future__ import annotations
 import math
 import os
 import sys
+from pathlib import Path
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(_HERE, "..", "..")))
@@ -382,10 +383,13 @@ def figures_data() -> dict:
     plan = (WorkPlan("replica").add("comprehension", 3, bytes=15_216)
             .add("code_write", 3))
 
+    # This checkout by default; extra repositories may be passed on argv.
+    repo_root = Path(__file__).resolve().parents[2]
+    sources = [(str(repo_root), repo_root.name)]
+    sources += [(a, Path(a).resolve().name) for a in sys.argv[1:]]
+
     mined = []
-    for path, name in (("/home/user/psf/requests", "requests"),
-                       ("/home/user/pallets/click", "click"),
-                       ("/home/user/harness-dose", "harness-dose")):
+    for path, name in sources:
         mined += mine_repo(path, limit=200, repo=name)
 
     return {

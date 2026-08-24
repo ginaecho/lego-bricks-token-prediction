@@ -21,12 +21,25 @@ both candidates and the selector decides.
 
 from __future__ import annotations
 
+import os
+import tempfile
 from dataclasses import dataclass
+from pathlib import Path
 
 from .taxonomy import Provenance, ScopedRecord
 
-SCRATCH = ("/tmp/claude-0/-home-user-harness-dose/"
-           "d6e84d11-a4c1-5e60-8722-4897492f2f5d/scratchpad/probes")
+# The checkout these probes ship in, resolved from this file rather than from
+# the machine they were first written on, so a probe reads the repository it is
+# actually running against.
+REPO_ROOT = Path(__file__).resolve().parents[1]
+COSTMODEL = REPO_ROOT / "token_yield" / "costmodel.py"
+
+# Where a probe run leaves its output. Every probe writes throwaway files, so a
+# temporary directory is the right default; override to keep them somewhere.
+SCRATCH = os.environ.get(
+    "TOKEN_YIELD_SCRATCH",
+    os.path.join(tempfile.gettempdir(), "token-yield-probes"),
+)
 
 
 @dataclass(frozen=True)
@@ -67,7 +80,7 @@ def code_write_probe(scope: int, out_file: str, funcs: list) -> str:
 def test_write_probe(scope: int, targets: list, out_file: str) -> str:
     return (f"MEASUREMENT PROBE — test_write, scope {scope}.\n\n"
             f"Do exactly this, nothing more. Do not run tests.\n\n"
-            f"1. Read /home/user/harness-dose/token_yield/costmodel.py\n"
+            f"1. Read {COSTMODEL}\n"
             f"2. Write pytest tests for these {scope} function(s): "
             f"{', '.join(targets[:scope])}\n"
             f"3. Save to {SCRATCH}/{out_file}\n\nReply with just the word DONE.")
@@ -77,7 +90,7 @@ def code_review_probe(scope: int, targets: list) -> str:
     return (f"MEASUREMENT PROBE — code_review, scope {scope}.\n\n"
             f"Do exactly this, nothing more. Do not edit files. "
             f"Do not run tests.\n\n"
-            f"1. Read /home/user/harness-dose/token_yield/costmodel.py\n"
+            f"1. Read {COSTMODEL}\n"
             f"2. Review these {scope} function(s) for correctness bugs: "
             f"{', '.join(targets[:scope])}\n"
             f"3. Report findings in at most 3 sentences.\n\nStop after answering.")
@@ -86,7 +99,7 @@ def code_review_probe(scope: int, targets: list) -> str:
 def docs_probe(scope: int, targets: list, out_file: str) -> str:
     return (f"MEASUREMENT PROBE — docs, scope {scope}.\n\n"
             f"Do exactly this, nothing more. Do not run tests.\n\n"
-            f"1. Read /home/user/harness-dose/token_yield/costmodel.py\n"
+            f"1. Read {COSTMODEL}\n"
             f"2. Write reference documentation (Markdown) for these {scope} "
             f"function(s): {', '.join(targets[:scope])}\n"
             f"3. Save to {SCRATCH}/{out_file}\n\nReply with just the word DONE.")

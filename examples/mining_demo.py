@@ -8,15 +8,26 @@ of real work you have never measured, ranked by how much of the project they
 would unlock.
 """
 
+import sys
+from pathlib import Path
+
 from token_yield.learn import seeded_store
 from token_yield.mine import classify, coverage, distribution, mine_repo
 from token_yield.plan import PlanForecaster, WorkPlan
 
-REPOS = [
-    ("/home/user/psf/requests", "requests"),
-    ("/home/user/pallets/click", "click"),
-    ("/home/user/harness-dose", "harness-dose"),
-]
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def repos_to_mine() -> list:
+    """This checkout, plus any repository paths given on the command line.
+
+    Mining a single project only tells you about that project, so pass more
+    when you have them checked out:
+
+        python -m examples.mining_demo ~/src/requests ~/src/click
+    """
+    extra = [(a, Path(a).resolve().name) for a in sys.argv[1:]]
+    return [(str(REPO_ROOT), REPO_ROOT.name)] + extra
 
 
 def rule(title: str) -> None:
@@ -30,7 +41,7 @@ def main() -> None:
 
     rule("1. MINE — what is the real work made of?")
     mined = []
-    for path, name in REPOS:
+    for path, name in repos_to_mine():
         tasks = mine_repo(path, limit=200, repo=name)
         mined += tasks
         print(f"  {name:<16} {len(tasks):>4} commits")
