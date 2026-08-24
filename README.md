@@ -20,9 +20,23 @@ yet, and refit as real runs come back.
 
 ## The core idea
 
-Run a few task types for real and record what they cost. Fit a curve to each.
-Then price the variants and combinations you have **never run** — a bigger `A`,
-a much bigger `A`, or `A` and `B` and `C` together.
+Name the handful of things an agent actually does to your documents — **Review,
+Extract, Classify, Retrieve, Reconcile, Draft, Remediate, Validate, Report**.
+Measure each one for real. Then price any *combination* of them, including
+requests nobody has ever run, by decomposing the request into those base tasks
+and recomposing the cost.
+
+![Four panels: the nine named base tasks with their measured marginal cost; the context ablation showing 0.37 tokens per byte above a fixed agent start-up cost; batching several base tasks into one agent saving 64-71% against running them apart; and three plain-English requests decomposed, priced in advance, then checked against what they actually cost](docs/media/token-yield-composition.svg)
+
+The full experiment — 39 measured agent runs over real SEC filings, the fitted
+model, held-out accuracy and the limitations — is in
+[docs/composition-findings.md](docs/composition-findings.md). Run it yourself
+with `python -m examples.composition_demo`.
+
+### Where this came from
+
+The earlier version of the idea, in terms of abstract task types `A`, `B`
+and `C`:
 
 ![The core idea: three measured task types A, B and C on the left feed a fitted curve in the middle, which answers A+, A++ and A+B+C on the right — each shown against the naive guess it replaces](docs/media/token-yield-core-idea.svg)
 
@@ -371,7 +385,7 @@ precedence/      L5 — precedence/conflict layer, the A–D skill family, live-
 integrations/    L3 — Claude Code hook + tool→event adapters
 examples/        calibration_demo.py (measure → fit → validate → refit) · token_yield_demo.py · demo_session.py
 tests/           pytest suite (186 tests: token yield, semantics, cards, benchmark, integration, precedence, AGT)
-docs/            calibration-findings · architecture · proving-it-works · how-it-was-tested · precedence · evaluation-methodology · agt-integration · zenodo
+docs/            calibration-findings · composition-findings · architecture · proving-it-works · how-it-was-tested · precedence · evaluation-methodology · agt-integration · zenodo
 docs/media/      draw_token_yield.py — regenerates the three hand-drawn figures from the real engine
 ```
 
