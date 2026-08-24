@@ -1,10 +1,22 @@
 """Tests for mining real repositories and classifying the work they contain."""
 
+from pathlib import Path
+
 import pytest
 
 from token_yield.mine import (
     ChangeFeatures, CoverageReport, classify, coverage, distribution,
     mine_repo, MinedTask,
+)
+
+# The repository under test, resolved from this file's own location so the
+# suite runs wherever the checkout lives — a developer machine, CI, or a
+# container — instead of a path baked in from where it was written.
+REPO_ROOT = str(Path(__file__).resolve().parents[1])
+
+needs_git_history = pytest.mark.skipif(
+    not (Path(REPO_ROOT) / ".git").is_dir(),
+    reason="not a git checkout — no history to mine",
 )
 
 
@@ -161,8 +173,9 @@ def test_coverage_summary_names_the_gap():
 
 # ── mining a real repository ────────────────────────────────────────────
 
+@needs_git_history
 def test_mine_this_repo():
-    tasks = mine_repo("/home/user/harness-dose", limit=25, repo="harness-dose")
+    tasks = mine_repo(REPO_ROOT, limit=25, repo="harness-dose")
     assert tasks, "this repository has history to mine"
     assert all(t.repo == "harness-dose" for t in tasks)
     assert all(t.sha for t in tasks)
@@ -173,14 +186,16 @@ def test_mine_missing_repo_returns_empty():
     assert mine_repo("/nonexistent/path/here") == []
 
 
+@needs_git_history
 def test_mined_kinds_are_all_classifiable():
-    tasks = mine_repo("/home/user/harness-dose", limit=25)
+    tasks = mine_repo(REPO_ROOT, limit=25)
     assert all(t.kind != "" for t in tasks)
     assert all(0.0 <= t.confidence <= 1.0 for t in tasks)
 
 
+@needs_git_history
 def test_mining_supplies_shape_but_never_cost():
     """Commits were written by people; no token count may be inferred from them."""
-    tasks = mine_repo("/home/user/harness-dose", limit=10)
+    tasks = mine_repo(REPO_ROOT, limit=10)
     for t in tasks:
         assert not hasattr(t, "tokens")

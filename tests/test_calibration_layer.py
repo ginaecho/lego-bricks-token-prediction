@@ -2,6 +2,8 @@
 
 import math
 
+from pathlib import Path
+
 import pytest
 
 from token_yield.taxonomy import (
@@ -19,6 +21,10 @@ from token_yield.probes import (
     COMPOSITION_MEASURED, MEASURED, PROBE_SUITE, composition_evidence,
     replicate_spread,
 )
+
+# Resolved from this file's own location so the suite runs wherever the
+# checkout lives, rather than a path baked in from where it was written.
+REPO_ROOT = str(Path(__file__).resolve().parents[1])
 
 
 def rec(kind, scope, tokens, prov=Provenance.PROBE):
@@ -559,7 +565,7 @@ def test_plan_interval_is_never_tighter_than_the_noise_floor():
 def test_coverage_backlog_names_kinds_we_have_not_measured():
     """The framework must say what it cannot price, ranked by how much it matters."""
     from token_yield.mine import coverage, mine_repo
-    mined = mine_repo("/home/user/harness-dose", limit=100)
+    mined = mine_repo(REPO_ROOT, limit=100)
     if not mined:
         pytest.skip("no history to mine")
     store = seeded_store()
@@ -573,7 +579,7 @@ def test_coverage_backlog_names_kinds_we_have_not_measured():
 def test_acting_on_the_backlog_raises_coverage():
     """Measuring a kind on the backlog must move it out of the backlog."""
     from token_yield.mine import coverage, mine_repo
-    mined = mine_repo("/home/user/harness-dose", limit=100)
+    mined = mine_repo(REPO_ROOT, limit=100)
     if not mined:
         pytest.skip("no history to mine")
     before = coverage(mined, ["comprehension"])
