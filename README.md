@@ -1,15 +1,19 @@
 # HarnessDose — Token Yield
 
-### Scope the project before you start — with a cost model you measured, not one you guessed
+### Connect AI spend to accepted work — credible cost ranges at scoping, outlier risk priced in, and a chargeback line per task
 
 [![CI](https://github.com/ginaecho/open-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/ginaecho/open-harness/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/1314056228.svg)](https://zenodo.org/badge/latestdoi/1314056228)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Run a handful of representative tasks for real. Measure what they actually cost.
-Fit a cost model to those measurements — **letting the data choose the model's
-shape, not just its coefficients** — then price the project you haven't started
-yet, and refit as real runs come back.
+When an AI project is scoped today, the token budget is a shrug. **Token
+Yield** replaces the shrug with a measured rate card: run a small vocabulary of
+base tasks for real, record what each *accepted deliverable* actually cost, fit
+a cost model — **letting the data choose the model's shape, not just its
+coefficients** — then price the work you haven't started yet as a credible
+range, with the expensive-outlier risk located in the specific task types that
+cause it. Every forecast itemises into per-task lines, which is exactly the
+shape budgeting, forecasting and chargeback need.
 
 > The Python package is `openharness`; **HarnessDose** is the project name — the
 > *materia medica* framing where every rule is characterized like a dose you can
@@ -21,10 +25,12 @@ yet, and refit as real runs come back.
 ## The core idea
 
 Name the handful of things an agent actually does to your documents — **Review,
-Extract, Classify, Retrieve, Reconcile, Draft, Remediate, Validate, Report**.
-Measure each one for real. Then price any *combination* of them, including
-requests nobody has ever run, by decomposing the request into those base tasks
-and recomposing the cost.
+Extract, Classify, Retrieve, Reconcile, Draft, Remediate, Validate, Report** —
+each one a task type enterprises already buy: invoice intake, contract review,
+financial close, control testing, board reporting. Measure each one for real,
+against real work, keeping only runs that end in a checkable deliverable. Then
+price any *combination* of them — including requests nobody has ever run — by
+decomposing the request into those base tasks and recomposing the cost.
 
 ![Four panels: the nine named base tasks with their measured marginal cost; the context ablation showing 0.37 tokens per byte above a fixed agent start-up cost; batching several base tasks into one agent saving 64-71% against running them apart; and three plain-English requests decomposed, priced in advance, then checked against what they actually cost](docs/media/token-yield-composition.svg)
 
@@ -32,6 +38,43 @@ The full experiment — 39 measured agent runs over real SEC filings, the fitted
 model, held-out accuracy and the limitations — is in
 [docs/composition-findings.md](docs/composition-findings.md). Run it yourself
 with `python -m examples.composition_demo`.
+
+### From a token count to a budget line
+
+The number a forecast produces is only useful to a budget holder in three
+forms, and all three fall out of the same model:
+
+- **A credible range, not a point.** Repeating the identical task varies runs
+  by **0.29%**; the fitted model cross-validates at **2.55%** and predicts
+  held-out compositions at **2.2% mean / 4.7% worst**. A forecast is therefore
+  quoted as a range floored by that noise — never tighter than the process
+  itself can repeat.
+- **Outlier risk, priced and located.** The expensive tail is not uniform: it
+  lives in the search-shaped work. `Retrieve` costs **5,384 tokens per unit** —
+  an order of magnitude above every other primitive — because its cost is tool
+  calls (one three-fact retrieval burned 36 of them and 47k tokens, the most
+  expensive run in the campaign). Because the decomposition counts how much
+  Retrieve a request contains, the range widens exactly where the risk is, and
+  the mitigation is legible: narrow the search space before dispatching, batch
+  everything else.
+- **A chargeback line per task.** `explain()` itemises every forecast — agent
+  start-up, context bytes, then each base task at its measured marginal. The
+  same decomposition that prices a request in advance becomes its invoice after
+  the fact, so spend reconciles to accepted work items rather than to a blob of
+  tokens.
+
+### The product this is building toward
+
+The [animated explainer](docs/media/token-yield-explainer.html) (a standalone
+page — download and open it) walks the full product arc: a wider vocabulary of **agent-mechanics primitives**
+(plan, tool call, MCP discovery, loop control, eval harness, memory), **domain
+packs** that price what an industry demands on top — PHI redaction and
+clinician sign-off for healthcare, audit trails and model-risk controls for
+finance, telemetry windows for energy — and a scoping UI where editing the
+workload or the domain moves the budget live. Those figures are illustrative;
+this repository is the measured slice that makes the arc credible: the nine
+document primitives above are fitted from real runs end to end, and the same
+decompose-and-recompose machinery extends to the rest.
 
 ### Where this came from
 
