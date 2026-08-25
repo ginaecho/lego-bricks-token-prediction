@@ -1,15 +1,20 @@
 # HarnessDose — Token Yield
 
-### Scope the project before you start — with a cost model you measured, not one you guessed
+### Connect AI spend to accepted work — credible cost ranges at scoping, outlier risk priced in, and a chargeback line per task
 
 [![CI](https://github.com/ginaecho/open-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/ginaecho/open-harness/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/1314056228.svg)](https://zenodo.org/badge/latestdoi/1314056228)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Run a handful of representative tasks for real. Measure what they actually cost.
-Fit a cost model to those measurements — **letting the data choose the model's
-shape, not just its coefficients** — then price the project you haven't started
-yet, and refit as real runs come back.
+**Budget the tokens before you spend them.** Token Yield is Lego-like
+prediction for AI work: a small set of measured primitive bricks, and every
+agentic workload built out of them. Run the bricks for real, record what each
+*accepted deliverable* actually cost, fit a cost model — **letting the data
+choose the model's shape, not just its coefficients** — then price the work you
+haven't started yet as a credible range, with the expensive-outlier risk
+located in the specific bricks that cause it. Every forecast itemises into
+per-brick lines, which is exactly the shape budgeting, forecasting and
+chargeback need.
 
 > The Python package is `openharness`; **HarnessDose** is the project name — the
 > *materia medica* framing where every rule is characterized like a dose you can
@@ -18,11 +23,82 @@ yet, and refit as real runs come back.
 
 ---
 
-## The core idea
+## The core idea: Lego-like prediction
 
-Run a few task types for real and record what they cost. Fit a curve to each.
-Then price the variants and combinations you have **never run** — a bigger `A`,
-a much bigger `A`, or `A` and `B` and `C` together.
+Name the primitive bricks an agent's work is made of. Measure each one for
+real, keeping only runs that end in a checkable deliverable. Then price any
+*stack* of them — including workloads nobody has ever run — by decomposing the
+request into bricks and recomposing the cost.
+
+The [animated explainer](docs/media/token-yield-explainer.html) (standalone
+page — download and open) tells this in six steps. Each step is either measured
+in this repository today or explicitly on the roadmap:
+
+| the explainer | what it shows | measured here, today |
+|---|---|---|
+| **1 · Pre-simulation** — *"Take one primitive. Vary it. Measure it."* | one primitive perturbed: context removed, documents added, citations added | the Review ladder: the same instruction over 0.9→33 KB of real filings — **0.37 tokens/byte** over a **29.8k** agent start-up toll |
+| **2 · Composition** — *"Stack primitives into real workloads."* | workloads bricked up; naive sum vs measured | 11 measured composites; batching into one agent beats one-agent-per-brick by **64–71%** |
+| **3 · The second brick** — *"The same stack costs differently per industry."* | domain packs: healthcare ×1.8, finance ×1.5, energy ×1.3 | roadmap — to be **fitted as measured deltas** (re-run the campaign under each compliance overlay), never asserted as multipliers |
+| **4 · Fit** — *"Train on every stack, in every domain."* | a cost model fitted across stacks and domains | six nested forms raced by leave-one-out CV; winner predicts at **2.55%** against a **0.29%** noise floor |
+| **5 · A workload it has never seen** — *"Decompose. Recompose. Predict."* | an unseen healthcare copilot projected onto the bricks and rebuilt | held-out compositions at **2.2% mean error**; plain-English requests priced before running at **0–3.5%** |
+| **6 · In the product** — *"adjust the workload, watch the budget move."* | the forecast UI, quoting tokens ±8% | `explain()` itemises every forecast — start-up, context, each brick at its measured marginal — the invoice line chargeback needs |
+
+The measured slice uses nine **document-work bricks** — Review, Extract,
+Classify, Retrieve, Reconcile, Draft, Remediate, Validate, Report — each a task
+type enterprises already buy: invoice intake, contract review, financial close,
+control testing, board reporting. The explainer's fuller registry adds the
+**agent-mechanics bricks** (Plan, Tool call, MCP discovery, Generate, Loop
+control, Eval harness, Prompt + memory); the registries are open, and fitted
+per client. Same machinery, wider wall of bricks.
+
+![Four panels: the nine named base tasks with their measured marginal cost; the context ablation showing 0.37 tokens per byte above a fixed agent start-up cost; batching several base tasks into one agent saving 64-71% against running them apart; and three plain-English requests decomposed, priced in advance, then checked against what they actually cost](docs/media/token-yield-composition.svg)
+
+The full experiment — 39 measured agent runs over real SEC filings, the fitted
+model, held-out accuracy and the limitations — is in
+[docs/composition-findings.md](docs/composition-findings.md). Run it yourself
+with `python -m examples.composition_demo`.
+
+### From a token count to a budget line
+
+The number a forecast produces is only useful to a budget holder in three
+forms, and all three fall out of the same model:
+
+- **A credible range, not a point.** Repeating the identical task varies runs
+  by **0.29%**; the fitted model cross-validates at **2.55%** and predicts
+  held-out compositions at **2.2% mean / 4.7% worst**. A forecast is therefore
+  quoted as a range floored by that noise — never tighter than the process
+  itself can repeat.
+- **Outlier risk, priced and located.** The expensive tail is not uniform: it
+  lives in the search-shaped work. `Retrieve` costs **5,384 tokens per unit** —
+  an order of magnitude above every other primitive — because its cost is tool
+  calls (one three-fact retrieval burned 36 of them and 47k tokens, the most
+  expensive run in the campaign). Because the decomposition counts how much
+  Retrieve a request contains, the range widens exactly where the risk is, and
+  the mitigation is legible: narrow the search space before dispatching, batch
+  everything else.
+- **A chargeback line per brick.** `explain()` itemises every forecast — agent
+  start-up, context bytes, then each brick at its measured marginal. The
+  same decomposition that prices a request in advance becomes its invoice after
+  the fact, so spend reconciles to accepted work items rather than to a blob of
+  tokens.
+
+### The second brick, concretely
+
+A domain pack prices what an industry demands on top of the same stack: PHI
+redaction, clinical ontology grounding and clinician sign-off for
+**healthcare**; an audit trail per step, model-risk controls and cite-the-filing
+for **finance**; telemetry windows and safety interlock checks for **energy**.
+The explainer's multipliers (×1.8 / ×1.5 / ×1.3) are illustrative placeholders;
+the point of this repository's method is that each pack becomes a *measured
+delta* — the calibration campaign re-run under the overlay — so the industry
+premium is a finding, not an assumption.
+
+> *A small set of bricks. Any AI project, costed.*
+
+### Where this came from
+
+The earlier version of the idea, in terms of abstract task types `A`, `B`
+and `C`:
 
 ![The core idea: three measured task types A, B and C on the left feed a fitted curve in the middle, which answers A+, A++ and A+B+C on the right — each shown against the naive guess it replaces](docs/media/token-yield-core-idea.svg)
 
@@ -371,7 +447,7 @@ precedence/      L5 — precedence/conflict layer, the A–D skill family, live-
 integrations/    L3 — Claude Code hook + tool→event adapters
 examples/        calibration_demo.py (measure → fit → validate → refit) · token_yield_demo.py · demo_session.py
 tests/           pytest suite (186 tests: token yield, semantics, cards, benchmark, integration, precedence, AGT)
-docs/            calibration-findings · architecture · proving-it-works · how-it-was-tested · precedence · evaluation-methodology · agt-integration · zenodo
+docs/            calibration-findings · composition-findings · architecture · proving-it-works · how-it-was-tested · precedence · evaluation-methodology · agt-integration · zenodo
 docs/media/      draw_token_yield.py — regenerates the three hand-drawn figures from the real engine
 ```
 
