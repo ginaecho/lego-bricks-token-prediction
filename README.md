@@ -1,8 +1,8 @@
-# HarnessDose — Token Yield
+# Token Yield — Lego bricks for token prediction
 
 ### Connect AI spend to accepted work — credible cost ranges at scoping, outlier risk priced in, and a chargeback line per task
 
-[![CI](https://github.com/ginaecho/open-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/ginaecho/open-harness/actions/workflows/ci.yml)
+[![CI](https://github.com/ginaecho/lego-bricks-token-prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/ginaecho/lego-bricks-token-prediction/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/1314056228.svg)](https://zenodo.org/badge/latestdoi/1314056228)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -16,10 +16,13 @@ located in the specific bricks that cause it. Every forecast itemises into
 per-brick lines, which is exactly the shape budgeting, forecasting and
 chargeback need.
 
-> The Python package is `openharness`; **HarnessDose** is the project name — the
+> **Names, reconciled.** The repository is `lego-bricks-token-prediction`, after
+> the idea it exists to prove: a small set of measured bricks, and any AI
+> workload built out of them. **Token Yield** (`token_yield/`) is that
+> prediction layer. It stands on **HarnessDose** — the measurement layer that
+> makes per-task token counts observable in the first place, named for the
 > *materia medica* framing where every rule is characterized like a dose you can
-> measure. **Token Yield** (`token_yield/`) is the prediction layer built on top
-> of that measurement.
+> measure. The installable Python package for both is `openharness`.
 
 ---
 
