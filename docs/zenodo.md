@@ -10,7 +10,7 @@ Zenodo mints the DOI in *your* name, not ours. Here is the whole flow.
 1. Sign in at <https://zenodo.org> with the **same GitHub account that owns the
    repository** (`ginaecho`). Use *Log in with GitHub* and authorize Zenodo.
 2. Go to **Settings → GitHub** (<https://zenodo.org/account/settings/github/>).
-3. Find **`ginaecho/open-harness`** in the list and flip its toggle **On**.
+3. Find **`ginaecho/lego-bricks-token-prediction`** in the list and flip its toggle **On**.
    (If it isn't listed yet, click *Sync now* — Zenodo re-reads your repos.)
 
 That's it. Zenodo is now watching the repo for releases.
