@@ -4,6 +4,17 @@
 [![DOI](https://zenodo.org/badge/1314056228.svg)](https://zenodo.org/badge/latestdoi/1314056228)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+<p align="center">
+  <a href="docs/media/Token_Yield_Explainer.mp4">
+    <img src="docs/media/Token_Yield_Explainer.gif" width="820"
+         alt="Token Yield — the animated explainer, looping: atomic task blocks are measured, combined, trained on, and used to price an unseen project">
+  </a>
+</p>
+
+<p align="center">
+  ▶ <b><a href="docs/media/Token_Yield_Explainer.mp4">Watch the full video</a></b>
+</p>
+
 We predict token consumption for AI projects by decomposing complex workflows
 into reusable, **LEGO-like task blocks**. Each atomic task serves as a building
 block and is represented as an input feature for model training. For a new
@@ -17,10 +28,6 @@ money is gone. Token Yield turns them into a line item — a credible cost range
 at scoping time, the expensive-outlier risk located before dispatch, and a
 per-brick invoice that reconciles spend to accepted work. Budgeting,
 forecasting and chargeback, from one model.
-
-[![Token Yield — the animated explainer, looping](docs/media/Token_Yield_Explainer.gif)](docs/media/Token_Yield_Explainer.mp4)
-
-▶ **[Full video](docs/media/Token_Yield_Explainer.mp4)**
 
 ## How it works
 
