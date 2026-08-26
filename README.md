@@ -12,6 +12,12 @@ are then encoded and reconstructed through an **autoencoder-based architecture**
 to capture project complexity and structure. The resulting representation is
 used to predict overall token usage accurately.
 
+**Why it matters:** AI budgets are set by guesswork and reconciled after the
+money is gone. Token Yield turns them into a line item — a credible cost range
+at scoping time, the expensive-outlier risk located before dispatch, and a
+per-brick invoice that reconciles spend to accepted work. Budgeting,
+forecasting and chargeback, from one model.
+
 [![Token Yield — the animated explainer, looping](docs/media/Token_Yield_Explainer.gif)](docs/media/Token_Yield_Explainer.mp4)
 
 ▶ **[Full video](docs/media/Token_Yield_Explainer.mp4)**
@@ -27,28 +33,28 @@ used to predict overall token usage accurately.
             ↺  measured actual refits the model
 ```
 
-1. **Pre-simulate the bricks.** Run each atomic task for real, at several
-   sizes, and record its token cost.
-2. **Pre-simulate combinations.** Stack bricks (`A+A`, `A+B`, `A+B+C`) and
-   measure again — combinations are strongly sub-additive.
-3. **Train.** Brick counts + context size are the features, measured tokens the
-   target; the model form is chosen by leave-one-out cross-validation.
-4. **Predict and close the loop.** A real request is decomposed back into
-   bricks, recomposed into a price *before it runs*; the measured actual feeds
-   back and refits.
+1. **Pre-simulate the bricks** — run each atomic task for real, at several
+   sizes. This is the rate card finance can hold.
+2. **Pre-simulate combinations** — stack bricks and measure again. They are
+   strongly sub-additive: batching work into one agent **saves 64–71%**, the
+   single biggest cost lever a buyer has.
+3. **Train** — brick counts + context size in, measured tokens out; model form
+   chosen by cross-validation, never assumed.
+4. **Predict and close the loop** — decompose a real request into bricks,
+   quote it *before it runs*, then let the measured actual refit the model.
+   The same decomposition is the chargeback invoice afterwards.
 
 ## Measured, not asserted
 
-39 real agent runs over 33 genuine SEC filings, nine bricks
+39 real agent runs over 33 genuine SEC filings; nine bricks
 (Review · Extract · Classify · Retrieve · Reconcile · Draft · Remediate · Validate · Report):
 
-| | |
+| finding | business read |
 |---|---|
-| Agent start-up, before any work | **29,821 tokens** — 89% of the median task |
-| Context | **0.37 tokens/byte**, flat |
-| Stacking bricks in one agent | **saves 64–71%** vs one agent per brick |
-| Model accuracy (LOO-CV) | **2.55%** against a 0.29% noise floor |
-| Held-out and plain-English requests, priced in advance | **0–4.7% error** |
+| Start-up is **29,821 tokens** — 89% of a median task | most of what you pay is the invocation, not the work — so batch |
+| Context costs **0.37 tokens/byte**, flat | more reading scales linearly; it will not blow the budget |
+| **Retrieve = 5,384/unit**, 10× any other brick | the outlier tail is *located* — narrow the search before dispatch |
+| Cross-validated **2.55%**; unseen requests **0–4.7%** | a range you can sign off on at scoping, not a vibe |
 
 Full experiment and limitations: **[docs/composition-findings.md](docs/composition-findings.md)**
 
