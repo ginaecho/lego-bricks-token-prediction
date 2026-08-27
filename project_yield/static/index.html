@@ -4,343 +4,386 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<title>Project Yield — use case scoping</title>
+<title>Project Yield</title>
 <style>
   :root {
-    --bg: #f6f7f9; --panel: #ffffff; --ink: #16191d; --muted: #5c6470;
-    --line: #e2e5ea; --accent: #2f5bd7; --accent-soft: #eaf0ff;
-    --good: #1a7f4b; --bad: #b3261e; --warn: #8a5a00; --warn-bg: #fff8e6;
-    --radius: 10px;
+    --bg: #ffffff; --raised: #f5f5f7; --ink: #1d1d1f; --muted: #86868b;
+    --hairline: rgba(0,0,0,.10); --accent: #0066cc;
+    --up: #157347; --down: #c0392b; --flag: #9a6b00;
+    --r: 18px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #14171b; --panel: #1c2026; --ink: #e8eaed; --muted: #9aa3af;
-      --line: #2c323a; --accent: #7ba1ff; --accent-soft: #1e2a45;
-      --good: #57c98a; --bad: #ff8b80; --warn: #e3b341; --warn-bg: #2a2312;
+      --bg: #000000; --raised: #1c1c1e; --ink: #f5f5f7; --muted: #98989d;
+      --hairline: rgba(255,255,255,.14); --accent: #2997ff;
+      --up: #5ed99a; --down: #ff6b5e; --flag: #e0b13a;
     }
   }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
-    font: 15px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+    font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text",
+          "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  header {
-    padding: 22px 26px 18px; border-bottom: 1px solid var(--line);
-    background: var(--panel);
+  .page { max-width: 720px; margin: 0 auto; padding: 72px 24px 120px; }
+  @media (max-width: 600px) { .page { padding: 44px 20px 80px; } }
+
+  /* ── masthead ─────────────────────────────────────────── */
+  h1 {
+    margin: 0; font-size: 40px; line-height: 1.1; font-weight: 600;
+    letter-spacing: -.022em;
   }
-  h1 { margin: 0 0 4px; font-size: 20px; font-weight: 650; letter-spacing: -.2px; }
-  .sub { color: var(--muted); font-size: 13.5px; margin: 0; }
-  .wrap {
-    display: grid; grid-template-columns: minmax(320px, 400px) 1fr;
-    gap: 20px; padding: 20px 26px 60px; align-items: start;
+  .lede {
+    margin: 12px 0 0; font-size: 19px; color: var(--muted);
+    letter-spacing: -.01em; max-width: 34em;
   }
-  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } }
-  .panel {
-    background: var(--panel); border: 1px solid var(--line);
-    border-radius: var(--radius); padding: 18px;
+
+  /* ── the one input ────────────────────────────────────── */
+  form { margin-top: 40px; }
+  .composer {
+    background: var(--raised); border-radius: var(--r); padding: 6px 6px 6px;
   }
-  .panel h2 {
-    margin: 0 0 14px; font-size: 12px; text-transform: uppercase;
-    letter-spacing: .8px; color: var(--muted); font-weight: 650;
+  textarea {
+    width: 100%; border: 0; background: transparent; color: var(--ink);
+    font: inherit; font-size: 18px; line-height: 1.45; letter-spacing: -.01em;
+    padding: 18px; min-height: 128px; resize: vertical;
   }
-  label { display: block; font-size: 12.5px; color: var(--muted); margin: 12px 0 4px; }
-  input, select, textarea {
-    width: 100%; padding: 8px 10px; font: inherit; font-size: 14px;
-    color: var(--ink); background: var(--bg);
-    border: 1px solid var(--line); border-radius: 7px;
+  textarea::placeholder { color: var(--muted); }
+  @media (max-width: 600px) { textarea { min-height: 200px; font-size: 17px; } }
+  textarea:focus { outline: none; }
+  .composer:focus-within { box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent); }
+  .bar {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    padding: 10px 12px 12px; border-top: 1px solid var(--hairline);
   }
-  textarea { min-height: 110px; resize: vertical; line-height: 1.45; }
-  input:focus, select:focus, textarea:focus {
-    outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent;
+  .bar .grow { flex: 1; }
+  select, input[type=number], input[type=text] {
+    font: inherit; font-size: 14px; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--hairline); border-radius: 980px;
+    padding: 7px 12px; max-width: 15em;
+    appearance: none; -webkit-appearance: none;
   }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  select {
+    padding-right: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2386868b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+  }
+  select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
   button {
-    font: inherit; font-weight: 600; cursor: pointer; border-radius: 7px;
-    padding: 9px 14px; border: 1px solid var(--accent);
-    background: var(--accent); color: #fff;
+    font: inherit; font-size: 15px; font-weight: 500; cursor: pointer;
+    border: 0; border-radius: 980px; padding: 9px 20px;
+    background: var(--accent); color: #fff; transition: opacity .15s;
   }
-  button.ghost { background: transparent; color: var(--accent); }
-  button:disabled { opacity: .55; cursor: progress; }
-  .actions { display: flex; gap: 8px; margin-top: 16px; }
-  .bricks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .bricks label { margin: 0 0 2px; font-size: 11.5px; }
-  .bricks input { padding: 5px 7px; font-size: 13px; }
+  button:hover { opacity: .85; }
+  button:disabled { opacity: .4; cursor: progress; }
+
   details { margin-top: 14px; }
-  summary { cursor: pointer; font-size: 12.5px; color: var(--accent); }
-
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-  .card {
-    border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 13px 14px; background: var(--panel);
+  summary {
+    cursor: pointer; font-size: 15px; color: var(--accent);
+    list-style: none; letter-spacing: -.01em;
   }
-  .card .k { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
-  .card .v { font-size: 21px; font-weight: 650; margin: 5px 0 2px; letter-spacing: -.4px; }
-  .card .band { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .card.hero { background: var(--accent-soft); border-color: transparent; }
-  .pos { color: var(--good); } .neg { color: var(--bad); }
-
-  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); }
-  th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); font-weight: 600; }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-  .scroll { overflow-x: auto; }
-
-  .warn {
-    background: var(--warn-bg); border: 1px solid var(--warn);
-    border-radius: var(--radius); padding: 12px 14px; margin-bottom: 16px;
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: "›"; display: inline-block; margin-left: 6px; transition: transform .2s;
   }
-  .warn h3 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .7px; color: var(--warn); }
-  .warn li { margin: 4px 0; font-size: 13px; }
-  .warn ul { margin: 0; padding-left: 18px; }
-  .chip {
-    display: inline-block; font-size: 11.5px; padding: 2px 8px; border-radius: 99px;
-    background: var(--accent-soft); color: var(--accent); margin-right: 6px;
+  details[open] summary::after { transform: rotate(90deg); }
+  .drawer { padding: 18px 2px 4px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 520px) { .grid3 { grid-template-columns: repeat(2, 1fr); } }
+  .field { display: block; }
+  .field span {
+    display: block; font-size: 12px; color: var(--muted);
+    margin-bottom: 5px; letter-spacing: -.005em;
   }
-  .empty { color: var(--muted); font-size: 14px; padding: 26px 4px; }
-  section + section { margin-top: 20px; }
-  h3.sec { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
-  code { font: 13px/1.4 ui-monospace, "Cascadia Code", Consolas, monospace; }
+  .field input, .field select { width: 100%; max-width: none; border-radius: 10px; }
+  .drawer .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  @media (max-width: 520px) { .drawer .row2 { grid-template-columns: 1fr; } }
+
+  .echo { margin: 14px 2px 0; font-size: 14px; color: var(--muted); letter-spacing: -.005em; }
+  .echo b { color: var(--ink); font-weight: 500; }
+
+  /* ── the answer ───────────────────────────────────────── */
+  #out { margin-top: 64px; }
+  #out:empty { display: none; }
+  .hero { text-align: center; padding: 8px 0 4px; }
+  .hero .n {
+    font-size: 72px; line-height: 1.05; font-weight: 600; letter-spacing: -.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 520px) { .hero .n { font-size: 52px; } }
+  .hero .cap {
+    font-size: 15px; color: var(--muted); margin-top: 6px; letter-spacing: -.005em;
+  }
+  .hero .verdict { margin-top: 18px; font-size: 19px; letter-spacing: -.012em; }
+
+  .tiles {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 40px;
+  }
+  @media (max-width: 520px) { .tiles { grid-template-columns: 1fr; } }
+  .tile {
+    background: var(--raised); border-radius: var(--r); padding: 20px 18px;
+    text-align: center;
+  }
+  .tile .n {
+    font-size: 30px; font-weight: 600; letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .tile .k { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .tile .b { font-size: 12px; color: var(--muted); margin-top: 8px; font-variant-numeric: tabular-nums; }
+
+  h2 {
+    font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--muted); margin: 48px 0 4px;
+  }
+  dl { margin: 0; }
+  .line {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 14px 2px; border-bottom: 1px solid var(--hairline);
+  }
+  .line dt { flex: 1; letter-spacing: -.01em; }
+  .line dd {
+    margin: 0; text-align: right; font-variant-numeric: tabular-nums;
+    letter-spacing: -.01em;
+  }
+  .line small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .line dt small { text-align: left; }
+
+  .caption {
+    font-size: 13px; color: var(--muted); margin: 10px 2px 0; letter-spacing: -.005em;
+  }
+  .note {
+    display: flex; gap: 10px; margin-top: 40px; padding: 16px 18px;
+    background: var(--raised); border-radius: 14px;
+    font-size: 14px; line-height: 1.5; color: var(--muted);
+  }
+  .note .dot {
+    flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--flag); margin-top: 7px;
+  }
+  .note p { margin: 0 0 8px; }
+  .note p:last-child { margin-bottom: 0; }
+  .note strong { color: var(--ink); font-weight: 500; }
+
+  .peers { margin-top: 10px; }
+  .peers .line dt { font-variant-numeric: normal; }
+  .peers code {
+    font: 13px/1.4 ui-monospace, "SF Mono", Menlo, monospace; color: var(--muted);
+  }
+  .up { color: var(--up); } .down { color: var(--down); }
+  .err { color: var(--down); font-size: 15px; margin-top: 16px; }
+  .sr {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
 </style>
 </head>
 <body>
-<header>
+<div class="page">
   <h1>Project Yield</h1>
-  <p class="sub">Scope a use case once. Get the token budget, the price, the win
-     rate, the staffing and the calendar — from the same lego bricks.</p>
-</header>
+  <p class="lede">Describe a use case. Get what it costs to run, what a client
+     like this pays, and whether it is worth staffing.</p>
 
-<div class="wrap">
-  <form class="panel" id="form">
-    <h2>The use case</h2>
-
-    <label for="title">Title</label>
-    <input id="title" name="title" placeholder="Northwind invoice intake">
-
-    <label for="description">Description — goals, scope, what it reads and produces</label>
-    <textarea id="description" name="description" placeholder="Automate supplier invoice intake: read each invoice, extract header and line fields, classify for routing, validate totals against the purchase order and flag exceptions. Around 24,000 invoices a month."></textarea>
-
-    <div class="row">
-      <div>
-        <label for="industry">Industry</label>
-        <select id="industry" name="industry"></select>
-      </div>
-      <div>
-        <label for="goal">Business goal</label>
-        <select id="goal" name="goal"></select>
+  <form id="form">
+    <div class="composer">
+      <label class="sr" for="description">Use case description</label>
+      <textarea id="description" placeholder="Automate supplier invoice intake for a manufacturing client. Each invoice is read, 9 fields are extracted, it is classified for routing, checked against the purchase order, and simple exceptions are corrected. Around 24,000 invoices a month."></textarea>
+      <div class="bar">
+        <label class="sr" for="industry">Industry</label>
+        <select id="industry"></select>
+        <label class="sr" for="goal">Business goal</label>
+        <select id="goal"></select>
+        <span class="grow"></span>
+        <button type="submit" id="go">Estimate</button>
       </div>
     </div>
 
-    <div class="row">
-      <div>
-        <label for="context_bytes">Source material per run (bytes)</label>
-        <input id="context_bytes" name="context_bytes" type="number" min="0" step="1000" value="0">
+    <p class="echo" id="echo" hidden></p>
+    <p class="err" id="err" hidden></p>
+
+    <details id="more">
+      <summary>Refine the scope</summary>
+      <div class="drawer">
+        <div class="grid3" id="bricks"></div>
+        <div class="row2">
+          <label class="field"><span>Source material per run (bytes)</span>
+            <input id="context_bytes" type="number" min="0" step="1000" value="0"></label>
+          <label class="field"><span>Production runs per month</span>
+            <input id="monthly_runs" type="number" min="0" step="100" value="0"></label>
+        </div>
+        <div class="row2">
+          <label class="field"><span>Continues an earlier use case</span>
+            <select id="parent_id"></select></label>
+          <label class="field"><span>Title</span>
+            <input id="title" type="text" placeholder="Untitled use case"></label>
+        </div>
       </div>
-      <div>
-        <label for="monthly_runs">Production runs per month</label>
-        <input id="monthly_runs" name="monthly_runs" type="number" min="0" step="100" value="0">
-      </div>
-    </div>
-
-    <label for="parent_id">Continues an earlier use case</label>
-    <select id="parent_id" name="parent_id"></select>
-
-    <label for="sibling_ids">Delivered alongside (ctrl-click for several)</label>
-    <select id="sibling_ids" name="sibling_ids" multiple size="4"></select>
-
-    <details open>
-      <summary>Task bricks — one end-to-end run</summary>
-      <div class="bricks" id="bricks"></div>
     </details>
-
-    <div class="actions">
-      <button type="button" id="encode" class="ghost">Read from description</button>
-      <button type="submit" id="submit">Predict</button>
-    </div>
   </form>
 
-  <main id="out">
-    <div class="panel empty" id="empty">
-      Fill in a use case and press <strong>Predict</strong>. Or press
-      <strong>Read from description</strong> first to let the encoder fill in
-      the bricks, industry, goal and run rate.
-    </div>
-  </main>
+  <main id="out" aria-live="polite"></main>
 </div>
 
 <script>
 const $ = (id) => document.getElementById(id);
-let META = null;
+const esc = (s) => String(s).replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = (n) => (n < 0 ? '−$' : '$') + Math.abs(Math.round(n)).toLocaleString();
+const num = (n, d = 0) => Number(n).toLocaleString(undefined, {maximumFractionDigits: d});
+const title = (s) => String(s).replace(/_/g, ' ');
+
+let BRICKS = [];
 
 async function boot() {
-  META = await (await fetch('/api/meta')).json();
-  fill($('industry'), META.industries);
-  fill($('goal'), META.goals);
-  const none = new Option('— none (greenfield) —', '');
-  $('parent_id').add(none);
-  META.library.forEach(u => {
-    $('parent_id').add(new Option(`${u.id} · ${u.title}`, u.id));
-    $('sibling_ids').add(new Option(`${u.id} · ${u.title}`, u.id));
-  });
-  const grid = $('bricks');
-  META.bricks.forEach(b => {
-    const wrap = document.createElement('div');
-    wrap.innerHTML = `<label for="b_${b.slug}" title="${esc(b.blurb)}">${b.name}</label>
-      <input id="b_${b.slug}" data-brick="${b.slug}" type="number" min="0" value="0">`;
-    grid.appendChild(wrap);
-  });
+  const meta = await (await fetch('/api/meta')).json();
+  BRICKS = meta.bricks;
+  meta.industries.forEach(v => $('industry').add(new Option(title(v), v)));
+  meta.goals.forEach(v => $('goal').add(new Option(title(v), v)));
+  $('parent_id').add(new Option('Nothing — this is new', ''));
+  meta.library.forEach(u => $('parent_id').add(new Option(`${u.id} · ${u.title}`, u.id)));
+  $('bricks').innerHTML = BRICKS.map(b => `
+    <label class="field" title="${esc(b.blurb)}"><span>${esc(b.name)}</span>
+      <input data-brick="${b.slug}" type="number" min="0" value="0"></label>`).join('');
 }
 
-function fill(sel, values) {
-  values.forEach(v => sel.add(new Option(v.replace(/_/g, ' '), v)));
-}
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, c =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function payload() {
-  const counts = {};
+const bricksSet = () => [...document.querySelectorAll('[data-brick]')]
+  .some(i => parseInt(i.value || '0', 10) > 0);
+
+function counts() {
+  const out = {};
   document.querySelectorAll('[data-brick]').forEach(i => {
     const n = parseInt(i.value || '0', 10);
-    if (n > 0) counts[i.dataset.brick] = n;
+    if (n > 0) out[i.dataset.brick] = n;
   });
-  return {
-    title: $('title').value, description: $('description').value,
-    industry: $('industry').value, goal: $('goal').value,
-    context_bytes: parseInt($('context_bytes').value || '0', 10),
-    monthly_runs: parseInt($('monthly_runs').value || '0', 10),
-    parent_id: $('parent_id').value || null,
-    sibling_ids: [...$('sibling_ids').selectedOptions].map(o => o.value),
-    counts: counts,
-  };
+  return out;
 }
 
 async function post(url, body) {
   const r = await fetch(url, {method: 'POST',
     headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
-  const data = await r.json();
-  if (!r.ok) throw new Error(data.error || 'request failed');
-  return data;
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.error || 'request failed');
+  return d;
 }
 
-$('encode').addEventListener('click', async () => {
-  const btn = $('encode'); btn.disabled = true;
-  try {
-    const uc = await post('/api/encode', {description: $('description').value,
-                                          title: $('title').value});
-    $('industry').value = uc.industry;
-    $('goal').value = uc.goal;
-    $('context_bytes').value = uc.context_bytes;
-    $('monthly_runs').value = uc.monthly_runs;
-    if (!$('title').value) $('title').value = uc.title;
-    document.querySelectorAll('[data-brick]').forEach(i => {
-      i.value = uc.counts[i.dataset.brick] || 0;
-    });
-    $('out').innerHTML = `<div class="panel"><h2>Encoded by ${esc(uc.encoder)}</h2>
-      <p><code>${esc(uc.notation)}</code></p>
-      <p class="sub">${esc(uc.rationale || '')}</p></div>`;
-  } catch (e) { showError(e); } finally { btn.disabled = false; }
-});
+function say(el, text) {
+  el.textContent = text || '';
+  el.hidden = !text;
+}
 
 $('form').addEventListener('submit', async (ev) => {
   ev.preventDefault();
-  const btn = $('submit'); btn.disabled = true;
-  try { render(await post('/api/predict', payload())); }
-  catch (e) { showError(e); } finally { btn.disabled = false; }
+  const btn = $('go');
+  btn.disabled = true;
+  say($('err'), '');
+  try {
+    // One button. If the scope has not been set by hand, the description is
+    // encoded first — the two-step version only ever made people press twice.
+    if (!bricksSet()) {
+      const uc = await post('/api/encode', {description: $('description').value,
+                                            title: $('title').value});
+      $('industry').value = uc.industry;
+      $('goal').value = uc.goal;
+      $('context_bytes').value = uc.context_bytes;
+      $('monthly_runs').value = uc.monthly_runs;
+      if (!$('title').value) $('title').value = uc.title;
+      document.querySelectorAll('[data-brick]').forEach(i => {
+        i.value = uc.counts[i.dataset.brick] || 0;
+      });
+      say($('echo'), `Read as ${uc.notation} · ${title(uc.industry)} · ` +
+        (uc.monthly_runs ? `${num(uc.monthly_runs)} runs a month` : 'no run rate given'));
+    }
+    render(await post('/api/predict', {
+      title: $('title').value, description: $('description').value,
+      industry: $('industry').value, goal: $('goal').value,
+      context_bytes: parseInt($('context_bytes').value || '0', 10),
+      monthly_runs: parseInt($('monthly_runs').value || '0', 10),
+      parent_id: $('parent_id').value || null,
+      counts: counts(),
+    }));
+  } catch (e) {
+    say($('err'), e.message);
+  } finally {
+    btn.disabled = false;
+  }
 });
 
-function showError(e) {
-  $('out').innerHTML = `<div class="warn"><h3>That did not work</h3>${esc(e.message)}</div>`;
+// Editing the description invalidates a scope the encoder produced, so the
+// next Estimate re-reads it instead of silently reusing stale brick counts.
+$('description').addEventListener('input', () => {
+  if ($('echo').hidden) return;
+  document.querySelectorAll('[data-brick]').forEach(i => { i.value = 0; });
+  say($('echo'), '');
+});
+
+function band(o) {
+  const m = o.formatted.match(/\(([^)]+)\)/);
+  return m ? m[1] : '';
+}
+function point(o) {
+  return o.formatted.split('  (')[0];
 }
 
-const money = (n) => (n < 0 ? '-$' : '$') + Math.abs(Math.round(n)).toLocaleString();
-const num = (n, d = 1) => Number(n).toLocaleString(undefined, {maximumFractionDigits: d});
-
 function render(f) {
-  const o = f.outcomes, e = f.economics;
-  const warn = f.warnings.length ? `<div class="warn">
-      <h3>Read this first</h3><ul>${f.warnings.map(w => `<li>${esc(w)}</li>`).join('')}</ul>
-    </div>` : '';
+  const o = f.outcomes, e = f.economics, worth = e.expected_margin >= 0;
 
-  const head = (slug, hero) => `<div class="card ${hero ? 'hero' : ''}">
-      <div class="k">${esc(o[slug].name)}</div>
-      <div class="v">${esc(o[slug].formatted.split('  (')[0])}</div>
-      <div class="band">80% band ${esc(o[slug].formatted.split('  (')[1] || '').replace(')', '')}</div>
-    </div>`;
+  const line = (k, v, sub, vsub) => `<div class="line">
+    <dt>${k}${sub ? `<small>${sub}</small>` : ''}</dt>
+    <dd>${v}${vsub ? `<small>${vsub}</small>` : ''}</dd></div>`;
 
   $('out').innerHTML = `
-  ${warn}
-  <section>
-    <h3 class="sec">What it is worth</h3>
-    <div class="cards">
-      ${head('contract_value', true)}
-      ${head('win_probability', true)}
-      <div class="card">
-        <div class="k">Expected margin</div>
-        <div class="v ${e.expected_margin >= 0 ? 'pos' : 'neg'}">${money(e.expected_margin)}</div>
-        <div class="band">breaks even at a ${(e.breakeven_win_rate * 100).toFixed(0)}% win rate</div>
-      </div>
-      <div class="card">
-        <div class="k">Gross margin if it lands</div>
-        <div class="v">${money(e.gross_margin)}</div>
-        <div class="band">${(e.gross_margin_pct * 100).toFixed(0)}% of contract value</div>
-      </div>
-    </div>
-  </section>
+  <div class="hero">
+    <div class="n ${worth ? 'up' : 'down'}">${money(e.expected_margin)}</div>
+    <div class="cap">expected margin — contingent revenue less committed cost</div>
+    <div class="verdict">${worth ? 'Worth staffing.' : 'Not worth staffing at this price.'}
+      It breaks even at a ${(e.breakeven_win_rate * 100).toFixed(0)}% win rate.</div>
+  </div>
 
-  <section>
-    <h3 class="sec">What it takes</h3>
-    <div class="cards">
-      ${head('architect_days')} ${head('engineer_days')}
-      ${head('pm_days')} ${head('calendar_days')}
-    </div>
-  </section>
+  <div class="tiles">
+    <div class="tile"><div class="n">${point(o.contract_value)}</div>
+      <div class="k">what a client pays</div><div class="b">${esc(band(o.contract_value))}</div></div>
+    <div class="tile"><div class="n">${point(o.win_probability)}</div>
+      <div class="k">success rate</div><div class="b">${esc(band(o.win_probability))}</div></div>
+    <div class="tile"><div class="n">${point(o.calendar_days)}</div>
+      <div class="k">to finish</div><div class="b">${esc(band(o.calendar_days))}</div></div>
+  </div>
 
-  <section>
-    <h3 class="sec">What it costs to run</h3>
-    <div class="cards">
-      <div class="card">
-        <div class="k">Tokens, one run</div>
-        <div class="v">${num(f.tokens.per_run, 0)}</div>
-        <div class="band">${num(f.tokens.low, 0)} – ${num(f.tokens.high, 0)}</div>
-      </div>
-      <div class="card">
-        <div class="k">Inference, first year</div>
-        <div class="v">${e.has_run_rate ? money(e.annual_token_cost) : '—'}</div>
-        <div class="band">${e.has_run_rate
-          ? (e.run_rate_dominates ? 'more than the build costs' : 'less than the build costs')
-          : 'no production run rate given'}</div>
-      </div>
-      <div class="card">
-        <div class="k">Delivery cost</div>
-        <div class="v">${money(e.delivery_cost)}</div>
-        <div class="band">${num(e.total_staff_days)} staff days · ${esc(e.rates_source)}</div>
-      </div>
-      <div class="card">
-        <div class="k">Saving from batching</div>
-        <div class="v">${(f.tokens.batching_saving * 100).toFixed(0)}%</div>
-        <div class="band">one agent for all bricks vs one per brick</div>
-      </div>
-    </div>
-  </section>
+  <h2>Who it takes</h2>
+  <dl>
+    ${['architect_days', 'engineer_days', 'pm_days'].map(s =>
+      line(esc(o[s].name), point(o[s]), '', esc(band(o[s])))).join('')}
+    ${line('<strong>Delivery cost</strong>', `<strong>${money(e.delivery_cost)}</strong>`,
+           `${num(e.total_staff_days, 1)} staff days`)}
+  </dl>
+  <p class="caption">Day rates: ${esc(e.rates_source)}.</p>
 
-  <section class="panel">
-    <h2>Lineage</h2>
-    <p>${esc(f.lineage.explanation)}</p>
-    <p class="sub"><span class="chip">scope ${esc(f.notation)}</span>
-       <span class="chip">encoder ${esc(f.usecase.encoder)}</span></p>
-  </section>
+  <h2>What it costs to run</h2>
+  <dl>
+    ${line('Tokens, one run', num(f.tokens.per_run),
+           'measured model, unchanged', `${num(f.tokens.low)} – ${num(f.tokens.high)}`)}
+    ${line('Inference, first year', e.has_run_rate ? money(e.annual_token_cost) : '—',
+           e.has_run_rate
+             ? (e.run_rate_dominates ? 'more than the build costs' : 'less than the build costs')
+             : 'no production run rate given')}
+    ${line('Saving from batching', (f.tokens.batching_saving * 100).toFixed(0) + '%',
+           'one agent for every brick vs one agent each')}
+  </dl>
 
-  <section class="panel">
-    <h2>Comparable engagements it is standing on</h2>
-    <div class="scroll"><table>
-      <tr><th>id</th><th>engagement</th><th class="num">brick similarity</th>
-          <th>also matches</th><th>shape</th></tr>
-      ${f.neighbours.map(n => `<tr><td>${esc(n.id)}</td><td>${esc(n.title)}</td>
-        <td class="num">${n.similarity.toFixed(2)}</td>
-        <td>${n.also_matches.map(m => `<span class="chip">${esc(m)}</span>`).join('') || '—'}</td>
-        <td><code>${esc(n.notation)}</code></td></tr>`).join('')}
-    </table></div>
-  </section>`;
+  <h2>Lineage</h2>
+  <dl>${line(esc(f.lineage.explanation), '', `scope ${esc(f.notation)}`)}</dl>
+
+  ${f.warnings.length ? `<div class="note"><span class="dot"></span><div>
+    ${f.warnings.map(w => `<p>${esc(w)}</p>`).join('')}</div></div>` : ''}
+
+  <details class="peers"><summary>${f.neighbours.length} comparable engagements</summary>
+    <dl>${f.neighbours.map(n => line(
+      esc(n.title), n.similarity.toFixed(2),
+      `<code>${esc(n.notation)}</code>`,
+      n.also_matches.length ? 'same ' + n.also_matches.join(', ') : 'shape only')).join('')}
+    </dl>
+  </details>`;
+  $('out').scrollIntoView({behavior: 'smooth', block: 'start'});
 }
 
 boot();

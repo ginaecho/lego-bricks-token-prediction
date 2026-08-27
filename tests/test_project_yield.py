@@ -420,6 +420,22 @@ def test_app_refuses_an_empty_scope(predictor):
         YieldApp(predictor).predict({"counts": {}})
 
 
+def test_encode_then_predict_is_the_single_button_path(predictor):
+    """The page encodes and predicts on one press. Both halves must compose.
+
+    The two-step version only ever made people press twice, so the button does
+    the encode itself when the scope has not been set by hand — which means
+    encode's output has to be a valid predict input without any editing.
+    """
+    from project_yield.app import YieldApp
+    app = YieldApp(predictor)
+    encoded = app.encode({"description": "Read 6 supplier contracts and "
+                                         "reconcile the pricing terms."})
+    forecast = app.predict(encoded)
+    assert forecast["outcomes"]["contract_value"]["value"] > 0
+    assert forecast["usecase"]["encoder"] == "heuristic"
+
+
 def test_a_use_case_scoped_now_can_be_a_parent_next(predictor):
     from project_yield.app import YieldApp
     app = YieldApp(predictor)

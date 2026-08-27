@@ -66,17 +66,17 @@ HELD_OUT_FRACTION = 0.15
 # integration   : how hard the systems are to build against
 # win_adj       : log-odds shift on delivery success
 INDUSTRY = {
-    "financial_services": dict(value_rate=7800, governance=1.25,
+    "financial_services": dict(value_rate=8650, governance=1.25,
                                integration=1.20, win_adj=+0.10),
-    "healthcare":         dict(value_rate=6700, governance=1.45,
+    "healthcare":         dict(value_rate=7450, governance=1.45,
                                integration=1.30, win_adj=-0.25),
-    "manufacturing":      dict(value_rate=4800, governance=0.95,
+    "manufacturing":      dict(value_rate=5350, governance=0.95,
                                integration=1.00, win_adj=+0.30),
-    "retail":             dict(value_rate=4100, governance=0.85,
+    "retail":             dict(value_rate=4550, governance=0.85,
                                integration=0.90, win_adj=+0.35),
-    "public_sector":      dict(value_rate=5400, governance=1.70,
+    "public_sector":      dict(value_rate=6000, governance=1.70,
                                integration=1.25, win_adj=-0.45),
-    "energy":             dict(value_rate=6100, governance=1.10,
+    "energy":             dict(value_rate=6800, governance=1.10,
                                integration=1.15, win_adj=0.00),
 }
 
@@ -197,7 +197,13 @@ def generate() -> List[dict]:
 
         goal = (by_id[parent_id]["goal"] if parent_id and rng.random() < 0.6
                 else rng.choice(GOALS))
-        scale = math.exp(rng.gauss(0.55, 0.65))          # median ~1.7x profile
+        # Wide, and deliberately heavy at the bottom. A services book is not
+        # made of medium-sized projects: the most common enterprise shape is a
+        # per-item pipeline — one invoice, one ticket, one claim — run tens of
+        # thousands of times a month, whose *per-run* scope is one or two
+        # bricks. A corpus without those makes the tool warn "smaller than
+        # anything I have seen" at exactly the use case it should handle best.
+        scale = math.exp(rng.gauss(-0.15, 0.95))
 
         if parent_id:
             counts = inherit_counts(rng, by_id[parent_id]["counts"], goal, scale)

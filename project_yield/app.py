@@ -145,8 +145,9 @@ class YieldApp:
         counts = body.get("counts") or {}
         if not any(int(v or 0) > 0 for v in counts.values()):
             raise ValueError(
-                "no task bricks given — press 'Read from description' or set "
-                "at least one brick count by hand")
+                "no task bricks given, and no description to read them from "
+                "— write what the use case does, or set at least one brick "
+                "count under 'Refine the scope'")
         parent = body.get("parent_id") or None
         return UseCase(
             id=str(body.get("id") or self._next_id()),
@@ -175,9 +176,11 @@ def make_handler(app: YieldApp):
             self.send_header("Content-Length", str(len(body)))
             # The page is entirely self-contained; saying so closes off the
             # whole class of "it worked locally and then loaded a CDN" bugs.
+            # data: images are allowed for inline SVG icons and nothing else —
+            # no host is reachable from the page under any directive.
             self.send_header("Content-Security-Policy",
                              "default-src 'self'; style-src 'unsafe-inline'; "
-                             "script-src 'unsafe-inline'")
+                             "script-src 'unsafe-inline'; img-src 'self' data:")
             self.send_header("X-Content-Type-Options", "nosniff")
             self.end_headers()
             self.wfile.write(body)
