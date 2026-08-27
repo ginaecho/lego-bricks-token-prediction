@@ -16,3 +16,6 @@ imply that we are.
 About 300 memos a month across the corporate book. Source documents run to
 around 60 kB per customer. This is sold as revenue growth — more RM time in
 front of clients — not as a cost save.
+
+Team: unspecified — propose one. The RMs will want somebody who can talk
+credit, not just somebody who can build.

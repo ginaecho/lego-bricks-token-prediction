@@ -14,3 +14,6 @@ currently says.
 Roughly 1,400 customers a month fall due. Document packs run to about 40 kB.
 This is a compliance and risk programme — it is funded out of the regulatory
 remediation budget, not out of operations.
+
+Team: not settled. The bank has asked us to propose one. Adverse media
+retrieval across the licensed archive is the part nobody has scoped before.

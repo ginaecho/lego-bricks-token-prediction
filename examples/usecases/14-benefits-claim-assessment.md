@@ -16,3 +16,7 @@ might will end the conversation with the department.
 Claim packs are around 15 kB. Full audit trail required on every step,
 accessibility standards apply, and the assurance process will involve the
 department's digital service standard assessment.
+
+Team: the department's digital service standard assessment means a project
+manager and an industry consultant throughout, and a change manager for the
+case officers. We should assume a data engineer for the records access.

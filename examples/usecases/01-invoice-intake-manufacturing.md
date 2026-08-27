@@ -14,3 +14,7 @@ transposed digits, missing PO prefix — without a human.
 Anything that fails the purchase-order check goes to a person. Invoices average
 about 2 kB of extracted text. The business case is straight cost reduction: they
 want the AP headcount redeployed, not grown.
+
+Team: we have committed a solution architect, two software engineers and a
+project manager. Northwind's own AP lead will handle change management, so we
+are not staffing that.

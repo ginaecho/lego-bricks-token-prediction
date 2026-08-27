@@ -27,6 +27,15 @@ for the *goal* — only loosely on what the work costs, which is why margin vari
 at all. Success is a Bernoulli draw from a logistic latent in which inherited
 work is the dominant positive term and raw scope the dominant negative one.
 
+Staffing is generated in two stages per role, matching how it is predicted: a
+Bernoulli draw for whether the engagement used the role at all, then a
+power-law draw for how many days if it did. Which roles are *likely* depends on
+what the work is — a data scientist appears where classification and validation
+dominate, a data engineer where retrieval and large corpora do, a change
+manager where the work displaces an existing team — so a retail copy-generation
+job and a healthcare coding audit come out with genuinely different teams
+rather than the same three lines at different sizes.
+
 Replacing this file with a Fabric extract of real delivery records is the whole
 of the productionisation task for the value heads. See
 ``docs/product-prototype.md``.
@@ -57,7 +66,8 @@ HELD_OUT_FRACTION = 0.15
 # value_rate    : dollars a unit of weighted scope is worth to this industry.
 #                 Calibrated so the corpus lands on a median gross margin of
 #                 roughly 45% against the placeholder day rates in
-#                 project_yield.economics — a plausible services book, not a
+#                 the placeholder day rates on the roster in
+#                 project_yield.roles — a plausible services book, not a
 #                 measured one. Price is anchored here rather than on realised
 #                 effort on purpose: if it were derived from effort, margin
 #                 would be constant by construction and there would be nothing
@@ -66,17 +76,17 @@ HELD_OUT_FRACTION = 0.15
 # integration   : how hard the systems are to build against
 # win_adj       : log-odds shift on delivery success
 INDUSTRY = {
-    "financial_services": dict(value_rate=8650, governance=1.25,
+    "financial_services": dict(value_rate=10400, governance=1.25,
                                integration=1.20, win_adj=+0.10),
-    "healthcare":         dict(value_rate=7450, governance=1.45,
+    "healthcare":         dict(value_rate=8950, governance=1.45,
                                integration=1.30, win_adj=-0.25),
-    "manufacturing":      dict(value_rate=5350, governance=0.95,
+    "manufacturing":      dict(value_rate=6450, governance=0.95,
                                integration=1.00, win_adj=+0.30),
-    "retail":             dict(value_rate=4550, governance=0.85,
+    "retail":             dict(value_rate=5500, governance=0.85,
                                integration=0.90, win_adj=+0.35),
-    "public_sector":      dict(value_rate=6000, governance=1.70,
+    "public_sector":      dict(value_rate=7200, governance=1.70,
                                integration=1.25, win_adj=-0.45),
-    "energy":             dict(value_rate=6800, governance=1.10,
+    "energy":             dict(value_rate=8200, governance=1.10,
                                integration=1.15, win_adj=0.00),
 }
 
@@ -98,6 +108,50 @@ GOAL = {
         value_mult=0.90, win_adj=-0.10,
         profile={"classify": 6.0, "retrieve": 3.0, "draft": 2.5,
                  "remediate": 2.5, "report": 1.0}),
+}
+
+# ── who gets staffed, and how much ──────────────────────────────────────
+#
+# For each role: the log-odds of being used at all, and the days if used.
+#   base      : log-odds intercept for presence
+#   drivers   : per-brick-share pull on presence, as log-odds
+#   goals     : per-goal pull on presence
+#   scale     : days multiplier, applied to weighted scope ** exponent
+#   exponent  : how days grow with scope
+#   governance: how much the industry's governance load inflates the days
+#   reuse     : how much of the role's work a continuation avoids
+ROLE_PROCESS = {
+    "solution_architect": dict(
+        base=3.2, drivers={}, goals={}, scale=1.30, exponent=0.42,
+        governance=0.35, reuse=0.52),
+    "software_engineer": dict(
+        base=3.6, drivers={}, goals={}, scale=1.85, exponent=0.78,
+        governance=0.15, reuse=0.38),
+    "project_manager": dict(
+        base=3.0, drivers={}, goals={}, scale=0.75, exponent=0.55,
+        governance=1.00, reuse=0.10),
+    "data_scientist": dict(
+        base=-1.1,
+        drivers={"classify": 2.6, "validate": 1.9, "reconcile": 0.8},
+        goals={"cost_reduction": 0.4, "compliance_risk": 0.3},
+        scale=1.05, exponent=0.55, governance=0.20, reuse=0.45),
+    "data_engineer": dict(
+        base=-0.7,
+        drivers={"retrieve": 3.0, "reconcile": 1.6, "extract": 1.0},
+        goals={},
+        scale=0.95, exponent=0.62, governance=0.10, reuse=0.55),
+    "security_expert": dict(
+        base=-1.0, drivers={"retrieve": 1.8, "extract": 1.2},
+        goals={"compliance_risk": 1.6, "customer_experience": 0.5},
+        scale=0.60, exponent=0.44, governance=1.10, reuse=0.60),
+    "consultant": dict(
+        base=-0.9, drivers={"review": 1.4, "report": 1.2},
+        goals={"compliance_risk": 1.5, "revenue_growth": 0.7},
+        scale=0.80, exponent=0.50, governance=0.90, reuse=0.30),
+    "change_manager": dict(
+        base=-1.4, drivers={"classify": 0.9, "remediate": 1.1},
+        goals={"cost_reduction": 1.4, "customer_experience": 1.2},
+        scale=0.55, exponent=0.45, governance=0.80, reuse=0.25),
 }
 
 # How much engineering one unit of each brick implies, relative to Classify.
@@ -227,15 +281,40 @@ def generate() -> List[dict]:
                             * (counts["review"] + counts["extract"]
                                + counts["reconcile"] + counts["retrieve"]))
 
-        # -- effort ------------------------------------------------------
-        engineer = (1.85 * (wscope ** 0.78) * ind["integration"]
-                    * (1.0 - 0.38 * inherited) * _lognormal(rng, 0.24))
-        architect = (1.30 * (wscope ** 0.42) * (1.0 + 0.35 * distinct / 9.0)
-                     * (1.0 - 0.52 * inherited) * ind["integration"]
-                     * _lognormal(rng, 0.27))
-        pm = (0.75 * (units ** 0.55) * ind["governance"]
-              * (1.0 + 0.14 * len(siblings)) * _lognormal(rng, 0.26))
-        calendar = (16.0 + 1.55 * (engineer ** 0.86) * ind["governance"]
+        # -- who is staffed, and for how long ------------------------------
+        shares = {b: (counts[b] / units if units else 0.0) for b in BRICKS}
+        role_days = {}
+        for slug, proc in ROLE_PROCESS.items():
+            z = (proc["base"]
+                 + sum(w * shares.get(b, 0.0)
+                       for b, w in proc["drivers"].items())
+                 + proc["goals"].get(goal, 0.0)
+                 + 0.35 * (math.log1p(units) - 2.2)
+                 - 0.30 * inherited
+                 + (0.9 if slug == "security_expert"
+                    and industry in ("financial_services", "healthcare",
+                                     "public_sector") else 0.0))
+            if rng.random() >= _sigmoid(z):
+                continue                     # this engagement did not use them
+            days = (proc["scale"] * (wscope ** proc["exponent"])
+                    * (1.0 + proc["governance"] * (ind["governance"] - 1.0))
+                    * (1.0 + 0.14 * len(siblings) if slug == "project_manager"
+                       else 1.0)
+                    * (1.0 + 0.35 * distinct / 9.0
+                       if slug == "solution_architect" else 1.0)
+                    * ind["integration"] ** (0.6 if slug in
+                                             ("software_engineer",
+                                              "solution_architect",
+                                              "data_engineer") else 0.0)
+                    * (1.0 - proc["reuse"] * inherited)
+                    * _lognormal(rng, 0.25))
+            role_days[slug] = round(max(days, 0.25), 2)
+
+        # The calendar is bounded by the build, not by the total headcount —
+        # which is exactly why it is a separate head and not staff-days over a
+        # team size.
+        build = role_days.get("software_engineer", 1.0)
+        calendar = (16.0 + 1.55 * (build ** 0.86) * ind["governance"]
                     * (1.0 - 0.24 * inherited)) * _lognormal(rng, 0.19)
 
         # -- price: anchored on the value of the goal to the industry ----
@@ -261,9 +340,7 @@ def generate() -> List[dict]:
             client=client["name"], industry=industry, goal=goal,
             counts=counts, context_bytes=context_bytes,
             contract_value=round(value, 2), won=won,
-            architect_days=round(architect, 2),
-            engineer_days=round(engineer, 2),
-            pm_days=round(pm, 2),
+            role_days=role_days,
             calendar_days=round(calendar, 2),
             parent_id=parent_id, sibling_ids=siblings,
             started=f"day+{day}", provenance="synthetic",

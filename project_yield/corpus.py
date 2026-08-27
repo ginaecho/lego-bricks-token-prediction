@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import json
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence
 
 from .usecase import GOALS, INDUSTRIES, UseCase, normalise_counts
@@ -44,10 +44,11 @@ class Engagement:
     # -- outcomes, as realised -------------------------------------------
     contract_value: float
     won: bool
-    architect_days: float
-    engineer_days: float
-    pm_days: float
     calendar_days: float
+    #: Days by role slug. A role absent from the dict, or present with zero,
+    #: means the engagement did not use it — which is information, not a gap:
+    #: it is what the presence heads are fitted on.
+    role_days: Dict[str, float] = field(default_factory=dict)
     # -- lineage ---------------------------------------------------------
     parent_id: Optional[str] = None
     sibling_ids: Sequence[str] = ()
@@ -62,15 +63,29 @@ class Engagement:
 
     @property
     def staff_days(self) -> float:
-        return self.architect_days + self.engineer_days + self.pm_days
+        return sum(self.role_days.values())
+
+    def days_for(self, role_slug: str) -> float:
+        return float(self.role_days.get(role_slug, 0.0))
+
+    def used(self, role_slug: str) -> bool:
+        return self.days_for(role_slug) > 0.0
 
     def observed(self, outcome: str) -> float:
-        """The realised value of one outcome, by slug."""
+        """The realised value of one outcome, by slug.
+
+        Staffing outcomes are named ``<role>_days`` and ``<role>_used``, so the
+        roster can grow without this method or its callers changing.
+        """
         if outcome == "win_probability":
             return 1.0 if self.won else 0.0
+        if outcome.endswith("_used"):
+            return 1.0 if self.used(outcome[:-len("_used")]) else 0.0
+        if outcome.endswith("_days") and outcome != "calendar_days":
+            return self.days_for(outcome[:-len("_days")])
         return float(getattr(self, outcome))
 
-    def as_usecase(self) -> UseCase:
+    def as_usecase(self) -> UseCase:  # noqa: D401
         """The same engagement viewed as an input, for lineage and similarity."""
         return UseCase(
             id=self.id, title=self.title, industry=self.industry, goal=self.goal,
@@ -111,10 +126,9 @@ def load_engagements(path: Optional[str] = None) -> List[Engagement]:
                     context_bytes=int(d.get("context_bytes", 0)),
                     contract_value=float(d["contract_value"]),
                     won=bool(d["won"]),
-                    architect_days=float(d["architect_days"]),
-                    engineer_days=float(d["engineer_days"]),
-                    pm_days=float(d["pm_days"]),
                     calendar_days=float(d["calendar_days"]),
+                    role_days={str(k): float(v)
+                               for k, v in (d["role_days"] or {}).items()},
                     parent_id=(str(d["parent_id"]) if d.get("parent_id") else None),
                     sibling_ids=tuple(str(s) for s in (d.get("sibling_ids") or [])),
                     started=str(d.get("started", "")),
@@ -137,6 +151,21 @@ def load_engagements(path: Optional[str] = None) -> List[Engagement]:
     return out
 
 
+def roles_present(engagements: Sequence[Engagement]) -> List[str]:
+    """Every role slug the corpus has data for, in first-seen order.
+
+    This is what decides which staffing heads can be fitted at all: a roster
+    may name a role the history has never recorded, and inventing a prediction
+    for it would be worse than saying so.
+    """
+    out: List[str] = []
+    for eng in engagements:
+        for slug in eng.role_days:
+            if slug not in out:
+                out.append(slug)
+    return out
+
+
 def summarise(engagements: Sequence[Engagement]) -> str:
     """A short census of the corpus, for the top of any report."""
     n = len(engagements)
@@ -147,5 +176,6 @@ def summarise(engagements: Sequence[Engagement]) -> str:
     values = sorted(e.contract_value for e in engagements)
     return (f"{n} engagements ({held} held out) · {won / n:.0%} succeeded · "
             f"{cont / n:.0%} continuations · value "
-            f"${values[0]:,.0f}-${values[-1]:,.0f} · provenance: "
+            f"${values[0]:,.0f}-${values[-1]:,.0f} · "
+            f"{len(roles_present(engagements))} roles · provenance: "
             + ", ".join(provs))

@@ -13,3 +13,6 @@ each disagreement in the form the audit team already uses.
 They want to move from a 2% sample to 100% coverage. That is about 18,000
 episodes a month. Summaries are around 8 kB. Funded as compliance and revenue
 integrity — under-coding is costing them as much as over-coding is risking them.
+
+Team: not decided. Moving from a 2% sample to full coverage is as much a
+process change for the audit team as it is a build.

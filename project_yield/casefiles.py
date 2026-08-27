@@ -50,6 +50,9 @@ class CaseFile:
     text: str
     parent: Optional[str] = None
     siblings: Sequence[str] = ()
+    #: The team the note states, if it states one. ``None`` means the base
+    #: rates from comparable engagements decide who is needed.
+    roles: Optional[Sequence[str]] = None
 
     @property
     def filename(self) -> str:
@@ -118,12 +121,14 @@ def read_folder(directory: str) -> List[CaseFile]:
         if parent_file and parent_file not in ids:
             raise ValueError(f"{name}: continues {parent_file!r}, which is not "
                              f"in the folder")
+        roles = entry.get("roles")
         cases.append(CaseFile(
             path=case.path, uid=case.uid,
             title=str(entry.get("title") or case.title), text=case.text,
             parent=ids[parent_file] if parent_file else None,
             siblings=tuple(ids[f] for f in entry.get("alongside", [])
                            if f in ids),
+            roles=tuple(str(r) for r in roles) if roles is not None else None,
         ))
     return cases
 
@@ -150,6 +155,8 @@ def encode_folder(directory: str,
         usecase = encoder(case.text, uid=case.uid, title=case.title)
         usecase.parent_id = case.parent
         usecase.sibling_ids = list(case.siblings)
+        if case.roles is not None:
+            usecase.roles = list(case.roles)
 
         guessed = [a for a in usecase.assumptions
                    if a.startswith(ASSUMED_INDUSTRY)]

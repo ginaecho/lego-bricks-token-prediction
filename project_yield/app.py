@@ -83,6 +83,11 @@ class YieldApp:
             "outcomes": [{"slug": s, "name": OUTCOMES[s].name,
                           "unit": OUTCOMES[s].unit,
                           "question": OUTCOMES[s].question} for s in ORDER],
+            "roles": [{"slug": r.slug, "name": r.name, "blurb": r.blurb,
+                       "day_rate": r.day_rate, "core": r.core,
+                       "has_history": r.days_outcome in self.predictor.heads}
+                      for r in self.predictor.roster],
+            "roster_source": self.predictor.roster.source,
             "library": [{"id": u.id, "title": u.title,
                          "industry": u.industry} for u in library],
             "encoder": getattr(_encoder(), "name", "heuristic"),
@@ -112,19 +117,25 @@ class YieldApp:
         return {
             "corpus": len(self.predictor.corpus),
             "fitted_on": heads.n,
+            "roster": self.predictor.roster.to_list(),
+            "unfitted": dict(heads.unfitted),
             "heads": [{
-                "slug": slug, "name": OUTCOMES[slug].name,
+                "slug": slug, "name": h.outcome.name,
                 "form": h.form, "link": h.outcome.link.name,
                 "metric": "brier" if h.outcome.binary else "mape",
                 "cross_validated": round(h.loo_score, 4),
                 "baseline": round(h.baseline_score, 4),
                 "skill": round(h.skill, 4),
                 "beats_baseline": h.beats_baseline,
-                "held_out": (round(holdout[slug][0], 4)
+                "held_out": (round(holdout[slug].score, 4)
                              if slug in holdout else None),
-                "held_out_n": holdout.get(slug, (0, 0))[1],
+                "held_out_baseline": (round(holdout[slug].baseline, 4)
+                                      if slug in holdout else None),
+                "held_out_beats_baseline": (holdout[slug].beats_baseline
+                                            if slug in holdout else None),
+                "held_out_n": holdout[slug].n if slug in holdout else 0,
                 "candidate_scores": {k: round(v, 4) for k, v in h.scores.items()},
-            } for slug, h in ((s, heads.heads[s]) for s in ORDER
+            } for slug, h in ((s, heads.heads[s]) for s in heads.order
                               if s in heads.heads)],
             "token_model": {
                 "form": self.predictor.token_model.form,
@@ -183,6 +194,11 @@ class YieldApp:
             parent_id=str(parent) if parent else None,
             sibling_ids=[str(s) for s in (body.get("sibling_ids") or []) if s],
             encoder=str(body.get("encoder") or "manual"),
+            roles=([str(r) for r in body["roles"]]
+                   if body.get("roles") is not None else None),
+            role_days={str(k): float(v)
+                       for k, v in (body.get("role_days") or {}).items()
+                       if float(v or 0) > 0},
         )
         usecase.assumptions = self._surviving_assumptions(usecase)
         return usecase

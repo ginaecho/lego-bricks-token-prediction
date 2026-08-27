@@ -72,20 +72,33 @@ def main() -> None:
         predictor.index.add(case)
 
     print(rule("1. WHAT THIS ADDS TO THE TOKEN MODEL"))
-    print("  The token model answers one question. A scoping decision needs "
-          "five.")
+    print("  The token model answers one question. A scoping conversation "
+          "needs five.")
     print()
-    print(f"  {'head':<20}{'unit':<14}{'link':<10}what it is for")
-    print(f"  {'tokens':<20}{'tokens':<14}{'linear':<10}"
+    print(f"  {'head':<22}{'unit':<14}{'link':<10}what it is for")
+    print(f"  {'tokens':<22}{'tokens':<14}{'linear':<10}"
           "what one run costs to execute")
     for slug in ORDER:
         o = OUTCOMES[slug]
-        print(f"  {o.name:<20}{o.unit:<14}{o.link.name:<10}{o.question}")
+        print(f"  {o.name:<22}{o.unit:<14}{o.link.name:<10}{o.question}")
+    print(f"  {'annual impact':<22}{'USD':<14}{'derived':<10}"
+          "what the client gets once it runs")
     print()
-    print("  Six heads, not one model with six outputs. Money multiplies, a "
-          "win is")
-    print("  bounded at both ends, and elapsed time has a floor no headcount "
-          "moves.")
+    print("  Plus two heads for every role on the roster — is this role needed")
+    print("  at all, and how many days if it is:")
+    print()
+    for role in predictor.roster:
+        fitted = "fitted" if role.days_outcome in predictor.heads else "NO DATA"
+        print(f"    {role.name:<24}${role.day_rate:>7,.0f}/day   {fitted}")
+    print()
+    print("  The roster is a JSON file, not a list in the code. Add a role and")
+    print("  — given a column in the corpus — it is fitted, priced and "
+          "reported")
+    print("  with no code change. Nothing is one model with many outputs: "
+          "money")
+    print("  multiplies, a win is bounded at both ends, elapsed time has a "
+          "floor")
+    print("  no headcount moves, and a data scientist is not on every job.")
 
     print(model_card(predictor.heads, predictor.evaluate_holdout(),
                      title="2. THE MODEL"))
@@ -109,6 +122,10 @@ def main() -> None:
     rows = [("brick units", float(greenfield.total_units),
              float(CASES[2].total_units))]
     rows += [(OUTCOMES[s].name, alone.value(s), linked.value(s)) for s in ORDER]
+    rows += [("total staff days", alone.economics.total_staff_days,
+              linked.economics.total_staff_days),
+             ("delivery cost", alone.economics.delivery_cost,
+              linked.economics.delivery_cost)]
     for name, a, b in rows:
         delta = (b - a) / a if a else 0.0
         print(f"  {name:<24}{a:>16,.1f}{b:>18,.1f}{delta:>12.0%}")
@@ -122,12 +139,35 @@ def main() -> None:
     print("  head was free to price them at zero.")
 
     print()
-    print(rule("5. THE PORTFOLIO VIEW"))
+    print(rule("5. WHAT THE CLIENT GETS"))
+    print("  Everything above prices the engagement. A build costing $60,000 "
+          "is")
+    print("  expensive or cheap depending entirely on what it displaces, and "
+          "no")
+    print("  delivery estimate can tell you which.")
+    print()
+    print(f"  {'use case':<34}{'min/run':>9}{'runs/mo':>10}"
+          f"{'impact/yr':>13}{'payback':>10}")
+    for case in CASES:
+        f = predictor.forecast(case)
+        i = f.impact
+        payback = (f"{i.payback_months:.1f} mo" if i.payback_months
+                   else ("—" if not i.quoted else "never"))
+        print(f"  {case.title[:33]:<34}{i.minutes_per_run:>9.0f}"
+              f"{case.monthly_runs:>10,}{i.annual_net_benefit:>13,.0f}"
+              f"{payback:>10}")
+    print()
+    print("  Same three use cases, same bricks. The one that runs 24,000 times")
+    print("  a month is a different business case from the one that runs 120")
+    print("  times, and the token model is what makes that difference visible.")
+
+    print()
+    print(rule("6. THE PORTFOLIO VIEW"))
     forecasts = [predictor.forecast(c) for c in CASES]
     print(portfolio_table(forecasts))
 
     print()
-    print(rule("6. FROM A DESCRIPTION, WITH NO STRUCTURED INPUT"))
+    print(rule("7. FROM A DESCRIPTION, WITH NO STRUCTURED INPUT"))
     typed = heuristic_encode(
         "We want to triage inbound service tickets for a retail client and "
         "draft a first response, around 900 tickets per week, to cut handling "
@@ -142,6 +182,8 @@ def main() -> None:
     for slug in ORDER:
         print(f"    {OUTCOMES[slug].name:<22}{f.estimates[slug].format()}")
     print(f"    {'tokens, one run':<22}{f.tokens.formatted}")
+    print(f"    {'team':<22}"
+          + ", ".join(r.role.name for r in f.staffing))
     print()
     print(warnings_block(f))
     print()

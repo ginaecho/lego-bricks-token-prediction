@@ -13,3 +13,6 @@ say whether it is a repeat, and drafts the report that goes to the supplier.
 Cost reduction, and a quality argument: repeat failures are currently only
 spotted when someone remembers them. Inspection reports plus drawing notes come
 to roughly 12 kB.
+
+Team: unspecified. Retrieval across the previous non-conformance history
+suggests we will need somebody on the data side.

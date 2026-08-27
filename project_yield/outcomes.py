@@ -6,8 +6,8 @@ decide anything:
 
 * **Will the client pay for it, and how much?**  (``contract_value``)
 * **Will it actually land?**                     (``win_probability``)
-* **Who do I need, and for how long?**           (``architect_days``,
-                                                  ``engineer_days``, ``pm_days``)
+* **Who do I need, and for how long?**           (one pair of heads per role
+                                                  on the roster)
 * **When is it done?**                           (``calendar_days``)
 
 Each of these is a *head*: an independent model over the same encoded feature
@@ -21,15 +21,36 @@ no forecast: people learn to apply a mental correction and then stop reading it.
 
 So each head declares its own **link** and its own **scoring metric**, and each
 independently selects its functional form by cross-validation.
+
+The staffing heads are not written down here
+--------------------------------------------
+The three fixed outcomes below are properties of the *engagement*. Staffing is a
+property of the *organisation*, and it is read off
+:mod:`project_yield.roles` — a roster the user edits — rather than hardcoded.
+:func:`build_outcomes` turns that roster into two heads per role:
+
+``<role>_used``
+    Does work like this need this role at all? A logit head over every
+    engagement. Averaging a data scientist's days across jobs that never used
+    one produces "3.1 days", which is not a thing anybody can book.
+
+``<role>_days``
+    How many days when it does? A log head, fitted only on the engagements that
+    actually used the role, so the number means what it says.
+
+Cost uses the product of the two; the staffing plan shows both.
 """
 
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Callable, Dict, Tuple
+from typing import TYPE_CHECKING, Callable, Dict, List, Tuple
 
 from .linalg import logit, sigmoid
+
+if TYPE_CHECKING:                                        # pragma: no cover
+    from .roles import Role, Roster
 
 
 @dataclass(frozen=True)
@@ -101,25 +122,6 @@ OUTCOMES: Dict[str, Outcome] = {
             binary=True,
         ),
         Outcome(
-            "architect_days", "Architect", "days", LOG,
-            "How many solution-architect days does it take?",
-            "Scales with novelty and integration surface, not with volume: "
-            "the tenth extraction is free to design, the first retrieval "
-            "across an unmapped corpus is not.",
-        ),
-        Outcome(
-            "engineer_days", "Engineer", "days", LOG,
-            "How many engineering days does it take?",
-            "The bulk of delivery effort, and the line item that moves most "
-            "with the brick composition.",
-        ),
-        Outcome(
-            "pm_days", "Program manager", "days", LOG,
-            "How many program-management days does it take?",
-            "Scales with governance rather than build: regulated industries "
-            "and multi-party scopes pay for coordination whatever gets built.",
-        ),
-        Outcome(
             "calendar_days", "Time to finish", "days", LOG,
             "How long from kickoff to acceptance?",
             "Elapsed time, not effort. Bounded below by the critical path, so "
@@ -130,9 +132,47 @@ OUTCOMES: Dict[str, Outcome] = {
     )
 }
 
-#: Stable ordering for tables, feature vectors and reports.
-ORDER: Tuple[str, ...] = ("contract_value", "win_probability", "architect_days",
-                          "engineer_days", "pm_days", "calendar_days")
+#: The outcomes that are properties of the engagement rather than of the
+#: organisation delivering it. Stable ordering for tables and reports.
+ORDER: Tuple[str, ...] = ("contract_value", "win_probability", "calendar_days")
 
-#: The heads that together make up the staffing plan.
-STAFF_OUTCOMES: Tuple[str, ...] = ("architect_days", "engineer_days", "pm_days")
+
+def days_outcome(role: "Role") -> Outcome:
+    """The head that answers *how many days of this role, when it is needed*."""
+    return Outcome(
+        slug=role.days_outcome, name=role.name, unit="days", link=LOG,
+        question=f"How many {role.name.lower()} days does it take?",
+        blurb=(role.blurb + " ") if role.blurb else ""
+              + "Fitted only on engagements that actually used the role, so "
+                "the figure is days-when-needed rather than an average "
+                "flattened by the jobs that needed none.",
+    )
+
+
+def used_outcome(role: "Role") -> Outcome:
+    """The head that answers *does work like this need this role at all*."""
+    return Outcome(
+        slug=role.used_outcome, name=f"{role.name} needed", unit="probability",
+        link=LOGIT, binary=True,
+        question=f"How often does work like this need a {role.name.lower()}?",
+        blurb=(f"The base rate at which comparable engagements staffed a "
+               f"{role.name.lower()} at all. A project manager who knows the "
+               f"answer overrides it; one who does not gets the history."),
+    )
+
+
+def build_outcomes(roster: "Roster") -> Dict[str, Outcome]:
+    """Every head for a given roster: the three fixed ones, then two per role."""
+    out: Dict[str, Outcome] = dict(OUTCOMES)
+    for role in roster:
+        out[role.used_outcome] = used_outcome(role)
+        out[role.days_outcome] = days_outcome(role)
+    return out
+
+
+def build_order(roster: "Roster") -> Tuple[str, ...]:
+    """Report order: engagement outcomes first, then the staffing plan."""
+    staffing: List[str] = []
+    for role in roster:
+        staffing += [role.used_outcome, role.days_outcome]
+    return ORDER + tuple(staffing)

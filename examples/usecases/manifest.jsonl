@@ -1,24 +1,31 @@
-// Lineage only. Everything else — bricks, industry, goal, scope, volume — is
-// read out of the prose by the encoder. A continuation must appear later in
-// filename order than the use case it continues, or its parent is not in the
-// library yet when it is priced.
-{"file": "01-invoice-intake-manufacturing.md", "id": "UC-01"}
-{"file": "02-invoice-intake-phase-2-warranty.md", "id": "UC-02", "continues": "01-invoice-intake-manufacturing.md"}
+// Lineage and team. Everything else — bricks, industry, goal, scope,
+// volume — is read out of the prose by the encoder.
+//
+// "continues" must point at a file earlier in filename order, or the
+// parent is not in the library yet when the child is priced.
+//
+// "roles" is the team the note states. Naming it makes those roles
+// certain and excludes every other role on the roster; omit it and the
+// base rates from comparable engagements decide who is needed. Ten of
+// the twenty state a team and ten deliberately do not, so both paths
+// are exercised.
+{"file": "01-invoice-intake-manufacturing.md", "id": "UC-01", "roles": ["solution_architect", "software_engineer", "project_manager"]}
+{"file": "02-invoice-intake-phase-2-warranty.md", "id": "UC-02", "continues": "01-invoice-intake-manufacturing.md", "roles": ["solution_architect", "software_engineer", "project_manager", "data_engineer"]}
 {"file": "03-kyc-refresh-banking.md", "id": "UC-03"}
-{"file": "04-disclosure-review-banking.md", "id": "UC-04", "alongside": ["03-kyc-refresh-banking.md"]}
+{"file": "04-disclosure-review-banking.md", "id": "UC-04", "alongside": ["03-kyc-refresh-banking.md"], "roles": ["solution_architect", "software_engineer", "project_manager", "consultant", "data_scientist"]}
 {"file": "05-credit-memo-drafting.md", "id": "UC-05"}
-{"file": "06-prior-authorisation-triage.md", "id": "UC-06"}
+{"file": "06-prior-authorisation-triage.md", "id": "UC-06", "roles": ["solution_architect", "software_engineer", "project_manager", "consultant", "data_scientist"]}
 {"file": "07-clinical-coding-audit.md", "id": "UC-07"}
-{"file": "08-patient-message-response.md", "id": "UC-08"}
+{"file": "08-patient-message-response.md", "id": "UC-08", "roles": ["solution_architect", "software_engineer", "project_manager", "change_manager"]}
 {"file": "09-supplier-nonconformance.md", "id": "UC-09"}
 {"file": "10-bid-response-assembly.md", "id": "UC-10"}
-{"file": "11-ticket-triage-retail.md", "id": "UC-11"}
-{"file": "12-ticket-triage-phase-2-multilingual.md", "id": "UC-12", "continues": "11-ticket-triage-retail.md"}
+{"file": "11-ticket-triage-retail.md", "id": "UC-11", "roles": ["solution_architect", "software_engineer", "project_manager", "data_scientist"]}
+{"file": "12-ticket-triage-phase-2-multilingual.md", "id": "UC-12", "continues": "11-ticket-triage-retail.md", "roles": ["solution_architect", "software_engineer", "project_manager", "data_scientist", "change_manager"]}
 {"file": "13-product-copy-generation.md", "id": "UC-13", "alongside": ["11-ticket-triage-retail.md"]}
-{"file": "14-benefits-claim-assessment.md", "id": "UC-14"}
+{"file": "14-benefits-claim-assessment.md", "id": "UC-14", "roles": ["solution_architect", "software_engineer", "project_manager", "consultant", "change_manager", "data_engineer"]}
 {"file": "15-foi-request-handling.md", "id": "UC-15"}
-{"file": "16-consultation-analysis.md", "id": "UC-16"}
+{"file": "16-consultation-analysis.md", "id": "UC-16", "roles": ["solution_architect", "software_engineer", "project_manager", "data_scientist", "data_engineer"]}
 {"file": "17-outage-report-reconciliation.md", "id": "UC-17"}
-{"file": "18-permit-pack-preparation.md", "id": "UC-18"}
+{"file": "18-permit-pack-preparation.md", "id": "UC-18", "roles": ["solution_architect", "software_engineer", "project_manager", "consultant"]}
 {"file": "19-knowledge-assistant-vague.md", "id": "UC-19"}
 {"file": "20-claims-platform-migration.md", "id": "UC-20"}

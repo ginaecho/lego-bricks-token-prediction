@@ -14,3 +14,7 @@ footnote.
 
 Messages are short, under 1 kB with the retrieved context. The business case is
 patient experience and staff retention, not headcount.
+
+Team: architect, software engineers, and a change manager — the clinical
+staff have to trust the drafts before they will use them, and that is the
+part that will decide whether this lands.

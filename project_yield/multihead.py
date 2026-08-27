@@ -36,13 +36,13 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import Dict, List, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from . import features as F
 from .features import FeatureRow
 from .linalg import (LOGIT_RIDGE, irls_logistic, least_squares, leverage,
                      quantile, sigmoid, standard_error)
-from .outcomes import ORDER, OUTCOMES, Outcome
+from .outcomes import Outcome
 
 #: Central interval reported for every estimate. 80% is the band an estimator
 #: can actually stand behind at this sample size; 95% would be mostly extrapolation.
@@ -60,9 +60,21 @@ class Estimate:
     high: float
     unit: str
 
+    #: Carried so a caller can render the estimate without a second lookup —
+    #: the outcome set is now built from a roster and is no longer a constant.
+    name: str = ""
+    binary: bool = False
+
     def format(self) -> str:
-        o = OUTCOMES[self.outcome]
-        return f"{o.format(self.value)}  ({o.format(self.low)} – {o.format(self.high)})"
+        if self.binary:
+            fmt = "{:.0%}".format
+        elif self.unit == "USD":
+            fmt = "${:,.0f}".format
+        elif self.unit == "days":
+            fmt = "{:,.1f} days".format
+        else:
+            fmt = "{:,.0f}".format
+        return f"{fmt(self.value)}  ({fmt(self.low)} – {fmt(self.high)})"
 
 
 @dataclass
@@ -78,6 +90,11 @@ class Head:
     in_sample_score: float
     #: The same metric for the do-nothing model — the corpus mean, or base rate.
     baseline_score: float
+    #: The do-nothing prediction itself: the base rate for a binary head, the
+    #: geometric mean otherwise. Kept because a head that cannot beat it should
+    #: be *replaced* by it rather than merely apologised for — see
+    #: :meth:`project_yield.predict.Predictor._staffing`.
+    baseline_value: float = 0.0
     scores: Dict[str, float] = field(default_factory=dict)
     resid_low: float = 0.0
     resid_high: float = 0.0
@@ -110,7 +127,8 @@ class Head:
     def estimate(self, row: FeatureRow) -> Estimate:
         lo, hi = self.interval(row)
         return Estimate(self.outcome.slug, self.predict(row), lo, hi,
-                        self.outcome.unit)
+                        self.outcome.unit, self.outcome.name,
+                        self.outcome.binary)
 
     # -- interpretation --------------------------------------------------
 
@@ -184,15 +202,15 @@ def _loo_binary(form: str, rows: Sequence[FeatureRow],
     return brier, loo_p
 
 
-def _baseline_score(y_obs: Sequence[float], outcome: Outcome) -> float:
-    """What you get for free: the corpus mean, or the base rate."""
+def _baseline(y_obs: Sequence[float], outcome: Outcome) -> Tuple[float, float]:
+    """What you get for free: ``(score, prediction)`` for the do-nothing model."""
     if outcome.binary:
         rate = sum(y_obs) / len(y_obs)
-        return sum((rate - y) ** 2 for y in y_obs) / len(y_obs)
+        return sum((rate - y) ** 2 for y in y_obs) / len(y_obs), rate
     # Geometric mean, because the head works in log space and the arithmetic
     # mean of a skewed corpus is a straw man that any model would beat.
     gm = math.exp(sum(math.log(max(y, 1e-9)) for y in y_obs) / len(y_obs))
-    return sum(abs(gm - y) / y for y in y_obs if y) / len(y_obs)
+    return sum(abs(gm - y) / y for y in y_obs if y) / len(y_obs), gm
 
 
 # ── fitting one head ─────────────────────────────────────────────────────
@@ -243,10 +261,12 @@ def fit_head(outcome: Outcome, rows: Sequence[FeatureRow],
         lo = quantile(residuals[best], (1.0 - INTERVAL) / 2.0)
         hi = quantile(residuals[best], 1.0 - (1.0 - INTERVAL) / 2.0)
 
+    baseline_score, baseline_value = _baseline(
+        [float(v) for v in y_obs], outcome)
     return Head(
         outcome=outcome, form=best, coef=coef, n=len(rows),
         loo_score=scores[best], in_sample_score=in_sample,
-        baseline_score=_baseline_score([float(v) for v in y_obs], outcome),
+        baseline_score=baseline_score, baseline_value=baseline_value,
         scores=scores, resid_low=lo, resid_high=hi,
         _design=x, _weights=weights,
     )
@@ -260,12 +280,21 @@ class MultiHeadModel:
 
     heads: Dict[str, Head]
     n: int
+    order: Tuple[str, ...] = ()
+    #: Heads the corpus had too little evidence to fit, and why. A missing head
+    #: that is merely absent looks like a role nobody needs; one that says it
+    #: is missing is a gap somebody can go and fill.
+    unfitted: Dict[str, str] = field(default_factory=dict)
 
     def __getitem__(self, slug: str) -> Head:
         return self.heads[slug]
 
+    def __contains__(self, slug: str) -> bool:
+        return slug in self.heads
+
     def estimate_all(self, row: FeatureRow) -> Dict[str, Estimate]:
-        return {slug: self.heads[slug].estimate(row) for slug in ORDER
+        return {slug: self.heads[slug].estimate(row)
+                for slug in (self.order or tuple(self.heads))
                 if slug in self.heads}
 
     def report(self) -> str:
@@ -273,31 +302,73 @@ class MultiHeadModel:
                  "=" * 74,
                  f"  corpus: {self.n} engagements, "
                  f"{len(F.FORM_ORDER)} candidate forms per head", ""]
-        for slug in ORDER:
+        for slug in (self.order or tuple(self.heads)):
             head = self.heads.get(slug)
             if head is None:
-                lines.append(f"  {slug}: not fitted")
+                lines.append(f"  {slug}: {self.unfitted.get(slug, 'not fitted')}")
                 continue
             lines.append("  " + head.describe())
         weak = [h.outcome.name for h in self.heads.values()
                 if not h.beats_baseline]
         if weak:
             lines += ["", "  Heads that do NOT beat their baseline: "
-                          + ", ".join(weak),
+                          + ", ".join(sorted(set(weak))),
                       "  Report these as the base rate, not as a prediction."]
         return "\n".join(lines)
 
 
+#: Below this many usable observations a head is not fitted at all. Seven
+#: candidate forms selected against four points is not cross-validation, it is
+#: a coin toss with a decimal place — and a role the corpus barely records is
+#: exactly where a confident number does the most damage.
+MIN_OBSERVATIONS = 12
+
+
 def fit(rows: Sequence[FeatureRow],
-        observations: Dict[str, Sequence[float]]) -> MultiHeadModel:
-    """Fit one head per outcome from aligned rows and observed values."""
+        observations: Dict[str, Sequence[float]],
+        outcomes: Dict[str, Outcome],
+        order: Sequence[str] = (),
+        subsets: Optional[Dict[str, Sequence[bool]]] = None) -> MultiHeadModel:
+    """Fit one head per outcome from aligned rows and observed values.
+
+    ``subsets`` restricts a head to the rows a mask marks true. That is what
+    makes the days-per-role heads mean something: a data scientist's days are
+    fitted only on the engagements that used one, so the figure is
+    days-when-needed rather than an average dragged toward zero by every job
+    that needed none. The matching ``<role>_used`` head, fitted on everything,
+    carries how often that is.
+    """
+    subsets = subsets or {}
+    order = tuple(order) or tuple(outcomes)
     heads: Dict[str, Head] = {}
-    for slug in ORDER:
-        y_obs = observations.get(slug)
-        if not y_obs:
+    unfitted: Dict[str, str] = {}
+
+    for slug in order:
+        outcome = outcomes.get(slug)
+        y_all = observations.get(slug)
+        if outcome is None or y_all is None:
+            unfitted[slug] = "no observations in the corpus"
             continue
-        if len(y_obs) != len(rows):
-            raise ValueError(f"{slug}: {len(y_obs)} observations for "
+        if len(y_all) != len(rows):
+            raise ValueError(f"{slug}: {len(y_all)} observations for "
                              f"{len(rows)} rows")
-        heads[slug] = fit_head(OUTCOMES[slug], rows, y_obs)
-    return MultiHeadModel(heads=heads, n=len(rows))
+
+        mask = subsets.get(slug)
+        if mask is None:
+            use_rows, y_obs = list(rows), list(y_all)
+        else:
+            pairs = [(r, y) for r, y, m in zip(rows, y_all, mask) if m]
+            use_rows = [r for r, _ in pairs]
+            y_obs = [y for _, y in pairs]
+
+        if len(use_rows) < MIN_OBSERVATIONS:
+            unfitted[slug] = (f"only {len(use_rows)} usable observations "
+                              f"(need {MIN_OBSERVATIONS})")
+            continue
+        if outcome.binary and len({round(v) for v in y_obs}) < 2:
+            unfitted[slug] = "every observation has the same outcome"
+            continue
+        heads[slug] = fit_head(outcome, use_rows, y_obs)
+
+    return MultiHeadModel(heads=heads, n=len(rows), order=order,
+                          unfitted=unfitted)

@@ -16,3 +16,6 @@ around 250 kB.
 
 Revenue growth. The number that matters to the client is bids submitted per
 quarter, and they will judge this on whether that goes up.
+
+Team: the bid director wants a consultant who has written tenders, not just
+engineers. Beyond that, propose.

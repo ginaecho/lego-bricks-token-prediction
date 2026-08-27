@@ -14,3 +14,6 @@ around 400 kB.
 
 The client will justify this on the returned-pack rate rather than on the three
 weeks, because the returns delay drilling and that is where the money is.
+
+Team: an industry consultant who knows the regulator's checklist is
+non-negotiable. The rest is open.

@@ -17,3 +17,7 @@ About 9,000 claims a month. Documents are a bit longer than the invoices,
 call it 3 kB each. Cost reduction again, and the client has already seen phase
 one work, so the commercial conversation is about extending the existing
 statement of work rather than a new one.
+
+Team: the same crew as phase one — architect, software engineers, project
+manager — plus a data engineer for the contract repository, which we did not
+need last time.

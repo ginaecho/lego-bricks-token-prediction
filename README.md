@@ -67,26 +67,41 @@ Full experiment and limitations: **[docs/composition-findings.md](docs/compositi
 
 ## From a token budget to a scoping decision
 
-A token budget is one of five numbers a project manager needs. **Project
+A token budget is one of several numbers a project manager needs. **Project
 Yield** (`project_yield/`) keeps the encoder and the brick vocabulary exactly as
-they are and points the same decode step at the other four — what the client
-will pay, whether it will land, who it takes, and how long it runs.
+they are and points the same decode step at the rest — what the client will pay,
+whether it will land, how long it runs, who you need to build it, and what the
+whole thing is worth to the client once it is running.
 
 ```
- description ──encode──▶  9 brick counts             ──decode──▶  tokens
+ description ──encode──▶  9 brick counts             ──decode──▶  tokens & cost
                         + context bytes                        ├▶ contract value
                         + industry, goal                       ├▶ success rate
-                        + lineage: depth, siblings,            ├▶ architect · engineer
-                          inherited brick share                │  · pm days
-                                                               └▶ time to finish
+                        + lineage: depth, siblings,            ├▶ working days
+                          inherited brick share                ├▶ days per role
+                        + production run rate                  └▶ annual impact
 ```
 
-Six heads, not one model with six outputs: money multiplies, a win is bounded at
-both ends, and elapsed time has a floor no headcount moves. Each head declares
-its own link function and **independently selects its functional form** from
-seven candidates by leave-one-out cross-validation — the same rule the token
-model uses, six times over, and on the shipped data they do not all choose the
+Many heads, not one model with many outputs: money multiplies, a win is bounded
+at both ends, and elapsed time has a floor no headcount moves. Each declares its
+own link function and **independently selects its functional form** from seven
+candidates by leave-one-out cross-validation — the same rule the token model
+uses, nineteen times over, and on the shipped data they do not all choose the
 same one.
+
+**The delivery roster is a file you edit.** `roles.json` ships with solution
+architect, data scientist, data engineer, software engineer, security expert,
+industry consultant, project manager and change manager. Each gets two heads —
+*is this role needed at all* and *how many days if it is* — so the plan reads
+"48% likely, 7.4 days when needed" rather than an average flattened by every job
+that needed none. Name the team on a use case and your knowledge overrides the
+base rates.
+
+**And what the client gets.** Everything else prices the engagement; `impact.py`
+prices the outcome — handling time displaced, at the client's loaded cost, less
+what the inference costs to run. A build costing $60,000 is expensive or cheap
+depending entirely on whether it displaces $40,000 a year or $4 million, and no
+delivery estimate can tell you which.
 
 **Lineage is a feature, not a footnote.** Most enterprise use cases continue one
 already delivered, and pricing those as greenfield is how both the estimate and

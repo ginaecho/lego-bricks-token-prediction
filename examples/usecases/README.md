@@ -52,19 +52,36 @@ Chosen to span the things that move a forecast, not just to be twenty of them.
 | 19 | AI assistant for the operations team | **deliberately vague** — watch what the tool refuses to pretend |
 | 20 | Fabrikam claims platform migration | **deliberately enormous** — should trigger extrapolation warnings |
 
+Team-wise: 04 and 06 name a data scientist and a consultant, 14 names six roles
+including a change manager, 16 names two data scientists and no change manager,
+18 names a consultant as non-negotiable. The other ten leave it open. Security
+experts are never named in a note and are always inferred — which is realistic,
+and is why they are the role most often missing from a scoping conversation.
+
 ## The manifest
 
-`manifest.jsonl` declares **lineage only** — which use case continues which, and
-which run alongside which. Everything else is read out of the prose.
+`manifest.jsonl` declares the two things prose cannot safely carry — **lineage**
+and the **team** — and nothing else. Bricks, industry, goal, scope and volume
+are all read out of the description.
 
-Lineage is the one thing a description cannot carry. "Follow-on to the pipeline
-we delivered for Northwind" is obvious to a reader and not recoverable by an
-encoder, so it is stated as data:
+Lineage is not recoverable by an encoder: "follow-on to the pipeline we
+delivered for Northwind" is obvious to a reader and refers to something outside
+the document. A stated team is recoverable in principle but should not be
+guessed, because reading it wrongly silently deletes a person from the bill.
 
 ```json
 {"file": "02-invoice-intake-phase-2-warranty.md", "id": "UC-02",
- "continues": "01-invoice-intake-manufacturing.md"}
+ "continues": "01-invoice-intake-manufacturing.md",
+ "roles": ["solution_architect", "software_engineer", "project_manager",
+           "data_engineer"]}
 ```
+
+Naming `roles` makes those roles certain and excludes every other role on the
+roster. Omit it and the base rates from comparable engagements decide who is
+needed — "48% likely, 7.4 days when needed". **Ten of the twenty state a team
+and ten deliberately do not**, so both paths are exercised. The roster itself
+(who exists, what they cost) is [`roles.json`](../../roles.json) at the repo
+root.
 
 Files are processed in filename order, so a continuation must sort after its
 parent. Drop your own `.md` or `.txt` files in and they are picked up with no
@@ -81,6 +98,19 @@ pipeline, not a 400-claim one) — but it sees words, not intent.
 Where it has to guess, it records the guess: 19 names no industry and no goal
 and says so; 12 does not name its industry either and takes it from its parent.
 Those notes travel with the forecast into every card and every JSON payload.
+
+## The impact figure
+
+The headline number is what the client gets: handling time displaced, at their
+own loaded cost, less what the pipeline costs to run. It is the number that
+separates these twenty from each other more than anything else does — 01 runs
+24,000 times a month and 04 runs four times a year, from a similar amount of
+build.
+
+It is also the least evidenced thing on the page: arithmetic over placeholder
+handling times, a placeholder hourly cost, and a placeholder deflection rate
+(the share of the work automation actually removes, deliberately below 1.0).
+Every card names those assumptions inline.
 
 And the standing caveat applies to all twenty: the token budget comes from a
 model fitted on real measured agent runs, and everything else comes from a model

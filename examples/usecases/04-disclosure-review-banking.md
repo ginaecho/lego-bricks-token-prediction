@@ -12,3 +12,7 @@ exception with the page reference.
 This runs four times a year — it is not a volume play. The value is that the
 review finishes a week earlier and the exceptions are found before the audit
 committee sees the pack rather than during. Total pack is around 48 kB of text.
+
+Team: the reporting lead wants an industry consultant in the room for the
+regulator conversations, and a data scientist to design the exception checks
+so we can show the audit committee how they were validated.

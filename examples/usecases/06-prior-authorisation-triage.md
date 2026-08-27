@@ -16,3 +16,7 @@ raw submission.
 Clinical notes average around 6 kB. Regulated environment, clinical safety
 sign-off required, and the client's information governance team will want to
 review the whole thing.
+
+Team: clinical safety sign-off means an industry consultant throughout, and
+the client's information governance team has asked for a named data scientist
+accountable for the triage model. Change management is theirs, not ours.

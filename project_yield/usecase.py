@@ -89,6 +89,17 @@ class UseCase:
     parent_id: Optional[str] = None
     #: Use cases delivered alongside this one for the same client.
     sibling_ids: List[str] = field(default_factory=list)
+    #: The roles the PM says are in play. ``None`` means "let the history
+    #: decide" — each role is included at the rate comparable work used it. A
+    #: list is a statement of knowledge and overrides that: the named roles are
+    #: staffed, and every other role on the roster is not. Naming roles is how
+    #: a PM says "this one needs a data scientist and no change manager"
+    #: without editing the roster, which is organisation-wide configuration.
+    roles: Optional[List[str]] = None
+    #: Days per role entered by hand, which win outright over any prediction.
+    #: For the role the corpus has never seen, and for the one the PM has
+    #: already negotiated.
+    role_days: Dict[str, float] = field(default_factory=dict)
     client: str = ""
     encoder: str = "manual"
     rationale: str = ""
@@ -96,6 +107,12 @@ class UseCase:
     #: not a small thing — it is a feature in every head — so it travels with
     #: the use case and every surface that shows a number shows these too.
     assumptions: List[str] = field(default_factory=list)
+
+    @property
+    def staffing_is_specified(self) -> bool:
+        """True when the PM has said who is on this, rather than leaving it
+        to the base rates from comparable work."""
+        return self.roles is not None or bool(self.role_days)
 
     def __post_init__(self) -> None:
         self.counts = normalise_counts(self.counts)
@@ -133,6 +150,8 @@ class UseCase:
             "sibling_ids": list(self.sibling_ids), "client": self.client,
             "encoder": self.encoder, "rationale": self.rationale,
             "assumptions": list(self.assumptions),
+            "roles": list(self.roles) if self.roles is not None else None,
+            "role_days": dict(self.role_days),
         }
 
     @classmethod
@@ -151,4 +170,8 @@ class UseCase:
             encoder=str(d.get("encoder", "manual")),
             rationale=str(d.get("rationale", "")),
             assumptions=[str(a) for a in (d.get("assumptions") or [])],
+            roles=([str(r) for r in d["roles"]]
+                   if d.get("roles") is not None else None),
+            role_days={str(k): float(v)
+                       for k, v in (d.get("role_days") or {}).items()},
         )

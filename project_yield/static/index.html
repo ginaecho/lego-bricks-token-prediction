@@ -107,6 +107,21 @@
   .field input, .field select { width: 100%; max-width: none; border-radius: 10px; }
   .drawer .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
   @media (max-width: 520px) { .drawer .row2 { grid-template-columns: 1fr; } }
+  .subhead {
+    font-size: 12px; color: var(--muted); margin: 22px 0 8px;
+    letter-spacing: -.005em;
+  }
+  .role {
+    display: flex; align-items: center; gap: 10px; padding: 7px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .role label { margin: 0; flex: 1; color: var(--ink); font-size: 15px;
+                display: flex; align-items: center; gap: 9px; cursor: pointer; }
+  .role input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--accent); }
+  .role .rate { font-size: 12px; color: var(--muted); }
+  .role input[type=number] { width: 88px; max-width: 88px; border-radius: 10px;
+                             padding: 5px 9px; font-size: 13px; }
+  .role.stale label { color: var(--muted); }
 
   .echo { margin: 14px 2px 0; font-size: 14px; color: var(--muted); letter-spacing: -.005em; }
   .echo b { color: var(--ink); font-weight: 500; }
@@ -189,8 +204,8 @@
 <body>
 <div class="page">
   <h1>Project Yield</h1>
-  <p class="lede">Describe a use case. Get what it costs to run, what a client
-     like this pays, and whether it is worth staffing.</p>
+  <p class="lede">Describe a use case. Get what it is worth to the client, what
+     it costs in tokens, how long it takes, and who you need to build it.</p>
 
   <form id="form">
     <div class="composer">
@@ -228,6 +243,11 @@
           <label class="field"><span>Title</span>
             <input id="title" type="text" placeholder="Untitled use case"></label>
         </div>
+
+        <p class="subhead" id="team-hint">Team — leave every role unticked and
+           comparable engagements decide who is needed. Tick any and that becomes
+           the team. Days are optional; enter one and it overrides the estimate.</p>
+        <div id="roles"></div>
       </div>
     </details>
   </form>
@@ -258,6 +278,38 @@ async function boot() {
   $('bricks').innerHTML = BRICKS.map(b => `
     <label class="field" title="${esc(b.blurb)}"><span>${esc(b.name)}</span>
       <input data-brick="${b.slug}" type="number" min="0" value="0"></label>`).join('');
+  $('roles').innerHTML = meta.roles.map(r => `
+    <div class="role ${r.has_history ? '' : 'stale'}">
+      <label title="${esc(r.blurb)}">
+        <input type="checkbox" data-role="${r.slug}">
+        ${esc(r.name)}
+        <span class="rate">$${r.day_rate.toLocaleString()}/day${
+          r.has_history ? '' : ' · no history, enter days'}</span>
+      </label>
+      <input type="number" min="0" step="0.5" data-role-days="${r.slug}"
+             placeholder="days" aria-label="${esc(r.name)} days">
+    </div>`).join('');
+  // Entering days for a role is a statement that the role is on the team, so
+  // it ticks the box rather than making the two controls disagree.
+  document.querySelectorAll('[data-role-days]').forEach(input => {
+    input.addEventListener('input', () => {
+      if (parseFloat(input.value) > 0) {
+        document.querySelector(`[data-role="${input.dataset.roleDays}"]`).checked = true;
+      }
+    });
+  });
+}
+
+function team() {
+  const picked = [...document.querySelectorAll('[data-role]')]
+    .filter(c => c.checked).map(c => c.dataset.role);
+  const days = {};
+  document.querySelectorAll('[data-role-days]').forEach(i => {
+    const v = parseFloat(i.value);
+    if (v > 0) days[i.dataset.roleDays] = v;
+  });
+  // No ticks at all means "you tell me", not "a team of nobody".
+  return {roles: picked.length ? picked : null, role_days: days};
 }
 
 // A written description in a file is the input people actually have — a
@@ -350,7 +402,7 @@ $('form').addEventListener('submit', async (ev) => {
       context_bytes: parseInt($('context_bytes').value || '0', 10),
       monthly_runs: parseInt($('monthly_runs').value || '0', 10),
       parent_id: $('parent_id').value || null,
-      counts: counts(), encoder: ENCODER,
+      counts: counts(), encoder: ENCODER, ...team(),
     }));
   } catch (e) {
     say($('err'), e.message);
@@ -377,7 +429,7 @@ function point(o) {
 }
 
 function render(f) {
-  const o = f.outcomes, e = f.economics, worth = e.expected_margin >= 0;
+  const o = f.outcomes, e = f.economics, i = f.impact;
 
   const line = (k, v, sub, vsub) => `<div class="line">
     <dt>${k}${sub ? `<small>${sub}</small>` : ''}</dt>
@@ -385,10 +437,14 @@ function render(f) {
 
   $('out').innerHTML = `
   <div class="hero">
-    <div class="n ${worth ? 'up' : 'down'}">${money(e.expected_margin)}</div>
-    <div class="cap">expected margin — contingent revenue less committed cost</div>
-    <div class="verdict">${worth ? 'Worth staffing.' : 'Not worth staffing at this price.'}
-      It breaks even at a ${(e.breakeven_win_rate * 100).toFixed(0)}% win rate.</div>
+    <div class="n ${i.is_positive ? 'up' : ''}">${
+      i.quoted ? money(i.annual_net_benefit) : '—'}</div>
+    <div class="cap">${i.quoted
+      ? 'annual impact — handling displaced, less what it costs to run'
+      : 'annual impact needs a production run rate'}</div>
+    <div class="verdict">${i.quoted
+      ? `Frees ${num(i.fte_equivalent, 1)} full-time people, and ${esc(i.verdict)}.`
+      : 'Add runs per month under Refine the scope to size the benefit.'}</div>
   </div>
 
   <div class="tiles">
@@ -397,29 +453,53 @@ function render(f) {
     <div class="tile"><div class="n">${point(o.win_probability)}</div>
       <div class="k">success rate</div><div class="b">${esc(band(o.win_probability))}</div></div>
     <div class="tile"><div class="n">${point(o.calendar_days)}</div>
-      <div class="k">to finish</div><div class="b">${esc(band(o.calendar_days))}</div></div>
+      <div class="k">working days to finish</div><div class="b">${esc(band(o.calendar_days))}</div></div>
   </div>
 
   <h2>Who it takes</h2>
   <dl>
-    ${['architect_days', 'engineer_days', 'pm_days'].map(s =>
-      line(esc(o[s].name), point(o[s]), '', esc(band(o[s])))).join('')}
+    ${f.staffing.map(r => line(
+      esc(r.name),
+      `${num(r.certain ? r.days_when_needed : r.expected_days, 1)} days`,
+      r.certain
+        ? esc(r.source === 'entered' ? 'days you entered'
+              : r.source === 'named' ? 'you named this role'
+              : r.source === 'no history' ? 'no history — enter the days'
+              : 'always staffed')
+        : `${(r.probability * 100).toFixed(0)}% likely · ${num(r.days_when_needed, 1)} days when needed`,
+      money(r.cost))).join('') || '<div class="line"><dt>No roles on the plan</dt></div>'}
     ${line('<strong>Delivery cost</strong>', `<strong>${money(e.delivery_cost)}</strong>`,
-           `${num(e.total_staff_days, 1)} staff days`)}
+           `${num(e.total_staff_days, 1)} expected staff days`)}
   </dl>
-  <p class="caption">Day rates: ${esc(e.rates_source)}.</p>
+  <p class="caption">Day rates: ${esc(e.rates_source)}. Roles come from the
+     roster, which you own — see <code>roles.json</code>.</p>
 
-  <h2>What it costs to run</h2>
+  <h2>Tokens</h2>
   <dl>
     ${line('Tokens, one run', num(f.tokens.per_run),
            'measured model, unchanged', `${num(f.tokens.low)} – ${num(f.tokens.high)}`)}
-    ${line('Inference, first year', e.has_run_rate ? money(e.annual_token_cost) : '—',
+    ${line('Token cost, first year', e.has_run_rate ? money(e.annual_token_cost) : '—',
            e.has_run_rate
-             ? (e.run_rate_dominates ? 'more than the build costs' : 'less than the build costs')
+             ? `${num(f.usecase.monthly_runs)} runs a month`
              : 'no production run rate given')}
     ${line('Saving from batching', (f.tokens.batching_saving * 100).toFixed(0) + '%',
            'one agent for every brick vs one agent each')}
   </dl>
+
+  <h2>The business case</h2>
+  <dl>
+    ${i.quoted ? line('Handling displaced', `${num(i.hours_saved)} hours/year`,
+           `${num(i.minutes_per_run, 0)} min per run by hand, ${(i.deflection * 100).toFixed(0)}% removed`) : ''}
+    ${i.quoted ? line('Annual benefit', money(i.annual_benefit),
+           'at the client\'s own loaded staff cost') : ''}
+    ${line('Delivery cost', money(e.delivery_cost),
+           `${num(e.total_staff_days, 1)} expected staff days`)}
+    ${line('Gross margin if it lands', money(e.gross_margin),
+           `${(e.gross_margin_pct * 100).toFixed(0)}% of contract value`)}
+    ${line('Expected margin', money(e.expected_margin),
+           `breaks even at a ${(e.breakeven_win_rate * 100).toFixed(0)}% win rate`)}
+  </dl>
+  <p class="caption">Impact assumptions: ${esc(i.assumptions)}.</p>
 
   <h2>Lineage</h2>
   <dl>${line(esc(f.lineage.explanation), '', `scope ${esc(f.notation)}`)}</dl>

@@ -16,3 +16,7 @@ About 180,000 claims a year. Document packs average 55 kB.
 They have asked for a single price. This is the kind of scope where an estimate
 built from comparables should be treated with suspicion, and it is worth seeing
 what the model says before deciding whether to give them one.
+
+Team: they have asked for a named team of eleven across architecture,
+engineering, data science, data engineering, consulting, delivery management
+and change. We should not put names to that until the scope is real.

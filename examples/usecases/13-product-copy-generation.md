@@ -13,3 +13,6 @@ Merchandising approves before anything publishes.
 Specification sheets are small, about 3 kB. This is revenue growth — the
 argument is time-to-live, not the agency fee, though the agency fee is what will
 be quoted back at us.
+
+Team: not proposed yet. Merchandising will review everything, so somebody has
+to own that workflow with them.

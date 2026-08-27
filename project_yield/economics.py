@@ -21,31 +21,41 @@ argument so nothing is hardcoded into a result.
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from typing import Dict
+from typing import Dict, Optional
 
-from .outcomes import STAFF_OUTCOMES
+from .roles import DEFAULT_ROSTER, Roster
 
 
 @dataclass(frozen=True)
 class Rates:
-    """Blended internal day rates and the token price. **Placeholders.**
+    """Day rates by role, and the token price. **Placeholders.**
 
-    Replace with your own before quoting anything. They are deliberately round
-    numbers so that nobody mistakes them for a finance-supplied figure.
+    Day rates live on the roster, because the roster is the thing an
+    organisation owns and edits — adding a role and forgetting to price it is
+    not a state this should be able to reach. Replace both before quoting
+    anything; the defaults are round numbers so nobody mistakes them for a
+    finance-supplied figure.
     """
 
-    architect_day: float = 1850.0
-    engineer_day: float = 1250.0
-    pm_day: float = 1100.0
+    roster: Roster = DEFAULT_ROSTER
     #: Blended dollars per million tokens, input and output together.
     dollars_per_million_tokens: float = 5.00
     currency: str = "USD"
     source: str = "PLACEHOLDER — replace with internal rate card"
 
-    def day_rate(self, outcome_slug: str) -> float:
-        return {"architect_days": self.architect_day,
-                "engineer_days": self.engineer_day,
-                "pm_days": self.pm_day}[outcome_slug]
+    def day_rate(self, role_slug: str) -> float:
+        role = self.roster.get(role_slug)
+        if role is None:
+            raise KeyError(
+                f"no rate for {role_slug!r}: it is not on the roster "
+                f"({self.roster.source}). Add it there rather than here, so "
+                f"it is priced and predicted together.")
+        return role.day_rate
+
+    def with_day_rates(self, **rates: float) -> "Rates":
+        """A copy with some role day rates replaced, by slug."""
+        return replace(self, roster=self.roster.with_rates(rates),
+                       source=self.source + " + overridden day rates")
 
     def with_rates(self, **kwargs) -> "Rates":
         return replace(self, **kwargs)
@@ -66,6 +76,7 @@ class Economics:
 
     contract_value: float
     win_probability: float
+    #: Expected days by role slug — presence probability times days-when-needed.
     staff_days: Dict[str, float]
     #: Inference cost of building and testing the pipeline.
     token_cost: float
@@ -79,6 +90,16 @@ class Economics:
     @property
     def total_staff_days(self) -> float:
         return sum(self.staff_days.values())
+
+    @property
+    def cost_by_role(self) -> Dict[str, float]:
+        return {slug: self.rates.day_rate(slug) * days
+                for slug, days in self.staff_days.items() if days}
+
+    @property
+    def biggest_role(self) -> Optional[str]:
+        costs = self.cost_by_role
+        return max(costs, key=lambda k: costs[k]) if costs else None
 
     @property
     def delivery_cost(self) -> float:
@@ -162,7 +183,8 @@ class Economics:
 
 
 def compute(contract_value: float, win_probability: float,
-            staff_days: Dict[str, float], tokens: float,
+            #: Expected days by role slug — presence probability times days-when-needed.
+    staff_days: Dict[str, float], tokens: float,
             rates: Rates = DEFAULT_RATES, monthly_runs: int = 0,
             build_multiplier: float = BUILD_RUNS) -> Economics:
     """Assemble the economics from the head predictions and a token budget.
@@ -172,14 +194,14 @@ def compute(contract_value: float, win_probability: float,
     repeatedly while it is developed and tested — so the build-side inference
     cost is that multiplied by :data:`BUILD_RUNS`.
     """
-    labour = sum(rates.day_rate(slug) * staff_days.get(slug, 0.0)
-                 for slug in STAFF_OUTCOMES)
+    labour = sum(rates.day_rate(slug) * days
+                 for slug, days in staff_days.items() if days)
     token_cost = (tokens * build_multiplier
                   * rates.dollars_per_million_tokens / 1_000_000.0)
     return Economics(
         contract_value=float(contract_value),
         win_probability=float(win_probability),
-        staff_days={s: float(staff_days.get(s, 0.0)) for s in STAFF_OUTCOMES},
+        staff_days={s: float(d) for s, d in staff_days.items()},
         token_cost=token_cost, labour_cost=labour, rates=rates,
         tokens_per_run=float(tokens), monthly_runs=int(monthly_runs),
     )

@@ -14,3 +14,7 @@ consultation, but that is not this piece of work.
 
 The full response corpus is about 90 MB of text, so how it is chunked and
 retrieved is the whole engineering problem here.
+
+Team: two data scientists on the thematic classification and a data engineer
+on the corpus. No change manager — nothing about how the department works is
+changing, this is one analysis.

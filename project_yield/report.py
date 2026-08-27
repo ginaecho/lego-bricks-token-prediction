@@ -15,7 +15,7 @@ from __future__ import annotations
 from typing import Dict, List, Optional, Sequence, Tuple
 
 from .multihead import MultiHeadModel
-from .outcomes import ORDER, OUTCOMES, STAFF_OUTCOMES
+from .outcomes import OUTCOMES
 from .predict import Forecast
 
 WIDTH = 74
@@ -26,8 +26,14 @@ def rule(title: str = "") -> str:
 
 
 def forecast_card(f: Forecast) -> str:
-    """The single-use-case card: what it costs, what it earns, what it risks."""
-    uc, e = f.usecase, f.economics
+    """The single-use-case card, in the order a sponsor asks the questions.
+
+    Impact first. Everything else here prices the engagement, and a build that
+    costs sixty thousand dollars is expensive or cheap depending entirely on
+    whether it displaces forty thousand a year or four million — so leading
+    with the cost is leading with the half of the case that cannot settle it.
+    """
+    uc, e, i = f.usecase, f.economics, f.impact
     out: List[str] = []
     out.append(rule(f"{uc.title.upper()}"))
     out.append(f"  {uc.industry.replace('_', ' ')} · "
@@ -40,11 +46,55 @@ def forecast_card(f: Forecast) -> str:
     if uc.rationale:
         out.append(f"  encoder : {uc.rationale}")
 
-    if f.warnings:
-        out.append("")
-        out.append("  READ THIS FIRST")
-        for w in f.warnings:
-            out.extend("  ! " + line for line in _wrap(w, WIDTH - 4))
+    out.append("")
+    out.append("  WHAT IT IS WORTH TO THE CLIENT")
+    if i.quoted:
+        out.append(f"    {'handling displaced':<28}"
+                   f"{f'{i.hours_saved:,.0f} hours/year':>34}")
+        out.append(f"    {'  which is':<28}"
+                   f"{f'{i.fte_equivalent:.1f} full-time people':>34}")
+        out.append(f"    {'annual benefit':<28}"
+                   f"{'$' + format(i.annual_benefit, ',.0f'):>34}")
+        out.append(f"    {'less running it':<28}"
+                   f"{'-$' + format(e.annual_token_cost, ',.0f'):>34}")
+        out.append(f"    {'net impact, per year':<28}"
+                   f"{'$' + format(i.annual_net_benefit, ',.0f'):>34}")
+        out.append(f"    {'first-year return':<28}"
+                   f"{'$' + format(i.first_year_return, ',.0f'):>34}")
+        out.append(f"    {'':<28}{i.verdict:>34}")
+    else:
+        out.append(f"    {'annual impact':<28}{i.verdict:>34}")
+    out.append(f"    assumes {i.minutes_per_run:.0f} min/run by hand, "
+               f"{i.assumptions.deflection:.0%} removed — {i.assumptions.source}")
+
+    out.append("")
+    out.append("  WHAT IT IS WORTH TO US")
+    for slug in ("contract_value", "win_probability"):
+        out.append(f"    {OUTCOMES[slug].name:<28}"
+                   f"{f.estimates[slug].format():>34}")
+    out.append(f"    {'gross margin if it lands':<28}"
+               f"{'$' + format(e.gross_margin, ',.0f') + f'  ({e.gross_margin_pct:.0%})':>34}")
+    out.append(f"    {'expected margin':<28}"
+               f"{'$' + format(e.expected_margin, ',.0f'):>34}")
+    out.append(f"    {'breaks even at a win rate of':<28}"
+               f"{e.breakeven_win_rate:>34.0%}")
+
+    out.append("")
+    out.append("  WHO IT TAKES")
+    if not f.staffing:
+        out.append("    (no roles on the plan)")
+    for role in f.staffing:
+        out.append(f"    {role.role.name:<28}{role.summary():>34}")
+    out.append(f"    {'total expected staff days':<28}"
+               f"{e.total_staff_days:>34,.1f}")
+    out.append(f"    {'delivery cost':<28}"
+               f"{'$' + format(e.delivery_cost, ',.0f'):>34}")
+    out.append(f"    {'working days to finish':<28}"
+               f"{f.estimates['calendar_days'].format():>34}")
+    sourced = sorted({r.source for r in f.staffing})
+    if sourced and sourced != ["predicted"]:
+        out.append(f"    {'team decided by':<28}{', '.join(sourced):>34}")
+    out.append(f"    rates: {e.rates.source}")
 
     out.append("")
     out.append("  WHAT IT COSTS TO RUN")
@@ -55,35 +105,11 @@ def forecast_card(f: Forecast) -> str:
         out.append(f"    {'inference, first year':<28}"
                    f"{'$' + format(e.annual_token_cost, ',.0f'):>34}")
 
-    out.append("")
-    out.append("  WHAT IT IS WORTH")
-    for slug in ("contract_value", "win_probability"):
-        out.append(f"    {OUTCOMES[slug].name:<28}"
-                   f"{f.estimates[slug].format():>34}")
-
-    out.append("")
-    out.append("  WHAT IT TAKES")
-    for slug in STAFF_OUTCOMES:
-        out.append(f"    {OUTCOMES[slug].name:<28}"
-                   f"{f.estimates[slug].format():>34}")
-    out.append(f"    {'total staff days':<28}{e.total_staff_days:>34,.1f}")
-    out.append(f"    {OUTCOMES['calendar_days'].name:<28}"
-               f"{f.estimates['calendar_days'].format():>34}")
-
-    out.append("")
-    out.append("  THE DECISION")
-    out.append(f"    {'delivery cost':<28}"
-               f"{'$' + format(e.delivery_cost, ',.0f'):>34}")
-    out.append(f"    {'gross margin if it lands':<28}"
-               f"{'$' + format(e.gross_margin, ',.0f') + f'  ({e.gross_margin_pct:.0%})':>34}")
-    out.append(f"    {'expected margin':<28}"
-               f"{'$' + format(e.expected_margin, ',.0f'):>34}")
-    out.append(f"    {'breaks even at a win rate of':<28}"
-               f"{e.breakeven_win_rate:>34.0%}")
-    verdict = ("worth staffing" if e.is_worth_doing else
-               "NOT worth staffing at this price")
-    out.append(f"    {'verdict':<28}{verdict:>34}")
-    out.append(f"    rates: {e.rates.source}")
+    if f.warnings:
+        out.append("")
+        out.append("  READ THIS FIRST")
+        for w in f.warnings:
+            out.extend("  ! " + line for line in _wrap(w, WIDTH - 4))
 
     if f.neighbours:
         out.append("")
@@ -109,20 +135,33 @@ def model_card(model: MultiHeadModel,
     out = [rule(title), model.report()]
     if holdout:
         out.append("")
-        out.append("  Scored on the most recent engagements, held out entirely:")
-        out.append(f"    {'head':<20}{'cross-validated':>17}{'held out':>12}"
-                   f"{'n':>5}")
-        for slug in ORDER:
+        out.append("  Scored on the most recent engagements, held out entirely.")
+        out.append("  'base' is the do-nothing model on the same rows — a score")
+        out.append("  means nothing without it.")
+        out.append(f"    {'head':<24}{'cross-val':>10}{'held out':>10}"
+                   f"{'base':>8}{'n':>5}  ")
+        for slug in (model.order or tuple(model.heads)):
             head = model.heads.get(slug)
-            if head is None or slug not in holdout:
+            score = holdout.get(slug)
+            if head is None or score is None:
                 continue
-            score, n = holdout[slug]
-            out.append(f"    {OUTCOMES[slug].name:<20}{head.loo_score:>17.3f}"
-                       f"{score:>12.3f}{n:>5}")
+            flag = "" if score.beats_baseline else "  <- loses to base rate"
+            out.append(f"    {head.outcome.name[:23]:<24}{head.loo_score:>10.3f}"
+                       f"{score.score:>10.3f}{score.baseline:>8.3f}"
+                       f"{score.n:>5}{flag}")
+        lost = [model.heads[s].outcome.name for s in holdout
+                if s in model.heads and not holdout[s].beats_baseline]
         out.append("")
-        out.append("  The two columns agreeing is the point. A gap between them")
-        out.append("  would mean the form selection had fitted the corpus rather")
-        out.append("  than the process that generated it.")
+        if lost:
+            out.append("  Cross-validation and the forward hold-out disagreeing is")
+            out.append("  the most useful thing this table can show, and it is")
+            out.append("  showing it for: " + ", ".join(sorted(set(lost))) + ".")
+            out.append("  Those heads interpolate within the history and do not")
+            out.append("  yet predict the next engagement.")
+        else:
+            out.append("  The columns agreeing is the point. A gap would mean the")
+            out.append("  form selection had fitted the corpus rather than the")
+            out.append("  process that generated it.")
     out.append("")
     out.append("  Each head chose its own form by cross-validation over the "
                "same seven")
@@ -133,27 +172,32 @@ def model_card(model: MultiHeadModel,
 
 def portfolio_table(forecasts: Sequence[Forecast]) -> str:
     """Rank a set of use cases by the thing that is actually scarce: people."""
-    rows = sorted(forecasts, key=lambda f: -f.economics.margin_per_staff_day)
-    out = [rule("PORTFOLIO — ranked by expected margin per staff day")]
-    out.append(f"  {'use case':<32}{'value':>10}{'win':>6}{'days':>6}"
-               f"{'exp. margin':>13}{'$/day':>7}")
+    rows = sorted(forecasts, key=lambda f: -f.impact.first_year_return)
+    out = [rule("PORTFOLIO — ranked by first-year client return")]
+    out.append(f"  {'use case':<30}{'impact/yr':>13}{'value':>10}{'win':>6}"
+               f"{'days':>6}{'payback':>9}")
     out.append("  " + "-" * (WIDTH - 4))
     for f in rows:
-        e = f.economics
-        out.append(f"  {f.usecase.title[:31]:<32}"
+        e, i = f.economics, f.impact
+        payback = (f"{i.payback_months:.0f} mo" if i.payback_months
+                   else ("—" if not i.quoted else "never"))
+        out.append(f"  {f.usecase.title[:29]:<30}"
+                   f"{i.annual_net_benefit:>13,.0f}"
                    f"{e.contract_value:>10,.0f}"
                    f"{e.win_probability:>6.0%}"
                    f"{e.total_staff_days:>6,.0f}"
-                   f"{e.expected_margin:>13,.0f}"
-                   f"{e.margin_per_staff_day:>7,.0f}")
-    total = sum(f.economics.expected_margin for f in rows)
-    days = sum(f.economics.total_staff_days for f in rows)
+                   f"{payback:>9}")
     out.append("  " + "-" * (WIDTH - 4))
-    out.append(f"  {'all of it':<32}{'':>10}{'':>6}{days:>6,.0f}{total:>13,.0f}")
+    out.append(f"  {'all of it':<30}"
+               f"{sum(f.impact.annual_net_benefit for f in rows):>13,.0f}"
+               f"{sum(f.economics.contract_value for f in rows):>10,.0f}"
+               f"{'':>6}"
+               f"{sum(f.economics.total_staff_days for f in rows):>6,.0f}")
     out.append("")
-    out.append("  Ranking on expected margin alone would pick the biggest deals.")
-    out.append("  Ranking per staff day picks the ones you can actually deliver")
-    out.append("  more of, which is the constraint that binds in practice.")
+    out.append("  Ranked by what the client gets, because that is what decides")
+    out.append("  whether a use case is funded at all. Ranking by our own margin")
+    out.append("  picks the deals we like; ranking by payback picks the ones that")
+    out.append("  get a second phase.")
     return "\n".join(out)
 
 

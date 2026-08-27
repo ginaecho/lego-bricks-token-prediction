@@ -168,8 +168,8 @@ ENV_FABRIC_TABLE = "FABRIC_ENGAGEMENTS_TABLE"
 #: ``docs/product-prototype.md`` for the query that builds it.
 REQUIRED_COLUMNS = (
     "id", "title", "client", "industry", "goal", "counts", "context_bytes",
-    "contract_value", "won", "architect_days", "engineer_days", "pm_days",
-    "calendar_days", "parent_id", "sibling_ids", "started",
+    "contract_value", "won", "role_days", "calendar_days", "parent_id",
+    "sibling_ids", "started",
 )
 
 
@@ -224,6 +224,18 @@ class FabricCorpus:
         return rows
 
 
+def _as_role_days(value: Any) -> Dict[str, float]:
+    """``role_days`` as a dict, whether it arrived as JSON text or an object.
+
+    A role missing from the dict means the engagement did not use it, which is
+    the observation the presence heads are fitted on — so an absent key is data,
+    not a null to be filled in.
+    """
+    if isinstance(value, str):
+        value = json.loads(value) if value.strip() else {}
+    return {str(k): float(v) for k, v in (value or {}).items() if float(v) > 0}
+
+
 def _engagement_from_row(row: Dict[str, Any]) -> Engagement:
     """One SQL row to one :class:`Engagement`.
 
@@ -245,10 +257,8 @@ def _engagement_from_row(row: Dict[str, Any]) -> Engagement:
         context_bytes=int(row.get("context_bytes") or 0),
         contract_value=float(row["contract_value"]),
         won=bool(row["won"]),
-        architect_days=float(row["architect_days"]),
-        engineer_days=float(row["engineer_days"]),
-        pm_days=float(row["pm_days"]),
         calendar_days=float(row["calendar_days"]),
+        role_days=_as_role_days(row.get("role_days")),
         parent_id=(str(row["parent_id"]) if row.get("parent_id") else None),
         sibling_ids=tuple(str(s) for s in siblings),
         started=str(row.get("started", "")),

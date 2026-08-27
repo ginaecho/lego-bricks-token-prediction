@@ -24,9 +24,10 @@ from project_yield.encode import (encode_prompt, heuristic_encode,
 from project_yield.features import FORMS, FeatureRow, build, names, width
 from project_yield.lineage import LineageIndex
 from project_yield.multihead import INTERVAL
-from project_yield.outcomes import ORDER, OUTCOMES, STAFF_OUTCOMES
+from project_yield.outcomes import ORDER, OUTCOMES
 from project_yield.predict import Predictor
 from project_yield.report import forecast_card, model_card, portfolio_table
+from project_yield.roles import DEFAULT_ROSTER, load_roster
 from project_yield.usecase import GOALS, INDUSTRIES, UseCase
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -116,8 +117,8 @@ def test_corpus_rejects_an_unknown_industry(tmp_path):
     good = load_engagements()[0]
     row = dict(id=good.id, title="", client="", industry="fintech",
                goal=good.goal, counts=good.counts, context_bytes=0,
-               contract_value=1.0, won=True, architect_days=1.0,
-               engineer_days=1.0, pm_days=1.0, calendar_days=1.0)
+               contract_value=1.0, won=True, calendar_days=1.0,
+               role_days={"software_engineer": 1.0})
     path = tmp_path / "x.jsonl"
     path.write_text(json.dumps(row) + "\n")
     with pytest.raises(ValueError, match="unknown industry"):
@@ -225,25 +226,55 @@ def test_heads_recover_the_generator_reuse_effect(predictor):
 
     alone = predictor.forecast(UseCase("C2", "child alone", **base))
     linked = predictor.forecast(child)
-    assert linked.value("engineer_days") < alone.value("engineer_days")
+    assert (linked.role("software_engineer").days_when_needed
+            < alone.role("software_engineer").days_when_needed)
     assert linked.value("win_probability") > alone.value("win_probability")
     assert linked.value("calendar_days") < alone.value("calendar_days")
 
 
-def test_holdout_agrees_with_cross_validation(predictor):
-    """A gap between the two would mean the form selection fitted the corpus."""
+def test_holdout_carries_its_own_baseline(predictor):
+    """A score is not interpretable without the do-nothing model beside it."""
     holdout = predictor.evaluate_holdout()
     assert holdout, "the corpus must keep a hold-out slice"
-    for slug, (score, n) in holdout.items():
-        assert n > 0
-        cv = predictor.heads[slug].loo_score
-        assert score < cv * 2.0 + 0.15, f"{slug}: {score:.3f} vs cv {cv:.3f}"
+    for slug, score in holdout.items():
+        assert score.n > 0
+        assert score.baseline > 0
+        assert score.metric in ("mape", "brier")
+
+
+def test_the_money_heads_generalise_forward(predictor):
+    """Contract value and duration must beat their base rate on unseen work.
+
+    Deliberately not asserted for the win head: on the shipped corpus it has
+    cross-validated skill and loses to its own base rate on the most recent
+    engagements, which the model card and every forecast now say out loud. A
+    test that demanded otherwise would be a test that the corpus flatters us.
+    """
+    holdout = predictor.evaluate_holdout()
+    for slug in ("contract_value", "calendar_days"):
+        assert holdout[slug].beats_baseline, (
+            f"{slug}: {holdout[slug].score:.3f} vs base "
+            f"{holdout[slug].baseline:.3f}")
+
+
+def test_a_head_that_fails_forward_says_so(predictor, usecase):
+    """Whenever cross-validation and the hold-out disagree, the forecast tells
+    you — that disagreement is the most decision-relevant thing about a head."""
+    holdout = predictor.evaluate_holdout()
+    failing = [s for s in ORDER
+               if s in holdout and not holdout[s].beats_baseline]
+    warnings = predictor.forecast(usecase).warnings
+    for slug in failing:
+        assert any(OUTCOMES[slug].name.lower() in w and "base rate" in w
+                   for w in warnings), slug
 
 
 def test_intervals_bracket_the_point_estimate(predictor, usecase):
-    for est in predictor.forecast(usecase).estimates.values():
+    forecast = predictor.forecast(usecase)
+    for est in forecast.estimates.values():
         assert est.low <= est.value <= est.high
-        assert est.low > 0 or OUTCOMES[est.outcome].binary
+    for role in forecast.staffing:
+        assert role.low <= role.days_when_needed <= role.high
 
 
 def test_win_probability_stays_a_probability(predictor):
@@ -316,8 +347,8 @@ def test_heuristic_always_says_it_is_the_heuristic():
 
 def test_cost_is_committed_and_revenue_is_contingent():
     """The win probability must discount value only — never cost."""
-    kwargs = dict(staff_days={"architect_days": 5, "engineer_days": 20,
-                              "pm_days": 4}, tokens=40000)
+    kwargs = dict(staff_days={"solution_architect": 5, "software_engineer": 20,
+                              "project_manager": 4}, tokens=40000)
     sure = compute(100000, 1.0, **kwargs)
     coin = compute(100000, 0.5, **kwargs)
     assert sure.delivery_cost == pytest.approx(coin.delivery_cost)
@@ -325,17 +356,18 @@ def test_cost_is_committed_and_revenue_is_contingent():
 
 
 def test_breakeven_win_rate_is_where_expected_margin_crosses_zero():
-    e = compute(200000, 0.5, {"architect_days": 6, "engineer_days": 30,
-                              "pm_days": 5}, 50000)
+    e = compute(200000, 0.5, {"solution_architect": 6, "software_engineer": 30,
+                              "project_manager": 5}, 50000)
     at_breakeven = compute(200000, e.breakeven_win_rate,
-                           {"architect_days": 6, "engineer_days": 30,
-                            "pm_days": 5}, 50000)
+                           {"solution_architect": 6, "software_engineer": 30,
+                            "project_manager": 5}, 50000)
     assert at_breakeven.expected_margin == pytest.approx(0.0, abs=1.0)
 
 
 def test_run_rate_is_separate_from_build_cost():
-    quiet = compute(100000, 0.6, {"engineer_days": 20}, 40000, monthly_runs=50)
-    busy = compute(100000, 0.6, {"engineer_days": 20}, 40000,
+    quiet = compute(100000, 0.6, {"software_engineer": 20}, 40000,
+                    monthly_runs=50)
+    busy = compute(100000, 0.6, {"software_engineer": 20}, 40000,
                    monthly_runs=500000)
     assert quiet.delivery_cost == pytest.approx(busy.delivery_cost)
     assert not quiet.run_rate_dominates
@@ -344,9 +376,10 @@ def test_run_rate_is_separate_from_build_cost():
 
 def test_rates_are_marked_as_placeholders():
     assert "PLACEHOLDER" in DEFAULT_RATES.source
-    custom = DEFAULT_RATES.with_rates(engineer_day=999.0, source="internal")
-    assert custom.engineer_day == 999.0 and custom.architect_day == \
-        DEFAULT_RATES.architect_day
+    custom = DEFAULT_RATES.with_day_rates(software_engineer=999.0)
+    assert custom.day_rate("software_engineer") == 999.0
+    assert custom.day_rate("project_manager") == \
+        DEFAULT_RATES.day_rate("project_manager")
 
 
 # ── the whole thing ──────────────────────────────────────────────────────
@@ -378,7 +411,8 @@ def test_the_token_head_is_the_measured_model_unchanged(predictor):
 
 def test_forecast_serialises_to_json(predictor, usecase):
     payload = predictor.forecast(usecase).to_dict()
-    assert json.loads(json.dumps(payload))["outcomes"].keys() == set(ORDER)
+    assert set(payload["outcomes"]) >= set(ORDER)
+    assert json.loads(json.dumps(payload))["staffing"]
     assert payload["economics"]["total_staff_days"] > 0
 
 
@@ -386,14 +420,14 @@ def test_reports_render(predictor, usecase):
     f = predictor.forecast(usecase)
     assert usecase.title.upper() in forecast_card(f)
     assert "PLACEHOLDER" in forecast_card(f)
-    assert "cross-validated" in model_card(predictor.heads,
-                                           predictor.evaluate_holdout())
+    assert "held out" in model_card(predictor.heads,
+                                    predictor.evaluate_holdout())
     assert "PORTFOLIO" in portfolio_table([f])
 
 
 def test_staff_outcomes_are_all_priced(predictor, usecase):
     f = predictor.forecast(usecase)
-    assert set(f.staff_days) == set(STAFF_OUTCOMES)
+    assert set(f.staff_days) <= set(DEFAULT_ROSTER.slugs)
     assert f.economics.total_staff_days == pytest.approx(
         sum(f.staff_days.values()))
 
@@ -662,3 +696,172 @@ def test_a_hand_specified_use_case_carries_no_encoder_assumptions(predictor):
         "title": "typed by hand", "industry": "energy",
         "goal": "compliance_risk", "counts": {"review": 4, "validate": 5}})
     assert not any("keyword match" in w for w in forecast["warnings"])
+
+
+# ── the roster is data, not code ─────────────────────────────────────────
+
+def test_the_roster_covers_the_roles_a_delivery_team_actually_has():
+    names = {r.slug for r in DEFAULT_ROSTER}
+    for expected in ("solution_architect", "consultant", "data_engineer",
+                     "data_scientist", "security_expert", "project_manager"):
+        assert expected in names, expected
+    assert all(r.day_rate > 0 for r in DEFAULT_ROSTER)
+
+
+def test_the_shipped_roles_json_matches_the_built_in_roster():
+    """roles.json is the file a user edits. It must start as the default."""
+    on_disk = load_roster(str(REPO_ROOT / "roles.json"))
+    assert on_disk.slugs == DEFAULT_ROSTER.slugs
+    assert on_disk.rates() == DEFAULT_ROSTER.rates()
+
+
+def test_an_unknown_role_names_the_ones_that_exist():
+    with pytest.raises(KeyError, match="solution_architect"):
+        DEFAULT_ROSTER["chief_vibes_officer"]
+    with pytest.raises(ValueError, match="unknown role"):
+        DEFAULT_ROSTER.validate(["chief_vibes_officer"])
+
+
+def test_a_roster_role_with_no_history_gets_no_head_and_says_why(tmp_path):
+    """Adding a role must never invent a number for it."""
+    roles = tmp_path / "roles.json"
+    roles.write_text(json.dumps({"roles": DEFAULT_ROSTER.to_list() + [
+        {"slug": "mlops_engineer", "name": "MLOps engineer",
+         "day_rate": 1350.0}]}))
+    predictor = Predictor.from_defaults(roster=load_roster(str(roles)))
+    assert "mlops_engineer_days" not in predictor.heads
+    assert "mlops_engineer_days" in predictor.heads.unfitted
+
+
+def test_naming_a_role_with_no_history_warns_rather_than_dropping_it(tmp_path):
+    roles = tmp_path / "roles.json"
+    roles.write_text(json.dumps({"roles": DEFAULT_ROSTER.to_list() + [
+        {"slug": "mlops_engineer", "name": "MLOps engineer",
+         "day_rate": 1350.0}]}))
+    predictor = Predictor.from_defaults(roster=load_roster(str(roles)))
+    uc = UseCase("M", "needs mlops", industry="retail", goal="cost_reduction",
+                 counts={"extract": 6}, roles=["software_engineer",
+                                               "mlops_engineer"])
+    forecast = predictor.forecast(uc)
+    assert any("MLOps engineer" in w and "no history" in w
+               for w in forecast.warnings)
+    assert forecast.role("mlops_engineer") is not None    # on the plan at zero
+
+
+# ── presence and days are separate questions ─────────────────────────────
+
+def test_days_are_days_when_needed_not_an_average_over_everyone(predictor,
+                                                                usecase):
+    """A role used half the time must not report half its days as its days."""
+    for role in predictor.forecast(usecase).staffing:
+        if not role.is_certain:
+            assert role.days_when_needed > role.expected_days
+            assert role.expected_days == pytest.approx(
+                role.probability * role.days_when_needed)
+
+
+def test_naming_the_team_overrides_the_base_rates(predictor):
+    base = dict(industry="healthcare", goal="compliance_risk",
+                counts={"review": 4, "extract": 6, "validate": 5},
+                context_bytes=18000)
+    inferred = predictor.forecast(UseCase("A", "inferred", **base))
+    named = predictor.forecast(UseCase(
+        "B", "named", roles=["solution_architect", "data_scientist",
+                             "security_expert"], **base))
+    assert {r.role.slug for r in named.staffing} == {
+        "solution_architect", "data_scientist", "security_expert"}
+    assert all(r.is_certain for r in named.staffing)
+    assert len(inferred.staffing) > len(named.staffing)
+    assert any("specified rather than predicted" in w for w in named.warnings)
+
+
+def test_entered_days_win_over_any_prediction(predictor):
+    uc = UseCase("E", "hand priced", industry="energy", goal="compliance_risk",
+                 counts={"review": 5, "reconcile": 4},
+                 role_days={"software_engineer": 42.0})
+    role = predictor.forecast(uc).role("software_engineer")
+    assert role.days_when_needed == pytest.approx(42.0)
+    assert role.source == "entered" and role.is_certain
+
+
+def test_a_presence_head_with_no_skill_is_replaced_by_the_base_rate(predictor):
+    """Not merely flagged. For a role staffed on 97% of jobs there is nothing
+    to predict, and the base rate is the better answer."""
+    forecast = predictor.forecast(UseCase(
+        "S", "s", industry="retail", goal="cost_reduction",
+        counts={"extract": 8, "classify": 5}))
+    sources = {r.source for r in forecast.staffing}
+    assert sources <= {"predicted", "base rate", "assumed"}
+    for role in forecast.staffing:
+        if role.source == "base rate":
+            head = predictor.heads[role.role.used_outcome]
+            assert not head.beats_baseline
+            assert role.probability == pytest.approx(head.baseline_value)
+
+
+def test_cost_uses_expected_days_and_the_roster_rate(predictor, usecase):
+    f = predictor.forecast(usecase)
+    for role in f.staffing:
+        assert role.cost == pytest.approx(
+            role.expected_days * DEFAULT_ROSTER[role.role.slug].day_rate)
+    assert f.economics.delivery_cost == pytest.approx(
+        sum(r.cost for r in f.staffing) + f.economics.token_cost)
+
+
+# ── the client-side impact ───────────────────────────────────────────────
+
+def test_impact_scales_with_volume_not_with_scope():
+    from project_yield.impact import compute
+    counts = {"review": 1, "extract": 9, "validate": 3}
+    quiet = compute(counts, 100, 500, 50000)
+    busy = compute(counts, 100000, 500, 50000)
+    assert quiet.minutes_per_run == busy.minutes_per_run
+    assert busy.annual_benefit > 100 * quiet.annual_benefit * 0.99
+
+
+def test_impact_is_not_quoted_without_a_run_rate():
+    from project_yield.impact import compute
+    i = compute({"review": 4}, 0, 0, 50000)
+    assert not i.quoted and i.payback_months is None
+    assert "run rate" in i.verdict
+
+
+def test_impact_nets_off_what_it_costs_to_run():
+    from project_yield.impact import compute
+    cheap = compute({"extract": 5}, 10000, 1_000, 40000)
+    dear = compute({"extract": 5}, 10000, 10_000_000, 40000)
+    assert cheap.annual_net_benefit > dear.annual_net_benefit
+    assert dear.payback_months is None          # running costs eat the benefit
+
+
+def test_deflection_below_one_is_the_default():
+    """Assuming automation removes all the handling is the commonest way a
+    benefit case is overstated."""
+    from project_yield.impact import DEFAULT_ASSUMPTIONS
+    assert 0 < DEFAULT_ASSUMPTIONS.deflection < 1
+    assert "PLACEHOLDER" in DEFAULT_ASSUMPTIONS.source
+
+
+def test_the_impact_assumptions_are_stated_on_every_forecast(predictor,
+                                                             usecase):
+    warnings = predictor.forecast(usecase).warnings
+    assert any("minutes on one of these by hand" in w for w in warnings)
+
+
+def test_a_volume_use_case_is_worth_doing(predictor):
+    """The shape the whole tool exists for: small per-run scope, large volume.
+
+    If this comes out negative the prototype is not demonstrating anything —
+    but it must come out positive because of the arithmetic, not because the
+    arithmetic was arranged to.
+    """
+    uc = UseCase("V", "invoice intake", industry="manufacturing",
+                 goal="cost_reduction",
+                 counts={"review": 1, "extract": 9, "classify": 1,
+                         "validate": 3, "remediate": 1},
+                 context_bytes=20000, monthly_runs=24000)
+    f = predictor.forecast(uc)
+    assert f.impact.is_positive
+    assert f.impact.fte_equivalent > 1
+    assert f.impact.payback_months < 24
+    assert f.economics.gross_margin > 0

@@ -13,3 +13,6 @@ report what is left for a human.
 
 Monthly. Combined extracts and notes come to roughly 200 kB. Compliance driven —
 the regulator has already written to them about the discrepancies.
+
+Team: propose one. The reconciliation rules live in the field engineers'
+heads and somebody has to get them out.

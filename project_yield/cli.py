@@ -107,20 +107,52 @@ def cmd_batch(args) -> int:
     print(f"Encoded {len(cases)} descriptions from {folder}")
     print(f"  encoder: {getattr(_encoder(), 'name', 'heuristic')}")
     print()
-    print(f"  {'id':<7}{'use case':<34}{'scope':<8}{'tokens':>9}"
-          f"{'value':>10}{'win':>6}{'days':>6}")
-    print("  " + "-" * 78)
+    codes = _role_codes(predictor.roster)
+    print(f"  {'id':<7}{'use case':<28}{'tokens':>8}{'value':>10}{'win':>5}"
+          f"{'days':>6}{'impact/yr':>12}  team")
+    print("  " + "-" * 96)
     for f in forecasts:
-        e = f.economics
-        print(f"  {f.usecase.id:<7}{f.usecase.title[:33]:<34}"
-              f"{f.usecase.total_units:>5} u  "
-              f"{f.tokens.tokens:>9,.0f}"
+        e, i = f.economics, f.impact
+        team = " ".join(
+            codes[r.role.slug] if r.is_certain else codes[r.role.slug].lower()
+            for r in f.staffing) or "—"
+        impact = f"{i.annual_net_benefit:,.0f}" if i.quoted else "—"
+        print(f"  {f.usecase.id:<7}{f.usecase.title[:27]:<28}"
+              f"{f.tokens.tokens:>8,.0f}"
               f"{e.contract_value:>10,.0f}"
-              f"{e.win_probability:>6.0%}"
-              f"{e.total_staff_days:>6,.0f}")
+              f"{e.win_probability:>5.0%}"
+              f"{e.total_staff_days:>6,.0f}"
+              f"{impact:>12}  {team}")
+    print()
+    print("  " + " · ".join(f"{c}={predictor.roster[s].name}"
+                            for s, c in codes.items()))
+    print("  UPPER where the role is certain — the note named it, the days")
+    print("  were entered, or comparable work always uses it. lower where it")
+    print("  is a likelihood. impact/yr is what the client gets, net.")
     print()
     print(portfolio_table(forecasts))
     return 0
+
+
+def _role_codes(roster) -> "dict":
+    """Short unique codes per role.
+
+    Initials alone are not unique — Software engineer and Security expert both
+    give SE, and a legend that maps two roles to one code is worse than no
+    legend. Collisions take another letter from the first word until they part.
+    """
+    codes: dict = {}
+    for role in roster:
+        words = role.name.split()
+        depth = 1
+        while True:
+            code = (words[0][:depth].capitalize()
+                    + "".join(w[0].upper() for w in words[1:2]))
+            if code not in codes.values() or depth > 6:
+                break
+            depth += 1
+        codes[role.slug] = code
+    return codes
 
 
 def cmd_cases(args) -> int:
@@ -135,6 +167,14 @@ def cmd_cases(args) -> int:
 def cmd_model(args) -> int:
     predictor = Predictor.from_defaults(corpus_path=args.corpus)
     print(model_card(predictor.heads, predictor.evaluate_holdout()))
+    print()
+    print(f"Roster ({predictor.roster.source})")
+    print("=" * 74)
+    for role in predictor.roster:
+        fitted = role.days_outcome in predictor.heads
+        note = "" if fitted else \
+            f"  <- {predictor.heads.unfitted.get(role.days_outcome, 'no head')}"
+        print(f"  {role.name:<24}${role.day_rate:>8,.0f}/day{note}")
     return 0
 
 

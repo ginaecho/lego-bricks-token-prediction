@@ -14,3 +14,6 @@ where the twenty days go.
 
 Candidate document sets vary wildly — call it 120 kB per request on average.
 Compliance driven: the deadline is statutory and the misses are reportable.
+
+Team: unspecified. The retrieval across the records system is the hard part
+and will decide the shape of the team.
