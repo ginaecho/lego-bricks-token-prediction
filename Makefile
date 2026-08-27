@@ -1,4 +1,4 @@
-.PHONY: help test demo prove l1 l2 l5 hook dashboard clean
+.PHONY: help test demo prove l1 l2 l5 hook dashboard scope serve corpus clean
 
 help:
 	@echo "OpenHarness — targets:"
@@ -10,6 +10,9 @@ help:
 	@echo "  make l5         L5 precedence & conflict ablation"
 	@echo "  make hook       L3 live-hook self-test"
 	@echo "  make dashboard  build the harness-cards dashboard"
+	@echo "  make scope      Project Yield demo: tokens + value + impact"
+	@echo "  make serve      run the Project Yield web prototype"
+	@echo "  make corpus     regenerate the synthetic engagement corpus"
 	@echo "  make clean      remove generated artifacts"
 
 test:
@@ -41,6 +44,18 @@ prove: l1 l2 l5 hook
 
 dashboard:
 	python -m openharness.cli dashboard -o dashboard.html
+
+# Project Yield — the scoping prototype built on the token model.
+scope:
+	python -m examples.project_yield_demo
+
+serve:
+	python -m project_yield serve --open
+
+# Deterministic and seeded: this must reproduce experiments/engagements.jsonl
+# byte for byte, and a test asserts that it does.
+corpus:
+	python -m experiments.make_engagements > experiments/engagements.jsonl
 
 clean:
 	rm -f dashboard.html session_dashboard.html

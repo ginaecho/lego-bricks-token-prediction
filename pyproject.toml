@@ -13,6 +13,7 @@ authors = [{ name = "Gina Chen", email = "gina.tcchen@gmail.com" }]
 keywords = [
     "ai-agents", "llm", "agent-harness", "observability", "governance",
     "guardrails", "conformance", "evaluation", "test-driven-development",
+    "cost-estimation", "project-estimation", "azure",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -35,9 +36,13 @@ Repository = "https://github.com/ginaecho/lego-bricks-token-prediction"
 
 [project.scripts]
 openharness = "openharness.cli:main"
+project-yield = "project_yield.cli:main"
 
 [tool.setuptools]
-packages = ["openharness", "modules", "token_yield"]
+packages = ["openharness", "modules", "token_yield", "project_yield"]
+
+[tool.setuptools.package-data]
+project_yield = ["static/*.html"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

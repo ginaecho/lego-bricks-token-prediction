@@ -65,11 +65,55 @@ forecasting and chargeback, from one model.
 
 Full experiment and limitations: **[docs/composition-findings.md](docs/composition-findings.md)**
 
+## From a token budget to a scoping decision
+
+A token budget is one of five numbers a project manager needs. **Project
+Yield** (`project_yield/`) keeps the encoder and the brick vocabulary exactly as
+they are and points the same decode step at the other four — what the client
+will pay, whether it will land, who it takes, and how long it runs.
+
+```
+ description ──encode──▶  9 brick counts             ──decode──▶  tokens
+                        + context bytes                        ├▶ contract value
+                        + industry, goal                       ├▶ success rate
+                        + lineage: depth, siblings,            ├▶ architect · engineer
+                          inherited brick share                │  · pm days
+                                                               └▶ time to finish
+```
+
+Six heads, not one model with six outputs: money multiplies, a win is bounded at
+both ends, and elapsed time has a floor no headcount moves. Each head declares
+its own link function and **independently selects its functional form** from
+seven candidates by leave-one-out cross-validation — the same rule the token
+model uses, six times over, and on the shipped data they do not all choose the
+same one.
+
+**Lineage is a feature, not a footnote.** Most enterprise use cases continue one
+already delivered, and pricing those as greenfield is how both the estimate and
+the margin go wrong. A use case can declare a parent and siblings; reuse depth,
+sibling count and *inherited brick share* go into the vector, and every head is
+free to price them at zero.
+
+**The token head is measured. The value and impact heads are not** — they are
+fitted on a synthetic corpus (`experiments/make_engagements.py`) so the
+machinery could be built and reviewed before touching real delivery data. Every
+card, screen and JSON payload says so, alongside warnings for extrapolated
+scope, an unusual brick mix, a keyword-encoded description, or a head that fails
+to beat its own baseline.
+
+Runs locally with no cloud; `project_yield/azure.py` is the seam where Azure AI
+Foundry (the encoder), Microsoft Fabric (the corpus) and Azure ML (scheduled
+retraining, later) plug in.
+**[docs/product-prototype.md](docs/product-prototype.md)** has the architecture,
+the Fabric view, and what would have to be true before it quotes a real client.
+
 ## Try it
 
 ```bash
 pip install -e .                       # Python ≥ 3.9, no runtime dependencies
-python -m examples.composition_demo    # the whole loop, from the committed data
+python -m examples.composition_demo    # the token model, from the committed data
+python -m examples.project_yield_demo  # tokens + value + impact, end to end
+python -m project_yield serve --open   # the scoping prototype, in a browser
 ```
 
 ---
@@ -77,6 +121,7 @@ python -m examples.composition_demo    # the whole loop, from the committed data
 *Token Yield (`token_yield/`) stands on **HarnessDose**, the measurement layer
 (package `openharness`), and composes with Microsoft's
 [Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit).
-Docs: [calibration](docs/calibration-findings.md) ·
+Docs: [product prototype](docs/product-prototype.md) ·
+[calibration](docs/calibration-findings.md) ·
 [architecture](docs/architecture.md) · [precedence](docs/precedence.md) ·
 [AGT](docs/agt-integration.md) · [Zenodo/citing](docs/zenodo.md). MIT license.*

@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Project Yield — use case scoping</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #16191d; --muted: #5c6470;
+    --line: #e2e5ea; --accent: #2f5bd7; --accent-soft: #eaf0ff;
+    --good: #1a7f4b; --bad: #b3261e; --warn: #8a5a00; --warn-bg: #fff8e6;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171b; --panel: #1c2026; --ink: #e8eaed; --muted: #9aa3af;
+      --line: #2c323a; --accent: #7ba1ff; --accent-soft: #1e2a45;
+      --good: #57c98a; --bad: #ff8b80; --warn: #e3b341; --warn-bg: #2a2312;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  header {
+    padding: 22px 26px 18px; border-bottom: 1px solid var(--line);
+    background: var(--panel);
+  }
+  h1 { margin: 0 0 4px; font-size: 20px; font-weight: 650; letter-spacing: -.2px; }
+  .sub { color: var(--muted); font-size: 13.5px; margin: 0; }
+  .wrap {
+    display: grid; grid-template-columns: minmax(320px, 400px) 1fr;
+    gap: 20px; padding: 20px 26px 60px; align-items: start;
+  }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px;
+  }
+  .panel h2 {
+    margin: 0 0 14px; font-size: 12px; text-transform: uppercase;
+    letter-spacing: .8px; color: var(--muted); font-weight: 650;
+  }
+  label { display: block; font-size: 12.5px; color: var(--muted); margin: 12px 0 4px; }
+  input, select, textarea {
+    width: 100%; padding: 8px 10px; font: inherit; font-size: 14px;
+    color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 7px;
+  }
+  textarea { min-height: 110px; resize: vertical; line-height: 1.45; }
+  input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent;
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  button {
+    font: inherit; font-weight: 600; cursor: pointer; border-radius: 7px;
+    padding: 9px 14px; border: 1px solid var(--accent);
+    background: var(--accent); color: #fff;
+  }
+  button.ghost { background: transparent; color: var(--accent); }
+  button:disabled { opacity: .55; cursor: progress; }
+  .actions { display: flex; gap: 8px; margin-top: 16px; }
+  .bricks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .bricks label { margin: 0 0 2px; font-size: 11.5px; }
+  .bricks input { padding: 5px 7px; font-size: 13px; }
+  details { margin-top: 14px; }
+  summary { cursor: pointer; font-size: 12.5px; color: var(--accent); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .card {
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 13px 14px; background: var(--panel);
+  }
+  .card .k { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+  .card .v { font-size: 21px; font-weight: 650; margin: 5px 0 2px; letter-spacing: -.4px; }
+  .card .band { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .card.hero { background: var(--accent-soft); border-color: transparent; }
+  .pos { color: var(--good); } .neg { color: var(--bad); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+  th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .scroll { overflow-x: auto; }
+
+  .warn {
+    background: var(--warn-bg); border: 1px solid var(--warn);
+    border-radius: var(--radius); padding: 12px 14px; margin-bottom: 16px;
+  }
+  .warn h3 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .7px; color: var(--warn); }
+  .warn li { margin: 4px 0; font-size: 13px; }
+  .warn ul { margin: 0; padding-left: 18px; }
+  .chip {
+    display: inline-block; font-size: 11.5px; padding: 2px 8px; border-radius: 99px;
+    background: var(--accent-soft); color: var(--accent); margin-right: 6px;
+  }
+  .empty { color: var(--muted); font-size: 14px; padding: 26px 4px; }
+  section + section { margin-top: 20px; }
+  h3.sec { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+  code { font: 13px/1.4 ui-monospace, "Cascadia Code", Consolas, monospace; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Project Yield</h1>
+  <p class="sub">Scope a use case once. Get the token budget, the price, the win
+     rate, the staffing and the calendar — from the same lego bricks.</p>
+</header>
+
+<div class="wrap">
+  <form class="panel" id="form">
+    <h2>The use case</h2>
+
+    <label for="title">Title</label>
+    <input id="title" name="title" placeholder="Northwind invoice intake">
+
+    <label for="description">Description — goals, scope, what it reads and produces</label>
+    <textarea id="description" name="description" placeholder="Automate supplier invoice intake: read each invoice, extract header and line fields, classify for routing, validate totals against the purchase order and flag exceptions. Around 24,000 invoices a month."></textarea>
+
+    <div class="row">
+      <div>
+        <label for="industry">Industry</label>
+        <select id="industry" name="industry"></select>
+      </div>
+      <div>
+        <label for="goal">Business goal</label>
+        <select id="goal" name="goal"></select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="context_bytes">Source material per run (bytes)</label>
+        <input id="context_bytes" name="context_bytes" type="number" min="0" step="1000" value="0">
+      </div>
+      <div>
+        <label for="monthly_runs">Production runs per month</label>
+        <input id="monthly_runs" name="monthly_runs" type="number" min="0" step="100" value="0">
+      </div>
+    </div>
+
+    <label for="parent_id">Continues an earlier use case</label>
+    <select id="parent_id" name="parent_id"></select>
+
+    <label for="sibling_ids">Delivered alongside (ctrl-click for several)</label>
+    <select id="sibling_ids" name="sibling_ids" multiple size="4"></select>
+
+    <details open>
+      <summary>Task bricks — one end-to-end run</summary>
+      <div class="bricks" id="bricks"></div>
+    </details>
+
+    <div class="actions">
+      <button type="button" id="encode" class="ghost">Read from description</button>
+      <button type="submit" id="submit">Predict</button>
+    </div>
+  </form>
+
+  <main id="out">
+    <div class="panel empty" id="empty">
+      Fill in a use case and press <strong>Predict</strong>. Or press
+      <strong>Read from description</strong> first to let the encoder fill in
+      the bricks, industry, goal and run rate.
+    </div>
+  </main>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let META = null;
+
+async function boot() {
+  META = await (await fetch('/api/meta')).json();
+  fill($('industry'), META.industries);
+  fill($('goal'), META.goals);
+  const none = new Option('— none (greenfield) —', '');
+  $('parent_id').add(none);
+  META.library.forEach(u => {
+    $('parent_id').add(new Option(`${u.id} · ${u.title}`, u.id));
+    $('sibling_ids').add(new Option(`${u.id} · ${u.title}`, u.id));
+  });
+  const grid = $('bricks');
+  META.bricks.forEach(b => {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<label for="b_${b.slug}" title="${esc(b.blurb)}">${b.name}</label>
+      <input id="b_${b.slug}" data-brick="${b.slug}" type="number" min="0" value="0">`;
+    grid.appendChild(wrap);
+  });
+}
+
+function fill(sel, values) {
+  values.forEach(v => sel.add(new Option(v.replace(/_/g, ' '), v)));
+}
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function payload() {
+  const counts = {};
+  document.querySelectorAll('[data-brick]').forEach(i => {
+    const n = parseInt(i.value || '0', 10);
+    if (n > 0) counts[i.dataset.brick] = n;
+  });
+  return {
+    title: $('title').value, description: $('description').value,
+    industry: $('industry').value, goal: $('goal').value,
+    context_bytes: parseInt($('context_bytes').value || '0', 10),
+    monthly_runs: parseInt($('monthly_runs').value || '0', 10),
+    parent_id: $('parent_id').value || null,
+    sibling_ids: [...$('sibling_ids').selectedOptions].map(o => o.value),
+    counts: counts,
+  };
+}
+
+async function post(url, body) {
+  const r = await fetch(url, {method: 'POST',
+    headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+  const data = await r.json();
+  if (!r.ok) throw new Error(data.error || 'request failed');
+  return data;
+}
+
+$('encode').addEventListener('click', async () => {
+  const btn = $('encode'); btn.disabled = true;
+  try {
+    const uc = await post('/api/encode', {description: $('description').value,
+                                          title: $('title').value});
+    $('industry').value = uc.industry;
+    $('goal').value = uc.goal;
+    $('context_bytes').value = uc.context_bytes;
+    $('monthly_runs').value = uc.monthly_runs;
+    if (!$('title').value) $('title').value = uc.title;
+    document.querySelectorAll('[data-brick]').forEach(i => {
+      i.value = uc.counts[i.dataset.brick] || 0;
+    });
+    $('out').innerHTML = `<div class="panel"><h2>Encoded by ${esc(uc.encoder)}</h2>
+      <p><code>${esc(uc.notation)}</code></p>
+      <p class="sub">${esc(uc.rationale || '')}</p></div>`;
+  } catch (e) { showError(e); } finally { btn.disabled = false; }
+});
+
+$('form').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const btn = $('submit'); btn.disabled = true;
+  try { render(await post('/api/predict', payload())); }
+  catch (e) { showError(e); } finally { btn.disabled = false; }
+});
+
+function showError(e) {
+  $('out').innerHTML = `<div class="warn"><h3>That did not work</h3>${esc(e.message)}</div>`;
+}
+
+const money = (n) => (n < 0 ? '-$' : '$') + Math.abs(Math.round(n)).toLocaleString();
+const num = (n, d = 1) => Number(n).toLocaleString(undefined, {maximumFractionDigits: d});
+
+function render(f) {
+  const o = f.outcomes, e = f.economics;
+  const warn = f.warnings.length ? `<div class="warn">
+      <h3>Read this first</h3><ul>${f.warnings.map(w => `<li>${esc(w)}</li>`).join('')}</ul>
+    </div>` : '';
+
+  const head = (slug, hero) => `<div class="card ${hero ? 'hero' : ''}">
+      <div class="k">${esc(o[slug].name)}</div>
+      <div class="v">${esc(o[slug].formatted.split('  (')[0])}</div>
+      <div class="band">80% band ${esc(o[slug].formatted.split('  (')[1] || '').replace(')', '')}</div>
+    </div>`;
+
+  $('out').innerHTML = `
+  ${warn}
+  <section>
+    <h3 class="sec">What it is worth</h3>
+    <div class="cards">
+      ${head('contract_value', true)}
+      ${head('win_probability', true)}
+      <div class="card">
+        <div class="k">Expected margin</div>
+        <div class="v ${e.expected_margin >= 0 ? 'pos' : 'neg'}">${money(e.expected_margin)}</div>
+        <div class="band">breaks even at a ${(e.breakeven_win_rate * 100).toFixed(0)}% win rate</div>
+      </div>
+      <div class="card">
+        <div class="k">Gross margin if it lands</div>
+        <div class="v">${money(e.gross_margin)}</div>
+        <div class="band">${(e.gross_margin_pct * 100).toFixed(0)}% of contract value</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="sec">What it takes</h3>
+    <div class="cards">
+      ${head('architect_days')} ${head('engineer_days')}
+      ${head('pm_days')} ${head('calendar_days')}
+    </div>
+  </section>
+
+  <section>
+    <h3 class="sec">What it costs to run</h3>
+    <div class="cards">
+      <div class="card">
+        <div class="k">Tokens, one run</div>
+        <div class="v">${num(f.tokens.per_run, 0)}</div>
+        <div class="band">${num(f.tokens.low, 0)} – ${num(f.tokens.high, 0)}</div>
+      </div>
+      <div class="card">
+        <div class="k">Inference, first year</div>
+        <div class="v">${e.has_run_rate ? money(e.annual_token_cost) : '—'}</div>
+        <div class="band">${e.has_run_rate
+          ? (e.run_rate_dominates ? 'more than the build costs' : 'less than the build costs')
+          : 'no production run rate given'}</div>
+      </div>
+      <div class="card">
+        <div class="k">Delivery cost</div>
+        <div class="v">${money(e.delivery_cost)}</div>
+        <div class="band">${num(e.total_staff_days)} staff days · ${esc(e.rates_source)}</div>
+      </div>
+      <div class="card">
+        <div class="k">Saving from batching</div>
+        <div class="v">${(f.tokens.batching_saving * 100).toFixed(0)}%</div>
+        <div class="band">one agent for all bricks vs one per brick</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Lineage</h2>
+    <p>${esc(f.lineage.explanation)}</p>
+    <p class="sub"><span class="chip">scope ${esc(f.notation)}</span>
+       <span class="chip">encoder ${esc(f.usecase.encoder)}</span></p>
+  </section>
+
+  <section class="panel">
+    <h2>Comparable engagements it is standing on</h2>
+    <div class="scroll"><table>
+      <tr><th>id</th><th>engagement</th><th class="num">brick similarity</th>
+          <th>also matches</th><th>shape</th></tr>
+      ${f.neighbours.map(n => `<tr><td>${esc(n.id)}</td><td>${esc(n.title)}</td>
+        <td class="num">${n.similarity.toFixed(2)}</td>
+        <td>${n.also_matches.map(m => `<span class="chip">${esc(m)}</span>`).join('') || '—'}</td>
+        <td><code>${esc(n.notation)}</code></td></tr>`).join('')}
+    </table></div>
+  </section>`;
+}
+
+boot();
+</script>
+</body>
+</html>

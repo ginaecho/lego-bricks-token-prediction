@@ -31,3 +31,9 @@ jobs:
         run: |
           python -m examples.demo_session
           test -f dashboard.html
+      - name: Smoke-test the scoping prototype
+        run: |
+          python -m examples.composition_demo
+          python -m examples.project_yield_demo
+          python -m project_yield model
+          python -m project_yield predict --description "Read 8 supplier contracts and reconcile the pricing terms, then report the variances."
