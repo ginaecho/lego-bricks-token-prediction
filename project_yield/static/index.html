@@ -78,6 +78,13 @@
   }
   button:hover { opacity: .85; }
   button:disabled { opacity: .4; cursor: progress; }
+  button.plain {
+    background: transparent; color: var(--accent); padding: 7px 4px;
+    font-weight: 400; font-size: 14px;
+  }
+  .composer.drop {
+    outline: 2px dashed var(--accent); outline-offset: -2px;
+  }
 
   details { margin-top: 14px; }
   summary {
@@ -194,6 +201,9 @@
         <select id="industry"></select>
         <label class="sr" for="goal">Business goal</label>
         <select id="goal"></select>
+        <button type="button" class="plain" id="pick">Attach a file</button>
+        <input type="file" id="file" accept=".md,.txt,.markdown,text/plain"
+               hidden>
         <span class="grow"></span>
         <button type="submit" id="go">Estimate</button>
       </div>
@@ -234,6 +244,9 @@ const num = (n, d = 0) => Number(n).toLocaleString(undefined, {maximumFractionDi
 const title = (s) => String(s).replace(/_/g, ' ');
 
 let BRICKS = [];
+// Which encoder produced the scope currently in the form. Sent with the
+// forecast so a keyword-derived estimate never renders like a typed one.
+let ENCODER = 'manual';
 
 async function boot() {
   const meta = await (await fetch('/api/meta')).json();
@@ -246,6 +259,42 @@ async function boot() {
     <label class="field" title="${esc(b.blurb)}"><span>${esc(b.name)}</span>
       <input data-brick="${b.slug}" type="number" min="0" value="0"></label>`).join('');
 }
+
+// A written description in a file is the input people actually have — a
+// scoping note, an extract from a statement of work. Dropping one in is the
+// same path as typing, so it clears any scope the encoder produced earlier.
+function loadText(text, name) {
+  ENCODER = 'manual';
+  $('description').value = text.trim();
+  document.querySelectorAll('[data-brick]').forEach(i => { i.value = 0; });
+  const first = text.trim().split('\n')[0].replace(/^#{1,3}\s*/, '').trim();
+  $('title').value = first.slice(0, 70);
+  say($('echo'), `Loaded ${name}`);
+  say($('err'), '');
+}
+
+async function readFile(file) {
+  if (!file) return;
+  if (file.size > 512 * 1024) {
+    say($('err'), `${file.name} is larger than 512 kB — paste the relevant part instead.`);
+    return;
+  }
+  loadText(await file.text(), file.name);
+}
+
+$('pick').addEventListener('click', () => $('file').click());
+$('file').addEventListener('change', (ev) => readFile(ev.target.files[0]));
+
+const composer = document.querySelector('.composer');
+['dragenter', 'dragover'].forEach(t => composer.addEventListener(t, (ev) => {
+  ev.preventDefault();
+  composer.classList.add('drop');
+}));
+['dragleave', 'drop'].forEach(t => composer.addEventListener(t, (ev) => {
+  ev.preventDefault();
+  composer.classList.remove('drop');
+}));
+composer.addEventListener('drop', (ev) => readFile(ev.dataTransfer.files[0]));
 
 const bricksSet = () => [...document.querySelectorAll('[data-brick]')]
   .some(i => parseInt(i.value || '0', 10) > 0);
@@ -291,6 +340,7 @@ $('form').addEventListener('submit', async (ev) => {
       document.querySelectorAll('[data-brick]').forEach(i => {
         i.value = uc.counts[i.dataset.brick] || 0;
       });
+      ENCODER = uc.encoder;
       say($('echo'), `Read as ${uc.notation} · ${title(uc.industry)} · ` +
         (uc.monthly_runs ? `${num(uc.monthly_runs)} runs a month` : 'no run rate given'));
     }
@@ -300,7 +350,7 @@ $('form').addEventListener('submit', async (ev) => {
       context_bytes: parseInt($('context_bytes').value || '0', 10),
       monthly_runs: parseInt($('monthly_runs').value || '0', 10),
       parent_id: $('parent_id').value || null,
-      counts: counts(),
+      counts: counts(), encoder: ENCODER,
     }));
   } catch (e) {
     say($('err'), e.message);
@@ -312,8 +362,9 @@ $('form').addEventListener('submit', async (ev) => {
 // Editing the description invalidates a scope the encoder produced, so the
 // next Estimate re-reads it instead of silently reusing stale brick counts.
 $('description').addEventListener('input', () => {
-  if ($('echo').hidden) return;
+  if ($('echo').hidden || !bricksSet()) return;
   document.querySelectorAll('[data-brick]').forEach(i => { i.value = 0; });
+  ENCODER = 'manual';
   say($('echo'), '');
 });
 

@@ -114,7 +114,14 @@ pip install -e .                       # Python ≥ 3.9, no runtime dependencies
 python -m examples.composition_demo    # the token model, from the committed data
 python -m examples.project_yield_demo  # tokens + value + impact, end to end
 python -m project_yield serve --open   # the scoping prototype, in a browser
+python -m project_yield batch examples/usecases   # 20 written scoping notes, ranked
 ```
+
+Feed it the paragraph somebody already wrote — paste it, drop the file on the
+page, or point it at a folder. Twenty worked examples are in
+[`examples/usecases/`](examples/usecases/), spanning a per-item pipeline at
+24,000 runs a month, two continuation chains, one deliberately vague note and
+one deliberately enormous programme.
 
 ---
 

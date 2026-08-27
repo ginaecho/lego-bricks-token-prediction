@@ -28,9 +28,10 @@ import json
 import os
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
-from .encode import heuristic_encode
+from .encode import (ASSUMED_GOAL, ASSUMED_INDUSTRY, ASSUMED_SCOPE,
+                     heuristic_encode)
 from .outcomes import ORDER, OUTCOMES
 from .predict import Predictor
 from .usecase import GOALS, INDUSTRIES, UseCase
@@ -141,6 +142,27 @@ class YieldApp:
         self._counter += 1
         return f"NEW-{self._counter:03d}"
 
+    def _surviving_assumptions(self, usecase: UseCase) -> List[str]:
+        """The encoder's guesses that the submitted use case has not overruled.
+
+        The page encodes and predicts in two calls, so provenance would
+        otherwise be lost in between and a keyword-derived estimate would
+        render exactly like a hand-specified one. Rather than trust the round
+        trip, the server re-encodes the description and keeps the assumptions
+        that are still true — a user who picked the industry themselves does
+        not need to be told it was defaulted, and one who did not, does.
+        """
+        if usecase.encoder != "heuristic" or not usecase.description:
+            return []
+        fresh = heuristic_encode(usecase.description)
+        overruled = {
+            ASSUMED_INDUSTRY: usecase.industry != fresh.industry,
+            ASSUMED_GOAL: usecase.goal != fresh.goal,
+            ASSUMED_SCOPE: usecase.counts != fresh.counts,
+        }
+        return [a for a in fresh.assumptions
+                if not any(a.startswith(k) and v for k, v in overruled.items())]
+
     def _usecase_from(self, body: Dict[str, Any]) -> UseCase:
         counts = body.get("counts") or {}
         if not any(int(v or 0) > 0 for v in counts.values()):
@@ -149,7 +171,7 @@ class YieldApp:
                 "— write what the use case does, or set at least one brick "
                 "count under 'Refine the scope'")
         parent = body.get("parent_id") or None
-        return UseCase(
+        usecase = UseCase(
             id=str(body.get("id") or self._next_id()),
             title=str(body.get("title") or "").strip() or "Untitled use case",
             description=str(body.get("description") or ""),
@@ -162,6 +184,8 @@ class YieldApp:
             sibling_ids=[str(s) for s in (body.get("sibling_ids") or []) if s],
             encoder=str(body.get("encoder") or "manual"),
         )
+        usecase.assumptions = self._surviving_assumptions(usecase)
+        return usecase
 
 
 def make_handler(app: YieldApp):

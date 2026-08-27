@@ -242,6 +242,7 @@ class Predictor:
             out.append(
                 "Encoded by keyword match, not by a model. The brick counts "
                 "are a guess at scale rather than a reading of intent.")
+        out.extend(usecase.assumptions)
         lo, hi = self._unit_range
         if usecase.total_units > hi:
             out.append(

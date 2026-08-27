@@ -30,8 +30,35 @@ the person who has to judge it can run it.
 ```bash
 python -m project_yield model                       # how each head was chosen
 python -m project_yield predict --description "..." # one use case, as a card
-python -m project_yield portfolio cases.jsonl       # rank a set of them
+python -m project_yield batch examples/usecases     # a whole folder, ranked
+python -m project_yield batch examples/usecases --cards   # ... with every caveat
+python -m project_yield batch examples/usecases --json    # ... as JSON
 ```
+
+## Feeding it real descriptions
+
+The natural input is not a form — it is the paragraph somebody already wrote in
+a scoping note, an email or a statement of work. Three ways in:
+
+* **Paste it** into the description box and press Estimate.
+* **Drop the file** on the description box, or use *Attach a file*. Plain text
+  or Markdown, up to 512 kB.
+* **Point it at a folder** with `project_yield batch`, and get the whole
+  portfolio ranked in one pass.
+
+Twenty worked examples ship in [`examples/usecases/`](../examples/usecases/),
+chosen to span the things that actually move a forecast — a per-item pipeline at
+24,000 runs a month, a four-times-a-year review with a large per-run scope, two
+continuation chains, one deliberately vague note and one deliberately enormous
+programme. Their `README.md` says what each one exercises.
+
+A folder needs no configuration. An optional `manifest.jsonl` beside the files
+declares **lineage only** — which use case continues which — because that is
+the one thing a description cannot carry: "follow-on to the pipeline we
+delivered for Northwind" is obvious to a reader and not recoverable by an
+encoder. Where a continuation never repeats the client's sector, which is the
+normal case, the industry is taken from its parent and the substitution is
+recorded rather than made silently.
 
 ## How it works
 
@@ -264,6 +291,7 @@ project_yield/
   multihead.py    per-outcome fitting, form selection, intervals
   linalg.py       least squares, IRLS, leverage — dependency-free
   encode.py       description -> use case (agent prompt + keyword fallback)
+  casefiles.py    reading a folder of written descriptions, plus its manifest
   predict.py      the end-to-end Predictor and Forecast
   economics.py    margin, expected margin, breakeven, run rate
   report.py       terminal cards
@@ -273,4 +301,7 @@ project_yield/
 experiments/
   make_engagements.py   the synthetic corpus generator — read this first
   engagements.jsonl     its committed output
+examples/usecases/
+  *.md                  twenty written scoping notes to feed it
+  manifest.jsonl        their lineage, and nothing else
 ```

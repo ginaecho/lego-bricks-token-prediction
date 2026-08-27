@@ -92,6 +92,10 @@ class UseCase:
     client: str = ""
     encoder: str = "manual"
     rationale: str = ""
+    #: What the encoder had to guess rather than read. A defaulted industry is
+    #: not a small thing — it is a feature in every head — so it travels with
+    #: the use case and every surface that shows a number shows these too.
+    assumptions: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.counts = normalise_counts(self.counts)
@@ -128,6 +132,7 @@ class UseCase:
             "monthly_runs": self.monthly_runs, "parent_id": self.parent_id,
             "sibling_ids": list(self.sibling_ids), "client": self.client,
             "encoder": self.encoder, "rationale": self.rationale,
+            "assumptions": list(self.assumptions),
         }
 
     @classmethod
@@ -145,4 +150,5 @@ class UseCase:
             client=str(d.get("client", "")),
             encoder=str(d.get("encoder", "manual")),
             rationale=str(d.get("rationale", "")),
+            assumptions=[str(a) for a in (d.get("assumptions") or [])],
         )

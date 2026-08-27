@@ -1,7 +1,8 @@
 """Command line for the prototype: ``python -m project_yield <command>``.
 
     serve      run the web app
-    predict    forecast one use case from a description or a JSON file
+    predict    forecast one use case from a description, a file or a folder
+    batch      encode and rank a whole folder of written descriptions
     model      print the model card — which form each head chose, and its score
     portfolio  rank several use cases from a JSONL file
     encode     show what the encoder makes of a description, and stop there
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from typing import List, Optional
 
+from .casefiles import default_folder, encode_folder, read_folder
 from .encode import heuristic_encode
 from .predict import Predictor
 from .report import forecast_card, model_card, portfolio_table
@@ -30,6 +33,13 @@ def _encoder():
 
 
 def _usecases_from(path: str) -> List[UseCase]:
+    """Use cases from a folder of written descriptions, or from JSON/JSONL.
+
+    A folder of prose is the input people actually have, so it is accepted
+    everywhere a file is.
+    """
+    if os.path.isdir(path):
+        return encode_folder(path, _encoder())
     with open(path, encoding="utf-8") as fh:
         if path.endswith(".jsonl"):
             return [UseCase.from_dict(json.loads(l)) for l in fh if l.strip()]
@@ -72,6 +82,56 @@ def cmd_predict(args) -> int:
     return 0
 
 
+def cmd_batch(args) -> int:
+    """Encode a folder of descriptions and rank what comes out.
+
+    Order matters and is not incidental: every use case is added to the library
+    before any of them is priced, so a continuation can see its parent whether
+    or not the parent happens to have been forecast yet.
+    """
+    folder = args.folder or default_folder()
+    predictor = Predictor.from_defaults(corpus_path=args.corpus)
+    cases = encode_folder(folder, _encoder())
+    for case in cases:
+        predictor.index.add(case)
+    forecasts = [predictor.forecast(c) for c in cases]
+
+    if args.json:
+        print(json.dumps([f.to_dict() for f in forecasts], indent=2))
+        return 0
+    if args.cards:
+        for forecast in forecasts:
+            print(forecast_card(forecast))
+        return 0
+
+    print(f"Encoded {len(cases)} descriptions from {folder}")
+    print(f"  encoder: {getattr(_encoder(), 'name', 'heuristic')}")
+    print()
+    print(f"  {'id':<7}{'use case':<34}{'scope':<8}{'tokens':>9}"
+          f"{'value':>10}{'win':>6}{'days':>6}")
+    print("  " + "-" * 78)
+    for f in forecasts:
+        e = f.economics
+        print(f"  {f.usecase.id:<7}{f.usecase.title[:33]:<34}"
+              f"{f.usecase.total_units:>5} u  "
+              f"{f.tokens.tokens:>9,.0f}"
+              f"{e.contract_value:>10,.0f}"
+              f"{e.win_probability:>6.0%}"
+              f"{e.total_staff_days:>6,.0f}")
+    print()
+    print(portfolio_table(forecasts))
+    return 0
+
+
+def cmd_cases(args) -> int:
+    folder = args.folder or default_folder()
+    for case in read_folder(folder):
+        print(f"{case.uid:<8}{case.filename:<44}"
+              f"{'continues ' + case.parent if case.parent else '':<20}"
+              f"{case.title}")
+    return 0
+
+
 def cmd_model(args) -> int:
     predictor = Predictor.from_defaults(corpus_path=args.corpus)
     print(model_card(predictor.heads, predictor.evaluate_holdout()))
@@ -108,14 +168,28 @@ def build_parser() -> argparse.ArgumentParser:
     p = subs.add_parser("predict", help="forecast one or more use cases")
     p.add_argument("--description")
     p.add_argument("--title")
-    p.add_argument("--file", help="JSON or JSONL of use cases")
+    p.add_argument("--file", help="JSON or JSONL of use cases, or a folder of "
+                                  "written descriptions")
     p.add_argument("--json", action="store_true", help="emit JSON, not a card")
     p.set_defaults(func=cmd_predict)
+
+    p = subs.add_parser("batch", help="encode and rank a folder of descriptions")
+    p.add_argument("folder", nargs="?",
+                   help="folder of .md/.txt descriptions "
+                        "(default: examples/usecases)")
+    p.add_argument("--json", action="store_true", help="emit JSON, not a table")
+    p.add_argument("--cards", action="store_true",
+                   help="print a full card per use case")
+    p.set_defaults(func=cmd_batch)
+
+    p = subs.add_parser("cases", help="list a folder of descriptions")
+    p.add_argument("folder", nargs="?")
+    p.set_defaults(func=cmd_cases)
 
     p = subs.add_parser("model", help="print the model card")
     p.set_defaults(func=cmd_model)
 
-    p = subs.add_parser("portfolio", help="rank a file of use cases")
+    p = subs.add_parser("portfolio", help="rank a file or folder of use cases")
     p.add_argument("file")
     p.set_defaults(func=cmd_portfolio)
     return parser

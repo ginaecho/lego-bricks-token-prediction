@@ -1,4 +1,4 @@
-.PHONY: help test demo prove l1 l2 l5 hook dashboard scope serve corpus clean
+.PHONY: help test demo prove l1 l2 l5 hook dashboard scope serve cases corpus clean
 
 help:
 	@echo "OpenHarness — targets:"
@@ -12,6 +12,7 @@ help:
 	@echo "  make dashboard  build the harness-cards dashboard"
 	@echo "  make scope      Project Yield demo: tokens + value + impact"
 	@echo "  make serve      run the Project Yield web prototype"
+	@echo "  make cases      estimate the 20 example use case descriptions"
 	@echo "  make corpus     regenerate the synthetic engagement corpus"
 	@echo "  make clean      remove generated artifacts"
 
@@ -51,6 +52,10 @@ scope:
 
 serve:
 	python -m project_yield serve --open
+
+# The example descriptions in examples/usecases/, encoded and ranked.
+cases:
+	python -m project_yield batch examples/usecases
 
 # Deterministic and seeded: this must reproduce experiments/engagements.jsonl
 # byte for byte, and a test asserts that it does.

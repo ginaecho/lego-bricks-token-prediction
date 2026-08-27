@@ -494,3 +494,171 @@ def test_generator_and_corpus_stay_in_step():
         cwd=REPO_ROOT, capture_output=True, text=True, check=True).stdout
     committed = (REPO_ROOT / "experiments" / "engagements.jsonl").read_text()
     assert out == committed, "run: make corpus"
+
+
+# ── reading a folder of written descriptions ─────────────────────────────
+
+def test_the_shipped_folder_loads_and_declares_its_lineage():
+    from project_yield.casefiles import default_folder, read_folder
+    cases = read_folder(default_folder())
+    assert len(cases) >= 20
+    assert all(c.title and not c.title.startswith("#") for c in cases)
+    continuations = [c for c in cases if c.parent]
+    assert continuations, "the folder must exercise lineage"
+    ids = {c.uid for c in cases}
+    for case in continuations:
+        assert case.parent in ids
+        # a continuation encoded before its parent is priced as greenfield
+        assert [c.uid for c in cases].index(case.parent) < \
+            [c.uid for c in cases].index(case.uid)
+
+
+def test_readme_and_manifest_are_not_encoded_as_use_cases():
+    from project_yield.casefiles import default_folder, read_folder
+    names = {c.filename for c in read_folder(default_folder())}
+    assert "README.md" not in names
+    assert "manifest.jsonl" not in names
+
+
+def test_manifest_naming_a_missing_file_is_an_error(tmp_path):
+    from project_yield.casefiles import read_folder
+    (tmp_path / "a.md").write_text("# A\nRead 3 contracts.")
+    (tmp_path / "manifest.jsonl").write_text(
+        '{"file": "a.md", "id": "A", "continues": "ghost.md"}\n')
+    with pytest.raises(ValueError, match="not in the folder"):
+        read_folder(str(tmp_path))
+
+
+def test_a_folder_with_no_manifest_still_loads(tmp_path):
+    from project_yield.casefiles import encode_folder
+    (tmp_path / "one.md").write_text("# One\nRead 4 contracts and check them.")
+    cases = encode_folder(str(tmp_path))
+    assert len(cases) == 1 and cases[0].parent_id is None
+    assert cases[0].counts["review"] == 4
+
+
+def test_lineage_supplies_an_industry_the_prose_never_states(tmp_path):
+    """A phase-two note that never repeats the sector is the normal case."""
+    from project_yield.casefiles import encode_folder
+    (tmp_path / "1.md").write_text(
+        "# Phase one\nContoso is a retail group. Classify inbound tickets.")
+    (tmp_path / "2.md").write_text(
+        "# Phase two\nExtend the same triage to the European desks.")
+    (tmp_path / "manifest.jsonl").write_text(
+        '{"file": "1.md", "id": "P1"}\n'
+        '{"file": "2.md", "id": "P2", "continues": "1.md"}\n')
+    one, two = encode_folder(str(tmp_path))
+    assert one.industry == "retail"
+    assert two.industry == "retail"
+    assert any("taken from P1" in a for a in two.assumptions)
+
+
+def test_the_whole_folder_forecasts(predictor):
+    from project_yield.casefiles import default_folder, encode_folder
+    cases = encode_folder(default_folder())
+    for case in cases:
+        predictor.index.add(case)
+    forecasts = [predictor.forecast(c) for c in cases]
+    assert all(f.economics.contract_value > 0 for f in forecasts)
+    # the folder is meant to span the space, not to be twenty of the same thing
+    units = [c.total_units for c in cases]
+    assert max(units) > 20 * min(units)
+    wins = [f.value("win_probability") for f in forecasts]
+    assert max(wins) - min(wins) > 0.25
+
+
+def test_a_continuation_in_the_folder_beats_its_own_greenfield_twin(predictor):
+    from project_yield.casefiles import default_folder, encode_folder
+    cases = {c.id: c for c in encode_folder(default_folder())}
+    child = next(c for c in cases.values() if c.parent_id)
+    for case in cases.values():
+        predictor.index.add(case)
+    twin = UseCase.from_dict(dict(child.to_dict(), id=child.id + "-alone",
+                                  parent_id=None))
+    assert predictor.forecast(child).value("win_probability") > \
+        predictor.forecast(twin).value("win_probability")
+
+
+# ── the encoder reads prose, not just digits ─────────────────────────────
+
+def test_spelled_out_quantities_are_read():
+    """Scoping notes spell out small numbers. Missing them flattens every use
+    case to the same size, which is the failure that makes a portfolio view
+    useless."""
+    uc = heuristic_encode("Read the invoice, extract nine header fields and "
+                          "write three validation checks.")
+    assert uc.counts["extract"] == 9
+    assert uc.counts["validate"] == 3
+
+
+def test_a_quantity_attaches_to_the_nearest_task_only():
+    """One number, one brick — not nine of everything."""
+    uc = heuristic_encode("Read the invoice, extract nine header fields, "
+                          "then classify it.")
+    assert uc.counts["extract"] == 9
+    assert uc.counts["review"] == 1
+    assert uc.counts["classify"] == 1
+
+
+def test_a_duration_is_not_a_quantity_of_work():
+    uc = heuristic_encode("Review the pack. It currently takes 48 hours and "
+                          "three years of history are in scope.")
+    assert uc.counts["review"] == 1
+
+
+def test_a_defaulted_industry_is_recorded_as_an_assumption():
+    uc = heuristic_encode("Somebody wants an assistant that finds things.")
+    assert any("No industry is named" in a for a in uc.assumptions)
+
+
+def test_a_stated_industry_produces_no_assumption_about_it():
+    uc = heuristic_encode("Read 4 patient records at the hospital and "
+                          "classify them to cut manual effort.")
+    assert uc.industry == "healthcare"
+    assert not any("industry" in a for a in uc.assumptions)
+
+
+def test_encoder_assumptions_reach_the_forecast(predictor):
+    uc = heuristic_encode("Somebody wants an assistant that finds things.",
+                          uid="VAGUE")
+    warnings = predictor.forecast(uc).warnings
+    assert any("No industry is named" in w for w in warnings)
+
+
+def test_a_markdown_heading_does_not_become_the_title():
+    uc = heuristic_encode("# Northwind invoice intake\n\nRead 3 invoices.")
+    assert uc.title == "Northwind invoice intake"
+
+
+def test_provenance_survives_the_encode_then_predict_round_trip(predictor):
+    """A keyword-derived estimate must not render like a hand-typed one.
+
+    The page encodes and predicts in two calls, so the fact that a model never
+    read the description is exactly the fact most easily lost in between.
+    """
+    from project_yield.app import YieldApp
+    app = YieldApp(predictor)
+    encoded = app.encode({"description": "Somebody wants an assistant that "
+                                         "finds things for the team."})
+    forecast = app.predict(dict(encoded, encoder="heuristic"))
+    assert any("keyword match" in w for w in forecast["warnings"])
+    assert any("No industry is named" in w for w in forecast["warnings"])
+
+
+def test_overruling_the_encoder_retires_its_assumption(predictor):
+    """Telling it the industry should stop it saying the industry was guessed."""
+    from project_yield.app import YieldApp
+    app = YieldApp(predictor)
+    encoded = app.encode({"description": "Somebody wants an assistant that "
+                                         "finds things for the team."})
+    chosen = app.predict(dict(encoded, encoder="heuristic", industry="energy"))
+    assert not any("No industry is named" in w for w in chosen["warnings"])
+    assert any("keyword match" in w for w in chosen["warnings"])
+
+
+def test_a_hand_specified_use_case_carries_no_encoder_assumptions(predictor):
+    from project_yield.app import YieldApp
+    forecast = YieldApp(predictor).predict({
+        "title": "typed by hand", "industry": "energy",
+        "goal": "compliance_risk", "counts": {"review": 4, "validate": 5}})
+    assert not any("keyword match" in w for w in forecast["warnings"])
