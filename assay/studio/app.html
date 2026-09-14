@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assay Studio — can you price a task before you run it?</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 30'%3E%3Crect x='5' y='3' width='7' height='5' rx='2' fill='%23b11f4b'/%3E%3Crect x='16.5' y='3' width='7' height='5' rx='2' fill='%23b11f4b'/%3E%3Crect x='28' y='3' width='7' height='5' rx='2' fill='%23b11f4b'/%3E%3Crect x='2' y='8' width='36' height='19' rx='4' fill='%23b11f4b'/%3E%3C/svg%3E" />
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+}
+code, .mono, pre { font-family: Consolas, "Courier New", Courier, monospace; }
+h1, h2, h3 { line-height: 1.25; margin: 0 0 8px; font-weight: 600; }
+h1 { font-size: 20px; }
+h2 { font-size: 17px; }
+h3 { font-size: 14px; }
+p { margin: 0 0 12px; color: var(--cp-text-muted); }
+a { color: var(--cp-link); }
+
+/* The sidebar is sticky at 100vh, so on a long page its column would otherwise
+   stop painting partway down. Paint the column itself. */
+.layout {
+  display: grid; grid-template-columns: 244px 1fr; min-height: 100%;
+  background: linear-gradient(to right,
+    var(--cp-bg-elevated) 0 243px, var(--cp-border) 243px 244px, var(--cp-bg) 244px);
+}
+
+/* ---- sidebar ------------------------------------------------------------ */
+.side {
+  background: transparent;
+  padding: 20px 14px;
+  display: flex; flex-direction: column; gap: 4px;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; padding: 0 8px; }
+.brand-mark { width: 30px; height: 22px; flex: none; }
+.brand b { font-size: 15px; }
+.brand small { display: block; color: var(--cp-text-soft); font-size: 11px; line-height: 1.3; }
+.navlink {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: 0.625rem;
+  color: var(--cp-text-muted); cursor: pointer; border: 1px solid transparent;
+  font-size: 13px; user-select: none;
+}
+.navlink:hover { background: var(--cp-surface-soft); color: var(--cp-text); }
+.navlink.on {
+  background: var(--cp-accent-soft); color: var(--cp-accent);
+  border-color: var(--cp-accent-soft); font-weight: 600;
+}
+.navlink .stud { flex: none; }
+.side-foot { margin-top: auto; padding: 10px 8px 0; border-top: 1px solid var(--cp-border); }
+.side-foot small { color: var(--cp-text-soft); font-size: 11px; }
+
+/* ---- main --------------------------------------------------------------- */
+.main { padding: 0 28px 56px; max-width: 1180px; }
+.topbar {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--cp-panel-strong); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--cp-border);
+  margin: 0 -28px 22px; padding: 14px 28px;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.grow { flex: 1 1 auto; }
+
+.btn {
+  background: var(--cp-accent); color: var(--cp-accent-fg);
+  border: 1px solid var(--cp-accent); border-radius: 0.625rem;
+  padding: 7px 15px; font: inherit; font-weight: 600; cursor: pointer;
+}
+.btn:hover:not(:disabled) { background: var(--cp-accent-hover); border-color: var(--cp-accent-hover); }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn.ghost { background: transparent; color: var(--cp-text-muted); border-color: var(--cp-border); }
+.btn.ghost:hover { background: var(--cp-surface-soft); color: var(--cp-text); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--cp-border); border-radius: 999px;
+  padding: 3px 11px; font-size: 11.5px; color: var(--cp-text-muted);
+  background: var(--cp-surface); white-space: nowrap;
+}
+.pill.warn { border-color: var(--cp-warning); color: var(--cp-warning); }
+.pill.ok { border-color: var(--cp-success); color: var(--cp-success); }
+.pill.bad { border-color: var(--cp-danger); color: var(--cp-danger); }
+.pill.accent { border-color: var(--cp-accent); color: var(--cp-accent); background: var(--cp-accent-soft); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.dot.live { animation: pulse 1.1s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+
+.card {
+  background: var(--cp-surface); border: 1px solid var(--cp-border);
+  border-radius: 16px; padding: 18px 20px; margin-bottom: 16px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+}
+.card.flat { box-shadow: none; }
+.card > h2:first-child, .card > h3:first-child { margin-top: 0; }
+.grid { display: grid; gap: 16px; }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.g4 { grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); }
+
+.stat { background: var(--cp-surface-soft); border-radius: 0.625rem; padding: 11px 13px; }
+.stat .v { font-size: 21px; font-weight: 600; font-family: Consolas, "Courier New", Courier, monospace; }
+.stat .k { font-size: 11px; color: var(--cp-text-soft); text-transform: uppercase; letter-spacing: .04em; }
+.stat .s { font-size: 11.5px; color: var(--cp-text-muted); }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--cp-border); }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--cp-text-soft); font-weight: 600; }
+td.num, th.num { text-align: right; font-family: Consolas, "Courier New", Courier, monospace; }
+tr.hl td { background: var(--cp-accent-soft); }
+
+.bar { height: 8px; border-radius: 999px; background: var(--cp-surface-soft); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--cp-accent); border-radius: 999px; transition: width .3s ease; }
+.bar > i.ok { background: var(--cp-success); }
+.bar > i.warn { background: var(--cp-warning); }
+.bar > i.bad { background: var(--cp-danger); }
+.bar.tall { height: 13px; }
+
+.muted { color: var(--cp-text-muted); }
+.soft { color: var(--cp-text-soft); }
+.small { font-size: 12px; }
+.tiny { font-size: 11px; }
+.right { text-align: right; }
+.nowrap { white-space: nowrap; }
+.row { display: flex; align-items: center; gap: 10px; }
+.wrap { flex-wrap: wrap; }
+.sep { height: 1px; background: var(--cp-border); margin: 14px 0; }
+
+/* ---- lego bits ---------------------------------------------------------- */
+.brick {
+  border: 1px solid var(--cp-border); border-radius: 0.625rem;
+  background: var(--cp-surface-soft); padding: 12px 13px 11px;
+  position: relative; overflow: hidden;
+}
+.brick.primary { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+.studs { display: flex; gap: 5px; margin-bottom: 9px; }
+.studs i {
+  width: 13px; height: 6px; border-radius: 999px 999px 3px 3px;
+  background: var(--cp-border-strong); display: block;
+}
+.brick.primary .studs i { background: var(--cp-accent); }
+
+.stage {
+  display: grid; grid-template-columns: 22px 1fr auto; gap: 10px;
+  align-items: start; padding: 8px 0; border-bottom: 1px solid var(--cp-border);
+}
+.stage:last-child { border-bottom: 0; }
+.stage .mark {
+  width: 20px; height: 20px; border-radius: 5px; margin-top: 2px;
+  border: 1px solid var(--cp-border-strong); background: var(--cp-surface-soft);
+  display: grid; place-items: center; font-size: 11px; color: var(--cp-text-soft);
+}
+.stage.done .mark { background: var(--cp-success); border-color: var(--cp-success); color: var(--cp-accent-fg); }
+.stage.running .mark { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
+.stage.failed .mark { background: var(--cp-danger); border-color: var(--cp-danger); color: var(--cp-accent-fg); }
+.stage .t { font-weight: 600; font-size: 13px; }
+.stage .d { font-size: 11.5px; color: var(--cp-text-soft); }
+.stage .n { font-size: 11.5px; color: var(--cp-text-muted); font-family: Consolas, monospace; }
+
+.log { max-height: 260px; overflow-y: auto; font-family: Consolas, monospace; font-size: 11.5px; }
+.log div { padding: 2px 0; border-bottom: 1px solid var(--cp-border); color: var(--cp-text-muted); }
+.log b { color: var(--cp-accent); font-weight: 600; }
+
+.gate { border: 1px solid var(--cp-border); border-radius: 0.625rem; padding: 11px 13px; background: var(--cp-surface-soft); }
+.gate.feasible { border-left: 3px solid var(--cp-success); }
+.gate.narrow { border-left: 3px solid var(--cp-warning); }
+.gate.stop { border-left: 3px solid var(--cp-danger); }
+.gate .gid { font-family: Consolas, monospace; font-size: 11.5px; font-weight: 600; }
+
+input[type="number"], select {
+  background: var(--cp-surface); color: var(--cp-text);
+  border: 1px solid var(--cp-border); border-radius: 0.625rem;
+  padding: 6px 9px; font: inherit; width: 100%;
+}
+input[type="range"] { width: 100%; accent-color: var(--cp-accent); }
+label.fld { display: block; font-size: 11.5px; color: var(--cp-text-soft); margin-bottom: 3px; }
+
+.stack { display: flex; height: 30px; border-radius: 0.625rem; overflow: hidden; border: 1px solid var(--cp-border); }
+.stack > span { display: grid; place-items: center; font-size: 11px; overflow: hidden; white-space: nowrap; color: var(--cp-accent-fg); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--cp-text-muted); }
+.legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 5px; vertical-align: -1px; }
+
+.banner {
+  border: 1px solid var(--cp-warning); background: var(--cp-surface);
+  border-left: 3px solid var(--cp-warning);
+  border-radius: 0.625rem; padding: 11px 14px; margin-bottom: 16px; font-size: 12.5px;
+}
+.banner b { color: var(--cp-warning); }
+.empty { padding: 40px 0; text-align: center; color: var(--cp-text-soft); }
+.hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="side">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 30" aria-hidden="true">
+        <rect x="5" y="3" width="7" height="5" rx="2" fill="var(--cp-accent)"/>
+        <rect x="16.5" y="3" width="7" height="5" rx="2" fill="var(--cp-accent)"/>
+        <rect x="28" y="3" width="7" height="5" rx="2" fill="var(--cp-accent)"/>
+        <rect x="2" y="8" width="36" height="19" rx="4" fill="var(--cp-accent)"/>
+      </svg>
+      <div>
+        <b>Assay Studio</b>
+        <small>a falsification harness</small>
+      </div>
+    </div>
+    <div class="sep" style="margin:10px 0"></div>
+    <div id="nav"></div>
+    <div class="side-foot">
+      <small id="footnote">idle</small>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="btn" id="runbtn">Build it</button>
+      <div style="min-width:190px">
+        <div class="row tiny soft" style="justify-content:space-between;margin-bottom:3px">
+          <span id="statustext">not started</span><span id="pct">0%</span>
+        </div>
+        <div class="bar"><i id="topbar-progress" style="width:0%"></i></div>
+      </div>
+      <div class="grow"></div>
+      <span class="pill warn" title="Every number on this screen comes from a simulated runtime, not a live model."><span class="dot"></span> evidence: pipeline_only</span>
+      <button class="btn ghost" id="themebtn" title="Toggle light/dark">◐</button>
+    </div>
+    <div id="page"></div>
+  </main>
+</div>
+
+<script>
+"use strict";
+
+/* ------------------------------------------------------------------ state */
+let S = null;            // latest snapshot
+let lastSeq = -1;
+let page = "baseplate";
+let quoteState = { units: {}, bytes: 4000, results: {}, busy: false };
+
+const PAGES = [
+  ["baseplate", "Baseplate",  "What this is, and how far the build has got."],
+  ["bricks",    "Brick box",  "The vocabulary the whole method rests on."],
+  ["toll",      "The toll",   "Why 'mean error under 10%' is not a result."],
+  ["ladder",    "The ladder", "Every form scored, simplest first."],
+  ["quote",     "Quote desk", "Price a task before you run it."],
+  ["invoice",   "Invoice",    "Where the tokens actually went."],
+  ["verdict",   "Verdict",    "Pre-registered gates, scored."],
+];
+
+const ARMS = ["brick", "null"];
+const ARM_NAME = { brick: "Brick arm", null: "Null arm" };
+
+/* ------------------------------------------------------------------ utils */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const n0 = (v) => (v == null ? "—" : Math.round(v).toLocaleString());
+const n1 = (v) => (v == null ? "—" : Number(v).toFixed(1));
+const n2 = (v) => (v == null ? "—" : Number(v).toFixed(2));
+const pct = (v, d = 1) => (v == null ? "—" : Number(v).toFixed(d) + "%");
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+function res(arm, key) { return S && S.arms[arm] && S.arms[arm].result[key]; }
+function ready(key) { return ARMS.every((a) => res(a, key)); }
+
+function studs(k, cls = "") {
+  return `<div class="studs ${cls}">${'<i></i>'.repeat(k)}</div>`;
+}
+function waiting(what) {
+  return `<div class="card"><div class="empty">Nothing to show yet — ${esc(what)}.<br>
+    <span class="tiny">Press <b>Build it</b> above; the whole run takes a couple of seconds.</span></div></div>`;
+}
+
+/* ---------------------------------------------------------------- polling */
+async function poll() {
+  try {
+    const r = await fetch("/api/state", { cache: "no-store" });
+    const s = await r.json();
+    const changed = s.seq !== lastSeq;
+    lastSeq = s.seq;
+    S = s;
+    chrome();
+    if (changed) render();
+  } catch (e) { /* server gone; keep the last frame on screen */ }
+}
+
+function chrome() {
+  if (!S) return;
+  const p = Math.round((S.overall_progress || 0) * 100);
+  $("pct").textContent = p + "%";
+  $("topbar-progress").style.width = p + "%";
+  $("topbar-progress").className = S.status === "failed" ? "bad" : S.status === "done" ? "ok" : "";
+  const label = { idle: "not started", running: "building…", done: "complete", failed: "failed" }[S.status];
+  $("statustext").textContent = label + (S.elapsed_s ? ` · ${S.elapsed_s}s` : "");
+  $("runbtn").disabled = S.status === "running";
+  $("runbtn").textContent = S.status === "running" ? "Building…" : S.status === "idle" ? "Build it" : "Build again";
+  $("footnote").innerHTML = S.error
+    ? `<span style="color:var(--cp-danger)">${esc(S.error)}</span>`
+    : `${S.corpus.n_documents || 0} documents · ${(S.vocabulary.bricks || []).length} bricks<br>no network, no credentials`;
+}
+
+/* -------------------------------------------------------------------- nav */
+function drawNav() {
+  $("nav").innerHTML = PAGES.map(([k, t]) =>
+    `<div class="navlink ${k === page ? "on" : ""}" data-page="${k}">
+       <svg class="stud" width="14" height="11" viewBox="0 0 14 11" aria-hidden="true">
+         <rect x="2" y="0" width="4" height="3" rx="1.2" fill="currentColor"/>
+         <rect x="8" y="0" width="4" height="3" rx="1.2" fill="currentColor"/>
+         <rect x="0.5" y="3" width="13" height="7.5" rx="1.8" fill="currentColor"/>
+       </svg>${esc(t)}</div>`).join("");
+  $("nav").querySelectorAll(".navlink").forEach((el) =>
+    el.addEventListener("click", () => { page = el.dataset.page; drawNav(); render(); }));
+}
+
+/* ------------------------------------------------------------------ pages */
+function render() {
+  const meta = PAGES.find((p) => p[0] === page);
+  const head = `<h1>${esc(meta[1])}</h1><p>${esc(meta[2])}</p>`;
+  $("page").innerHTML = head + ({
+    baseplate: pageBaseplate, bricks: pageBricks, toll: pageToll,
+    ladder: pageLadder, quote: pageQuote, invoice: pageInvoice, verdict: pageVerdict,
+  }[page])();
+  if (page === "quote") wireQuote();
+}
+
+/* -- 1. baseplate ---------------------------------------------------------- */
+function pageBaseplate() {
+  const c = S.corpus || {};
+  const intro = `
+  <div class="card">
+    <h2>The question</h2>
+    <p>Before you run an agent over a pile of documents, can you say what it will cost — and be
+    right often enough to quote it? This studio runs the whole method twice, against two simulated
+    runtimes, and shows you both answers side by side.</p>
+    <div class="grid g2">
+      ${ARMS.map((a) => `
+        <div class="brick ${a === "brick" ? "primary" : ""}">
+          ${studs(4)}
+          <h3>${ARM_NAME[a]}</h3>
+          <div class="small muted">${esc((S.arms[a] || {}).blurb || "")}</div>
+        </div>`).join("")}
+    </div>
+    <div class="sep"></div>
+    <p class="small" style="margin:0"><b>The honest bit:</b> a method that only ever finds signal is
+    useless — it would find signal in noise too. The null arm is the control. If the brick arm
+    finds bricks and the null arm refuses to, the machinery discriminates. That is the claim this
+    demo can support, and it is the only one.</p>
+  </div>`;
+
+  const outcome = ready("ladder") ? `
+  <div class="card">
+    <h2>Did it discriminate?</h2>
+    <div class="grid g2">
+      ${ARMS.map((a) => {
+        const l = res(a, "ladder"), f = res(a, "fit");
+        const found = l.chose_a_decoder;
+        return `<div class="card flat" style="margin:0">
+          <div class="row" style="justify-content:space-between">
+            <h3 style="margin:0">${ARM_NAME[a]}</h3>
+            <span class="pill ${found ? "ok" : "accent"}"><span class="dot"></span>
+              ${found ? "per-brick prices earned" : "per-brick prices withheld"}</span>
+          </div>
+          <div class="grid g2" style="margin-top:11px;gap:9px">
+            <div class="stat"><div class="k">chose</div><div class="v" style="font-size:14px">${esc(l.chosen)}</div>
+              <div class="s">beat <code>${esc(l.best_baseline)}</code></div></div>
+            <div class="stat"><div class="k">blind variable error</div>
+              <div class="v">${pct(res(a, "blind") && res(a, "blind").vwape_pct, 1)}</div>
+              <div class="s">on the sealed set</div></div>
+          </div>
+        </div>`;
+      }).join("")}
+    </div>
+    <div class="sep"></div>
+    <div class="small muted">${
+      ready("ladder") && res("brick", "ladder").chose_a_decoder && !res("null", "ladder").chose_a_decoder
+        ? "<b style='color:var(--cp-success)'>Discriminated.</b> The brick arm climbed to a per-brick form; the null arm stopped at a size-only baseline and declined to publish prices it had not earned."
+        : "The two arms did <b>not</b> separate on this run. That is a finding about the method, not a bug to hide — read the ladder page."
+    }</div>
+  </div>` : "";
+
+  const board = `
+  <div class="card">
+    <h2>Build progress</h2>
+    <div class="grid g2">
+      ${ARMS.map((a) => `
+        <div>
+          <div class="row" style="justify-content:space-between;margin-bottom:6px">
+            <h3 style="margin:0">${ARM_NAME[a]}</h3>
+          </div>
+          ${(S.arms[a].stages || []).map((st, i) => `
+            <div class="stage ${st.status}">
+              <div class="mark">${st.status === "done" ? "✓" : st.status === "failed" ? "!" : i + 1}</div>
+              <div>
+                <div class="t">${esc(st.title)}</div>
+                <div class="d">${esc(st.detail)}</div>
+                ${st.status === "running" && st.progress > 0
+                  ? `<div class="bar" style="margin-top:5px"><i style="width:${Math.round(st.progress * 100)}%"></i></div>` : ""}
+              </div>
+              <div class="n nowrap">${esc(st.note || "")}</div>
+            </div>`).join("")}
+        </div>`).join("")}
+    </div>
+  </div>`;
+
+  const corpus = c.documents ? `
+  <div class="card">
+    <h2>The baseplate</h2>
+    <p>A deterministic, fictional corpus, generated locally. Sizes span
+    <b>${n0(c.size_lo)}</b>–<b>${n0(c.size_hi)}</b> bytes (${n1(c.span_x)}×) so that document size and
+    brick count can be told apart. Three documents are sealed away before any measurement happens.</p>
+    <div class="row wrap" style="gap:7px">
+      ${c.documents.map((d) => `
+        <span class="pill ${d.blind ? "accent" : ""}" title="${esc(d.band)} · ${n0(d.bytes)} bytes">
+          ${d.blind ? "🔒 " : ""}${esc(d.name)} <span class="soft">${n0(d.bytes)}B</span></span>`).join("")}
+    </div>
+    <div class="sep"></div>
+    <div class="tiny soft mono">seal sha256 ${esc((c.seal_sha256 || "").slice(0, 32))}…</div>
+  </div>` : "";
+
+  const log = (S.log || []).length ? `
+  <div class="card">
+    <h2>Run log</h2>
+    <div class="log" id="log">${S.log.slice().reverse().map((l) =>
+      `<div>${l.arm ? `<b>${esc(l.arm)}</b> ` : ""}${esc(l.message)}</div>`).join("")}</div>
+  </div>` : "";
+
+  return intro + outcome + board + corpus + log;
+}
+
+/* -- 2. bricks ------------------------------------------------------------- */
+function pageBricks() {
+  const v = S.vocabulary || {};
+  if (!v.bricks) return waiting("the vocabulary loads with the first run");
+  return `
+  <div class="card">
+    <p style="margin:0">A brick is a unit of work you could <i>buy</i> — not a unit of work a model
+    performs. Each one names what you would put on a purchase order, and each carries a note about
+    its nearest neighbour, because the failure mode of a taxonomy is two bricks that are really one.
+    <b>${v.primary.length}</b> of these ${v.bricks.length} carry the pre-registered gates.</p>
+  </div>
+  <div class="grid g2">
+    ${v.bricks.map((b) => `
+      <div class="brick ${b.primary ? "primary" : ""}">
+        ${studs(b.primary ? 4 : 2)}
+        <div class="row" style="justify-content:space-between;align-items:flex-start">
+          <h3 style="margin:0">${esc(b.name)}</h3>
+          <span class="pill tiny">${esc(b.category)}</span>
+        </div>
+        <div class="small muted" style="margin:6px 0">${esc(b.definition)}</div>
+        <div class="tiny soft"><b>Bought as:</b> ${esc(b.bought_as)}</div>
+        <div class="tiny soft"><b>Priced per:</b> ${esc(b.unit)}</div>
+        ${b.nearest_neighbour ? `<div class="tiny soft" style="margin-top:5px"><b>Not to be confused with:</b> ${esc(b.nearest_neighbour)}</div>` : ""}
+      </div>`).join("")}
+  </div>`;
+}
+
+/* -- 3. the toll ----------------------------------------------------------- */
+function pageToll() {
+  const r = S.reference || {};
+  const m = res("brick", "measure");
+
+  const thesis = `
+  <div class="card">
+    <h2>Most of a task's cost is a toll you pay for showing up</h2>
+    <p>Run an agent on an <i>empty</i> task and it still burns tokens: the system prompt, the tool
+    schemas, the scaffolding. Call that the <b>start-up toll</b>. It is large, and — this is the
+    trap — it is <i>constant</i>. So a model that ignores your request entirely and always predicts
+    the toll can post a flattering "mean error" and look like a result.</p>
+    ${r.boot_from_null_probes ? `
+    <div class="grid g3">
+      <div class="stat"><div class="k">start-up toll</div><div class="v">${n0(r.boot_from_null_probes)}</div>
+        <div class="s">measured from empty tasks</div></div>
+      <div class="stat"><div class="k">runs behind it</div><div class="v">${n0(r.n_fitted)}</div>
+        <div class="s">this repository's own evidence</div></div>
+      <div class="stat"><div class="k">held out</div><div class="v">${n0(r.n_held_out)}</div>
+        <div class="s">never seen while fitting</div></div>
+    </div>` : ""}
+  </div>`;
+
+  const split = m ? `
+  <div class="card">
+    <h2>What a typical task is made of</h2>
+    <div class="stack">
+      <span style="width:${clamp(m.toll_share_pct, 4, 96)}%;background:var(--cp-border-strong)">toll ${n0(m.toll_share_pct)}%</span>
+      <span style="width:${clamp(100 - m.toll_share_pct, 4, 96)}%;background:var(--cp-accent)">the part you asked for ${n0(100 - m.toll_share_pct)}%</span>
+    </div>
+    <div class="small muted" style="margin-top:10px">
+      Median task <b>${n0(m.median_task)}</b> units, of which <b>${n0(m.boot)}</b> is toll.
+      Only the right-hand slice is <i>predictable from the request</i>. Every honest score below is
+      computed against that slice.</div>
+  </div>` : "";
+
+  const forms = (r.forms || []).slice().sort((a, b) => a.loo_vwape_pct - b.loo_vwape_pct);
+  const table = forms.length ? `
+  <div class="card">
+    <h2>The same forms, scored two ways</h2>
+    <p>Left column is the number people quote. Right column is the number that means something.
+    Both bars share one 0–100% scale, so the two columns are directly comparable.
+    Notice <code>constant</code> — a model with no inputs at all.</p>
+    <table>
+      <thead><tr><th>form</th><th class="num">total error</th><th></th><th class="num">variable-portion error</th><th></th></tr></thead>
+      <tbody>${forms.map((f) => {
+        const hl = f.form === "constant" || f.form === "boot";
+        return `<tr class="${hl ? "hl" : ""}">
+          <td class="mono">${esc(f.form)}${hl ? ' <span class="tiny soft">← no request input</span>' : ""}</td>
+          <td class="num">${pct(f.loo_mape_total_pct, 2)}</td>
+          <td style="width:26%"><div class="bar"><i class="ok" style="width:${clamp(f.loo_mape_total_pct, 0, 100)}%"></i></div></td>
+          <td class="num">${pct(f.loo_vwape_pct, 2)}</td>
+          <td style="width:26%"><div class="bar"><i class="${f.loo_vwape_pct > 60 ? "bad" : f.loo_vwape_pct > 30 ? "warn" : "ok"}" style="width:${clamp(f.loo_vwape_pct, 0, 100)}%"></i></div></td>
+        </tr>`;
+      }).join("")}</tbody>
+    </table>
+    <div class="sep"></div>
+    <div class="small muted">${(r.notes || []).map(esc).join("<br>")}</div>
+    <div class="small" style="margin-top:9px"><b>Read it this way:</b> a constant scores
+    <b>${pct((forms.find((f) => f.form === "constant") || {}).loo_mape_total_pct, 1)}</b> on total error
+    — it would clear a "mean error under 10%" bar — while scoring
+    <b>${pct((forms.find((f) => f.form === "constant") || {}).loo_vwape_pct, 1)}</b> on the part that
+    actually varies. That gap is the whole argument.</div>
+  </div>` : `<div class="card"><div class="empty">Reference audit not loaded.</div></div>`;
+
+  return thesis + split + table;
+}
+
+/* -- 4. the ladder --------------------------------------------------------- */
+function pageLadder() {
+  if (!ready("ladder")) return waiting("the ladder is climbed during a run");
+  return `
+  <div class="card">
+    <p style="margin:0">Start with the dumbest thing that could work and add complexity only when it
+    pays. A rung is promoted only if it beats the best <i>cheaper</i> rung on the variable portion,
+    under grouped cross-validation, by a pre-registered margin — and only if the challenger was
+    testable on the same folds. Bars are drawn on <b>variable-portion error, lower is better</b>.</p>
+  </div>` + ARMS.map((a) => {
+    const l = res(a, "ladder");
+    const worst = Math.max(...l.rungs.map((r) => r.vwape_pct || 0), 1);
+    return `
+    <div class="card">
+      <div class="row" style="justify-content:space-between;flex-wrap:wrap">
+        <h2 style="margin:0">${ARM_NAME[a]}</h2>
+        <span class="pill ${l.chose_a_decoder ? "ok" : "accent"}"><span class="dot"></span>
+          chose <code>${esc(l.chosen)}</code>${l.chose_a_decoder ? "" : " — a baseline"}</span>
+      </div>
+      <div class="small muted" style="margin:8px 0 14px">
+        Best baseline to beat: <code>${esc(l.best_baseline)}</code>.
+        ${l.lift ? `Measured lift <b>${pct(l.lift.lift_pct)}</b>
+          (bootstrap ${pct(l.lift.bootstrap_lo)} – ${pct(l.lift.bootstrap_hi)}) against a
+          <b>${pct(l.lift.bar_pct)}</b> bar — ${l.lift.passed
+            ? "<b style='color:var(--cp-success)'>cleared</b>" : "<b style='color:var(--cp-danger)'>not cleared</b>"}.`
+          : "No challenger was promoted."}
+      </div>
+      ${(l.notes || []).length ? `<div class="banner"><b>Notes.</b> ${l.notes.map(esc).join("<br>")}</div>` : ""}
+      <table>
+        <thead><tr><th></th><th>rung</th><th class="num">params</th><th class="num">variable error</th><th></th><th class="num">total error</th></tr></thead>
+        <tbody>${l.rungs.map((r, i) => `
+          <tr class="${r.form === l.chosen ? "hl" : ""}" title="${esc(r.label)}">
+            <td class="soft tiny">${i + 1}</td>
+            <td class="mono">${esc(r.form)}
+              <span class="tiny soft">${esc(r.role)}</span>
+              ${r.failed_folds ? `<span class="pill bad tiny">${r.failed_folds} fold(s) failed</span>` : ""}</td>
+            <td class="num">${r.n_params}</td>
+            <td class="num">${pct(r.vwape_pct, 1)}</td>
+            <td style="width:32%"><div class="bar tall"><i class="${r.form === l.chosen ? "" : r.vwape_pct > 60 ? "bad" : "warn"}"
+              style="width:${clamp((r.vwape_pct / worst) * 100, 1, 100)}%"></i></div></td>
+            <td class="num soft">${pct(r.mape_total_pct, 1)}</td>
+          </tr>`).join("")}</tbody>
+      </table>
+      <div class="tiny soft" style="margin-top:8px">Hover a rung for what it means.</div>
+    </div>`;
+  }).join("");
+}
+
+/* -- 5. quote -------------------------------------------------------------- */
+function pageQuote() {
+  const v = S.vocabulary || {};
+  if (!v.bricks || !ready("fit")) return waiting("quoting needs a fitted model");
+  const f = res("brick", "fit");
+  const controls = v.bricks.map((b) => `
+    <div>
+      <label class="fld">${esc(b.name)}${f.marginals && f.marginals[b.name] != null
+        ? ` <span class="soft">· ${n0(f.marginals[b.name])} units each</span>` : ""}</label>
+      <input type="number" min="0" max="40" step="1" data-brick="${esc(b.name)}"
+             value="${quoteState.units[b.name] || 0}" />
+    </div>`).join("");
+
+  return `
+  <div class="card">
+    <h2>Order some bricks</h2>
+    <p>Both arms price the same order. The brick arm earned per-brick prices; the null arm did not,
+    so it can only answer from document size. Watch what happens when you change <i>which</i> bricks
+    you ask for without changing the byte count.</p>
+    <div class="grid g4">${controls}</div>
+    <div class="sep"></div>
+    <label class="fld">Context size — <b id="bytesv">${n0(quoteState.bytes)}</b> bytes</label>
+    <input type="range" id="bytes" min="500" max="12000" step="100" value="${quoteState.bytes}" />
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="qbtn">Get a quote</button>
+      <span class="tiny soft" id="qnote"></span>
+    </div>
+  </div>
+  <div class="grid g2">${ARMS.map((a) => quoteCard(a)).join("")}</div>
+  ${quoteContrast()}
+  <div class="card">
+    <div class="small muted" style="margin:0"><b>Why the bands differ.</b> The interval is conformal:
+    it is calibrated on out-of-fold residuals and floored at the start-up toll, so it cannot claim to
+    be tighter than the noise it was measured against. A wider band is not a worse model — it is a
+    model being honest about what it does not know.</div>
+  </div>
+  <div class="banner">
+    <b>These bands are too tight to believe.</b> The simulated runtime is very nearly noiseless, so
+    the calibration has almost no residual to work with. Against a real model the bands would be far
+    wider. Read the <i>difference between the arms</i>, not the absolute width.
+  </div>`;
+}
+
+/* Sensitivity is the whole demonstration: re-price the same order and watch which
+   arm actually responds to what you asked for. */
+function quoteContrast() {
+  const b = quoteState.results.brick, z = quoteState.results.null;
+  if (!b || !z || b.error || z.error) return "";
+  const base = quoteState.baseline;
+  if (!base) return "";
+  const d = (cur, prev) => (prev == null ? null : ((cur - prev) / prev) * 100);
+  const db = d(b.predicted_units, base.brick), dz = d(z.predicted_units, base.null);
+  if (db == null) return "";
+  return `
+  <div class="card">
+    <h2>Did the quote notice what you ordered?</h2>
+    <p>Compared with your previous quote, at whatever byte count you had then.</p>
+    <div class="grid g2">
+      ${[["brick", db], ["null", dz]].map(([a, delta]) => `
+        <div class="stat">
+          <div class="k">${ARM_NAME[a]} moved</div>
+          <div class="v" style="color:${Math.abs(delta) > 1 ? "var(--cp-accent)" : "var(--cp-text-soft)"}">
+            ${delta > 0 ? "+" : ""}${n1(delta)}%</div>
+          <div class="s">${Math.abs(delta) > 1
+            ? "responded to the order"
+            : "barely moved — it is pricing size, not work"}</div>
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function quoteCard(a) {
+  const q = quoteState.results[a];
+  if (!q) return `<div class="card"><h3>${ARM_NAME[a]}</h3><div class="empty tiny">no quote yet</div></div>`;
+  if (q.error) return `<div class="card"><h3>${ARM_NAME[a]}</h3><div class="empty tiny">${esc(q.error)}</div></div>`;
+  const half = q.relative_half_width_pct;
+  return `
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <h3 style="margin:0">${ARM_NAME[a]}</h3>
+      <span class="pill ${q.show_per_brick ? "ok" : "accent"}">${q.show_per_brick ? "per-brick" : "size only"}</span>
+    </div>
+    <div class="stat" style="margin:12px 0">
+      <div class="k">predicted</div>
+      <div class="v">${n0(q.predicted_units)} <span class="soft" style="font-size:13px">units</span></div>
+      <div class="s">${n0(q.interval_lo)} – ${n0(q.interval_hi)} at ${Math.round(q.interval_level * 100)}% · ±${n1(half)}%</div>
+    </div>
+    <div class="bar tall" title="band width relative to the prediction">
+      <i class="${half > 40 ? "bad" : half > 15 ? "warn" : "ok"}" style="width:${clamp(half * 2, 2, 100)}%"></i>
+    </div>
+    <div class="tiny soft" style="margin-top:4px">band width, relative to the prediction — full bar is ±50%</div>
+    <div class="tiny soft" style="margin-top:6px">
+      ref <code>${esc(q.coefficients_ref)}</code><br>
+      quote sha256 ${esc((q.quote_sha256 || "").slice(0, 24))}…
+    </div>
+    ${(q.notes || []).length ? `<div class="banner" style="margin:11px 0 0">${q.notes.map(esc).join("<br>")}</div>` : ""}
+  </div>`;
+}
+
+function wireQuote() {
+  const bytes = $("bytes");
+  if (bytes) bytes.addEventListener("input", () => {
+    quoteState.bytes = Number(bytes.value);
+    $("bytesv").textContent = Number(bytes.value).toLocaleString();
+  });
+  document.querySelectorAll("input[data-brick]").forEach((el) =>
+    el.addEventListener("input", () => { quoteState.units[el.dataset.brick] = Number(el.value) || 0; }));
+  const btn = $("qbtn");
+  if (btn) btn.addEventListener("click", async () => {
+    btn.disabled = true; $("qnote").textContent = "pricing…";
+    const prior = {};
+    for (const a of ARMS) {
+      const r = quoteState.results[a];
+      if (r && !r.error) prior[a] = r.predicted_units;
+    }
+    const params = new URLSearchParams({ bytes: String(quoteState.bytes) });
+    for (const [k, v] of Object.entries(quoteState.units)) if (v > 0) params.set("u." + k, String(v));
+    for (const a of ARMS) {
+      params.set("arm", a);
+      try {
+        quoteState.results[a] = await (await fetch("/api/quote?" + params)).json();
+      } catch (e) { quoteState.results[a] = { error: String(e) }; }
+    }
+    btn.disabled = false;
+    if (quoteState.results.brick && !quoteState.results.brick.error) {
+      quoteState.baseline = prior;
+    }
+    render();
+  });
+}
+
+/* -- 6. invoice ------------------------------------------------------------ */
+function pageInvoice() {
+  if (!ready("example")) return waiting("an invoice is drawn from a blind run");
+  return `
+  <div class="card">
+    <p style="margin:0">A quote is a promise; an invoice is what happened. Every line below is a
+    claim about where tokens went, and the lines must sum to the measured total — including a
+    <b>reconciliation</b> line for whatever the model could not account for. If that line is large,
+    the model is not explaining much, and the invoice says so rather than hiding it.</p>
+  </div>` + ARMS.map((a) => {
+    const ex = res(a, "example"), inv = ex.invoice, q = ex.quote;
+    const tot = inv.sum_check || 1;
+    const colour = ["var(--cp-border-strong)", "var(--cp-accent)", "var(--cp-success)", "var(--cp-warning)", "var(--cp-link)"];
+    return `
+    <div class="card">
+      <div class="row" style="justify-content:space-between;flex-wrap:wrap">
+        <h2 style="margin:0">${ARM_NAME[a]}</h2>
+        <div class="row" style="gap:7px">
+          <span class="pill ${inv.reconciles ? "ok" : "bad"}"><span class="dot"></span>
+            ${inv.reconciles ? "lines reconcile to the measured total" : "does not reconcile"}</span>
+          <span class="pill ${inv.interval_hit ? "ok" : "bad"}">${inv.interval_hit ? "inside the quoted band" : "outside the band"}</span>
+        </div>
+      </div>
+      <div class="grid g4" style="margin:13px 0">
+        <div class="stat"><div class="k">quoted</div><div class="v">${n0(inv.predicted_units)}</div></div>
+        <div class="stat"><div class="k">actual</div><div class="v">${n0(inv.actual_units)}</div></div>
+        <div class="stat"><div class="k">total error</div><div class="v">${pct(inv.error_pct, 2)}</div>
+          <div class="s">flattered by the toll</div></div>
+        <div class="stat"><div class="k">variable error</div><div class="v">${pct(inv.variable_error_pct, 2)}</div>
+          <div class="s">the honest one</div></div>
+      </div>
+      <div class="stack">${inv.lines.map((l, i) => {
+        const w = clamp((Math.abs(l.units) / tot) * 100, 0, 100);
+        return `<span style="width:${w}%;background:${colour[i % colour.length]}" title="${esc(l.item)}: ${n0(l.units)}">${w > 11 ? esc(l.item) : ""}</span>`;
+      }).join("")}</div>
+      <table style="margin-top:12px">
+        <thead><tr><th>line</th><th>how it was worked out</th><th class="num">units</th><th class="num">share</th></tr></thead>
+        <tbody>${inv.lines.map((l) => `
+          <tr><td>${esc(l.item)}</td><td class="soft small">${esc(l.detail)}</td>
+            <td class="num">${n0(l.units)}</td><td class="num soft">${pct((l.units / tot) * 100, 1)}</td></tr>`).join("")}
+          <tr><td><b>total</b></td><td class="soft small">measured</td>
+            <td class="num"><b>${n0(inv.sum_check)}</b></td><td class="num soft">100.0%</td></tr>
+        </tbody>
+      </table>
+      <div class="tiny soft" style="margin-top:9px">request <code>${esc(q.request_id)}</code> ·
+        ordered ${esc(Object.entries(q.units).map(([k, v]) => `${v}× ${k}`).join(", ") || "nothing")} ·
+        ${n0(q.context_bytes)} bytes</div>
+      ${(inv.notes || []).length ? `<div class="banner" style="margin-top:11px">${inv.notes.map(esc).join("<br>")}</div>` : ""}
+    </div>`;
+  }).join("");
+}
+
+/* -- 7. verdict ------------------------------------------------------------ */
+function pageVerdict() {
+  if (!ready("verdict")) return waiting("the verdict is scored last");
+  const OUT = { feasible: "ok", narrow: "warn", stop: "bad" };
+  return `
+  <div class="card">
+    <p style="margin:0">These gates and their bars were written down and hashed <i>before</i> any
+    number was measured. The hash is printed below; move a bar and it changes, which is the point.
+    A gate with no observation does not quietly pass — it caps the verdict.</p>
+  </div>
+  <div class="grid g2">${ARMS.map((a) => {
+    const v = res(a, "verdict");
+    const counts = { feasible: 0, narrow: 0, stop: 0, missing: 0 };
+    v.gates.forEach((g) => { counts[g.outcome] = (counts[g.outcome] || 0) + 1; if (g.value == null) counts.missing++; });
+    return `
+    <div class="card flat" style="margin:0">
+      <div class="row" style="justify-content:space-between;flex-wrap:wrap">
+        <h2 style="margin:0">${ARM_NAME[a]}</h2>
+        <span class="pill ${OUT[v.outcome]}"><span class="dot"></span>${esc(v.outcome)}</span>
+      </div>
+      <div class="row wrap tiny soft" style="margin:9px 0 13px;gap:9px">
+        <span>${counts.feasible} met</span><span>${counts.narrow} narrow</span>
+        <span>${counts.stop} stop</span><span>${counts.missing} unmeasured</span>
+      </div>
+      <div class="grid" style="gap:9px">
+        ${v.gates.map((g) => `
+          <div class="gate ${g.outcome}">
+            <div class="row" style="justify-content:space-between;align-items:flex-start">
+              <span class="gid">${esc(g.id)}</span>
+              <span class="mono small ${g.value == null ? "soft" : ""}">${g.value == null ? "not measured" : n2(g.value)}</span>
+            </div>
+            <div class="tiny soft">${esc(g.label)}</div>
+            <div class="tiny soft" style="margin-top:4px">
+              bar ${n1(g.pass_bar)} / narrow ${n1(g.narrow_bar)} · ${esc(g.direction.replace(/_/g, " "))}</div>
+            <div class="tiny" style="margin-top:3px">${esc(g.reason)}</div>
+          </div>`).join("")}
+      </div>
+      <div class="sep"></div>
+      <div class="tiny soft mono">policy sha256 ${esc((v.policy_sha256 || "").slice(0, 32))}…</div>
+    </div>`;
+  }).join("")}</div>
+  <div class="banner">
+    <b>Both arms land on “narrow”, and that is correct.</b> Four gates — the encoder's accuracy,
+    end-to-end error, batching quality and inter-rater agreement — cannot be observed by a simulated
+    runtime with no human labellers and no real model. They are left unmeasured, and unmeasured gates
+    cap the verdict. A demo that returned “feasible” here would be doing exactly the thing this
+    project was built to catch.
+  </div>`;
+}
+
+/* ------------------------------------------------------------------- boot */
+$("runbtn").addEventListener("click", async () => {
+  $("runbtn").disabled = true;
+  quoteState.results = {};
+  await fetch("/api/run", { method: "POST" });
+  poll();
+});
+$("themebtn").addEventListener("click", () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  document.documentElement.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+});
+
+drawNav();
+$("page").innerHTML = waiting("the run has not started");
+poll();
+setInterval(poll, 400);
+</script>
+</body>
+</html>
