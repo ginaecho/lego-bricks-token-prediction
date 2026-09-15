@@ -1,0 +1,43 @@
+{
+  "schema_version": "customer-pilot-v1",
+  "endpoint": "https://foundary-tzuc06.openai.azure.com/openai/v1",
+  "deployment": "gpt-5.4",
+  "expected_response_model": "gpt-5.4",
+  "deployment_version": "2026-03-05",
+  "deployment_sku": "GlobalStandard",
+  "reasoning_effort": "none",
+  "text_verbosity": "low",
+  "replicates": 2,
+  "seed": 914,
+  "cap_usd": 49.8832,
+  "stop_usd": 47.8832,
+  "prior_attempt": {
+    "run": "runs/20260914_customer_scoping_v1",
+    "rated_cost_usd": 0.0094,
+    "settled_safety_usd": 0.1168,
+    "active_reserved_usd": 0
+  },
+  "max_input_tokens_per_call": 32768,
+  "pricing": {
+    "input_per_million": 2.5,
+    "cached_input_per_million": 0.25,
+    "output_per_million": 15.0
+  },
+  "pricing_source": {
+    "url": "https://prices.azure.com/api/retail/prices",
+    "region": "germanywestcentral",
+    "retrieved_on": "2026-09-14",
+    "effective_start": "2026-03-01",
+    "unit": "1M tokens",
+    "input_meter_id": "6dc15256-2348-5f90-9e58-98ee417bc714",
+    "cached_input_meter_id": "781c01c1-b89f-57d8-98f9-d6a746505093",
+    "output_meter_id": "d88ed52a-9046-55e0-9931-e2d6a4d9c59f",
+    "boundary": "Standard Global synchronous requests, short context. Retail-rate calculated cost, not reconciled invoice, discounts, tax, or procurement budget. Batching here means merging work into one normal request, not the Azure Batch API."
+  },
+  "authorization": {
+    "inputs": "Only the six paraphrased public-request summaries, requirement annotations, exclusions, and scoping template.",
+    "tools": "None. No source fetch, private data, client contact, deployment, or full-project execution.",
+    "retries": "None. Stop after transport, telemetry, output-cap, or identity failure; preserve uncertain reservations.",
+    "quality": "Automatic contract checks are necessary but not sufficient. Free-text drafts require human review before quality-preserving optimization can be promoted."
+  }
+}
