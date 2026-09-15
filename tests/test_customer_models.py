@@ -7,6 +7,7 @@ import json
 
 import pytest
 
+from token_yield import customer_models
 from token_yield.customer_models import evaluate_predictions, fit_models, predict_cost
 from token_yield.robust import ConstantModel, Record, RidgeLinearModel
 
@@ -289,3 +290,300 @@ def test_evaluation_rejects_unmeasured_completed_target():
     rows[0]["rated_cost_usd"] = None
     with pytest.raises(TypeError, match="rated_cost_usd"):
         evaluate_predictions(rows, predictions)
+
+
+PROJECT_FORMS = (*FORMS, "workflow")
+PROJECT_CHANNELS = ("input_tokens", "output_tokens", "rated_cost_usd")
+PROJECT_RUNTIME = {"model": "test-model", "harness": "test-v1"}
+
+
+def synthetic_project_test_rows():
+    """Complete synthetic project/arm/replicate totals, never public measurements."""
+    seed = synthetic_test_rows()[0]
+    rows = []
+    for project, replicates in enumerate((1, 2, 3, 1, 2, 3)):
+        for replicate in range(replicates):
+            for arm, calls, maximum in (("single", 4, 1), ("batch", 2, 3)):
+                row = copy.deepcopy(seed)
+                units = 3 * (project + 1) + 1
+                row.update(
+                    call_id=f"project-test-{project}-{arm}-{replicate}",
+                    project_id=f"project-test-{project}",
+                    arm_id=arm,
+                    replicate=replicate,
+                    rated_cost_usd=0.1 + 0.02 * project + 0.03 * calls + 0.001 * replicate,
+                )
+                row["quote"].update(
+                    context_bytes=100 * project,
+                    prompt_bytes=200 + 600 * project + 40 * replicate + 50 * calls,
+                    planned_output_tokens=100 * units,
+                    counts=dict(extract=project + 1, classify=project + 1,
+                                plan=project + 1, report=1),
+                    planned_calls=calls,
+                    max_operations_per_call=maximum,
+                )
+                input_tokens = 80 + 100 * project + 20 * calls + replicate
+                output_tokens = 20 + 15 * units + 2 * replicate
+                row["usage"].update(input_tokens=input_tokens, output_tokens=output_tokens,
+                                    total_tokens=input_tokens + output_tokens)
+                rows.append(row)
+    return rows
+
+
+def independent_project_features(row, form):
+    if form == "workflow":
+        return (*independent_features(row, "lego"), row["quote"]["planned_calls"],
+                row["quote"]["max_operations_per_call"])
+    return independent_features(row, form)
+
+
+def project_target(row, channel):
+    return row[channel] if channel == "rated_cost_usd" else row["usage"][channel]
+
+
+def assert_uncalibrated_project_forecast(result):
+    assert result["calibrated_interval"] is None
+    assert result["upper_budget_bound"] is None
+    assert result["calibration_status"] == "insufficient_independent_groups_shared_template"
+    assert isinstance(result["support"]["reasons"], list)
+
+
+def test_project_channels_match_independent_grouped_cv_and_selection():
+    rows = synthetic_project_test_rows()
+    artifact = customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+    assert artifact["schema_version"] == "customer-project-model-v1"
+    assert set(artifact["channels"]) == set(PROJECT_CHANNELS)
+    projects = {row["project_id"] for row in rows}
+    assert len(projects) == 6
+    for channel in PROJECT_CHANNELS:
+        fitted = artifact["channels"][channel]
+        assert set(fitted["forms"]) == set(PROJECT_FORMS)
+        for form in PROJECT_FORMS:
+            project_errors = {}
+            for held_out in sorted(projects):
+                records = [
+                    Record(independent_project_features(row, form),
+                           project_target(row, channel), row["project_id"])
+                    for row in sorted(rows, key=lambda row: row["call_id"])
+                    if row["project_id"] != held_out
+                ]
+                model = (ConstantModel.fit(records) if form == "constant"
+                         else RidgeLinearModel.fit(records, alpha=10.0))
+                errors = []
+                for row in rows:
+                    if row["project_id"] == held_out:
+                        prediction = max(0.0, model.predict(independent_project_features(row, form)))
+                        assert fitted["forms"][form]["cv_predictions"][row["call_id"]] == (
+                            pytest.approx(prediction)
+                        )
+                        errors.append(abs(project_target(row, channel) - prediction))
+                project_errors[held_out] = sum(errors) / len(errors)
+            assert fitted["forms"][form]["per_project_mae"] == pytest.approx(project_errors)
+            assert fitted["cv_mae"][form] == pytest.approx(
+                sum(project_errors.values()) / len(project_errors)
+            )
+            folds = fitted["forms"][form]["cv_folds"]
+            assert {fold["validation_project_id"] for fold in folds} == projects
+            for fold in folds:
+                assert set(fold["training_project_ids"]) == (
+                    projects - {fold["validation_project_id"]}
+                )
+        assert fitted["selected_form"] == min(PROJECT_FORMS, key=fitted["cv_mae"].get)
+    assert artifact == customer_models.fit_project_models(list(reversed(rows)), PROJECT_RUNTIME)
+
+
+def test_project_artifact_json_roundtrip_forecasts_without_refitting(monkeypatch):
+    rows = synthetic_project_test_rows()
+    artifact = customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+    restored = json.loads(json.dumps(artifact, allow_nan=False))
+    quote = rows[0]["quote"]
+    expected = customer_models.forecast_project(artifact, quote, PROJECT_RUNTIME)
+    assert expected["support"]["status"] == "within_observed_ranges"
+    assert_uncalibrated_project_forecast(expected)
+    point = expected["point_estimate"]
+    assert set(point) == {*PROJECT_CHANNELS, "total_tokens"}
+    assert point["total_tokens"] == pytest.approx(point["input_tokens"] + point["output_tokens"])
+    assert all(value >= 0 for value in point.values())
+    for channel in PROJECT_CHANNELS:
+        for form in PROJECT_FORMS:
+            if form != "constant":
+                assert restored["channels"][channel]["forms"][form]["model"]["alpha"] == 10.0
+        selected = artifact["channels"][channel]["selected_form"]
+        records = [
+            Record(independent_project_features(row, selected), project_target(row, channel),
+                   row["project_id"])
+            for row in sorted(rows, key=lambda row: row["call_id"])
+        ]
+        model = (ConstantModel.fit(records) if selected == "constant"
+                 else RidgeLinearModel.fit(records, alpha=10.0))
+        assert point[channel] == pytest.approx(
+            max(0.0, model.predict(independent_project_features(rows[0], selected)))
+        )
+
+    def forbidden_fit(*args, **kwargs):
+        raise AssertionError("project forecasting must never refit")
+
+    monkeypatch.setattr(ConstantModel, "fit", forbidden_fit)
+    monkeypatch.setattr(RidgeLinearModel, "fit", forbidden_fit)
+    assert customer_models.forecast_project(restored, quote, PROJECT_RUNTIME) == expected
+
+
+def test_project_runtime_is_canonically_compared_and_frozen():
+    rows = synthetic_project_test_rows()
+    runtime = {**PROJECT_RUNTIME, "settings": {"temperature": 0, "seed": 42}}
+    artifact = customer_models.fit_project_models(rows, runtime)
+    reordered = {"settings": {"seed": 42, "temperature": 0},
+                 "harness": "test-v1", "model": "test-model"}
+    assert customer_models.forecast_project(artifact, rows[0]["quote"], reordered)[
+        "support"
+    ]["status"] == "within_observed_ranges"
+    runtime["settings"]["seed"] = 43
+    mismatch = customer_models.forecast_project(artifact, rows[0]["quote"], runtime)
+    assert mismatch["point_estimate"] is None
+    assert mismatch["support"]["status"] == "unsupported"
+    assert mismatch["support"]["reasons"]
+    assert_uncalibrated_project_forecast(mismatch)
+    assert customer_models.forecast_project(artifact, rows[0]["quote"], reordered)[
+        "point_estimate"
+    ] is not None
+
+
+@pytest.mark.parametrize("field", [
+    "context_bytes", "prompt_bytes", "planned_output_tokens",
+])
+def test_project_quote_outside_training_range_warns_without_calibration(field):
+    rows = synthetic_project_test_rows()
+    artifact = customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+    quote = copy.deepcopy(rows[0]["quote"])
+    quote[field] = 100 * max(row["quote"][field] for row in rows) + 1
+    result = customer_models.forecast_project(artifact, quote, PROJECT_RUNTIME)
+    assert result["support"]["status"] == "extrapolation"
+    assert result["support"]["reasons"]
+    assert_uncalibrated_project_forecast(result)
+
+
+def test_project_valid_unmeasured_layout_warns_without_calibration():
+    rows = synthetic_project_test_rows()
+    artifact = customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+    quote = copy.deepcopy(rows[0]["quote"])
+    quote.update(planned_calls=2, max_operations_per_call=2)
+    result = customer_models.forecast_project(artifact, quote, PROJECT_RUNTIME)
+    assert result["support"]["status"] == "extrapolation"
+    assert "unmeasured_call_layout" in result["support"]["reasons"]
+    assert result["point_estimate"] is not None
+    assert_uncalibrated_project_forecast(result)
+
+
+@pytest.mark.parametrize("calls,maximum", [
+    (5, 1), (1, 5), (100, 1), (1, 100),
+    (1, 1), (1, 2), (1, 3),
+    (2, 1), (2, 4),
+    (3, 1), (3, 3), (3, 4),
+    (4, 2), (4, 3), (4, 4),
+])
+def test_project_impossible_or_unbounded_layouts_rejected(calls, maximum):
+    rows = synthetic_project_test_rows()
+    artifact = customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+    rows[0]["quote"].update(planned_calls=calls, max_operations_per_call=maximum)
+    with pytest.raises(ValueError):
+        customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+    with pytest.raises(ValueError):
+        customer_models.forecast_project(artifact, rows[0]["quote"], PROJECT_RUNTIME)
+
+
+@pytest.mark.parametrize("status", ["completed", "failed"])
+def test_project_holdout_labels_rejected_before_any_fitting(monkeypatch, status):
+    rows = synthetic_project_test_rows()
+    held_out = copy.deepcopy(rows[0])
+    held_out.update(call_id="unseen-holdout-row", split="holdout", status=status)
+
+    def forbidden_fit(*args, **kwargs):
+        raise AssertionError("holdout labels must be rejected before any fitting")
+
+    monkeypatch.setattr(ConstantModel, "fit", forbidden_fit)
+    monkeypatch.setattr(RidgeLinearModel, "fit", forbidden_fit)
+    for project_id in (rows[0]["project_id"], "independent-holdout-project"):
+        held_out["project_id"] = project_id
+        for label in (0.0, 1e6):
+            held_out["rated_cost_usd"] = label
+            with pytest.raises(ValueError):
+                customer_models.fit_project_models(rows + [held_out], PROJECT_RUNTIME)
+
+
+def test_project_duplicate_rows_and_fewer_than_three_groups_rejected():
+    rows = synthetic_project_test_rows()
+    with pytest.raises(ValueError):
+        customer_models.fit_project_models(rows + [copy.deepcopy(rows[0])], PROJECT_RUNTIME)
+    for group_count in (0, 1, 2):
+        projects = {f"project-test-{index}" for index in range(group_count)}
+        with pytest.raises(ValueError):
+            customer_models.fit_project_models(
+                [row for row in rows if row["project_id"] in projects], PROJECT_RUNTIME
+            )
+
+
+@pytest.mark.parametrize("field", ["quote", "usage", "rated_cost_usd"])
+def test_project_missing_measurements_rejected(field):
+    rows = synthetic_project_test_rows()
+    del rows[0][field]
+    with pytest.raises((TypeError, ValueError)):
+        customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+
+
+@pytest.mark.parametrize("value", [None, float("nan"), float("inf"), -1])
+@pytest.mark.parametrize("field", [*PROJECT_CHANNELS, "total_tokens"])
+def test_project_nonfinite_or_missing_labels_rejected(field, value):
+    rows = synthetic_project_test_rows()
+    target = rows[0] if field == "rated_cost_usd" else rows[0]["usage"]
+    target[field] = value
+    with pytest.raises((TypeError, ValueError)):
+        customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+
+
+@pytest.mark.parametrize("field", ["planned_calls", "max_operations_per_call"])
+@pytest.mark.parametrize("value", [None, True, 0, -1, 1.5, "2", float("nan"), float("inf")])
+def test_project_workflow_counts_must_be_positive_integers(field, value):
+    rows = synthetic_project_test_rows()
+    rows[0]["quote"][field] = value
+    with pytest.raises((TypeError, ValueError)):
+        customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+
+
+@pytest.mark.parametrize("field", ["planned_calls", "max_operations_per_call"])
+def test_project_workflow_counts_are_required(field):
+    rows = synthetic_project_test_rows()
+    del rows[0]["quote"][field]
+    with pytest.raises((TypeError, ValueError)):
+        customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+
+
+@pytest.mark.parametrize("counts", [
+    dict(extract=0, classify=0, plan=0, report=1),
+    dict(extract=2, classify=1, plan=2, report=1),
+    dict(extract=2, classify=2, plan=1, report=1),
+    dict(extract=1, classify=1, plan=1, report=0),
+    dict(extract=1, classify=1, plan=1, report=2),
+    dict(extract=1, classify=1, report=1),
+    dict(extract=1, classify=1, plan=1, report=1, unknown=1),
+])
+def test_project_incomplete_or_unknown_operation_counts_rejected(counts):
+    rows = synthetic_project_test_rows()
+    artifact = customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+    rows[0]["quote"]["counts"] = counts
+    with pytest.raises((TypeError, ValueError)):
+        customer_models.fit_project_models(rows, PROJECT_RUNTIME)
+    try:
+        forecast = customer_models.forecast_project(artifact, rows[0]["quote"], PROJECT_RUNTIME)
+    except ValueError:
+        return
+    assert forecast["support"]["status"] == "unsupported"
+    assert forecast["point_estimate"] is None
+    assert forecast["support"]["reasons"]
+    assert_uncalibrated_project_forecast(forecast)
+
+
+@pytest.mark.parametrize("runtime", [None, {}, [], {"model": float("nan")},
+                                     {"model": float("inf")}, {"model": object()}])
+def test_project_runtime_must_be_nonempty_finite_json_mapping(runtime):
+    with pytest.raises((TypeError, ValueError)):
+        customer_models.fit_project_models(synthetic_project_test_rows(), runtime)

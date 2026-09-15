@@ -8,9 +8,11 @@ Cross-validation residuals are exploratory, not calibrated coverage estimates.
 from __future__ import annotations
 
 import math
+import json
 import sys
 from dataclasses import asdict
 
+from token_yield.customer_decomposition import canonical_json
 from token_yield.robust import ConstantModel, Record, RidgeLinearModel, grouped_kfold
 
 
@@ -24,6 +26,12 @@ _FEATURES = {
     "lego": ("prompt_bytes", "planned_output_tokens", *_UNITS),
 }
 _CALIBRATION_STATUS = "insufficient_independent_groups_shared_template"
+_PROJECT_SCHEMA = "customer-project-model-v1"
+_PROJECT_FEATURES = {
+    **_FEATURES,
+    "workflow": (*_FEATURES["lego"], "planned_calls", "max_operations_per_call"),
+}
+_PROJECT_TARGETS = ("input_tokens", "output_tokens", "rated_cost_usd")
 
 
 def _mapping(value: object, label: str) -> dict:
@@ -122,12 +130,13 @@ def _completed_rows(rows: list[dict], *, training: bool) -> tuple[list[dict], li
     return sorted(completed, key=lambda row: row["call_id"]), sorted(excluded)
 
 
-def _features(values: dict, form: str) -> tuple:
+def _features(values: dict, form: str, names: tuple | None = None) -> tuple:
     # Record requires a nonempty vector even for an intercept-only model.
-    return tuple(values[name] for name in _FEATURES[form]) or (0.0,)
+    return tuple(values[name] for name in (_FEATURES[form] if names is None else names)) or (0.0,)
 
 
-def _fit(records: list[Record], form: str) -> ConstantModel | RidgeLinearModel:
+def _fit(records: list[Record], form: str,
+         names: tuple | None = None) -> ConstantModel | RidgeLinearModel:
     try:
         model = (
             ConstantModel.fit(records)
@@ -136,7 +145,7 @@ def _fit(records: list[Record], form: str) -> ConstantModel | RidgeLinearModel:
         )
     except OverflowError as exc:
         raise ValueError("model inputs exceed supported numeric range") from exc
-    _model_from_params(_model_params(model), form)
+    _model_from_params(_model_params(model), form, names)
     return model
 
 
@@ -147,11 +156,12 @@ def _model_params(model: ConstantModel | RidgeLinearModel) -> dict:
     }
 
 
-def _model_from_params(params: object, form: str) -> ConstantModel | RidgeLinearModel:
+def _model_from_params(params: object, form: str,
+                       names: tuple | None = None) -> ConstantModel | RidgeLinearModel:
     params = _mapping(params, "model")
     if form == "constant":
         return ConstantModel(_number(_required(params, "value"), "value", nonnegative=False))
-    width = len(_FEATURES[form])
+    width = len(_FEATURES[form] if names is None else names)
     vectors = {}
     for name in ("coefficients", "means", "scales", "active"):
         value = _required(params, name)
@@ -190,11 +200,16 @@ def _predict(model: ConstantModel | RidgeLinearModel, features: tuple) -> float:
     return max(0.0, value)
 
 
-def _errors(rows: list[dict], predictions: dict[str, float]) -> dict:
+def _target(row: dict, target: str) -> float:
+    return row[target] if target == "rated_cost_usd" else row["usage"][target]
+
+
+def _errors(rows: list[dict], predictions: dict[str, float],
+            target: str = "rated_cost_usd") -> dict:
     projects = {}
     residuals = []
     for row in rows:
-        residual = row["rated_cost_usd"] - predictions[row["call_id"]]
+        residual = _target(row, target) - predictions[row["call_id"]]
         _number(residual, "residual", nonnegative=False)
         residuals.append(residual)
         projects.setdefault(row["project_id"], []).append(abs(residual))
@@ -228,21 +243,28 @@ def fit_models(rows: list[dict]) -> dict:
     Complete usage requires input_tokens, output_tokens, total_tokens,
     cached_tokens, and reasoning_tokens, including explicit measured zeros.
     """
+    return _fit_target_models(rows)
+
+
+def _fit_target_models(rows: list[dict], *, target: str = "rated_cost_usd",
+                       project_level: bool = False) -> dict:
     rows, excluded = _completed_rows(rows, training=True)
     projects = sorted({row["project_id"] for row in rows})
     if len(projects) < 3:
         raise ValueError("at least 3 completed training projects are required")
-    values = [_quote_features(row["quote"]) for row in rows]
+    feature_sets = _PROJECT_FEATURES if project_level else _FEATURES
+    encoder = _project_quote_features if project_level else _quote_features
+    values = [encoder(row["quote"]) for row in rows]
     forms = {}
-    for form in _FEATURES:
+    for form, names in feature_sets.items():
         records = [
-            Record(_features(features, form), row["rated_cost_usd"], row["project_id"])
+            Record(_features(features, form, names), _target(row, target), row["project_id"])
             for row, features in zip(rows, values)
         ]
         predictions = {}
         folds = []
         for train, validation in grouped_kfold(records, n_splits=len(projects), seed=0):
-            model = _fit([records[i] for i in train], form)
+            model = _fit([records[i] for i in train], form, names)
             for i in validation:
                 predictions[rows[i]["call_id"]] = _predict(model, records[i].features)
             folds.append({
@@ -250,10 +272,10 @@ def fit_models(rows: list[dict]) -> dict:
                 "training_project_ids": sorted({rows[i]["project_id"] for i in train}),
                 "validation_call_ids": [rows[i]["call_id"] for i in validation],
             })
-        metrics = _errors(rows, predictions)
+        metrics = _errors(rows, predictions, target)
         forms[form] = {
-            "features": list(_FEATURES[form]),
-            "model": _model_params(_fit(records, form)),
+            "features": list(names),
+            "model": _model_params(_fit(records, form, names)),
             "cv_mae": metrics["mae"],
             "per_project_mae": metrics["per_project_mae"],
             "cv_predictions": dict(sorted(predictions.items())),
@@ -261,7 +283,7 @@ def fit_models(rows: list[dict]) -> dict:
             "residual_summary": metrics["residual_summary"],
         }
     selected = min(forms, key=lambda form: forms[form]["cv_mae"])
-    return {
+    artifact = {
         "schema_version": _SCHEMA_VERSION,
         "selected_form": selected,
         "training_project_ids": projects,
@@ -278,13 +300,26 @@ def fit_models(rows: list[dict]) -> dict:
         "cv_mae": {form: result["cv_mae"] for form, result in forms.items()},
         "cv_method": "leave_one_project_out",
         "selection_metric": "equal_project_weight_mae_usd",
-        "tie_break_order": list(_FEATURES),
+        "tie_break_order": list(feature_sets),
         "ridge_alpha": _ALPHA,
         "prediction_floor_usd": 0.0,
         "residual_summary": forms[selected]["residual_summary"],
         "calibrated_interval": None,
         "calibration_status": _CALIBRATION_STATUS,
     }
+    if project_level:
+        artifact.update(
+            schema_version=_PROJECT_SCHEMA,
+            target=target,
+            observation_unit="complete_project_arm_replicate",
+            selection_metric=f"equal_project_weight_mae_{target}",
+            prediction_floor=artifact.pop("prediction_floor_usd"),
+        )
+        artifact["feature_definitions"].update({
+            "planned_calls": "Number of declared requests, not realized tool or retry counts.",
+            "max_operations_per_call": "Largest declared batch of independent scoping operations.",
+        })
+    return artifact
 
 
 def predict_cost(artifact: dict, quote: dict, form: str | None = None) -> float:
@@ -353,4 +388,177 @@ def evaluate_predictions(rows: list[dict], predictions: list[dict]) -> dict:
         "metric": "equal_project_weight_mae_usd",
         "forms": scores,
         "mae": {form: metrics["mae"] for form, metrics in scores.items()},
+    }
+
+
+def _project_quote_features(quote: dict) -> dict:
+    values = _quote_features(quote)
+    if set(quote) != {
+        "context_bytes", "prompt_bytes", "planned_output_tokens", "counts",
+        "planned_calls", "max_operations_per_call",
+    }:
+        raise ValueError("project quote must contain exactly the declared quote-time fields")
+    counts = quote["counts"]
+    if not (counts["extract"] == counts["classify"] == counts["plan"] > 0
+            and counts["report"] == 1):
+        raise ValueError("project counts must cover all four scoping operations exactly once")
+    for name in ("planned_calls", "max_operations_per_call"):
+        values[name] = _count(quote[name], name)
+        if not 1 <= values[name] <= 4:
+            raise ValueError(f"{name} must be between 1 and 4")
+    calls, batch = values["planned_calls"], values["max_operations_per_call"]
+    if not math.ceil(4 / calls) <= batch <= 5 - calls:
+        raise ValueError("project call layout cannot cover four independent operations")
+    return values
+
+
+def _runtime_contract(runtime: dict) -> dict:
+    runtime = _mapping(runtime, "runtime")
+    if not runtime or any(not isinstance(key, str) or not key for key in runtime):
+        raise ValueError("runtime must be a nonempty JSON object with named settings")
+    return json.loads(canonical_json(runtime))
+
+
+def fit_project_models(rows: list[dict], runtime: dict) -> dict:
+    """Train whole-scoping-project predictors without changing the call models.
+
+    Uses only training project totals. Shared-template CV is exploratory;
+    it is not an independent calibration set. Runtime settings are a frozen
+    compatibility contract, not learned effects without measured variation.
+    """
+    runtime = _runtime_contract(runtime)
+    rows, excluded = _completed_rows(rows, training=True)
+    if excluded:
+        raise ValueError("project training requires complete metered executions")
+    values = [_project_quote_features(row["quote"]) for row in rows]
+    channels = {
+        target: _fit_target_models(rows, target=target, project_level=True)
+        for target in _PROJECT_TARGETS
+    }
+    return {
+        "schema_version": _PROJECT_SCHEMA,
+        "scope": "public_request_scoping_not_full_customer_delivery",
+        "runtime": runtime,
+        "training_project_ids": channels["rated_cost_usd"]["training_project_ids"],
+        "training_observation_ids": [row["call_id"] for row in rows],
+        "channels": channels,
+        "support": {
+            "method": "training_only_marginal_ranges_and_observed_layouts",
+            "feature_ranges": {
+                name: [min(value[name] for value in values),
+                       max(value[name] for value in values)]
+                for name in values[0]
+            },
+            "layouts": sorted({(value["planned_calls"], value["max_operations_per_call"])
+                               for value in values}),
+            "interpretation": "Within marginal ranges does not establish joint or domain support.",
+        },
+        "calibrated_interval": None,
+        "upper_budget_bound": None,
+        "calibration_status": _CALIBRATION_STATUS,
+        "calibration_project_count": 0,
+        "cost_definition": "Direct regression of recorded retail-rate API cost, not invoice cost.",
+        "limitations": [
+            "Tokens and cost are separately selected regressions; cost is not repriced token predictions.",
+            "All observed failures of automatic quality checks retain their incurred cost.",
+            "No tools, clarification loops, retries, new model versions, or full delivery were measured.",
+            "Only extract, classify, plan, report were executed; broader proposed bricks are untrained.",
+            "No per-brick causal cost or independent coefficient identification is established.",
+        ],
+    }
+
+
+def _project_prediction(channel: dict, quote: dict, form: str | None = None) -> float:
+    channel = _mapping(channel, "channel")
+    if channel.get("schema_version") != _PROJECT_SCHEMA:
+        raise ValueError("unsupported project channel schema_version")
+    form = channel["selected_form"] if form is None else form
+    if form not in _PROJECT_FEATURES:
+        raise ValueError("unknown project model form")
+    forms = _mapping(_required(channel, "forms"), "forms")
+    if set(forms) != set(_PROJECT_FEATURES):
+        raise ValueError("project channel must contain all five model forms")
+    result = _mapping(forms[form], "form")
+    names = _PROJECT_FEATURES[form]
+    if result["features"] != list(names):
+        raise ValueError("project model features do not match form")
+    model = _model_from_params(result["model"], form, names)
+    return _predict(model, _features(_project_quote_features(quote), form, names))
+
+
+def forecast_project(artifact: dict, quote: dict, runtime: dict) -> dict:
+    """Reload a project forecast; abstain on incompatible execution settings."""
+    artifact = _mapping(artifact, "artifact")
+    if artifact.get("schema_version") != _PROJECT_SCHEMA:
+        raise ValueError("unsupported project artifact schema_version")
+    values = _project_quote_features(quote)
+    runtime = _runtime_contract(runtime)
+    channels = _mapping(_required(artifact, "channels"), "channels")
+    if set(channels) != set(_PROJECT_TARGETS):
+        raise ValueError("project artifact must contain all three target channels")
+    support = _mapping(_required(artifact, "support"), "support")
+    ranges = _mapping(_required(support, "feature_ranges"), "feature_ranges")
+    if set(ranges) != set(values):
+        raise ValueError("support feature ranges must match project features")
+    reasons = []
+    for name, value in values.items():
+        bounds = ranges[name]
+        if not isinstance(bounds, list) or len(bounds) != 2:
+            raise ValueError("support ranges must contain two numeric bounds")
+        lower, upper = (_number(bound, name) for bound in bounds)
+        if lower > upper:
+            raise ValueError("support lower bound exceeds upper bound")
+        if not lower <= value <= upper:
+            reasons.append(f"outside_training_range:{name}")
+    layout = [values["planned_calls"], values["max_operations_per_call"]]
+    if layout not in [list(item) for item in support["layouts"]]:
+        reasons.append("unmeasured_call_layout")
+    result = {
+        "point_estimate": None,
+        "support": {
+            "status": "extrapolation" if reasons else "within_observed_ranges",
+            "reasons": reasons,
+        },
+        "calibrated_interval": None,
+        "upper_budget_bound": None,
+        "calibration_status": _CALIBRATION_STATUS,
+        "scope": "public_request_scoping_not_full_customer_delivery",
+    }
+    if canonical_json(runtime) != canonical_json(_runtime_contract(artifact["runtime"])):
+        result["support"] = {"status": "unsupported", "reasons": ["runtime_contract_mismatch"]}
+        return result
+    point = {target: _project_prediction(channels[target], quote) for target in _PROJECT_TARGETS}
+    point["total_tokens"] = point["input_tokens"] + point["output_tokens"]
+    result["point_estimate"] = point
+    return result
+
+
+def evaluate_project_models(artifact: dict, rows: list[dict]) -> dict:
+    """Evaluate fixed project models without selecting on historical holdout labels."""
+    rows, excluded = _completed_rows(rows, training=False)
+    if excluded or any(row["split"] != "holdout" for row in rows):
+        raise ValueError("project evaluation requires complete holdout observations")
+    if set(artifact["training_project_ids"]) & {row["project_id"] for row in rows}:
+        raise ValueError("training and evaluation project groups must be disjoint")
+    scores = {}
+    for target in _PROJECT_TARGETS:
+        channel = artifact["channels"][target]
+        scores[target] = {}
+        for form in _PROJECT_FEATURES:
+            predictions = {
+                row["call_id"]: _project_prediction(channel, row["quote"], form) for row in rows
+            }
+            metrics = _errors(rows, predictions, target)
+            scores[target][form] = {
+                "mae": metrics["mae"], "per_project_mae": metrics["per_project_mae"],
+            }
+    return {
+        "method": "historical_holdout_retrospective_not_new_sealed_test",
+        "n_observations": len(rows),
+        "n_projects": len({row["project_id"] for row in rows}),
+        "selected_forms": {target: artifact["channels"][target]["selected_form"]
+                           for target in _PROJECT_TARGETS},
+        "scores": scores,
+        "calibrated_interval": None,
+        "upper_budget_bound": None,
     }

@@ -1,0 +1,162 @@
+{
+  "status": "trained_exploratory",
+  "source_run": "20260914_customer_scoping_v2",
+  "measured_calls": 60,
+  "project_observations": 24,
+  "training_projects": 4,
+  "holdout_projects": 2,
+  "training_observations": 16,
+  "holdout_observations": 8,
+  "selected_forms": {
+    "input_tokens": "workflow",
+    "output_tokens": "lego",
+    "rated_cost_usd": "workflow"
+  },
+  "holdout": {
+    "method": "historical_holdout_retrospective_not_new_sealed_test",
+    "n_observations": 8,
+    "n_projects": 2,
+    "selected_forms": {
+      "input_tokens": "workflow",
+      "output_tokens": "lego",
+      "rated_cost_usd": "workflow"
+    },
+    "scores": {
+      "input_tokens": {
+        "constant": {
+          "mae": 795.0,
+          "per_project_mae": {
+            "a4l-security-assessment": 814.5,
+            "handmade-arcade-strategic-plan": 775.5
+          }
+        },
+        "size": {
+          "mae": 315.4129520573887,
+          "per_project_mae": {
+            "a4l-security-assessment": 323.56788210605805,
+            "handmade-arcade-strategic-plan": 307.2580220087193
+          }
+        },
+        "size+units": {
+          "mae": 316.9653560144601,
+          "per_project_mae": {
+            "a4l-security-assessment": 325.15700959759783,
+            "handmade-arcade-strategic-plan": 308.7737024313223
+          }
+        },
+        "lego": {
+          "mae": 317.50256320610697,
+          "per_project_mae": {
+            "a4l-security-assessment": 325.70692491635896,
+            "handmade-arcade-strategic-plan": 309.298201495855
+          }
+        },
+        "workflow": {
+          "mae": 186.84837170795268,
+          "per_project_mae": {
+            "a4l-security-assessment": 201.2021424121105,
+            "handmade-arcade-strategic-plan": 172.49460100379486
+          }
+        }
+      },
+      "output_tokens": {
+        "constant": {
+          "mae": 157.625,
+          "per_project_mae": {
+            "a4l-security-assessment": 164.25,
+            "handmade-arcade-strategic-plan": 151.0
+          }
+        },
+        "size": {
+          "mae": 155.34752083393855,
+          "per_project_mae": {
+            "a4l-security-assessment": 161.35045541837775,
+            "handmade-arcade-strategic-plan": 149.34458624949934
+          }
+        },
+        "size+units": {
+          "mae": 76.21225682338479,
+          "per_project_mae": {
+            "a4l-security-assessment": 82.40882026453352,
+            "handmade-arcade-strategic-plan": 70.01569338223607
+          }
+        },
+        "lego": {
+          "mae": 48.827610742254336,
+          "per_project_mae": {
+            "a4l-security-assessment": 55.09117917515209,
+            "handmade-arcade-strategic-plan": 42.56404230935658
+          }
+        },
+        "workflow": {
+          "mae": 49.279597985763644,
+          "per_project_mae": {
+            "a4l-security-assessment": 55.74803807468754,
+            "handmade-arcade-strategic-plan": 42.811157896839745
+          }
+        }
+      },
+      "rated_cost_usd": {
+        "constant": {
+          "mae": 0.0027128125,
+          "per_project_mae": {
+            "a4l-security-assessment": 0.0028934375,
+            "handmade-arcade-strategic-plan": 0.0025321875
+          }
+        },
+        "size": {
+          "mae": 0.002505583301887886,
+          "per_project_mae": {
+            "a4l-security-assessment": 0.0026296061958572623,
+            "handmade-arcade-strategic-plan": 0.002381560407918509
+          }
+        },
+        "size+units": {
+          "mae": 0.0012560178943188925,
+          "per_project_mae": {
+            "a4l-security-assessment": 0.0013830982358658643,
+            "handmade-arcade-strategic-plan": 0.0011289375527719207
+          }
+        },
+        "lego": {
+          "mae": 0.0009583653397235725,
+          "per_project_mae": {
+            "a4l-security-assessment": 0.0011707510332858526,
+            "handmade-arcade-strategic-plan": 0.0007459796461612924
+          }
+        },
+        "workflow": {
+          "mae": 0.000886915729293822,
+          "per_project_mae": {
+            "a4l-security-assessment": 0.0010437497085616712,
+            "handmade-arcade-strategic-plan": 0.0007300817500259728
+          }
+        }
+      }
+    },
+    "calibrated_interval": null,
+    "upper_budget_bound": null
+  },
+  "spent_usd": 0,
+  "scope": "public_request_scoping_not_full_customer_delivery",
+  "calibration_status": "insufficient_independent_groups_shared_template",
+  "calibrated_interval": null,
+  "upper_budget_bound": null,
+  "total_recorded_rated_cost_usd": 0.37898,
+  "contract_passed_project_observations": 17,
+  "limitations": [
+    "Scoping drafts only, not execution of customer engagements.",
+    "Hand-annotated deliverable units are not known full-project workloads.",
+    "Shared template prevents a source/template-independent confirmatory claim.",
+    "Four train and two outcome-holdout projects cannot calibrate useful tails.",
+    "Automatic contract checks do not establish semantic quality of free text.",
+    "Rated costs use published prices; invoice reconciliation is outstanding.",
+    "Tokens and cost are separately selected regressions; cost is not repriced token predictions.",
+    "All observed failures of automatic quality checks retain their incurred cost.",
+    "No tools, clarification loops, retries, new model versions, or full delivery were measured.",
+    "Only extract, classify, plan, report were executed; broader proposed bricks are untrained.",
+    "No per-brick causal cost or independent coefficient identification is established.",
+    "Historical holdout results were previously examined; this is retrospective evaluation.",
+    "Training CV chooses the form; its winning CV error is not an unbiased new-test estimate."
+  ]
+}

@@ -7,12 +7,15 @@ costs and conservative spending reservations are retained separately.
 
 from __future__ import annotations
 
+import ast
+import copy
 import hashlib
 import json
 import math
 import random
 import shutil
 import subprocess
+import time
 from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -24,7 +27,7 @@ from .budget import HardBudget, SafetyRateCard
 from .customer_decomposition import (
     SCOPING_BRICKS, arm_batches, batch_candidates, build_prompt, canonical_json,
     check_output, compile_plan, content_hash, delivery_decomposition,
-    load_catalog, load_template, quote_features,
+    load_catalog, load_template, quote_features, validate_project,
 )
 from .economics import Pricing
 from .foundry_count import FoundryCountError, FoundryInputTokenCounter
@@ -42,7 +45,15 @@ def _write_json(path: Path, value: Any) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n",
                          encoding="utf-8")
-    temporary.replace(path)
+    for attempt in range(5):
+        try:
+            temporary.replace(path)
+            return
+        except PermissionError:
+            if attempt == 4:
+                raise
+            # Windows scanners can briefly lock snapshots; never retry an API request.
+            time.sleep(0.05 * (attempt + 1))
 
 
 def _require_measured_channels(raw: bytes) -> None:
@@ -67,6 +78,10 @@ def _require_measured_channels(raw: bytes) -> None:
 
 def load_config(path: Path) -> dict:
     config = json.loads(path.read_text(encoding="utf-8"))
+    return _validate_config(config)
+
+
+def _validate_config(config: dict) -> dict:
     if config.get("schema_version") != "customer-pilot-v1":
         raise ValueError("unsupported pilot configuration")
     if config.get("endpoint") != "https://foundary-tzuc06.openai.azure.com/openai/v1":
@@ -147,6 +162,11 @@ def prepare_campaign(experiment_dir: Path) -> dict:
     if (len(projects) != 6
             or sum(p["split"] == "train" for p in projects) != 4):
         raise ValueError("v1 requires four training and two outcome-holdout projects")
+    return _prepare_campaign(catalog, template, config)
+
+
+def _prepare_campaign(catalog: dict, template: dict, config: dict) -> dict:
+    projects = catalog["projects"]
     plans = []
     calls = []
     rng = random.Random(config["seed"])
@@ -313,6 +333,9 @@ def execute_campaign(
     A failed or interrupted campaign cannot be restarted in this directory.
     Unknown charges keep their full reservation. There are no automatic retries.
     """
+    prospective = campaign.get("prospective")
+    if prospective is not None:
+        _validate_prospective(campaign, run_dir)
     run_dir.mkdir(parents=True, exist_ok=False)
     config = campaign["config"]
     pricing = Pricing(**config["pricing"])
@@ -331,6 +354,14 @@ def execute_campaign(
     })
     _write_json(run_dir / "budget.json", budget.snapshot())
     _write_json(run_dir / "state.json", {"status": "preflight", "at": _now()})
+    if prospective is not None:
+        _write_json(run_dir / "models.json", prospective["model"])
+        predictions = prospective["predictions"]
+        _write_json(run_dir / "predictions.json", {
+            "frozen_at": _now(), "model_sha256": prospective["model_sha256"],
+            "catalog_sha256": campaign["catalog_sha256"], "predictions": predictions,
+        })
+        _prospective_summary(campaign, rows, run_dir, "preflight")
     ledger = UsageLedger()
     try:
         # Authenticate before reserving any generation spend. Tokens stay in memory.
@@ -380,6 +411,16 @@ def execute_campaign(
 
             def audited_transport(url: str, headers: dict, body: bytes,
                                   timeout: float) -> tuple[int, bytes]:
+                if prospective is not None:
+                    expected_payload = {
+                        "model": config["deployment"], "input": call["prompt"],
+                        "max_output_tokens": output_cap,
+                        "reasoning": {"effort": config["reasoning_effort"]},
+                        "text": {"verbosity": config["text_verbosity"]},
+                    }
+                    if (json.loads(body) != expected_payload
+                            or url != config["endpoint"] + "/responses"):
+                        raise ValueError("request differs from frozen no-tool payload")
                 status, raw = transport(url, headers, body, timeout)
                 # Never persist headers: they contain the bearer token.
                 (run_dir / f"{call_id}.request.json").write_bytes(body)
@@ -429,6 +470,11 @@ def execute_campaign(
                 _write_json(run_dir / "records.json", rows)
                 raise RuntimeError("provider usage exceeded reservation bounds")
         _audit_deployment(config, run_dir, "after")
+        if prospective is not None:
+            summary = _prospective_summary(campaign, rows, run_dir, "completed")
+            _write_json(run_dir / "analysis.json", summary)
+            _write_json(run_dir / "state.json", {"status": summary["status"], "at": _now()})
+            return summary
         from .customer_models import evaluate_predictions
 
         if predictions is None:
@@ -450,9 +496,493 @@ def execute_campaign(
         _write_json(run_dir / "analysis.json", summary)
         _write_json(run_dir / "state.json", {"status": "complete_exploratory", "at": _now()})
         return summary
-    except (FoundryDispatchError, FoundryCountError, OSError, ValueError, RuntimeError) as exc:
+    except (FoundryDispatchError, FoundryCountError, OSError, ValueError, RuntimeError,
+            KeyboardInterrupt) as exc:
+        if prospective is not None:
+            _prospective_summary(campaign, rows, run_dir, "halted", error=str(exc))
         _write_json(run_dir / "state.json", {
             "status": "halted", "error_type": type(exc).__name__, "error": str(exc),
             "at": _now(), "no_automatic_retry": True,
         })
         raise
+
+
+def _project_quote(calls: list[dict]) -> dict:
+    quotes = [call["quote"] for call in calls]
+    return {
+        "context_bytes": quotes[0]["context_bytes"],
+        "prompt_bytes": sum(value["prompt_bytes"] for value in quotes),
+        "planned_output_tokens": sum(value["planned_output_tokens"] for value in quotes),
+        "counts": {name: sum(value["counts"][name] for value in quotes)
+                   for name in SCOPING_BRICKS},
+        "planned_calls": len(calls),
+        "max_operations_per_call": max(len(call["operations"]) for call in calls),
+    }
+
+
+def _runtime_compatibility(model: dict, campaign: dict) -> dict:
+    """Audit unchanged generation components without claiming whole-runtime identity."""
+    original = model["runtime"]
+    hashes = {
+        name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
+        for name in original["execution_code_sha256"]
+    }
+    critical = ("customer_decomposition.py", "foundry_dispatch.py", "foundry_count.py",
+                "budget.py", "economics.py", "robust.py")
+    matches = {name: hashes.get(name) == original["execution_code_sha256"].get(name)
+               for name in critical}
+    if not all(matches.values()):
+        raise ValueError("critical execution component differs from frozen runtime")
+    function_matches = {}
+    verification_note = "Historical controller source did not match the saved execution hash."
+    source = Path(__file__)
+    try:
+        historical = subprocess.run(
+            ["git", "show", "HEAD:token_yield/customer_pilot.py"],
+            cwd=source.parents[1], capture_output=True, check=True, timeout=10,
+        ).stdout
+        # Git stores LF; the execution snapshot may have been checked out as CRLF.
+        variants = (historical, historical.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
+        expected = original["execution_code_sha256"]["customer_pilot.py"]
+        baseline = next((raw for raw in variants
+                         if hashlib.sha256(raw).hexdigest() == expected), None)
+        if baseline is not None:
+            def functions(raw: bytes) -> dict:
+                return {node.name: ast.dump(node, include_attributes=False)
+                        for node in ast.parse(raw).body if isinstance(node, ast.FunctionDef)}
+
+            before, after = functions(baseline), functions(source.read_bytes())
+            function_matches = {name: before.get(name) == after.get(name) for name in (
+                "_dispatcher", "_default_transport", "_require_measured_channels",
+                "_audit_deployment", "_deployment_probe",
+            )}
+            if not all(function_matches.values()):
+                raise ValueError("critical pilot dispatch function differs from frozen runtime")
+            verification_note = "Critical controller functions match the historical source."
+    except (OSError, subprocess.SubprocessError) as exc:
+        verification_note = f"Historical controller verification unavailable: {exc}"
+    config = campaign["config"]
+    actual_runtime = {
+        "deployment": config["deployment"], "deployment_version": config["deployment_version"],
+        "reasoning_effort": config["reasoning_effort"], "text_verbosity": config["text_verbosity"],
+        "template_sha256": campaign["template_sha256"], "execution_code_sha256": hashes,
+        "execution_policy": config["authorization"],
+        "max_input_tokens_per_call": config["max_input_tokens_per_call"],
+        "pricing": config["pricing"], "pricing_source": config["pricing_source"],
+    }
+    return {
+        "status": "controller_revision_transfer_evaluation",
+        "exact_runtime_identity": actual_runtime == original,
+        "critical_file_matches": matches, "critical_controller_function_matches": function_matches,
+        "historical_controller_verified": bool(function_matches),
+        "historical_controller_verification_note": verification_note,
+        "controller_code_sha256": hashes, "actual_runtime": actual_runtime,
+        "scope": "Unchanged compiler/dispatcher/safety components; revised evaluation controller "
+                 "and approved input catalog. This is not exact original-runtime identity.",
+    }
+
+
+def _load_prospective_catalog(path: Path) -> tuple[dict, dict]:
+    """Keep approved research metadata outside the unchanged compiler input."""
+    catalog = json.loads(path.read_text(encoding="utf-8"))
+    metadata = {key: catalog.pop(key) for key in (
+        "scope", "selection_notes", "rejected_projects") if key in catalog}
+    notes = metadata.get("selection_notes", [])
+    if not isinstance(notes, list) or any(not isinstance(note, str) for note in notes):
+        raise ValueError("selection_notes must be a list of research caveats")
+    if (set(catalog) != {"schema_version", "verified_on", "projects"}
+            or catalog["schema_version"] != "customer-requests-v1"
+            or not isinstance(catalog["verified_on"], str)
+            or not catalog["verified_on"].strip()
+            or not isinstance(catalog["projects"], list)):
+        raise ValueError("unsupported prospective catalog fields or schema")
+    project_metadata, seen = {}, set()
+    for project in catalog["projects"]:
+        extra = {key: project.pop(key) for key in (
+            "compatibility", "source_sections") if key in project}
+        validate_project(project)
+        if project["id"] in seen:
+            raise ValueError("duplicate project id")
+        seen.add(project["id"])
+        if extra:
+            project_metadata[project["id"]] = extra
+    return catalog, {**metadata, "projects": project_metadata}
+
+
+def prepare_prospective_campaign(model_run: Path, catalog_path: Path) -> dict:
+    """Freeze all project/channel/form forecasts offline; never fit on new labels."""
+    from .customer_models import _project_prediction, forecast_project
+    from urllib.parse import urlsplit, urlunsplit
+
+    model_run, catalog_path = model_run.resolve(), catalog_path.resolve()
+    model_raw = (model_run / "models.json").read_bytes()
+    model = json.loads(model_raw)
+    if model.get("schema_version") != "customer-project-model-v1":
+        raise ValueError("test-model requires a frozen project model")
+    source_name = model["provenance"]["source_run"]
+    if Path(source_name).name != source_name:
+        raise ValueError("source run must be a sibling run name")
+    source_run = model_run.parent / source_name
+    protocol_raw = (source_run / "protocol.json").read_bytes()
+    if hashlib.sha256(protocol_raw).hexdigest() != model["provenance"]["source_file_sha256"]["protocol.json"]:
+        raise ValueError("source protocol hash mismatch")
+    source = json.loads(protocol_raw)
+    for section in ("catalog", "template", "config"):
+        if content_hash(source[section]) != source[f"{section}_sha256"]:
+            raise ValueError(f"source {section} hash mismatch")
+    config, template = copy.deepcopy(source["config"]), source["template"]
+    _validate_config(config)
+    runtime = model["runtime"]
+    if set(runtime) != {
+        "deployment", "deployment_version", "reasoning_effort", "text_verbosity",
+        "template_sha256", "execution_code_sha256", "execution_policy",
+        "max_input_tokens_per_call", "pricing", "pricing_source",
+    }:
+        raise ValueError("unknown frozen model runtime settings")
+    if (runtime["execution_code_sha256"] != source["code_sha256"]
+            or runtime["template_sha256"] != source["template_sha256"]
+            or runtime["execution_policy"] != config["authorization"]
+            or any(runtime[key] != config[key] for key in (
+                "deployment", "deployment_version", "reasoning_effort", "text_verbosity",
+                "max_input_tokens_per_call", "pricing", "pricing_source"))
+            or template["max_output_tokens_per_operation"] != 1600):
+        raise ValueError("model settings differ from frozen source execution")
+    if set(runtime["execution_code_sha256"]) != {
+        "customer_pilot.py", "customer_decomposition.py", "customer_models.py",
+        "robust.py", "foundry_dispatch.py", "foundry_count.py", "budget.py", "economics.py",
+    }:
+        raise ValueError("unknown execution components")
+    catalog, source_metadata = _load_prospective_catalog(catalog_path)
+    projects = catalog["projects"]
+    if not 4 <= len(projects) <= 6 or any(p["split"] != "holdout" for p in projects):
+        raise ValueError("prospective testing requires four to six all-holdout projects")
+
+    def normalized_url(url: str) -> str:
+        parts = urlsplit(url)
+        return urlunsplit((parts.scheme.lower(), parts.netloc.lower(),
+                           parts.path.rstrip("/"), parts.query, ""))
+
+    old_ids = {p["id"] for p in source["catalog"]["projects"]} | set(model["training_project_ids"])
+    old_urls = {normalized_url(p["source_url"]) for p in source["catalog"]["projects"]}
+    new_urls = [normalized_url(p["source_url"]) for p in projects]
+    if (old_ids & {p["id"] for p in projects} or old_urls & set(new_urls)
+            or len(set(new_urls)) != len(new_urls)):
+        raise ValueError("prospective projects require new, distinct IDs and source URLs")
+    config.update(cap_usd=10.0, stop_usd=9.5, prior_attempt={
+        "run": "separate_prospective_approval", "rated_cost_usd": 0.0,
+        "settled_safety_usd": 0.0, "active_reserved_usd": 0,
+    })
+    config["authorization"]["inputs"] = (
+        "Only this frozen prospective public-request catalog and the unchanged scoping template.")
+    _validate_config(config)
+    campaign = _prepare_campaign(catalog, template, config)
+    compatibility = _runtime_compatibility(model, campaign)
+    predictions = []
+    for project in projects:
+        for repeat in range(config["replicates"]):
+            for arm in ("split", "batched"):
+                calls = [call for call in campaign["calls"] if (
+                    call["project_id"], call["replicate"], call["arm"]
+                ) == (project["id"], repeat, arm)]
+                quote = _project_quote(calls)
+                actual = forecast_project(model, quote, compatibility["actual_runtime"])
+                conditional = forecast_project(model, quote, runtime)
+                support = actual["support"]
+                if support["status"] == "unsupported":
+                    support["reasons"] += conditional["support"]["reasons"]
+                predictions.append({
+                    "observation_id": f"{project['id']}-{repeat}-{arm}",
+                    "project_id": project["id"], "arm": arm, "replicate": repeat, "quote": quote,
+                    "predicted": conditional["point_estimate"],
+                    "predictions_by_form": {
+                        target: {form: _project_prediction(channel, quote, form)
+                                 for form in channel["forms"]}
+                        for target, channel in model["channels"].items()
+                    },
+                    "support": support,
+                    "prediction_basis": "conditional_original_runtime_transfer_forecast",
+                    "actual_runtime_forecast": actual,
+                })
+    campaign["limitations"] = [
+        item for item in campaign["limitations"]
+        if not item.startswith("Four train")
+    ] + model["limitations"] + [
+        "New source holdout, same shared scoping template; not full customer delivery.",
+        "Project IDs and buyer labels are not independent organizations. Requests from "
+        "the same buyer and a shared template can have correlated errors.",
+        "Legacy requirement brick tags describe proposed deliverables, not executed operations. "
+        "Only extract/classify/plan/report scoping projections are executed and evaluated.",
+        "Weights and selected forms remain frozen; no calibration or prediction intervals.",
+        "Controller/input-policy revisions prevent exact runtime identity; scores evaluate "
+        "conditional original-runtime forecasts as an explicitly labeled transfer test.",
+        "No source fetching, tools, retries, or paid generation occurs during preview.",
+    ] + source_metadata.get("selection_notes", [])
+    campaign["prospective"] = {
+        "source_model_run": str(model_run), "source_measured_run": str(source_run),
+        "catalog_path": str(catalog_path),
+        "source_catalog_metadata": source_metadata,
+        "model_sha256": hashlib.sha256(model_raw).hexdigest(),
+        "catalog_file_sha256": hashlib.sha256(catalog_path.read_bytes()).hexdigest(),
+        "model": model, "compatibility": compatibility, "predictions": predictions,
+        "selected_forms": {target: channel["selected_form"]
+                           for target, channel in model["channels"].items()},
+    }
+    campaign["prospective"]["campaign_sha256"] = content_hash(campaign)
+    return campaign
+
+
+def _validate_prospective(campaign: dict, run_dir: Path) -> None:
+    prospective = campaign["prospective"]
+    for root in ("source_model_run", "source_measured_run"):
+        source = Path(prospective[root]).resolve()
+        if run_dir.resolve() == source or source in run_dir.resolve().parents:
+            raise ValueError("prospective output must be outside frozen source runs")
+    frozen = copy.deepcopy(campaign)
+    expected = frozen["prospective"].pop("campaign_sha256")
+    if content_hash(frozen) != expected:
+        raise ValueError("prospective campaign changed after prediction freeze")
+    current = prepare_prospective_campaign(
+        Path(prospective["source_model_run"]), Path(prospective["catalog_path"]))
+    if canonical_json(current) != canonical_json(campaign):
+        raise ValueError("frozen model, catalog, or execution code changed after preview")
+
+
+def _prospective_summary(campaign: dict, rows: list[dict], run_dir: Path,
+                         status: str, *, error: str | None = None) -> dict:
+    from .customer_models import evaluate_project_models
+
+    frozen = campaign["prospective"]
+    observations, scores = [], {}
+    if status == "completed":
+        grouped = aggregate_project_rows(campaign, rows)
+        indexed = {row["call_id"]: row for row in grouped}
+        for prediction in frozen["predictions"]:
+            row = indexed[prediction["observation_id"]]
+            if row["quote"] != prediction["quote"]:
+                raise ValueError("observed quote differs from pre-execution prediction")
+            observations.append({
+                **prediction, "actual": {
+                    **{name: row["usage"][name] for name in (
+                        "input_tokens", "output_tokens", "total_tokens")},
+                    "rated_cost_usd": row["rated_cost_usd"],
+                }, "contract_passed": row["contract_passed"],
+            })
+        scores = evaluate_project_models(frozen["model"], grouped)["scores"]
+        _write_json(run_dir / "project_records.json", grouped)
+    summary = {
+        "status": status, "method": "prospective_frozen_model_transfer_evaluation",
+        "model_sha256": frozen["model_sha256"], "catalog_sha256": campaign["catalog_sha256"],
+        "catalog_file_sha256": frozen["catalog_file_sha256"],
+        "source_model_run": Path(frozen["source_model_run"]).name,
+        "n_projects": len(campaign["catalog"]["projects"]), "n_observations": len(observations),
+        "planned_observations": len(frozen["predictions"]),
+        "selected_forms": frozen["selected_forms"], "scores": scores, "observations": observations,
+        "totals": {
+            "rated_cost_usd": sum(row["rated_cost_usd"] or 0 for row in rows),
+            **{name: sum((row.get("usage") or {}).get(name, 0) for row in rows)
+               for name in ("input_tokens", "output_tokens")},
+        },
+        "runtime_compatibility": frozen["compatibility"],
+        "limitations": campaign["limitations"], "error": error,
+        "spend_scope": "Metered attempts only; budget.json retains uncertain reservations.",
+    }
+    _write_json(run_dir / "prospective_evaluation.json", summary)
+    return summary
+
+
+def aggregate_project_rows(campaign: dict, rows: list[dict]) -> list[dict]:
+    """Combine complete declared executions, never partial or successful-only costs."""
+    from .customer_models import _completed_rows
+
+    if campaign.get("schema_version") != "customer-campaign-v1":
+        raise ValueError("unsupported customer campaign schema")
+    for section in ("catalog", "template", "config"):
+        if content_hash(campaign[section]) != campaign[f"{section}_sha256"]:
+            raise ValueError(f"frozen {section} hash mismatch")
+    completed, excluded = _completed_rows(rows, training=False)
+    if excluded:
+        raise ValueError(f"incomplete project executions cannot be training targets: {excluded}")
+    actual = {row["call_id"]: row for row in completed}
+    declared = {call["call_id"]: call for call in campaign["calls"]}
+    if len(declared) != len(campaign["calls"]) or set(actual) != set(declared):
+        raise ValueError("measured call IDs must exactly match the frozen campaign")
+    projects = {project["id"]: project for project in campaign["catalog"]["projects"]}
+    groups: dict[tuple, list[dict]] = {}
+    pricing = Pricing(**campaign["config"]["pricing"])
+    for call_id, call in declared.items():
+        project = projects[call["project_id"]]
+        if type(call["replicate"]) is not int or call["replicate"] < 0:
+            raise ValueError("replicate must be a nonnegative integer")
+        batches = arm_batches(call["arm"])
+        operations = tuple(call["operations"])
+        if operations not in batches:
+            raise ValueError("operations differ from declared arm")
+        expected_id = f"{project['id']}-{call['replicate']}-{call['arm']}-{batches.index(operations)}"
+        if call_id != expected_id or call["split"] != project["split"]:
+            raise ValueError("call identity or split differs from frozen project")
+        expected_quote = quote_features(project, campaign["template"], operations)
+        prompt = build_prompt(project, campaign["template"], operations)
+        if (canonical_json(call["quote"]) != canonical_json(expected_quote)
+                or call["prompt"] != prompt
+                or call["prompt_sha256"] != hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+                or call["plan_sha256"] != compile_plan(project, campaign["template"]).sha256):
+            raise ValueError("declared call differs from frozen quote, prompt, or plan")
+        row = actual[call_id]
+        if any(canonical_json(row.get(key)) != canonical_json(value)
+               for key, value in call.items()):
+            raise ValueError(f"measurement differs from frozen call: {call_id}")
+        if row.get("response_model") != campaign["config"]["expected_response_model"]:
+            raise ValueError("measured model differs from frozen runtime")
+        quality = row.get("quality", {}).get("contract_passed")
+        if type(quality) is not bool:
+            raise ValueError("measured contract_passed must be boolean")
+        usage = row["usage"]
+        rated = pricing.attempt_cost(
+            input_tokens=usage["input_tokens"], cached_input_tokens=usage["cached_tokens"],
+            output_tokens=usage["output_tokens"])
+        if not math.isclose(rated, row["rated_cost_usd"], rel_tol=1e-9, abs_tol=1e-12):
+            raise ValueError("recorded cost does not reconcile with usage and frozen rates")
+        if (usage["output_tokens"] > expected_quote["planned_output_tokens"]
+                or usage["input_tokens"] > campaign["config"]["max_input_tokens_per_call"]):
+            raise ValueError("measured usage exceeds declared execution limits")
+        key = (project["id"], call["arm"], call["replicate"])
+        groups.setdefault(key, []).append(call)
+    expected_groups = {
+        (project_id, arm, replicate) for project_id in projects
+        for arm in ("split", "batched")
+        for replicate in range(campaign["config"]["replicates"])
+    }
+    if set(groups) != expected_groups:
+        raise ValueError("campaign is missing complete project/arm/replicate groups")
+    result = []
+    for (project_id, arm, replicate), calls in sorted(groups.items()):
+        calls = sorted(calls, key=lambda call: call["call_id"])
+        if sorted(tuple(call["operations"]) for call in calls) != sorted(arm_batches(arm)):
+            raise ValueError("project group must execute every declared operation exactly once")
+        measurements = [actual[call["call_id"]] for call in calls]
+        project = projects[project_id]
+        quote = _project_quote(calls)
+        result.append({
+            "call_id": f"{project_id}-{replicate}-{arm}",
+            "project_id": project_id, "split": project["split"],
+            "arm": arm, "replicate": replicate, "status": "completed",
+            "source_url": project["source_url"], "quote": quote,
+            "source_call_ids": [call["call_id"] for call in calls],
+            "usage": {name: sum(row["usage"][name] for row in measurements)
+                      for name in ("input_tokens", "output_tokens", "total_tokens",
+                                   "cached_tokens", "reasoning_tokens")},
+            "rated_cost_usd": sum(row["rated_cost_usd"] for row in measurements),
+            "contract_passed": all(row["quality"]["contract_passed"] for row in measurements),
+            "human_quality_accepted": None,
+            "label_provenance": "provider_usage_and_price_derived_cost",
+        })
+    return result
+
+
+def _verify_training_responses(source_run: Path, campaign: dict, rows: list[dict]) -> dict:
+    hashes = {}
+    for row in rows:
+        call_id = row["call_id"]
+        request_path = source_run / f"{call_id}.request.json"
+        response_path = source_run / f"{call_id}.response.json"
+        request_raw, response_raw = request_path.read_bytes(), response_path.read_bytes()
+        _require_measured_channels(response_raw)
+        request, response = json.loads(request_raw), json.loads(response_raw)
+        if (request["input"] != row["prompt"]
+                or request["model"] != campaign["config"]["deployment"]
+                or request["max_output_tokens"] != row["quote"]["planned_output_tokens"]
+                or request.get("tools")
+                or request["reasoning"]["effort"] != campaign["config"]["reasoning_effort"]
+                or request["text"]["verbosity"] != campaign["config"]["text_verbosity"]):
+            raise ValueError(f"raw request differs from frozen execution: {call_id}")
+        usage = response["usage"]
+        observed = {
+            "input_tokens": usage["input_tokens"], "output_tokens": usage["output_tokens"],
+            "total_tokens": usage["total_tokens"],
+            "cached_tokens": usage["input_tokens_details"]["cached_tokens"],
+            "reasoning_tokens": usage["output_tokens_details"]["reasoning_tokens"],
+        }
+        if (canonical_json(observed) != canonical_json(row["usage"])
+                or response["model"] != row["response_model"]
+                or response["status"] != "completed"):
+            raise ValueError(f"raw response differs from recorded execution: {call_id}")
+        ledger = row["response_calls"]
+        if len(ledger) != 1:
+            raise ValueError("scoping execution must contain exactly one response per call")
+        for path, raw, field in (
+            (request_path, request_raw, "request_sha256"),
+            (response_path, response_raw, "response_sha256"),
+        ):
+            digest = hashlib.sha256(raw).hexdigest()
+            if digest != ledger[0][field]:
+                raise ValueError(f"response ledger hash mismatch: {path.name}")
+            hashes[path.name] = digest
+    return hashes
+
+
+def train_project_forecast(source_run: Path, run_dir: Path) -> dict:
+    """Train offline from existing measured calls, preserving all historical files."""
+    from .customer_models import evaluate_project_models, fit_project_models, forecast_project
+
+    source_run, run_dir = source_run.resolve(), run_dir.resolve()
+    if run_dir == source_run or source_run in run_dir.parents:
+        raise ValueError("training output must be outside the frozen source run")
+    if run_dir.exists():
+        raise FileExistsError(f"training output already exists: {run_dir}")
+    raw = {name: (source_run / name).read_bytes() for name in ("protocol.json", "records.json")}
+    campaign, measured = json.loads(raw["protocol.json"]), json.loads(raw["records.json"])
+    rows = aggregate_project_rows(campaign, measured)
+    hashes = _verify_training_responses(source_run, campaign, measured)
+    hashes.update({name: hashlib.sha256(value).hexdigest() for name, value in raw.items()})
+    config = campaign["config"]
+    runtime = {
+        "deployment": config["deployment"], "deployment_version": config["deployment_version"],
+        "reasoning_effort": config["reasoning_effort"], "text_verbosity": config["text_verbosity"],
+        "template_sha256": campaign["template_sha256"],
+        "execution_code_sha256": campaign["code_sha256"],
+        "execution_policy": config["authorization"],
+        "max_input_tokens_per_call": config["max_input_tokens_per_call"],
+        "pricing": config["pricing"], "pricing_source": config["pricing_source"],
+    }
+    training = [row for row in rows if row["split"] == "train"]
+    holdout = [row for row in rows if row["split"] == "holdout"]
+    models = fit_project_models(training, runtime)
+    models["provenance"] = {
+        "source_run": source_run.name, "source_file_sha256": hashes,
+        "catalog_sha256": campaign["catalog_sha256"],
+        "training_code_sha256": {
+            name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
+            for name in ("customer_models.py", "customer_pilot.py", "customer_decomposition.py",
+                         "robust.py", "economics.py")
+        },
+    }
+    predictions = [
+        {"observation_id": row["call_id"], "project_id": row["project_id"],
+         "split": row["split"], "arm": row["arm"],
+         "evaluation_role": "in_sample" if row["split"] == "train" else "historical_holdout",
+         **forecast_project(models, row["quote"], runtime)}
+        for row in rows
+    ]
+    evaluation = evaluate_project_models(models, holdout)
+    summary = {
+        "status": "trained_exploratory", "source_run": source_run.name,
+        "measured_calls": len(measured), "project_observations": len(rows),
+        "training_projects": len(models["training_project_ids"]),
+        "holdout_projects": evaluation["n_projects"],
+        "training_observations": len(training), "holdout_observations": len(holdout),
+        "selected_forms": evaluation["selected_forms"],
+        "holdout": evaluation, "spent_usd": 0,
+        "scope": models["scope"], "calibration_status": models["calibration_status"],
+        "calibrated_interval": None, "upper_budget_bound": None,
+        "total_recorded_rated_cost_usd": sum(row["rated_cost_usd"] for row in rows),
+        "contract_passed_project_observations": sum(row["contract_passed"] for row in rows),
+        "limitations": campaign["limitations"] + models["limitations"] + [
+            "Historical holdout results were previously examined; this is retrospective evaluation.",
+            "Training CV chooses the form; its winning CV error is not an unbiased new-test estimate.",
+        ],
+    }
+    run_dir.mkdir(parents=True, exist_ok=False)
+    for name, value in (("project_records.json", rows), ("models.json", models),
+                        ("predictions.json", predictions), ("analysis.json", summary)):
+        _write_json(run_dir / name, value)
+    return summary
