@@ -1,0 +1,81 @@
+{
+  "protocol_version": 1,
+  "status": "frozen-before-dispatch",
+  "runtime_stratum": "microsoft-foundry-direct-responses",
+  "deployment": "gpt-5-mini",
+  "reasoning_effort": "minimal",
+  "text_verbosity": "low",
+  "random_seed": 260826,
+  "session_ceiling": 30,
+  "campaign_session_ceiling": 120,
+  "blind_reserve_sessions": 24,
+  "pilot_allocation": {
+    "summarise": 9,
+    "transform": 9,
+    "fetch_snapshot_live": 6,
+    "null_drift_controls": 6
+  },
+  "budget": {
+    "currency": "USD",
+    "hard_cap": 200,
+    "operational_stop": 190,
+    "safety_input_per_million": 20,
+    "safety_output_per_million": 200,
+    "rate_status": "authorization safety rates, not provider billing quote",
+    "rule": "reserve worst-case spend before every request and stop before crossing"
+  },
+  "quality_policy": {
+    "usage_population": "all attempts",
+    "acceptance_population": "separate binary outcome",
+    "minimum_acceptance_per_shape": 0.8
+  },
+  "signal_gate": {
+    "telemetry_complete": true,
+    "minimum_effect_over_pooled_within_shape_mad": 3,
+    "summarise_and_transform_require_monotonic_medians": true,
+    "fetch_requires_planned_tool_and_model_call_branch": true,
+    "failed_mechanism_action": "drop; do not rescue by adding rows"
+  },
+  "model_gate": {
+    "grouping": "shape/source",
+    "minimum_grouped_cv_relative_gain_over_constant": 0.2,
+    "grouped_bootstrap_confidence": 0.95,
+    "confidence_interval_must_exclude_zero": true,
+    "tail_interval_levels": [0.9, 0.95],
+    "tail_coverage_tolerance": 0.1,
+    "autoencoder_status": "diagnostic-only"
+  },
+  "post_pilot": "stop and require approval before any expansion",
+  "order": [
+    {"sequence":1,"block":1,"position":1,"case_id":"fetch-2019-24499-snapshot"},
+    {"sequence":2,"block":1,"position":2,"case_id":"summarise-102400-r3"},
+    {"sequence":3,"block":1,"position":3,"case_id":"transform-8-r3"},
+    {"sequence":4,"block":1,"position":4,"case_id":"summarise-1024-r3"},
+    {"sequence":5,"block":1,"position":5,"case_id":"control-r1"},
+    {"sequence":6,"block":2,"position":1,"case_id":"transform-32-r2"},
+    {"sequence":7,"block":2,"position":2,"case_id":"control-r2"},
+    {"sequence":8,"block":2,"position":3,"case_id":"summarise-10240-r3"},
+    {"sequence":9,"block":2,"position":4,"case_id":"fetch-2024-06550-snapshot"},
+    {"sequence":10,"block":2,"position":5,"case_id":"transform-8-r1"},
+    {"sequence":11,"block":3,"position":1,"case_id":"summarise-10240-r1"},
+    {"sequence":12,"block":3,"position":2,"case_id":"control-r3"},
+    {"sequence":13,"block":3,"position":3,"case_id":"fetch-2025-01358-snapshot"},
+    {"sequence":14,"block":3,"position":4,"case_id":"transform-2-r2"},
+    {"sequence":15,"block":3,"position":5,"case_id":"summarise-10240-r2"},
+    {"sequence":16,"block":4,"position":1,"case_id":"transform-2-r1"},
+    {"sequence":17,"block":4,"position":2,"case_id":"control-r4"},
+    {"sequence":18,"block":4,"position":3,"case_id":"transform-8-r2"},
+    {"sequence":19,"block":4,"position":4,"case_id":"summarise-102400-r2"},
+    {"sequence":20,"block":4,"position":5,"case_id":"fetch-2025-01358-live"},
+    {"sequence":21,"block":5,"position":1,"case_id":"summarise-1024-r2"},
+    {"sequence":22,"block":5,"position":2,"case_id":"control-r5"},
+    {"sequence":23,"block":5,"position":3,"case_id":"fetch-2024-06550-live"},
+    {"sequence":24,"block":5,"position":4,"case_id":"summarise-102400-r1"},
+    {"sequence":25,"block":5,"position":5,"case_id":"transform-32-r3"},
+    {"sequence":26,"block":6,"position":1,"case_id":"transform-2-r3"},
+    {"sequence":27,"block":6,"position":2,"case_id":"summarise-1024-r1"},
+    {"sequence":28,"block":6,"position":3,"case_id":"control-r6"},
+    {"sequence":29,"block":6,"position":4,"case_id":"transform-32-r1"},
+    {"sequence":30,"block":6,"position":5,"case_id":"fetch-2019-24499-live"}
+  ]
+}

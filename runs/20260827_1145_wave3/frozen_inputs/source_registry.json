@@ -1,0 +1,43 @@
+{
+  "summary_sources": {
+    "sec-apple-2021-10k": {
+      "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019321000105/aapl-20210925.htm",
+      "snapshot_path": "snapshots/sec-apple-2021-10k.html",
+      "snapshot_sha256": "c174312fe1823b0c8aabf1638d6fa8c1783b53034986cdd572a8e88c3484779b",
+      "extract": {
+        "kind": "html_text_window",
+        "start": "The Company designs, manufactures and markets smartphones",
+        "required_phrases": ["smartphones", "services", "single or limited sources", "Asia"],
+        "max_chars": 9000
+      }
+    },
+    "ecfr-regulation-e": {
+      "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-12.xml?part=1005",
+      "snapshot_path": "snapshots/ecfr-title12-part1005.xml",
+      "snapshot_sha256": "0669a14f83f836f4086de21514f3bcd40041784e50c444b415f4d8e1909a10d0",
+      "extract": {
+        "kind": "xml_text_window",
+        "start": "PART 1005",
+        "required_phrases": ["Electronic Fund Transfers", "rights", "consumers", "remittance transfer"],
+        "max_chars": 9000
+      }
+    },
+    "openfda-silicea-label": {
+      "url": "https://api.fda.gov/drug/label.json?limit=1",
+      "snapshot_path": "snapshots/openfda-drug-label-1.json",
+      "snapshot_sha256": "7757f4cef4ac9f2b686191127bfd617dc3fa33b2aa49634d460225b73ffd0e76",
+      "extract": {
+        "kind": "json_full",
+        "required_phrases": ["SILICEA", "ORAL", "4 days", "not accepted medical evidence"],
+        "max_chars": 9000
+      }
+    }
+  },
+  "excluded_blind_source_families": [
+    "CISA KEV",
+    "MITRE ATT&CK",
+    "GS1",
+    "UN/CEFACT",
+    "EUR-Lex"
+  ]
+}
