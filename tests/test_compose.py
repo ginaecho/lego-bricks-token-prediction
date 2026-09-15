@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 
 from token_yield.compose import (
-    CompositionModel, Run, batching_saving, default_runs_path, load_runs,
-    mape, noise_floor, select_model,
+    CompositionModel, Run, batching_saving, default_runs_path, fit_form,
+    load_runs, excess_error_ratio, mape, noise_floor, select_model,
 )
 from token_yield.decompose import (
     Decomposition, decompose_prompt, explain, heuristic_decompose,
@@ -45,6 +45,23 @@ def test_order_covers_the_vocabulary_exactly():
 def test_categories_map_onto_the_maintenance_taxonomy():
     cats = {p.category for p in PRIMITIVES.values()}
     assert {"corrective", "adaptive", "perfective"} <= cats
+
+
+def test_expanded_bricks_have_mechanistic_size_drivers():
+    expected = {
+        "fetch": "external_calls",
+        "score": "alternatives_x_criteria",
+        "summarise": "input_bytes",
+        "monitor": "conditions_x_points",
+        "plan": "subtask_count",
+        "notify": "recipients_x_fields",
+        "approve": "gates_x_evidence",
+        "transform": "field_mappings",
+        "correlate": "records_x_keys_x_candidates",
+        "diagnose": "symptoms_x_evidence",
+        "provision": "nodes_x_edges_x_lifecycle_steps",
+    }
+    assert {slug: PRIMITIVES[slug].driver for slug in expected} == expected
 
 
 # ── composition algebra ──────────────────────────────────────────────────
@@ -128,6 +145,40 @@ def test_selection_beats_the_constant_model(model):
 
 def test_selected_model_predicts_inside_a_few_percent(model):
     assert model.loo_mape < 0.05
+
+
+def test_accuracy_reports_variable_work_not_only_the_large_intercept(model):
+    assert model.excess_loo_error > model.loo_mape
+    assert model.excess_skill_vs_constant > 0
+
+
+def test_tool_use_rivals_are_reported_but_cannot_win_pre_run_selection(model):
+    assert "diagnostic:bytes+tool-uses" in model.scores
+    assert not model.form.startswith("diagnostic:")
+
+
+def test_tool_use_rivals_are_omitted_when_measurement_is_unavailable(runs):
+    unavailable = [
+        Run(
+            run.label, run.notation, run.counts, run.context_bytes, run.arity,
+            run.tokens, None, run.held_out,
+        )
+        for run in runs
+    ]
+    model = select_model(unavailable)
+    assert not any(name.startswith("diagnostic:") for name in model.scores)
+
+
+def test_named_form_can_be_fitted_for_hypothesis_comparison(runs):
+    forced = fit_form(runs, "bytes+per-primitive")
+    assert forced.form == "bytes+per-primitive"
+    assert forced.predict({"review": 1}, 100) > 0
+    with pytest.raises(ValueError, match="pre-run"):
+        fit_form(runs, "diagnostic:bytes+tool-uses")
+
+
+def test_feature_names_align_one_to_one_with_coefficients(model):
+    assert len(model.feature_names) == len(model.coef)
 
 
 def test_context_bytes_earn_their_place(model):
@@ -286,6 +337,10 @@ def test_plain_english_cases_round_trip(model):
 
 def test_mape_is_symmetric_in_magnitude():
     assert mape([100.0], [110.0]) == pytest.approx(0.1)
+
+
+def test_excess_error_ratio_excludes_the_null_probe():
+    assert excess_error_ratio([100.0, 120.0], [999.0, 118.0], 100.0) == 0.1
 
 
 def test_model_equation_reads_as_an_equation(model):

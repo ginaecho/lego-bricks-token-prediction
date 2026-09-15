@@ -8,10 +8,8 @@ Why a fixed set at all
 ----------------------
 A cost model needs a unit of work. "One task" is not a unit — a task can be
 anything. What *is* reasonably stable across a business is the small vocabulary
-of things an agent actually does to a body of documents: read them, pull fields
-out of them, sort them, find things in them, check them against each other,
-write new material, correct what is wrong, test that it holds, and report on it.
-Those are the primitives here.
+of things an agent actually does: read, structure, decide, communicate, invoke
+services, and transform records. Those are the primitives here.
 
 They are not invented. Each one names a task type that enterprises already buy
 agents to do — invoice and claims intake, ticket triage, knowledge discovery,
@@ -119,13 +117,84 @@ PRIMITIVES: Dict[str, Primitive] = {
             "Turn source material into a written reference. Same shape as "
             "Validate, different product.",
         ),
+        Primitive(
+            "Fetch", "fetch", "adaptive", "external_calls",
+            "public-data integration and service orchestration",
+            "Invoke an allowlisted external service and ingest its response. "
+            "Unlike Retrieve, the content is not present before dispatch.",
+        ),
+        Primitive(
+            "Score", "score", "perfective", "alternatives_x_criteria",
+            "vendor selection, underwriting, prioritisation",
+            "Evaluate alternatives against explicit criteria and return a "
+            "ranked or scored decision artifact.",
+        ),
+        Primitive(
+            "Summarise", "summarise", "perfective", "input_bytes",
+            "knowledge management, regulatory and incident summaries",
+            "Compress existing material faithfully without imposing a "
+            "management-report schema.",
+        ),
+        Primitive(
+            "Monitor", "monitor", "preventive", "conditions_x_points",
+            "operations monitoring and event management",
+            "Evaluate observations against thresholds and emit structured "
+            "events without remediating them.",
+        ),
+        Primitive(
+            "Plan", "plan", "adaptive", "subtask_count",
+            "workflow design and case investigation",
+            "Decompose an objective into an ordered or parallel set of "
+            "subtasks; execution is outside this brick.",
+        ),
+        Primitive(
+            "Notify", "notify", "adaptive", "recipients_x_fields",
+            "incident response and customer communications",
+            "Produce a transmittable message with recipients, subject, and "
+            "body rather than unconstrained prose.",
+        ),
+        Primitive(
+            "Approve", "approve", "preventive", "gates_x_evidence",
+            "change enablement and controlled spending",
+            "Prepare a human decision checkpoint with the evidence required "
+            "to approve or reject a proposed action.",
+        ),
+        Primitive(
+            "Transform", "transform", "adaptive", "field_mappings",
+            "system migration and data interchange",
+            "Map a valid structured record from one declared schema to "
+            "another declared schema.",
+        ),
+        Primitive(
+            "Correlate", "correlate", "adaptive",
+            "records_x_keys_x_candidates",
+            "fraud operations, case linking, threat intelligence",
+            "Link records to the same case or transaction using declared keys "
+            "before resolving any disagreement.",
+        ),
+        Primitive(
+            "Diagnose", "diagnose", "corrective",
+            "symptoms_x_evidence",
+            "incident analysis, problem management, healthcare safety",
+            "Infer a root cause and contributing factors from bounded evidence "
+            "without performing remediation.",
+        ),
+        Primitive(
+            "Provision", "provision", "adaptive",
+            "nodes_x_edges_x_lifecycle_steps",
+            "service orchestration and infrastructure operations",
+            "Instantiate a runtime resource from a declared topology or "
+            "template rather than merely planning it.",
+        ),
     )
 }
 
 #: Stable ordering for tables, figures and feature vectors.
 ORDER: Tuple[str, ...] = ("review", "extract", "classify", "retrieve",
                           "reconcile", "draft", "remediate", "validate",
-                          "report")
+                          "report", "fetch", "score", "summarise", "monitor",
+                          "plan", "notify", "approve", "transform",
+                          "correlate", "diagnose", "provision")
 
 
 # ── material for the source-free primitives ──────────────────────────────
@@ -211,6 +280,48 @@ def _instruction(slug: str, units: int, ctx: Sequence[str],
         return (f"Read this document:\n   {ctx[0]}\n"
                 f"Then write a reference summary (Markdown) covering these "
                 f"{units} aspect(s): {', '.join(targets[:units])}.")
+    if slug == "fetch":
+        return (f"Request these {units} allowlisted external resource(s): "
+                f"{', '.join(targets[:units])}. Return one structured result "
+                f"per resource.")
+    if slug == "score":
+        return (f"Score the supplied alternatives against these {units} "
+                f"criterion entry or entries: {', '.join(targets[:units])}. "
+                f"Return the score matrix and ranking.")
+    if slug == "summarise":
+        return (f"Read this material:\n   {_files_block(ctx)}\n"
+                f"Produce {units} faithful summary artifact(s), preserving "
+                f"the named facts: {', '.join(targets[:units])}.")
+    if slug == "monitor":
+        return (f"Evaluate these {units} condition(s) against the observations "
+                f"in:\n   {_files_block(ctx)}\nReturn structured events only.")
+    if slug == "plan":
+        return (f"Produce a plan containing {units} explicit subtask(s) for: "
+                f"{', '.join(targets[:units])}. Do not execute the plan.")
+    if slug == "notify":
+        return (f"Produce {units} transmittable notification(s) for: "
+                f"{', '.join(targets[:units])}. Include recipients, subject, "
+                f"and body.")
+    if slug == "approve":
+        return (f"Prepare {units} approval checkpoint(s) using this evidence:"
+                f"\n   {_files_block(ctx)}\nInclude the decision requested, "
+                f"evidence, risk, and approver role; do not decide for them.")
+    if slug == "transform":
+        return (f"Transform {units} declared field mapping(s) from the source "
+                f"record in:\n   {_files_block(ctx)}\nReturn only the target "
+                f"schema.")
+    if slug == "correlate":
+        return (f"Correlate {units} record/key candidate(s) from:\n   "
+                f"{_files_block(ctx)}\nReturn matched groups, the exact keys "
+                f"that justify each link, and unmatched record IDs.")
+    if slug == "diagnose":
+        return (f"Diagnose {units} symptom/evidence item(s) from:\n   "
+                f"{_files_block(ctx)}\nReturn root cause, cited evidence IDs, "
+                f"confidence, and contributing factors. Do not remediate.")
+    if slug == "provision":
+        return (f"Prepare the controlled provisioning result for {units} "
+                f"topology/lifecycle unit(s) in:\n   {_files_block(ctx)}\n"
+                f"Return node IDs, intended types, and lifecycle status.")
     raise KeyError(slug)
 
 

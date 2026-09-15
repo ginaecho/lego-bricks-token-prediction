@@ -26,7 +26,7 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass, field
-from typing import Dict, List, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from .tasks import ORDER, PRIMITIVES
 
@@ -43,7 +43,7 @@ class Run:
     context_bytes: int
     arity: int
     tokens: int
-    tool_uses: int
+    tool_uses: Optional[int]
     held_out: bool
 
     @property
@@ -134,6 +134,18 @@ def _f_perprim(r: Run) -> List[float]:
     return [1.0] + [float(r.counts.get(p, 0)) for p in ORDER]
 
 
+def _f_bytes_tools(r: Run) -> List[float]:
+    if r.tool_uses is None:
+        raise ValueError("tool-use feature is unavailable")
+    return [1.0, float(r.context_bytes), float(r.tool_uses)]
+
+
+def _f_bytes_units_tools(r: Run) -> List[float]:
+    if r.tool_uses is None:
+        raise ValueError("tool-use feature is unavailable")
+    return [1.0, float(r.context_bytes), float(r.total_units), float(r.tool_uses)]
+
+
 FORMS = {
     "constant": _f_constant,
     "bytes": _f_bytes,
@@ -141,6 +153,24 @@ FORMS = {
     "bytes+units": _f_bytes_units,
     "per-primitive": _f_perprim,
     "bytes+per-primitive": _f_bytes_perprim,
+}
+
+# Post-run rivals test whether bricks add signal beyond execution mechanics.
+# They are diagnostic only because tool counts are not known at scoping time.
+DIAGNOSTIC_FORMS = {
+    "diagnostic:bytes+tool-uses": _f_bytes_tools,
+    "diagnostic:bytes+units+tool-uses": _f_bytes_units_tools,
+}
+
+ALL_FORMS = {**FORMS, **DIAGNOSTIC_FORMS}
+
+FORM_FEATURE_NAMES = {
+    "constant": ("intercept",),
+    "bytes": ("intercept", "context_bytes"),
+    "units": ("intercept", "total_units"),
+    "bytes+units": ("intercept", "context_bytes", "total_units"),
+    "per-primitive": ("intercept", *ORDER),
+    "bytes+per-primitive": ("intercept", "context_bytes", *ORDER),
 }
 
 
@@ -155,6 +185,8 @@ class CompositionModel:
     boot: float
     loo_mape: float
     in_sample_mape: float
+    excess_loo_error: float
+    excess_skill_vs_constant: float
     n: int
     scores: Dict[str, float] = field(default_factory=dict)
 
@@ -166,6 +198,12 @@ class CompositionModel:
         """Price a composition that may never have been run."""
         r = Run("?", "?", dict(counts), int(context_bytes), 0, 0, 0, False)
         return self.predict_run(r)
+
+    @property
+    def feature_names(self) -> Tuple[str, ...]:
+        """Coefficient names in exact serialized order."""
+
+        return FORM_FEATURE_NAMES[self.form]
 
     # -- readable parameters ---------------------------------------------
 
@@ -197,7 +235,7 @@ def mape(actual: Sequence[float], predicted: Sequence[float]) -> float:
 
 
 def _fit_one(form: str, runs: Sequence[Run]) -> List[float]:
-    x = [FORMS[form](r) for r in runs]
+    x = [ALL_FORMS[form](r) for r in runs]
     y = [float(r.tokens) for r in runs]
     return _least_squares(x, y)
 
@@ -208,10 +246,75 @@ def _loo_mape(form: str, runs: Sequence[Run]) -> float:
     for i in range(len(runs)):
         rest = list(runs[:i]) + list(runs[i + 1:])
         coef = _fit_one(form, rest)
-        feats = FORMS[form](runs[i])
+        feats = ALL_FORMS[form](runs[i])
         pred = sum(c * f for c, f in zip(coef, feats))
         errs.append(abs(runs[i].tokens - pred) / runs[i].tokens)
     return sum(errs) / len(errs)
+
+
+def _loo_predictions(form: str, runs: Sequence[Run]) -> List[float]:
+    predictions = []
+    for i in range(len(runs)):
+        rest = list(runs[:i]) + list(runs[i + 1:])
+        coef = _fit_one(form, rest)
+        predictions.append(sum(
+            c * f for c, f in zip(coef, ALL_FORMS[form](runs[i]))
+        ))
+    return predictions
+
+
+def excess_error_ratio(actual: Sequence[float], predicted: Sequence[float],
+                       boot: float) -> float:
+    """Absolute error divided by actual variable work above startup."""
+
+    pairs = [(a, p) for a, p in zip(actual, predicted)
+             if abs(a - boot) > 1e-9]
+    denominator = sum(abs(a - boot) for a, _ in pairs)
+    return sum(abs(a - p) for a, p in pairs) / denominator if denominator else 0.0
+
+
+def _build_model(best: str, fitted: Sequence[Run],
+                 scores: Dict[str, float]) -> CompositionModel:
+    coef = _fit_one(best, fitted)
+    preds = [sum(c * f for c, f in zip(coef, FORMS[best](r))) for r in fitted]
+    boot = next((float(r.tokens) for r in fitted if r.total_units == 0), coef[0])
+    best_loo = _loo_predictions(best, fitted)
+    constant_loo = _loo_predictions("constant", fitted)
+    non_null = [i for i, run in enumerate(fitted) if run.total_units > 0]
+    actual_work = [fitted[i].tokens for i in non_null]
+    variable_error = excess_error_ratio(
+        actual_work, [best_loo[i] for i in non_null], boot
+    )
+    constant_error = excess_error_ratio(
+        actual_work, [constant_loo[i] for i in non_null], boot
+    )
+    skill = 1.0 - variable_error / constant_error if constant_error else 0.0
+    return CompositionModel(
+        form=best, coef=coef, boot=boot, loo_mape=scores[best],
+        in_sample_mape=mape([r.tokens for r in fitted], preds),
+        excess_loo_error=variable_error,
+        excess_skill_vs_constant=skill,
+        n=len(fitted), scores=scores,
+    )
+
+
+def _score_forms(fitted: Sequence[Run]) -> Dict[str, float]:
+    forms = dict(FORMS)
+    if all(run.tool_uses is not None for run in fitted):
+        forms.update(DIAGNOSTIC_FORMS)
+    return {name: _loo_mape(name, fitted) for name in forms}
+
+
+def fit_form(runs: Sequence[Run], form: str) -> CompositionModel:
+    """Fit one named pre-run form for a controlled hypothesis comparison."""
+
+    if form not in FORMS:
+        raise ValueError(f"unknown pre-run form: {form}")
+    fitted = [r for r in runs if not r.held_out]
+    if len(fitted) < 2:
+        raise ValueError("at least two fitted runs are required")
+    scores = _score_forms(fitted)
+    return _build_model(form, fitted, scores)
 
 
 def select_model(runs: Sequence[Run]) -> CompositionModel:
@@ -221,16 +324,9 @@ def select_model(runs: Sequence[Run]) -> CompositionModel:
     the same thing is the one that will still be right next quarter.
     """
     fitted = [r for r in runs if not r.held_out]
-    scores = {name: _loo_mape(name, fitted) for name in FORMS}
+    scores = _score_forms(fitted)
     best = min(FORMS, key=lambda n: (round(scores[n], 4), len(FORMS[n](fitted[0]))))
-    coef = _fit_one(best, fitted)
-    preds = [sum(c * f for c, f in zip(coef, FORMS[best](r))) for r in fitted]
-    boot = next((float(r.tokens) for r in fitted if r.total_units == 0), coef[0])
-    return CompositionModel(
-        form=best, coef=coef, boot=boot, loo_mape=scores[best],
-        in_sample_mape=mape([r.tokens for r in fitted], preds),
-        n=len(fitted), scores=scores,
-    )
+    return _build_model(best, fitted, scores)
 
 
 # ── what composition actually buys you ───────────────────────────────────

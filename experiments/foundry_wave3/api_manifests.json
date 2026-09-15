@@ -1,0 +1,45 @@
+{
+  "sec-apple-revenue": {
+    "method": "GET",
+    "url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0000320193/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax.json",
+    "headers": {
+      "Accept": "application/json",
+      "User-Agent": "ginaecho-research/1.0 (gina.tcchen@gmail.com)"
+    },
+    "expected_schema": {
+      "root_type": "object",
+      "required": ["cik", "taxonomy", "tag", "entityName", "units"]
+    },
+    "max_response_bytes": 65536,
+    "snapshot_path": "snapshots/sec-apple-revenue-concept.json",
+    "snapshot_sha256": "4495f7a16b4ade43dfa8041ac6477074122cbd5b88033e3e0f68b3f919e7ffbf"
+  },
+  "usaspending-budget-functions": {
+    "method": "GET",
+    "url": "https://api.usaspending.gov/api/v2/budget_functions/list_budget_functions/",
+    "headers": {
+      "Accept": "application/json"
+    },
+    "expected_schema": {
+      "root_type": "object",
+      "required": ["results"]
+    },
+    "max_response_bytes": 16384,
+    "snapshot_path": "snapshots/usaspending-budget-functions.json",
+    "snapshot_sha256": "787e2994a0b8542840a4bae29d625b9ad320abbab20ca5386bc93883ec65b9a7"
+  },
+  "cms-provider-enrollment": {
+    "method": "GET",
+    "url": "https://data.cms.gov/data-api/v1/dataset/2457ea29-fc82-48b0-86ec-3b0755de7515/data?size=5",
+    "headers": {
+      "Accept": "application/json"
+    },
+    "expected_schema": {
+      "root_type": "array",
+      "item_required": ["NPI", "ENRLMT_ID", "PROVIDER_TYPE_DESC", "STATE_CD"]
+    },
+    "max_response_bytes": 16384,
+    "snapshot_path": "snapshots/cms-provider-enrollment-5.json",
+    "snapshot_sha256": "c0ae5809d851470855f1e1cd6000c8e2ad39e19338d32ad67cf57ab3b0fb3bd7"
+  }
+}

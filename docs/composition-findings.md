@@ -111,19 +111,20 @@ Doing the same Review task **twice** in one invocation cost 34,701 against
 34,051 for asking once over the same two documents — an extra 650 tokens, or
 1.9%, for a second full pass. The reading is shared; only the answering repeats.
 
-Generalising: the cost of running *n* base tasks in one agent versus *n* agents.
+Generalising with the fitted model: the estimated cost of running *n* base
+tasks in one agent versus *n* agents. The split-agent arm was not dispatched,
+so this table is a model comparison, not a measured saving.
 
-| composition | apart | together | saving |
+| composition | separate estimate | batched estimate | estimated saving |
 |---|---|---|---|
 | Review + 3xExtract + 2xValidate | 97,646 | 34,804 | **64%** |
 | Review + 2xRemediate + 2xValidate | 96,542 | 33,699 | **65%** |
 | Retrieve + Review + Remediate + Validate | 132,235 | 37,971 | **71%** |
 
-An additive model cannot see this, and it is the largest single lever a buyer
-has. It also points the opposite way to the intuition that mixing task types
-costs extra: the earlier calibration work found an *asserted* +15% interaction
-surcharge that measurement showed to be a 47% saving. This campaign confirms it
-at larger arity, and the saving grows with the number of parts.
+An additive model cannot see this potential lever. It also points the opposite
+way to the earlier asserted +15% interaction surcharge. A real split-arm
+campaign must run the same work both apart and together before the 64-71%
+estimate can be claimed as an observed saving.
 
 ## 4. The model
 
@@ -131,7 +132,7 @@ at larger arity, and the saving grows with the number of parts.
 tokens = 30,969 + 0.3661 x context_bytes + Σ marginal[p] x units[p]
 ```
 
-The form is not assumed. Six nested candidates were fitted and scored by
+The pre-run form is not assumed. Six nested candidates were fitted and scored by
 leave-one-out cross-validation, so a richer form only wins if it predicts points
 it did not see:
 
@@ -144,15 +145,23 @@ it did not see:
 | units | 5.44% |
 | constant | 6.93% |
 
+Two post-run diagnostic rivals were also scored to test whether bricks merely
+proxy execution mechanics: `bytes + tool uses` scored 3.22%, and
+`bytes + units + tool uses` scored 3.19%. They cannot produce a scoping-time
+quote because tool uses are unknown before dispatch, but their proximity means
+the brick interpretation is not uniquely established.
+
 Note what the selection did to Review. Fitted without a bytes term, Review
 looks like it costs 966 tokens a unit. Once `context_bytes` is in the model,
 Review's marginal collapses to 52 — because Review's cost was never the
 *instruction*, it was the *reading*. The model reassigns it to the right term
 without being told to.
 
-Against a **0.29% noise floor**, a 2.55% cross-validated error is roughly 9x the
-irreducible limit. More measurement of these same primitives will help less than
-reducing run-to-run variance would.
+The large startup term makes total-token error flattering. Error relative to
+the variable work above startup is **18.73%**, with **64.47% skill over a
+constant model** on that variable work. Both views are now reported: 2.55%
+answers "how close is the total invoice?", while 18.73% is the stricter test of
+whether the LEGO features explain the work-dependent part.
 
 ## 5. Pricing what was never run
 
@@ -214,12 +223,16 @@ deserves in places:
   which is measured.
 - **Replicates are thin.** Three primitives have a second run; the rest have
   one. The 0.29% noise floor is computed from those few pairs.
+- **Batching is estimated, not split-arm measured.** The separate-agent totals
+  in section 3.4 are model outputs that charge context to each invocation.
+- **The intercept dominates percentage error.** Total-token MAPE must be read
+  together with excess-over-startup error and skill versus a constant.
 
 ## 7. Reproducing it
 
 ```bash
 python -m examples.composition_demo        # the whole chain, from committed data
-python -m pytest tests/test_compose.py -q  # 39 tests over the vocabulary and model
+python -m pytest tests/test_compose.py -q  # vocabulary and model tests
 python docs/media/draw_composition.py      # redraw the figure from the data
 ```
 

@@ -52,13 +52,17 @@ def main() -> None:
     rule("2. WHAT THE MODEL LEARNED")
     print(f"  {model.equation()}")
     print()
-    print(f"  chosen by cross-validation from {len(model.scores)} candidate forms:")
+    diagnostic_count = sum(name.startswith("diagnostic:") for name in model.scores)
+    print(f"  chosen from {len(model.scores) - diagnostic_count} pre-run forms; "
+          f"{diagnostic_count} post-run rivals shown for comparison:")
     for name, s in sorted(model.scores.items(), key=lambda kv: kv[1]):
         mark = "  <- selected" if name == model.form else ""
         print(f"    {name:<22}{s:>7.2%}{mark}")
     print()
     print(f"  fitted on {model.n} measured runs")
-    print(f"  cross-validated error : {model.loo_mape:.2%}")
+    print(f"  total-token LOO error : {model.loo_mape:.2%}")
+    print(f"  excess-over-boot error: {model.excess_loo_error:.2%}")
+    print(f"  skill vs constant     : {model.excess_skill_vs_constant:.2%}")
     print(f"  repeat-run noise floor: {noise_floor(runs):.2%}")
 
     rule("3. HELD OUT — compositions the model was never fitted on")
