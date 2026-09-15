@@ -1,0 +1,2289 @@
+{
+  "schema_version": "customer-project-model-v1",
+  "scope": "public_request_scoping_not_full_customer_delivery",
+  "runtime": {
+    "deployment": "gpt-5.4",
+    "deployment_version": "2026-03-05",
+    "execution_code_sha256": {
+      "budget.py": "6307a21aab7386a1297b759fa1a436e295d9581a42d5c7110856b8daab40d896",
+      "customer_decomposition.py": "1eae24c659408d62051531fe48cc05a1f6536e05b035115f147f8d6b7b1b8255",
+      "customer_models.py": "63fa917cdb209f196862d6c03c65cdfd2c4ff1a100b208d6ff1acc2c6439cdbf",
+      "customer_pilot.py": "2e5c29a8755540267ed1abe69b69b4188d1a26a0bcb35f954698747a52fdab59",
+      "economics.py": "0d81485da685de9313e3a3e389b9032ddb9a93c540b753627f473361cd203531",
+      "foundry_count.py": "4df8b59a600c387538cff62898a547fc6bc025b277e7ed898e8701e498cc65ec",
+      "foundry_dispatch.py": "5ce975313ee7620395b028e79c61d59fd54b91fab32983dc64feb24864d53590",
+      "robust.py": "99b88c2f01af94defbefa000f739c6577c3712584a6cbe1187cdd92b660720fd"
+    },
+    "execution_policy": {
+      "inputs": "Only the six paraphrased public-request summaries, requirement annotations, exclusions, and scoping template.",
+      "quality": "Automatic contract checks are necessary but not sufficient. Free-text drafts require human review before quality-preserving optimization can be promoted.",
+      "retries": "None. Stop after transport, telemetry, output-cap, or identity failure; preserve uncertain reservations.",
+      "tools": "None. No source fetch, private data, client contact, deployment, or full-project execution."
+    },
+    "max_input_tokens_per_call": 32768,
+    "pricing": {
+      "cached_input_per_million": 0.25,
+      "input_per_million": 2.5,
+      "output_per_million": 15.0
+    },
+    "pricing_source": {
+      "boundary": "Standard Global synchronous requests, short context. Retail-rate calculated cost, not reconciled invoice, discounts, tax, or procurement budget. Batching here means merging work into one normal request, not the Azure Batch API.",
+      "cached_input_meter_id": "781c01c1-b89f-57d8-98f9-d6a746505093",
+      "effective_start": "2026-03-01",
+      "input_meter_id": "6dc15256-2348-5f90-9e58-98ee417bc714",
+      "output_meter_id": "d88ed52a-9046-55e0-9931-e2d6a4d9c59f",
+      "region": "germanywestcentral",
+      "retrieved_on": "2026-09-14",
+      "unit": "1M tokens",
+      "url": "https://prices.azure.com/api/retail/prices"
+    },
+    "reasoning_effort": "none",
+    "template_sha256": "ba6781573d8f3e4c4c711fe44844ef1b899931899194b4953dd16ba1722fa29a",
+    "text_verbosity": "low"
+  },
+  "training_project_ids": [
+    "campus-compact-evaluation",
+    "climateworks-plastic-demand-review",
+    "paradigm-website-redesign",
+    "slls-disaster-dashboard"
+  ],
+  "training_observation_ids": [
+    "campus-compact-evaluation-0-batched",
+    "campus-compact-evaluation-0-split",
+    "campus-compact-evaluation-1-batched",
+    "campus-compact-evaluation-1-split",
+    "climateworks-plastic-demand-review-0-batched",
+    "climateworks-plastic-demand-review-0-split",
+    "climateworks-plastic-demand-review-1-batched",
+    "climateworks-plastic-demand-review-1-split",
+    "paradigm-website-redesign-0-batched",
+    "paradigm-website-redesign-0-split",
+    "paradigm-website-redesign-1-batched",
+    "paradigm-website-redesign-1-split",
+    "slls-disaster-dashboard-0-batched",
+    "slls-disaster-dashboard-0-split",
+    "slls-disaster-dashboard-1-batched",
+    "slls-disaster-dashboard-1-split"
+  ],
+  "channels": {
+    "input_tokens": {
+      "schema_version": "customer-project-model-v1",
+      "selected_form": "workflow",
+      "training_project_ids": [
+        "campus-compact-evaluation",
+        "climateworks-plastic-demand-review",
+        "paradigm-website-redesign",
+        "slls-disaster-dashboard"
+      ],
+      "training_call_ids": [
+        "campus-compact-evaluation-0-batched",
+        "campus-compact-evaluation-0-split",
+        "campus-compact-evaluation-1-batched",
+        "campus-compact-evaluation-1-split",
+        "climateworks-plastic-demand-review-0-batched",
+        "climateworks-plastic-demand-review-0-split",
+        "climateworks-plastic-demand-review-1-batched",
+        "climateworks-plastic-demand-review-1-split",
+        "paradigm-website-redesign-0-batched",
+        "paradigm-website-redesign-0-split",
+        "paradigm-website-redesign-1-batched",
+        "paradigm-website-redesign-1-split",
+        "slls-disaster-dashboard-0-batched",
+        "slls-disaster-dashboard-0-split",
+        "slls-disaster-dashboard-1-batched",
+        "slls-disaster-dashboard-1-split"
+      ],
+      "excluded_call_ids": [],
+      "feature_definitions": {
+        "prompt_bytes": "Declared quote-time prompt byte count; no measured usage.",
+        "context_bytes": "Validated quote metadata; not an additional model feature.",
+        "planned_output_tokens": "Declared quote-time output allowance, not actual output.",
+        "total_scoping_units": "Sum of extract, classify, plan, and report counts.",
+        "extract": "Declared quote-time extract scoping-unit count.",
+        "classify": "Declared quote-time classify scoping-unit count.",
+        "plan": "Declared quote-time plan scoping-unit count.",
+        "report": "Declared quote-time report scoping-unit count.",
+        "planned_calls": "Number of declared requests, not realized tool or retry counts.",
+        "max_operations_per_call": "Largest declared batch of independent scoping operations."
+      },
+      "forms": {
+        "constant": {
+          "features": [],
+          "model": {
+            "value": 1409.625
+          },
+          "cv_mae": 711.375,
+          "per_project_mae": {
+            "campus-compact-evaluation": 739.5,
+            "climateworks-plastic-demand-review": 723.0,
+            "paradigm-website-redesign": 759.0,
+            "slls-disaster-dashboard": 624.0
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 1394.0,
+            "campus-compact-evaluation-0-split": 1394.0,
+            "campus-compact-evaluation-1-batched": 1394.0,
+            "campus-compact-evaluation-1-split": 1394.0,
+            "climateworks-plastic-demand-review-0-batched": 1403.1666666666667,
+            "climateworks-plastic-demand-review-0-split": 1403.1666666666667,
+            "climateworks-plastic-demand-review-1-batched": 1403.1666666666667,
+            "climateworks-plastic-demand-review-1-split": 1403.1666666666667,
+            "paradigm-website-redesign-0-batched": 1383.1666666666667,
+            "paradigm-website-redesign-0-split": 1383.1666666666667,
+            "paradigm-website-redesign-1-batched": 1383.1666666666667,
+            "paradigm-website-redesign-1-split": 1383.1666666666667,
+            "slls-disaster-dashboard-0-batched": 1458.1666666666667,
+            "slls-disaster-dashboard-0-split": 1458.1666666666667,
+            "slls-disaster-dashboard-1-batched": 1458.1666666666667,
+            "slls-disaster-dashboard-1-split": 1458.1666666666667
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 711.375,
+            "mean_signed_residual": -5.684341886080802e-14,
+            "min_signed_residual": -818.1666666666667,
+            "max_signed_residual": 864.8333333333333,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "size": {
+          "features": [
+            "prompt_bytes"
+          ],
+          "model": {
+            "intercept": 1409.625,
+            "coefficients": [
+              441.5295733212602
+            ],
+            "means": [
+              7094.0
+            ],
+            "scales": [
+              3531.8256256502814
+            ],
+            "active": [
+              0
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 323.0893377147226,
+          "per_project_mae": {
+            "campus-compact-evaluation": 343.44267989924447,
+            "climateworks-plastic-demand-review": 306.61901559706655,
+            "paradigm-website-redesign": 364.18785779295024,
+            "slls-disaster-dashboard": 278.10779756962916
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 1019.6243146809143,
+            "campus-compact-evaluation-0-split": 1811.7389548824253,
+            "campus-compact-evaluation-1-batched": 1019.6243146809143,
+            "campus-compact-evaluation-1-split": 1811.7389548824253,
+            "climateworks-plastic-demand-review-0-batched": 1034.8527511702769,
+            "climateworks-plastic-demand-review-0-split": 1867.6147199761438,
+            "climateworks-plastic-demand-review-1-batched": 1034.8527511702769,
+            "climateworks-plastic-demand-review-1-split": 1867.6147199761438,
+            "paradigm-website-redesign-0-batched": 1014.587889390318,
+            "paradigm-website-redesign-0-split": 1804.2121738044175,
+            "paradigm-website-redesign-1-batched": 1014.587889390318,
+            "paradigm-website-redesign-1-split": 1804.2121738044175,
+            "slls-disaster-dashboard-0-batched": 1016.4245948419066,
+            "slls-disaster-dashboard-0-split": 1708.2089997026483,
+            "slls-disaster-dashboard-1-batched": 1016.4245948419066,
+            "slls-disaster-dashboard-1-split": 1708.2089997026483
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 323.0893377147226,
+            "mean_signed_residual": -0.03304980613131647,
+            "min_signed_residual": -376.4245948419066,
+            "max_signed_residual": 443.7878261955825,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "size+units": {
+          "features": [
+            "prompt_bytes",
+            "total_scoping_units",
+            "planned_output_tokens"
+          ],
+          "model": {
+            "intercept": 1409.625,
+            "coefficients": [
+              440.1003598766345,
+              27.902392171023862
+            ],
+            "means": [
+              7094.0,
+              20.5,
+              6400.0
+            ],
+            "scales": [
+              3531.8256256502814,
+              4.9749371855331,
+              0.0
+            ],
+            "active": [
+              0,
+              1
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 324.2456882903265,
+          "per_project_mae": {
+            "campus-compact-evaluation": 345.04770482430877,
+            "climateworks-plastic-demand-review": 308.55949279893593,
+            "paradigm-website-redesign": 365.41663474777954,
+            "slls-disaster-dashboard": 277.9589207902818
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 1057.7255115122257,
+            "campus-compact-evaluation-0-split": 1846.6301018636082,
+            "campus-compact-evaluation-1-batched": 1057.7255115122257,
+            "campus-compact-evaluation-1-split": 1846.6301018636082,
+            "climateworks-plastic-demand-review-0-batched": 1025.8616944074856,
+            "climateworks-plastic-demand-review-0-split": 1854.7427088096138,
+            "climateworks-plastic-demand-review-1-batched": 1025.8616944074856,
+            "climateworks-plastic-demand-review-1-split": 1854.7427088096138,
+            "paradigm-website-redesign-0-batched": 1044.609319690378,
+            "paradigm-website-redesign-0-split": 1831.776050194819,
+            "paradigm-website-redesign-1-batched": 1044.609319690378,
+            "paradigm-website-redesign-1-split": 1831.776050194819,
+            "slls-disaster-dashboard-0-batched": 960.6846333274939,
+            "slls-disaster-dashboard-0-split": 1652.7667917469303,
+            "slls-disaster-dashboard-1-batched": 960.6846333274939,
+            "slls-disaster-dashboard-1-split": 1652.7667917469303
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 324.2456882903265,
+            "mean_signed_residual": 0.27539855593070683,
+            "min_signed_residual": -340.7255115122257,
+            "max_signed_residual": 416.22394980518106,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "lego": {
+          "features": [
+            "prompt_bytes",
+            "planned_output_tokens",
+            "extract",
+            "classify",
+            "plan",
+            "report"
+          ],
+          "model": {
+            "intercept": 1409.625,
+            "coefficients": [
+              439.60578258742186,
+              12.519325160373498,
+              12.519325160373494,
+              12.519325160373496
+            ],
+            "means": [
+              7094.0,
+              6400.0,
+              6.5,
+              6.5,
+              6.5,
+              1.0
+            ],
+            "scales": [
+              3531.8256256502814,
+              0.0,
+              1.6583123951777,
+              1.6583123951777,
+              1.6583123951777,
+              0.0
+            ],
+            "active": [
+              0,
+              2,
+              3,
+              4
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 324.75073057618846,
+          "per_project_mae": {
+            "campus-compact-evaluation": 345.74831220107717,
+            "climateworks-plastic-demand-review": 309.40757877002466,
+            "paradigm-website-redesign": 365.9528509281131,
+            "slls-disaster-dashboard": 277.8941804055389
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 1074.357016199076,
+            "campus-compact-evaluation-0-split": 1861.8603917969217,
+            "campus-compact-evaluation-1-batched": 1074.357016199076,
+            "campus-compact-evaluation-1-split": 1861.8603917969217,
+            "climateworks-plastic-demand-review-0-batched": 1021.9321511495491,
+            "climateworks-plastic-demand-review-0-split": 1849.1169936094998,
+            "climateworks-plastic-demand-review-1-batched": 1021.9321511495491,
+            "climateworks-plastic-demand-review-1-split": 1849.1169936094998,
+            "paradigm-website-redesign-0-batched": 1057.7101323483485,
+            "paradigm-website-redesign-0-split": 1843.8044304921223,
+            "paradigm-website-redesign-1-batched": 1057.7101323483485,
+            "paradigm-website-redesign-1-split": 1843.8044304921223,
+            "slls-disaster-dashboard-0-batched": 936.445617882534,
+            "slls-disaster-dashboard-0-split": 1628.6572570714561,
+            "slls-disaster-dashboard-1-batched": 936.445617882534,
+            "slls-disaster-dashboard-1-split": 1628.6572570714561
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 324.75073057618846,
+            "mean_signed_residual": 0.38950118131157296,
+            "min_signed_residual": -357.35701619907604,
+            "max_signed_residual": 404.19556950787774,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "workflow": {
+          "features": [
+            "prompt_bytes",
+            "planned_output_tokens",
+            "extract",
+            "classify",
+            "plan",
+            "report",
+            "planned_calls",
+            "max_operations_per_call"
+          ],
+          "model": {
+            "intercept": 1409.625,
+            "coefficients": [
+              200.2819228928651,
+              18.014569495157176,
+              18.014569495157176,
+              18.01456949515718,
+              195.30324039299637,
+              -195.30324039299637
+            ],
+            "means": [
+              7094.0,
+              6400.0,
+              6.5,
+              6.5,
+              6.5,
+              1.0,
+              2.5,
+              2.5
+            ],
+            "scales": [
+              3531.8256256502814,
+              0.0,
+              1.6583123951777,
+              1.6583123951777,
+              1.6583123951777,
+              0.0,
+              1.5,
+              1.5
+            ],
+            "active": [
+              0,
+              2,
+              3,
+              4,
+              6,
+              7
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 156.25541623388017,
+          "per_project_mae": {
+            "campus-compact-evaluation": 183.2809792789343,
+            "climateworks-plastic-demand-review": 154.77448668761258,
+            "paradigm-website-redesign": 206.51608471643192,
+            "slls-disaster-dashboard": 80.45011425254188
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 919.0555685853378,
+            "campus-compact-evaluation-0-split": 2031.4936100274692,
+            "campus-compact-evaluation-1-batched": 919.0555685853378,
+            "campus-compact-evaluation-1-split": 2031.4936100274692,
+            "climateworks-plastic-demand-review-0-batched": 836.6157908988018,
+            "climateworks-plastic-demand-review-0-split": 1973.0668175235767,
+            "climateworks-plastic-demand-review-1-batched": 836.6157908988018,
+            "climateworks-plastic-demand-review-1-split": 1973.0668175235767,
+            "paradigm-website-redesign-0-batched": 902.2503452139958,
+            "paradigm-website-redesign-0-split": 2007.218175781132,
+            "paradigm-website-redesign-1-batched": 902.2503452139958,
+            "paradigm-website-redesign-1-split": 2007.218175781132,
+            "slls-disaster-dashboard-0-batched": 792.5103684766691,
+            "slls-disaster-dashboard-0-split": 1896.3898600284147,
+            "slls-disaster-dashboard-1-batched": 792.5103684766691,
+            "slls-disaster-dashboard-1-split": 1896.3898600284147
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 156.25541623388017,
+            "mean_signed_residual": -10.200067066924646,
+            "min_signed_residual": -202.05556858533782,
+            "max_signed_residual": 240.781824218868,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        }
+      },
+      "cv_mae": {
+        "constant": 711.375,
+        "size": 323.0893377147226,
+        "size+units": 324.2456882903265,
+        "lego": 324.75073057618846,
+        "workflow": 156.25541623388017
+      },
+      "cv_method": "leave_one_project_out",
+      "selection_metric": "equal_project_weight_mae_input_tokens",
+      "tie_break_order": [
+        "constant",
+        "size",
+        "size+units",
+        "lego",
+        "workflow"
+      ],
+      "ridge_alpha": 10.0,
+      "residual_summary": {
+        "residual_mae": 156.25541623388017,
+        "mean_signed_residual": -10.200067066924646,
+        "min_signed_residual": -202.05556858533782,
+        "max_signed_residual": 240.781824218868,
+        "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+      },
+      "calibrated_interval": null,
+      "calibration_status": "insufficient_independent_groups_shared_template",
+      "target": "input_tokens",
+      "observation_unit": "complete_project_arm_replicate",
+      "prediction_floor": 0.0
+    },
+    "output_tokens": {
+      "schema_version": "customer-project-model-v1",
+      "selected_form": "lego",
+      "training_project_ids": [
+        "campus-compact-evaluation",
+        "climateworks-plastic-demand-review",
+        "paradigm-website-redesign",
+        "slls-disaster-dashboard"
+      ],
+      "training_call_ids": [
+        "campus-compact-evaluation-0-batched",
+        "campus-compact-evaluation-0-split",
+        "campus-compact-evaluation-1-batched",
+        "campus-compact-evaluation-1-split",
+        "climateworks-plastic-demand-review-0-batched",
+        "climateworks-plastic-demand-review-0-split",
+        "climateworks-plastic-demand-review-1-batched",
+        "climateworks-plastic-demand-review-1-split",
+        "paradigm-website-redesign-0-batched",
+        "paradigm-website-redesign-0-split",
+        "paradigm-website-redesign-1-batched",
+        "paradigm-website-redesign-1-split",
+        "slls-disaster-dashboard-0-batched",
+        "slls-disaster-dashboard-0-split",
+        "slls-disaster-dashboard-1-batched",
+        "slls-disaster-dashboard-1-split"
+      ],
+      "excluded_call_ids": [],
+      "feature_definitions": {
+        "prompt_bytes": "Declared quote-time prompt byte count; no measured usage.",
+        "context_bytes": "Validated quote metadata; not an additional model feature.",
+        "planned_output_tokens": "Declared quote-time output allowance, not actual output.",
+        "total_scoping_units": "Sum of extract, classify, plan, and report counts.",
+        "extract": "Declared quote-time extract scoping-unit count.",
+        "classify": "Declared quote-time classify scoping-unit count.",
+        "plan": "Declared quote-time plan scoping-unit count.",
+        "report": "Declared quote-time report scoping-unit count.",
+        "planned_calls": "Number of declared requests, not realized tool or retry counts.",
+        "max_operations_per_call": "Largest declared batch of independent scoping operations."
+      },
+      "forms": {
+        "constant": {
+          "features": [],
+          "model": {
+            "value": 757.5
+          },
+          "cv_mae": 182.5,
+          "per_project_mae": {
+            "campus-compact-evaluation": 168.66666666666663,
+            "climateworks-plastic-demand-review": 92.0,
+            "paradigm-website-redesign": 196.33333333333337,
+            "slls-disaster-dashboard": 273.0
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 715.3333333333334,
+            "campus-compact-evaluation-0-split": 715.3333333333334,
+            "campus-compact-evaluation-1-batched": 715.3333333333334,
+            "campus-compact-evaluation-1-split": 715.3333333333334,
+            "climateworks-plastic-demand-review-0-batched": 780.5,
+            "climateworks-plastic-demand-review-0-split": 780.5,
+            "climateworks-plastic-demand-review-1-batched": 780.5,
+            "climateworks-plastic-demand-review-1-split": 780.5,
+            "paradigm-website-redesign-0-batched": 708.4166666666666,
+            "paradigm-website-redesign-0-split": 708.4166666666666,
+            "paradigm-website-redesign-1-batched": 708.4166666666666,
+            "paradigm-website-redesign-1-split": 708.4166666666666,
+            "slls-disaster-dashboard-0-batched": 825.75,
+            "slls-disaster-dashboard-0-split": 825.75,
+            "slls-disaster-dashboard-1-batched": 825.75,
+            "slls-disaster-dashboard-1-split": 825.75
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 182.5,
+            "mean_signed_residual": 0.0,
+            "min_signed_residual": -316.75,
+            "max_signed_residual": 236.58333333333337,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "size": {
+          "features": [
+            "prompt_bytes"
+          ],
+          "model": {
+            "intercept": 757.5,
+            "coefficients": [
+              14.525795540551659
+            ],
+            "means": [
+              7094.0
+            ],
+            "scales": [
+              3531.8256256502814
+            ],
+            "active": [
+              0
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 182.8173467502656,
+          "per_project_mae": {
+            "campus-compact-evaluation": 167.96391861102427,
+            "climateworks-plastic-demand-review": 95.06644425137767,
+            "paradigm-website-redesign": 195.62946723454246,
+            "slls-disaster-dashboard": 272.60955690411805
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 703.1990183895085,
+            "campus-compact-evaluation-0-split": 728.8731443884429,
+            "campus-compact-evaluation-1-batched": 703.1990183895085,
+            "campus-compact-evaluation-1-split": 728.8731443884429,
+            "climateworks-plastic-demand-review-0-batched": 757.0033709238187,
+            "climateworks-plastic-demand-review-0-split": 810.1295175789367,
+            "climateworks-plastic-demand-review-1-batched": 757.0033709238187,
+            "climateworks-plastic-demand-review-1-split": 810.1295175789367,
+            "paradigm-website-redesign-0-batched": 698.5273479786546,
+            "paradigm-website-redesign-0-split": 719.7137175522605,
+            "paradigm-website-redesign-1-batched": 698.5273479786546,
+            "paradigm-website-redesign-1-split": 719.7137175522605,
+            "slls-disaster-dashboard-0-batched": 823.9505698787666,
+            "slls-disaster-dashboard-0-split": 826.7685439294695,
+            "slls-disaster-dashboard-1-batched": 823.9505698787666,
+            "slls-disaster-dashboard-1-split": 826.7685439294695
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 182.8173467502656,
+            "mean_signed_residual": -1.0206538274822492,
+            "min_signed_residual": -314.9505698787666,
+            "max_signed_residual": 225.2862824477395,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "size+units": {
+          "features": [
+            "prompt_bytes",
+            "total_scoping_units",
+            "planned_output_tokens"
+          ],
+          "model": {
+            "intercept": 757.5,
+            "coefficients": [
+              10.004384909198778,
+              88.27105081934518
+            ],
+            "means": [
+              7094.0,
+              20.5,
+              6400.0
+            ],
+            "scales": [
+              3531.8256256502814,
+              4.9749371855331,
+              0.0
+            ],
+            "active": [
+              0,
+              1
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 81.92443062394278,
+          "per_project_mae": {
+            "campus-compact-evaluation": 72.73652240894558,
+            "climateworks-plastic-demand-review": 63.78791554386913,
+            "paradigm-website-redesign": 105.94900060444093,
+            "slls-disaster-dashboard": 85.2242839385155
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 802.614315307474,
+            "campus-compact-evaluation-0-split": 819.9126398746348,
+            "campus-compact-evaluation-1-batched": 802.614315307474,
+            "campus-compact-evaluation-1-split": 819.9126398746348,
+            "climateworks-plastic-demand-review-0-batched": 731.2771528125314,
+            "climateworks-plastic-demand-review-0-split": 773.2986782752068,
+            "climateworks-plastic-demand-review-1-batched": 731.2771528125314,
+            "climateworks-plastic-demand-review-1-split": 773.2986782752068,
+            "paradigm-website-redesign-0-batched": 792.0350857314315,
+            "paradigm-website-redesign-0-split": 805.5669130596866,
+            "paradigm-website-redesign-1-batched": 792.0350857314315,
+            "paradigm-website-redesign-1-split": 805.5669130596866,
+            "slls-disaster-dashboard-0-batched": 636.0634661597403,
+            "slls-disaster-dashboard-0-split": 639.8851017172907,
+            "slls-disaster-dashboard-1-batched": 636.0634661597403,
+            "slls-disaster-dashboard-1-split": 639.8851017172907
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 81.92443062394278,
+            "mean_signed_residual": 7.4183308827504675,
+            "min_signed_residual": -133.29867827520684,
+            "max_signed_residual": 139.4330869403134,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "lego": {
+          "features": [
+            "prompt_bytes",
+            "planned_output_tokens",
+            "extract",
+            "classify",
+            "plan",
+            "report"
+          ],
+          "model": {
+            "intercept": 757.5,
+            "coefficients": [
+              8.439757161061785,
+              39.605707664121226,
+              39.60570766412122,
+              39.60570766412121
+            ],
+            "means": [
+              7094.0,
+              6400.0,
+              6.5,
+              6.5,
+              6.5,
+              1.0
+            ],
+            "scales": [
+              3531.8256256502814,
+              0.0,
+              1.6583123951777,
+              1.6583123951777,
+              1.6583123951777,
+              0.0
+            ],
+            "active": [
+              0,
+              2,
+              3,
+              4
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 47.051205731200014,
+          "per_project_mae": {
+            "campus-compact-evaluation": 31.168933514996013,
+            "climateworks-plastic-demand-review": 52.60087608768367,
+            "paradigm-website-redesign": 66.81405664415956,
+            "slls-disaster-dashboard": 37.620956677960805
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 846.0099593854302,
+            "campus-compact-evaluation-0-split": 859.6521735845778,
+            "campus-compact-evaluation-1-batched": 846.0099593854302,
+            "campus-compact-evaluation-1-split": 859.6521735845778,
+            "climateworks-plastic-demand-review-0-batched": 720.0335037511915,
+            "climateworks-plastic-demand-review-0-split": 757.2017521753673,
+            "climateworks-plastic-demand-review-1-batched": 720.0335037511915,
+            "climateworks-plastic-demand-review-1-split": 757.2017521753673,
+            "paradigm-website-redesign-0-batched": 832.8401820285031,
+            "paradigm-website-redesign-0-split": 843.0317046831777,
+            "paradigm-website-redesign-1-batched": 832.8401820285031,
+            "paradigm-website-redesign-1-split": 843.0317046831777,
+            "slls-disaster-dashboard-0-batched": 554.3590967052203,
+            "slls-disaster-dashboard-0-split": 558.6171833492987,
+            "slls-disaster-dashboard-1-batched": 554.3590967052203,
+            "slls-disaster-dashboard-1-split": 558.6171833492987
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 47.051205731200014,
+            "mean_signed_residual": 11.031805542154174,
+            "min_signed_residual": -117.20175217536735,
+            "max_signed_residual": 101.96829531682226,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "workflow": {
+          "features": [
+            "prompt_bytes",
+            "planned_output_tokens",
+            "extract",
+            "classify",
+            "plan",
+            "report",
+            "planned_calls",
+            "max_operations_per_call"
+          ],
+          "model": {
+            "intercept": 757.5,
+            "coefficients": [
+              3.655816898434539,
+              39.715554298968655,
+              39.71555429896865,
+              39.71555429896864,
+              3.9039945132510896,
+              -3.9039945132510905
+            ],
+            "means": [
+              7094.0,
+              6400.0,
+              6.5,
+              6.5,
+              6.5,
+              1.0,
+              2.5,
+              2.5
+            ],
+            "scales": [
+              3531.8256256502814,
+              0.0,
+              1.6583123951777,
+              1.6583123951777,
+              1.6583123951777,
+              0.0,
+              1.5,
+              1.5
+            ],
+            "active": [
+              0,
+              2,
+              3,
+              4,
+              6,
+              7
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 47.12903699795767,
+          "per_project_mae": {
+            "campus-compact-evaluation": 31.04095144954914,
+            "climateworks-plastic-demand-review": 54.785434535190916,
+            "paradigm-website-redesign": 66.75958311162748,
+            "slls-disaster-dashboard": 35.93017889546314
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 843.2362895348698,
+            "campus-compact-evaluation-0-split": 862.6818075660319,
+            "campus-compact-evaluation-1-batched": 843.2362895348698,
+            "campus-compact-evaluation-1-split": 862.6818075660319,
+            "climateworks-plastic-demand-review-0-batched": 713.5012730877949,
+            "climateworks-plastic-demand-review-0-split": 761.5708690703818,
+            "climateworks-plastic-demand-review-1-batched": 713.5012730877949,
+            "climateworks-plastic-demand-review-1-split": 761.5708690703818,
+            "paradigm-website-redesign-0-batched": 830.7108160933974,
+            "paradigm-website-redesign-0-split": 845.2700176833476,
+            "paradigm-website-redesign-1-batched": 830.7108160933974,
+            "paradigm-website-redesign-1-split": 845.2700176833476,
+            "slls-disaster-dashboard-0-batched": 553.1767720693913,
+            "slls-disaster-dashboard-0-split": 560.816414278465,
+            "slls-disaster-dashboard-1-batched": 553.1767720693913,
+            "slls-disaster-dashboard-1-split": 560.816414278465
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 47.12903699795767,
+            "mean_signed_residual": 11.129467577040032,
+            "min_signed_residual": -121.57086907038183,
+            "max_signed_residual": 99.72998231665235,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        }
+      },
+      "cv_mae": {
+        "constant": 182.5,
+        "size": 182.8173467502656,
+        "size+units": 81.92443062394278,
+        "lego": 47.051205731200014,
+        "workflow": 47.12903699795767
+      },
+      "cv_method": "leave_one_project_out",
+      "selection_metric": "equal_project_weight_mae_output_tokens",
+      "tie_break_order": [
+        "constant",
+        "size",
+        "size+units",
+        "lego",
+        "workflow"
+      ],
+      "ridge_alpha": 10.0,
+      "residual_summary": {
+        "residual_mae": 47.051205731200014,
+        "mean_signed_residual": 11.031805542154174,
+        "min_signed_residual": -117.20175217536735,
+        "max_signed_residual": 101.96829531682226,
+        "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+      },
+      "calibrated_interval": null,
+      "calibration_status": "insufficient_independent_groups_shared_template",
+      "target": "output_tokens",
+      "observation_unit": "complete_project_arm_replicate",
+      "prediction_floor": 0.0
+    },
+    "rated_cost_usd": {
+      "schema_version": "customer-project-model-v1",
+      "selected_form": "workflow",
+      "training_project_ids": [
+        "campus-compact-evaluation",
+        "climateworks-plastic-demand-review",
+        "paradigm-website-redesign",
+        "slls-disaster-dashboard"
+      ],
+      "training_call_ids": [
+        "campus-compact-evaluation-0-batched",
+        "campus-compact-evaluation-0-split",
+        "campus-compact-evaluation-1-batched",
+        "campus-compact-evaluation-1-split",
+        "climateworks-plastic-demand-review-0-batched",
+        "climateworks-plastic-demand-review-0-split",
+        "climateworks-plastic-demand-review-1-batched",
+        "climateworks-plastic-demand-review-1-split",
+        "paradigm-website-redesign-0-batched",
+        "paradigm-website-redesign-0-split",
+        "paradigm-website-redesign-1-batched",
+        "paradigm-website-redesign-1-split",
+        "slls-disaster-dashboard-0-batched",
+        "slls-disaster-dashboard-0-split",
+        "slls-disaster-dashboard-1-batched",
+        "slls-disaster-dashboard-1-split"
+      ],
+      "excluded_call_ids": [],
+      "feature_definitions": {
+        "prompt_bytes": "Declared quote-time prompt byte count; no measured usage.",
+        "context_bytes": "Validated quote metadata; not an additional model feature.",
+        "planned_output_tokens": "Declared quote-time output allowance, not actual output.",
+        "total_scoping_units": "Sum of extract, classify, plan, and report counts.",
+        "extract": "Declared quote-time extract scoping-unit count.",
+        "classify": "Declared quote-time classify scoping-unit count.",
+        "plan": "Declared quote-time plan scoping-unit count.",
+        "report": "Declared quote-time report scoping-unit count.",
+        "planned_calls": "Number of declared requests, not realized tool or retry counts.",
+        "max_operations_per_call": "Largest declared batch of independent scoping operations."
+      },
+      "forms": {
+        "constant": {
+          "features": [],
+          "model": {
+            "value": 0.0148865625
+          },
+          "cv_mae": 0.0029859895833333336,
+          "per_project_mae": {
+            "campus-compact-evaluation": 0.0026862500000000003,
+            "climateworks-plastic-demand-review": 0.0014677083333333335,
+            "paradigm-website-redesign": 0.003209583333333333,
+            "slls-disaster-dashboard": 0.004580416666666667
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 0.014215,
+            "campus-compact-evaluation-0-split": 0.014215,
+            "campus-compact-evaluation-1-batched": 0.014215,
+            "campus-compact-evaluation-1-split": 0.014215,
+            "climateworks-plastic-demand-review-0-batched": 0.015215416666666667,
+            "climateworks-plastic-demand-review-0-split": 0.015215416666666667,
+            "climateworks-plastic-demand-review-1-batched": 0.015215416666666667,
+            "climateworks-plastic-demand-review-1-split": 0.015215416666666667,
+            "paradigm-website-redesign-0-batched": 0.014084166666666667,
+            "paradigm-website-redesign-0-split": 0.014084166666666667,
+            "paradigm-website-redesign-1-batched": 0.014084166666666667,
+            "paradigm-website-redesign-1-split": 0.014084166666666667,
+            "slls-disaster-dashboard-0-batched": 0.016031666666666666,
+            "slls-disaster-dashboard-0-split": 0.016031666666666666,
+            "slls-disaster-dashboard-1-batched": 0.016031666666666666,
+            "slls-disaster-dashboard-1-split": 0.016031666666666666
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 0.0029859895833333336,
+            "mean_signed_residual": 1.0842021724855044e-19,
+            "min_signed_residual": -0.006796666666666666,
+            "max_signed_residual": 0.005710833333333333,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "size": {
+          "features": [
+            "prompt_bytes"
+          ],
+          "model": {
+            "intercept": 0.0148865625,
+            "coefficients": [
+              0.0013217108664114255
+            ],
+            "means": [
+              7094.0
+            ],
+            "scales": [
+              3531.8256256502814
+            ],
+            "active": [
+              0
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 0.0028928657427955157,
+          "per_project_mae": {
+            "campus-compact-evaluation": 0.0026215046922111905,
+            "climateworks-plastic-demand-review": 0.001481581002703691,
+            "paradigm-website-redesign": 0.003133441929524718,
+            "slls-disaster-dashboard": 0.004334935346742464
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 0.013097046062544913,
+            "campus-compact-evaluation-0-split": 0.015462444553032707,
+            "campus-compact-evaluation-1-batched": 0.013097046062544913,
+            "campus-compact-evaluation-1-split": 0.015462444553032707,
+            "climateworks-plastic-demand-review-0-batched": 0.013942182441782972,
+            "climateworks-plastic-demand-review-0-split": 0.01682097956362441,
+            "climateworks-plastic-demand-review-1-batched": 0.013942182441782972,
+            "climateworks-plastic-demand-review-1-split": 0.01682097956362441,
+            "paradigm-website-redesign-0-batched": 0.013014379943155612,
+            "paradigm-website-redesign-0-split": 0.015306236197794951,
+            "paradigm-website-redesign-1-batched": 0.013014379943155612,
+            "paradigm-website-redesign-1-split": 0.015306236197794951,
+            "slls-disaster-dashboard-0-batched": 0.014900320035286265,
+            "slls-disaster-dashboard-0-split": 0.016672050658198663,
+            "slls-disaster-dashboard-1-batched": 0.014900320035286265,
+            "slls-disaster-dashboard-1-split": 0.016672050658198663
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 0.0028928657427955157,
+            "mean_signed_residual": -1.5392431927561674e-05,
+            "min_signed_residual": -0.005665320035286265,
+            "max_signed_residual": 0.004488763802205049,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "size+units": {
+          "features": [
+            "prompt_bytes",
+            "total_scoping_units",
+            "planned_output_tokens"
+          ],
+          "model": {
+            "intercept": 0.0148865625,
+            "coefficients": [
+              0.0012503166733295681,
+              0.001393821742717737
+            ],
+            "means": [
+              7094.0,
+              20.5,
+              6400.0
+            ],
+            "scales": [
+              3531.8256256502814,
+              4.9749371855331,
+              0.0
+            ],
+            "active": [
+              0,
+              1
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 0.0012970898484311708,
+          "per_project_mae": {
+            "campus-compact-evaluation": 0.0011018533194143924,
+            "climateworks-plastic-demand-review": 0.00098507423717941,
+            "paradigm-website-redesign": 0.001716253296710118,
+            "slls-disaster-dashboard": 0.0013851785404207623
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 0.014683528508392675,
+            "campus-compact-evaluation-0-split": 0.01691526485277854,
+            "campus-compact-evaluation-1-batched": 0.014683528508392675,
+            "campus-compact-evaluation-1-split": 0.01691526485277854,
+            "climateworks-plastic-demand-review-0-batched": 0.013533811528206685,
+            "climateworks-plastic-demand-review-0-split": 0.016236336946152136,
+            "climateworks-plastic-demand-review-1-batched": 0.013533811528206685,
+            "climateworks-plastic-demand-review-1-split": 0.016236336946152136,
+            "paradigm-website-redesign-0-batched": 0.014492049585197416,
+            "paradigm-website-redesign-0-split": 0.016662943821382347,
+            "paradigm-website-redesign-1-batched": 0.014492049585197416,
+            "paradigm-website-redesign-1-split": 0.016662943821382347,
+            "slls-disaster-dashboard-0-batched": 0.011942663575714838,
+            "slls-disaster-dashboard-0-split": 0.013730193505126687,
+            "slls-disaster-dashboard-1-batched": 0.011942663575714838,
+            "slls-disaster-dashboard-1-split": 0.013730193505126687
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 0.0012970898484311708,
+            "mean_signed_residual": 0.00011196345963108447,
+            "min_signed_residual": -0.0027076635757148377,
+            "max_signed_residual": 0.003132056178617653,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "lego": {
+          "features": [
+            "prompt_bytes",
+            "planned_output_tokens",
+            "extract",
+            "classify",
+            "plan",
+            "report"
+          ],
+          "model": {
+            "intercept": 0.0148865625,
+            "coefficients": [
+              0.0012256108138844815,
+              0.0006253839278627518,
+              0.0006253839278627521,
+              0.000625383927862752
+            ],
+            "means": [
+              7094.0,
+              6400.0,
+              6.5,
+              6.5,
+              6.5,
+              1.0
+            ],
+            "scales": [
+              3531.8256256502814,
+              0.0,
+              1.6583123951777,
+              1.6583123951777,
+              1.6583123951777,
+              0.0
+            ],
+            "active": [
+              0,
+              2,
+              3,
+              4
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 0.0010803438832501424,
+          "per_project_mae": {
+            "campus-compact-evaluation": 0.0010395541740090856,
+            "climateworks-plastic-demand-review": 0.0007680758503980016,
+            "paradigm-website-redesign": 0.001254695707410223,
+            "slls-disaster-dashboard": 0.001259049801183259
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 0.01537604193127914,
+            "campus-compact-evaluation-0-split": 0.01754943358326097,
+            "campus-compact-evaluation-1-batched": 0.01537604193127914,
+            "campus-compact-evaluation-1-split": 0.01754943358326097,
+            "climateworks-plastic-demand-review-0-batched": 0.013355332934141746,
+            "climateworks-plastic-demand-review-0-split": 0.015980818766654258,
+            "climateworks-plastic-demand-review-1-batched": 0.013355332934141746,
+            "climateworks-plastic-demand-review-1-split": 0.015980818766654258,
+            "paradigm-website-redesign-0-batched": 0.015136878061298417,
+            "paradigm-website-redesign-0-split": 0.017254986646477972,
+            "paradigm-website-redesign-1-batched": 0.015136878061298417,
+            "paradigm-website-redesign-1-split": 0.017254986646477972,
+            "slls-disaster-dashboard-0-batched": 0.010656500495284639,
+            "slls-disaster-dashboard-0-split": 0.01245090089291812,
+            "slls-disaster-dashboard-1-batched": 0.010656500495284639,
+            "slls-disaster-dashboard-1-split": 0.01245090089291812
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 0.0010803438832501424,
+            "mean_signed_residual": 0.0001664508360855922,
+            "min_signed_residual": -0.0014215004952846388,
+            "max_signed_residual": 0.0025400133535220283,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        },
+        "workflow": {
+          "features": [
+            "prompt_bytes",
+            "planned_output_tokens",
+            "extract",
+            "classify",
+            "plan",
+            "report",
+            "planned_calls",
+            "max_operations_per_call"
+          ],
+          "model": {
+            "intercept": 0.0148865625,
+            "coefficients": [
+              0.0005555420607086812,
+              0.0006407697382224224,
+              0.0006407697382224228,
+              0.0006407697382224227,
+              0.0005468180186812572,
+              -0.0005468180186812572
+            ],
+            "means": [
+              7094.0,
+              6400.0,
+              6.5,
+              6.5,
+              6.5,
+              1.0,
+              2.5,
+              2.5
+            ],
+            "scales": [
+              3531.8256256502814,
+              0.0,
+              1.6583123951777,
+              1.6583123951777,
+              1.6583123951777,
+              0.0,
+              1.5,
+              1.5
+            ],
+            "active": [
+              0,
+              2,
+              3,
+              4,
+              6,
+              7
+            ],
+            "alpha": 10.0
+          },
+          "cv_mae": 0.0007677917010251715,
+          "per_project_mae": {
+            "campus-compact-evaluation": 0.000589861062963621,
+            "climateworks-plastic-demand-review": 0.0006751443267142983,
+            "paradigm-website-redesign": 0.0010870580954305017,
+            "slls-disaster-dashboard": 0.0007191033189922649
+          },
+          "cv_predictions": {
+            "campus-compact-evaluation-0-batched": 0.014946183264486391,
+            "campus-compact-evaluation-0-split": 0.01801896113855915,
+            "campus-compact-evaluation-1-batched": 0.014946183264486391,
+            "campus-compact-evaluation-1-split": 0.01801896113855915,
+            "climateworks-plastic-demand-review-0-batched": 0.012794058573563928,
+            "climateworks-plastic-demand-review-0-split": 0.01635623007986467,
+            "climateworks-plastic-demand-review-1-batched": 0.012794058573563928,
+            "climateworks-plastic-demand-review-1-split": 0.01635623007986467,
+            "paradigm-website-redesign-0-batched": 0.01471628810443595,
+            "paradigm-website-redesign-0-split": 0.017697095704703045,
+            "paradigm-website-redesign-1-batched": 0.01471628810443595,
+            "paradigm-website-redesign-1-split": 0.017697095704703045,
+            "slls-disaster-dashboard-0-batched": 0.010278927502232542,
+            "slls-disaster-dashboard-0-split": 0.013153220864248012,
+            "slls-disaster-dashboard-1-batched": 0.010278927502232542,
+            "slls-disaster-dashboard-1-split": 0.013153220864248012
+          },
+          "cv_folds": [
+            {
+              "validation_project_id": "campus-compact-evaluation",
+              "training_project_ids": [
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "campus-compact-evaluation-0-batched",
+                "campus-compact-evaluation-0-split",
+                "campus-compact-evaluation-1-batched",
+                "campus-compact-evaluation-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "climateworks-plastic-demand-review",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "paradigm-website-redesign",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "climateworks-plastic-demand-review-0-batched",
+                "climateworks-plastic-demand-review-0-split",
+                "climateworks-plastic-demand-review-1-batched",
+                "climateworks-plastic-demand-review-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "paradigm-website-redesign",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "slls-disaster-dashboard"
+              ],
+              "validation_call_ids": [
+                "paradigm-website-redesign-0-batched",
+                "paradigm-website-redesign-0-split",
+                "paradigm-website-redesign-1-batched",
+                "paradigm-website-redesign-1-split"
+              ]
+            },
+            {
+              "validation_project_id": "slls-disaster-dashboard",
+              "training_project_ids": [
+                "campus-compact-evaluation",
+                "climateworks-plastic-demand-review",
+                "paradigm-website-redesign"
+              ],
+              "validation_call_ids": [
+                "slls-disaster-dashboard-0-batched",
+                "slls-disaster-dashboard-0-split",
+                "slls-disaster-dashboard-1-batched",
+                "slls-disaster-dashboard-1-split"
+              ]
+            }
+          ],
+          "residual_summary": {
+            "residual_mae": 0.0007677917010251715,
+            "mean_signed_residual": 0.00014144184598828904,
+            "min_signed_residual": -0.0013762300798646696,
+            "max_signed_residual": 0.0020979042952969547,
+            "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+          }
+        }
+      },
+      "cv_mae": {
+        "constant": 0.0029859895833333336,
+        "size": 0.0028928657427955157,
+        "size+units": 0.0012970898484311708,
+        "lego": 0.0010803438832501424,
+        "workflow": 0.0007677917010251715
+      },
+      "cv_method": "leave_one_project_out",
+      "selection_metric": "equal_project_weight_mae_rated_cost_usd",
+      "tie_break_order": [
+        "constant",
+        "size",
+        "size+units",
+        "lego",
+        "workflow"
+      ],
+      "ridge_alpha": 10.0,
+      "residual_summary": {
+        "residual_mae": 0.0007677917010251715,
+        "mean_signed_residual": 0.00014144184598828904,
+        "min_signed_residual": -0.0013762300798646696,
+        "max_signed_residual": 0.0020979042952969547,
+        "interpretation": "exploratory_leave_one_project_out_residuals_not_coverage"
+      },
+      "calibrated_interval": null,
+      "calibration_status": "insufficient_independent_groups_shared_template",
+      "target": "rated_cost_usd",
+      "observation_unit": "complete_project_arm_replicate",
+      "prediction_floor": 0.0
+    }
+  },
+  "support": {
+    "method": "training_only_marginal_ranges_and_observed_layouts",
+    "feature_ranges": {
+      "context_bytes": [
+        1327,
+        1714
+      ],
+      "prompt_bytes": [
+        3331,
+        11110
+      ],
+      "planned_output_tokens": [
+        6400,
+        6400
+      ],
+      "extract": [
+        4,
+        8
+      ],
+      "classify": [
+        4,
+        8
+      ],
+      "plan": [
+        4,
+        8
+      ],
+      "report": [
+        1,
+        1
+      ],
+      "total_scoping_units": [
+        13,
+        25
+      ],
+      "planned_calls": [
+        1,
+        4
+      ],
+      "max_operations_per_call": [
+        1,
+        4
+      ]
+    },
+    "layouts": [
+      [
+        1,
+        4
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "interpretation": "Within marginal ranges does not establish joint or domain support."
+  },
+  "calibrated_interval": null,
+  "upper_budget_bound": null,
+  "calibration_status": "insufficient_independent_groups_shared_template",
+  "calibration_project_count": 0,
+  "cost_definition": "Direct regression of recorded retail-rate API cost, not invoice cost.",
+  "limitations": [
+    "Tokens and cost are separately selected regressions; cost is not repriced token predictions.",
+    "All observed failures of automatic quality checks retain their incurred cost.",
+    "No tools, clarification loops, retries, new model versions, or full delivery were measured.",
+    "Only extract, classify, plan, report were executed; broader proposed bricks are untrained.",
+    "No per-brick causal cost or independent coefficient identification is established."
+  ],
+  "provenance": {
+    "source_run": "20260914_customer_scoping_v2",
+    "source_file_sha256": {
+      "slls-disaster-dashboard-1-batched-0.request.json": "3f1e461b04a4316053d015cd1fe20a2fb81ab89fff5f98aca8aa1adb26cc244f",
+      "slls-disaster-dashboard-1-batched-0.response.json": "35bf577820406d37d22c15e48911bcac3075dddaadc6bf75e59f4662619afc43",
+      "slls-disaster-dashboard-1-split-0.request.json": "368117bc0bb5af83fe66d38f51317c9ad2ded3740c96caaea63134c49a512b5a",
+      "slls-disaster-dashboard-1-split-0.response.json": "7399af223436fb960e96c6f6149a35250da7025434da6e0ee34074789c880272",
+      "slls-disaster-dashboard-1-split-1.request.json": "f6dd580590d1b0654319cdda3151423f93dea2a7aa6871c94b4b411edfed7725",
+      "slls-disaster-dashboard-1-split-1.response.json": "3d2285a0ad657c9d4ee0aa7a5c161dbadc0674d6fdb7c6f3f0917ed17ac0a57b",
+      "slls-disaster-dashboard-1-split-2.request.json": "6ef3c1a15e7f13b464dc9a8cadf9db61b713f3b52ae5d6f0be0c80f93f77694e",
+      "slls-disaster-dashboard-1-split-2.response.json": "a1817babf2c690c9f86417e75be3514b785db32ed9903780869571dc349e36fc",
+      "slls-disaster-dashboard-1-split-3.request.json": "0e69573bec647a01d8fe12cc8187d8e2d6ea78f384fbd6e3808d8bb8d961f8a0",
+      "slls-disaster-dashboard-1-split-3.response.json": "bbd62e0349c6a960d2f80c67af6384a991dc11d81bed29eec78861f92fd99b8c",
+      "campus-compact-evaluation-1-split-0.request.json": "cd4b78bc408097b3066aa06dc50b92d0e52fb073a26ebcf2034758b8f08afed2",
+      "campus-compact-evaluation-1-split-0.response.json": "c3206437a0c5cf3c578f9fab7e2b9744e2f543cf3c938e530a895e96cb55d9af",
+      "campus-compact-evaluation-1-split-1.request.json": "ea52256b53dbaa7aa94630f97ff15712fb69be7dcf6e8ba475a3f8f674882e3e",
+      "campus-compact-evaluation-1-split-1.response.json": "257b562cdf06dcc0558fb2dc151160a108295c2561477c605060d4ad09032dee",
+      "campus-compact-evaluation-1-split-2.request.json": "fe7ebccfb10f564c16364403381c69a6d81548fd37bc2c4d5687943fcc3ed718",
+      "campus-compact-evaluation-1-split-2.response.json": "27b3abb2f7d68da82e354f370217521c5fe6df54d3cf3a40962fe10c84c033dd",
+      "campus-compact-evaluation-1-split-3.request.json": "1c1e57281a7d869751c7ad10588295170f1c0433a95087051e37453f46335a29",
+      "campus-compact-evaluation-1-split-3.response.json": "b51d1ce3e9c00ac7cf0b779e4784c089bb1cda9ccad8fc2b09c018c13583683f",
+      "climateworks-plastic-demand-review-0-split-0.request.json": "7c385e0fc42026fbc0832a834c757919cc4ad8a943dff89b7960342be932a499",
+      "climateworks-plastic-demand-review-0-split-0.response.json": "d7b4317392b8b9e9f79d5dc5e4e69cdd58a47f305dfa9db71b6bc01e8ffeab84",
+      "climateworks-plastic-demand-review-0-split-1.request.json": "a65f71166a4a981f292d468444c2696e02c89bbd036421ccc41a609caed3608e",
+      "climateworks-plastic-demand-review-0-split-1.response.json": "155584599e835de33376d80bd27f262a3b472042d07f74c43b877797ad024d88",
+      "climateworks-plastic-demand-review-0-split-2.request.json": "3b795af49a24e147190e6afb470764c32bf8cd3ff5b497426151b8534aa3a0fc",
+      "climateworks-plastic-demand-review-0-split-2.response.json": "9acada8f542b658aefd3aee2a0b2f7ba8f450322bafe065fedb77a88f1138f99",
+      "climateworks-plastic-demand-review-0-split-3.request.json": "6d2798a4632259bda9c005b47ff7fc305c1566e41bf2b3f01ce14321c6d1fa45",
+      "climateworks-plastic-demand-review-0-split-3.response.json": "1b2be1adc61fe7cd2c7e97c2f2f812e9291a439b8a2c1e24753857ad14925705",
+      "paradigm-website-redesign-1-batched-0.request.json": "38893e2ea51e35515c60f3930e0f0f9ae9c237bddbd7c78226b5610e82e3ba60",
+      "paradigm-website-redesign-1-batched-0.response.json": "b17e1c48bf2a177916489f06a94bc0cdc9ba682a05d5def30e3816e7b45ca833",
+      "paradigm-website-redesign-0-split-0.request.json": "482ee4500ae004bad9b849e1b497f624f3e789961794edd28e66775df474b634",
+      "paradigm-website-redesign-0-split-0.response.json": "0f15515d43f48bda04226cb22e7bd996d142cb925fb107d83edb5343564916d4",
+      "paradigm-website-redesign-0-split-1.request.json": "06407324f1d1af080ae61b7b2a2b4cf017f6881eb068a3d0951907ccdce74d3a",
+      "paradigm-website-redesign-0-split-1.response.json": "52b77c4c3d59a6f40a0988dfbce0b59c735b1ca911c2fc99e37c16a27d322ee6",
+      "paradigm-website-redesign-0-split-2.request.json": "9378b29767d1f68f851e203e65c3def2ba509dfbaffaf17dec200d446927f737",
+      "paradigm-website-redesign-0-split-2.response.json": "070a890e9780c8c36d62bf06b650127e0dd53352fee490022b4b747edc962305",
+      "paradigm-website-redesign-0-split-3.request.json": "cf9a155abdf3b58c29442c7b0b270a027990ddd9f29896affa9435d4aa69fdab",
+      "paradigm-website-redesign-0-split-3.response.json": "8e37e014654f1722fae2685b21ccfad6e5b5e762d93df20ec83e6967f74e6e2a",
+      "climateworks-plastic-demand-review-1-split-0.request.json": "7c385e0fc42026fbc0832a834c757919cc4ad8a943dff89b7960342be932a499",
+      "climateworks-plastic-demand-review-1-split-0.response.json": "d30796c30ec345b492150bcb4b4976e46002de5febbf557f84bfe60fba57fcc2",
+      "climateworks-plastic-demand-review-1-split-1.request.json": "a65f71166a4a981f292d468444c2696e02c89bbd036421ccc41a609caed3608e",
+      "climateworks-plastic-demand-review-1-split-1.response.json": "49951590d8613c86bf76a7f2cc0fd883249cd6ec8fb228cfb5805a7a05f7ef35",
+      "climateworks-plastic-demand-review-1-split-2.request.json": "3b795af49a24e147190e6afb470764c32bf8cd3ff5b497426151b8534aa3a0fc",
+      "climateworks-plastic-demand-review-1-split-2.response.json": "2691425e2ccc9a446a1b360863274adaccf6a9d5462bf4eee330c28760fed5e5",
+      "climateworks-plastic-demand-review-1-split-3.request.json": "6d2798a4632259bda9c005b47ff7fc305c1566e41bf2b3f01ce14321c6d1fa45",
+      "climateworks-plastic-demand-review-1-split-3.response.json": "e9ba88f5eb7e2203ee01b6a51c361942cbcbc61fc32fc9724de52942f51841b6",
+      "slls-disaster-dashboard-0-batched-0.request.json": "3f1e461b04a4316053d015cd1fe20a2fb81ab89fff5f98aca8aa1adb26cc244f",
+      "slls-disaster-dashboard-0-batched-0.response.json": "d1e6f2f54c53ad33eca4168cc8304e118fbf9e4b18e3a86776605faf0feffb1f",
+      "paradigm-website-redesign-1-split-0.request.json": "482ee4500ae004bad9b849e1b497f624f3e789961794edd28e66775df474b634",
+      "paradigm-website-redesign-1-split-0.response.json": "157a1e0e3d3587441ce522cbc676c3cfac2c2da4e3fd544ddf293127895a1f5f",
+      "paradigm-website-redesign-1-split-1.request.json": "06407324f1d1af080ae61b7b2a2b4cf017f6881eb068a3d0951907ccdce74d3a",
+      "paradigm-website-redesign-1-split-1.response.json": "12fb5c5352b0cc6a8cdea6cf45579ba3882a5c62dfc7315e895558e612c3d754",
+      "paradigm-website-redesign-1-split-2.request.json": "9378b29767d1f68f851e203e65c3def2ba509dfbaffaf17dec200d446927f737",
+      "paradigm-website-redesign-1-split-2.response.json": "bf92484d928b4730a45534b38109f8666719b65681884bdcce6d5003433ec5fa",
+      "paradigm-website-redesign-1-split-3.request.json": "cf9a155abdf3b58c29442c7b0b270a027990ddd9f29896affa9435d4aa69fdab",
+      "paradigm-website-redesign-1-split-3.response.json": "5722a86b3e584908d2324cc12fa3f57c109522729d23620c344a8d33d58a764e",
+      "climateworks-plastic-demand-review-0-batched-0.request.json": "129b6d5acedf2695cc936239fad5f91fee16884eeebee226bc7332785427049b",
+      "climateworks-plastic-demand-review-0-batched-0.response.json": "2c9ff81a978a8dc45fb2e8e32298fffc81b0954885f521cd003438043906369c",
+      "campus-compact-evaluation-1-batched-0.request.json": "c9b5cf9b12836c1d62846c1cda88f84d90c2b255a71ca138f338e6bf8e1d79c4",
+      "campus-compact-evaluation-1-batched-0.response.json": "92857b349c61213c315e139ad570faa34bec0fd0c421c891452c688c959c56f0",
+      "climateworks-plastic-demand-review-1-batched-0.request.json": "129b6d5acedf2695cc936239fad5f91fee16884eeebee226bc7332785427049b",
+      "climateworks-plastic-demand-review-1-batched-0.response.json": "97deba5f50185a35730a622b8306ceebe6d275a739fe0b81e24cf71ac920b1f1",
+      "campus-compact-evaluation-0-batched-0.request.json": "c9b5cf9b12836c1d62846c1cda88f84d90c2b255a71ca138f338e6bf8e1d79c4",
+      "campus-compact-evaluation-0-batched-0.response.json": "40984e971cdb020c054e6ecfd99189446d244d29ba13d83a21b22729070a5aaf",
+      "campus-compact-evaluation-0-split-0.request.json": "cd4b78bc408097b3066aa06dc50b92d0e52fb073a26ebcf2034758b8f08afed2",
+      "campus-compact-evaluation-0-split-0.response.json": "38d6a244f24a032184ebc90076bfc0b336b604e45c4004e746d5adabfcffdaae",
+      "campus-compact-evaluation-0-split-1.request.json": "ea52256b53dbaa7aa94630f97ff15712fb69be7dcf6e8ba475a3f8f674882e3e",
+      "campus-compact-evaluation-0-split-1.response.json": "1d89ffaceb6c74851d44c79a3d4d841d20ee6c05191606200af5e8c51fed0f5c",
+      "campus-compact-evaluation-0-split-2.request.json": "fe7ebccfb10f564c16364403381c69a6d81548fd37bc2c4d5687943fcc3ed718",
+      "campus-compact-evaluation-0-split-2.response.json": "2c902bf3c4f4603aee71d9fdf503f0fd134c98d13a27e8d9efdadddc005a7110",
+      "campus-compact-evaluation-0-split-3.request.json": "1c1e57281a7d869751c7ad10588295170f1c0433a95087051e37453f46335a29",
+      "campus-compact-evaluation-0-split-3.response.json": "15251fb16bd129ab407a1a8e339ebf38068eff2b6a799100dce6eb317125cc45",
+      "slls-disaster-dashboard-0-split-0.request.json": "368117bc0bb5af83fe66d38f51317c9ad2ded3740c96caaea63134c49a512b5a",
+      "slls-disaster-dashboard-0-split-0.response.json": "a43b727d6926f30b3f7a3294871da4b083043c8bb533f46fefb022e993a02c2a",
+      "slls-disaster-dashboard-0-split-1.request.json": "f6dd580590d1b0654319cdda3151423f93dea2a7aa6871c94b4b411edfed7725",
+      "slls-disaster-dashboard-0-split-1.response.json": "f8fa76fa62c4f11918a7780920b509f4df2ca1d7927fcbed64032033f1754e60",
+      "slls-disaster-dashboard-0-split-2.request.json": "6ef3c1a15e7f13b464dc9a8cadf9db61b713f3b52ae5d6f0be0c80f93f77694e",
+      "slls-disaster-dashboard-0-split-2.response.json": "d9dc3d860074d0eb831ada73912541d42f827bdc38b29a38562a8714fe86a0d5",
+      "slls-disaster-dashboard-0-split-3.request.json": "0e69573bec647a01d8fe12cc8187d8e2d6ea78f384fbd6e3808d8bb8d961f8a0",
+      "slls-disaster-dashboard-0-split-3.response.json": "84fc25ce1025e3e3f4496e4a2a5b3b44f47789c48510589551c09efddcb56a0d",
+      "paradigm-website-redesign-0-batched-0.request.json": "38893e2ea51e35515c60f3930e0f0f9ae9c237bddbd7c78226b5610e82e3ba60",
+      "paradigm-website-redesign-0-batched-0.response.json": "5fe46d7058ac13fc9c289ad1f9e227f38fc41da5127230deaaf09c1e2e4b6f5b",
+      "a4l-security-assessment-1-split-0.request.json": "f11a78f73ecadcf4a7b914297de2f9485f23029e816e7d0abd507a9130e1e6af",
+      "a4l-security-assessment-1-split-0.response.json": "39a578cdb6720e4c7b7dc9504e34d2285bbde23cc4c1b4ff0dae598b3806ea06",
+      "a4l-security-assessment-1-split-1.request.json": "e056c9596833005ce5d3ac172644efaa7b0b98117d9d6d68540721ad8f3437ac",
+      "a4l-security-assessment-1-split-1.response.json": "db5763a21ebb3a37d5a76f713018019a1fec07b8b06fc857ed46f82377a2ee31",
+      "a4l-security-assessment-1-split-2.request.json": "3015d28a4ef7212685d038bb766c708442e91e17dc5636fb971d9204613ed4cd",
+      "a4l-security-assessment-1-split-2.response.json": "470f8e83666b96736dcdb3fa7aac59ba584ae789c01587c2df493009d3546c43",
+      "a4l-security-assessment-1-split-3.request.json": "c85243bfbdfb98739f3cc4d834298f9fab651cc2fc43d8f52fc1266c6c217ec4",
+      "a4l-security-assessment-1-split-3.response.json": "26f3fb3508f5d41321cf9c54caa900eb850c3a4779d207a05dfa358f657c05a7",
+      "a4l-security-assessment-0-batched-0.request.json": "2cfe87a01250bb9a74dfbbd5d0c10725d1de3e90e9926de84a9f7a43fa54fce5",
+      "a4l-security-assessment-0-batched-0.response.json": "8bbd65b51ff5d5bbf6dc189a3df4e5311378fb751461b64651d6f96d28469cd8",
+      "handmade-arcade-strategic-plan-0-batched-0.request.json": "ba285260c0eb5286ceabdafb93672758dfc1679b1328829535ea8e5f1bd86def",
+      "handmade-arcade-strategic-plan-0-batched-0.response.json": "0f57956fe451085edb8a0c4e5af5c315a7d65d6f631ccc37517dc641e7cf62fe",
+      "handmade-arcade-strategic-plan-0-split-0.request.json": "c2a9bde6df0470516f9f97fd354398a3290514feb241a46d420078efd1978cad",
+      "handmade-arcade-strategic-plan-0-split-0.response.json": "34dfda1fa500e0f057caf518f876b5967f6d803a6cdeaedd42d48385a5638b9b",
+      "handmade-arcade-strategic-plan-0-split-1.request.json": "3894413e370e1177d21b4e94d04b27b8c4369b33ee852e735af55c866cdeb40f",
+      "handmade-arcade-strategic-plan-0-split-1.response.json": "079500d415c65665ece6ae84bfcd6c7fa75e5d3422e00d88feee3c2132e4eac9",
+      "handmade-arcade-strategic-plan-0-split-2.request.json": "d0a97ae5d227392860918c91d00479cced3249f43390d3be535bdd528ab252b1",
+      "handmade-arcade-strategic-plan-0-split-2.response.json": "44e33dce15db5bcde9cfce77deb5a01570c9b32451f87264fd724c2bc2949104",
+      "handmade-arcade-strategic-plan-0-split-3.request.json": "f9194a1ed5f44512b52662430d57002414d3d31cd6dd720d9bd57716cb9b3421",
+      "handmade-arcade-strategic-plan-0-split-3.response.json": "4e68a6d0c209a82d43f6e0dbfee7847758619212b24f02a807ea8e38516abc23",
+      "handmade-arcade-strategic-plan-1-batched-0.request.json": "ba285260c0eb5286ceabdafb93672758dfc1679b1328829535ea8e5f1bd86def",
+      "handmade-arcade-strategic-plan-1-batched-0.response.json": "1a1e68090bfca963305682225402684fc2170a7373219a1ceb09f6a2eaea90c2",
+      "a4l-security-assessment-0-split-0.request.json": "f11a78f73ecadcf4a7b914297de2f9485f23029e816e7d0abd507a9130e1e6af",
+      "a4l-security-assessment-0-split-0.response.json": "1facc862a387a5ed2d2ab4864f2dea320808a6e8b912d55cca6d427c837cbb1f",
+      "a4l-security-assessment-0-split-1.request.json": "e056c9596833005ce5d3ac172644efaa7b0b98117d9d6d68540721ad8f3437ac",
+      "a4l-security-assessment-0-split-1.response.json": "6ef75a11a1ed569532676a0ee8257208ce1c4661d3ce7d46d33f19317442ba69",
+      "a4l-security-assessment-0-split-2.request.json": "3015d28a4ef7212685d038bb766c708442e91e17dc5636fb971d9204613ed4cd",
+      "a4l-security-assessment-0-split-2.response.json": "09461dd2309f296cbe79d77edcfbf098d87fbe3f339ea9a4c6c8b88396a133ed",
+      "a4l-security-assessment-0-split-3.request.json": "c85243bfbdfb98739f3cc4d834298f9fab651cc2fc43d8f52fc1266c6c217ec4",
+      "a4l-security-assessment-0-split-3.response.json": "ec95e61df6c4d3e12016edc0edb16cffe9677ae3667065e758f06ab3d59e61e9",
+      "a4l-security-assessment-1-batched-0.request.json": "2cfe87a01250bb9a74dfbbd5d0c10725d1de3e90e9926de84a9f7a43fa54fce5",
+      "a4l-security-assessment-1-batched-0.response.json": "7c6ca513a61e10195c1802f5c1f0e2b689b8bb9388925cab5765641f84f44db3",
+      "handmade-arcade-strategic-plan-1-split-0.request.json": "c2a9bde6df0470516f9f97fd354398a3290514feb241a46d420078efd1978cad",
+      "handmade-arcade-strategic-plan-1-split-0.response.json": "7d49d25f8cb177e875e97c1dd49bc934d189c83ca35410b295f4329d45c48330",
+      "handmade-arcade-strategic-plan-1-split-1.request.json": "3894413e370e1177d21b4e94d04b27b8c4369b33ee852e735af55c866cdeb40f",
+      "handmade-arcade-strategic-plan-1-split-1.response.json": "9461c07c6e0284c0491c1987306e1d2cf1d84f0f43d34e535976371960975ae6",
+      "handmade-arcade-strategic-plan-1-split-2.request.json": "d0a97ae5d227392860918c91d00479cced3249f43390d3be535bdd528ab252b1",
+      "handmade-arcade-strategic-plan-1-split-2.response.json": "49cc28f9e29f246f18e27c7a6163af97e68e548ed5cf302be57f5b74691a034d",
+      "handmade-arcade-strategic-plan-1-split-3.request.json": "f9194a1ed5f44512b52662430d57002414d3d31cd6dd720d9bd57716cb9b3421",
+      "handmade-arcade-strategic-plan-1-split-3.response.json": "4c7a2bf04e08e97785317d8d0a0d60194f03e6d08524e9217e4e95e8694de0de",
+      "protocol.json": "22583b8cb0deb1d355d2d206aa23a845c237195aa3e85ae23d9d03c2f5ecfdf4",
+      "records.json": "96702e8065de7f0211db56e4e556a4cd9334d951a311f10f1082791d99412bfa"
+    },
+    "catalog_sha256": "aa644aea92e7fd6d922687f70f3bacee320cf6a19b7cbb0b26a7f9ae5faf26f1",
+    "training_code_sha256": {
+      "customer_models.py": "2afce7596e40582dfd7ae14f9c9a3bbb718d69acb1379e28b1f688bac2acd698",
+      "customer_pilot.py": "9884437acc80d4909885d6133c52583fa6ef0066d3485ee5891c01920b0f412e",
+      "customer_decomposition.py": "1eae24c659408d62051531fe48cc05a1f6536e05b035115f147f8d6b7b1b8255",
+      "robust.py": "99b88c2f01af94defbefa000f739c6577c3712584a6cbe1187cdd92b660720fd",
+      "economics.py": "0d81485da685de9313e3a3e389b9032ddb9a93c540b753627f473361cd203531"
+    }
+  }
+}
