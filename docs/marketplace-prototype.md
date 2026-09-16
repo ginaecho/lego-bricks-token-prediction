@@ -14,11 +14,73 @@ not a production storefront or a purchasing system.
 > does not call the repository's trained predictor or a model provider.
 > Business benefits are hypotheses, not measured improvements.
 
+## Working local project pipeline
+
+The sales page also supports an actual local backend. Start it from the demo
+worktree using a Python environment with the repository available:
+
+```text
+python -m examples.marketplace_demo_server --port 8765
+```
+
+Open <http://127.0.0.1:8765/marketplace-sales-demo.html?mode=custom>.
+If that port is already occupied, use `--port 8766` and change the URL to match.
+Choose **Load security project**, then **Run project pipeline + open operations**.
+The companion [operations page](../marketplace-operations-demo.html) opens
+automatically. If the browser blocks popups, use the operations link in the
+sales page. Both pages read the same backend run, identified by its run ID.
+
+The backend performs these operations rather than animating canned progress:
+
+1. Decompose the security-documentation brief with explicit offline rules.
+2. Build a wiki from original fictional sample documents and document links.
+3. Compare text evidence against a demo reference-requirements checklist.
+4. Attempt a prediction using the initial feature schema.
+5. Detect a novel function, generate labeled synthetic token samples, and
+   construct an expanded numerical feature matrix.
+6. Fit local regression models using the repository's
+   `RidgeLinearModel`, evaluate on separate synthetic samples, and predict again.
+7. Save the run, training evidence and model artifacts locally.
+
+Choose **Try a new function** to add Policy-as-code validation and rerun.
+Operations shows the new feature, any initial unsupported prediction, sample
+rows, fitted coefficients, evaluation metrics, and the resulting token estimate.
+Its event console reflects backend events also printed in the server terminal.
+Opening operations alone never starts a training run.
+
+Review the proposed functions and approve **Replace build with this complete
+pipeline** to use the returned input/output prediction in the sales estimate.
+The whole project is one composite brick, so its internal functions are not
+charged a second time. Its model and document features are frozen to that run;
+rerun to change them. Monthly volume and commercial assumptions remain editable.
+Staffing, tool costs and ROI are not outputs of the trained regression.
+
+> [!IMPORTANT]
+> Model fitting and document processing are real local operations, but the
+> token measurements are synthetic. Low test error against that simulator is
+> not evidence of accuracy on real LLM calls. Named model rates remain scenario
+> assumptions. No LLM provider, live web search or AI deep-research service runs.
+
+The reference documents are a fictional demo baseline, not an exhaustive
+security standard or certified ground truth. Found, partial and missing text
+evidence are documentation diagnostics, not proof that controls work. An expert
+must confirm the applicable requirements, validate the evidence, and approve
+any compliance conclusion.
+
+Run artifacts are stored in the ignored `.demo-runs/` directory by default.
+Each run starts from a reproducible synthetic baseline; it does not accumulate
+learning across submitted projects or execute the newly named function itself.
+The run list covers the current server process. Saved artifacts remain on disk
+after a restart, but are not automatically reloaded into that list.
+Do not enter confidential briefs into a shared prototype. The server is for
+localhost demonstrations, not production hosting.
+
 ## Sales conversation demo
 
 Open [marketplace-sales-demo.html](../marketplace-sales-demo.html) directly in
 a browser. This separate prototype builds on marketplace layout A; the original
-three-layout explorer remains available. No server or dependencies are needed.
+three-layout explorer remains available. The original manual and quick-preview
+flows need no server; the working project pipeline above requires localhost.
 
 The demo provides two entry paths to the same estimate:
 

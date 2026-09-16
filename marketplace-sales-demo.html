@@ -60,13 +60,13 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 <body>
 <header><div class="header-inner">
   <div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Token Yield</div>
-  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><span>Sales studio</span><span class="pill amber">Simulation / no API calls</span></div>
+  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><span>Sales studio</span><span class="pill amber">Local prototype / no provider calls</span></div>
 </div></header>
 <main>
   <section class="intro"><div><div class="eyebrow">The functionality marketplace</div><h1>Your next product.<br>One brick at a time.</h1><p>Shape the solution together. Explore the capabilities, the team, and the value they could create &mdash; not just the tokens they consume.</p></div>
     <div class="steps"><span><b>1</b> Choose &amp; customize</span><span><b>2</b> Shape your estimate</span><span><b>3</b> Make the value case</span></div>
   </section>
-  <div class="notice"><b>Sales-flow prototype.</b> Can sales and a client turn selected capabilities or a brief into a transparent value case? All token coefficients, LLM factors, prices, staffing, and ROI are <b>editable illustrative assumptions</b>. No trained predictor or live LLM is connected; variants and model choices are not calibrated.</div>
+  <div class="notice"><b>Sales-flow prototype.</b> Manual bricks use illustrative coefficients. The local project pipeline performs <b>real feature engineering and regression training on synthetic token measurements</b>. Neither path is calibrated against real LLM usage. No live LLM or web research is called; prices, staffing and benefits remain planning assumptions.</div>
   <nav class="mode-bar" aria-label="Demo flows">
     <button class="mode active" id="manual-tab" aria-pressed="true">01 &nbsp; Build with bricks</button>
     <button class="mode" id="custom-tab" aria-pressed="false">02 &nbsp; Describe your idea</button>
@@ -76,17 +76,31 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
   <div class="workspace">
     <div>
       <section id="custom-panel" class="panel" hidden>
-        <div class="section-head"><div><div class="eyebrow">Demo 02 / brief to bricks</div><h2>What would you like to build?</h2><p>Describe research or a whole solution. Review the proposed mapping before adding it.</p></div><span class="pill amber">Local simulation</span></div>
+        <div class="section-head"><div><div class="eyebrow">Demo 02 / project to trained estimate</div><h2>What would you like to build?</h2><p>Describe the project, run the local pipeline, and inspect what happens in the operations page.</p></div><span class="pill amber">Synthetic training data</span></div>
         <label for="brief">Customized description</label>
         <textarea id="brief" maxlength="6000" placeholder="For example: Deep research into competitors, web research with cited sources, and personalized discovery based on customer interests."></textarea>
         <div class="form-grid two">
           <label>Focus area<select id="brief-focus"><option value="all">Whole solution</option><option value="research">Research</option><option value="recommend">Personalized discovery</option><option value="support">AI customer support</option><option value="documents">Document automation</option></select></label>
           <label>Preferred execution LLM<select id="brief-model" class="model-options"></select><small>This selects a scenario rate card; it does not call this model.</small></label>
         </div>
-        <div class="custom-actions"><button class="primary" id="decompose">Preview decomposition (simulated)</button><button class="secondary" id="example">Load research example</button></div>
-        <p class="help">This preview uses visible keyword rules, not an LLM. Unsupported, negative, or conditional requirements need human clarification. A production LLM would propose this same catalog mapping, followed by approval and a calibrated predictor.</p>
-        <div class="flow"><span>Your description</span>&rarr;<span>Simulated catalog mapping</span>&rarr;<span>You approve</span>&rarr;<span>Illustrative feature estimator</span>&rarr;<span>Cost + value case</span></div>
+        <div class="form-grid two">
+          <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>One execution runs the complete document-checking pipeline once.</small></label>
+          <label>New function to explore (optional)<input id="new-function" class="search" maxlength="120" placeholder="For example: Policy-as-code validation"><small>A new function expands the feature schema and triggers synthetic sampling and refitting.</small></label>
+        </div>
+        <div class="custom-actions"><button class="primary" id="run-pipeline">Run project pipeline + open operations</button><button class="secondary" id="security-example">Load security project</button><button class="secondary" id="novel-example">Try a new function</button></div>
+        <p id="backend-status" class="help" role="status">Checking local backend...</p>
+        <p class="help">The backend uses original fictional sample documents and an explicit demo reference checklist. It builds document links, finds text evidence and missing items, creates synthetic token samples, fits a regression model, and predicts again. These are real local operations, not live LLM reasoning or proof of security compliance. The focus-area filter above applies only to the quick preview below.</p>
+        <div class="flow"><span>Project brief</span>&rarr;<span>Document wiki + reference checklist</span>&rarr;<span>Evidence + gaps</span>&rarr;<span>New feature? Generate synthetic samples</span>&rarr;<span>Fit model + predict</span></div>
+        <div id="pipeline-progress" class="proposal" hidden>
+          <a id="operations-link" target="token-yield-operations" rel="noopener">Open background operations &nearr;</a>
+          <p id="pipeline-status" class="help" role="status"></p>
+          <div id="pipeline-result"></div>
+        </div>
+        <details><summary>Quick catalog preview / original keyword-only demo</summary>
+        <div class="custom-actions"><button class="secondary" id="decompose">Preview decomposition (simulated)</button><button class="secondary" id="example">Load research example</button></div>
+        <p class="help">This older shortcut only matches catalog phrases. Use the project pipeline above for the security-documentation example. Neither route uses a live LLM.</p>
         <div id="proposal" class="proposal" hidden></div>
+        </details>
       </section>
       <section aria-labelledby="catalog-heading">
         <div class="section-head"><div><h2 id="catalog-heading">The functionality marketplace</h2><p>Click a brick to zoom in. Mix variants and choose an LLM for each.</p></div><button id="starter" class="secondary">Load sales example</button></div>
@@ -95,9 +109,11 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         <div class="catalog" id="catalog"></div>
       </section>
       <section class="panel section-space" aria-labelledby="assumptions-heading">
-        <div class="eyebrow">Shape your estimate</div><h2 id="assumptions-heading">Shared planning assumptions</h2><p class="help">Monthly runs are set per selected variant. Multiple variants are separate workloads, not mutually exclusive research depths.</p>
+        <div class="eyebrow">Shape your estimate</div><h2 id="assumptions-heading">How often will you use each feature?</h2>
+        <p class="help">One run means using a selected option once, such as completing one web research request. Open a brick to set how many times you expect to use each option per month.</p>
+        <p class="help"><b>Example:</b> 100 web research requests + 20 deep research requests = 120 research requests per month. The estimate includes the cost of both. Selecting deep research does not replace web research; uncheck an option if you do not need it.</p>
         <div class="form-grid">
-          <label>New variant runs / month<input id="defaultRuns" type="number" min="0" max="1000000" step="1" value="1000"><small>Applies when adding variants, not existing ones.</small></label>
+          <label>Starting monthly usage for new options<input id="defaultRuns" type="number" min="0" max="1000000" step="1" value="1000"><small>Prefills the number of uses when you add an option. To change an option already in your build, open its brick and edit its monthly runs.</small></label>
           <label>Context tokens / run<input id="context" type="number" min="0" max="100000" step="1" value="500"><small>Additional input per variant execution.</small></label>
           <label>Integration complexity<select id="complexity"><option value="1">Standard / shared APIs</option><option value="1.6">Custom systems / 1.6x</option><option value="2.4">Legacy systems / 2.4x</option></select><small>Affects routing and setup, not variant tokens.</small></label>
           <label>Coordinator LLM<select id="coordinator" class="model-options"></select><small>Rates one-time setup and recurring routing.</small></label>
@@ -153,10 +169,10 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
       <button class="primary wide" id="review">Review build &amp; value case &rarr;</button>
       <p class="fine"><a href="#value-heading">Explore ROI and client-impact assumptions &darr;</a></p>
       <div style="text-align:center"><button class="text-button" id="clear">Clear build</button></div>
-      <p class="fine">Illustrative, not a trained forecast, invoice, staffing commitment or guaranteed return. All amounts in USD. No work is executed. Export includes assumptions and full calculation details.</p>
+      <p class="fine">Not calibrated against real LLM usage; not an invoice, staffing commitment or guaranteed return. All amounts in USD. The project backend processes sample documents and trains on synthetic data; it does not execute the proposed customer service. Export includes assumptions and calculation details.</p>
     </aside>
   </div>
-  <footer><span>Token Yield &middot; Marketplace sales-flow prototype &middot; based on feat/marketplace</span><span>Private by design: in-memory, offline, no telemetry.</span></footer>
+  <footer><span>Token Yield &middot; Marketplace sales-flow prototype &middot; based on feat/marketplace</span><span>No external calls. Manual build stays in memory; backend run artifacts are saved locally.</span></footer>
 </main>
 <dialog id="configure" aria-labelledby="configure-title">
   <div class="dialog-head"><div><div class="eyebrow">Zoom into your brick</div><h2 id="configure-title"></h2></div><button class="close" data-close="configure" aria-label="Close configuration">&times;</button></div>
@@ -210,7 +226,7 @@ const MODELS = [
   {id:"gemini",name:"Gemini Flash",input:0.3,output:2.5,inputFactor:0.95,outputFactor:1.05}
 ];
 const LIMITATIONS = [
-  "Offline sales simulation; no live LLM, trained predictor or provider connection.",
+  "No live LLM or provider connection. Manual catalog uses fixed illustrative coefficients; project runs can use a fitted synthetic-data model.",
   "Atomic token coefficients inherited from feat/marketplace are illustrative, not fitted.",
   "Variant tasks, context conversion, LLM factors, rates, staffing and tool fees are editable scenario assumptions.",
   "No calibrated ranges or demonstrated coverage for these capabilities, variants or model runtimes.",
@@ -228,15 +244,18 @@ const compact = value => value >= 1e6 ? `${number(value/1e6)}M` : value >= 1000 
 const key = (feature,variant) => `${feature}:${variant}`;
 const fields = ["defaultRuns","context","complexity","reserve","operating","weeks","weekHours","dsRate","archRate","consultRate","reviewRate","cases","before","after","laborValue","realization","contribution"];
 class InputError extends Error {}
+class PipelineError extends Error {}
 let selections = [], category = "All", editingFeature = null, proposal = null, latestEstimate = null, mode = "manual";
+let pipelineRun=null, pipelineBusy=false, pipelineTimer=null, pipelineGeneration=0, projectScenario=null;
 const modelOptions = selected => MODELS.map(model => `<option value="${model.id}" ${model.id===selected?"selected":""}>${model.name}</option>`).join("");
 function assumptions() {
   for (const id of fields) if (!$(id).checkValidity()) throw new InputError(`Check "${$(id).closest("label").childNodes[0].textContent.trim()}": enter a value within the displayed limits.`);
   return Object.fromEntries(fields.map(id => [id,Number($(id).value)]));
 }
 function record(featureId,variantId,modelId="gpt-mini",runs=1000,source="catalog",description="") {
-  const variant = CATALOG.find(item => item.id===featureId).variants.find(item => item.id===variantId);
-  return {featureId,variantId,modelId,runs,hours:[...variant.hours],review:variant.review,tool:variant.tool,source,description};
+  const feature=CATALOG.find(item => item.id===featureId),variant=feature.variants.find(item => item.id===variantId);
+  return {featureId,variantId,modelId:feature.backendRequest?.model_id||modelId,runs,hours:[...variant.hours],review:variant.review,tool:variant.tool,source,description,
+    ...(feature.backendPrediction?{backendPrediction:feature.backendPrediction,backendFeatures:feature.backendFeatures,backendRunId:feature.backendRunId}:{})};
 }
 // One pure calculation feeds the sidebar, review, business case and exported estimate.
 function calculate(items,a,models,coordinatorId) {
@@ -245,14 +264,16 @@ function calculate(items,a,models,coordinatorId) {
     const variant = feature.variants.find(entry => entry.id===item.variantId);
     const model = models.find(entry => entry.id===item.modelId);
     const atomCounts = variant.atoms.reduce((counts,atom) => ({...counts,[atom]:(counts[atom]||0)+1}),{});
-    const raw = variant.atoms.reduce((sum,atom) => [sum[0]+ATOMS[atom][0],sum[1]+ATOMS[atom][1]],[0,0]);
+    const raw = item.backendPrediction ? [0,0] : variant.atoms.reduce((sum,atom) => [sum[0]+ATOMS[atom][0],sum[1]+ATOMS[atom][1]],[0,0]);
     const briefInput = Math.ceil(item.description.length/4);
-    const perRun = {input:Math.ceil((raw[0]+a.context+briefInput)*model.inputFactor),output:Math.ceil(raw[1]*model.outputFactor)};
+    const perRun = item.backendPrediction ? {input:item.backendPrediction.input_tokens,output:item.backendPrediction.output_tokens} :
+      {input:Math.ceil((raw[0]+a.context+briefInput)*model.inputFactor),output:Math.ceil(raw[1]*model.outputFactor)};
     const tokens = {input:perRun.input*item.runs,output:perRun.output*item.runs};
     const api = (tokens.input*model.input+tokens.output*model.output)/1e6;
     return {...item,feature:feature.name,variant:variant.name,model:model.name,atomCounts,briefInput,perRun,tokens,api,
       toolCost:item.tool*item.runs,reviewHours:item.review*item.runs/60,
-      featureVector:{capability:item.featureId,variation:item.variantId,model:item.modelId,atomCounts,contextTokens:a.context,briefInputTokens:briefInput}};
+      featureVector:item.backendPrediction ? {source:"synthetic-trained-project",runId:item.backendRunId,...item.backendFeatures} :
+        {capability:item.featureId,variation:item.variantId,model:item.modelId,atomCounts,contextTokens:a.context,briefInputTokens:briefInput}};
   });
   const groups = [...new Set(rows.map(row=>row.featureId))].map(id=>({id,runs:rows.filter(row=>row.featureId===id).reduce((sum,row)=>sum+row.runs,0)}));
   const coordinator = models.find(model=>model.id===coordinatorId);
@@ -307,8 +328,8 @@ function renderCatalog() {
     const chosen=selections.filter(item=>item.featureId===feature.id);
     const atoms=[...new Set(feature.variants.flatMap(variant=>variant.atoms))];
     return `<article class="card ${chosen.length?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature.color}" aria-hidden="true"></span><small>${feature.category}</small></div>
-      <div><h3><button class="card-title" data-configure="${feature.id}">${feature.name}</button></h3><p>${feature.description}</p></div>
-      <div class="tags">${atoms.map(atom=>`<span>${atom}</span>`).join("")}</div><div class="picked">${chosen.length ? chosen.map(item=>feature.variants.find(v=>v.id===item.variantId).name).join(" + ") : `${feature.variants.length} variations to explore`}</div>
+      <div><h3><button class="card-title" data-configure="${feature.id}">${esc(feature.name)}</button></h3><p>${esc(feature.description)}</p></div>
+      <div class="tags">${atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div><div class="picked">${chosen.length ? chosen.map(item=>esc(feature.variants.find(v=>v.id===item.variantId).name)).join(" + ") : `${feature.variants.length} variations to explore`}</div>
       <div class="card-bottom"><div><b>${chosen.length ? chosen.length+" selected" : "Choose your depth"}</b><small>Multi-select &middot; LLM per variation</small></div><button class="secondary" data-configure="${feature.id}" aria-label="Configure ${feature.name}">${chosen.length?"Edit brick":"Explore brick"} &rarr;</button></div></article>`;
   }).join("")||'<p class="empty">No matching functionalities. Try another search or category.</p>';
 }
@@ -365,8 +386,9 @@ function configure(id) {
     const item=selections.find(item=>item.featureId===id&&item.variantId===variant.id);
     const draft=item||record(id,variant.id,"gpt-mini",a.defaultRuns);
     return `<section class="variant-row"><input type="checkbox" name="pick-${variant.id}" id="pick-${variant.id}" ${item?"checked":""} aria-label="Select ${variant.name}">
-      <div><label for="pick-${variant.id}">${variant.name}</label><p>${variant.description}</p><div class="tags">${variant.atoms.map(atom=>`<span>${atom}</span>`).join("")}</div>
-      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}">${modelOptions(draft.modelId)}</select></label>${field("Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
+      <div><label for="pick-${variant.id}">${variant.name}</label><p>${esc(variant.description)}</p><div class="tags">${variant.atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div>
+      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}" ${editingFeature.backendPrediction?"disabled":""}>${modelOptions(draft.modelId)}</select></label>${field("Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
+      ${editingFeature.backendPrediction?'<p>This complete workflow uses a frozen synthetic-trained prediction. Rerun the project pipeline to change its model or document features. Shared context and token-factor controls do not change this snapshot; editable rates still change its USD scenario.</p>':""}
       <details><summary>Edit effort &amp; tool assumptions</summary><div class="form-grid two">
       ${field("Data scientist setup hours",`ds-${variant.id}`,draft.hours[0])}${field("Architect setup hours",`arch-${variant.id}`,draft.hours[1])}${field("Consultant setup hours",`consult-${variant.id}`,draft.hours[2])}
       ${field("Review minutes / run",`review-${variant.id}`,draft.review,"0.1","10000")}${field("Tool fee USD / run",`tool-${variant.id}`,draft.tool,"0.01","10000")}
@@ -432,6 +454,7 @@ function previewBrief() {
 }
 function invalidateProposal() {
   if(proposal){proposal=null;$("proposal").hidden=true;$("status").textContent="Description or preference changed. Preview again before approving.";}
+  if(pipelineRun && !pipelineBusy){pipelineRun=null;$("pipeline-result").innerHTML="";$("pipeline-status").textContent="Project inputs changed. Rerun the pipeline before using its prediction. Any previously approved build remains a frozen snapshot.";}
 }
 function applyProposal() {
   if(!proposal||!$("approve-mapping")?.checked)return;
@@ -447,7 +470,7 @@ function applyProposal() {
 function setMode(next) {
   mode=next;$("custom-panel").hidden=next!=="custom";
   ["manual","custom"].forEach(name=>{$(`${name}-tab`).classList.toggle("active",name===next);$(`${name}-tab`).setAttribute("aria-pressed",String(name===next));});
-  $("status").textContent=next==="custom"?"Demo 02: describe, inspect and approve. Your existing build is preserved.":"Demo 01: click a capability to select variations and LLMs. Your existing build is preserved.";
+  $("status").textContent=next==="custom"?"Demo 02: describe your project, run the backend, inspect the evidence and approve the pipeline. Your existing build is preserved.":"Demo 01: click a capability to select variations and LLMs. Your existing build is preserved.";
 }
 function loadStarter() {
   selections=[record("recommend","interests"),record("research","web")];
@@ -460,27 +483,127 @@ function renderFilters() {
 function exportData() {
   const a=assumptions();
   return {schema:"token-yield-marketplace-sales-demo-v1",createdAt:new Date().toISOString(),basis:"illustrative-simulation",
-    trainedPredictorConnected:false,liveLLMConnected:false,sourceBranch:"feat/marketplace",flow:mode,
+    trainedPredictorConnected:selections.some(item=>item.backendPrediction),trainingDataSource:selections.some(item=>item.backendPrediction)?"synthetic":null,
+    projectScenario:selections.some(item=>item.backendPrediction)?projectScenario:null,liveLLMConnected:false,sourceBranch:"feat/marketplace",flow:mode,
     assumptions:{...a,coordinatorId:$("coordinator").value},modelScenarioRates:MODELS,atomicScenarioTokens:ATOMS,
     selections,estimate:calculate(selections,a,MODELS,$("coordinator").value),limitations:LIMITATIONS};
 }
 function openReview() {
   renderQuote();if(!latestEstimate||!selections.length)return;
   const e=latestEstimate;
-  $("review-body").innerHTML=`<div class="notice">Illustrative scenario only. All selected functions, subtypes, models and costs below share one calculation. This is not a trained forecast.</div>
+  $("review-body").innerHTML=`<div class="notice">${e.rows.some(item=>item.backendPrediction)?"Includes a real regression prediction trained on synthetic token samples, not measured LLM usage. The project is one complete workflow; expand its constituent functions below.":"Illustrative scenario only; catalog tokens use fixed coefficients."} No real-world accuracy or ROI is established.</div>
     <div class="review-metrics"><div><small>Total tokens / month</small><b>${compact(e.totalTokens)}</b></div><div><small>Recurring cost / month</small><b>${money(e.monthlyCost)}</b></div><div><small>12-month ROI</small><b>${e.roi===null?"Not defined":number(e.roi)+"%"}</b></div></div>
     <h3>Final selected functionalities</h3><div class="table-scroll"><table><thead><tr><th>Capability / variant / LLM</th><th class="num">Runs/mo</th><th class="num">Tokens/run</th><th class="num">AI USD/mo</th></tr></thead><tbody>
-    ${e.rows.map(item=>`<tr><td><b>${item.feature}</b><small>${item.variant}</small><small>${item.model} &middot; ${item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${number(item.perRun.input+item.perRun.output)}</td><td class="num">${money(item.api)}</td></tr>`).join("")}
+    ${e.rows.map(item=>`<tr><td><b>${item.feature}</b><small>${item.variant}</small><small>${item.model} &middot; ${item.backendPrediction?"synthetic-trained project":item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${number(item.perRun.input+item.perRun.output)}</td><td class="num">${money(item.api)}</td></tr>`).join("")}
     <tr><td>Integration routing<small>${e.coordinator}; ${number(e.pairs.length)} assumed pairs</small></td><td class="num">${number(e.routingRuns)}</td><td class="num">&mdash;</td><td class="num">${money(e.monthlyApi-e.rows.reduce((sum,item)=>sum+item.api,0))}</td></tr></tbody></table></div>
     ${row("Total monthly tokens (exact)",number(e.totalTokens))}${row("Input / output",`${number(e.input)} / ${number(e.output)}`)}${row("Monthly AI API",money(e.monthlyApi))}${row("Monthly tools",money(e.tools))}${row("Monthly AI/tool reserve",money(e.reserveCost))}${row("Monthly human review",money(e.reviewCost))}${row("Other monthly operating cost",money(e.operating))}
     <div class="divider"></div><h3>Delivery team</h3>${e.team.map(role=>row(role.role,`${role.people} people / ${role.fte.toFixed(2)} FTE / ${number(role.hours)} h`)).join("")}
     ${row("One-time setup labor",money(e.setupLabor))}${row("One-time setup AI + reserve",money(e.setupAI))}${row("One-time setup tokens",number(e.setupTokens.input+e.setupTokens.output))}
     <div class="divider"></div><h3>Value case</h3>${row("Monthly gross benefit",money(e.benefit))}${row("Monthly net value",money(e.net))}${row("12-month benefit",money(e.yearBenefit))}${row("12-month total cost (including setup)",money(e.yearCost))}${row("12-month net value",money(e.yearBenefit-e.yearCost))}${row("Payback",e.payback===null?"Not reached":number(e.payback)+" months")}
     ${e.warnings.map(message=>`<div class="error">${message}</div>`).join("")}
-    <details><summary>Inspect feature vectors &amp; custom descriptions</summary>${e.rows.map(item=>`<div class="proposal-line"><b>${item.feature} / ${item.variant}</b><p class="help">${Object.entries(item.atomCounts).map(([atom,count])=>`${atom} &times; ${count}`).join(", ")}; context ${number($("context").value)} tokens; brief ${item.briefInput} tokens; model ${item.model}.</p>${item.description?`<p class="help">Brief: ${esc(item.description)}</p>`:""}</div>`).join("")}</details>
+    <details><summary>Inspect feature vectors &amp; custom descriptions</summary>${e.rows.map(item=>`<div class="proposal-line"><b>${item.feature} / ${item.variant}</b><p class="help">${Object.entries(item.atomCounts).map(([atom,count])=>`${esc(atom)} &times; ${count}`).join(", ")}; ${item.backendPrediction?"frozen backend feature vector (see export)":"context "+number($("context").value)+" tokens; brief "+item.briefInput+" tokens"}; model ${item.model}.</p>${item.description?`<p class="help">Brief: ${esc(item.description)}</p>`:""}${item.backendPrediction&&projectScenario?`<p class="help">Functions: ${projectScenario.result.bricks.map(brick=>esc(brick.name)).join("; ")}</p>`:""}</div>`).join("")}</details>
     <p class="fine">Capacity value is not guaranteed cash. Compare accepted outcomes, effort, quality and incremental margin with the client before making a commitment. No calibrated confidence intervals are available.</p>`;
   $("export-json").value=JSON.stringify(exportData(),null,2);$("download-status").textContent="";
   $("review-dialog").showModal();
+}
+async function backendJson(path,options={}) {
+  let response;
+  try {response=await fetch(path,{...options,signal:AbortSignal.timeout(15000)});}
+  catch(error){if(!(error instanceof TypeError)&&!(error instanceof DOMException))throw error;throw new PipelineError("The local backend could not be reached. Check the server terminal and reopen this page through localhost.");}
+  let data;
+  try {data=await response.json();}
+  catch(error){if(!(error instanceof SyntaxError))throw error;throw new PipelineError("The backend returned an invalid JSON response.");}
+  if(!response.ok)throw new PipelineError(typeof data.error==="string"?data.error:`Backend request failed (${response.status}).`);
+  return data;
+}
+function setPipelineBusy(busy) {
+  pipelineBusy=busy;
+  ["run-pipeline","security-example","novel-example","brief","brief-model","brief-focus","project-runs","new-function","decompose","example"].forEach(id=>$(id).disabled=busy);
+  $("run-pipeline").textContent=busy?"Backend pipeline is running...":"Run project pipeline + open operations";
+}
+function renderPipelineResult(run) {
+  const r=run.result;
+  if(!r||!Array.isArray(r.bricks)||!r.bricks.length||!r.after||!Number.isFinite(r.after.total_tokens)||!r.training)throw new PipelineError("Completed run is missing its prediction or training artifact. Nothing was added to the estimate.");
+  const missing=r.requirements.filter(item=>item.status==="missing").length,partial=r.requirements.filter(item=>item.status==="partial").length;
+  $("pipeline-result").innerHTML=`<div class="notice"><b>Real model fitting, synthetic measurements.</b> This run processed the sample document corpus and fitted a local regression. Its test error measures agreement with the simulator only.</div>
+    <h3>Your proposed project functions</h3><div class="impact-grid">${r.bricks.map(brick=>`<div class="impact"><h3>${esc(brick.name)}</h3><p>${brick.novel?"New function: expanded the feature schema.":"Reused function from the demo catalog."}</p><div class="tags">${brick.atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div></div>`).join("")}</div>
+    <div class="review-metrics"><div><small>Before new training</small><b>${r.before.supported?compact(r.before.total_tokens):"Not covered"}</b><small>${esc(r.before.reason)}</small></div><div><small>After training / one project run</small><b>${compact(r.after.total_tokens)}</b><small>${number(r.after.input_tokens)} input + ${number(r.after.output_tokens)} output</small></div><div><small>AI estimate / month</small><b>${money(r.after.usd_per_month)}</b><small>${number(run.request.runs_per_month)} complete project executions</small></div></div>
+    <p class="help">${number(r.training.train_count)} synthetic training samples; ${number(r.training.test_count)} separate synthetic test samples. ${r.feature_names.length} features. Model version: ${esc(r.training.version)}.</p>
+    <p class="help">${r.documents.length} sample documents linked to the wiki. ${missing} reference requirements have no matching evidence and ${partial} have partial evidence. Text matches are not proof that controls work. Inspect document text and the checklist in operations.</p>
+    <p class="help">Add the complete workflow as <b>one project brick</b> so its internal functions are not charged twice. Staffing and ROI remain editable commercial assumptions, separate from this synthetic-trained token prediction.</p>
+    <label style="margin-top:14px"><input id="approve-pipeline" type="checkbox"> I reviewed the proposed functions and understand this is a sample-corpus, synthetic-data estimate.</label>
+    <button id="use-pipeline" class="primary wide" disabled>Replace build with this complete pipeline</button>`;
+}
+async function pollPipeline(id,generation) {
+  if(generation!==pipelineGeneration)return;
+  try {
+    const run=await backendJson(`/api/runs/${encodeURIComponent(id)}`);
+    if(generation!==pipelineGeneration)return;
+    const last=run.events[run.events.length-1];
+    $("pipeline-status").textContent=`Run ${run.id} / ${run.status}${last?" / "+last.message:""}`;
+    if(run.status==="failed")throw new PipelineError(run.error||"The backend run failed. Inspect its event log.");
+    if(run.status==="completed"){
+      pipelineRun=run;renderPipelineResult(run);setPipelineBusy(false);
+      $("backend-status").textContent="Complete. Both HTML pages show the same persisted backend run. No live LLM calls were made.";return;
+    }
+    pipelineTimer=setTimeout(()=>pollPipeline(id,generation),700);
+  }catch(error){
+    if(!(error instanceof PipelineError))throw error;
+    setPipelineBusy(false);$("pipeline-status").textContent=error.message;$("backend-status").textContent="Run status unavailable or failed. Inspect operations; a connection failure does not cancel a running backend job.";
+  }
+}
+async function runPipeline() {
+  if(!["http:","https:"].includes(location.protocol)){
+    $("backend-status").textContent="This operation needs the local server. Run python -m examples.marketplace_demo_server from the demo worktree, then open its localhost URL.";return;
+  }
+  const description=$("brief").value.trim();
+  if(description.length<20||!$("project-runs").checkValidity()){
+    $("backend-status").textContent="Enter a project description of at least 20 characters and a whole number of monthly executions between 0 and 1,000,000.";return;
+  }
+  const request={description,model_id:$("brief-model").value,runs_per_month:Number($("project-runs").value),new_function:$("new-function").value.trim()};
+  const popup=window.open("/marketplace-operations-demo.html","token-yield-operations");
+  setPipelineBusy(true);pipelineRun=null;clearTimeout(pipelineTimer);const generation=++pipelineGeneration;
+  $("proposal").hidden=true;proposal=null;$("pipeline-result").innerHTML="";$("pipeline-progress").hidden=false;
+  $("operations-link").href="/marketplace-operations-demo.html";$("pipeline-status").textContent="Submitting project to the local backend...";
+  $("backend-status").textContent=popup?"The companion operations page is opening.":"Your browser blocked the companion popup. Use Open background operations below.";
+  try {
+    const run=await backendJson("/api/runs",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(request)});
+    const operations=`/marketplace-operations-demo.html?run=${encodeURIComponent(run.id)}`;
+    $("operations-link").href=operations;if(popup&&!popup.closed)popup.location.href=operations;
+    const url=new URL(location.href);url.searchParams.set("run",run.id);url.searchParams.set("mode","custom");history.replaceState(null,"",url);
+    await pollPipeline(run.id,generation);
+  }catch(error){
+    if(!(error instanceof PipelineError))throw error;
+    setPipelineBusy(false);$("pipeline-status").textContent=error.message;
+  }
+}
+function usePipeline() {
+  if(!pipelineRun||!$("approve-pipeline")?.checked)return;
+  const r=pipelineRun.result,atoms=r.bricks.flatMap(brick=>brick.atoms);
+  const prior=CATALOG.findIndex(feature=>feature.id==="project-pipeline");if(prior>=0)CATALOG.splice(prior,1);
+  CATALOG.unshift({id:"project-pipeline",name:"Document assurance pipeline",category:"Intelligence",color:"#96b6a3",
+    description:r.bricks.map(brick=>brick.name).join(" + "),backendPrediction:r.after,backendFeatures:r.features,backendRequest:pipelineRun.request,backendRunId:pipelineRun.id,
+    variants:[{id:"workflow",name:`${r.bricks.length} linked functions / complete workflow`,description:"One execution processes the sample documents through the complete approved pipeline. Tokens come from the fitted synthetic-data regression.",
+      atoms,hours:[r.bricks.length*8,r.bricks.length*4,r.bricks.length*6],review:5,tool:0}]});
+  projectScenario=pipelineRun;
+  selections=[record("project-pipeline","workflow",pipelineRun.request.model_id,pipelineRun.request.runs_per_month,"backend",pipelineRun.request.description)];
+  category="All";$("search").value="";renderFilters();refresh("Build replaced with the complete project workflow. Its fitted synthetic-token prediction is now used by the cost and ROI calculation.");
+  $("use-pipeline").disabled=true;
+}
+async function connectBackend() {
+  if(location.protocol==="file:"){$("backend-status").textContent="Manual catalog preview works offline. The project pipeline needs the local server: python -m examples.marketplace_demo_server.";return;}
+  try {
+    const health=await backendJson("/api/health");
+    if(health.status!=="ok")throw new PipelineError("This address is not reporting a healthy marketplace backend. Check the server's port and open the URL printed in its terminal.");
+    $("backend-status").textContent="Local backend connected. Running the project will open the operations page automatically; no provider credits are used.";
+    const id=new URLSearchParams(location.search).get("run");
+    if(id){
+      const run=await backendJson(`/api/runs/${encodeURIComponent(id)}`);setMode("custom");
+      $("brief").value=run.request.description;$("brief-model").value=run.request.model_id;$("project-runs").value=run.request.runs_per_month;$("new-function").value=run.request.new_function||"";
+      $("pipeline-progress").hidden=false;$("operations-link").href=`/marketplace-operations-demo.html?run=${encodeURIComponent(id)}`;
+      setPipelineBusy(true);await pollPipeline(id,++pipelineGeneration);
+    }
+  }catch(error){if(!(error instanceof PipelineError))throw error;$("backend-status").textContent=error.message;}
 }
 document.querySelectorAll(".model-options").forEach(select=>select.innerHTML=modelOptions("gpt-mini"));
 $("model-rates").innerHTML=`<table><thead><tr><th>Scenario LLM</th><th>Input USD / 1M</th><th>Output USD / 1M</th><th>Input factor</th><th>Output factor</th></tr></thead><tbody>${MODELS.map(model=>`<tr><td>${model.name}</td>${["input","output","inputFactor","outputFactor"].map(property=>`<td><input aria-label="${model.name} ${property}" type="number" min="${property.includes("Factor")?0.1:0}" max="${property.includes("Factor")?10:10000}" step="0.01" required value="${model[property]}" data-model="${model.id}" data-property="${property}" style="min-width:85px;width:100%"></td>`).join("")}</tr>`).join("")}</tbody></table>`;
@@ -515,6 +638,19 @@ $("example").addEventListener("click",()=>{
   $("status").textContent="Example loaded. Preview the simulated decomposition, then inspect each suggestion.";
 });
 ["brief","brief-focus","brief-model"].forEach(id=>$(id).addEventListener("input",invalidateProposal));
+["project-runs","new-function"].forEach(id=>$(id).addEventListener("input",invalidateProposal));
+$("run-pipeline").addEventListener("click",runPipeline);
+$("security-example").addEventListener("click",()=>{
+  invalidateProposal();$("brief-focus").value="all";$("new-function").value="";
+  $("brief").value="I want to build a pipeline that automatically analyzes security documentation and verifies whether all required security architecture components have been properly documented and addressed. Build a linked document wiki, maintain ground-truth reference requirements, map evidence, perform deep research into missing requirements, and prepare a gap report for human review.";
+  $("status").textContent="Security project loaded. Run it against the original fictional sample documents and demo reference checklist.";
+});
+$("novel-example").addEventListener("click",()=>{
+  if(!$("brief").value.trim())$("security-example").click();
+  invalidateProposal();$("new-function").value="Policy-as-code validation";$("status").textContent="New function added. Run again to see baseline abstention, feature expansion, synthetic sampling and refitting.";
+});
+$("pipeline-result").addEventListener("change",()=>{if($("use-pipeline"))$("use-pipeline").disabled=!$("approve-pipeline").checked;});
+$("pipeline-result").addEventListener("click",event=>{if(event.target.id==="use-pipeline")usePipeline();});
 $("decompose").addEventListener("click",previewBrief);
 $("proposal").addEventListener("change",()=>{
   if($("apply-proposal"))$("apply-proposal").disabled=!$("approve-mapping").checked||!$("proposal").querySelector("[data-proposal]:checked");
@@ -530,6 +666,10 @@ $("download").addEventListener("click",()=>{
   $("download-status").textContent="Download requested. If your browser blocks it, expand the copyable JSON below.";
 });
 renderFilters();loadStarter();
+if(new URLSearchParams(location.search).get("mode")==="custom"||new URLSearchParams(location.search).has("run")){
+  selections=[];setMode("custom");refresh("Start with a project description. The estimate updates after you approve its complete pipeline.");
+}
+connectBackend();
 </script>
 </body>
 </html>
