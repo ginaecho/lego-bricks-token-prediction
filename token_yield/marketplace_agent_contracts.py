@@ -230,6 +230,13 @@ def _keys(value: dict, expected: set[str]) -> None:
         raise ValueError(f"expected JSON fields {sorted(expected)}")
 
 
+def _normalize_span(text: str) -> str:
+    """Collapse runs of whitespace so a citation still matches across line breaks
+    without permitting paraphrase: the exact word sequence must remain a contiguous
+    substring of the supplied source."""
+    return " ".join(text.split())
+
+
 def _text(value: Any, maximum: int = 3000) -> None:
     if not isinstance(value, str) or not 1 <= len(value.strip()) <= maximum:
         raise ValueError("nonempty bounded text required")
@@ -243,14 +250,15 @@ def _texts(value: Any, maximum: int = 16) -> None:
 
 
 def validate_evidence(value: Any, documents: list[dict]) -> None:
-    docs = {doc["id"]: doc["text"] for doc in documents}
+    docs = {doc["id"]: _normalize_span(doc["text"]) for doc in documents}
     if not isinstance(value, list) or not 1 <= len(value) <= 12:
         raise ValueError("one to twelve source citations required")
     for entry in value:
         _keys(entry, {"document_id", "quote"})
         _text(entry["document_id"], 180)
         _text(entry["quote"], 1200)
-        if entry["document_id"] not in docs or entry["quote"] not in docs[entry["document_id"]]:
+        if (entry["document_id"] not in docs
+                or _normalize_span(entry["quote"]) not in docs[entry["document_id"]]):
             raise ValueError("citation must quote an exact supplied document span")
 
 

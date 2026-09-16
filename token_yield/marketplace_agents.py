@@ -20,7 +20,9 @@ from typing import Any, Callable
 
 from .budget import HardBudget, SafetyRateCard
 from .customer_pilot import _default_transport
-from .foundry_dispatch import DispatchResult, FoundryDispatcher, UsageLedger, acquire_entra_token
+from .foundry_dispatch import (
+    DispatchResult, FoundryDispatcher, ResponseProtocolError, UsageLedger, acquire_entra_token,
+)
 from .marketplace_agent_contracts import (
     ATOMS, CONTRACT_VERSION, FEATURE_BUILDERS, LIMITATIONS, ROLES, SCHEMA_VERSION, TRANSPORT_PROTOCOL,
     canonical, contracts, external_scope_reason, fingerprint, numeric_features,
@@ -37,8 +39,9 @@ APPROVED_ENDPOINT = "https://foundary-tzuc06.openai.azure.com/openai/v1"
 APPROVAL_ID = "marketplace-new-25usd-pilot"
 MAX_CALLS_PER_RUN = 144
 MAX_CALLS_TOTAL = 1024
-WORKLOAD_OUTPUT_CAP = 384
+WORKLOAD_OUTPUT_CAP = 1536
 AGENT_OUTPUT_CAP = 1536
+WORKLOAD_ATTEMPTS = 3
 MAX_INPUT_BOUND = 32768
 _LOCKS: dict[str, threading.Lock] = {}
 _LOCKS_LOCK = threading.Lock()
@@ -46,6 +49,13 @@ _LOCKS_LOCK = threading.Lock()
 
 class AgentCancelled(RuntimeError):
     """The caller cancelled before further paid dispatch."""
+
+
+class ContentContractError(ValueError):
+    """A fully settled provider call returned output that failed the strict public
+    contract (invalid JSON or a bad source citation). The budget is already settled,
+    so this is a content problem, not a budget risk: it must never halt the campaign
+    and may be retried with a fresh, separately-metered paid call."""
 
 
 class StructuredDispatcher(FoundryDispatcher):
@@ -600,25 +610,60 @@ class AgentRuntime:
                         "input_bound": input_bound, "output_cap": output_cap, "time": _now()}
             _write(evidence_path, evidence)
             attempted = False
+            settled_ok = False
+            pre_recorded = len(ledger.calls(target))
             try:
                 cancel()
-                if self._dispatch_hook:
-                    attempted = True
-                    response = self._dispatch_hook(prompt, target=target, output_cap=output_cap)
-                else:
-                    def preflight(body: dict, index: int) -> None:
-                        nonlocal attempted
-                        cancel()
-                        actual = _request_bytes(dict(body))
-                        if (index != 0 or len(actual) > input_bound
-                                or hashlib.sha256(actual).hexdigest() != request_sha256):
-                            raise RuntimeError("actual dispatch violates reserved input bounds")
-                        if body.get("max_output_tokens") != output_cap:
-                            raise RuntimeError("hard output cap mismatch")
+                try:
+                    if self._dispatch_hook:
                         attempted = True
+                        response = self._dispatch_hook(prompt, target=target, output_cap=output_cap)
+                    else:
+                        def preflight(body: dict, index: int) -> None:
+                            nonlocal attempted
+                            cancel()
+                            actual = _request_bytes(dict(body))
+                            if (index != 0 or len(actual) > input_bound
+                                    or hashlib.sha256(actual).hexdigest() != request_sha256):
+                                raise RuntimeError("actual dispatch violates reserved input bounds")
+                            if body.get("max_output_tokens") != output_cap:
+                                raise RuntimeError("hard output cap mismatch")
+                            attempted = True
 
-                    dispatcher.pre_dispatch_hook = preflight
-                    response = dispatcher.dispatch(prompt, target=target)
+                        dispatcher.pre_dispatch_hook = preflight
+                        response = dispatcher.dispatch(prompt, target=target)
+                except ResponseProtocolError as protocol_exc:
+                    # The provider recorded a response with known usage but it violated the
+                    # response protocol (e.g. a truncated/incomplete completion). If the usage
+                    # was captured, settle it honestly from that record so the budget stays
+                    # accurate, then treat the unusable output as a retryable content failure
+                    # rather than an unknown-telemetry halt. If nothing was recorded, the
+                    # telemetry is genuinely unknown and must fall through to a fail-closed halt.
+                    recorded = ledger.calls(target)
+                    if len(recorded) <= pre_recorded:
+                        raise
+                    rc = recorded[-1]
+                    usage = asdict(rc.usage)
+                    if (rc.model != MODEL_ID or usage["input_tokens"] > input_bound
+                            or usage["output_tokens"] > output_cap
+                            or usage["reasoning_tokens"] > usage["output_tokens"]
+                            or usage["cached_tokens"] > usage["input_tokens"]
+                            or usage["total_tokens"] != usage["input_tokens"] + usage["output_tokens"]):
+                        raise
+                    pricing = self.config["pricing"]
+                    cost = ((usage["input_tokens"] - usage["cached_tokens"]) * pricing["input_per_million"]
+                            + usage["cached_tokens"] * pricing["cached_input_per_million"]
+                            + usage["output_tokens"] * pricing["output_per_million"]) / 1_000_000
+                    settled = budget.settle(call_id, usage, cost)
+                    self._save_budget(budget, budget_state)
+                    settled_ok = True
+                    evidence.update(status="measured", usage=usage, response_id=rc.response_id,
+                                    model_id=rc.model, observed_model=rc.model, observed_status=rc.status,
+                                    rated_usd=cost, safety_usd=settled, response_calls=[asdict(rc)])
+                    _write(evidence_path, evidence)
+                    raise ContentContractError(
+                        f"provider response failed the response protocol: {protocol_exc}"
+                    ) from protocol_exc
                 evidence.update(output=response.output, response_id=response.response_id,
                                 observed_model=response.model, observed_status=response.status)
                 _write(evidence_path, evidence)
@@ -651,34 +696,41 @@ class AgentRuntime:
                 ) / 1_000_000
                 settled = budget.settle(call_id, usage, cost)
                 self._save_budget(budget, budget_state)
+                settled_ok = True  # Provider call is paid and recorded; any later failure is content-only.
                 evidence.update(status="measured", output=response.output, usage=usage,
                                 response_id=response.response_id, model_id=response.model,
                                 response_calls=[asdict(c) for c in response.response_calls],
                                 rated_usd=cost, safety_usd=settled)
                 _write(evidence_path, evidence)
-                parsed = strict_json(response.output)
-                validate_message(kind, parsed, docs, catalog)
+                try:
+                    parsed = strict_json(response.output)
+                    validate_message(kind, parsed, docs, catalog)
+                except Exception as content_exc:
+                    raise ContentContractError(str(content_exc)) from content_exc
                 evidence.update(status="validated", public_output=parsed)
                 _write(evidence_path, evidence)
             except BaseException as exc:
+                content_only = settled_ok  # Settled call: budget is intact, failure is output content.
                 if not attempted:
                     budget.cancel(call_id)
-                else:
+                elif not settled_ok:
                     budget_state["halted"] = (
                         "Dispatch/telemetry/contract failure; no automatic retry. "
                         "Unknown telemetry retains full reservation. Manual audit required."
                     )
-                evidence.update(status="failed", error_type=type(exc).__name__)
+                evidence.update(status="content_rejected" if content_only else "failed",
+                                error_type=type(exc).__name__)
                 _write(evidence_path, evidence)
-                if attempted:
+                if attempted and not settled_ok:
                     budget_state.update(
                         halted_call_id=call_id, halted_run_id=run_id,
                         halted_evidence_sha256=hashlib.sha256(evidence_path.read_bytes()).hexdigest(),
                     )
                 self._save_budget(budget, budget_state)
-                event("Call failed closed; inspect evidence and persistent budget.",
-                      {"evidence": str(evidence_path.relative_to(run_dir)),
-                       "role": role, "halted": budget_state.get("halted")})
+                event("Settled output rejected by strict contract; budget intact, no halt."
+                      if content_only else "Call failed closed; inspect evidence and persistent budget.",
+                      {"evidence": str(evidence_path.relative_to(run_dir)), "role": role,
+                       "content_rejected": content_only, "halted": budget_state.get("halted")})
                 raise
             public = {key: evidence[key] for key in (
                 "id", "kind", "role", "source", "model_id", "usage", "public_output",
@@ -844,8 +896,20 @@ class AgentRuntime:
         rows = list(reused)
         for job in jobs:
             brick = by_id[job["brick_id"]]
-            observed = call("workload", brick["id"], workload_prompt(brick, job["documents"]),
-                            job["documents"], catalog, workload=True)
+            observed = None
+            for attempt in range(WORKLOAD_ATTEMPTS):
+                try:
+                    observed = call("workload", brick["id"], workload_prompt(brick, job["documents"]),
+                                    job["documents"], catalog, workload=True)
+                    break
+                except ContentContractError:
+                    # The provider call is settled and paid, but its output failed the strict
+                    # source-citation contract. Retry a fresh, separately-metered paid call a
+                    # bounded number of times; only conforming measurements become training rows.
+                    if attempt + 1 >= WORKLOAD_ATTEMPTS:
+                        raise
+                    event("Workload output failed the source-citation contract; retrying a fresh paid call.",
+                          {"brick_id": brick["id"], "group": job["group"], "attempt": attempt + 1})
             row = {
                 "id": observed["id"], "run_id": run_id, "brick_id": brick["id"],
                 "group": job["group"], "split": job["split"], "source": source,
@@ -979,10 +1043,16 @@ class AgentRuntime:
         cancel()
         # Immutable candidate and result are written first. The atomic pointer is the
         # commit record; interrupted runs never become the current pilot version.
-        publish = bool(review["accepted"] and not unsupported)
+        # Publication of the measured brick catalog depends on measured-pilot integrity
+        # (metric acceptance), not on a single custom project's scope or decomposition
+        # dissent. Project-scope reasons in `unsupported` still block the whole-project
+        # forecast via `after`, and each published brick is independently evidence-gated
+        # in `_forecast_brick` (compatibility, contract hash, row counts, and bounds).
+        publish = bool(review["accepted"])
         _write(run_dir / "result.json", result)
         event("Measured pilot complete; candidate ready for publication, no production promotion.",
               {"version": version, "publication_requested": publish,
+               "project_forecast_supported": after["supported"],
                "supported": after["supported"], "result": "result.json"})
         if publish:
             _write(self.state_dir / "versions" / f"{version}.json", candidate)
