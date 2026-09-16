@@ -1,0 +1,386 @@
+# Functionality marketplace prototype
+
+Token Yield can give clients a marketplace for composing a product from
+LEGO-like functionality bricks. Instead of choosing technical tasks first,
+clients shop for customer-facing capabilities and see their underlying task
+composition, estimated token usage, AI budget, and potential business benefits.
+
+The [interactive HTML prototype](../marketplace-prototype.html) explores this
+idea on the `feat/marketplace` branch. It is a standalone design experiment,
+not a production storefront or a purchasing system.
+
+> [!IMPORTANT]
+> The original standalone marketplace uses illustrative coefficients and prices.
+> The paired sales and operations pages also support an explicitly enabled
+> Foundry agent pilot. Keep its measured-data predictions separate from the
+> offline simulation. Business benefits remain hypotheses, not measured improvements.
+
+## Working local project pipeline
+
+The sales page also supports an actual local backend. For offline execution, start it from the demo
+worktree using a Python environment with the repository available:
+
+```text
+python -m examples.marketplace_demo_server --port 8765
+```
+
+Open <http://127.0.0.1:8765/marketplace-sales-demo.html?mode=custom>.
+If that port is already occupied, use `--port 8766` and change the URL to match.
+Choose **Load security project**, then **Start step-by-step + open operations**.
+The companion [operations page](../marketplace-operations-demo.html) opens
+automatically. If the browser blocks popups, use the operations link in the
+sales page. Both pages read the same backend run, identified by its run ID.
+
+The new run pauses before its first stage. Click **Next step** in operations to
+execute one real backend stage, inspect its output, then continue when ready.
+This is not playback: future stages have not executed, and no final estimate
+exists until prediction and artifact saving finish. Cancel an unfinished run
+from operations to release its worker. A stage left paused for 30 minutes fails
+explicitly and releases its worker. If the sales page loses its connection, use
+**Refresh project status** to reconnect to the same run without restarting it.
+Older completed runs remain inspectable,
+but cannot be stepped through again; start a new project to demonstrate execution.
+
+The HTTP API retains automatic execution when `execution_mode` is omitted.
+The sales page defaults to `execution_mode: "step"` and also offers automatic
+execution explicitly.
+
+The offline backend performs these operations rather than animating canned progress:
+
+1. Decompose the security-documentation brief with explicit offline rules.
+2. Build a wiki from original fictional sample documents and document links.
+3. Compare text evidence against a demo reference-requirements checklist.
+4. Engineer the features, including any new-function feature.
+5. Fit the initial synthetic catalog and predict, or abstain for a new feature.
+6. Generate labeled synthetic token samples for the expanded schema.
+7. Fit the expanded regression models using the repository's `RidgeLinearModel`.
+8. Evaluate on separate synthetic samples.
+9. Predict again using the newly fitted model.
+10. Save the run, training evidence and model artifacts locally.
+
+Choose **Try a new function** to add Policy-as-code validation and rerun.
+Operations shows the new feature, any initial unsupported prediction, sample
+rows, fitted coefficients, evaluation metrics, and the resulting token estimate.
+Its event console reflects backend events also printed in the server terminal.
+Opening operations alone never starts a training run.
+
+Review the proposed functions and approve **Replace build with this complete
+pipeline** to use the returned input/output prediction in the sales estimate.
+The whole project is one composite brick, so its internal functions are not
+charged a second time. Its model and document features are frozen to that run;
+rerun to change them. Monthly volume and commercial assumptions remain editable.
+Staffing, tool costs and ROI are not outputs of the trained regression.
+
+> [!IMPORTANT]
+> In offline mode, model fitting and document processing are real local operations, but the
+> token measurements are synthetic. Low test error against that simulator is
+> not evidence of accuracy on real LLM calls. Named model rates remain scenario
+> assumptions. No LLM provider, live web search or AI deep-research service runs.
+
+The reference documents are a fictional demo baseline, not an exhaustive
+security standard or certified ground truth. Found, partial and missing text
+evidence are documentation diagnostics, not proof that controls work. An expert
+must confirm the applicable requirements, validate the evidence, and approve
+any compliance conclusion.
+
+Run artifacts are stored in the ignored `.demo-runs/` directory by default.
+Each offline run starts from a reproducible synthetic baseline; it does not accumulate
+learning across submitted projects or execute the newly named function itself.
+The run list covers the current server process. Saved artifacts remain on disk
+after a restart and can be inspected through the original run URL, but are not
+automatically reloaded into that list. Interrupted runs cannot resume.
+Do not enter confidential briefs into a shared prototype. The server is for
+localhost demonstrations, not production hosting.
+
+## Real Foundry agent pilot
+
+The live mode uses the existing Azure deployment rather than creating hosted
+agent infrastructure. Agent roles run in the local orchestrator and make separate
+Foundry requests. Distinct role instructions do not imply different underlying
+models: this pilot uses the pinned GPT-5.4 deployment for every role and workload.
+
+Enable paid execution only with a new, explicit campaign approval:
+
+```text
+python -m examples.marketplace_demo_server --port 8766 --enable-foundry --agent-budget-usd 25 --agent-approval-id marketplace-agent-pilot-usd25-v1
+```
+
+The budget is for the entire campaign, not each run. The default durable state
+directory is `.demo-runs/agent-state`. Reuse that directory on restart; do not
+change directories to bypass the approved total. Starting without
+`--enable-foundry` makes no paid calls and rejects live-run submissions.
+The browser cannot configure an endpoint, increase the budget, or change the
+approved deployment. Only one Foundry run can execute or wait at a time.
+
+The live workflow separates three kinds of evidence:
+
+1. Agent proposals, critiques and decisions describe a suggested decomposition.
+   They are not measured labels or proof of completeness.
+2. Task-execution usage returned by Foundry supplies the regression labels.
+   Discussion and coordination tokens are recorded separately as pilot overhead.
+3. Fitted token predictions estimate repeated execution of the scoped prompt
+   contracts. Staffing and ROI still come from the client's editable assumptions.
+
+The operations view exposes public role responses and actual tool outputs, not
+private chain-of-thought. In step mode, approving a stage authorizes its work;
+opening either page or reading a catalog does not start inference. Cancellation
+stops before subsequent calls, but cannot undo a request already sent to Azure.
+Unknown outcomes remain reserved against the campaign budget rather than being
+assumed free.
+
+Submitted custom descriptions are sent to the configured Azure deployment.
+Use fictional demonstration briefs, not confidential customer information.
+The bundled documents remain fictional, and this pilot does not ingest user
+documents, browse the web, validate operating controls, or certify compliance.
+Source-bound research is not a replacement for a deployed deep-research service.
+
+The design draws on the bounded orchestration and finite feature-building
+patterns in [agentic-labeling at its inspected revision](https://github.com/ginaecho/agentic-labeling/tree/efca794b3df6c15549e67ca8ac8dc26fed13dc3c).
+That repository's three judges critique independently. This pilot adds an
+explicit peer-review round before the orchestrator makes a decision. Agent
+agreement must not be mistaken for verified ground truth.
+
+After a live pilot completes, **Pre-predicted GPT-5.4 bricks** reads the stored
+catalog without calling the provider. Select multiple supported variants and
+set each one's monthly volume. Their saved input/output predictions stay fixed;
+editing the shared context, illustrative atom coefficients or scenario LLMs
+does not alter those tokens. Commercial rates remain editable planning inputs.
+Measured catalog choices cannot be mixed with illustrative choices, and no
+synthetic routing or setup tokens are added to a measured forecast.
+
+For a custom project, review the accepted functions and approve its complete
+workflow instead. It replaces the build with one composite forecast rather
+than charging its internal functions twice. Unsupported results have no
+financial apply action. Reference-context pilot forecasts do not establish
+accuracy for arbitrary customer documents or live-web research.
+
+## Sales conversation demo
+
+Open [marketplace-sales-demo.html](../marketplace-sales-demo.html) directly in
+a browser. This separate prototype builds on marketplace layout A; the original
+three-layout explorer remains available. The original manual and quick-preview
+flows need no server; the working project pipeline above requires localhost.
+
+The original illustrative mode provides two entry paths to the same estimate:
+
+1. Choose **Build with bricks**, click Research or Personalized discovery, and
+   select multiple variations. Set each variation's execution LLM, monthly runs,
+   setup hours, review minutes, and tool fee.
+2. Choose **Describe your idea**, expand **Quick catalog preview**, load the research example or enter a brief,
+   preview its simulated decomposition, inspect the matched phrases, and
+   approve the mapping. Existing matching variants are replaced with defaults,
+   not duplicated; unrelated selections remain.
+
+This quick-preview mapper uses local keyword rules, not an LLM. Unknown intent is
+reported without adding anything. Negations, conditions and unrecognized
+requirements require human interpretation. Editing the brief invalidates
+its pending proposal. Approval preserves the description and catalog mapping.
+
+Both flows show input/output tokens, AI cost, tool fees, recurring review,
+one-time setup labor, and role capacity for data scientists, architects and
+consultants. Staffing is an hours-based scenario, not a learned prediction.
+FTE divides setup hours by delivery weeks and weekly capacity; rounded-up
+people counts are not full-time hiring recommendations.
+
+The client value case uses unique monthly cases, before/after manual effort,
+labor value, a realization percentage and optional incremental contribution.
+Benefits are not multiplied by the number of selected bricks.
+
+```text
+monthly gross benefit = released hours x labor value x realization + contribution
+monthly net value = monthly gross benefit - recurring cost
+first-year cost = setup cost + 12 x recurring cost
+12-month ROI = (12 x monthly gross benefit - first-year cost) / first-year cost
+payback months = setup cost / positive monthly net value
+```
+
+Zero cost makes ROI undefined; nonpositive net value does not reach payback.
+Zero workloads produce no assumed benefit but can still incur setup and
+declared operating costs. Time increases remain negative benefits.
+This is an undiscounted scenario with full operation from month one, not a
+cash-flow forecast or causal impact estimate.
+
+Manual catalog coefficients and rates are illustrative and editable. No trained
+predictor supports those manual variant/model combinations. Named scenario LLM rate cards
+are placeholders, not verified provider prices. The same pure calculation
+feeds the sidebar, review, ROI and JSON export. Review the build to download
+the scenario or copy its full JSON if the browser blocks downloads.
+
+Browser checks cover multi-selection, per-variant LLMs, approval and stale
+proposals, unknown briefs, invalid inputs, empty builds, zero workloads,
+negative ROI, role capacity, numeric reconciliation, and mobile layout.
+These checks verify the prototype's behavior, not empirical model accuracy.
+
+## Try the original prototype
+
+Open [marketplace-prototype.html](../marketplace-prototype.html) in a modern
+browser. No server, package installation, API key, or network connection is
+required. From the repository root on Windows:
+
+```powershell
+Start-Process .\marketplace-prototype.html
+```
+
+Use the floating design explorer to compare three layouts:
+
+| Variant | Layout | Question to explore |
+|---------|--------|---------------------|
+| `?variant=A` | Marketplace | Can clients select capabilities through familiar shopping cards? |
+| `?variant=B` | Compare and configure | Does a compact catalog alongside configuration controls support comparison? |
+| `?variant=C` | Composition canvas | Does a visual assembly help explain how capabilities connect? |
+
+The left and right arrow keys also switch layouts, except while editing form
+fields or using the review dialog. The URL preserves the layout on reload.
+Selections and assumptions live in memory and reset when the page reloads.
+No winning layout has been selected yet.
+
+## Client experience
+
+1. Search or filter the catalog by customer experience, operations, or intelligence.
+2. Add functionality bricks to the build, or remove them from the catalog or cart.
+3. Adjust monthly runs, integration complexity, budget, and planning reserve.
+4. Inspect recurring functionality tokens, integration routing tokens, and
+   one-time integration AI cost separately.
+5. Explore potential scalability, resource-use, and engagement benefits.
+6. Review the build and download a JSON estimate containing selected features,
+   atomic coefficients, assumptions, token totals, costs, and limitations.
+
+The download is local. Nothing is ordered, submitted to a server, or provisioned.
+
+## From product capabilities to atomic tasks
+
+The interface follows the repository's
+[decompose-and-recompose approach](../README.md#how-it-works).
+Each purchasable-looking capability is a composition of smaller task types.
+These tasks provide a vocabulary for future measurement and prediction, rather
+than treating each product feature as an unrelated fixed price.
+
+| Functionality | Atomic tasks | Demo tokens per run |
+|---------------|--------------|--------------------:|
+| AI customer support | Retrieve, Draft, Validate | 3,960 |
+| Smart product search | Retrieve, Classify | 2,490 |
+| Personalized discovery | Classify, Score, Draft | 2,570 |
+| Customer insights | Classify, Summarise, Report | 3,270 |
+| Document automation | Extract, Transform, Validate | 2,970 |
+| Guided onboarding | Plan, Draft, Notify | 2,990 |
+
+Shared task types make reuse opportunities visible. The prototype still charges
+each task occurrence independently: it does not assume that shared task names
+automatically eliminate work or save tokens.
+
+## Estimation rules
+
+### Monthly functionality usage
+
+One run executes a selected functionality once. The same monthly run count
+applies to every selected functionality; it is not a unique-customer count or
+a single end-to-end product transaction.
+
+```text
+feature input tokens = runs x sum(selected feature input tokens per run)
+feature output tokens = runs x sum(selected feature output tokens per run)
+```
+
+### Integration usage
+
+For `n` selected functionalities, the prototype assumes every pair requires a
+connection:
+
+```text
+connections = n x (n - 1) / 2
+routing input tokens = round(120 x connections x runs x complexity)
+routing output tokens = round(30 x connections x runs x complexity)
+setup input tokens = round(18,000 x connections x complexity)
+setup output tokens = round(6,000 x connections x complexity)
+```
+
+Complexity is `1` for standard shared APIs, `1.6` for multiple custom systems,
+or `2.4` for legacy integrations. This multiplier affects integration only,
+not base functionality tokens.
+
+Routing is recurring AI overhead. Setup represents hypothetical one-time
+AI-assisted Plan, Transform, and Validate work, not developer labor.
+Zero monthly runs remove recurring costs but do not remove setup costs for
+selected connections. Zero or one selected functionality has no connections.
+The canvas is conceptual, not a dependency graph or execution order.
+
+### Pricing and budget
+
+Input and output rates are editable under the estimate details. Defaults are
+USD 2 per million input tokens and USD 8 per million output tokens.
+They are placeholders, not provider price quotes.
+
+```text
+cost = (input tokens x input rate + output tokens x output rate) / 1,000,000
+cost with reserve = cost x (1 + reserve)
+first-month AI subtotal = recurring cost with reserve + setup cost with reserve
+```
+
+The reserve can be 0%, 20%, or 40%. It adds a planning allowance to costs,
+not tokens, and is not a statistical confidence interval. The budget indicator
+compares the monthly budget with recurring AI cost including reserve;
+it excludes setup.
+
+### Default worked example
+
+The initial build contains AI customer support and smart product search,
+each running 10,000 times per month, with standard integration, a 20% reserve,
+and a USD 500 monthly budget.
+
+| Item | Estimate |
+|------|---------:|
+| Functionality tokens per month | 64,500,000 |
+| Integration routing tokens per month | 1,500,000 |
+| Total monthly input tokens | 55,200,000 |
+| Total monthly output tokens | 10,800,000 |
+| Total monthly tokens | 66,000,000 |
+| Monthly AI cost before reserve | USD 196.80 |
+| Monthly AI cost including reserve | USD 236.16 |
+| Budget remaining | USD 263.84 |
+| One-time integration tokens | 24,000 |
+| One-time integration AI cost including reserve | USD 0.1008 |
+| First-month AI subtotal, displayed to cents | USD 236.26 |
+
+Displayed prices round to cents. The JSON export retains numeric precision.
+
+## Potential benefits and evidence needed
+
+| Benefit | What the prototype shows | What must be validated |
+|---------|--------------------------|------------------------|
+| Scalability | Modeled runs across selected capabilities | Throughput, latency, rate limits, and reliability under load |
+| Sustainability | Distinct task types shared by multiple capabilities | Energy per successful task against a baseline; no carbon conversion or savings assumed |
+| Customer engagement | Count of customer-facing capabilities | Engagement, conversion, satisfaction, and retention in controlled experiments |
+
+These indicators describe the selected build, not a return-on-investment score.
+More functionalities do not necessarily improve business outcomes. Fewer tokens
+alone do not establish lower energy use or emissions.
+
+## Limits and next steps
+
+The estimate excludes engineering labor, hosting, licenses, tax, maintenance,
+cache behavior, and reasoning-token modeling. It is not a total project quote.
+There is no backend, authentication, checkout, saved project store, live
+telemetry, or trained-model integration.
+
+To move beyond the prototype:
+
+1. Validate the shopping flow and select a layout with representative clients.
+2. Replace the all-pairs connection assumption with explicit dependencies and
+   per-feature usage volumes from a real product.
+3. Map compositions to quote-time features supported by the repository's
+   prediction pipeline and replace demo coefficients with measured evidence.
+4. Track input, output, cache, reasoning, retries, and acceptance separately,
+   preserving unknown values where measurements are unavailable.
+5. Evaluate predictions on independent projects and expose calibrated ranges
+   only when the evidence supports them.
+6. Measure business benefits independently from token-cost prediction and
+   present implementation and operating costs separately from AI usage.
+
+## Verification
+
+Browser checks covered adding and removing bricks, clearing the build, search,
+category filters, exact default cost calculations, complexity changes, budget
+warnings, zero usage, zero rates, invalid-number recovery, the review dialog,
+JSON export arithmetic, and reload-stable layout selection. All three layouts
+were checked for horizontal overflow at a 390-pixel viewport. Editor diagnostics
+reported no errors in the HTML prototype.

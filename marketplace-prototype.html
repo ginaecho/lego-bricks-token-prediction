@@ -1,0 +1,459 @@
+<!doctype html>
+<!-- Throwaway prototype: compare a marketplace, a compact catalog, and a composition canvas via ?variant=A|B|C. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Token Yield | Build your product</title>
+  <style>
+    :root { --ink:#20352e; --muted:#69766e; --green:#27674e; --lime:#def29d; --line:#e0e6dd; --paper:#f7f8f3; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:14px/1.5 "Segoe UI",system-ui,sans-serif; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    button:disabled { cursor:not-allowed; opacity:.45; }
+    button,a,input,select,summary { outline-offset:4px; }
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible { outline:2px solid var(--green); }
+    button { color:inherit; }
+    h1,h2,h3,p { margin:0; }
+    h1 { font-size:clamp(32px,4vw,49px); line-height:1.1; letter-spacing:-2px; font-weight:650; }
+    h2 { font-size:20px; letter-spacing:-.6px; font-weight:650; }
+    h3 { font-size:16px; font-weight:650; }
+    small { font-size:11px; }
+    .muted { color:var(--muted); }
+    .eyebrow { font-size:10px; letter-spacing:1.8px; text-transform:uppercase; font-weight:700; }
+    header { background:#fff; border-bottom:1px solid var(--line); }
+    .header-inner { max-width:1440px; margin:auto; padding:20px 40px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+    .brand { display:flex; align-items:center; gap:11px; font-size:19px; font-weight:750; letter-spacing:-.7px; }
+    .logo { width:33px; height:33px; background:var(--green); border-radius:8px; display:grid; grid-template-columns:repeat(2,7px); align-content:center; justify-content:center; gap:4px; }
+    .logo i { width:7px; height:7px; background:var(--lime); border-radius:2px; }
+    .header-links { display:flex; align-items:center; gap:28px; font-size:12px; }
+    .header-links a { color:var(--muted); text-decoration:none; }
+    .header-links a:first-child { color:var(--green); font-weight:700; }
+    .pill { display:inline-flex; align-items:center; gap:7px; padding:5px 10px; border-radius:20px; background:#edf4e9; font-size:11px; color:#376247; }
+    .prototype-badge { background:#f4f0e5; color:#776441; }
+    main { max-width:1440px; margin:auto; padding:38px 40px 100px; }
+    .intro { display:flex; align-items:center; justify-content:space-between; gap:30px; margin-bottom:30px; }
+    .intro .eyebrow { color:var(--green); margin-bottom:12px; }
+    .intro p { max-width:540px; margin-top:13px; color:var(--muted); }
+    .steps { display:flex; gap:20px; color:var(--muted); font-size:11px; white-space:nowrap; }
+    .steps span { display:flex; align-items:center; gap:7px; }
+    .steps b { border:1px solid var(--line); width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font-size:10px; }
+    .steps span:first-child { color:var(--green); }
+    .steps span:first-child b { color:white; background:var(--green); border-color:var(--green); }
+    .workspace { display:grid; grid-template-columns:minmax(0,1fr) 350px; gap:26px; align-items:start; }
+    .section-head { display:flex; justify-content:space-between; align-items:center; gap:14px; margin-bottom:16px; }
+    .section-head p { font-size:12px; margin-top:3px; }
+    .filters { display:flex; gap:7px; flex-wrap:wrap; margin:18px 0; }
+    .filter { border:1px solid var(--line); border-radius:7px; padding:7px 13px; background:transparent; font-size:12px; }
+    .filter.active { background:var(--ink); color:white; border-color:var(--ink); }
+    .search { position:relative; }
+    .search input { width:100%; border:1px solid var(--line); border-radius:8px; padding:11px 14px 11px 37px; background:white; color:var(--ink); }
+    .search svg { position:absolute; top:13px; left:12px; width:17px; height:17px; fill:none; stroke:var(--muted); stroke-width:1.7; }
+    .catalog { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .feature { display:flex; flex-direction:column; gap:12px; border:1px solid var(--line); border-radius:12px; padding:20px; background:white; transition:border-color .15s,box-shadow .15s; }
+    .feature:hover { border-color:#92b29b; box-shadow:0 4px 15px #20352e08; }
+    .feature.selected { border-color:#6c9a76; box-shadow:inset 0 0 0 1px #6c9a7618; }
+    .feature-top { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .category { font-size:10px; color:var(--muted); }
+    .brick { --brick:#e8c270; width:43px; height:33px; position:relative; margin-top:5px; border-radius:4px; background:var(--brick); box-shadow:inset 0 -6px #0000000d; flex-shrink:0; }
+    .brick:before,.brick:after { content:""; position:absolute; top:-5px; width:11px; height:7px; border-radius:3px 3px 0 0; background:var(--brick); box-shadow:inset 0 2px #ffffff60; }
+    .brick:before { left:7px; } .brick:after { right:7px; }
+    .feature p { font-size:12px; color:var(--muted); min-height:36px; margin-top:5px; }
+    .atomic { display:flex; flex-wrap:wrap; gap:5px; }
+    .atomic span { font-size:10px; color:#617267; padding:3px 6px; background:#f1f4ee; border-radius:4px; }
+    .feature-bottom { display:flex; align-items:center; justify-content:space-between; gap:10px; border-top:1px solid #eef1ea; padding-top:13px; margin-top:auto; }
+    .feature-bottom strong { font-size:13px; }
+    .feature-bottom small { display:block; color:var(--muted); font-size:10px; }
+    .add { border:1px solid var(--line); border-radius:6px; background:white; padding:7px 12px; font-size:12px; min-width:81px; }
+    .selected .add { background:#edf4e8; border-color:transparent; color:var(--green); }
+    .panel { border:1px solid var(--line); border-radius:13px; background:white; padding:22px; }
+    .cart { position:sticky; top:20px; }
+    .cart-title { display:flex; align-items:center; justify-content:space-between; }
+    .count { font-size:11px; border-radius:5px; background:#f0f3ec; padding:3px 7px; }
+    .cart-items { margin:15px 0; }
+    .cart-item { display:flex; gap:9px; align-items:center; padding:8px 0; font-size:12px; }
+    .dot { width:9px; height:9px; border-radius:2px; flex-shrink:0; background:var(--brick); }
+    .cart-item .item-name { flex:1; }
+    .remove { background:none; border:0; font-size:18px; line-height:1; color:var(--muted); padding:4px; }
+    .integration-note { font-size:11px; color:var(--muted); padding:11px 0; border-top:1px dashed var(--line); }
+    .estimate { background:#f0f5e9; margin:16px -7px; padding:19px; border-radius:9px; }
+    .estimate .eyebrow { font-size:9px; color:#5a735d; letter-spacing:1.3px; }
+    .amount { font-size:40px; font-weight:650; line-height:1.25; letter-spacing:-1.7px; margin:6px 0; }
+    .amount small { font-size:13px; font-weight:400; letter-spacing:0; color:var(--muted); }
+    .cost-row { display:flex; justify-content:space-between; gap:12px; margin:8px 0; font-size:12px; }
+    .cost-row span { color:var(--muted); }
+    .bar { height:5px; background:#dce5d5; border-radius:8px; overflow:hidden; margin-top:16px; }
+    .bar div { height:100%; background:var(--green); transition:width .2s; }
+    .budget-state { font-size:11px; margin-top:7px; color:var(--green); }
+    .over { color:#a34429; } .bar .over { background:#b64d30; }
+    .primary { background:var(--green); color:white; border:0; padding:12px 16px; border-radius:7px; font-size:12px; font-weight:600; width:100%; margin-top:14px; }
+    .primary:hover:not(:disabled) { background:#1d513c; }
+    .text-button { background:none; border:0; padding:7px; font-size:11px; color:var(--muted); text-decoration:underline; }
+    .fine { font-size:10px; color:var(--muted); margin-top:11px; line-height:1.6; }
+    .controls { margin-top:25px; }
+    .control-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:18px; }
+    label { display:block; font-size:12px; font-weight:600; }
+    label small { display:block; font-size:10px; font-weight:400; color:var(--muted); margin:3px 0 8px; }
+    input[type=number],select { width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:6px; background:white; color:var(--ink); }
+    input[type=range] { width:100%; accent-color:var(--green); margin:12px 0 0; }
+    .benefits { margin-top:26px; }
+    .benefit-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .benefit { padding:17px; border:1px solid var(--line); border-radius:10px; background:#f1f4eb; }
+    .benefit h3 { font-size:12px; margin:8px 0; }
+    .benefit p { font-size:11px; color:var(--muted); }
+    .benefit .number { font-size:19px; letter-spacing:-.5px; }
+    details { margin-top:22px; border-top:1px solid var(--line); padding-top:15px; }
+    summary { cursor:pointer; font-size:12px; font-weight:600; }
+    details p,details li { font-size:11px; color:var(--muted); margin-top:9px; }
+    details ul { padding-left:18px; }
+    .rates { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:13px; }
+    .empty { padding:24px; color:var(--muted); text-align:center; font-size:12px; grid-column:1/-1; }
+    .composition { display:none; margin-bottom:24px; }
+    .canvas { display:flex; align-items:center; flex-wrap:wrap; gap:12px; min-height:125px; padding:24px; background-color:#f0f3e9; background-image:radial-gradient(#c5d0bc 1px,transparent 1px); background-size:16px 16px; border-radius:9px; margin-top:17px; }
+    .node { background:white; border:1px solid #c7d6c0; border-radius:9px; padding:16px; min-width:150px; font-size:12px; }
+    .node strong { display:block; margin:14px 0 8px; }
+    .connector { font-size:20px; color:#6a8560; }
+    body[data-variant=B] .workspace { grid-template-columns:230px minmax(0,1fr) 320px; }
+    body[data-variant=B] .controls { margin-top:0; grid-column:1; grid-row:1; }
+    body[data-variant=B] .shopping { grid-column:2; grid-row:1; }
+    body[data-variant=B] .cart { grid-column:3; grid-row:1; }
+    body[data-variant=B] .control-grid,body[data-variant=B] .rates { grid-template-columns:1fr; }
+    body[data-variant=B] .catalog { grid-template-columns:1fr; }
+    body[data-variant=B] .feature { display:grid; grid-template-columns:44px 1fr auto; align-items:center; gap:12px; padding:15px; }
+    body[data-variant=B] .feature-top .category,body[data-variant=B] .feature>.atomic { display:none; }
+    body[data-variant=B] .feature-bottom { border:0; display:block; padding:0; text-align:right; }
+    body[data-variant=B] .feature-bottom .add { margin-top:7px; }
+    body[data-variant=B] .feature p { min-height:0; }
+    body[data-variant=B] .benefit-grid { grid-template-columns:1fr; }
+    body[data-variant=C] .composition { display:block; }
+    body[data-variant=C] .catalog { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    body[data-variant=C] .feature { padding:14px; }
+    body[data-variant=C] .feature p,body[data-variant=C] .feature>.atomic,body[data-variant=C] .category { display:none; }
+    body[data-variant=C] .feature-bottom { flex-wrap:wrap; }
+    .switcher { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); display:flex; gap:15px; align-items:center; background:#20352e; color:white; border:1px solid #ffffff30; border-radius:30px; padding:7px 10px; box-shadow:0 6px 24px #20352e25; z-index:3; font-size:11px; white-space:nowrap; }
+    .switcher button { border:0; border-radius:50%; background:#ffffff15; color:white; width:29px; height:29px; }
+    .switcher small { color:#bdd0c2; font-size:9px; }
+    dialog { width:min(610px,calc(100% - 32px)); border:1px solid var(--line); border-radius:15px; padding:28px; color:var(--ink); max-height:85vh; }
+    dialog::backdrop { background:#182f2560; backdrop-filter:blur(3px); }
+    .dialog-heading { display:flex; align-items:center; justify-content:space-between; }
+    .review-list { margin:18px 0; }
+    .review-list .cost-row { padding:8px 0; border-bottom:1px solid var(--line); }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @media(max-width:1150px) {
+      .steps { display:none; } .header-inner { padding:18px 24px; } main { padding:30px 24px 100px; }
+      .workspace { grid-template-columns:minmax(0,1fr) 310px; gap:20px; }
+      body[data-variant=B] .workspace { grid-template-columns:minmax(0,1fr) 310px; }
+      body[data-variant=B] .shopping { grid-column:1; } body[data-variant=B] .cart { grid-column:2; }
+      body[data-variant=B] .controls { grid-column:1/-1; grid-row:2; }
+      body[data-variant=B] .control-grid { grid-template-columns:1fr 1fr; }
+      body[data-variant=C] .catalog { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .benefit-grid { grid-template-columns:1fr; }
+    }
+    @media(max-width:760px) {
+      .header-inner { padding:16px 20px; } .header-links a { display:none; } .header-links { gap:0; }
+      main { padding:27px 18px 100px; } .intro { margin-bottom:25px; } h1 { letter-spacing:-1.3px; }
+      .workspace,body[data-variant=B] .workspace { display:flex; flex-direction:column; }
+      .shopping,.cart,.controls { width:100%; } .cart { position:static; } .controls { margin-top:0; }
+      .catalog,body[data-variant=C] .catalog { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+      .feature { padding:14px; } .feature-bottom { flex-wrap:wrap; } .benefit-grid { grid-template-columns:1fr; }
+      .category { font-size:9px; } .section-head { align-items:flex-start; } .section-head .pill { font-size:9px; }
+      .control-grid { gap:14px; } .panel { padding:19px; }
+    }
+    @media(max-width:400px) {
+      .catalog,body[data-variant=C] .catalog { grid-template-columns:1fr; }
+      body[data-variant=B] .feature { grid-template-columns:1fr; }
+      body[data-variant=B] .feature-bottom { display:flex; text-align:left; }
+    }
+    @media print { .switcher,button,.search,.filters { display:none!important; } .cart { position:static; } }
+  </style>
+</head>
+<body data-variant="A">
+  <header>
+    <div class="header-inner">
+      <div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>token yield<span class="muted" style="font-weight:400">/</span><span style="font-size:13px;font-weight:500;letter-spacing:0">studio</span></div>
+      <nav class="header-links" aria-label="Main navigation">
+        <a href="#marketplace">Marketplace</a><a href="marketplace-sales-demo.html">Sales demo &amp; ROI</a><a href="#assumptions">How estimates work</a><span class="pill prototype-badge">Interactive prototype</span>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="intro">
+      <div><div class="eyebrow">Small bricks. Bigger possibilities.</div><h1>Your next product.<br>One brick at a time.</h1><p>Shop for the capabilities your customers need. See how they fit together, what they could cost, and the value they could create.</p></div>
+      <div class="steps" aria-label="Workflow"><span><b>1</b> Pick your bricks</span><span><b>2</b> Shape your estimate</span><span><b>3</b> Review your build</span></div>
+    </section>
+    <div class="workspace">
+      <section class="shopping" id="marketplace" aria-label="Functionality marketplace">
+        <section class="panel composition" aria-label="Composition canvas">
+          <div class="eyebrow muted">Your composition</div><h2 style="margin-top:5px">See the pieces connect.</h2>
+          <div class="canvas" id="canvas"></div>
+          <p class="fine">Conceptual connections, not an execution order. Integration is estimated for every pair of selected capabilities.</p>
+        </section>
+        <div class="section-head"><div><h2>The functionality marketplace</h2><p class="muted">One capability. A reusable stack of atomic tasks.</p></div><span class="pill">6 ready-to-explore bricks</span></div>
+        <div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"></circle><path d="m15 15 5 5"></path></svg><input id="search" type="search" placeholder="Find a functionality..." aria-label="Search functionalities"></div>
+        <div class="filters" role="group" aria-label="Filter by category">
+          <button class="filter active" data-category="All" aria-pressed="true">All bricks</button>
+          <button class="filter" data-category="Customer experience" aria-pressed="false">Customer experience</button>
+          <button class="filter" data-category="Operations" aria-pressed="false">Operations</button>
+          <button class="filter" data-category="Intelligence" aria-pressed="false">Intelligence</button>
+        </div>
+        <div class="catalog" id="catalog"></div>
+        <section class="benefits" aria-labelledby="benefits-title">
+          <div class="section-head"><div><div class="eyebrow muted">Beyond the budget</div><h2 id="benefits-title" style="margin-top:5px">What your build could unlock</h2></div></div>
+          <div class="benefit-grid" id="benefits"></div>
+          <p class="fine">Potential benefits, not measured outcomes. Validate with load tests, an energy baseline, and customer experiments before making claims.</p>
+        </section>
+      </section>
+      <aside class="panel cart" aria-label="Your build estimate">
+        <div class="cart-title"><h2>Your build</h2><span class="count" id="count"></span></div>
+        <p class="fine">A customer-facing digital product</p>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="integration-note" id="integration-note"></div>
+        <div class="estimate">
+          <div class="eyebrow">Estimated monthly AI usage cost</div>
+          <div class="amount"><span id="monthly-cost"></span><small> / month</small></div>
+          <div class="cost-row"><span>Functionality tokens</span><strong id="feature-tokens"></strong></div>
+          <div class="cost-row"><span>Integration routing tokens</span><strong id="routing-tokens"></strong></div>
+          <div class="cost-row"><span>Total tokens / month</span><strong id="total-tokens"></strong></div>
+          <div class="bar"><div id="budget-bar"></div></div>
+          <div class="budget-state" id="budget-state"></div>
+        </div>
+        <div class="cost-row"><span>One-time integration AI</span><strong id="setup-cost"></strong></div>
+        <p class="fine" id="setup-tokens"></p>
+        <div class="cost-row"><span>First-month AI subtotal</span><strong id="first-month"></strong></div>
+        <button class="primary" id="review">Review your build &rarr;</button>
+        <div style="text-align:center"><button class="text-button" id="clear">Clear build</button></div>
+        <p class="fine">Illustrative estimates only. No live predictor or provider connection. USD; excludes engineering, hosting, licenses, tax, and maintenance. Not a total project quote.</p>
+      </aside>
+      <section class="panel controls" id="assumptions" style="grid-column:1" aria-labelledby="assumptions-title">
+        <div class="eyebrow muted">Make it yours</div><h2 id="assumptions-title" style="margin-top:5px">A few assumptions. A clearer picture.</h2>
+        <div class="control-grid">
+          <div><label for="volume">Monthly runs per selected functionality<small>Each run executes that functionality once.</small></label><input id="volume" type="range" min="0" max="100000" step="1000" value="10000"><output for="volume" id="volume-value" style="font-size:18px;font-weight:650">10,000</output></div>
+          <div><label for="complexity">Integration complexity<small>Applies to connections, not base feature usage.</small></label><select id="complexity"><option value="1">Standard / shared APIs</option><option value="1.6">Custom / multiple systems</option><option value="2.4">Complex / legacy systems</option></select></div>
+          <div><label for="budget">Monthly AI budget (USD)<small>Compared with recurring usage, excluding setup.</small></label><input id="budget" type="number" min="0" max="1000000" step="1" value="500" required></div>
+          <div><label for="buffer">Planning reserve<small>Budget allowance, not a confidence interval.</small></label><select id="buffer"><option value="0">No reserve</option><option value="0.2" selected>20% reserve</option><option value="0.4">40% reserve</option></select></div>
+        </div>
+        <details>
+          <summary>Inside the estimate: bricks, rates, and limitations</summary>
+          <p>Inspired by this repository's decompose-and-recompose approach. These hand-authored demo coefficients are not fitted weights, benchmark results, or current provider prices.</p>
+          <div class="rates">
+            <div><label for="input-rate">USD / 1M input tokens</label><input id="input-rate" type="number" min="0" max="1000" step="0.01" value="2" required></div>
+            <div><label for="output-rate">USD / 1M output tokens</label><input id="output-rate" type="number" min="0" max="1000" step="0.01" value="8" required></div>
+          </div>
+          <ul>
+            <li>Feature tokens = runs per feature x sum of its atomic input and output tokens. Reasoning and cache are not modeled.</li>
+            <li>Connection count = n x (n - 1) / 2. Every selected pair is assumed to need an integration.</li>
+            <li>Each connection adds 120 input + 30 output tokens per monthly run, multiplied by integration complexity.</li>
+            <li>One-time integration uses Plan + Transform + Validate: 18,000 input + 6,000 output tokens per connection, multiplied by complexity. This is hypothetical AI-assisted integration work, not labor.</li>
+            <li>Cost = (input tokens x input rate + output tokens x output rate) / 1,000,000. Reserve applies to cost only, not tokens.</li>
+            <li>No assumed batching savings, guaranteed engagement uplift, or carbon conversion. Lower tokens alone do not establish sustainability.</li>
+          </ul>
+          <div id="atomic-breakdown"></div>
+        </details>
+      </section>
+    </div>
+  </main>
+  <div class="switcher" aria-label="Prototype layout switcher">
+    <button id="previous" aria-label="Previous layout">&larr;</button><span><small>DESIGN EXPLORER</small> <span id="variant-label"></span></span><button id="next" aria-label="Next layout">&rarr;</button>
+  </div>
+  <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+  <dialog id="review-dialog" aria-labelledby="review-title">
+    <div class="dialog-heading"><div><div class="eyebrow muted">Your product blueprint</div><h2 id="review-title">A build worth exploring.</h2></div><button class="remove" id="close-dialog" aria-label="Close review">&times;</button></div>
+    <div id="review-content"></div>
+    <button class="primary" id="download">Download estimate (.json)</button>
+    <p class="fine">Local download only. Nothing is submitted, purchased, or stored on a server.</p>
+  </dialog>
+  <script>
+    const atoms = {
+      Retrieve: [1800, 220], Draft: [900, 450], Validate: [500, 90],
+      Classify: [400, 70], Score: [650, 100], Summarise: [1400, 300],
+      Report: [700, 400], Extract: [1200, 200], Transform: [800, 180],
+      Plan: [900, 350], Notify: [300, 90]
+    };
+    const features = [
+      { id:"support", name:"AI customer support", category:"Customer experience", color:"#d6b4e9", description:"Helpful, grounded answers. Even when your team is offline.", atoms:["Retrieve","Draft","Validate"], engagement:true },
+      { id:"search", name:"Smart product search", category:"Customer experience", color:"#e7c374", description:"Help customers find what they mean, not just what they type.", atoms:["Retrieve","Classify"], engagement:true },
+      { id:"recommend", name:"Personalized discovery", category:"Customer experience", color:"#e8af94", description:"Make the next product feel like the right product.", atoms:["Classify","Score","Draft"], engagement:true },
+      { id:"insights", name:"Customer insights", category:"Intelligence", color:"#a8c9e0", description:"Turn scattered feedback into themes your team can act on.", atoms:["Classify","Summarise","Report"], engagement:false },
+      { id:"documents", name:"Document automation", category:"Operations", color:"#b7c99a", description:"Extract, reshape, and check data without the repetitive work.", atoms:["Extract","Transform","Validate"], engagement:false },
+      { id:"onboard", name:"Guided onboarding", category:"Operations", color:"#a7cebf", description:"Give every new customer a clear, personalized next step.", atoms:["Plan","Draft","Notify"], engagement:true }
+    ];
+    const selected = new Set(["support","search"]);
+    const layouts = ["A","B","C"];
+    const layoutNames = { A:"Marketplace", B:"Compare & configure", C:"Composition canvas" };
+    let category = "All";
+    let variant = new URLSearchParams(location.search).get("variant");
+    if (!layouts.includes(variant)) variant = "A";
+    const $ = id => document.getElementById(id);
+    const number = value => new Intl.NumberFormat("en-US").format(value);
+    const money = value => new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", minimumFractionDigits:2 }).format(value);
+    const compact = value => value >= 1e6 ? `${number(Number((value / 1e6).toFixed(2)))}M` : value >= 1000 ? `${number(Number((value / 1000).toFixed(1)))}K` : number(value);
+    const atomSum = feature => feature.atoms.reduce((total, name) => [total[0] + atoms[name][0], total[1] + atoms[name][1]], [0,0]);
+    function estimate() {
+      const chosen = features.filter(feature => selected.has(feature.id));
+      const runs = Number($("volume").value);
+      const complexity = Number($("complexity").value);
+      const reserve = Number($("buffer").value);
+      const inputRate = Number($("input-rate").value);
+      const outputRate = Number($("output-rate").value);
+      const connections = chosen.length * (chosen.length - 1) / 2;
+      const base = chosen.reduce((total, feature) => {
+        const units = atomSum(feature);
+        return [total[0] + units[0] * runs, total[1] + units[1] * runs];
+      }, [0,0]);
+      const routing = [120,30].map(tokens => Math.round(tokens * connections * runs * complexity));
+      const setup = [18000,6000].map(tokens => Math.round(tokens * connections * complexity));
+      const total = [base[0] + routing[0], base[1] + routing[1]];
+      const cost = tokens => (tokens[0] * inputRate + tokens[1] * outputRate) / 1e6;
+      return { chosen, runs, complexity, reserve, inputRate, outputRate, connections, base, routing, setup, total,
+        monthlyBase:cost(total), monthly:cost(total) * (1 + reserve), setupCost:cost(setup) * (1 + reserve), budget:Number($("budget").value) };
+    }
+    function renderCatalog() {
+      const query = $("search").value.trim().toLowerCase();
+      const visible = features.filter(feature => (category === "All" || feature.category === category) &&
+        `${feature.name} ${feature.description} ${feature.atoms.join(" ")}`.toLowerCase().includes(query));
+      $("catalog").innerHTML = visible.map(feature => {
+        const tokens = atomSum(feature);
+        const active = selected.has(feature.id);
+        return `<article class="feature ${active ? "selected" : ""}">
+          <div class="feature-top"><span class="brick" style="--brick:${feature.color}" aria-hidden="true"></span><span class="category">${feature.category}</span></div>
+          <div><h3>${feature.name}</h3><p>${feature.description}</p></div>
+          <div class="atomic">${feature.atoms.map(atom => `<span>${atom}</span>`).join("")}</div>
+          <div class="feature-bottom"><div><strong>${number(tokens[0] + tokens[1])} <span style="font-size:10px;font-weight:400">tokens</span></strong><small>per run &middot; demo estimate</small></div>
+          <button class="add" data-feature="${feature.id}" aria-pressed="${active}" aria-label="${active ? "Remove" : "Add"} ${feature.name}">${active ? "&#10003; Added" : "+ Add brick"}</button></div></article>`;
+      }).join("") || '<p class="empty">No matching bricks. Try another search or category.</p>';
+    }
+    function renderSummary() {
+      const e = estimate();
+      $("count").textContent = `${e.chosen.length} bricks`;
+      $("cart-items").innerHTML = e.chosen.map(feature => `<div class="cart-item"><span class="dot" style="--brick:${feature.color}"></span><span class="item-name">${feature.name}</span><button class="remove" data-feature="${feature.id}" aria-label="Remove ${feature.name} from build">&times;</button></div>`).join("") || '<p class="empty">Your build starts with one brick.<br>Choose a functionality to begin.</p>';
+      $("integration-note").textContent = `${e.connections} ${e.connections === 1 ? "connection" : "connections"} estimated between your bricks`;
+      $("monthly-cost").textContent = money(e.monthly);
+      $("feature-tokens").textContent = compact(e.base[0] + e.base[1]);
+      $("routing-tokens").textContent = compact(e.routing[0] + e.routing[1]);
+      $("total-tokens").textContent = compact(e.total[0] + e.total[1]);
+      const over = e.monthly > e.budget;
+      $("budget-bar").style.width = `${e.budget > 0 ? Math.min(100, e.monthly / e.budget * 100) : e.monthly > 0 ? 100 : 0}%`;
+      $("budget-bar").classList.toggle("over",over);
+      $("budget-state").classList.toggle("over",over);
+      $("budget-state").textContent = `${money(Math.abs(e.budget - e.monthly))} ${over ? "over budget" : "budget remaining"} / ${Math.round(e.reserve * 100)}% reserve included`;
+      $("setup-cost").textContent = money(e.setupCost);
+      $("setup-tokens").textContent = `${number(e.setup[0] + e.setup[1])} one-time tokens. Includes ${Math.round(e.reserve * 100)}% cost reserve; excludes engineering labor.`;
+      $("first-month").textContent = money(e.monthly + e.setupCost);
+      $("volume-value").textContent = number(e.runs);
+      $("review").disabled = e.chosen.length === 0;
+      $("clear").disabled = e.chosen.length === 0;
+      const engagement = e.chosen.filter(feature => feature.engagement).length;
+      const uniqueAtoms = new Set(e.chosen.flatMap(feature => feature.atoms));
+      const reused = [...uniqueAtoms].filter(atom => e.chosen.filter(feature => feature.atoms.includes(atom)).length > 1).length;
+      $("benefits").innerHTML = `
+        <article class="benefit"><div class="number">${e.chosen.length ? number(e.runs * e.chosen.length) : "0"} <small>runs / month</small></div><h3>Room to scale</h3><p>${e.chosen.length ? "Your modeled workload across selected capabilities. Validate throughput, latency, and rate limits with a load test." : "Add a brick to explore automated workflow capacity."}</p></article>
+        <article class="benefit"><div class="number">${reused} <small>shared task ${reused === 1 ? "type" : "types"}</small></div><h3>More thoughtful resource use</h3><p>${reused ? "Shared tasks may offer batching opportunities. Measure energy per successful task; no token or carbon savings assumed." : "Look for opportunities to reuse context and reduce duplicate work. Sustainability impact is not yet measured."}</p></article>
+        <article class="benefit"><div class="number">${engagement} <small>customer touchpoints</small></div><h3>Make every interaction count</h3><p>${engagement ? "Potential for easier discovery and faster help. Test engagement and retention against your current experience." : "Add customer-facing bricks to explore engagement opportunities."}</p></article>`;
+      $("canvas").innerHTML = e.chosen.map(feature => `<div class="node"><div class="brick" style="--brick:${feature.color}" aria-hidden="true"></div><strong>${feature.name}</strong><div class="atomic">${feature.atoms.map(atom => `<span>${atom}</span>`).join("")}</div></div>`).join('<span class="connector" aria-hidden="true">+</span>') || '<p class="muted">Add a brick below to start your composition.</p>';
+      $("atomic-breakdown").innerHTML = '<p><strong>Selected task coefficients (input / output tokens per run)</strong></p>' +
+        [...uniqueAtoms].map(atom => `<div class="cost-row"><span>${atom}</span><strong>${number(atoms[atom][0])} / ${number(atoms[atom][1])}</strong></div>`).join("");
+      $("announcement").textContent = `${e.chosen.length} bricks selected. Monthly AI estimate ${money(e.monthly)}. ${over ? "Over budget." : "Within budget."}`;
+    }
+    function refresh() { renderCatalog(); renderSummary(); }
+    function toggleFeature(id) {
+      selected.has(id) ? selected.delete(id) : selected.add(id);
+      refresh();
+      const button = document.querySelector(`#catalog [data-feature="${id}"]`);
+      (button || $("clear")).focus();
+    }
+    $("catalog").addEventListener("click",event => {
+      const button = event.target.closest("[data-feature]");
+      if (button) toggleFeature(button.dataset.feature);
+    });
+    $("cart-items").addEventListener("click",event => {
+      const button = event.target.closest("[data-feature]");
+      if (button) toggleFeature(button.dataset.feature);
+    });
+    $("search").addEventListener("input",renderCatalog);
+    document.querySelectorAll("[data-category]").forEach(button => button.addEventListener("click",() => {
+      category = button.dataset.category;
+      document.querySelectorAll("[data-category]").forEach(filter => {
+        filter.classList.toggle("active", filter === button);
+        filter.setAttribute("aria-pressed", String(filter === button));
+      });
+      renderCatalog();
+    }));
+    ["volume","complexity","buffer"].forEach(id => $(id).addEventListener("input",renderSummary));
+    ["budget","input-rate","output-rate"].forEach(id => {
+      const input = $(id);
+      input.dataset.lastValid = input.value;
+      input.addEventListener("input",() => {
+        const valid = ["budget","input-rate","output-rate"].every(key => $(key).checkValidity());
+        $("review").disabled = !valid || selected.size === 0;
+        if (!input.checkValidity()) { input.reportValidity(); return; }
+        input.dataset.lastValid = input.value;
+        if (valid) renderSummary();
+      });
+      input.addEventListener("change",() => {
+        if (!input.checkValidity()) {
+          input.value = input.dataset.lastValid;
+          $("announcement").textContent = "Invalid number. The previous valid value has been restored.";
+        }
+        renderSummary();
+      });
+    });
+    $("clear").addEventListener("click",() => { selected.clear(); refresh(); $("search").focus(); });
+    function setVariant(next, updateUrl = true) {
+      variant = next;
+      document.body.dataset.variant = variant;
+      $("variant-label").textContent = `${variant} / ${layoutNames[variant]}`;
+      if (updateUrl) {
+        const url = new URL(location.href);
+        url.searchParams.set("variant", variant);
+        history.replaceState(null,"",url);
+      }
+    }
+    const cycle = direction => setVariant(layouts[(layouts.indexOf(variant) + direction + layouts.length) % layouts.length]);
+    $("previous").addEventListener("click",() => cycle(-1));
+    $("next").addEventListener("click",() => cycle(1));
+    document.addEventListener("keydown",event => {
+      if (event.target.closest("input,textarea,select,[contenteditable],dialog") || $("review-dialog").open) return;
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault(); cycle(event.key === "ArrowLeft" ? -1 : 1);
+      }
+    });
+    function blueprint() {
+      const e = estimate();
+      return {
+        prototype:true, estimation_method:"Illustrative coefficients; not connected to the repository predictor",
+        currency:"USD", selected_features:e.chosen.map(feature => ({ id:feature.id, name:feature.name, atomic_tasks:feature.atoms, per_run_input_tokens:atomSum(feature)[0], per_run_output_tokens:atomSum(feature)[1] })),
+        assumptions:{ runs_per_feature_per_month:e.runs, integration_complexity:e.complexity, all_pairs_connections:e.connections, input_usd_per_million:e.inputRate, output_usd_per_million:e.outputRate, cost_reserve:e.reserve, monthly_budget:e.budget, atomic_coefficients:atoms, routing_tokens_per_connection_per_run:{ input:120,output:30 }, setup_tokens_per_connection:{ input:18000,output:6000 } },
+        monthly:{ input_tokens:e.total[0], output_tokens:e.total[1], total_tokens:e.total[0]+e.total[1], routing_input_tokens:e.routing[0], routing_output_tokens:e.routing[1], cost_before_reserve:e.monthlyBase, cost_with_reserve:e.monthly },
+        one_time_integration:{ input_tokens:e.setup[0], output_tokens:e.setup[1], cost_with_reserve:e.setupCost },
+        first_month_ai_subtotal:e.monthly+e.setupCost,
+        benefits:{ status:"Unvalidated hypotheses", scalability:"Validate throughput and latency under load", sustainability:"Measure energy per successful task; no carbon or token savings assumed", engagement:"Measure engagement and retention with a controlled experiment" },
+        exclusions:["Engineering labor","Hosting","Licenses","Tax","Maintenance","Cache and reasoning modeling"]
+      };
+    }
+    $("review").addEventListener("click",() => {
+      const e = estimate();
+      $("review-content").innerHTML = `<p class="muted" style="margin-top:12px">${e.chosen.map(feature => feature.name).join(" + ")}</p>
+        <div class="review-list">
+          <div class="cost-row"><span>Runs per functionality / month</span><strong>${number(e.runs)}</strong></div>
+          <div class="cost-row"><span>Monthly input / output tokens</span><strong>${number(e.total[0])} / ${number(e.total[1])}</strong></div>
+          <div class="cost-row"><span>Monthly AI cost before reserve</span><strong>${money(e.monthlyBase)}</strong></div>
+          <div class="cost-row"><span>Monthly AI cost + ${Math.round(e.reserve*100)}% reserve</span><strong>${money(e.monthly)}</strong></div>
+          <div class="cost-row"><span>One-time integration AI + reserve</span><strong>${money(e.setupCost)}</strong></div>
+          <div class="cost-row"><span>First-month AI subtotal</span><strong>${money(e.monthly+e.setupCost)}</strong></div>
+        </div><p class="fine">Next step: validate the task decomposition and integration graph against your actual product, calibrate on measured runs, and test business-benefit hypotheses. This prototype does not run the repository's trained model. Estimates exclude non-AI implementation and operating costs.</p>`;
+      $("review-dialog").showModal();
+    });
+    $("close-dialog").addEventListener("click",() => $("review-dialog").close());
+    $("download").addEventListener("click",() => {
+      const blob = new Blob([JSON.stringify(blueprint(),null,2)], { type:"application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url; link.download = "token-yield-build-estimate.json"; link.click();
+      setTimeout(() => URL.revokeObjectURL(url),1000);
+    });
+    setVariant(variant,false);
+    refresh();
+  </script>
+</body>
+</html>

@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Token Yield | Pipeline operations</title>
+<style>
+:root{--ink:#20352e;--muted:#65746c;--green:#27674e;--lime:#def29d;--line:#dfe6dc;--paper:#f7f8f3;--amber:#846322;--red:#973d33;--terminal:#172a23}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}button,select{font:inherit}button,a,select,summary{touch-action:manipulation}button{cursor:pointer}a{color:var(--green)}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #9daf58;outline-offset:3px}header{padding:21px 3.2%;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:18px;background:#fff}.brand{font-weight:800;font-size:19px;letter-spacing:-.5px}.brand span{color:var(--green)}.header-links{display:flex;align-items:center;gap:20px}.eyebrow{text-transform:uppercase;font-size:11px;letter-spacing:1.8px;font-weight:800;color:var(--green)}main{padding:30px 3.2% 45px;max-width:1900px;margin:auto}h1{font-size:clamp(29px,3.4vw,45px);line-height:1.14;letter-spacing:-1.6px;margin:9px 0 13px}h2{font-size:20px;letter-spacing:-.4px;margin:0}h3{font-size:15px;margin:22px 0 10px}p{margin:8px 0 15px}.muted{color:var(--muted)}.intro{display:flex;justify-content:space-between;gap:25px;align-items:center;margin-bottom:24px}.intro p{max-width:850px}.badge{display:inline-flex;align-items:center;border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 11px;white-space:nowrap;font-size:12px;font-weight:700}.offline{background:var(--lime);border-color:var(--lime)}.controls{display:flex;align-items:end;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);padding:18px;border-radius:14px;margin-bottom:14px}label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}select{border:1px solid #aebbb1;border-radius:7px;padding:9px 32px 9px 11px;background:#fff;color:var(--ink);width:100%;max-width:700px}.run-picker{flex:1;min-width:220px}button.button{border:1px solid #aebbb1;background:#fff;border-radius:7px;color:var(--ink);padding:9px 14px;font-weight:600}.button.primary{background:var(--green);color:white;border-color:var(--green)}button:disabled{opacity:.5;cursor:not-allowed}.connection{font-size:12px;min-height:20px;color:var(--muted);margin:4px 0 18px}.error{padding:15px 18px;border:1px solid #d7a298;background:#fff0ed;border-radius:10px;color:#7e3028;margin:12px 0;overflow-wrap:anywhere}.run-summary{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;padding:19px 21px;border:1px solid var(--line);border-radius:13px;background:#edf2e9;margin-bottom:20px}.run-summary p{margin:7px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.run-meta{font:12px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;margin-top:10px;overflow-wrap:anywhere}.status-running,.status-queued{background:#fff5d8;border-color:#e1cc90;color:#6f5615}.status-completed{background:#def0de;color:#245338;border-color:#a6c8a9}.status-failed{background:#ffe5e0;color:#83392e;border-color:#dba59a}.workspace{display:grid;grid-template-columns:minmax(310px,.84fr) minmax(0,1.35fr);align-items:start;gap:22px}.panel{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 22px;border-bottom:1px solid var(--line)}.panel-head p{font-size:12px;margin:5px 0 0}.terminal{background:var(--terminal);color:#e4eddf}.terminal .panel-head{border-color:#3a4b40}.terminal .muted{color:#b4c5b8}.terminal .eyebrow{color:var(--lime)}.event-log{height:650px;max-height:75vh;overflow:auto;scrollbar-color:#6c8272 var(--terminal);padding:0 20px;overscroll-behavior:contain}.event{padding:17px 0;border-bottom:1px solid #384b3f}.event-top{display:flex;gap:9px;align-items:center;font:11px ui-monospace,SFMono-Regular,Consolas,monospace;color:#b6c6b8;flex-wrap:wrap}.stage{font-weight:700;color:var(--lime);text-transform:uppercase;letter-spacing:.7px}.event p{font-size:13px;line-height:1.7;overflow-wrap:anywhere;white-space:pre-wrap;margin:10px 0}.event details{font-size:12px}.event summary{cursor:pointer;color:#bcd2c0;width:fit-content}.event pre{background:#102019;padding:12px;border-radius:7px;white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;max-height:350px;overflow:auto}.terminal-footer{border-top:1px solid #384b3f;padding:13px 20px;font-size:11px;color:#b4c5b8;display:flex;align-items:center;justify-content:space-between;gap:12px}.terminal-footer label{font-size:11px;margin:0;display:flex;align-items:center;gap:7px}.tabs{display:flex;gap:5px;flex-wrap:wrap;padding:13px 16px;border-bottom:1px solid var(--line);background:#fafbf7}.tab{border:0;background:transparent;padding:9px 12px;border-radius:7px;color:var(--muted);font-weight:650;font-size:13px}.tab[aria-selected=true]{background:var(--green);color:#fff}.tab-content{padding:23px}.empty{padding:27px 5px;color:var(--muted);font-size:14px}.terminal .empty{color:#b4c5b8}.note{background:#f3f5ea;border-left:3px solid #a5b45f;padding:12px 15px;font-size:12px;margin:15px 0}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:18px 0}.stat{border:1px solid var(--line);border-radius:9px;padding:15px}.stat strong{font-size:27px;display:block;letter-spacing:-1px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.stat span{font-size:12px;color:var(--muted)}.stat.after{background:#edf5e8;border-color:#c5d8bd}.small{font-size:12px}.section-title{margin:5px 0 12px;font-size:16px}.brick{border:1px solid var(--line);padding:13px;border-radius:9px;margin-top:9px}.brick-title{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.chip{background:#eef1e9;border-radius:5px;padding:3px 7px;font-size:11px;display:inline-block;margin:5px 5px 0 0}.novel{background:#fff0cc;color:#75591f}.doc-layout{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px}.doc-nav{display:flex;flex-direction:column;gap:8px}.doc-button{text-align:left;border:1px solid var(--line);background:#fafbf7;color:var(--ink);border-radius:7px;padding:10px;font-size:12px;overflow-wrap:anywhere}.doc-button[aria-pressed=true]{border-color:var(--green);background:#e9f1e5}.doc-button small{display:block;color:var(--muted);margin-top:5px}.doc-text{white-space:pre-wrap;overflow-wrap:anywhere;background:#fafbf7;border:1px solid var(--line);padding:15px;border-radius:7px;max-height:440px;overflow:auto;font-size:13px}.doc-link{display:inline-block;margin:6px 10px 6px 0;font-size:12px}.requirement{border:1px solid var(--line);border-radius:10px;padding:15px;margin:12px 0}.requirement-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.evidence_found{background:#e4f0df;color:#345b32}.partial{background:#fff1c9;color:#795c1a}.missing{background:#ffe8dc;color:#873d25}.requirement blockquote{margin:12px 0;padding:10px 13px;border-left:3px solid #c3d1b7;background:#f7f9f3;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.table-wrap{max-width:100%;max-height:450px;overflow:auto;border:1px solid var(--line);border-radius:8px}table{border-collapse:collapse;width:100%;font-size:12px;text-align:left}td,th{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}th{background:#f1f4ed;position:sticky;top:0;font-weight:700;white-space:nowrap}td.number{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}.feature-name{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.table-wrap.wide td{white-space:nowrap}.metric-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}details.coefficients{margin:18px 0}details.coefficients summary{cursor:pointer;font-size:13px;font-weight:650;margin-bottom:12px}.limitations li{margin:8px 0}.pending{padding:25px;text-align:center;max-width:540px;margin:20px auto}.pending h3{font-size:19px}.pending p{font-size:13px}.footer{margin-top:22px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}[hidden]{display:none!important}
+@media(min-width:1450px){.event-log{height:760px}}
+@media(max-width:950px){.workspace{grid-template-columns:1fr}.event-log{height:390px;max-height:60vh}.intro{align-items:start}.intro>.badge{display:none}}
+@media(max-width:600px){header{padding:16px 5%}.header-links .badge{display:none}main{padding:22px 4%}.intro{margin-bottom:15px}h1{letter-spacing:-1px}.panel-head,.tab-content{padding:17px}.controls{padding:14px}.run-summary{grid-template-columns:1fr}.doc-layout{grid-template-columns:1fr}.doc-nav{flex-direction:row;overflow:auto;padding-bottom:5px}.doc-button{min-width:150px}.stats{gap:8px}.stat{padding:11px}.stat strong{font-size:23px}.requirement-head{flex-direction:column}.tab{padding:8px 10px}.run-picker{min-width:100%;}.header-links{font-size:13px}}
+</style>
+<style>
+.step-controls{background:#eaf2e5;border:1px solid #c4d7bb;border-radius:12px;padding:18px 20px;margin:18px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.step-controls p{margin:5px 0 0;font-size:12px}.step-actions{display:flex;gap:9px;flex-wrap:wrap}.status-waiting{background:var(--lime);color:#355328}.status-cancelled{background:#ecece7;color:#62675f}.stage-progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:16px 0 21px;padding:0;list-style:none}.stage-step{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12px;background:white}.stage-step strong,.stage-step small{display:block}.stage-step small{font-size:10px;color:var(--muted);margin-top:3px}.stage-step.done{background:#e7f2df;border-color:#bbd1af}.stage-step.current{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green);background:#f4f9ed}.latest-stage{border:1px solid var(--line);background:#fff;border-radius:12px;padding:18px 21px;margin-bottom:20px}.latest-stage p{margin:7px 0 0;font-size:13px}.latest-stage pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:230px;overflow:auto;background:#f3f6ed;padding:12px;font:12px/1.6 ui-monospace,Consolas,monospace}.latest-stage summary{font-size:12px;cursor:pointer;margin-top:10px}.stage-output{margin:0 0 21px;padding-bottom:15px;border-bottom:1px solid var(--line)}.stage-output pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto;font:12px/1.6 ui-monospace,Consolas,monospace;background:#f6f8f1;padding:12px}@media(max-width:750px){.stage-progress{grid-template-columns:repeat(2,minmax(0,1fr))}.step-controls{padding:15px}.step-actions{width:100%}.step-actions .primary{flex:1}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Token<span>Yield</span> <span class="muted small">/ operations</span></div>
+  <nav class="header-links" aria-label="Main navigation"><span id="runtime-badge" class="badge">Select a runtime in sales</span><a id="sales-link" href="/marketplace-sales-demo.html">← Sales studio</a></nav>
+</header>
+<main>
+  <section class="intro">
+    <div><div class="eyebrow">Behind the estimate</div><h1>Run one step. Inspect its output.</h1><p class="muted">Inspect the selected backend: offline synthetic pipeline, or real Foundry orchestrator + three-agent proposals, peer discussion, adjudication, features, measured calls, training and predictions. Each Next click releases one stage—not a replay. Events within a stage do not imply that stage has finished.</p></div>
+    <span class="badge">Live execution controls</span>
+  </section>
+  <div class="controls">
+    <div class="run-picker"><label for="run-select">Backend run</label><select id="run-select"><option value="">Loading available runs…</option></select></div>
+    <button class="button" id="refresh-runs" type="button">Refresh run list</button>
+    <button class="button primary" id="reload-run" type="button" disabled>Reload selected run</button>
+  </div>
+  <div id="connection" class="connection" role="status">Connecting to the local backend…</div>
+  <div id="error" class="error" role="alert" hidden></div>
+  <div id="azure-notice" class="note" hidden><b>Foundry / paid Azure execution:</b> Advancing this run may send its submitted brief and optional function to the configured GPT-5.4 deployment. Fixtures are original and fictional; no real documents are ingested and no live web research is performed. The US$25 shared pilot cap is server-only. Predictions and ROI are not actual provider bills or production quotes. Cancellation cannot undo an in-flight call.</div>
+  <section class="run-summary" aria-label="Selected run">
+    <div><div class="eyebrow">Request being observed</div><p id="brief">Opening this page never starts a run. Submit a request in the sales studio, then select it here.</p><div id="run-meta" class="run-meta"></div></div>
+    <span id="status" class="badge">No run selected</span>
+  </section>
+  <section class="step-controls" aria-label="Backend execution controls">
+    <div><strong id="step-heading">Select a run to inspect or advance</strong><p id="step-help">Opening this page does not execute a stage. Start a step-by-step request in the sales studio.</p></div>
+    <div class="step-actions"><button class="button primary" id="next-stage" type="button" disabled>Next step</button><button class="button" id="cancel-run" type="button" disabled>Cancel run</button></div>
+  </section>
+  <ol id="stage-progress" class="stage-progress" aria-label="Backend stage progress"></ol>
+  <section id="latest-stage" class="latest-stage" aria-label="Latest completed stage output" hidden></section>
+  <div class="workspace">
+    <section class="panel terminal" aria-labelledby="events-title">
+      <div class="panel-head"><div><div class="eyebrow">Execution journal</div><h2 id="events-title">Pipeline operations</h2><p class="muted">Actual backend events, in reported sequence.</p></div><span id="event-count" class="small">0 events</span></div>
+      <div id="event-log" class="event-log" tabindex="0" aria-label="Scrollable backend execution events"><div id="events-empty" class="empty">No events received. Nothing is simulated in this interface.</div></div>
+      <div class="terminal-footer"><span>Python operations, not shell command output.</span><label><input id="follow" type="checkbox" checked> Follow new events</label></div>
+    </section>
+    <section class="panel" aria-label="Run artifacts">
+      <div class="panel-head"><div><div class="eyebrow">Inspect the artifacts</div><h2>From evidence to estimate</h2></div><span id="artifact-count" class="small muted">Awaiting result</span></div>
+      <div class="tabs" role="tablist" aria-label="Artifact views">
+        <button class="tab" id="tab-overview" role="tab" aria-selected="true" aria-controls="view-overview" type="button" data-tab="overview">Overview</button>
+        <button class="tab" id="tab-wiki" role="tab" aria-selected="false" aria-controls="view-wiki" tabindex="-1" type="button" data-tab="wiki">Document wiki</button>
+        <button class="tab" id="tab-requirements" role="tab" aria-selected="false" aria-controls="view-requirements" tabindex="-1" type="button" data-tab="requirements">Evidence & gaps</button>
+        <button class="tab" id="tab-training" role="tab" aria-selected="false" aria-controls="view-training" tabindex="-1" type="button" data-tab="training">Features & model</button>
+      </div>
+      <div id="awaiting" class="pending"><div class="eyebrow">No fabricated results</div><h3>Run a step to produce its artifacts.</h3><p class="muted">Documents, evidence, features, fitted coefficients, and evaluation appear as their real backend events arrive. Unexecuted stages have no output. Complete runs show their stored result, not a replay.</p></div>
+      <div class="tab-content" id="view-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0"></div>
+      <div class="tab-content" id="view-wiki" role="tabpanel" aria-labelledby="tab-wiki" tabindex="0" hidden></div>
+      <div class="tab-content" id="view-requirements" role="tabpanel" aria-labelledby="tab-requirements" tabindex="0" hidden></div>
+      <div class="tab-content" id="view-training" role="tabpanel" aria-labelledby="tab-training" tabindex="0" hidden></div>
+    </section>
+  </div>
+  <footer class="footer"><span>Fictional reference baseline · offline synthetic or Foundry measured-data pilot · no live web research</span><span>Backend-driven updates approximately every 700 ms while active.</span></footer>
+</main>
+<script>
+'use strict';
+(() => {
+  const $ = id => document.getElementById(id);
+  const tabs = ['overview', 'wiki', 'requirements', 'training'];
+  const stages = [['decompose','Decompose brief'],['wiki','Link documents'],['requirements','Evidence & gaps'],['features','Engineer features'],['predict_before','Baseline prediction'],['simulate','Synthetic presimulation'],['train','Fit Ridge model'],['evaluate','Synthetic test evaluation'],['predict_after','Re-predict'],['complete','Finalize result']];
+  const liveStages = [['propose','Three agent proposals'],['discuss','Peer review / discussion'],['adjudicate','Orchestrator / accept & dissent'],['wiki','Link fictional sources'],['requirements','Evidence & gaps'],['features','Engineer feature schema'],['predict_before','Before retraining'],['measure','Measure workload calls'],['train','Train / retrain regression'],['evaluate','Held-out pilot evaluation'],['predict_after','Forecast project & catalog'],['complete','Finalize artifacts']];
+  const liveRun = () => state.snapshot?.request?.runtime === 'foundry';
+  function runStages() {
+    const fallback=liveRun()?liveStages:stages;
+    return Array.isArray(state.snapshot?.stages)&&state.snapshot.stages.length ? state.snapshot.stages.map(stage=>{
+      const id=typeof stage==='string'?stage:Array.isArray(stage)?stage[0]:stage.id;
+      return [id,(fallback.find(item=>item[0]===id)||[id,String(id).replaceAll('_',' ')])[1]];
+    }) : fallback;
+  }
+  const state = {id: '', generation: 0, timer: null, lastCount: -1, lastStatus: '', lastNext: null, result: null, rendered: false, tab: 'overview', docId: '', runList: [], listGeneration: 0, snapshot: null, actionPending: false, outputs: new Map()};
+  const queryId = new URL(location.href).searchParams.get('run');
+  const initialId = queryId === null ? '' : queryId.trim();
+  state.pendingSubmission = !initialId && new URL(location.href).searchParams.get('pending') === '1';
+  class RequestError extends Error {
+    constructor(message) { super(message); this.name = 'RequestError'; }
+  }
+  const number = value => typeof value === 'number' && Number.isFinite(value) ? value.toLocaleString(undefined, {maximumFractionDigits: 3}) : '—';
+  const money = value => typeof value === 'number' && Number.isFinite(value) ? '$' + value.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 6}) : '—';
+  const text = value => value === null || value === undefined ? '' : String(value);
+  function node(tag, content, className) {
+    const el = document.createElement(tag);
+    if (content !== undefined) el.textContent = text(content);
+    if (className) el.className = className;
+    return el;
+  }
+  function clearError() { $('error').hidden = true; $('error').textContent = ''; }
+  function showError(message) { $('error').textContent = message; $('error').hidden = false; }
+  async function getJSON(path, options = {}) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    try {
+      let response;
+      try { response = await fetch(path, {...options, cache: 'no-store', signal: controller.signal}); }
+      catch (error) {
+        if (error.name === 'AbortError') throw new RequestError('Backend request timed out after 10 seconds: ' + path);
+        if (error instanceof TypeError) throw new RequestError('Network request failed for ' + path + ': ' + error.message);
+        throw error;
+      }
+      if (!response.ok) throw new RequestError('HTTP ' + response.status + ' ' + response.statusText + ' from ' + path);
+      try { return await response.json(); }
+      catch (error) {
+        if (error instanceof SyntaxError) throw new RequestError('The backend returned invalid JSON from ' + path);
+        if (error.name === 'AbortError') throw new RequestError('Backend request timed out after 10 seconds: ' + path);
+        if (error instanceof TypeError) throw new RequestError('Cannot read the backend response from ' + path + ': ' + error.message);
+        throw error;
+      }
+    } finally { clearTimeout(timeout); }
+  }
+  function selectTab(name, focus = false) {
+    state.tab = name;
+    tabs.forEach(tab => {
+      $('tab-' + tab).setAttribute('aria-selected', String(tab === name));
+      $('tab-' + tab).tabIndex = tab === name ? 0 : -1;
+      $('view-' + tab).hidden = tab !== name || !state.result;
+    });
+    if (focus) $('tab-' + name).focus();
+  }
+  tabs.forEach((tab, index) => {
+    $('tab-' + tab).addEventListener('click', () => selectTab(tab));
+    $('tab-' + tab).addEventListener('keydown', event => {
+      let next;
+      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+      if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = tabs.length - 1;
+      if (next !== undefined) { event.preventDefault(); selectTab(tabs[next], true); }
+    });
+  });
+  function updateOptions(runs) {
+    const options = [new Option('Select a backend run', '')];
+    runs.forEach(run => options.push(new Option(text(run.id) + ' · ' + text(run.status) + ' · ' + text(run.description).slice(0, 85), text(run.id))));
+    if (state.id && !runs.some(run => text(run.id) === state.id)) options.push(new Option(state.id + ' · selected by URL', state.id));
+    $('run-select').replaceChildren(...options);
+    $('run-select').value = state.id;
+  }
+  async function listRuns() {
+    const listGeneration = ++state.listGeneration;
+    $('refresh-runs').disabled = true;
+    try {
+      const response = await getJSON('/api/runs');
+      if (listGeneration !== state.listGeneration) return;
+      if (!response || !Array.isArray(response.runs)) throw new RequestError('Invalid /api/runs response: expected a runs array.');
+      state.runList = response.runs.filter(run => run && typeof run.id === 'string' && run.id.trim());
+      updateOptions(state.runList);
+      if (!state.id) {
+        $('connection').textContent = state.pendingSubmission ? 'Connected · waiting for project submission. The sales studio will redirect this page to the new run ID.' : state.runList.length ? 'Connected. Select a run explicitly to inspect it. Historical runs are not selected automatically.' : 'Connected. No runs yet. Create one in the sales studio, then refresh the run list.';
+      }
+    } catch (error) {
+      if (!(error instanceof RequestError)) throw error;
+      if (listGeneration !== state.listGeneration) return;
+      showError('Could not list runs. ' + error.message + ' Use Refresh run list to retry. No fallback data is shown.');
+      $('connection').textContent = 'Run discovery failed; the selected run, if any, is independent.';
+    } finally {
+      if (listGeneration === state.listGeneration) $('refresh-runs').disabled = false;
+    }
+  }
+  function selectRun(id) {
+    state.id = text(id).trim();
+    state.pendingSubmission = false;
+    state.generation++;
+    clearTimeout(state.timer);
+    state.lastCount = -1;
+    state.lastStatus = '';
+    state.result = null;
+    state.rendered = false;
+    state.docId = '';
+    state.snapshot = null;
+    state.actionPending = false;
+    state.lastNext = null;
+    state.outputs.clear();
+    $('latest-stage').hidden = true;
+    $('latest-stage').replaceChildren();
+    updateStepControls();
+    renderProgress([]);
+    clearError();
+    $('event-log').replaceChildren(node('div', 'Waiting for events from the selected backend run…', 'empty'));
+    $('event-count').textContent = '0 events';
+    $('artifact-count').textContent = 'Awaiting result';
+    $('awaiting').hidden = false;
+    tabs.forEach(tab => $('view-' + tab).replaceChildren());
+    selectTab(state.tab);
+    $('reload-run').disabled = !state.id;
+    $('brief').textContent = state.id ? 'Loading request…' : 'Opening this page never starts a run. Submit a request in the sales studio, then select it here.';
+    $('run-meta').textContent = state.id ? 'Run ' + state.id : '';
+    $('status').textContent = state.id ? 'Loading' : 'No run selected';
+    $('status').className = 'badge';
+    const url = new URL(location.href);
+    url.searchParams.delete('pending');
+    if (state.id) url.searchParams.set('run', state.id); else url.searchParams.delete('run');
+    history.replaceState(null, '', url);
+    $('sales-link').href = '/marketplace-sales-demo.html' + (state.id ? '?run=' + encodeURIComponent(state.id) : '');
+    updateOptions(state.runList);
+    if (state.id) poll(state.generation);
+    else $('connection').textContent = 'No run selected. Opening this page does not start work.';
+  }
+  function appendEvents(events) {
+    const log = $('event-log');
+    if (state.lastCount < 0) log.replaceChildren();
+    if (events.length < state.lastCount) { log.replaceChildren(); state.lastCount = 0; }
+    const start = Math.max(0, state.lastCount);
+    const fragment = document.createDocumentFragment();
+    events.slice(start).forEach(event => {
+      const article = node('article', undefined, 'event');
+      const top = node('div', undefined, 'event-top');
+      top.append(node('span', '#' + text(event.seq)), node('span', text(event.stage), 'stage'));
+      const timestamp = node('time', text(event.time));
+      timestamp.dateTime = text(event.time);
+      top.append(timestamp);
+      article.append(top, node('p', event.message));
+      const details = node('details');
+      details.open = event === events[events.length - 1];
+      details.append(node('summary', 'Inspect stage data'), node('pre', JSON.stringify(event.data ?? {}, null, 2)));
+      article.append(details);
+      fragment.append(article);
+    });
+    log.append(fragment);
+    if (!events.length && !log.children.length) log.append(node('div', 'No events recorded yet. Waiting on the backend.', 'empty'));
+    if (events.length && log.firstElementChild && log.firstElementChild.classList.contains('empty')) log.firstElementChild.remove();
+    $('event-count').textContent = events.length + ' event' + (events.length === 1 ? '' : 's');
+    if ($('follow').checked && events.length > start) log.scrollTop = log.scrollHeight;
+  }
+  async function poll(generation) {
+    $('connection').textContent = 'Reading the local backend…';
+    try {
+      const run = await getJSON('/api/runs/' + encodeURIComponent(state.id));
+      if (generation !== state.generation) return;
+      if (!run || run.id !== state.id || !Array.isArray(run.events) || !['queued', 'waiting', 'running', 'completed', 'failed', 'cancelled'].includes(run.status)) throw new RequestError('Invalid run response: ID, events, or status does not match the API contract.');
+      if (run.status === 'waiting' && (typeof run.next_stage !== 'string' || !run.next_stage.trim())) throw new RequestError('Invalid waiting response: expected an exact nonblank next_stage.');
+      state.snapshot = run;
+      const changed = state.lastCount !== run.events.length || state.lastStatus !== run.status || state.lastNext !== run.next_stage;
+      if (changed) {
+        appendEvents(run.events);
+        if (run.events.length && state.lastCount !== run.events.length) renderLatest(run.events[run.events.length - 1]);
+        if (!run.result && !state.rendered) {
+          if(liveRun())renderLiveArtifacts(run.events);
+          else renderProgressive(run.events);
+        }
+        $('status').textContent = run.status;
+        $('status').className = 'badge status-' + run.status;
+        const request = run.request || {};
+        $('brief').textContent = request.description || '(No description supplied)';
+        $('runtime-badge').textContent=liveRun()?'Foundry / GPT-5.4 / measured pilot':'Offline / synthetic / no provider calls';
+        $('azure-notice').hidden=!liveRun();
+        $('run-meta').textContent = 'Run ' + run.id + ' · Runtime ' + text(request.runtime||'offline') + ' · Model ' + (liveRun()?'GPT-5.4 (pinned deployment)':text(request.model_id)) + ' · ' + number(request.runs_per_month) + ' runs / month' + (request.new_function ? ' · New function: ' + text(request.new_function) : '');
+        state.lastCount = run.events.length;
+        state.lastStatus = run.status;
+        state.lastNext = run.next_stage;
+        renderProgress(run.events);
+      }
+      updateStepControls();
+      if (run.result && !state.rendered) {
+        if(liveRun())renderLiveArtifacts(run.events,run.result);else renderResult(run.result);
+        state.rendered = true;
+      }
+      if (run.status === 'failed') {
+        showError('Backend run failed: ' + (run.error || 'No error detail was provided.') + ' Polling has stopped. Reload selected run to check again.');
+      }
+      const finished = ['completed', 'failed', 'cancelled'].includes(run.status);
+      $('connection').textContent = 'Connected · ' + (finished ? 'Run ' + run.status + '. Polling stopped; Reload selected run fetches this same ID again.' : 'Watching ' + run.id + ' · polling approximately every 700 ms.');
+      if (!finished) state.timer = setTimeout(() => poll(generation), 700);
+      else if (!run.result && run.status === 'completed') showError('The run completed without a result payload. No artifacts can be displayed. Reload selected run to check the backend again.');
+    } catch (error) {
+      if (!(error instanceof RequestError)) throw error;
+      if (generation !== state.generation) return;
+      state.snapshot = null;
+      updateStepControls();
+      $('connection').textContent = 'Connection or response error · polling paused.';
+      showError('Cannot read the selected run. ' + error.message + ' Existing events remain visible. Use Reload selected run to retry. No fallback data is shown.');
+    }
+  }
+  function stageName(stage) { return (runStages().find(item => item[0] === stage) || [stage, stage])[1]; }
+  function updateStepControls() {
+    const run = state.snapshot;
+    const waiting = run && run.status === 'waiting' && typeof run.next_stage === 'string' && run.next_stage.trim();
+    $('next-stage').disabled = !waiting || state.actionPending;
+    $('cancel-run').disabled = !run || !['queued','running','waiting'].includes(run.status) || state.actionPending;
+    $('reload-run').disabled = !state.id || state.actionPending;
+    $('next-stage').textContent = waiting ? 'Next step: ' + stageName(run.next_stage) : 'Next step';
+    if (state.actionPending) {
+      $('step-heading').textContent = 'Sending control request to the backend…';
+      $('step-help').textContent = 'Controls stay disabled until a fresh backend snapshot confirms the next gate.';
+    } else if (!run) {
+      $('step-heading').textContent = state.id ? 'Waiting for a valid backend snapshot' : 'Select a run to inspect or advance';
+      $('step-help').textContent = 'No stage is executed merely by opening this page. Controls require a connected, paused run.';
+    } else if (waiting) {
+      $('step-heading').textContent = 'Waiting for you / Next: ' + stageName(run.next_stage);
+      $('step-help').textContent = 'This stage has not run. Next executes only this backend stage; inspect its output before continuing.' + (liveRun()?' Agent and measurement stages use paid Azure calls under the server-only cap.':' Offline mode consumes no provider credits.');
+    } else if (run.status === 'completed') {
+      $('step-heading').textContent = (run.request?.execution_mode === 'step' ? 'Step-by-step run completed' : 'Automatic / historical run completed') + ' · no replay';
+      $('step-help').textContent = 'These are stored execution events and results. Create a new step-by-step request in the sales studio to execute again.';
+    } else if (['cancelled', 'failed'].includes(run.status)) {
+      $('step-heading').textContent = 'Run ' + run.status + ' · execution stopped';
+      $('step-help').textContent = 'Earlier outputs remain inspectable. Unexecuted stages have no result; create a new request to start again.';
+    } else {
+      $('step-heading').textContent = run.request?.execution_mode === 'step' ? 'Backend executing · wait for the next gate' : 'Automatic execution · observing live';
+      $('step-help').textContent = 'Only backend events mark stages done. Next is available only when the backend reports waiting.';
+    }
+  }
+  function renderProgress(events) {
+    const run = state.snapshot;
+    const registered=runStages(),nextIndex=registered.findIndex(stage=>stage[0]===run?.next_stage);
+    const reached=Math.max(nextIndex,...events.map(event=>registered.findIndex(stage=>stage[0]===event.stage)));
+    const done = new Set(registered.filter((stage,index)=>run?.status==='completed'||index<reached).map(stage=>stage[0]));
+    if(!liveRun())events.forEach(event=>done.add(event.stage));
+    else events.filter(event=>event.data?.status==='completed'&&event.data?.stage_complete===true).forEach(event=>done.add(event.stage));
+    const current = ['waiting','running'].includes(run?.status) ? run.next_stage || events.at(-1)?.stage : null;
+    const fragment = document.createDocumentFragment();
+    registered.forEach(([id, label], index) => {
+      const phase = done.has(id) ? 'done' : id === current ? 'current' : 'not-run';
+      const li = node('li', undefined, 'stage-step ' + phase);
+      const description = phase === 'done' ? 'Done · backend stage advanced' : phase === 'current' ? (run.status === 'waiting' ? 'Current · not run / awaiting Next' : 'Current · backend executing') : 'No confirmed completion';
+      li.append(node('strong', (index + 1) + '. ' + label), node('small', description));
+      if (phase === 'current') li.setAttribute('aria-current', 'step');
+      fragment.append(li);
+    });
+    $('stage-progress').replaceChildren(fragment);
+  }
+  async function controlRun(action) {
+    const run = state.snapshot;
+    if (state.actionPending || !run || (action==='next'?(run.status !== 'waiting' || !run.next_stage):!['queued','running','waiting'].includes(run.status))) return;
+    const id = state.id;
+    const stage = run.next_stage;
+    clearTimeout(state.timer);
+    const generation = ++state.generation;
+    state.actionPending = true;
+    updateStepControls();
+    clearError();
+    try {
+      const response = await getJSON('/api/runs/' + encodeURIComponent(id) + '/' + action, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(action === 'next' ? {stage} : {})
+      });
+      if (!response || response.id !== id) throw new RequestError('Unexpected control response: run ID did not match.');
+    } catch (error) {
+      if (!(error instanceof RequestError)) throw error;
+      if (generation !== state.generation) return;
+      showError('Control request was not confirmed. ' + error.message + ' A stale or double advance can return HTTP 409. Reading the real run state again; this request will not be automatically resubmitted.');
+    } finally {
+      if (generation === state.generation) {
+        state.actionPending = false;
+        state.snapshot = null;
+        updateStepControls();
+      }
+    }
+    if (generation === state.generation) await poll(generation);
+  }
+  function stageOutput(title) {
+    const section = node('section', undefined, 'stage-output');
+    section.append(node('h3', title, 'section-title'));
+    return section;
+  }
+  function payload(title,value,open=false) {
+    const details=node('details');
+    details.open=open;
+    details.append(node('summary',title),node('pre',JSON.stringify(value??{},null,2)));
+    details.className='stage-output';
+    return details;
+  }
+  function renderLiveArtifacts(events,result=null) {
+    state.result=result||{};
+    $('awaiting').hidden=true;
+    $('artifact-count').textContent=result?'Measured-data pilot / stored result':'Live artifacts / '+events.length+' events';
+    const overview=$('view-overview');
+    overview.replaceChildren(node('div','GPT-5.4 / source-bound measured pilot. Agent discussion and workload measurements are actual calls; token forecasts are regression predictions. Orchestration spend is separate from forecast workload USD. No production accuracy, web research, or compliance guarantee.','note'));
+    if(result){
+      const before=result.before||{},after=result.after||{};
+      const supported=after.supported===true&&Number.isFinite(after.input_tokens)&&Number.isFinite(after.output_tokens);
+      const stats=node('div',undefined,'stats');
+      stats.append(stat('Before training',before.supported?number(before.total_tokens)+' predicted tokens':'Abstained',before.reason),
+        stat('After training / forecast',supported?number(after.input_tokens+after.output_tokens)+' tokens':'Unsupported / abstained',supported?'Fixed reference / GPT-5.4':after.reason,true),
+        stat('Forecast USD / run',supported?money(after.usd_per_run):'Not available','Not actual pilot spend'),
+        stat('Forecast USD / month',supported?money(after.usd_per_month):'Not available','At requested volume / pinned rates'));
+      overview.append(stats,payload('Orchestration usage / actual paid pilot accounting',result.orchestration,true),
+        payload('Accepted project bricks / scope',result.bricks,true),payload('Full agent public outputs / decisions / dissent',result.agents,true),
+        payload('Pinned rates / provenance (not guaranteed current prices)',result.rates),
+        payload('Pre-predicted catalog / fixed reference context',result.catalog),
+        payload('Full final result / limitations',result));
+    }
+    const discussion=events.filter(event=>['propose','discuss','adjudicate'].includes(event.stage));
+    overview.append(node('h3','Three-agent discussion + orchestrator decisions'));
+    if(!discussion.length)overview.append(node('p','No role outputs yet. Start/advance the corresponding stage explicitly.','empty'));
+    discussion.forEach(event=>overview.append(payload('#'+text(event.seq)+' · '+stageName(event.stage)+' · '+text(event.message),event.data,true)));
+    const training=$('view-training');
+    training.replaceChildren(node('div','Measured call rows are numeric provider usage. Trained predictions and held-out MAE are separate pilot artifacts, not production calibration. Unexecuted stages have no output.','note'));
+    if(result?.features)training.append(node('h3','Engineered request features'),table(['Feature','Value'],Object.entries(result.features).map(([name,value])=>[name,typeof value==='object'?JSON.stringify(value):text(value)])));
+    if(result?.training){
+      const t=result.training,stats=node('div',undefined,'stats');
+      stats.append(stat('Measured training rows',number(t.train_count)),stat('Held-out pilot rows',number(t.test_count)),stat('Input MAE',number(t.input_mae),'held-out pilot tokens'),stat('Output MAE',number(t.output_mae),'held-out pilot tokens'));
+      training.append(stats,payload('Training version / coefficients / all measured rows',t,true));
+    }
+    events.filter(event=>['features','predict_before','measure','train','evaluate','predict_after'].includes(event.stage)).forEach(event=>training.append(payload('#'+text(event.seq)+' · '+text(event.message),event.data,event.stage==='measure')));
+    ['wiki','requirements'].forEach(tab=>{
+      const panel=$('view-'+tab);
+      panel.replaceChildren(node('div',tab==='wiki'?'Original fictional fixtures only; source-bound work, no real-document ingestion.':'Fictional reference checklist. Evidence labels are not compliance passes.','note'));
+      if(result)panel.append(payload(tab==='wiki'?'Document inventory and original fixture text':'Reference requirements, evidence, gaps and provenance',tab==='wiki'?result.documents:result.requirements,true));
+      events.filter(event=>event.stage===tab).forEach(event=>panel.append(payload('#'+text(event.seq)+' · '+text(event.message),event.data,true)));
+      if(panel.children.length===1)panel.append(node('p','This stage has not returned artifacts.','empty'));
+    });
+    selectTab(state.tab);
+  }
+  function renderLatest(latest) {
+    const latestPanel = $('latest-stage');
+    latestPanel.hidden = false;
+    latestPanel.replaceChildren(node('div', 'Latest backend output · #' + text(latest.seq), 'eyebrow'), node('h2', stageName(latest.stage)), node('p', latest.message));
+    const payload = node('details');
+    payload.open = true;
+    payload.append(node('summary', 'Actual stage payload'), node('pre', JSON.stringify(latest.data ?? {}, null, 2)));
+    latestPanel.append(payload);
+  }
+  function renderProgressive(events) {
+    const changed = new Set();
+    events.forEach(event => {
+      const prior = state.outputs.get(event.stage);
+      if (!prior || prior.seq !== event.seq) {
+        state.outputs.set(event.stage, event);
+        changed.add(event.stage);
+      }
+    });
+    if (!changed.size) return;
+    state.result = state.result || {};
+    $('awaiting').hidden = true;
+    $('artifact-count').textContent = 'Partial outputs · ' + events.length + ' real events';
+    const get = stage => state.outputs.get(stage)?.data;
+    if (changed.has('wiki') && Array.isArray(get('wiki')?.documents)) {
+      state.result.documents = get('wiki').documents;
+      renderWiki(state.result);
+    }
+    if (changed.has('requirements') && Array.isArray(get('requirements')?.requirements)) {
+      state.result.requirements = get('requirements').requirements;
+      renderRequirements(state.result);
+    }
+    if (['decompose', 'predict_before', 'simulate', 'predict_after'].some(stage => changed.has(stage))) {
+      const panel = $('view-overview');
+      panel.replaceChildren(node('div', 'Progressive outputs from executed stages only. No full estimate is available until prediction runs; all generated data and metrics are synthetic-only.', 'note'));
+      const bricks = get('decompose')?.bricks;
+      if (Array.isArray(bricks)) {
+        const section = stageOutput('Decomposed task bricks');
+        bricks.forEach(brick => {
+          const card = node('div', undefined, 'brick');
+          card.append(node('strong', brick.name), node('span', brick.novel ? 'New task detected' : brick.id, 'chip' + (brick.novel ? ' novel' : '')));
+          (brick.atoms || []).forEach(atom => card.append(node('span', atom, 'chip')));
+          section.append(card);
+        });
+        panel.append(section);
+      }
+      const before = get('predict_before');
+      if (before && typeof before.supported === 'boolean') {
+        const section = stageOutput('Baseline prediction · executed');
+        section.append(stat('Before training', before.supported ? number(before.total_tokens) + ' tokens' : 'Abstained', before.reason));
+        panel.append(section);
+      }
+      const simulation = get('simulate');
+      if (simulation) {
+        const section = stageOutput('Synthetic presimulation · executed');
+        section.append(node('p', 'Actual simulation stage output. No provider calls or live research.', 'small'), node('pre', JSON.stringify(simulation, null, 2)));
+        panel.append(section);
+      }
+      const after = get('predict_after')?.after;
+      if (after) {
+        const section = stageOutput('Re-prediction · executed / synthetic estimate');
+        section.append(stat('After training', number(after.total_tokens), 'tokens per whole-project run', true), node('p', number(after.input_tokens) + ' input + ' + number(after.output_tokens) + ' output tokens.', 'small'), node('p', money(after.usd_per_run) + ' / run · ' + money(after.usd_per_month) + ' / month at illustrative rates.', 'small'));
+        panel.append(section);
+      }
+    }
+    if (['features', 'train', 'evaluate'].some(stage => changed.has(stage))) {
+      const panel = $('view-training');
+      panel.replaceChildren(node('div', 'Only stages with backend events appear below. A fitted model is not a provider benchmark; test MAEs apply only to synthetic held-out rows.', 'note'));
+      const featureData = get('features');
+      if (featureData?.features) {
+        const section = stageOutput('Engineered request feature vector');
+        const names = featureData.feature_names || Object.keys(featureData.features);
+        section.append(table(['Feature name', 'Value'], names.map(name => [name, number(featureData.features[name])])));
+        panel.append(section);
+      }
+      const training = get('train');
+      if (training?.coefficients) {
+        const section = stageOutput('RidgeLinearModel.fit · returned coefficients');
+        section.append(node('p', 'Source: ' + text(training.source) + ' · alpha: ' + number(training.alpha), 'small'));
+        ['input', 'output'].forEach(target => section.append(node('h3', target + ' model'), table(['Coefficient', 'Value'], Object.entries(training.coefficients[target] || {}).map(([name, value]) => [name, number(value)]))));
+        panel.append(section);
+      }
+      const evaluation = get('evaluate');
+      if (evaluation) {
+        const section = stageOutput('Held-out evaluation · synthetic only');
+        const stats = node('div', undefined, 'stats');
+        stats.append(stat('Synthetic train rows', number(evaluation.train_count)), stat('Synthetic test rows', number(evaluation.test_count)), stat('Input test MAE', number(evaluation.input_mae), 'synthetic-only tokens'), stat('Output test MAE', number(evaluation.output_mae), 'synthetic-only tokens'));
+        section.append(stats, node('p', 'Version: ' + text(evaluation.version), 'small muted'));
+        panel.append(section);
+      }
+      panel.append(node('p', 'Full training/test rows are shown when the finalized result payload arrives.', 'small muted'));
+    }
+    tabs.forEach(tab => {
+      const panel = $('view-' + tab);
+      if (!panel.children.length) panel.append(node('p', 'No output for this view yet. Execute the relevant backend stage with Next.', 'empty'));
+    });
+    selectTab(state.tab);
+  }
+  function stat(label, value, detail, after = false) {
+    const card = node('div', undefined, 'stat' + (after ? ' after' : ''));
+    card.append(node('span', label), node('strong', value));
+    if (detail) card.append(node('span', detail));
+    return card;
+  }
+  function table(headers, rows, wide = false) {
+    const wrap = node('div', undefined, 'table-wrap' + (wide ? ' wide' : ''));
+    wrap.tabIndex = 0;
+    const el = node('table'), head = node('thead'), hr = node('tr'), body = node('tbody');
+    headers.forEach(header => { const th = node('th', header); th.scope = 'col'; hr.append(th); });
+    head.append(hr);
+    rows.forEach(row => {
+      const tr = node('tr');
+      row.forEach(cell => tr.append(node('td', cell)));
+      body.append(tr);
+    });
+    el.append(head, body);
+    wrap.append(el);
+    return wrap;
+  }
+  function docLink(id, label) {
+    const link = node('a', label || id, 'doc-link');
+    link.href = '#document-' + encodeURIComponent(text(id));
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      selectTab('wiki');
+      showDocument(id);
+      const title = $('document-title');
+      if (title) { title.focus({preventScroll: true}); title.scrollIntoView({block: 'nearest'}); }
+    });
+    return link;
+  }
+  function renderResult(result) {
+    state.result = result;
+    $('awaiting').hidden = true;
+    $('artifact-count').textContent = (result.documents || []).length + ' documents · ' + (result.requirements || []).length + ' requirements';
+    renderOverview(result);
+    renderWiki(result);
+    renderRequirements(result);
+    renderTraining(result);
+    selectTab(state.tab);
+  }
+  function renderOverview(result) {
+    const panel = $('view-overview'), before = result.before || {}, after = result.after || {}, training = result.training || {};
+    panel.replaceChildren(node('h3', 'A prediction boundary, then a fitted estimate', 'section-title'));
+    const stats = node('div', undefined, 'stats');
+    stats.append(stat('Before training', before.supported ? number(before.total_tokens) + ' tokens' : 'Abstained', before.reason || (before.supported ? 'Supported by the pre-training model' : 'No supported prediction returned')));
+    stats.append(stat('After training · synthetic estimate', number(after.total_tokens), 'tokens per run · not measured provider usage', true));
+    stats.append(stat('Estimated cost / run', money(after.usd_per_run), 'At the backend-provided model rates'));
+    stats.append(stat('Estimated cost / month', money(after.usd_per_month), 'At the request’s runs-per-month volume'));
+    panel.append(stats, node('p', 'After: ' + number(after.input_tokens) + ' input tokens + ' + number(after.output_tokens) + ' output tokens.', 'small'));
+    if (before.supported) panel.append(node('p', 'Before: ' + number(before.input_tokens) + ' input tokens + ' + number(before.output_tokens) + ' output tokens.', 'small'));
+    const rates = result.rates || {};
+    panel.append(node('p', 'Rates per million tokens: ' + money(rates.input_per_million) + ' input / ' + money(rates.output_per_million) + ' output.', 'small muted'));
+    panel.append(node('div', 'Synthetic-only results. Fitting and held-out evaluation execute in the backend; synthetic MAE does not establish accuracy on real provider usage. No provider calls or live web research are performed.', 'note'));
+    panel.append(node('h3', 'Decomposed task bricks'));
+    (result.bricks || []).forEach(brick => {
+      const card = node('div', undefined, 'brick'), title = node('div', undefined, 'brick-title');
+      title.append(node('strong', brick.name), node('span', brick.id, 'small muted'));
+      if (brick.novel) title.append(node('span', 'New task detected', 'chip novel'));
+      card.append(title);
+      (brick.atoms || []).forEach(atom => card.append(node('span', atom, 'chip')));
+      panel.append(card);
+    });
+    const documents = result.documents || [];
+    panel.append(node('h3', 'Source inventory'));
+    panel.append(node('p', documents.filter(doc => doc.role === 'reference').length + ' reference documents · ' + documents.filter(doc => doc.role === 'project').length + ' project documents · ' + number(training.train_count) + ' synthetic training rows · ' + number(training.test_count) + ' synthetic test rows.', 'small'));
+    panel.append(node('h3', 'Limitations reported by the backend'));
+    const list = node('ul', undefined, 'limitations small');
+    (result.limitations || []).forEach(item => list.append(node('li', item)));
+    if (!list.children.length) list.append(node('li', 'No additional limitations were provided by the backend.'));
+    panel.append(list);
+  }
+  function renderWiki(result) {
+    const panel = $('view-wiki');
+    panel.replaceChildren(node('h3', 'Linked source documents', 'section-title'), node('div', 'Original sample text returned by the backend. Reference documents form a fictional demo baseline—not an exhaustive authority, legal advice, or legal ground truth.', 'note'));
+    const docs = result.documents || [];
+    if (!docs.length) { panel.append(node('p', 'No documents returned.', 'empty')); return; }
+    const layout = node('div', undefined, 'doc-layout'), nav = node('nav', undefined, 'doc-nav'), body = node('article');
+    nav.setAttribute('aria-label', 'Document selection');
+    body.id = 'document-body';
+    docs.forEach(doc => {
+      const button = node('button', doc.title, 'doc-button');
+      button.type = 'button';
+      button.dataset.docId = doc.id;
+      button.setAttribute('aria-pressed', 'false');
+      button.append(node('small', doc.role + ' · ' + doc.id));
+      button.addEventListener('click', () => showDocument(doc.id));
+      nav.append(button);
+    });
+    layout.append(nav, body);
+    panel.append(layout);
+    const hashId = location.hash.startsWith('#document-') ? location.hash.slice(10) : '';
+    let decoded = '';
+    try { decoded = decodeURIComponent(hashId); }
+    catch (error) {
+      if (!(error instanceof URIError)) throw error;
+      showError('Invalid document URI fragment: ' + location.hash + '. The first document is displayed instead. Select a document from the wiki to continue.');
+    }
+    showDocument(docs.some(doc => doc.id === decoded) ? decoded : docs[0].id);
+  }
+  function showDocument(id) {
+    const body = $('document-body');
+    if (!body) return;
+    state.docId = id;
+    document.querySelectorAll('.doc-button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.docId === text(id))));
+    const doc = (state.result.documents || []).find(item => item.id === id);
+    if (!doc) { body.replaceChildren(node('p', 'Linked document not present in this result: ' + text(id), 'error')); return; }
+    const title = node('h3', doc.title, 'section-title');
+    title.id = 'document-title';
+    title.tabIndex = -1;
+    body.replaceChildren(title, node('p', doc.role + ' · ' + doc.id, 'small muted'), node('div', doc.text, 'doc-text'), node('h3', 'Linked documents'));
+    if (!(doc.links || []).length) body.append(node('p', 'No outgoing links recorded.', 'small muted'));
+    (doc.links || []).forEach(linkId => {
+      const target = state.result.documents.find(item => item.id === linkId);
+      body.append(docLink(linkId, target ? target.title : linkId + ' (not in result)'));
+    });
+  }
+  function renderRequirements(result) {
+    const panel = $('view-requirements'), requirements = result.requirements || [];
+    panel.replaceChildren(node('h3', 'Reference requirements → project evidence', 'section-title'), node('div', 'These labels report evidence coverage against a fictional reference corpus. “evidence_found” is not a compliance pass. Partial and missing items remain visible for review.', 'note'));
+    const counts = node('div', undefined, 'metric-row');
+    ['evidence_found', 'partial', 'missing'].forEach(status => counts.append(node('span', requirements.filter(req => req.status === status).length + ' ' + status, 'badge ' + status)));
+    panel.append(counts);
+    requirements.forEach(req => {
+      const card = node('article', undefined, 'requirement'), head = node('div', undefined, 'requirement-head');
+      const allowedStatus = ['evidence_found', 'partial', 'missing'].includes(req.status) ? req.status : '';
+      head.append(node('strong', req.id), node('span', req.status, 'badge ' + allowedStatus));
+      card.append(head, node('p', req.text), docLink(req.source_id, 'Reference: ' + text(req.source_id)));
+      if (!(req.evidence || []).length) card.append(node('p', 'No supporting evidence returned.', 'small muted'));
+      (req.evidence || []).forEach(evidence => card.append(node('blockquote', evidence.quote), docLink(evidence.document_id, 'Evidence source: ' + text(evidence.document_id))));
+      panel.append(card);
+    });
+    if (!requirements.length) panel.append(node('p', 'No requirements returned.', 'empty'));
+  }
+  function renderTraining(result) {
+    const panel = $('view-training'), training = result.training || {}, features = result.features || {};
+    const names = Array.isArray(result.feature_names) ? result.feature_names : Object.keys(features);
+    panel.replaceChildren(node('h3', 'Feature schema & fitted model', 'section-title'), node('div', 'Dataset source: ' + text(training.source || 'not reported') + '. Synthetic presimulation is not a provider benchmark. Test MAEs below apply only to the held-out synthetic rows.', 'note'));
+    panel.append(node('h3', 'Current request feature vector'), table(['Feature name', 'Value'], names.map(name => [name, number(features[name])])));
+    const stats = node('div', undefined, 'stats');
+    stats.append(stat('Synthetic training split', number(training.train_count), 'rows'), stat('Synthetic test split', number(training.test_count), 'held-out rows'), stat('Input test MAE · synthetic only', number(training.input_mae), 'tokens'), stat('Output test MAE · synthetic only', number(training.output_mae), 'tokens'));
+    panel.append(node('h3', 'RidgeLinearModel.fit · backend result'), node('p', 'Training version: ' + text(training.version || 'not reported'), 'small muted'), stats);
+    const details = node('details', undefined, 'coefficients');
+    details.append(node('summary', 'Inspect fitted coefficients (input and output models)'));
+    const coefficients = training.coefficients || {};
+    ['input', 'output'].forEach(target => {
+      details.append(node('h3', target + ' model'));
+      details.append(table(['Coefficient', 'Value'], Object.entries(coefficients[target] || {}).map(([name, value]) => [name, number(value)])));
+    });
+    panel.append(details, node('h3', 'Actual synthetic training and test rows'));
+    const rows = training.rows || [];
+    panel.append(node('p', rows.length + ' rows returned by the backend. Scroll horizontally to inspect the complete feature vector.', 'small muted'));
+    panel.append(table(['Split', 'Synthetic', ...names, 'Input tokens', 'Output tokens'], rows.map(row => [row.split, String(row.synthetic), ...names.map(name => number((row.features || {})[name])), number(row.input_tokens), number(row.output_tokens)]), true));
+  }
+  $('run-select').addEventListener('change', event => selectRun(event.target.value));
+  $('next-stage').addEventListener('click', () => controlRun('next'));
+  $('cancel-run').addEventListener('click', () => controlRun('cancel'));
+  $('refresh-runs').addEventListener('click', () => { clearError(); listRuns(); });
+  $('reload-run').addEventListener('click', () => {
+    if (!state.id) return;
+    clearTimeout(state.timer);
+    state.generation++;
+    clearError();
+    poll(state.generation);
+  });
+  window.addEventListener('pagehide', () => { state.generation++; clearTimeout(state.timer); });
+  async function start() {
+    if (state.pendingSubmission) {
+      $('brief').textContent = 'Waiting for project submission from the sales studio. No run is selected and no backend stage has been started by this page.';
+      $('status').textContent = 'Pending submission';
+      $('step-heading').textContent = 'Waiting for project submission';
+      $('step-help').textContent = 'The sales studio will redirect here with the new run ID after creating it. Historical results are not loaded automatically.';
+      $('connection').textContent = 'Connecting while the sales studio submits your project…';
+    }
+    if (location.protocol === 'file:') {
+      $('connection').textContent = 'Local server required.';
+      showError('This observer needs the same HTTP server as the sales studio. Open /marketplace-operations-demo.html on that server; file:// cannot access the run API.');
+      $('run-select').replaceChildren(new Option('Open this page through the local server', ''));
+      return;
+    }
+    try {
+      const health = await getJSON('/api/health');
+      if (!health || health.status !== 'ok') throw new RequestError('Health endpoint did not report status “ok”.');
+      if (initialId) selectRun(initialId);
+      await listRuns();
+      if (queryId !== null && !initialId && !state.pendingSubmission) showError('The run query parameter was blank. No run was selected or started. Select a backend run explicitly or submit a project in the sales studio.');
+    } catch (error) {
+      if (!(error instanceof RequestError)) throw error;
+      $('connection').textContent = 'Backend connection unavailable.';
+      showError('Health check failed. ' + error.message + ' Retry with Refresh run list, or reload this page. No local fallback is used.');
+      if (initialId) { state.id = initialId; updateOptions([]); $('reload-run').disabled = false; $('run-meta').textContent = 'Run ' + initialId; }
+      else $('run-select').replaceChildren(new Option('Backend unavailable — refresh to retry', ''));
+    }
+  }
+  selectTab('overview');
+  start();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!doctype html>
+<!-- Standalone concept prototype. No live inference, training, purchases, or persistence. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Token Yield | A marketplace that learns</title>
+  <style>
+    :root { color-scheme:dark; --bg:#0b1222; --panel:#121e31; --ink:#eef2fa; --muted:#a4b3c9; --line:#2a3951; --teal:#51d5be; --blue:#78b7ff; --purple:#bca3ff; --orange:#ffb476; --yellow:#e5ce85; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.55 "Segoe UI",system-ui,sans-serif; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    button { font:inherit; cursor:pointer; }
+    button:focus-visible,a:focus-visible { outline:3px solid #fff; outline-offset:5px; }
+    a { color:var(--teal); text-underline-offset:4px; }
+    h1,h2,h3,p { margin:0; }
+    .page { max-width:1540px; margin:auto; padding:30px 42px 24px; }
+    .masthead,.brand,.links,.toolbar,.legend,.navigation { display:flex; align-items:center; }
+    .masthead { justify-content:space-between; gap:20px; padding-bottom:25px; }
+    .brand { gap:11px; font-size:14px; font-weight:700; letter-spacing:.02em; }
+    .brand-mark { display:grid; grid-template-columns:repeat(3,5px); gap:3px; padding:8px; background:#173b3b; border-radius:7px; }
+    .brand-mark i { width:5px; height:5px; background:var(--teal); border-radius:2px; }
+    .links { gap:24px; font-size:12px; }
+    .links a { color:var(--muted); text-decoration:none; }
+    .badge { border:1px solid var(--line); padding:4px 9px; border-radius:5px; color:var(--muted); font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
+    .eyebrow { font-size:10px; letter-spacing:.17em; text-transform:uppercase; font-weight:750; }
+    .intro .eyebrow { color:var(--teal); margin-bottom:10px; }
+    h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(32px,3.5vw,51px); font-weight:600; letter-spacing:-.035em; line-height:1.12; }
+    h1 em { color:var(--teal); font-style:normal; }
+    .intro p { color:var(--muted); max-width:960px; margin-top:14px; font-size:15px; }
+    .toolbar { justify-content:space-between; gap:18px; margin:26px 0 22px; padding-top:20px; border-top:1px solid var(--line); }
+    .scenarios { display:flex; flex-wrap:wrap; gap:6px; }
+    .scenarios button,.navigation button { background:transparent; border:1px solid var(--line); border-radius:6px; padding:8px 13px; color:var(--muted); font-size:12px; }
+    .scenarios button[aria-pressed=true] { background:#173c3b; border-color:var(--teal); color:#bcf8ec; }
+    .toolbar-note { color:var(--muted); font-size:11px; }
+    .lane-label { display:flex; align-items:center; gap:12px; margin-bottom:17px; color:var(--teal); }
+    .lane-label span { color:var(--muted); letter-spacing:0; text-transform:none; font-weight:400; font-size:11px; }
+    .lane-label:after { content:""; flex:1; height:1px; background:var(--line); }
+    .flow { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:40px; }
+    .node { --accent:var(--teal); position:relative; border:1px solid var(--accent); border-radius:10px; padding:18px; min-width:0; min-height:240px; background:var(--panel); text-align:left; color:var(--ink); display:flex; flex-direction:column; align-items:stretch; }
+    .node:hover { background:#18273e; }
+    .node[aria-pressed=true] { box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--accent); background:#1a2940; }
+    .blue { --accent:var(--blue); } .purple { --accent:var(--purple); } .orange { --accent:var(--orange); } .yellow { --accent:var(--yellow); }
+    .node-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px; }
+    .number { display:grid; place-items:center; width:29px; height:29px; border-radius:50%; background:var(--accent); color:var(--bg); font-weight:800; font-size:13px; flex-shrink:0; }
+    .node-head .eyebrow { color:var(--accent); font-size:9px; letter-spacing:.12em; }
+    .node h3 { font-size:20px; line-height:1.22; letter-spacing:-.025em; margin-bottom:9px; }
+    .node p { color:var(--muted); font-size:12px; line-height:1.55; }
+    .node .output { border-top:1px solid var(--line); padding-top:10px; margin-top:auto; font-size:11px; color:#d9e3f2; }
+    .output strong { color:var(--accent); font-size:9px; font-weight:700; letter-spacing:.09em; margin-right:6px; text-transform:uppercase; }
+    .bricks { display:flex; flex-wrap:wrap; gap:7px; margin:18px 0 14px; }
+    .brick { position:relative; background:#244943; color:#baf2e6; padding:4px 8px 5px; font-size:10px; border-radius:3px; box-shadow:inset 0 -3px #0003; }
+    .brick:before,.brick:after { content:""; width:7px; height:4px; background:inherit; position:absolute; top:-4px; border-radius:2px 2px 0 0; }
+    .brick:before { left:7px; } .brick:after { right:7px; }
+    .blue .brick { background:#284365; color:#c2ddff; }
+    .yellow .brick { background:#51462c; color:#f5e4b3; }
+    .mini { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0; }
+    .mini span { border:1px solid var(--line); border-radius:4px; padding:4px 7px; font-size:10px; color:#d5dfef; }
+    .mini .new { color:var(--yellow); border-style:dashed; border-color:#887b52; }
+    .arrow { position:absolute; width:40px; top:50%; right:-41px; color:var(--accent); pointer-events:none; }
+    .arrow:before { content:""; position:absolute; width:34px; border-top:1.5px solid currentColor; top:0; left:0; }
+    .arrow:after { content:""; position:absolute; right:2px; top:-4px; border-left:6px solid currentColor; border-top:4px solid transparent; border-bottom:4px solid transparent; }
+    .bridge { display:flex; justify-content:space-between; align-items:center; padding:19px 0; gap:14px; }
+    .bridge .lane-label { color:var(--orange); margin:0; flex:1; }
+    .down { width:calc((100% - 120px)/4); text-align:center; color:var(--orange); font-size:11px; position:relative; }
+    .down:after { content:""; position:absolute; height:38px; border-left:1.5px dashed var(--orange); left:50%; top:-11px; z-index:-1; }
+    .down span { background:var(--bg); padding:0 9px; }
+    .learning .node { min-height:237px; border-style:dashed; }
+    .learning .node:nth-child(1) { grid-column:4; grid-row:1; }
+    .learning .node:nth-child(2) { grid-column:3; grid-row:1; }
+    .learning .node:nth-child(3) { grid-column:2; grid-row:1; }
+    .learning .node:nth-child(4) { grid-column:1; grid-row:1; }
+    .learning .arrow { left:-41px; right:auto; transform:rotate(180deg); }
+    .learning .arrow:before { border-top-style:dashed; }
+    .release { margin-top:22px; padding:12px 18px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 16px; border:1px dashed #7e6ca3; border-radius:8px; color:#d2c2fc; font-size:12px; background:#171c31; }
+    .release b { color:var(--purple); }
+    .release .return { font-size:20px; line-height:1; }
+    .detail { margin-top:22px; display:grid; grid-template-columns:1.1fr 1.7fr auto; align-items:center; gap:24px; padding:20px 22px; border:1px solid var(--line); border-radius:9px; background:#101a2b; }
+    .detail .eyebrow { color:var(--teal); font-size:9px; margin-bottom:5px; }
+    .detail h2 { font-size:16px; line-height:1.35; }
+    .detail p { color:var(--muted); font-size:12px; }
+    .navigation { gap:7px; }
+    .navigation button { color:var(--ink); white-space:nowrap; }
+    .navigation button:disabled { opacity:.4; cursor:default; }
+    .example { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:20px; }
+    .example article { padding:17px 20px; border-left:2px solid var(--line); background:#0f192a; }
+    .example h2 { font-size:12px; margin-bottom:7px; color:#d8e4f5; }
+    .example p { font-size:11px; color:var(--muted); }
+    .legend { flex-wrap:wrap; gap:12px 22px; margin-top:22px; font-size:10px; color:var(--muted); }
+    .legend span { display:flex; align-items:center; gap:7px; }
+    .swatch { width:8px; height:8px; border-radius:50%; background:var(--teal); }
+    .sample { width:24px; border-top:1px solid var(--muted); }
+    .sample.dashed { border-top-style:dashed; border-color:var(--purple); }
+    footer { color:var(--muted); font-size:10px; margin-top:17px; padding-top:14px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:24px; }
+    @media(min-width:1500px) { .node { min-height:248px; } }
+    @media(max-width:1100px) { .page { padding:25px; } .flow { gap:26px; } .node { padding:14px; } .node h3 { font-size:17px; } .arrow { width:26px; right:-27px; } .arrow:before { width:20px; } .learning .arrow { left:-27px; } .node-head .eyebrow { font-size:8px; } .detail { grid-template-columns:1fr 1.5fr; } .navigation { grid-column:1/-1; justify-content:flex-end; } }
+    @media(max-width:760px) {
+      .page { padding:22px 19px; } .masthead { align-items:flex-start; } .links { flex-wrap:wrap; justify-content:flex-end; gap:8px 15px; } .badge { display:none; }
+      .toolbar { align-items:flex-start; flex-direction:column; } .flow { grid-template-columns:1fr; gap:30px; }
+      .node,.learning .node { min-height:210px; padding:20px; } .node h3 { font-size:21px; } .node-head .eyebrow { font-size:10px; }
+      .learning .node:nth-child(n) { grid-column:1; grid-row:auto; } .node .arrow,.learning .arrow { top:auto; right:auto; left:50%; bottom:-16px; width:26px; transform:translateX(-50%) rotate(90deg); }
+      .bridge { padding:25px 0; } .down { display:none; } .lane-label { flex-wrap:wrap; gap:6px 12px; } .lane-label span { width:100%; }
+      .detail,.example { grid-template-columns:1fr; gap:15px; } .navigation { grid-column:auto; justify-content:flex-start; } footer { flex-direction:column; gap:7px; }
+    }
+    @media print {
+      body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } .page { max-width:none; padding:12px; }
+      .toolbar,.navigation,.links { display:none; } .node { break-inside:avoid; } .detail,.example,.release { break-inside:avoid; }
+      .node[aria-pressed=true] { box-shadow:none; } h1 { font-size:32px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="masthead">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>TOKEN YIELD</div>
+      <nav class="links" aria-label="Related prototypes">
+        <a href="../marketplace-prototype.html?variant=A">Open marketplace &nearr;</a>
+        <a href="customer-model-report.html">Model evidence &nearr;</a>
+        <span class="badge">Concept prototype</span>
+      </nav>
+    </div>
+    <header class="intro">
+      <div class="eyebrow">The composable intelligence cycle</div>
+      <h1>Choose what to build.<br>Learn what it takes. <em>Improve the bricks.</em></h1>
+      <p>A functionality marketplace meets a LEGO-like token predictor. How could new project types become reusable basic bricks, richer features, and a better-tested next model?</p>
+    </header>
+    <div class="toolbar">
+      <div class="scenarios" role="group" aria-label="Guided scenarios">
+        <button type="button" data-scenario="overview" aria-pressed="true">01 &nbsp; The whole loop</button>
+        <button type="button" data-scenario="known" aria-pressed="false">02 &nbsp; Compose a project</button>
+        <button type="button" data-scenario="new" aria-pressed="false">03 &nbsp; A new project type</button>
+      </div>
+      <span class="toolbar-note">Select a card to explore &middot; Follow the numbered arrows</span>
+    </div>
+    <section aria-labelledby="delivery-label">
+      <h2 class="lane-label eyebrow" id="delivery-label">A / Compose &amp; predict <span>Customer-facing path &middot; left to right</span></h2>
+      <div class="flow">
+        <button class="node" type="button" data-step="1" aria-pressed="false" aria-controls="step-detail">
+          <span class="node-head"><span class="number">1</span><span class="eyebrow">Functionality marketplace</span></span>
+          <h3>Pick the capabilities</h3>
+          <p>Start with a project brief. Select the functionality you want, rather than individual AI calls.</p>
+          <span class="bricks" aria-hidden="true"><span class="brick">AI support</span><span class="brick">Smart search</span><span class="brick">Documents</span></span>
+          <span class="output"><strong>Output</strong> Selected project scope</span><span class="arrow" aria-hidden="true"></span>
+        </button>
+        <button class="node blue" type="button" data-step="2" aria-pressed="false" aria-controls="step-detail">
+          <span class="node-head"><span class="number">2</span><span class="eyebrow">Versioned brick library</span></span>
+          <h3>Compose the blueprint</h3>
+          <p>Map capabilities to basic operations. Describe their counts, context, connections, and planned calls.</p>
+          <span class="bricks" aria-hidden="true"><span class="brick">Retrieve</span><span class="brick">Draft</span><span class="brick">Validate</span></span>
+          <span class="output"><strong>Output</strong> Quote-time feature vector</span><span class="arrow" aria-hidden="true"></span>
+        </button>
+        <button class="node purple" type="button" data-step="3" aria-pressed="false" aria-controls="step-detail">
+          <span class="node-head"><span class="number">3</span><span class="eyebrow">Token yield predictor</span></span>
+          <h3>Forecast before running</h3>
+          <p>Estimate input and output tokens, then apply versioned API rates. Flag unsupported compositions.</p>
+          <span class="mini"><span>Input tokens</span><span>Output tokens</span><span>API cost</span></span>
+          <span class="output"><strong>Output</strong> Estimate + coverage status</span><span class="arrow" aria-hidden="true"></span>
+        </button>
+        <button class="node orange" type="button" data-step="4" aria-pressed="false" aria-controls="step-detail">
+          <span class="node-head"><span class="number">4</span><span class="eyebrow">Controlled execution</span></span>
+          <h3>Run &amp; measure</h3>
+          <p>Execute approved trials or instrumented workloads. Record actual usage, configuration, and quality checks.</p>
+          <span class="mini"><span>Provider usage</span><span>Run traces</span><span>Quality</span></span>
+          <span class="output"><strong>Output</strong> Evidence, not assumptions</span>
+        </button>
+      </div>
+    </section>
+    <div class="bridge">
+      <h2 class="lane-label eyebrow" id="learning-label">B / Discover &amp; retrain <span>Proposed learning path &middot; right to left</span></h2>
+      <div class="down"><span>Measured feedback &darr;</span></div>
+    </div>
+    <section class="flow learning" aria-labelledby="learning-label">
+      <button class="node orange" type="button" data-step="5" aria-pressed="false" aria-controls="step-detail">
+        <span class="node-head"><span class="number">5</span><span class="eyebrow">New-project signal</span></span>
+        <h3>Spot what is missing</h3>
+        <p>A new project needs an unknown operation, or observed usage diverges from the forecast.</p>
+        <span class="mini"><span class="new">New brief / domain</span><span>Coverage gap</span></span>
+        <span class="output"><strong>Output</strong> Candidate discovery brief</span><span class="arrow" aria-hidden="true"></span>
+      </button>
+      <button class="node yellow" type="button" data-step="6" aria-pressed="false" aria-controls="step-detail">
+        <span class="node-head"><span class="number">6</span><span class="eyebrow">Brick re-distillation</span></span>
+        <h3>Discover reusable units</h3>
+        <p>Analyze requirements and traces. Propose new bricks, or split and refine existing ones; review before accepting.</p>
+        <span class="bricks" aria-hidden="true"><span class="brick">Read image?</span><span class="brick">Compare?</span><span class="brick">Human review</span></span>
+        <span class="output"><strong>Output</strong> Candidate library + schema</span><span class="arrow" aria-hidden="true"></span>
+      </button>
+      <button class="node blue" type="button" data-step="7" aria-pressed="false" aria-controls="step-detail">
+        <span class="node-head"><span class="number">7</span><span class="eyebrow">Pre-simulation &amp; trials</span></span>
+        <h3>Test before expanding</h3>
+        <p>Pre-simulate new compositions, vary the planned features, then run controlled trials to obtain real token labels.</p>
+        <span class="mini"><span>Context size</span><span>Brick counts</span><span>Call structure</span></span>
+        <span class="output"><strong>Output</strong> Measured training examples</span><span class="arrow" aria-hidden="true"></span>
+      </button>
+      <button class="node purple" type="button" data-step="8" aria-pressed="false" aria-controls="step-detail">
+        <span class="node-head"><span class="number">8</span><span class="eyebrow">Train &amp; challenge</span></span>
+        <h3>Earn the next version</h3>
+        <p>Refit with old and new evidence. Hold out project groups; check new-domain error and regressions on existing work.</p>
+        <span class="mini"><span>New features</span><span>Held-out checks</span><span>Release gate</span></span>
+        <span class="output"><strong>Output</strong> Candidate predictor vNext</span>
+      </button>
+    </section>
+    <div class="release" role="note">
+      <span class="return" aria-hidden="true">&#8634;</span><b>Only promote after validation</b>
+      <span>Approved bricks + feature schema &rarr; <strong>2 / Blueprint</strong></span>
+      <span>Compatible predictor &rarr; <strong>3 / Forecast</strong></span>
+      <span>&middot; Otherwise, keep the current version.</span>
+    </div>
+    <section class="detail" id="step-detail" aria-label="Guided explanation">
+      <div aria-live="polite" aria-atomic="true"><div class="eyebrow" id="detail-label">The big idea</div><h2 id="detail-title">The marketplace is the front door.<br>The evidence loop improves what is behind it.</h2></div>
+      <p id="detail-copy" aria-live="polite">Users choose capabilities, not tokens. The system translates those choices into measurable work. New kinds of work enter a discovery-and-validation cycle before they can become supported, reusable bricks.</p>
+      <div class="navigation"><button type="button" id="previous" disabled aria-label="Previous walkthrough step">&larr;</button><button type="button" id="next">Start walkthrough &rarr;</button></div>
+    </section>
+    <div class="example">
+      <article><h2 id="example-title">A concrete example / AI customer support</h2><p id="example-copy">Marketplace capability &rarr; Retrieve + Draft + Validate &rarr; planned counts and context &rarr; a token forecast. Capability-to-brick mapping comes from the marketplace prototype; its coefficients are illustrative.</p></article>
+      <article><h2>Evidence boundary / What exists today</h2><p>The measured pilot uses Extract, Classify, Plan, and Report with small ridge-regression predictors for scoping work, not full product delivery. Broader marketplace coverage and this automated learning loop are proposed. Re-distillation means discovering task units, not fine-tuning the execution LLM.</p></article>
+    </div>
+    <div class="legend" aria-label="Diagram legend">
+      <span class="eyebrow">Legend</span>
+      <span><i class="swatch"></i>Marketplace</span>
+      <span><i class="swatch" style="background:var(--blue)"></i>Composition &amp; experiments</span>
+      <span><i class="swatch" style="background:var(--orange)"></i>Measured feedback</span>
+      <span><i class="swatch" style="background:var(--purple)"></i>Model lifecycle</span>
+      <span><i class="sample"></i>Forward data flow</span>
+      <span><i class="sample dashed"></i>Proposed learning / release loop</span>
+    </div>
+    <footer><span>Concept illustration &middot; Local, in-memory walkthrough only. No training or live estimates are executed.</span><span>Pre-simulation designs trials. Actual execution supplies the labels.</span></footer>
+  </main>
+  <script>
+    const scenarios = {
+      overview: { steps:[1,2,3,4,5,6,7,8], title:"A concrete example / AI customer support", copy:"Marketplace capability \u2192 Retrieve + Draft + Validate \u2192 planned counts and context \u2192 a token forecast. Capability-to-brick mapping comes from the marketplace prototype; its coefficients are illustrative." },
+      known: { steps:[1,2,3,4], title:"Composition example / Two capabilities, shared operations", copy:"Select AI customer support and smart product search. Their proposed recipes share Retrieve; the blueprint must specify whether calls are actually shared or repeated. A shared name alone does not establish a token saving or trained coverage." },
+      new: { steps:[5,6,7,8,2,3], title:"New-project example / Visual equipment inspection", copy:"A new brief needs image interpretation and comparison against a reference. Propose Read image and Compare bricks; test image-related quote-time features in controlled trials. Only a validated library/schema/model release makes the new composition supported." }
+    };
+    const details = {
+      1:["Choose outcomes, not implementation details.","A project owner selects capabilities such as AI customer support or document automation, then supplies scope and workload assumptions. A marketplace capability is a bundle of basic operations, not a single token-priced unit."],
+      2:["Turn the scope into a measurable recipe.","Resolve capabilities against a versioned library. Record operation counts, declared context size, output allowance, and call structure before execution. New proposed features require a matching schema and a predictor trained to use them."],
+      3:["Check coverage before giving a confident quote.","Use the compatible released predictor only within its supported execution contract. Unknown bricks or domains trigger step 5 before a supported forecast is issued. Token estimates and versioned rates give API cost, not the full cost of delivering a project."],
+      4:["Keep predictions separate from measured truth.","Capture provider-reported input/output usage and execution metadata, together with quality results. Compare estimates with observations. Failed or low-quality trials remain visible; cheap output alone is not evidence of useful work."],
+      5:["A new brief can enter here, before any run.","Novel requirements, an unsupported brick, or a repeatable prediction gap starts discovery. In the visual-inspection example, image processing changes the execution contract, so the old text-scoping predictor cannot be treated as validated."],
+      6:["Re-distill the vocabulary, not just the weights.","An analysis process proposes reusable operations from new requirements and traces. Review definitions, inputs, outputs, overlaps, and exclusions. Keep candidate bricks separate from the released library; not every new project needs a new brick."],
+      7:["Simulate the design. Measure the targets.","Pre-simulation checks candidate recipes and chooses a coverage grid. Then controlled executions produce actual token labels and quality evidence. Synthetic estimates are not ground truth; never train on the old predictor's guesses as if they were measurements."],
+      8:["A candidate model is not automatically a release.","Train with compatible old and new observations, using only features known at quote time. Keep all repetitions of a project in the same split. Compare held-out errors and quality against the current version; reject or iterate if checks fail. Promote library, schema, and predictor together."]
+    };
+    function advance(state, direction) {
+      const last = scenarios[state.scenario].steps.length - 1;
+      return { ...state, index:Math.max(-1, Math.min(last, state.index + direction)), selected:null };
+    }
+    let state = { scenario:"overview", index:-1, selected:null };
+    const get = id => document.getElementById(id);
+    function render() {
+      const scenario = scenarios[state.scenario];
+      const step = state.selected ?? scenario.steps[state.index];
+      document.querySelectorAll("[data-scenario]").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.scenario === state.scenario));
+      });
+      document.querySelectorAll("[data-step]").forEach(button => {
+        button.setAttribute("aria-pressed", String(Number(button.dataset.step) === step));
+      });
+      get("detail-label").textContent = step ? `Step ${step} / ${state.selected ? "Explore the loop" : `Walkthrough ${state.index + 1} of ${scenario.steps.length}`}` : "The big idea";
+      get("detail-title").textContent = step ? details[step][0] : "The marketplace is the front door. The evidence loop improves what is behind it.";
+      get("detail-copy").textContent = step ? details[step][1] : "Users choose capabilities, not tokens. The system translates those choices into measurable work. New kinds of work enter a discovery-and-validation cycle before they can become supported, reusable bricks.";
+      get("example-title").textContent = scenario.title;
+      get("example-copy").textContent = scenario.copy;
+      get("previous").disabled = state.index < 0;
+      get("next").textContent = state.index === scenario.steps.length - 1 ? "Restart \u21ba" : state.index < 0 ? "Start walkthrough \u2192" : "Next step \u2192";
+    }
+    document.querySelectorAll("[data-scenario]").forEach(button => button.addEventListener("click", () => {
+      state = { scenario:button.dataset.scenario, index:button.dataset.scenario === "overview" ? -1 : 0, selected:null };
+      render();
+    }));
+    document.querySelectorAll("[data-step]").forEach(button => button.addEventListener("click", () => {
+      const selected = Number(button.dataset.step);
+      const index = scenarios[state.scenario].steps.indexOf(selected);
+      state = { ...state, index:index < 0 ? state.index : index, selected:index < 0 ? selected : null };
+      render();
+    }));
+    get("previous").addEventListener("click", () => { state = advance(state,-1); render(); });
+    get("next").addEventListener("click", () => {
+      state = state.index === scenarios[state.scenario].steps.length - 1 ? { ...state, index:0, selected:null } : advance(state,1);
+      render();
+    });
+  </script>
+</body>
+</html>
