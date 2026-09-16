@@ -12,13 +12,12 @@ import re
 import sys
 import threading
 import uuid
-from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
 
-from token_yield.marketplace_demo import run_pipeline, validate_request, write_json
+from token_yield.marketplace_demo import PipelineCancelled, run_pipeline, validate_request, write_json
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC_ROUTES = frozenset({
@@ -32,15 +31,26 @@ class RunLimitError(Exception):
     """The local demo's work or retention bound has been reached."""
 
 
+class StageConflictError(Exception):
+    """A stale, duplicate, or terminal-run control request was rejected."""
+
+
 class RunStore:
     """Lock-protected snapshots with append-only worker events."""
 
-    def __init__(self, run_dir: Path, *, max_running: int = 2, max_runs: int = 32):
+    def __init__(self, run_dir: Path, *, max_running: int = 2, max_runs: int = 32,
+                 stage_timeout: float = 1800):
         self.run_dir = Path(run_dir)
         self.max_running = max_running
         self.max_runs = max_runs
         self.lock = threading.RLock()
+        self.condition = threading.Condition(self.lock)
+        self.stage_timeout = stage_timeout
         self.runs: dict[str, dict[str, Any]] = {}
+        self._active: set[str] = set()
+        self._approved: dict[str, str] = {}
+        self._cancelled: set[str] = set()
+        self._finalizing: set[str] = set()
         self.previous_run_count = (
             sum(1 for _ in self.run_dir.glob("*/request.json")) if self.run_dir.exists() else 0
         )
@@ -48,14 +58,60 @@ class RunStore:
     def submit(self, request: dict[str, Any]) -> str:
         request = validate_request(request)
         with self.lock:
-            active = sum(run["status"] in ("queued", "running") for run in self.runs.values())
-            if active >= self.max_running or self.previous_run_count + len(self.runs) >= self.max_runs:
+            if len(self._active) >= self.max_running or self.previous_run_count + len(self.runs) >= self.max_runs:
                 raise RunLimitError("Demo run limit reached; wait for active work or restart with a new run directory.")
             run_id = uuid.uuid4().hex
             self.runs[run_id] = {"id": run_id, "status": "queued", "request": request,
-                                 "events": [], "result": None, "error": None}
+                                 "events": [], "result": None, "error": None, "next_stage": None}
+            self._active.add(run_id)
             threading.Thread(target=self._worker, args=(run_id,), daemon=True).start()
             return run_id
+
+    def approve(self, run_id: str, stage: str) -> None:
+        """Consume exactly the current named gate; approval never carries forward."""
+        with self.condition:
+            run = self.runs[run_id]
+            if (run["status"] != "waiting" or run["next_stage"] != stage
+                    or run_id in self._cancelled):
+                raise StageConflictError("Stale or duplicate approval; refresh next_stage.")
+            self._approved[run_id] = stage
+            run.update(status="running", next_stage=None)
+            self.condition.notify_all()
+
+    def cancel(self, run_id: str) -> None:
+        """Cancel cooperatively at a stage boundary, before finalization starts."""
+        with self.condition:
+            run = self.runs[run_id]
+            if run["status"] not in ("queued", "waiting", "running") or run_id in self._finalizing:
+                raise StageConflictError("Run is terminal or finalization has already started.")
+            self._cancelled.add(run_id)
+            self._approved.pop(run_id, None)
+            run.update(status="cancelled", next_stage=None)
+            self.condition.notify_all()
+
+    def _before_stage(self, run_id: str, stage: str) -> None:
+        with self.condition:
+            if run_id in self._cancelled:
+                raise PipelineCancelled("Cancelled by user before the next stage.")
+            run = self.runs[run_id]
+            if run["request"]["execution_mode"] == "step":
+                run.update(status="waiting", next_stage=stage)
+                write_json(self.run_dir / run_id / "run.json", run)
+                self.condition.notify_all()
+                approved = self.condition.wait_for(
+                    lambda: run_id in self._cancelled or self._approved.get(run_id) == stage,
+                    timeout=self.stage_timeout,
+                )
+                if run_id in self._cancelled:
+                    raise PipelineCancelled("Cancelled by user while waiting for stage approval.")
+                if not approved:
+                    run.update(status="failed", next_stage=None)
+                    raise TimeoutError(f"Stage approval timed out after {self.stage_timeout:g}s: {stage}")
+                del self._approved[run_id]
+            run.update(status="running", next_stage=None)
+            if stage == "complete":
+                # Final artifact publication is indivisible from the user's perspective.
+                self._finalizing.add(run_id)
 
     def _event(self, run_id: str, event: dict[str, Any]) -> None:
         with self.lock:
@@ -65,32 +121,39 @@ class RunStore:
     def _worker(self, run_id: str) -> None:
         try:
             with self.lock:
-                self.runs[run_id]["status"] = "running"
+                if run_id not in self._cancelled:
+                    self.runs[run_id]["status"] = "running"
                 request = self.runs[run_id]["request"].copy()
             result = run_pipeline(request, self.run_dir, run_id=run_id,
-                                  on_event=lambda event: self._event(run_id, event))
+                                  on_event=lambda event: self._event(run_id, event),
+                                  before_stage=lambda stage: self._before_stage(run_id, stage))
             with self.lock:
                 snapshot = copy.deepcopy(self.runs[run_id])
-                snapshot.update(status="completed", result=result)
+                snapshot.update(status="completed", result=result, next_stage=None)
                 write_json(self.run_dir / run_id / "run.json", snapshot)
-                self.runs[run_id].update(status="completed", result=result)
+                self.runs[run_id].update(status="completed", result=result, next_stage=None)
         except Exception as exc:
             with self.lock:
                 run = self.runs[run_id]
-                run.update(status="failed", error=f"{type(exc).__name__}: {exc}")
-                event = {"seq": len(run["events"]) + 1,
-                         "time": datetime.now(timezone.utc).isoformat(), "stage": "failed",
-                         "message": "Offline run failed; no fallback result was generated.",
-                         "data": {"error": run["error"]}}
-                self._event(run_id, event)
+                cancelled = isinstance(exc, PipelineCancelled)
+                status = "cancelled" if cancelled else "failed"
+                run.update(status=status, next_stage=None, result=None,
+                           error=None if cancelled else f"{type(exc).__name__}: {exc}")
+                # Terminal diagnostics are not completed work stages.
+                print(json.dumps({"run_id": run_id, "status": status, "error": run["error"]}),
+                      flush=True)
                 try:
                     folder = self.run_dir / run_id
                     folder.mkdir(parents=True, exist_ok=True)
-                    with (folder / "events.jsonl").open("a", encoding="utf-8") as stream:
-                        stream.write(json.dumps(event) + "\n")
                     write_json(folder / "run.json", run)
                 except OSError as persist_error:
-                    run["error"] += f"; persistence failed: {persist_error}"
+                    run["error"] = f"{run['error'] or status}; persistence failed: {persist_error}"
+        finally:
+            with self.condition:
+                self._active.discard(run_id)
+                self._approved.pop(run_id, None)
+                self._finalizing.discard(run_id)
+                self.condition.notify_all()
 
     def get(self, run_id: str) -> dict[str, Any] | None:
         with self.lock:
@@ -187,7 +250,8 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
         def do_POST(self) -> None:
             if not self._trusted():
                 return
-            if self.path != "/api/runs":
+            control = re.fullmatch(r"/api/runs/([0-9a-f]{32})/(next|cancel)", self.path)
+            if self.path != "/api/runs" and not control:
                 self._reply(404, {"error": "route not found"})
                 return
             lengths = self.headers.get_all("Content-Length", [])
@@ -208,21 +272,44 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
                 body = self.rfile.read(length)
                 if len(body) != length:
                     raise ValueError("incomplete request body")
-                request = validate_request(json.loads(body.decode("utf-8"),
-                                           object_pairs_hook=_unique_object,
-                                           parse_constant=_invalid_constant))
+                request = json.loads(body.decode("utf-8"), object_pairs_hook=_unique_object,
+                                     parse_constant=_invalid_constant)
+                if control:
+                    if not isinstance(request, dict):
+                        raise ValueError("control body must be an object")
+                    if control[2] == "next":
+                        if set(request) != {"stage"} or not isinstance(request["stage"], str):
+                            raise ValueError("next requires exactly one string stage")
+                    elif request:
+                        raise ValueError("cancel requires an empty object")
+                else:
+                    request = validate_request(request)
             except (ValueError, UnicodeError, RecursionError):
-                self._reply(400, {"error": "Invalid JSON or request fields: description 20..6000, valid model_id, integer runs_per_month 0..1000000, optional new_function <=120."})
+                self._reply(400, {"error": "Invalid JSON or request fields. Runs require description, model_id, integer runs_per_month; optional new_function and execution_mode step|automatic. Next requires {stage:string}; cancel requires {}."})
                 return
             except TimeoutError:
                 self._reply(408, {"error": "request body timed out"})
                 return
             try:
-                run_id = store.submit(request)
+                if control:
+                    run_id = control[1]
+                    if control[2] == "next":
+                        store.approve(run_id, request["stage"])
+                    else:
+                        store.cancel(run_id)
+                else:
+                    run_id = store.submit(request)
+            except KeyError:
+                self._reply(404, {"error": "run not found"})
+                return
+            except StageConflictError as exc:
+                self._reply(409, {"error": str(exc)})
+                return
             except RunLimitError as exc:
                 self._reply(429, {"error": str(exc)})
                 return
-            self._reply(202, {"id": run_id, "operations_url": f"/marketplace-operations-demo.html?run={run_id}"})
+            self._reply(202, {"id": run_id} if control else {
+                "id": run_id, "operations_url": f"/marketplace-operations-demo.html?run={run_id}"})
 
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     server.daemon_threads = True

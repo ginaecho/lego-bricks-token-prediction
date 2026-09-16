@@ -13,9 +13,11 @@ from pathlib import Path
 import pytest
 
 from examples import marketplace_demo_server as server_module
+from token_yield import marketplace_demo as pipeline_module
 from token_yield.marketplace_demo import (
     BASE_FEATURES,
     RATES,
+    STAGES,
     extract_requirements,
     run_pipeline,
     sample_documents,
@@ -81,10 +83,7 @@ def test_pipeline_fit_persistence_events_and_holdout(artifact_dir, monkeypatch):
     assert len(fit_calls) == 4  # Baseline + expanded fit, input and output each.
     assert all(records for records in fit_calls)
     assert all("test" not in str(record.group) for records in fit_calls for record in records)
-    assert [event["stage"] for event in events] == [
-        "decompose", "wiki", "requirements", "predict_before", "simulate",
-        "features", "train", "evaluate", "predict_after", "complete",
-    ]
+    assert [event["stage"] for event in events] == list(STAGES)
     assert [event["seq"] for event in events] == list(range(1, 11))
     assert all(event["time"] and isinstance(event["data"], dict) for event in events)
     training = result["training"]
@@ -178,6 +177,7 @@ def test_deep_research_is_offline_only(artifact_dir):
     {**REQUEST, "runs_per_month": 1.5}, {**REQUEST, "runs_per_month": 1_000_001},
     {**REQUEST, "new_function": None}, {**REQUEST, "new_function": "a" * 121},
     {**REQUEST, "run_dir": ".."}, {**REQUEST, "description": "a" * 20 + "\ud800"},
+    {**REQUEST, "execution_mode": "replay"}, {**REQUEST, "execution_mode": None},
 ])
 def test_invalid_request_rejected(body):
     with pytest.raises(ValueError):
@@ -199,7 +199,7 @@ def _wait_terminal(store, run_id):
     deadline = time.monotonic() + 10
     while time.monotonic() < deadline:
         run = store.get(run_id)
-        if run["status"] in ("completed", "failed"):
+        if run["status"] in ("completed", "failed", "cancelled") and run_id not in store._active:
             return run
         threading.Event().wait(0.005)
     pytest.fail("offline worker did not finish within 10 seconds")
@@ -215,6 +215,8 @@ def http_server(artifact_dir):
         yield server, store
     finally:
         for run in store.listing()["runs"]:
+            if run["status"] == "waiting":
+                store.cancel(run["id"])
             _wait_terminal(store, run["id"])
         server.shutdown()
         server.server_close()
@@ -303,7 +305,7 @@ def test_worker_failure_is_visible_and_persisted(artifact_dir, monkeypatch):
     run = _wait_terminal(store, run_id)
     assert run["status"] == "failed" and run["result"] is None
     assert "deliberate test failure" in run["error"]
-    assert run["events"][-1]["stage"] == "failed"
+    assert run["events"] == []
     assert json.loads((artifact_dir / run_id / "run.json").read_text())["status"] == "failed"
 
 
@@ -342,3 +344,217 @@ def test_running_and_total_run_limits(artifact_dir, monkeypatch):
     restarted = server_module.RunStore(artifact_dir, max_runs=1)
     with pytest.raises(server_module.RunLimitError):
         restarted.submit(REQUEST)
+
+
+def _wait_stage(store, run_id, stage):
+    with store.condition:
+        assert store.condition.wait_for(
+            lambda: store.runs[run_id]["status"] == "waiting"
+            and store.runs[run_id]["next_stage"] == stage, timeout=5,
+        ), store.get(run_id)
+    return store.get(run_id)
+
+
+def test_step_mode_executes_one_real_stage_per_approval(http_server, monkeypatch):
+    server, store = http_server
+    decomposition_calls, fit_stages, sample_stages = [], [], []
+    current_stage = []
+    actual_decompose = pipeline_module.decompose
+    actual_fit = pipeline_module._fit
+    actual_samples = pipeline_module._samples
+
+    def decompose(request):
+        decomposition_calls.append(True)
+        return actual_decompose(request)
+
+    def fit(rows, names):
+        fit_stages.append(current_stage[-1])
+        return actual_fit(rows, names)
+
+    def samples(*args, **kwargs):
+        sample_stages.append(current_stage[-1])
+        return actual_samples(*args, **kwargs)
+
+    monkeypatch.setattr(pipeline_module, "decompose", decompose)
+    monkeypatch.setattr(pipeline_module, "_fit", fit)
+    monkeypatch.setattr(pipeline_module, "_samples", samples)
+    status, _, body = _http(server, "POST", "/api/runs", json.dumps({
+        **REQUEST, "execution_mode": "step", "new_function": "Policy-as-code parsing",
+    }), {"Content-Type": "application/json"})
+    assert status == 202
+    run_id = json.loads(body)["id"]
+    first = _wait_stage(store, run_id, "decompose")
+    assert first["events"] == [] and first["result"] is None
+    assert decomposition_calls == fit_stages == sample_stages == []
+    for index, stage in enumerate(STAGES):
+        current_stage.append(stage)
+        snapshot = _wait_stage(store, run_id, stage)
+        assert len(snapshot["events"]) == index
+        assert snapshot["result"] is None
+        status, _, body = _http(server, "POST", f"/api/runs/{run_id}/next",
+                               json.dumps({"stage": stage}), {"Content-Type": "application/json"})
+        assert status == 202 and json.loads(body) == {"id": run_id}
+        # A retried approval cannot unlock any following stage, even if work was fast.
+        assert _http(server, "POST", f"/api/runs/{run_id}/next",
+                     json.dumps({"stage": stage}), {"Content-Type": "application/json"})[0] == 409
+        if index + 1 < len(STAGES):
+            snapshot = _wait_stage(store, run_id, STAGES[index + 1])
+        else:
+            snapshot = _wait_terminal(store, run_id)
+        assert [event["stage"] for event in snapshot["events"]] == list(STAGES[:index + 1])
+        assert len(fit_stages) == (0 if index < 4 else 1 if index < 6 else 2)
+    assert decomposition_calls == [True]
+    assert fit_stages == ["predict_before", "train"]
+    assert sample_stages == ["predict_before", "simulate"]
+    assert snapshot["status"] == "completed" and snapshot["next_stage"] is None
+    assert snapshot["result"]["before"]["supported"] is False
+    assert _http(server, "POST", f"/api/runs/{run_id}/cancel", "{}",
+                 {"Content-Type": "application/json"})[0] == 409
+
+
+def test_step_cancellation_releases_worker_without_work_or_result(http_server, monkeypatch):
+    server, store = http_server
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("unapproved stage executed")
+
+    monkeypatch.setattr(pipeline_module, "decompose", forbidden)
+    run_id = store.submit({**REQUEST, "execution_mode": "step"})
+    _wait_stage(store, run_id, "decompose")
+    status, _, body = _http(server, "POST", f"/api/runs/{run_id}/cancel", "{}",
+                            {"Content-Type": "application/json"})
+    assert status == 202 and json.loads(body) == {"id": run_id}
+    run = _wait_terminal(store, run_id)
+    assert run["status"] == "cancelled"
+    assert run["result"] is None and run["error"] is None and run["next_stage"] is None
+    assert run["events"] == []
+    assert not (store.run_dir / run_id / "result.json").exists()
+    assert not (store.run_dir / run_id / "model.json").exists()
+    assert run_id not in store._active
+    assert json.loads((store.run_dir / run_id / "run.json").read_text())["status"] == "cancelled"
+
+
+def test_waiting_counts_toward_limit_and_timeout_is_explicit(artifact_dir):
+    store = server_module.RunStore(artifact_dir, max_running=1, stage_timeout=0.2)
+    run_id = store.submit({**REQUEST, "execution_mode": "step"})
+    _wait_stage(store, run_id, "decompose")
+    with pytest.raises(server_module.RunLimitError):
+        store.submit(REQUEST)
+    run = _wait_terminal(store, run_id)
+    assert run["status"] == "failed" and "timed out" in run["error"]
+    assert run["next_stage"] is None and run["result"] is None
+    assert run["events"] == []
+    assert run_id not in store._active
+    with pytest.raises(server_module.StageConflictError):
+        store.approve(run_id, "decompose")
+
+
+def test_before_stage_is_before_work_and_step_matches_automatic(artifact_dir, monkeypatch):
+    automatic = run_pipeline(REQUEST, artifact_dir)
+    gates, events, fits = [], [], []
+    real_fit = pipeline_module._fit
+
+    def before_stage(stage):
+        assert [event["stage"] for event in events] == list(STAGES[:len(gates)])
+        gates.append(stage)
+
+    def fit(rows, names):
+        fits.append(gates[-1])
+        return real_fit(rows, names)
+
+    monkeypatch.setattr(pipeline_module, "_fit", fit)
+    stepped = run_pipeline({**REQUEST, "execution_mode": "step"}, artifact_dir,
+                           before_stage=before_stage, on_event=events.append)
+    assert gates == list(STAGES) and fits == ["predict_before", "train"]
+    assert {key: value for key, value in stepped.items() if key != "id"} == {
+        key: value for key, value in automatic.items() if key != "id"
+    }
+    with pytest.raises(ValueError, match="before_stage"):
+        run_pipeline({**REQUEST, "execution_mode": "step"}, artifact_dir)
+
+
+@pytest.mark.parametrize("action,body,expected", [
+    ("next", "{}", 400), ("next", '{"stage":2}', 400), ("next", '{"stage":"train"}', 409),
+    ("next", '{"stage":"decompose","extra":true}', 400),
+    ("cancel", '{"stage":"decompose"}', 400), ("cancel", "[]", 400),
+])
+def test_step_control_validation_preserves_gate(http_server, action, body, expected):
+    server, store = http_server
+    run_id = store.submit({**REQUEST, "execution_mode": "step"})
+    _wait_stage(store, run_id, "decompose")
+    assert _http(server, "POST", f"/api/runs/{run_id}/{action}", body,
+                 {"Content-Type": "application/json"})[0] == expected
+    run = store.get(run_id)
+    assert run["status"] == "waiting" and run["next_stage"] == "decompose" and run["events"] == []
+
+
+def test_stage_approval_is_atomic_under_concurrent_duplicates(http_server):
+    _, store = http_server
+    run_id = store.submit({**REQUEST, "execution_mode": "step"})
+    _wait_stage(store, run_id, "decompose")
+    barrier = threading.Barrier(3)
+    responses = []
+
+    def approve():
+        barrier.wait(timeout=5)
+        try:
+            store.approve(run_id, "decompose")
+            responses.append(202)
+        except server_module.StageConflictError:
+            responses.append(409)
+
+    threads = [threading.Thread(target=approve) for _ in range(2)]
+    for thread in threads:
+        thread.start()
+    barrier.wait(timeout=5)
+    for thread in threads:
+        thread.join(timeout=5)
+    run = _wait_stage(store, run_id, "wiki")
+    assert sorted(responses) == [202, 409]
+    assert [event["stage"] for event in run["events"]] == ["decompose"]
+
+
+def test_cancel_during_work_stops_at_next_boundary(http_server, monkeypatch):
+    _, store = http_server
+    entered, release = threading.Event(), threading.Event()
+    actual_decompose = pipeline_module.decompose
+
+    def decompose(request):
+        entered.set()
+        assert release.wait(5)
+        return actual_decompose(request)
+
+    monkeypatch.setattr(pipeline_module, "decompose", decompose)
+    run_id = store.submit(REQUEST)
+    try:
+        assert entered.wait(5)
+        store.cancel(run_id)
+        assert store.get(run_id)["status"] == "cancelled"
+    finally:
+        release.set()
+    run = _wait_terminal(store, run_id)
+    assert run["status"] == "cancelled" and run["result"] is None
+    assert [event["stage"] for event in run["events"]] == ["decompose"]
+    assert not (store.run_dir / run_id / "result.json").exists()
+
+
+def test_cannot_cancel_after_final_publication_starts(http_server, monkeypatch):
+    _, store = http_server
+    entered, release = threading.Event(), threading.Event()
+    actual_write = pipeline_module.write_json
+
+    def write(path, value):
+        if path.name == "result.json":
+            entered.set()
+            assert release.wait(5)
+        actual_write(path, value)
+
+    monkeypatch.setattr(pipeline_module, "write_json", write)
+    run_id = store.submit(REQUEST)
+    try:
+        assert entered.wait(5)
+        with pytest.raises(server_module.StageConflictError):
+            store.cancel(run_id)
+    finally:
+        release.set()
+    assert _wait_terminal(store, run_id)["status"] == "completed"

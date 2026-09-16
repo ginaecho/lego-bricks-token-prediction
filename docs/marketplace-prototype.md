@@ -25,22 +25,36 @@ python -m examples.marketplace_demo_server --port 8765
 
 Open <http://127.0.0.1:8765/marketplace-sales-demo.html?mode=custom>.
 If that port is already occupied, use `--port 8766` and change the URL to match.
-Choose **Load security project**, then **Run project pipeline + open operations**.
+Choose **Load security project**, then **Start step-by-step + open operations**.
 The companion [operations page](../marketplace-operations-demo.html) opens
 automatically. If the browser blocks popups, use the operations link in the
 sales page. Both pages read the same backend run, identified by its run ID.
+
+The new run pauses before its first stage. Click **Next step** in operations to
+execute one real backend stage, inspect its output, then continue when ready.
+This is not playback: future stages have not executed, and no final estimate
+exists until prediction and artifact saving finish. Cancel an unfinished run
+from operations to release its worker. A stage left paused for 30 minutes fails
+explicitly and releases its worker. If the sales page loses its connection, use
+**Refresh project status** to reconnect to the same run without restarting it.
+Older completed runs remain inspectable,
+but cannot be stepped through again; start a new project to demonstrate execution.
+
+The HTTP API retains automatic execution when `execution_mode` is omitted.
+The sales page explicitly requests `execution_mode: "step"`.
 
 The backend performs these operations rather than animating canned progress:
 
 1. Decompose the security-documentation brief with explicit offline rules.
 2. Build a wiki from original fictional sample documents and document links.
 3. Compare text evidence against a demo reference-requirements checklist.
-4. Attempt a prediction using the initial feature schema.
-5. Detect a novel function, generate labeled synthetic token samples, and
-   construct an expanded numerical feature matrix.
-6. Fit local regression models using the repository's
-   `RidgeLinearModel`, evaluate on separate synthetic samples, and predict again.
-7. Save the run, training evidence and model artifacts locally.
+4. Engineer the features, including any new-function feature.
+5. Fit the initial synthetic catalog and predict, or abstain for a new feature.
+6. Generate labeled synthetic token samples for the expanded schema.
+7. Fit the expanded regression models using the repository's `RidgeLinearModel`.
+8. Evaluate on separate synthetic samples.
+9. Predict again using the newly fitted model.
+10. Save the run, training evidence and model artifacts locally.
 
 Choose **Try a new function** to add Policy-as-code validation and rerun.
 Operations shows the new feature, any initial unsupported prediction, sample

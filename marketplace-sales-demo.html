@@ -87,12 +87,14 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>One execution runs the complete document-checking pipeline once.</small></label>
           <label>New function to explore (optional)<input id="new-function" class="search" maxlength="120" placeholder="For example: Policy-as-code validation"><small>A new function expands the feature schema and triggers synthetic sampling and refitting.</small></label>
         </div>
-        <div class="custom-actions"><button class="primary" id="run-pipeline">Run project pipeline + open operations</button><button class="secondary" id="security-example">Load security project</button><button class="secondary" id="novel-example">Try a new function</button></div>
+        <div class="custom-actions"><button class="primary" id="run-pipeline">Start step-by-step + open operations</button><button class="secondary" id="security-example">Load security project</button><button class="secondary" id="novel-example">Try a new function</button></div>
+        <p class="help"><b>You control the execution.</b> In background operations, click <b>Next step</b> to execute one real backend stage. Inspect its output before continuing. Training and prediction do not run until you reach those steps. You can cancel an unfinished run there.</p>
         <p id="backend-status" class="help" role="status">Checking local backend...</p>
         <p class="help">The backend uses original fictional sample documents and an explicit demo reference checklist. It builds document links, finds text evidence and missing items, creates synthetic token samples, fits a regression model, and predicts again. These are real local operations, not live LLM reasoning or proof of security compliance. The focus-area filter above applies only to the quick preview below.</p>
         <div class="flow"><span>Project brief</span>&rarr;<span>Document wiki + reference checklist</span>&rarr;<span>Evidence + gaps</span>&rarr;<span>New feature? Generate synthetic samples</span>&rarr;<span>Fit model + predict</span></div>
         <div id="pipeline-progress" class="proposal" hidden>
           <a id="operations-link" target="token-yield-operations" rel="noopener">Open background operations &nearr;</a>
+          <button class="secondary" id="refresh-pipeline" disabled>Refresh project status</button>
           <p id="pipeline-status" class="help" role="status"></p>
           <div id="pipeline-result"></div>
         </div>
@@ -519,7 +521,7 @@ async function backendJson(path,options={}) {
 function setPipelineBusy(busy) {
   pipelineBusy=busy;
   ["run-pipeline","security-example","novel-example","brief","brief-model","brief-focus","project-runs","new-function","decompose","example"].forEach(id=>$(id).disabled=busy);
-  $("run-pipeline").textContent=busy?"Backend pipeline is running...":"Run project pipeline + open operations";
+  $("run-pipeline").textContent=busy?"Project active in background operations...":"Start step-by-step + open operations";
 }
 function renderPipelineResult(run) {
   const r=run.result;
@@ -542,6 +544,16 @@ async function pollPipeline(id,generation) {
     const last=run.events[run.events.length-1];
     $("pipeline-status").textContent=`Run ${run.id} / ${run.status}${last?" / "+last.message:""}`;
     if(run.status==="failed")throw new PipelineError(run.error||"The backend run failed. Inspect its event log.");
+    if(run.status==="cancelled"){
+      setPipelineBusy(false);pipelineRun=null;
+      $("backend-status").textContent="Project cancelled. No new estimate was added. You can start another step-by-step run.";return;
+    }
+    if(run.status==="waiting"){
+      $("pipeline-status").textContent=`Paused before ${run.next_stage.replaceAll("_"," ")}. ${run.events.length} stages completed. Open background operations and click Next step.`;
+      $("backend-status").textContent="Waiting for your next step, not a replay. Later backend stages have not executed.";
+    }else{
+      $("backend-status").textContent="The backend is executing an approved stage. Its output will appear in operations.";
+    }
     if(run.status==="completed"){
       pipelineRun=run;renderPipelineResult(run);setPipelineBusy(false);
       $("backend-status").textContent="Complete. Both HTML pages show the same persisted backend run. No live LLM calls were made.";return;
@@ -549,6 +561,7 @@ async function pollPipeline(id,generation) {
     pipelineTimer=setTimeout(()=>pollPipeline(id,generation),700);
   }catch(error){
     if(!(error instanceof PipelineError))throw error;
+    if(generation!==pipelineGeneration)return;
     setPipelineBusy(false);$("pipeline-status").textContent=error.message;$("backend-status").textContent="Run status unavailable or failed. Inspect operations; a connection failure does not cancel a running backend job.";
   }
 }
@@ -560,16 +573,18 @@ async function runPipeline() {
   if(description.length<20||!$("project-runs").checkValidity()){
     $("backend-status").textContent="Enter a project description of at least 20 characters and a whole number of monthly executions between 0 and 1,000,000.";return;
   }
-  const request={description,model_id:$("brief-model").value,runs_per_month:Number($("project-runs").value),new_function:$("new-function").value.trim()};
-  const popup=window.open("/marketplace-operations-demo.html","token-yield-operations");
+  const request={description,model_id:$("brief-model").value,runs_per_month:Number($("project-runs").value),new_function:$("new-function").value.trim(),execution_mode:"step"};
+  const popup=window.open("/marketplace-operations-demo.html?pending=1","token-yield-operations");
   setPipelineBusy(true);pipelineRun=null;clearTimeout(pipelineTimer);const generation=++pipelineGeneration;
+  $("refresh-pipeline").disabled=true;
   $("proposal").hidden=true;proposal=null;$("pipeline-result").innerHTML="";$("pipeline-progress").hidden=false;
-  $("operations-link").href="/marketplace-operations-demo.html";$("pipeline-status").textContent="Submitting project to the local backend...";
+  $("operations-link").href="/marketplace-operations-demo.html?pending=1";$("pipeline-status").textContent="Submitting project to the local backend...";
   $("backend-status").textContent=popup?"The companion operations page is opening.":"Your browser blocked the companion popup. Use Open background operations below.";
   try {
     const run=await backendJson("/api/runs",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(request)});
     const operations=`/marketplace-operations-demo.html?run=${encodeURIComponent(run.id)}`;
     $("operations-link").href=operations;if(popup&&!popup.closed)popup.location.href=operations;
+    $("refresh-pipeline").disabled=false;
     const url=new URL(location.href);url.searchParams.set("run",run.id);url.searchParams.set("mode","custom");history.replaceState(null,"",url);
     await pollPipeline(run.id,generation);
   }catch(error){
@@ -595,9 +610,10 @@ async function connectBackend() {
   try {
     const health=await backendJson("/api/health");
     if(health.status!=="ok")throw new PipelineError("This address is not reporting a healthy marketplace backend. Check the server's port and open the URL printed in its terminal.");
-    $("backend-status").textContent="Local backend connected. Running the project will open the operations page automatically; no provider credits are used.";
+    $("backend-status").textContent="Local backend connected. Start a project, then use Next step in operations to execute each stage; no provider credits are used.";
     const id=new URLSearchParams(location.search).get("run");
     if(id){
+      $("refresh-pipeline").disabled=false;
       const run=await backendJson(`/api/runs/${encodeURIComponent(id)}`);setMode("custom");
       $("brief").value=run.request.description;$("brief-model").value=run.request.model_id;$("project-runs").value=run.request.runs_per_month;$("new-function").value=run.request.new_function||"";
       $("pipeline-progress").hidden=false;$("operations-link").href=`/marketplace-operations-demo.html?run=${encodeURIComponent(id)}`;
@@ -640,6 +656,9 @@ $("example").addEventListener("click",()=>{
 ["brief","brief-focus","brief-model"].forEach(id=>$(id).addEventListener("input",invalidateProposal));
 ["project-runs","new-function"].forEach(id=>$(id).addEventListener("input",invalidateProposal));
 $("run-pipeline").addEventListener("click",runPipeline);
+$("refresh-pipeline").addEventListener("click",()=>{
+  clearTimeout(pipelineTimer);pipelineGeneration++;connectBackend();
+});
 $("security-example").addEventListener("click",()=>{
   invalidateProposal();$("brief-focus").value="all";$("new-function").value="";
   $("brief").value="I want to build a pipeline that automatically analyzes security documentation and verifies whether all required security architecture components have been properly documented and addressed. Build a linked document wiki, maintain ground-truth reference requirements, map evidence, perform deep research into missing requirements, and prepare a gap report for human review.";

@@ -11,6 +11,9 @@
 @media(max-width:950px){.workspace{grid-template-columns:1fr}.event-log{height:390px;max-height:60vh}.intro{align-items:start}.intro>.badge{display:none}}
 @media(max-width:600px){header{padding:16px 5%}.header-links .badge{display:none}main{padding:22px 4%}.intro{margin-bottom:15px}h1{letter-spacing:-1px}.panel-head,.tab-content{padding:17px}.controls{padding:14px}.run-summary{grid-template-columns:1fr}.doc-layout{grid-template-columns:1fr}.doc-nav{flex-direction:row;overflow:auto;padding-bottom:5px}.doc-button{min-width:150px}.stats{gap:8px}.stat{padding:11px}.stat strong{font-size:23px}.requirement-head{flex-direction:column}.tab{padding:8px 10px}.run-picker{min-width:100%;}.header-links{font-size:13px}}
 </style>
+<style>
+.step-controls{background:#eaf2e5;border:1px solid #c4d7bb;border-radius:12px;padding:18px 20px;margin:18px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.step-controls p{margin:5px 0 0;font-size:12px}.step-actions{display:flex;gap:9px;flex-wrap:wrap}.status-waiting{background:var(--lime);color:#355328}.status-cancelled{background:#ecece7;color:#62675f}.stage-progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:16px 0 21px;padding:0;list-style:none}.stage-step{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12px;background:white}.stage-step strong,.stage-step small{display:block}.stage-step small{font-size:10px;color:var(--muted);margin-top:3px}.stage-step.done{background:#e7f2df;border-color:#bbd1af}.stage-step.current{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green);background:#f4f9ed}.latest-stage{border:1px solid var(--line);background:#fff;border-radius:12px;padding:18px 21px;margin-bottom:20px}.latest-stage p{margin:7px 0 0;font-size:13px}.latest-stage pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:230px;overflow:auto;background:#f3f6ed;padding:12px;font:12px/1.6 ui-monospace,Consolas,monospace}.latest-stage summary{font-size:12px;cursor:pointer;margin-top:10px}.stage-output{margin:0 0 21px;padding-bottom:15px;border-bottom:1px solid var(--line)}.stage-output pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto;font:12px/1.6 ui-monospace,Consolas,monospace;background:#f6f8f1;padding:12px}@media(max-width:750px){.stage-progress{grid-template-columns:repeat(2,minmax(0,1fr))}.step-controls{padding:15px}.step-actions{width:100%}.step-actions .primary{flex:1}}
+</style>
 </head>
 <body>
 <header>
@@ -19,8 +22,8 @@
 </header>
 <main>
   <section class="intro">
-    <div><div class="eyebrow">Behind the estimate</div><h1>Watch the work. Inspect the evidence.</h1><p class="muted">A live view of the local Python pipeline: brief decomposition, document linking, requirements gaps, synthetic presimulation, feature engineering, Ridge model fitting, test evaluation, and re-prediction.</p></div>
-    <span class="badge">Read-only observer</span>
+    <div><div class="eyebrow">Behind the estimate</div><h1>Run one step. Inspect its output.</h1><p class="muted">Advance a genuine local Python pipeline: brief decomposition, document linking, requirements gaps, feature engineering, synthetic presimulation, Ridge fitting, test evaluation, and re-prediction. Each Next click releases one backend stage—not a replay.</p></div>
+    <span class="badge">Live execution controls</span>
   </section>
   <div class="controls">
     <div class="run-picker"><label for="run-select">Backend run</label><select id="run-select"><option value="">Loading available runs…</option></select></div>
@@ -33,6 +36,12 @@
     <div><div class="eyebrow">Request being observed</div><p id="brief">Opening this page never starts a run. Submit a request in the sales studio, then select it here.</p><div id="run-meta" class="run-meta"></div></div>
     <span id="status" class="badge">No run selected</span>
   </section>
+  <section class="step-controls" aria-label="Backend execution controls">
+    <div><strong id="step-heading">Select a run to inspect or advance</strong><p id="step-help">Opening this page does not execute a stage. Start a step-by-step request in the sales studio.</p></div>
+    <div class="step-actions"><button class="button primary" id="next-stage" type="button" disabled>Next step</button><button class="button" id="cancel-run" type="button" disabled>Cancel paused run</button></div>
+  </section>
+  <ol id="stage-progress" class="stage-progress" aria-label="Backend stage progress"></ol>
+  <section id="latest-stage" class="latest-stage" aria-label="Latest completed stage output" hidden></section>
   <div class="workspace">
     <section class="panel terminal" aria-labelledby="events-title">
       <div class="panel-head"><div><div class="eyebrow">Execution journal</div><h2 id="events-title">Pipeline operations</h2><p class="muted">Actual backend events, in reported sequence.</p></div><span id="event-count" class="small">0 events</span></div>
@@ -47,7 +56,7 @@
         <button class="tab" id="tab-requirements" role="tab" aria-selected="false" aria-controls="view-requirements" tabindex="-1" type="button" data-tab="requirements">Evidence & gaps</button>
         <button class="tab" id="tab-training" role="tab" aria-selected="false" aria-controls="view-training" tabindex="-1" type="button" data-tab="training">Features & model</button>
       </div>
-      <div id="awaiting" class="pending"><div class="eyebrow">No fabricated results</div><h3>Artifacts arrive with the backend result.</h3><p class="muted">During execution, expand journal events to inspect their actual stage data. Final documents, evidence, training rows, coefficients, and estimates appear here when returned by the server.</p></div>
+      <div id="awaiting" class="pending"><div class="eyebrow">No fabricated results</div><h3>Run a step to produce its artifacts.</h3><p class="muted">Documents, evidence, features, fitted coefficients, and evaluation appear as their real backend events arrive. Unexecuted stages have no output. Complete runs show their stored result, not a replay.</p></div>
       <div class="tab-content" id="view-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0"></div>
       <div class="tab-content" id="view-wiki" role="tabpanel" aria-labelledby="tab-wiki" tabindex="0" hidden></div>
       <div class="tab-content" id="view-requirements" role="tabpanel" aria-labelledby="tab-requirements" tabindex="0" hidden></div>
@@ -61,9 +70,11 @@
 (() => {
   const $ = id => document.getElementById(id);
   const tabs = ['overview', 'wiki', 'requirements', 'training'];
-  const state = {id: '', generation: 0, timer: null, lastCount: -1, lastStatus: '', result: null, rendered: false, tab: 'overview', docId: '', runList: [], listGeneration: 0};
+  const stages = [['decompose','Decompose brief'],['wiki','Link documents'],['requirements','Evidence & gaps'],['features','Engineer features'],['predict_before','Baseline prediction'],['simulate','Synthetic presimulation'],['train','Fit Ridge model'],['evaluate','Synthetic test evaluation'],['predict_after','Re-predict'],['complete','Finalize result']];
+  const state = {id: '', generation: 0, timer: null, lastCount: -1, lastStatus: '', lastNext: null, result: null, rendered: false, tab: 'overview', docId: '', runList: [], listGeneration: 0, snapshot: null, actionPending: false, outputs: new Map()};
   const queryId = new URL(location.href).searchParams.get('run');
   const initialId = queryId === null ? '' : queryId.trim();
+  state.pendingSubmission = !initialId && new URL(location.href).searchParams.get('pending') === '1';
   class RequestError extends Error {
     constructor(message) { super(message); this.name = 'RequestError'; }
   }
@@ -78,12 +89,12 @@
   }
   function clearError() { $('error').hidden = true; $('error').textContent = ''; }
   function showError(message) { $('error').textContent = message; $('error').hidden = false; }
-  async function getJSON(path) {
+  async function getJSON(path, options = {}) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
     try {
       let response;
-      try { response = await fetch(path, {cache: 'no-store', signal: controller.signal}); }
+      try { response = await fetch(path, {...options, cache: 'no-store', signal: controller.signal}); }
       catch (error) {
         if (error.name === 'AbortError') throw new RequestError('Backend request timed out after 10 seconds: ' + path);
         if (error instanceof TypeError) throw new RequestError('Network request failed for ' + path + ': ' + error.message);
@@ -126,7 +137,7 @@
     $('run-select').replaceChildren(...options);
     $('run-select').value = state.id;
   }
-  async function listRuns(selectNewest = false) {
+  async function listRuns() {
     const listGeneration = ++state.listGeneration;
     $('refresh-runs').disabled = true;
     try {
@@ -135,10 +146,8 @@
       if (!response || !Array.isArray(response.runs)) throw new RequestError('Invalid /api/runs response: expected a runs array.');
       state.runList = response.runs.filter(run => run && typeof run.id === 'string' && run.id.trim());
       updateOptions(state.runList);
-      if (selectNewest && !state.id && state.runList.length) {
-        selectRun(state.runList[0].id);
-      } else if (!state.id) {
-        $('connection').textContent = state.runList.length ? 'Connected. Select a run to inspect it.' : 'Connected. No runs yet. Create one in the sales studio, then refresh the run list.';
+      if (!state.id) {
+        $('connection').textContent = state.pendingSubmission ? 'Connected · waiting for project submission. The sales studio will redirect this page to the new run ID.' : state.runList.length ? 'Connected. Select a run explicitly to inspect it. Historical runs are not selected automatically.' : 'Connected. No runs yet. Create one in the sales studio, then refresh the run list.';
       }
     } catch (error) {
       if (!(error instanceof RequestError)) throw error;
@@ -151,6 +160,7 @@
   }
   function selectRun(id) {
     state.id = text(id).trim();
+    state.pendingSubmission = false;
     state.generation++;
     clearTimeout(state.timer);
     state.lastCount = -1;
@@ -158,6 +168,14 @@
     state.result = null;
     state.rendered = false;
     state.docId = '';
+    state.snapshot = null;
+    state.actionPending = false;
+    state.lastNext = null;
+    state.outputs.clear();
+    $('latest-stage').hidden = true;
+    $('latest-stage').replaceChildren();
+    updateStepControls();
+    renderProgress([]);
     clearError();
     $('event-log').replaceChildren(node('div', 'Waiting for events from the selected backend run…', 'empty'));
     $('event-count').textContent = '0 events';
@@ -171,6 +189,7 @@
     $('status').textContent = state.id ? 'Loading' : 'No run selected';
     $('status').className = 'badge';
     const url = new URL(location.href);
+    url.searchParams.delete('pending');
     if (state.id) url.searchParams.set('run', state.id); else url.searchParams.delete('run');
     history.replaceState(null, '', url);
     $('sales-link').href = '/marketplace-sales-demo.html' + (state.id ? '?run=' + encodeURIComponent(state.id) : '');
@@ -193,6 +212,7 @@
       top.append(timestamp);
       article.append(top, node('p', event.message));
       const details = node('details');
+      details.open = event === events[events.length - 1];
       details.append(node('summary', 'Inspect stage data'), node('pre', JSON.stringify(event.data ?? {}, null, 2)));
       article.append(details);
       fragment.append(article);
@@ -208,10 +228,14 @@
     try {
       const run = await getJSON('/api/runs/' + encodeURIComponent(state.id));
       if (generation !== state.generation) return;
-      if (!run || run.id !== state.id || !Array.isArray(run.events) || !['queued', 'running', 'completed', 'failed'].includes(run.status)) throw new RequestError('Invalid run response: ID, events, or status does not match the API contract.');
-      const changed = state.lastCount !== run.events.length || state.lastStatus !== run.status;
+      if (!run || run.id !== state.id || !Array.isArray(run.events) || !['queued', 'waiting', 'running', 'completed', 'failed', 'cancelled'].includes(run.status)) throw new RequestError('Invalid run response: ID, events, or status does not match the API contract.');
+      if (run.status === 'waiting' && (typeof run.next_stage !== 'string' || !run.next_stage.trim())) throw new RequestError('Invalid waiting response: expected an exact nonblank next_stage.');
+      state.snapshot = run;
+      const changed = state.lastCount !== run.events.length || state.lastStatus !== run.status || state.lastNext !== run.next_stage;
       if (changed) {
         appendEvents(run.events);
+        if (run.events.length && state.lastCount !== run.events.length) renderLatest(run.events[run.events.length - 1]);
+        if (!run.result && !state.rendered) renderProgressive(run.events);
         $('status').textContent = run.status;
         $('status').className = 'badge status-' + run.status;
         const request = run.request || {};
@@ -219,21 +243,201 @@
         $('run-meta').textContent = 'Run ' + run.id + ' · Model ' + text(request.model_id) + ' · ' + number(request.runs_per_month) + ' runs / month' + (request.new_function ? ' · New function: ' + text(request.new_function) : '');
         state.lastCount = run.events.length;
         state.lastStatus = run.status;
+        state.lastNext = run.next_stage;
+        renderProgress(run.events);
       }
+      updateStepControls();
       if (run.result && !state.rendered) { renderResult(run.result); state.rendered = true; }
       if (run.status === 'failed') {
         showError('Backend run failed: ' + (run.error || 'No error detail was provided.') + ' Polling has stopped. Reload selected run to check again.');
       }
-      const finished = run.status === 'completed' || run.status === 'failed';
+      const finished = ['completed', 'failed', 'cancelled'].includes(run.status);
       $('connection').textContent = 'Connected · ' + (finished ? 'Run ' + run.status + '. Polling stopped; Reload selected run fetches this same ID again.' : 'Watching ' + run.id + ' · polling approximately every 700 ms.');
       if (!finished) state.timer = setTimeout(() => poll(generation), 700);
       else if (!run.result && run.status === 'completed') showError('The run completed without a result payload. No artifacts can be displayed. Reload selected run to check the backend again.');
     } catch (error) {
       if (!(error instanceof RequestError)) throw error;
       if (generation !== state.generation) return;
+      state.snapshot = null;
+      updateStepControls();
       $('connection').textContent = 'Connection or response error · polling paused.';
       showError('Cannot read the selected run. ' + error.message + ' Existing events remain visible. Use Reload selected run to retry. No fallback data is shown.');
     }
+  }
+  function stageName(stage) { return (stages.find(item => item[0] === stage) || [stage, stage])[1]; }
+  function updateStepControls() {
+    const run = state.snapshot;
+    const waiting = run && run.status === 'waiting' && typeof run.next_stage === 'string' && run.next_stage.trim();
+    $('next-stage').disabled = !waiting || state.actionPending;
+    $('cancel-run').disabled = !waiting || state.actionPending;
+    $('reload-run').disabled = !state.id || state.actionPending;
+    $('next-stage').textContent = waiting ? 'Next step: ' + stageName(run.next_stage) : 'Next step';
+    if (state.actionPending) {
+      $('step-heading').textContent = 'Sending control request to the backend…';
+      $('step-help').textContent = 'Controls stay disabled until a fresh backend snapshot confirms the next gate.';
+    } else if (!run) {
+      $('step-heading').textContent = state.id ? 'Waiting for a valid backend snapshot' : 'Select a run to inspect or advance';
+      $('step-help').textContent = 'No stage is executed merely by opening this page. Controls require a connected, paused run.';
+    } else if (waiting) {
+      $('step-heading').textContent = 'Waiting for you / Next: ' + stageName(run.next_stage);
+      $('step-help').textContent = 'This stage has not run. Next executes only this stage in Python; inspect its output before continuing.';
+    } else if (run.status === 'completed') {
+      $('step-heading').textContent = (run.request?.execution_mode === 'step' ? 'Step-by-step run completed' : 'Automatic / historical run completed') + ' · no replay';
+      $('step-help').textContent = 'These are stored execution events and results. Create a new step-by-step request in the sales studio to execute again.';
+    } else if (['cancelled', 'failed'].includes(run.status)) {
+      $('step-heading').textContent = 'Run ' + run.status + ' · execution stopped';
+      $('step-help').textContent = 'Earlier outputs remain inspectable. Unexecuted stages have no result; create a new request to start again.';
+    } else {
+      $('step-heading').textContent = run.request?.execution_mode === 'step' ? 'Backend executing · wait for the next gate' : 'Automatic execution · observing live';
+      $('step-help').textContent = 'Only backend events mark stages done. Next is available only when the backend reports waiting.';
+    }
+  }
+  function renderProgress(events) {
+    const done = new Set(events.map(event => event.stage));
+    const run = state.snapshot;
+    const current = run?.status === 'waiting' ? run.next_stage : run?.status === 'running' ? stages.find(stage => !done.has(stage[0]))?.[0] : null;
+    const fragment = document.createDocumentFragment();
+    stages.forEach(([id, label], index) => {
+      const phase = done.has(id) ? 'done' : id === current ? 'current' : 'not-run';
+      const li = node('li', undefined, 'stage-step ' + phase);
+      const description = phase === 'done' ? 'Done · event received' : phase === 'current' ? (run.status === 'waiting' ? 'Current · not run / awaiting Next' : 'Current · awaiting completion event') : 'Not run';
+      li.append(node('strong', (index + 1) + '. ' + label), node('small', description));
+      if (phase === 'current') li.setAttribute('aria-current', 'step');
+      fragment.append(li);
+    });
+    $('stage-progress').replaceChildren(fragment);
+  }
+  async function controlRun(action) {
+    const run = state.snapshot;
+    if (state.actionPending || !run || run.status !== 'waiting' || !run.next_stage) return;
+    const id = state.id;
+    const stage = run.next_stage;
+    clearTimeout(state.timer);
+    const generation = ++state.generation;
+    state.actionPending = true;
+    updateStepControls();
+    clearError();
+    try {
+      const response = await getJSON('/api/runs/' + encodeURIComponent(id) + '/' + action, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(action === 'next' ? {stage} : {})
+      });
+      if (!response || response.id !== id) throw new RequestError('Unexpected control response: run ID did not match.');
+    } catch (error) {
+      if (!(error instanceof RequestError)) throw error;
+      if (generation !== state.generation) return;
+      showError('Control request was not confirmed. ' + error.message + ' A stale or double advance can return HTTP 409. Reading the real run state again; this request will not be automatically resubmitted.');
+    } finally {
+      if (generation === state.generation) {
+        state.actionPending = false;
+        state.snapshot = null;
+        updateStepControls();
+      }
+    }
+    if (generation === state.generation) await poll(generation);
+  }
+  function stageOutput(title) {
+    const section = node('section', undefined, 'stage-output');
+    section.append(node('h3', title, 'section-title'));
+    return section;
+  }
+  function renderLatest(latest) {
+    const latestPanel = $('latest-stage');
+    latestPanel.hidden = false;
+    latestPanel.replaceChildren(node('div', 'Latest backend output · #' + text(latest.seq), 'eyebrow'), node('h2', stageName(latest.stage)), node('p', latest.message));
+    const payload = node('details');
+    payload.open = true;
+    payload.append(node('summary', 'Actual stage payload'), node('pre', JSON.stringify(latest.data ?? {}, null, 2)));
+    latestPanel.append(payload);
+  }
+  function renderProgressive(events) {
+    const changed = new Set();
+    events.forEach(event => {
+      const prior = state.outputs.get(event.stage);
+      if (!prior || prior.seq !== event.seq) {
+        state.outputs.set(event.stage, event);
+        changed.add(event.stage);
+      }
+    });
+    if (!changed.size) return;
+    state.result = state.result || {};
+    $('awaiting').hidden = true;
+    $('artifact-count').textContent = 'Partial outputs · ' + events.length + ' real events';
+    const get = stage => state.outputs.get(stage)?.data;
+    if (changed.has('wiki') && Array.isArray(get('wiki')?.documents)) {
+      state.result.documents = get('wiki').documents;
+      renderWiki(state.result);
+    }
+    if (changed.has('requirements') && Array.isArray(get('requirements')?.requirements)) {
+      state.result.requirements = get('requirements').requirements;
+      renderRequirements(state.result);
+    }
+    if (['decompose', 'predict_before', 'simulate', 'predict_after'].some(stage => changed.has(stage))) {
+      const panel = $('view-overview');
+      panel.replaceChildren(node('div', 'Progressive outputs from executed stages only. No full estimate is available until prediction runs; all generated data and metrics are synthetic-only.', 'note'));
+      const bricks = get('decompose')?.bricks;
+      if (Array.isArray(bricks)) {
+        const section = stageOutput('Decomposed task bricks');
+        bricks.forEach(brick => {
+          const card = node('div', undefined, 'brick');
+          card.append(node('strong', brick.name), node('span', brick.novel ? 'New task detected' : brick.id, 'chip' + (brick.novel ? ' novel' : '')));
+          (brick.atoms || []).forEach(atom => card.append(node('span', atom, 'chip')));
+          section.append(card);
+        });
+        panel.append(section);
+      }
+      const before = get('predict_before');
+      if (before && typeof before.supported === 'boolean') {
+        const section = stageOutput('Baseline prediction · executed');
+        section.append(stat('Before training', before.supported ? number(before.total_tokens) + ' tokens' : 'Abstained', before.reason));
+        panel.append(section);
+      }
+      const simulation = get('simulate');
+      if (simulation) {
+        const section = stageOutput('Synthetic presimulation · executed');
+        section.append(node('p', 'Actual simulation stage output. No provider calls or live research.', 'small'), node('pre', JSON.stringify(simulation, null, 2)));
+        panel.append(section);
+      }
+      const after = get('predict_after')?.after;
+      if (after) {
+        const section = stageOutput('Re-prediction · executed / synthetic estimate');
+        section.append(stat('After training', number(after.total_tokens), 'tokens per whole-project run', true), node('p', number(after.input_tokens) + ' input + ' + number(after.output_tokens) + ' output tokens.', 'small'), node('p', money(after.usd_per_run) + ' / run · ' + money(after.usd_per_month) + ' / month at illustrative rates.', 'small'));
+        panel.append(section);
+      }
+    }
+    if (['features', 'train', 'evaluate'].some(stage => changed.has(stage))) {
+      const panel = $('view-training');
+      panel.replaceChildren(node('div', 'Only stages with backend events appear below. A fitted model is not a provider benchmark; test MAEs apply only to synthetic held-out rows.', 'note'));
+      const featureData = get('features');
+      if (featureData?.features) {
+        const section = stageOutput('Engineered request feature vector');
+        const names = featureData.feature_names || Object.keys(featureData.features);
+        section.append(table(['Feature name', 'Value'], names.map(name => [name, number(featureData.features[name])])));
+        panel.append(section);
+      }
+      const training = get('train');
+      if (training?.coefficients) {
+        const section = stageOutput('RidgeLinearModel.fit · returned coefficients');
+        section.append(node('p', 'Source: ' + text(training.source) + ' · alpha: ' + number(training.alpha), 'small'));
+        ['input', 'output'].forEach(target => section.append(node('h3', target + ' model'), table(['Coefficient', 'Value'], Object.entries(training.coefficients[target] || {}).map(([name, value]) => [name, number(value)]))));
+        panel.append(section);
+      }
+      const evaluation = get('evaluate');
+      if (evaluation) {
+        const section = stageOutput('Held-out evaluation · synthetic only');
+        const stats = node('div', undefined, 'stats');
+        stats.append(stat('Synthetic train rows', number(evaluation.train_count)), stat('Synthetic test rows', number(evaluation.test_count)), stat('Input test MAE', number(evaluation.input_mae), 'synthetic-only tokens'), stat('Output test MAE', number(evaluation.output_mae), 'synthetic-only tokens'));
+        section.append(stats, node('p', 'Version: ' + text(evaluation.version), 'small muted'));
+        panel.append(section);
+      }
+      panel.append(node('p', 'Full training/test rows are shown when the finalized result payload arrives.', 'small muted'));
+    }
+    tabs.forEach(tab => {
+      const panel = $('view-' + tab);
+      if (!panel.children.length) panel.append(node('p', 'No output for this view yet. Execute the relevant backend stage with Next.', 'empty'));
+    });
+    selectTab(state.tab);
   }
   function stat(label, value, detail, after = false) {
     const card = node('div', undefined, 'stat' + (after ? ' after' : ''));
@@ -392,7 +596,9 @@
     panel.append(table(['Split', 'Synthetic', ...names, 'Input tokens', 'Output tokens'], rows.map(row => [row.split, String(row.synthetic), ...names.map(name => number((row.features || {})[name])), number(row.input_tokens), number(row.output_tokens)]), true));
   }
   $('run-select').addEventListener('change', event => selectRun(event.target.value));
-  $('refresh-runs').addEventListener('click', () => { clearError(); listRuns(!state.id); });
+  $('next-stage').addEventListener('click', () => controlRun('next'));
+  $('cancel-run').addEventListener('click', () => controlRun('cancel'));
+  $('refresh-runs').addEventListener('click', () => { clearError(); listRuns(); });
   $('reload-run').addEventListener('click', () => {
     if (!state.id) return;
     clearTimeout(state.timer);
@@ -402,6 +608,13 @@
   });
   window.addEventListener('pagehide', () => { state.generation++; clearTimeout(state.timer); });
   async function start() {
+    if (state.pendingSubmission) {
+      $('brief').textContent = 'Waiting for project submission from the sales studio. No run is selected and no backend stage has been started by this page.';
+      $('status').textContent = 'Pending submission';
+      $('step-heading').textContent = 'Waiting for project submission';
+      $('step-help').textContent = 'The sales studio will redirect here with the new run ID after creating it. Historical results are not loaded automatically.';
+      $('connection').textContent = 'Connecting while the sales studio submits your project…';
+    }
     if (location.protocol === 'file:') {
       $('connection').textContent = 'Local server required.';
       showError('This observer needs the same HTTP server as the sales studio. Open /marketplace-operations-demo.html on that server; file:// cannot access the run API.');
@@ -412,8 +625,8 @@
       const health = await getJSON('/api/health');
       if (!health || health.status !== 'ok') throw new RequestError('Health endpoint did not report status “ok”.');
       if (initialId) selectRun(initialId);
-      await listRuns(!initialId);
-      if (queryId !== null && !initialId) showError('The run query parameter was blank. Showing the newest available backend run instead; no work was started.');
+      await listRuns();
+      if (queryId !== null && !initialId && !state.pendingSubmission) showError('The run query parameter was blank. No run was selected or started. Select a backend run explicitly or submit a project in the sales studio.');
     } catch (error) {
       if (!(error instanceof RequestError)) throw error;
       $('connection').textContent = 'Backend connection unavailable.';
