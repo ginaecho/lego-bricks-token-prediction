@@ -10,13 +10,14 @@ idea on the `feat/marketplace` branch. It is a standalone design experiment,
 not a production storefront or a purchasing system.
 
 > [!IMPORTANT]
-> All token coefficients and pricing defaults are illustrative. The prototype
-> does not call the repository's trained predictor or a model provider.
-> Business benefits are hypotheses, not measured improvements.
+> The original standalone marketplace uses illustrative coefficients and prices.
+> The paired sales and operations pages also support an explicitly enabled
+> Foundry agent pilot. Keep its measured-data predictions separate from the
+> offline simulation. Business benefits remain hypotheses, not measured improvements.
 
 ## Working local project pipeline
 
-The sales page also supports an actual local backend. Start it from the demo
+The sales page also supports an actual local backend. For offline execution, start it from the demo
 worktree using a Python environment with the repository available:
 
 ```text
@@ -41,9 +42,10 @@ Older completed runs remain inspectable,
 but cannot be stepped through again; start a new project to demonstrate execution.
 
 The HTTP API retains automatic execution when `execution_mode` is omitted.
-The sales page explicitly requests `execution_mode: "step"`.
+The sales page defaults to `execution_mode: "step"` and also offers automatic
+execution explicitly.
 
-The backend performs these operations rather than animating canned progress:
+The offline backend performs these operations rather than animating canned progress:
 
 1. Decompose the security-documentation brief with explicit offline rules.
 2. Build a wiki from original fictional sample documents and document links.
@@ -70,7 +72,7 @@ rerun to change them. Monthly volume and commercial assumptions remain editable.
 Staffing, tool costs and ROI are not outputs of the trained regression.
 
 > [!IMPORTANT]
-> Model fitting and document processing are real local operations, but the
+> In offline mode, model fitting and document processing are real local operations, but the
 > token measurements are synthetic. Low test error against that simulator is
 > not evidence of accuracy on real LLM calls. Named model rates remain scenario
 > assumptions. No LLM provider, live web search or AI deep-research service runs.
@@ -82,12 +84,75 @@ must confirm the applicable requirements, validate the evidence, and approve
 any compliance conclusion.
 
 Run artifacts are stored in the ignored `.demo-runs/` directory by default.
-Each run starts from a reproducible synthetic baseline; it does not accumulate
+Each offline run starts from a reproducible synthetic baseline; it does not accumulate
 learning across submitted projects or execute the newly named function itself.
 The run list covers the current server process. Saved artifacts remain on disk
-after a restart, but are not automatically reloaded into that list.
+after a restart and can be inspected through the original run URL, but are not
+automatically reloaded into that list. Interrupted runs cannot resume.
 Do not enter confidential briefs into a shared prototype. The server is for
 localhost demonstrations, not production hosting.
+
+## Real Foundry agent pilot
+
+The live mode uses the existing Azure deployment rather than creating hosted
+agent infrastructure. Agent roles run in the local orchestrator and make separate
+Foundry requests. Distinct role instructions do not imply different underlying
+models: this pilot uses the pinned GPT-5.4 deployment for every role and workload.
+
+Enable paid execution only with a new, explicit campaign approval:
+
+```text
+python -m examples.marketplace_demo_server --port 8766 --enable-foundry --agent-budget-usd 25 --agent-approval-id marketplace-agent-pilot-usd25-v1
+```
+
+The budget is for the entire campaign, not each run. The default durable state
+directory is `.demo-runs/agent-state`. Reuse that directory on restart; do not
+change directories to bypass the approved total. Starting without
+`--enable-foundry` makes no paid calls and rejects live-run submissions.
+The browser cannot configure an endpoint, increase the budget, or change the
+approved deployment. Only one Foundry run can execute or wait at a time.
+
+The live workflow separates three kinds of evidence:
+
+1. Agent proposals, critiques and decisions describe a suggested decomposition.
+   They are not measured labels or proof of completeness.
+2. Task-execution usage returned by Foundry supplies the regression labels.
+   Discussion and coordination tokens are recorded separately as pilot overhead.
+3. Fitted token predictions estimate repeated execution of the scoped prompt
+   contracts. Staffing and ROI still come from the client's editable assumptions.
+
+The operations view exposes public role responses and actual tool outputs, not
+private chain-of-thought. In step mode, approving a stage authorizes its work;
+opening either page or reading a catalog does not start inference. Cancellation
+stops before subsequent calls, but cannot undo a request already sent to Azure.
+Unknown outcomes remain reserved against the campaign budget rather than being
+assumed free.
+
+Submitted custom descriptions are sent to the configured Azure deployment.
+Use fictional demonstration briefs, not confidential customer information.
+The bundled documents remain fictional, and this pilot does not ingest user
+documents, browse the web, validate operating controls, or certify compliance.
+Source-bound research is not a replacement for a deployed deep-research service.
+
+The design draws on the bounded orchestration and finite feature-building
+patterns in [agentic-labeling at its inspected revision](https://github.com/ginaecho/agentic-labeling/tree/efca794b3df6c15549e67ca8ac8dc26fed13dc3c).
+That repository's three judges critique independently. This pilot adds an
+explicit peer-review round before the orchestrator makes a decision. Agent
+agreement must not be mistaken for verified ground truth.
+
+After a live pilot completes, **Pre-predicted GPT-5.4 bricks** reads the stored
+catalog without calling the provider. Select multiple supported variants and
+set each one's monthly volume. Their saved input/output predictions stay fixed;
+editing the shared context, illustrative atom coefficients or scenario LLMs
+does not alter those tokens. Commercial rates remain editable planning inputs.
+Measured catalog choices cannot be mixed with illustrative choices, and no
+synthetic routing or setup tokens are added to a measured forecast.
+
+For a custom project, review the accepted functions and approve its complete
+workflow instead. It replaces the build with one composite forecast rather
+than charging its internal functions twice. Unsupported results have no
+financial apply action. Reference-context pilot forecasts do not establish
+accuracy for arbitrary customer documents or live-web research.
 
 ## Sales conversation demo
 
@@ -96,17 +161,17 @@ a browser. This separate prototype builds on marketplace layout A; the original
 three-layout explorer remains available. The original manual and quick-preview
 flows need no server; the working project pipeline above requires localhost.
 
-The demo provides two entry paths to the same estimate:
+The original illustrative mode provides two entry paths to the same estimate:
 
 1. Choose **Build with bricks**, click Research or Personalized discovery, and
    select multiple variations. Set each variation's execution LLM, monthly runs,
    setup hours, review minutes, and tool fee.
-2. Choose **Describe your idea**, load the research example or enter a brief,
+2. Choose **Describe your idea**, expand **Quick catalog preview**, load the research example or enter a brief,
    preview its simulated decomposition, inspect the matched phrases, and
    approve the mapping. Existing matching variants are replaced with defaults,
    not duplicated; unrelated selections remain.
 
-The brief mapper uses local keyword rules, not an LLM. Unknown intent is
+This quick-preview mapper uses local keyword rules, not an LLM. Unknown intent is
 reported without adding anything. Negations, conditions and unrecognized
 requirements require human interpretation. Editing the brief invalidates
 its pending proposal. Approval preserves the description and catalog mapping.
@@ -135,8 +200,8 @@ declared operating costs. Time increases remain negative benefits.
 This is an undiscounted scenario with full operation from month one, not a
 cash-flow forecast or causal impact estimate.
 
-All coefficients and rates are illustrative and editable. No trained predictor
-supports these variants or model choices in this demo. Named LLM rate cards
+Manual catalog coefficients and rates are illustrative and editable. No trained
+predictor supports those manual variant/model combinations. Named scenario LLM rate cards
 are placeholders, not verified provider prices. The same pure calculation
 feeds the sidebar, review, ROI and JSON export. Review the build to download
 the scenario or copy its full JSON if the browser blocks downloads.

@@ -1,4 +1,4 @@
-"""Serve the bounded offline marketplace demo on loopback only.
+"""Serve the bounded marketplace demo on loopback, offline unless explicitly enabled.
 
 Usage: python -m examples.marketplace_demo_server --port 8765 --run-dir .demo-runs
 """
@@ -14,10 +14,13 @@ import threading
 import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from urllib.parse import urlsplit
 
-from token_yield.marketplace_demo import PipelineCancelled, run_pipeline, validate_request, write_json
+from token_yield.marketplace_demo import STAGES, PipelineCancelled, run_pipeline, validate_request, write_json
+
+if TYPE_CHECKING:
+    from token_yield.marketplace_agents import AgentRuntime
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC_ROUTES = frozenset({
@@ -35,17 +38,38 @@ class StageConflictError(Exception):
     """A stale, duplicate, or terminal-run control request was rejected."""
 
 
+class RuntimeUnavailableError(Exception):
+    """Paid execution was requested without a configured, approved runtime."""
+
+
+def validate_run_request(value: Any) -> dict[str, Any]:
+    """Keep the offline contract unchanged while explicitly selecting a runtime."""
+    if not isinstance(value, dict):
+        raise ValueError("body must be a JSON object")
+    original = dict(value)
+    runtime = original.pop("runtime", "offline")
+    if not isinstance(runtime, str) or runtime not in ("offline", "foundry"):
+        raise ValueError("runtime must be offline or foundry")
+    result = validate_request(original)
+    if runtime == "foundry" and result["model_id"] != "gpt":
+        raise ValueError("Foundry runs require model_id gpt, the pinned deployment alias")
+    if "runtime" in value:
+        result["runtime"] = runtime
+    return result
+
+
 class RunStore:
     """Lock-protected snapshots with append-only worker events."""
 
     def __init__(self, run_dir: Path, *, max_running: int = 2, max_runs: int = 32,
-                 stage_timeout: float = 1800):
+                 stage_timeout: float = 1800, agent_runtime: AgentRuntime | None = None):
         self.run_dir = Path(run_dir)
         self.max_running = max_running
         self.max_runs = max_runs
         self.lock = threading.RLock()
         self.condition = threading.Condition(self.lock)
         self.stage_timeout = stage_timeout
+        self.agent_runtime = agent_runtime
         self.runs: dict[str, dict[str, Any]] = {}
         self._active: set[str] = set()
         self._approved: dict[str, str] = {}
@@ -56,13 +80,26 @@ class RunStore:
         )
 
     def submit(self, request: dict[str, Any]) -> str:
-        request = validate_request(request)
+        request = validate_run_request(request)
         with self.lock:
+            live = request.get("runtime") == "foundry"
+            if live and self.agent_runtime is None:
+                raise RuntimeUnavailableError("Foundry execution is disabled. Start the server with an approved campaign budget.")
+            if live and any(self.runs[active]["request"].get("runtime") == "foundry"
+                            for active in self._active):
+                raise RunLimitError("A Foundry run is already active. Finish or cancel it before starting another.")
             if len(self._active) >= self.max_running or self.previous_run_count + len(self.runs) >= self.max_runs:
                 raise RunLimitError("Demo run limit reached; wait for active work or restart with a new run directory.")
+            if live:
+                from token_yield.marketplace_agents import AGENT_STAGES
+
+                stages = AGENT_STAGES
+            else:
+                stages = STAGES
             run_id = uuid.uuid4().hex
             self.runs[run_id] = {"id": run_id, "status": "queued", "request": request,
-                                 "events": [], "result": None, "error": None, "next_stage": None}
+                                 "events": [], "result": None, "error": None, "next_stage": None,
+                                 "stages": list(stages)}
             self._active.add(run_id)
             threading.Thread(target=self._worker, args=(run_id,), daemon=True).start()
             return run_id
@@ -118,15 +155,32 @@ class RunStore:
             self.runs[run_id]["events"].append(copy.deepcopy(event))
             print(json.dumps({"run_id": run_id, **event}, ensure_ascii=True), flush=True)
 
+    def _check_cancel(self, run_id: str) -> None:
+        with self.lock:
+            if run_id in self._cancelled:
+                raise PipelineCancelled("Cancelled before the next paid request or tool.")
+
     def _worker(self, run_id: str) -> None:
         try:
             with self.lock:
                 if run_id not in self._cancelled:
                     self.runs[run_id]["status"] = "running"
                 request = self.runs[run_id]["request"].copy()
-            result = run_pipeline(request, self.run_dir, run_id=run_id,
-                                  on_event=lambda event: self._event(run_id, event),
-                                  before_stage=lambda stage: self._before_stage(run_id, stage))
+            callbacks = {
+                "run_id": run_id,
+                "on_event": lambda event: self._event(run_id, event),
+                "before_stage": lambda stage: self._before_stage(run_id, stage),
+            }
+            if request.get("runtime") == "foundry":
+                if self.agent_runtime is None:
+                    raise RuntimeUnavailableError("Foundry runtime is no longer available")
+                result = self.agent_runtime.run_pipeline(
+                    request, self.run_dir, **callbacks,
+                    check_cancel=lambda: self._check_cancel(run_id),
+                )
+            else:
+                request.pop("runtime", None)
+                result = run_pipeline(request, self.run_dir, **callbacks)
             with self.lock:
                 snapshot = copy.deepcopy(self.runs[run_id])
                 snapshot.update(status="completed", result=result, next_stage=None)
@@ -157,7 +211,33 @@ class RunStore:
 
     def get(self, run_id: str) -> dict[str, Any] | None:
         with self.lock:
-            return copy.deepcopy(self.runs.get(run_id))
+            current = self.runs.get(run_id)
+            if current is not None:
+                return copy.deepcopy(current)
+            if not re.fullmatch(r"[0-9a-f]{32}", run_id):
+                return None
+            saved = self.run_dir / run_id / "run.json"
+            if not saved.is_file():
+                return None
+            run = json.loads(saved.read_text(encoding="utf-8"))
+            if run.get("id") != run_id:
+                raise ValueError("Persisted run identity does not match its directory")
+            if run["status"] in ("queued", "waiting", "running"):
+                run.update(status="failed", next_stage=None, result=None,
+                           error="Server restarted during execution. This historical run cannot resume; any uncertain charges remain reserved.")
+            return run
+
+    def runtime_status(self) -> dict[str, Any]:
+        if self.agent_runtime is None:
+            return {"enabled": False, "source": "synthetic",
+                    "message": "Offline only. No paid calls are enabled."}
+        return self.agent_runtime.public_status()
+
+    def catalog(self) -> dict[str, Any]:
+        if self.agent_runtime is None:
+            return {"items": [], "enabled": False,
+                    "message": "No Foundry measurement campaign is enabled."}
+        return self.agent_runtime.catalog()
 
     def listing(self) -> dict[str, Any]:
         with self.lock:
@@ -233,6 +313,10 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
             path = urlsplit(self.path).path
             if path == "/api/health":
                 self._reply(200, {"status": "ok"})
+            elif path == "/api/runtime":
+                self._reply(200, store.runtime_status())
+            elif path == "/api/catalog":
+                self._reply(200, store.catalog())
             elif path == "/api/runs":
                 self._reply(200, store.listing())
             elif re.fullmatch(r"/api/runs/[0-9a-f]{32}", path):
@@ -283,9 +367,9 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
                     elif request:
                         raise ValueError("cancel requires an empty object")
                 else:
-                    request = validate_request(request)
+                    request = validate_run_request(request)
             except (ValueError, UnicodeError, RecursionError):
-                self._reply(400, {"error": "Invalid JSON or request fields. Runs require description, model_id, integer runs_per_month; optional new_function and execution_mode step|automatic. Next requires {stage:string}; cancel requires {}."})
+                self._reply(400, {"error": "Invalid JSON or request fields. Runs require description, model_id, integer runs_per_month; optional new_function, execution_mode step|automatic and runtime offline|foundry. Foundry uses the pinned gpt alias. Next requires {stage:string}; cancel requires {}."})
                 return
             except TimeoutError:
                 self._reply(408, {"error": "request body timed out"})
@@ -308,6 +392,9 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
             except RunLimitError as exc:
                 self._reply(429, {"error": str(exc)})
                 return
+            except RuntimeUnavailableError as exc:
+                self._reply(409, {"error": str(exc)})
+                return
             self._reply(202, {"id": run_id} if control else {
                 "id": run_id, "operations_url": f"/marketplace-operations-demo.html?run={run_id}"})
 
@@ -320,6 +407,16 @@ def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--run-dir", type=Path, default=ROOT / ".demo-runs")
+    parser.add_argument("--enable-foundry", action="store_true",
+                        help="Enable paid calls using the existing pinned Azure deployment.")
+    parser.add_argument("--agent-config", type=Path,
+                        default=ROOT / "experiments" / "customer_requests" / "pilot.json")
+    parser.add_argument("--agent-state-dir", type=Path,
+                        help="Durable campaign budget and registry directory; reuse it on restart.")
+    parser.add_argument("--agent-budget-usd", type=float,
+                        help="New approved total campaign cap (maximum USD 25), not a per-run cap.")
+    parser.add_argument("--agent-approval-id",
+                        help="Explicit new campaign approval identifier; previous pilot approval is not reused.")
     return parser
 
 
@@ -328,16 +425,36 @@ def main() -> int:
     if not 1 <= args.port <= 65535:
         print("--port must be in 1..65535", file=sys.stderr)
         return 2
+    if args.enable_foundry and (
+            args.agent_budget_usd is None or not 0 < args.agent_budget_usd <= 25
+            or not args.agent_approval_id or not args.agent_approval_id.strip()):
+        print("--enable-foundry requires --agent-budget-usd in (0,25] and --agent-approval-id",
+              file=sys.stderr)
+        return 2
+    runtime = None
     try:
-        with make_server(args.port, run_dir=args.run_dir) as server:
+        if args.enable_foundry:
+            from token_yield.marketplace_agents import AgentRuntime
+
+            runtime = AgentRuntime(
+                args.agent_state_dir or args.run_dir / "agent-state",
+                args.agent_config, cap_usd=args.agent_budget_usd,
+                approval_id=args.agent_approval_id,
+            )
+        store = RunStore(args.run_dir, agent_runtime=runtime)
+        with make_server(args.port, store=store) as server:
             print(json.dumps({"stage": "server", "url": f"http://127.0.0.1:{args.port}/marketplace-sales-demo.html",
-                              "source": "synthetic", "offline": True}), flush=True)
+                              "foundry_enabled": runtime is not None,
+                              "offline_available": True}), flush=True)
             server.serve_forever()
     except KeyboardInterrupt:
         return 130
-    except (OSError, BrokenPipeError) as exc:
+    except (OSError, ValueError, RuntimeError) as exc:
         print(f"Server error: {exc}", file=sys.stderr)
         return 1
+    finally:
+        if runtime is not None:
+            runtime.close()
     return 0
 
 

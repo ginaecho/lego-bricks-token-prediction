@@ -5,10 +5,12 @@ from __future__ import annotations
 import http.client
 import json
 import shutil
+import sys
 import threading
 import time
 import uuid
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -344,6 +346,115 @@ def test_running_and_total_run_limits(artifact_dir, monkeypatch):
     restarted = server_module.RunStore(artifact_dir, max_runs=1)
     with pytest.raises(server_module.RunLimitError):
         restarted.submit(REQUEST)
+
+
+def test_runtime_discovery_is_read_only_and_paid_calls_are_opt_in(http_server):
+    server, store = http_server
+    status, _, body = _http(server, "GET", "/api/runtime")
+    assert status == 200 and json.loads(body)["enabled"] is False
+    status, _, body = _http(server, "GET", "/api/catalog")
+    assert status == 200 and json.loads(body)["items"] == []
+    request = {**REQUEST, "runtime": "foundry", "model_id": "gpt"}
+    status, _, body = _http(server, "POST", "/api/runs", json.dumps(request),
+                            {"Content-Type": "application/json"})
+    assert status == 409 and "disabled" in json.loads(body)["error"]
+    assert store.listing() == {"runs": []}
+    with pytest.raises(server_module.RuntimeUnavailableError):
+        store.submit(request)
+
+
+@pytest.mark.parametrize("overrides", [
+    {"runtime": "azure"}, {"runtime": True},
+    {"runtime": "foundry", "model_id": "claude"},
+    {"runtime": "foundry", "model_id": "gpt", "cap_usd": 100},
+])
+def test_runtime_validation_rejects_unapproved_models_and_browser_budget(overrides):
+    with pytest.raises(ValueError):
+        server_module.validate_run_request({**REQUEST, **overrides})
+
+
+def test_explicit_offline_runtime_preserves_pipeline(http_server):
+    _, store = http_server
+    run = _wait_terminal(store, store.submit({**REQUEST, "runtime": "offline"}))
+    assert run["status"] == "completed"
+    assert run["request"]["runtime"] == "offline"
+    assert run["stages"] == list(STAGES)
+    assert run["result"]["training"]["source"] == "synthetic"
+
+
+def test_live_worker_routes_to_injected_runtime_and_checks_cancel(artifact_dir, monkeypatch):
+    monkeypatch.setitem(sys.modules, "token_yield.marketplace_agents",
+                        SimpleNamespace(AGENT_STAGES=("propose", "complete")))
+    entered, release = threading.Event(), threading.Event()
+    calls = []
+
+    class RuntimeStub:
+        def public_status(self):
+            return {"enabled": True, "deployment": "mock-only"}
+
+        def catalog(self):
+            return {"items": [], "source": "mock-only"}
+
+        def run_pipeline(self, request, run_dir, *, run_id, before_stage, on_event, check_cancel):
+            folder = run_dir / run_id
+            folder.mkdir(parents=True)
+            pipeline_module.write_json(folder / "request.json", request)
+            before_stage("propose")
+            check_cancel()
+            calls.append("first")
+            entered.set()
+            assert release.wait(5)
+            check_cancel()
+            pytest.fail("cancelled run must not perform a second paid request")
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("live failure must not fall back to offline data")
+
+    monkeypatch.setattr(server_module, "run_pipeline", forbidden)
+    store = server_module.RunStore(artifact_dir, agent_runtime=RuntimeStub())
+    assert store.runtime_status()["enabled"] is True
+    assert store.catalog()["source"] == "mock-only"
+    request = {**REQUEST, "runtime": "foundry", "model_id": "gpt", "execution_mode": "step"}
+    run_id = store.submit(request)
+    try:
+        paused = _wait_stage(store, run_id, "propose")
+        assert paused["stages"] == ["propose", "complete"]
+        assert calls == [] and paused["result"] is None
+        with pytest.raises(server_module.RunLimitError, match="already active"):
+            store.submit(request)
+        store.approve(run_id, "propose")
+        assert entered.wait(5)
+        store.cancel(run_id)
+    finally:
+        release.set()
+    run = _wait_terminal(store, run_id)
+    assert calls == ["first"] and run["status"] == "cancelled"
+    assert run["result"] is None
+
+
+def test_saved_run_is_read_only_after_restart(artifact_dir):
+    store = server_module.RunStore(artifact_dir)
+    run_id = store.submit(REQUEST)
+    original = _wait_terminal(store, run_id)
+    restarted = server_module.RunStore(artifact_dir)
+    assert restarted.get(run_id) == original
+    assert restarted.get("../request") is None
+    assert restarted.listing() == {"runs": []}
+    with pytest.raises(KeyError):
+        restarted.approve(run_id, "complete")
+    stale = {**original, "status": "running", "result": None}
+    pipeline_module.write_json(artifact_dir / run_id / "run.json", stale)
+    recovered = restarted.get(run_id)
+    assert recovered["status"] == "failed"
+    assert "cannot resume" in recovered["error"]
+    assert restarted._active == set()
+
+
+@pytest.mark.parametrize("cap", ["nan", "inf", "-1", "26"])
+def test_paid_server_requires_finite_new_approval(monkeypatch, cap):
+    monkeypatch.setattr(sys, "argv", ["server", "--enable-foundry", "--agent-budget-usd", cap,
+                                     "--agent-approval-id", "new-test-approval"])
+    assert server_module.main() == 2
 
 
 def _wait_stage(store, run_id, stage):

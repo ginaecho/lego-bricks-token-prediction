@@ -18,11 +18,11 @@
 <body>
 <header>
   <div class="brand">Token<span>Yield</span> <span class="muted small">/ operations</span></div>
-  <nav class="header-links" aria-label="Main navigation"><span class="badge offline">Offline · no provider calls</span><a id="sales-link" href="/marketplace-sales-demo.html">← Sales studio</a></nav>
+  <nav class="header-links" aria-label="Main navigation"><span id="runtime-badge" class="badge">Select a runtime in sales</span><a id="sales-link" href="/marketplace-sales-demo.html">← Sales studio</a></nav>
 </header>
 <main>
   <section class="intro">
-    <div><div class="eyebrow">Behind the estimate</div><h1>Run one step. Inspect its output.</h1><p class="muted">Advance a genuine local Python pipeline: brief decomposition, document linking, requirements gaps, feature engineering, synthetic presimulation, Ridge fitting, test evaluation, and re-prediction. Each Next click releases one backend stage—not a replay.</p></div>
+    <div><div class="eyebrow">Behind the estimate</div><h1>Run one step. Inspect its output.</h1><p class="muted">Inspect the selected backend: offline synthetic pipeline, or real Foundry orchestrator + three-agent proposals, peer discussion, adjudication, features, measured calls, training and predictions. Each Next click releases one stage—not a replay. Events within a stage do not imply that stage has finished.</p></div>
     <span class="badge">Live execution controls</span>
   </section>
   <div class="controls">
@@ -32,13 +32,14 @@
   </div>
   <div id="connection" class="connection" role="status">Connecting to the local backend…</div>
   <div id="error" class="error" role="alert" hidden></div>
+  <div id="azure-notice" class="note" hidden><b>Foundry / paid Azure execution:</b> Advancing this run may send its submitted brief and optional function to the configured GPT-5.4 deployment. Fixtures are original and fictional; no real documents are ingested and no live web research is performed. The US$25 shared pilot cap is server-only. Predictions and ROI are not actual provider bills or production quotes. Cancellation cannot undo an in-flight call.</div>
   <section class="run-summary" aria-label="Selected run">
     <div><div class="eyebrow">Request being observed</div><p id="brief">Opening this page never starts a run. Submit a request in the sales studio, then select it here.</p><div id="run-meta" class="run-meta"></div></div>
     <span id="status" class="badge">No run selected</span>
   </section>
   <section class="step-controls" aria-label="Backend execution controls">
     <div><strong id="step-heading">Select a run to inspect or advance</strong><p id="step-help">Opening this page does not execute a stage. Start a step-by-step request in the sales studio.</p></div>
-    <div class="step-actions"><button class="button primary" id="next-stage" type="button" disabled>Next step</button><button class="button" id="cancel-run" type="button" disabled>Cancel paused run</button></div>
+    <div class="step-actions"><button class="button primary" id="next-stage" type="button" disabled>Next step</button><button class="button" id="cancel-run" type="button" disabled>Cancel run</button></div>
   </section>
   <ol id="stage-progress" class="stage-progress" aria-label="Backend stage progress"></ol>
   <section id="latest-stage" class="latest-stage" aria-label="Latest completed stage output" hidden></section>
@@ -63,7 +64,7 @@
       <div class="tab-content" id="view-training" role="tabpanel" aria-labelledby="tab-training" tabindex="0" hidden></div>
     </section>
   </div>
-  <footer class="footer"><span>Fictional reference baseline · synthetic training and test data · no live web research</span><span>Backend-driven updates approximately every 700 ms while active.</span></footer>
+  <footer class="footer"><span>Fictional reference baseline · offline synthetic or Foundry measured-data pilot · no live web research</span><span>Backend-driven updates approximately every 700 ms while active.</span></footer>
 </main>
 <script>
 'use strict';
@@ -71,6 +72,15 @@
   const $ = id => document.getElementById(id);
   const tabs = ['overview', 'wiki', 'requirements', 'training'];
   const stages = [['decompose','Decompose brief'],['wiki','Link documents'],['requirements','Evidence & gaps'],['features','Engineer features'],['predict_before','Baseline prediction'],['simulate','Synthetic presimulation'],['train','Fit Ridge model'],['evaluate','Synthetic test evaluation'],['predict_after','Re-predict'],['complete','Finalize result']];
+  const liveStages = [['propose','Three agent proposals'],['discuss','Peer review / discussion'],['adjudicate','Orchestrator / accept & dissent'],['wiki','Link fictional sources'],['requirements','Evidence & gaps'],['features','Engineer feature schema'],['predict_before','Before retraining'],['measure','Measure workload calls'],['train','Train / retrain regression'],['evaluate','Held-out pilot evaluation'],['predict_after','Forecast project & catalog'],['complete','Finalize artifacts']];
+  const liveRun = () => state.snapshot?.request?.runtime === 'foundry';
+  function runStages() {
+    const fallback=liveRun()?liveStages:stages;
+    return Array.isArray(state.snapshot?.stages)&&state.snapshot.stages.length ? state.snapshot.stages.map(stage=>{
+      const id=typeof stage==='string'?stage:Array.isArray(stage)?stage[0]:stage.id;
+      return [id,(fallback.find(item=>item[0]===id)||[id,String(id).replaceAll('_',' ')])[1]];
+    }) : fallback;
+  }
   const state = {id: '', generation: 0, timer: null, lastCount: -1, lastStatus: '', lastNext: null, result: null, rendered: false, tab: 'overview', docId: '', runList: [], listGeneration: 0, snapshot: null, actionPending: false, outputs: new Map()};
   const queryId = new URL(location.href).searchParams.get('run');
   const initialId = queryId === null ? '' : queryId.trim();
@@ -235,19 +245,27 @@
       if (changed) {
         appendEvents(run.events);
         if (run.events.length && state.lastCount !== run.events.length) renderLatest(run.events[run.events.length - 1]);
-        if (!run.result && !state.rendered) renderProgressive(run.events);
+        if (!run.result && !state.rendered) {
+          if(liveRun())renderLiveArtifacts(run.events);
+          else renderProgressive(run.events);
+        }
         $('status').textContent = run.status;
         $('status').className = 'badge status-' + run.status;
         const request = run.request || {};
         $('brief').textContent = request.description || '(No description supplied)';
-        $('run-meta').textContent = 'Run ' + run.id + ' · Model ' + text(request.model_id) + ' · ' + number(request.runs_per_month) + ' runs / month' + (request.new_function ? ' · New function: ' + text(request.new_function) : '');
+        $('runtime-badge').textContent=liveRun()?'Foundry / GPT-5.4 / measured pilot':'Offline / synthetic / no provider calls';
+        $('azure-notice').hidden=!liveRun();
+        $('run-meta').textContent = 'Run ' + run.id + ' · Runtime ' + text(request.runtime||'offline') + ' · Model ' + (liveRun()?'GPT-5.4 (pinned deployment)':text(request.model_id)) + ' · ' + number(request.runs_per_month) + ' runs / month' + (request.new_function ? ' · New function: ' + text(request.new_function) : '');
         state.lastCount = run.events.length;
         state.lastStatus = run.status;
         state.lastNext = run.next_stage;
         renderProgress(run.events);
       }
       updateStepControls();
-      if (run.result && !state.rendered) { renderResult(run.result); state.rendered = true; }
+      if (run.result && !state.rendered) {
+        if(liveRun())renderLiveArtifacts(run.events,run.result);else renderResult(run.result);
+        state.rendered = true;
+      }
       if (run.status === 'failed') {
         showError('Backend run failed: ' + (run.error || 'No error detail was provided.') + ' Polling has stopped. Reload selected run to check again.');
       }
@@ -264,12 +282,12 @@
       showError('Cannot read the selected run. ' + error.message + ' Existing events remain visible. Use Reload selected run to retry. No fallback data is shown.');
     }
   }
-  function stageName(stage) { return (stages.find(item => item[0] === stage) || [stage, stage])[1]; }
+  function stageName(stage) { return (runStages().find(item => item[0] === stage) || [stage, stage])[1]; }
   function updateStepControls() {
     const run = state.snapshot;
     const waiting = run && run.status === 'waiting' && typeof run.next_stage === 'string' && run.next_stage.trim();
     $('next-stage').disabled = !waiting || state.actionPending;
-    $('cancel-run').disabled = !waiting || state.actionPending;
+    $('cancel-run').disabled = !run || !['queued','running','waiting'].includes(run.status) || state.actionPending;
     $('reload-run').disabled = !state.id || state.actionPending;
     $('next-stage').textContent = waiting ? 'Next step: ' + stageName(run.next_stage) : 'Next step';
     if (state.actionPending) {
@@ -280,7 +298,7 @@
       $('step-help').textContent = 'No stage is executed merely by opening this page. Controls require a connected, paused run.';
     } else if (waiting) {
       $('step-heading').textContent = 'Waiting for you / Next: ' + stageName(run.next_stage);
-      $('step-help').textContent = 'This stage has not run. Next executes only this stage in Python; inspect its output before continuing.';
+      $('step-help').textContent = 'This stage has not run. Next executes only this backend stage; inspect its output before continuing.' + (liveRun()?' Agent and measurement stages use paid Azure calls under the server-only cap.':' Offline mode consumes no provider credits.');
     } else if (run.status === 'completed') {
       $('step-heading').textContent = (run.request?.execution_mode === 'step' ? 'Step-by-step run completed' : 'Automatic / historical run completed') + ' · no replay';
       $('step-help').textContent = 'These are stored execution events and results. Create a new step-by-step request in the sales studio to execute again.';
@@ -293,14 +311,18 @@
     }
   }
   function renderProgress(events) {
-    const done = new Set(events.map(event => event.stage));
     const run = state.snapshot;
-    const current = run?.status === 'waiting' ? run.next_stage : run?.status === 'running' ? stages.find(stage => !done.has(stage[0]))?.[0] : null;
+    const registered=runStages(),nextIndex=registered.findIndex(stage=>stage[0]===run?.next_stage);
+    const reached=Math.max(nextIndex,...events.map(event=>registered.findIndex(stage=>stage[0]===event.stage)));
+    const done = new Set(registered.filter((stage,index)=>run?.status==='completed'||index<reached).map(stage=>stage[0]));
+    if(!liveRun())events.forEach(event=>done.add(event.stage));
+    else events.filter(event=>event.data?.status==='completed'&&event.data?.stage_complete===true).forEach(event=>done.add(event.stage));
+    const current = ['waiting','running'].includes(run?.status) ? run.next_stage || events.at(-1)?.stage : null;
     const fragment = document.createDocumentFragment();
-    stages.forEach(([id, label], index) => {
+    registered.forEach(([id, label], index) => {
       const phase = done.has(id) ? 'done' : id === current ? 'current' : 'not-run';
       const li = node('li', undefined, 'stage-step ' + phase);
-      const description = phase === 'done' ? 'Done · event received' : phase === 'current' ? (run.status === 'waiting' ? 'Current · not run / awaiting Next' : 'Current · awaiting completion event') : 'Not run';
+      const description = phase === 'done' ? 'Done · backend stage advanced' : phase === 'current' ? (run.status === 'waiting' ? 'Current · not run / awaiting Next' : 'Current · backend executing') : 'No confirmed completion';
       li.append(node('strong', (index + 1) + '. ' + label), node('small', description));
       if (phase === 'current') li.setAttribute('aria-current', 'step');
       fragment.append(li);
@@ -309,7 +331,7 @@
   }
   async function controlRun(action) {
     const run = state.snapshot;
-    if (state.actionPending || !run || run.status !== 'waiting' || !run.next_stage) return;
+    if (state.actionPending || !run || (action==='next'?(run.status !== 'waiting' || !run.next_stage):!['queued','running','waiting'].includes(run.status))) return;
     const id = state.id;
     const stage = run.next_stage;
     clearTimeout(state.timer);
@@ -341,6 +363,55 @@
     const section = node('section', undefined, 'stage-output');
     section.append(node('h3', title, 'section-title'));
     return section;
+  }
+  function payload(title,value,open=false) {
+    const details=node('details');
+    details.open=open;
+    details.append(node('summary',title),node('pre',JSON.stringify(value??{},null,2)));
+    details.className='stage-output';
+    return details;
+  }
+  function renderLiveArtifacts(events,result=null) {
+    state.result=result||{};
+    $('awaiting').hidden=true;
+    $('artifact-count').textContent=result?'Measured-data pilot / stored result':'Live artifacts / '+events.length+' events';
+    const overview=$('view-overview');
+    overview.replaceChildren(node('div','GPT-5.4 / source-bound measured pilot. Agent discussion and workload measurements are actual calls; token forecasts are regression predictions. Orchestration spend is separate from forecast workload USD. No production accuracy, web research, or compliance guarantee.','note'));
+    if(result){
+      const before=result.before||{},after=result.after||{};
+      const supported=after.supported===true&&Number.isFinite(after.input_tokens)&&Number.isFinite(after.output_tokens);
+      const stats=node('div',undefined,'stats');
+      stats.append(stat('Before training',before.supported?number(before.total_tokens)+' predicted tokens':'Abstained',before.reason),
+        stat('After training / forecast',supported?number(after.input_tokens+after.output_tokens)+' tokens':'Unsupported / abstained',supported?'Fixed reference / GPT-5.4':after.reason,true),
+        stat('Forecast USD / run',supported?money(after.usd_per_run):'Not available','Not actual pilot spend'),
+        stat('Forecast USD / month',supported?money(after.usd_per_month):'Not available','At requested volume / pinned rates'));
+      overview.append(stats,payload('Orchestration usage / actual paid pilot accounting',result.orchestration,true),
+        payload('Accepted project bricks / scope',result.bricks,true),payload('Full agent public outputs / decisions / dissent',result.agents,true),
+        payload('Pinned rates / provenance (not guaranteed current prices)',result.rates),
+        payload('Pre-predicted catalog / fixed reference context',result.catalog),
+        payload('Full final result / limitations',result));
+    }
+    const discussion=events.filter(event=>['propose','discuss','adjudicate'].includes(event.stage));
+    overview.append(node('h3','Three-agent discussion + orchestrator decisions'));
+    if(!discussion.length)overview.append(node('p','No role outputs yet. Start/advance the corresponding stage explicitly.','empty'));
+    discussion.forEach(event=>overview.append(payload('#'+text(event.seq)+' · '+stageName(event.stage)+' · '+text(event.message),event.data,true)));
+    const training=$('view-training');
+    training.replaceChildren(node('div','Measured call rows are numeric provider usage. Trained predictions and held-out MAE are separate pilot artifacts, not production calibration. Unexecuted stages have no output.','note'));
+    if(result?.features)training.append(node('h3','Engineered request features'),table(['Feature','Value'],Object.entries(result.features).map(([name,value])=>[name,typeof value==='object'?JSON.stringify(value):text(value)])));
+    if(result?.training){
+      const t=result.training,stats=node('div',undefined,'stats');
+      stats.append(stat('Measured training rows',number(t.train_count)),stat('Held-out pilot rows',number(t.test_count)),stat('Input MAE',number(t.input_mae),'held-out pilot tokens'),stat('Output MAE',number(t.output_mae),'held-out pilot tokens'));
+      training.append(stats,payload('Training version / coefficients / all measured rows',t,true));
+    }
+    events.filter(event=>['features','predict_before','measure','train','evaluate','predict_after'].includes(event.stage)).forEach(event=>training.append(payload('#'+text(event.seq)+' · '+text(event.message),event.data,event.stage==='measure')));
+    ['wiki','requirements'].forEach(tab=>{
+      const panel=$('view-'+tab);
+      panel.replaceChildren(node('div',tab==='wiki'?'Original fictional fixtures only; source-bound work, no real-document ingestion.':'Fictional reference checklist. Evidence labels are not compliance passes.','note'));
+      if(result)panel.append(payload(tab==='wiki'?'Document inventory and original fixture text':'Reference requirements, evidence, gaps and provenance',tab==='wiki'?result.documents:result.requirements,true));
+      events.filter(event=>event.stage===tab).forEach(event=>panel.append(payload('#'+text(event.seq)+' · '+text(event.message),event.data,true)));
+      if(panel.children.length===1)panel.append(node('p','This stage has not returned artifacts.','empty'));
+    });
+    selectTab(state.tab);
   }
   function renderLatest(latest) {
     const latestPanel = $('latest-stage');

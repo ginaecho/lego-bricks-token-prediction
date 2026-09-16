@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Throwaway sales-flow prototype, based on feat/marketplace. No provider calls or trained predictions. -->
+<!-- Sales-flow prototype: explicit offline simulation or opt-in server-configured Foundry pilot. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -26,8 +26,10 @@ main{max-width:1440px;margin:auto;padding:35px 36px 60px}.intro{display:flex;jus
 .search{width:100%;padding:11px 14px;background:white;border:1px solid var(--line);border-radius:8px}.filters{display:flex;gap:7px;margin:15px 0;flex-wrap:wrap}
 .filter,.secondary{border:1px solid var(--line);border-radius:7px;background:white;padding:8px 12px;font-size:12px}.filter.active{background:var(--ink);color:white}
 .catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{display:flex;flex-direction:column;gap:13px;background:white;border:1px solid var(--line);border-radius:12px;padding:20px}.card.selected{border-color:#80a78b}
-.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.brick{--brick:#e7c374;position:relative;width:40px;height:30px;background:var(--brick);border-radius:4px;box-shadow:inset 0 -5px #0000000c;margin:5px 0 2px}
-.brick:before,.brick:after{content:"";position:absolute;top:-5px;width:10px;height:6px;border-radius:3px 3px 0 0;background:var(--brick)}.brick:before{left:6px}.brick:after{right:6px}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.brick{--brick:#e7c374;position:relative;flex-shrink:0;width:48px;height:35px;background:var(--brick);border-radius:6px;box-shadow:inset 0 -5px #0000000c,0 4px 0 #20352e0a;margin:8px 0 4px}
+.brick:before,.brick:after{content:"";position:absolute;top:-7px;width:12px;height:8px;border-radius:4px 4px 0 0;background:var(--brick);box-shadow:inset 0 2px #ffffff40}.brick:before{left:7px}.brick:after{right:7px}
+.card{transition:box-shadow .18s,border-color .18s}.card:hover,.card:focus-within{border-color:#a8bca9;box-shadow:0 6px 20px #20352e09}.card.selected{background:#fbfdf8;box-shadow:0 0 0 1px #80a78b}
+.measured-catalog{margin-top:20px;align-items:start}.brick-options{margin-top:auto;border-top:1px solid var(--line);padding-top:12px}.brick-options>summary{padding:8px 0;color:var(--green)}.measured-variant{padding:14px 0;border-top:1px solid #eef1e9}.measured-variant label{display:flex;align-items:center;gap:9px}.measured-variant input[type=checkbox]{width:17px;height:17px;accent-color:var(--green);flex-shrink:0}.measured-variant p{min-height:0}.measured-variant input[type=number]{max-width:130px;margin-left:auto}.measured-variant details{margin-top:8px}.catalog-settings{margin-bottom:16px}.catalog-settings>summary{color:var(--muted)}
 .card p{font-size:12px;color:var(--muted);margin-top:5px;min-height:36px}.card-title{border:0;padding:0;background:none;font-weight:650;text-align:left;font-size:17px}
 .tags{display:flex;flex-wrap:wrap;gap:5px}.tags span{background:#f0f3ec;color:#5f7164;border-radius:4px;padding:3px 6px;font-size:10px}.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:12px;border-top:1px solid #eef1e9}.card-bottom small{display:block;font-size:10px}
 .selected .secondary{background:#edf4e8;color:var(--green)}.picked{font-size:11px;color:var(--green);min-height:18px}
@@ -40,7 +42,7 @@ main{max-width:1440px;margin:auto;padding:35px 36px 60px}.intro{display:flex;jus
 .form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-top:17px}.form-grid.two{grid-template-columns:1fr 1fr}label{display:block;font-size:12px;font-weight:600}label small{display:block;font-weight:400;margin:3px 0}
 input[type=number],select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:white;margin-top:5px}textarea{resize:vertical;min-height:130px;line-height:1.6}
 .help{font-size:12px;color:var(--muted);margin-top:7px}details{margin-top:18px}summary{cursor:pointer;font-size:12px;font-weight:600}.table-scroll{overflow:auto;margin-top:16px}table{width:100%;border-collapse:collapse;font-size:12px;text-align:left}th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px;font-weight:600}th,td{padding:11px 9px;border-bottom:1px solid var(--line);vertical-align:top}td small{display:block}td.num,th.num{text-align:right;white-space:nowrap}
-.yield-panel{background:#213d31;color:white;padding:25px;border-radius:13px;margin-top:25px}.yield-panel .eyebrow{color:#cfdfa6}.yield-panel p,.yield-panel small{color:#bfd0c2}.yield-head{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.yield-panel{background:#213d31;color:white;padding:25px;border-radius:13px;margin:0 0 26px}.yield-panel .eyebrow{color:#cfdfa6}.yield-panel p,.yield-panel small{color:#bfd0c2}.yield-head{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}.yield-panel a{color:#def29d;font-size:12px}.yield-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}.metric{padding:15px;border:1px solid #ffffff25;border-radius:8px}.metric strong{display:block;font-size:29px;font-weight:600;letter-spacing:-.8px}.metric small{font-size:11px}
 .positive{color:#d4eca3}.negative{color:#ffc0a5}.comparison{display:flex;gap:8px;height:9px;margin:12px 0;border-radius:6px;overflow:hidden;background:#ffffff18}.comparison span{background:#cde6a3}
 .impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:17px}.impact{background:#f2f5ed;border-radius:8px;padding:15px}.impact p{font-size:12px;margin-top:6px;color:var(--muted)}
@@ -55,18 +57,20 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 @media(min-width:1500px){main{padding-top:42px}}@media(max-width:1050px){.workspace{grid-template-columns:minmax(0,1fr) 310px}.header-inner,main{padding-left:22px;padding-right:22px}.steps{display:none}.form-grid{grid-template-columns:1fr 1fr}.card{padding:16px}}
 @media(max-width:780px){.workspace{grid-template-columns:1fr}.cart{position:static;max-height:none;overflow:visible}.header-links a{display:none}.intro{display:block}.catalog{grid-template-columns:1fr 1fr}.mode-bar small{margin-left:0}.metrics,.review-metrics{grid-template-columns:1fr}.form-grid,.form-grid.two,.impact-grid{grid-template-columns:1fr}.header-inner,main{padding-left:16px;padding-right:16px}.yield-head{align-items:start}.variant-row .form-grid{grid-template-columns:1fr}.dialog-footer{flex-wrap:wrap}}
 @media(max-width:480px){.catalog{grid-template-columns:1fr}.header-links{gap:0}.pill{font-size:10px}.mode{flex:1;font-size:12px;padding:10px}.brand{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.card{transition:none}}
 </style>
 </head>
 <body>
 <header><div class="header-inner">
   <div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Token Yield</div>
-  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><span>Sales studio</span><span class="pill amber">Local prototype / no provider calls</span></div>
+  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><span>Sales studio</span><span id="runtime-badge" class="pill amber">Offline selected</span></div>
 </div></header>
 <main>
   <section class="intro"><div><div class="eyebrow">The functionality marketplace</div><h1>Your next product.<br>One brick at a time.</h1><p>Shape the solution together. Explore the capabilities, the team, and the value they could create &mdash; not just the tokens they consume.</p></div>
     <div class="steps"><span><b>1</b> Choose &amp; customize</span><span><b>2</b> Shape your estimate</span><span><b>3</b> Make the value case</span></div>
   </section>
-  <div class="notice"><b>Sales-flow prototype.</b> Manual bricks use illustrative coefficients. The local project pipeline performs <b>real feature engineering and regression training on synthetic token measurements</b>. Neither path is calibrated against real LLM usage. No live LLM or web research is called; prices, staffing and benefits remain planning assumptions.</div>
+  <section id="yield-summary" class="yield-panel" aria-label="Return on your build"></section>
+  <div class="notice"><b>Planning pilot, not a production quote.</b> Manual bricks and the offline pipeline remain explicit simulations. The opt-in Foundry pipeline uses an orchestrator and three agents, source-bound fictional fixtures, measured workload calls and regression predictions. Predictions are not measured execution totals or validated production accuracy. No live web research or real customer-document ingestion. Staffing, ROI and commercial rates remain assumptions.</div>
   <nav class="mode-bar" aria-label="Demo flows">
     <button class="mode active" id="manual-tab" aria-pressed="true">01 &nbsp; Build with bricks</button>
     <button class="mode" id="custom-tab" aria-pressed="false">02 &nbsp; Describe your idea</button>
@@ -76,22 +80,28 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
   <div class="workspace">
     <div>
       <section id="custom-panel" class="panel" hidden>
-        <div class="section-head"><div><div class="eyebrow">Demo 02 / project to trained estimate</div><h2>What would you like to build?</h2><p>Describe the project, run the local pipeline, and inspect what happens in the operations page.</p></div><span class="pill amber">Synthetic training data</span></div>
+        <div class="section-head"><div><div class="eyebrow">Demo 02 / project to trained estimate</div><h2>What would you like to build?</h2><p>Choose offline simulation or the server-approved real multi-agent pilot, then inspect each backend stage.</p></div><span id="pipeline-basis" class="pill amber">Offline / synthetic</span></div>
+        <div class="form-grid two">
+          <label>Pipeline runtime<select id="pipeline-runtime"><option value="offline">Offline / synthetic training / no provider calls</option><option value="foundry" disabled>Foundry / GPT-5.4 / server approval required</option></select></label>
+          <label>Execution controls<select id="execution-mode"><option value="step">Step-by-step / pause before each stage</option><option value="automatic">Automatic / run all approved stages</option></select></label>
+        </div>
+        <p id="runtime-status" class="help" role="status">Checking server runtime approval. No model calls occur on page load.</p>
+        <div id="azure-notice" class="notice" hidden><b>Before you start:</b> Your submitted brief and optional function are sent to the configured Azure GPT-5.4 deployment. Use fictional information only. Workloads use original fictional fixtures; no real documents are ingested. Starting a Foundry run authorizes paid agent discussion and measurement under the server-only shared US$25 pilot cap. Automatic mode proceeds without further stage approval; step mode waits for Next. Cancellation cannot undo an in-flight call.</div>
         <label for="brief">Customized description</label>
         <textarea id="brief" maxlength="6000" placeholder="For example: Deep research into competitors, web research with cited sources, and personalized discovery based on customer interests."></textarea>
         <div class="form-grid two">
           <label>Focus area<select id="brief-focus"><option value="all">Whole solution</option><option value="research">Research</option><option value="recommend">Personalized discovery</option><option value="support">AI customer support</option><option value="documents">Document automation</option></select></label>
-          <label>Preferred execution LLM<select id="brief-model" class="model-options"></select><small>This selects a scenario rate card; it does not call this model.</small></label>
+          <label>Execution model<select id="brief-model" class="model-options"></select><small id="brief-model-help">Offline scenario rate card only; no model is called.</small></label>
         </div>
         <div class="form-grid two">
           <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>One execution runs the complete document-checking pipeline once.</small></label>
-          <label>New function to explore (optional)<input id="new-function" class="search" maxlength="120" placeholder="For example: Policy-as-code validation"><small>A new function expands the feature schema and triggers synthetic sampling and refitting.</small></label>
+          <label>New function to explore (optional)<input id="new-function" class="search" maxlength="120" placeholder="For example: Policy-as-code validation"><small>Requests feature expansion and retraining. Unsupported tasks must abstain, not become zero-cost predictions.</small></label>
         </div>
         <div class="custom-actions"><button class="primary" id="run-pipeline">Start step-by-step + open operations</button><button class="secondary" id="security-example">Load security project</button><button class="secondary" id="novel-example">Try a new function</button></div>
-        <p class="help"><b>You control the execution.</b> In background operations, click <b>Next step</b> to execute one real backend stage. Inspect its output before continuing. Training and prediction do not run until you reach those steps. You can cancel an unfinished run there.</p>
+        <p class="help"><b>You control the execution.</b> Step-by-step pauses before each stage; click <b>Next step</b> in operations to continue. Automatic mode proceeds through all stages without more clicks. Both expose real backend events and allow cancellation of unfinished work; in-flight calls may complete and incur usage.</p>
         <p id="backend-status" class="help" role="status">Checking local backend...</p>
-        <p class="help">The backend uses original fictional sample documents and an explicit demo reference checklist. It builds document links, finds text evidence and missing items, creates synthetic token samples, fits a regression model, and predicts again. These are real local operations, not live LLM reasoning or proof of security compliance. The focus-area filter above applies only to the quick preview below.</p>
-        <div class="flow"><span>Project brief</span>&rarr;<span>Document wiki + reference checklist</span>&rarr;<span>Evidence + gaps</span>&rarr;<span>New feature? Generate synthetic samples</span>&rarr;<span>Fit model + predict</span></div>
+        <p class="help">Offline uses keyword rules and synthetic samples. Foundry uses three role proposals, peer review and orchestrator adjudication before feature engineering, measured source-bound workload calls, training/evaluation and re-prediction. The fictional checklist is not proof of compliance. The focus-area filter applies only to the keyword preview.</p>
+        <div class="flow"><span>Brief + proposals</span>&rarr;<span>Discussion + adjudication</span>&rarr;<span>Documents + features</span>&rarr;<span>Measure / train / evaluate</span>&rarr;<span>Predict project + catalog</span></div>
         <div id="pipeline-progress" class="proposal" hidden>
           <a id="operations-link" target="token-yield-operations" rel="noopener">Open background operations &nearr;</a>
           <button class="secondary" id="refresh-pipeline" disabled>Refresh project status</button>
@@ -100,12 +110,23 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         </div>
         <details><summary>Quick catalog preview / original keyword-only demo</summary>
         <div class="custom-actions"><button class="secondary" id="decompose">Preview decomposition (simulated)</button><button class="secondary" id="example">Load research example</button></div>
-        <p class="help">This older shortcut only matches catalog phrases. Use the project pipeline above for the security-documentation example. Neither route uses a live LLM.</p>
+        <p class="help">This shortcut only matches catalog phrases and never calls an LLM. It remains separate from the Foundry agent pipeline above.</p>
         <div id="proposal" class="proposal" hidden></div>
         </details>
       </section>
-      <section aria-labelledby="catalog-heading">
-        <div class="section-head"><div><h2 id="catalog-heading">The functionality marketplace</h2><p>Click a brick to zoom in. Mix variants and choose an LLM for each.</p></div><button id="starter" class="secondary">Load sales example</button></div>
+      <section id="measured-marketplace" class="section-space" aria-labelledby="measured-heading">
+        <div class="section-head"><div><div class="eyebrow">Measured-data predictor / stored catalog</div><h2 id="measured-heading">Pre-predicted GPT-5.4 bricks</h2></div><button id="refresh-catalog" class="secondary">Refresh catalog (no model calls)</button></div>
+        <p class="help">Little bricks. A bigger possibility. Explore a capability, then mix the variations you need. Only supported, trained forecasts can be selected.</p>
+        <details class="catalog-settings"><summary>Forecast assumptions &amp; commercial rates</summary>
+        <p class="help">Stored forecasts at a fixed measured reference context and pinned GPT-5.4 model. These are predictions, not new measured calls. Selecting them replaces manual or whole-project selections; each selected variant is counted once, with no invented integration tokens. Shared context and scenario model factors do not change these frozen tokens. Monthly volume and the separate commercial rate below remain explicit.</p>
+        <div class="form-grid two"><label>Commercial input USD / 1M tokens<input id="measured-input-rate" type="number" min="0" max="10000" step="0.01" value="2.5" required></label><label>Commercial output USD / 1M tokens<input id="measured-output-rate" type="number" min="0" max="10000" step="0.01" value="15" required></label></div>
+        <p class="help">Starting rates: pinned pilot reference $2.50 input / $15 output per million, not a guaranteed current provider price. Editing these rates changes planning USD only, never actual server spend.</p>
+        </details>
+        <p id="catalog-status" class="help" role="status">No measured catalog loaded. Refresh reads saved predictions only.</p>
+        <div id="measured-catalog" class="catalog measured-catalog"></div>
+      </section>
+      <section id="manual-marketplace" class="section-space" aria-labelledby="catalog-heading">
+        <div class="section-head"><div><h2 id="catalog-heading">Manual illustrative marketplace</h2><p>Unmeasured simulation. Click a brick to choose variants and scenario LLMs.</p></div><button id="starter" class="secondary">Load sales example</button></div>
         <label for="search" class="muted">Find a functionality or variation</label><input class="search" id="search" type="search" placeholder="Try research, personalized discovery, or documents">
         <div class="filters" id="filters" aria-label="Catalog categories"></div>
         <div class="catalog" id="catalog"></div>
@@ -116,7 +137,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         <p class="help"><b>Example:</b> 100 web research requests + 20 deep research requests = 120 research requests per month. The estimate includes the cost of both. Selecting deep research does not replace web research; uncheck an option if you do not need it.</p>
         <div class="form-grid">
           <label>Starting monthly usage for new options<input id="defaultRuns" type="number" min="0" max="1000000" step="1" value="1000"><small>Prefills the number of uses when you add an option. To change an option already in your build, open its brick and edit its monthly runs.</small></label>
-          <label>Context tokens / run<input id="context" type="number" min="0" max="100000" step="1" value="500"><small>Additional input per variant execution.</small></label>
+          <label>Manual context tokens / run<input id="context" type="number" min="0" max="100000" step="1" value="500"><small>Manual simulation only. Frozen backend predictions do not track edits to this context.</small></label>
           <label>Integration complexity<select id="complexity"><option value="1">Standard / shared APIs</option><option value="1.6">Custom systems / 1.6x</option><option value="2.4">Legacy systems / 2.4x</option></select><small>Affects routing and setup, not variant tokens.</small></label>
           <label>Coordinator LLM<select id="coordinator" class="model-options"></select><small>Rates one-time setup and recurring routing.</small></label>
           <label>Cost reserve %<input id="reserve" type="number" min="0" max="100" step="1" value="20"><small>AI + tool cost only; not extra tokens.</small></label>
@@ -154,7 +175,6 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Additional contribution USD / month<input id="contribution" type="number" min="0" max="10000000" step="0.01" value="0"><small>Optional incremental margin, not revenue. Avoid double counting.</small></label>
         </div>
         <p class="help">Time released = unique cases &times; (before &minus; after) / 60. Monthly gross benefit = time released &times; labor value &times; realized share + incremental contribution. Negative time savings remain negative. Zero selected workloads or zero client cases produce no benefits.</p>
-        <div id="yield-summary" class="yield-panel"></div>
         <details><summary>What must be proven with the client?</summary><div class="impact-grid">
           <div class="impact"><h3>Productivity, without quality loss</h3><p>Measure minutes per accepted case, reviewer effort, rework, and acceptance rate against the manual baseline. Validate whether released capacity is redeployed or removed.</p></div>
           <div class="impact"><h3>Better customer experiences</h3><p>Test conversion, useful recommendations, customer satisfaction and retention against a control. Add incremental contribution only when supported by evidence.</p></div>
@@ -171,10 +191,10 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
       <button class="primary wide" id="review">Review build &amp; value case &rarr;</button>
       <p class="fine"><a href="#value-heading">Explore ROI and client-impact assumptions &darr;</a></p>
       <div style="text-align:center"><button class="text-button" id="clear">Clear build</button></div>
-      <p class="fine">Not calibrated against real LLM usage; not an invoice, staffing commitment or guaranteed return. All amounts in USD. The project backend processes sample documents and trains on synthetic data; it does not execute the proposed customer service. Export includes assumptions and calculation details.</p>
+      <p class="fine">Uncalibrated planning pilot, not an invoice, staffing commitment or guaranteed return. Measured-data forecasts are source-bound and do not validate the proposed production service. Staffing and ROI are assumptions. Export includes provenance and calculation details.</p>
     </aside>
   </div>
-  <footer><span>Token Yield &middot; Marketplace sales-flow prototype &middot; based on feat/marketplace</span><span>No external calls. Manual build stays in memory; backend run artifacts are saved locally.</span></footer>
+  <footer><span>Token Yield &middot; Marketplace sales-flow prototype</span><span>Manual mode is local. Explicit Foundry runs send the brief to Azure; run artifacts are saved locally.</span></footer>
 </main>
 <dialog id="configure" aria-labelledby="configure-title">
   <div class="dialog-head"><div><div class="eyebrow">Zoom into your brick</div><h2 id="configure-title"></h2></div><button class="close" data-close="configure" aria-label="Close configuration">&times;</button></div>
@@ -184,7 +204,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 </dialog>
 <dialog id="review-dialog" aria-labelledby="review-title">
   <div class="dialog-head"><div><div class="eyebrow">Demo estimate / not a commercial quote</div><h2 id="review-title">Your build. Your value case.</h2></div><button class="close" data-close="review-dialog" aria-label="Close review">&times;</button></div>
-  <div id="review-body"></div><div class="dialog-footer"><small>Local download only. No customer data is sent.</small><button id="download" class="primary">Download estimate JSON</button></div>
+  <div id="review-body"></div><div class="dialog-footer"><small>This download is local. Foundry run submissions separately send your brief to Azure.</small><button id="download" class="primary">Download estimate JSON</button></div>
   <p id="download-status" class="help" role="status"></p>
   <details><summary>Copyable JSON / use if your browser blocks downloads</summary><label for="export-json">Full scenario, assumptions and calculation details</label><textarea id="export-json" readonly rows="10" spellcheck="false"></textarea></details>
 </dialog>
@@ -228,7 +248,7 @@ const MODELS = [
   {id:"gemini",name:"Gemini Flash",input:0.3,output:2.5,inputFactor:0.95,outputFactor:1.05}
 ];
 const LIMITATIONS = [
-  "No live LLM or provider connection. Manual catalog uses fixed illustrative coefficients; project runs can use a fitted synthetic-data model.",
+  "Manual catalog and offline runs are simulations. Explicit Foundry runs use measured source-bound calls; resulting forecasts remain an uncalibrated pilot, not production quotes.",
   "Atomic token coefficients inherited from feat/marketplace are illustrative, not fitted.",
   "Variant tasks, context conversion, LLM factors, rates, staffing and tool fees are editable scenario assumptions.",
   "No calibrated ranges or demonstrated coverage for these capabilities, variants or model runtimes.",
@@ -249,6 +269,11 @@ class InputError extends Error {}
 class PipelineError extends Error {}
 let selections = [], category = "All", editingFeature = null, proposal = null, latestEstimate = null, mode = "manual";
 let pipelineRun=null, pipelineBusy=false, pipelineTimer=null, pipelineGeneration=0, projectScenario=null;
+let runtimeStatus={enabled:false}, measuredCatalog=[], catalogMetadata={}, catalogGeneration=0;
+const finiteTokens = prediction => prediction?.supported!==false && Number.isFinite(prediction?.input_tokens) && prediction.input_tokens>=0 && Number.isFinite(prediction?.output_tokens) && prediction.output_tokens>=0;
+const isMeasured = item => item.predictionSource==="measured-foundry";
+const measuredRates = () => ({id:"gpt-5.4",name:"GPT-5.4 · measured-data forecast",input:Number($("measured-input-rate").value),output:Number($("measured-output-rate").value),inputFactor:1,outputFactor:1});
+const itemModel = item => isMeasured(item) ? measuredRates() : MODELS.find(model=>model.id===item.modelId);
 const modelOptions = selected => MODELS.map(model => `<option value="${model.id}" ${model.id===selected?"selected":""}>${model.name}</option>`).join("");
 function assumptions() {
   for (const id of fields) if (!$(id).checkValidity()) throw new InputError(`Check "${$(id).closest("label").childNodes[0].textContent.trim()}": enter a value within the displayed limits.`);
@@ -257,14 +282,17 @@ function assumptions() {
 function record(featureId,variantId,modelId="gpt-mini",runs=1000,source="catalog",description="") {
   const feature=CATALOG.find(item => item.id===featureId),variant=feature.variants.find(item => item.id===variantId);
   return {featureId,variantId,modelId:feature.backendRequest?.model_id||modelId,runs,hours:[...variant.hours],review:variant.review,tool:variant.tool,source,description,
-    ...(feature.backendPrediction?{backendPrediction:feature.backendPrediction,backendFeatures:feature.backendFeatures,backendRunId:feature.backendRunId}:{})};
+    ...(feature.backendPrediction?{backendPrediction:feature.backendPrediction,backendFeatures:feature.backendFeatures,backendRunId:feature.backendRunId,predictionSource:feature.predictionSource}:{})};
 }
 // One pure calculation feeds the sidebar, review, business case and exported estimate.
 function calculate(items,a,models,coordinatorId) {
+  const measured=items.some(isMeasured);
+  if(measured && !items.every(isMeasured))throw new InputError("Measured predictions cannot be mixed with illustrative or synthetic selections. Choose one estimation basis.");
   const rows = items.map(item => {
     const feature = CATALOG.find(entry => entry.id===item.featureId);
     const variant = feature.variants.find(entry => entry.id===item.variantId);
-    const model = models.find(entry => entry.id===item.modelId);
+    const model = isMeasured(item) ? measuredRates() : models.find(entry => entry.id===item.modelId);
+    if(item.backendPrediction && !finiteTokens(item.backendPrediction))throw new InputError("Unsupported prediction: no financial estimate is available.");
     const atomCounts = variant.atoms.reduce((counts,atom) => ({...counts,[atom]:(counts[atom]||0)+1}),{});
     const raw = item.backendPrediction ? [0,0] : variant.atoms.reduce((sum,atom) => [sum[0]+ATOMS[atom][0],sum[1]+ATOMS[atom][1]],[0,0]);
     const briefInput = Math.ceil(item.description.length/4);
@@ -274,10 +302,10 @@ function calculate(items,a,models,coordinatorId) {
     const api = (tokens.input*model.input+tokens.output*model.output)/1e6;
     return {...item,feature:feature.name,variant:variant.name,model:model.name,atomCounts,briefInput,perRun,tokens,api,
       toolCost:item.tool*item.runs,reviewHours:item.review*item.runs/60,
-      featureVector:item.backendPrediction ? {source:"synthetic-trained-project",runId:item.backendRunId,...item.backendFeatures} :
+      featureVector:item.backendPrediction ? {source:item.predictionSource||"synthetic-trained-project",runId:item.backendRunId,scope:item.backendPrediction.scope,version:item.backendPrediction.version,...item.backendFeatures} :
         {capability:item.featureId,variation:item.variantId,model:item.modelId,atomCounts,contextTokens:a.context,briefInputTokens:briefInput}};
   });
-  const groups = [...new Set(rows.map(row=>row.featureId))].map(id=>({id,runs:rows.filter(row=>row.featureId===id).reduce((sum,row)=>sum+row.runs,0)}));
+  const groups = measured ? [] : [...new Set(rows.map(row=>row.featureId))].map(id=>({id,runs:rows.filter(row=>row.featureId===id).reduce((sum,row)=>sum+row.runs,0)}));
   const coordinator = models.find(model=>model.id===coordinatorId);
   const pairs = [];
   groups.forEach((left,i)=>groups.slice(i+1).forEach(right=>pairs.push({left:left.id,right:right.id,runs:Math.min(left.runs,right.runs)})));
@@ -338,12 +366,21 @@ function renderCatalog() {
 function row(label,value) {return `<div class="row"><span>${label}</span><b>${value}</b></div>`;}
 function renderQuote() {
   $("cart-items").innerHTML=selections.map(item=>{
-    const feature=CATALOG.find(f=>f.id===item.featureId),variant=feature.variants.find(v=>v.id===item.variantId),model=MODELS.find(m=>m.id===item.modelId);
-    return `<div class="cart-item"><span class="dot" style="background:${feature.color}"></span><div class="item"><b>${feature.name}</b><small>${variant.name} &middot; ${model.name}</small><small>${number(item.runs)} runs/month${item.source==="custom"?" &middot; approved brief mapping":""}</small></div><button class="remove" data-remove="${key(item.featureId,item.variantId)}" aria-label="Remove ${variant.name}">&times;</button></div>`;
+    const feature=CATALOG.find(f=>f.id===item.featureId),variant=feature.variants.find(v=>v.id===item.variantId),model=itemModel(item);
+    return `<div class="cart-item"><span class="dot" style="background:${feature.color}"></span><div class="item"><b>${esc(feature.name)}</b><small>${esc(variant.name)} &middot; ${esc(model.name)}</small><small>${number(item.runs)} runs/month${item.source==="custom"?" &middot; approved brief mapping":""}</small></div><button class="remove" data-remove="${esc(key(item.featureId,item.variantId))}" aria-label="Remove ${esc(variant.name)}">&times;</button></div>`;
   }).join("")||'<p class="empty">Start with one capability.<br>Your build and value case will appear here.</p>';
   $("build-count").textContent=`${new Set(selections.map(item=>item.featureId)).size} bricks / ${selections.length} variants`;
+  if(!selections.length){
+    latestEstimate=null;
+    $("quote-error").hidden=true;
+    $("quote-summary").innerHTML="";$("team-summary").innerHTML="";
+    $("yield-summary").innerHTML='<div class="eyebrow">The return on your build</div><h2>From token spend to client impact.</h2><p class="fine">Choose your first brick to see estimated tokens, costs, staffing, and ROI. No estimate yet.</p>';
+    $("review").disabled=true;
+    return;
+  }
   try {
     const a=assumptions();
+    if(selections.some(isMeasured) && ["measured-input-rate","measured-output-rate"].some(id=>!$(id).checkValidity()))throw new InputError("Check commercial measured-prediction rates: use nonnegative USD per million.");
     const invalidRate=[...$("model-rates").querySelectorAll("input")].find(input=>!input.checkValidity());
     if(invalidRate) throw new InputError("Check scenario LLM rates: enter nonnegative prices and token factors between 0.1 and 10.");
     if([...$("atom-table").querySelectorAll("input")].some(input=>!input.checkValidity())) throw new InputError("Atomic token assumptions must be whole numbers between 0 and 1,000,000.");
@@ -357,9 +394,9 @@ function renderQuote() {
   }
   $("quote-error").hidden=true;
   const e=latestEstimate;
-  $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">Estimated AI usage / illustrative</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
+  $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">${selections.some(isMeasured)?"Measured-data forecast / uncalibrated pilot":"Estimated AI usage / illustrative"}</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
     ${row("Input tokens",compact(e.input))}${row("Output tokens",compact(e.output))}${row("Total tokens / month",compact(e.totalTokens))}
-    <small>${number(e.pairs.length)} assumed connections &middot; routing included</small></div>
+    <small>${selections.some(isMeasured)?"Fixed reference context / GPT-5.4. No synthetic routing or setup tokens added; actual pilot orchestration spend is separate.":number(e.pairs.length)+" assumed connections · routing included"}</small></div>
     ${row("Tools + AI/tool reserve",money(e.tools+e.reserveCost))}${row("Human review",money(e.reviewCost))}${row("Other operating allowance",money(e.operating))}
     <div class="divider"></div>${row("Total recurring / month",money(e.monthlyCost))}${row("One-time setup (AI + labor)",money(e.setupCost))}
     <div class="divider"></div><div class="eyebrow">Illustrative delivery team</div>${e.team.map(role=>row(role.role,`${role.people} people <small>(${role.fte.toFixed(2)} FTE)</small>`)).join("")}
@@ -367,10 +404,10 @@ function renderQuote() {
     <p class="fine">ROI includes setup labor and recurring costs. Labor value is released capacity, not guaranteed cash.</p>`;
   $("team-summary").innerHTML=`<div class="table-scroll"><table><thead><tr><th>Setup role</th><th class="num">Hours</th><th class="num">FTE</th><th class="num">People</th><th class="num">USD</th></tr></thead><tbody>${e.team.map(role=>`<tr><td>${role.role}</td><td class="num">${number(role.hours)}</td><td class="num">${role.fte.toFixed(2)}</td><td class="num">${role.people}</td><td class="num">${money(role.cost)}</td></tr>`).join("")}</tbody></table></div>
     <p class="help">Setup labor ${money(e.setupLabor)} + setup AI with reserve ${money(e.setupAI)}. Recurring review: ${number(e.reviewHours)} hours/month, ${money(e.reviewCost)}. Adjust role hours and review minutes inside each brick.</p>`;
-  $("yield-summary").innerHTML=`<div class="yield-head"><div><div class="eyebrow">The return on your build</div><h2>From token spend to client impact.</h2></div><span class="pill">Client assumptions</span></div>
-    <div class="metrics"><div class="metric"><small>Time released / month</small><strong>${number(e.hoursSaved)} h</strong><small>before additional review cost</small></div>
+  $("yield-summary").innerHTML=`<div class="yield-head"><div><div class="eyebrow">The return on your build</div><h2>From token spend to client impact.</h2></div><div class="yield-actions"><span class="pill">Client assumptions</span><a href="#value-heading">Adjust value assumptions &darr;</a></div></div>
+    <div class="metrics"><div class="metric"><small>12-month ROI</small><strong class="${e.roi>=0?"positive":"negative"}">${e.roi===null?"Not defined":number(e.roi)+"%"}</strong><small>includes one-time implementation</small></div>
     <div class="metric"><small>Net value / month</small><strong class="${e.net>=0?"positive":"negative"}">${money(e.net)}</strong><small>benefit minus recurring costs</small></div>
-    <div class="metric"><small>12-month ROI</small><strong class="${e.roi>=0?"positive":"negative"}">${e.roi===null?"Not defined":number(e.roi)+"%"}</strong><small>includes one-time implementation</small></div></div>
+    <div class="metric"><small>Time released / month</small><strong>${number(e.hoursSaved)} h</strong><small>before additional review cost</small></div></div>
     <p>${money(e.benefit)} assumed monthly gross benefit &minus; ${money(e.monthlyCost)} recurring cost = ${money(e.net)} monthly net value.</p>
     <div class="comparison" aria-hidden="true"><span style="width:${e.benefit>0?Math.max(0,Math.min(100,e.net/e.benefit*100)):0}%"></span></div>
     <p><b>Payback:</b> ${e.payback===null?"Not reached at these assumptions":number(e.payback)+" months"} &nbsp;&middot;&nbsp; <b>Gross benefit per 1M tokens:</b> ${e.benefitPerMillionTokens===null?"Not defined":money(e.benefitPerMillionTokens)}</p>
@@ -378,7 +415,7 @@ function renderQuote() {
     ${e.warnings.map(message=>`<p class="negative" style="margin-top:10px">${message}</p>`).join("")}`;
   $("review").disabled=!selections.length;
 }
-function refresh(message) {renderCatalog();renderQuote();if(message)$("status").textContent=message;}
+function refresh(message) {renderCatalog();renderQuote();renderMeasuredCatalog();if(message)$("status").textContent=message;}
 function field(label,name,value,step="0.1",max="100000") {return `<label>${label}<input name="${name}" type="number" min="0" max="${max}" step="${step}" value="${value}" required></label>`;}
 function configure(id) {
   let a;try{a=assumptions();}catch(error){if(!(error instanceof InputError))throw error;$("status").textContent=error.message;return;}
@@ -388,9 +425,9 @@ function configure(id) {
     const item=selections.find(item=>item.featureId===id&&item.variantId===variant.id);
     const draft=item||record(id,variant.id,"gpt-mini",a.defaultRuns);
     return `<section class="variant-row"><input type="checkbox" name="pick-${variant.id}" id="pick-${variant.id}" ${item?"checked":""} aria-label="Select ${variant.name}">
-      <div><label for="pick-${variant.id}">${variant.name}</label><p>${esc(variant.description)}</p><div class="tags">${variant.atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div>
-      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}" ${editingFeature.backendPrediction?"disabled":""}>${modelOptions(draft.modelId)}</select></label>${field("Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
-      ${editingFeature.backendPrediction?'<p>This complete workflow uses a frozen synthetic-trained prediction. Rerun the project pipeline to change its model or document features. Shared context and token-factor controls do not change this snapshot; editable rates still change its USD scenario.</p>':""}
+      <div><label for="pick-${variant.id}">${esc(variant.name)}</label><p>${esc(variant.description)}</p><div class="tags">${variant.atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div>
+      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}" ${draft.backendPrediction?"disabled":""}>${isMeasured(draft)?'<option value="gpt-5.4">GPT-5.4 / fixed measured reference</option>':modelOptions(draft.modelId)}</select></label>${field("Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
+      ${draft.backendPrediction?`<p>Frozen ${isMeasured(draft)?"measured-data pilot":"synthetic-trained"} forecast. Context and token factors do not change this snapshot. Volume and commercial rates change planning USD only; use the pipeline to measure and retrain.</p>`:""}
       <details><summary>Edit effort &amp; tool assumptions</summary><div class="form-grid two">
       ${field("Data scientist setup hours",`ds-${variant.id}`,draft.hours[0])}${field("Architect setup hours",`arch-${variant.id}`,draft.hours[1])}${field("Consultant setup hours",`consult-${variant.id}`,draft.hours[2])}
       ${field("Review minutes / run",`review-${variant.id}`,draft.review,"0.1","10000")}${field("Tool fee USD / run",`tool-${variant.id}`,draft.tool,"0.01","10000")}
@@ -405,9 +442,11 @@ function saveVariants(event) {
     const previous=selections.find(item=>item.featureId===featureId&&item.variantId===variant.id);
     const val=name=>Number(form.elements[`${name}-${variant.id}`].value);
     return {...record(featureId,variant.id,form.elements[`model-${variant.id}`].value,val("runs"),previous?.source||"catalog",previous?.description||""),
+      ...(previous?.backendPrediction?{backendPrediction:previous.backendPrediction,backendFeatures:previous.backendFeatures,backendRunId:previous.backendRunId,predictionSource:previous.predictionSource,modelId:previous.modelId}:{}),
       hours:[val("ds"),val("arch"),val("consult")],review:val("review"),tool:val("tool")};
   });
-  selections=[...selections.filter(item=>item.featureId!==featureId),...updated];
+  if(updated.some(isMeasured) && !updated.every(isMeasured)){$("status").textContent="Do not mix measured and manual variants. Select measured variants in the pre-predicted catalog.";return;}
+  selections=[...selections.filter(item=>item.featureId!==featureId && (!updated.length || isMeasured(item)===updated.some(isMeasured))),...updated];
   $("configure").close();refresh(`${editingFeature.name}: saved ${updated.length} variation${updated.length===1?"":"s"}.`);
 }
 // Deliberately local and narrow: preserve matched evidence and require human approval, never impersonate an LLM.
@@ -442,7 +481,7 @@ function previewBrief() {
   const text=$("brief").value.trim();$("proposal").hidden=false;
   if(!text){proposal=null;$("proposal").innerHTML='<div class="error" role="alert">Enter a description before previewing its decomposition.</div>';return;}
   const matches=decomposeBrief(text,$("brief-focus").value);
-  proposal={text,matches,modelId:$("brief-model").value};
+  proposal={text,matches,modelId:$("pipeline-runtime").value==="foundry"?"gpt-mini":$("brief-model").value};
   if(!matches.length){$("proposal").innerHTML='<div class="error" role="alert">No supported catalog mapping found. Nothing was estimated or added. Choose a capability manually, or try an explicit phrase such as "deep research" or "web research".</div>';return;}
   $("proposal").innerHTML=`<h3>Review the proposed LEGO mapping</h3><p class="help">Matched phrases are shown below. Uncheck incorrect suggestions. All other details in your brief remain unverified; this simulation cannot understand exclusions, compliance, deliverables, deadlines or quality targets.</p>
     ${matches.map((match,index)=>{
@@ -464,7 +503,7 @@ function applyProposal() {
   const approved=[...$("proposal").querySelectorAll("[data-proposal]:checked")].map(input=>proposal.matches[Number(input.dataset.proposal)]);
   if(!approved.length){$("status").textContent="Select at least one proposed variation to approve.";return;}
   const replacements=new Set(approved.map(item=>key(item.featureId,item.variantId)));
-  selections=[...selections.filter(item=>!replacements.has(key(item.featureId,item.variantId))),
+  selections=[...selections.filter(item=>!isMeasured(item)&&!replacements.has(key(item.featureId,item.variantId))),
     ...approved.map(item=>record(item.featureId,item.variantId,proposal.modelId,a.defaultRuns,"custom",proposal.text))];
   proposal=null;$("proposal").hidden=true;
   refresh(`Approved ${approved.length} simulated mappings. Review volumes and effort in each brick; tokens and ROI use the shared scenario estimator.`);
@@ -484,26 +523,26 @@ function renderFilters() {
 }
 function exportData() {
   const a=assumptions();
-  return {schema:"token-yield-marketplace-sales-demo-v1",createdAt:new Date().toISOString(),basis:"illustrative-simulation",
-    trainedPredictorConnected:selections.some(item=>item.backendPrediction),trainingDataSource:selections.some(item=>item.backendPrediction)?"synthetic":null,
-    projectScenario:selections.some(item=>item.backendPrediction)?projectScenario:null,liveLLMConnected:false,sourceBranch:"feat/marketplace",flow:mode,
+  return {schema:"token-yield-marketplace-sales-demo-v1",createdAt:new Date().toISOString(),basis:selections.some(isMeasured)?"measured-data-pilot-forecast":"illustrative-simulation",
+    trainedPredictorConnected:selections.some(item=>item.backendPrediction),trainingDataSource:selections.some(isMeasured)?"measured-foundry":selections.some(item=>item.backendPrediction)?"synthetic":null,
+    projectScenario:selections.some(item=>item.featureId==="project-pipeline")?projectScenario:null,catalogMetadata,commercialMeasuredRates:measuredRates(),liveLLMConnected:runtimeStatus.enabled===true,sourceBranch:"feat/marketplace",flow:mode,
     assumptions:{...a,coordinatorId:$("coordinator").value},modelScenarioRates:MODELS,atomicScenarioTokens:ATOMS,
-    selections,estimate:calculate(selections,a,MODELS,$("coordinator").value),limitations:LIMITATIONS};
+    selections,estimate:selections.length?calculate(selections,a,MODELS,$("coordinator").value):null,limitations:LIMITATIONS};
 }
 function openReview() {
   renderQuote();if(!latestEstimate||!selections.length)return;
   const e=latestEstimate;
-  $("review-body").innerHTML=`<div class="notice">${e.rows.some(item=>item.backendPrediction)?"Includes a real regression prediction trained on synthetic token samples, not measured LLM usage. The project is one complete workflow; expand its constituent functions below.":"Illustrative scenario only; catalog tokens use fixed coefficients."} No real-world accuracy or ROI is established.</div>
+  $("review-body").innerHTML=`<div class="notice">${e.rows.some(isMeasured)?"Measured-data regression forecasts at a fixed GPT-5.4 reference context. These predictions are not actual billed calls. Orchestration/training spend is reported separately in operations. No invented integration tokens are included.":e.rows.some(item=>item.backendPrediction)?"Real regression predictions trained on synthetic samples, not measured LLM usage.":"Illustrative scenario only; catalog tokens use fixed coefficients."} No production accuracy or ROI is established. Staffing and benefits remain assumptions.</div>
     <div class="review-metrics"><div><small>Total tokens / month</small><b>${compact(e.totalTokens)}</b></div><div><small>Recurring cost / month</small><b>${money(e.monthlyCost)}</b></div><div><small>12-month ROI</small><b>${e.roi===null?"Not defined":number(e.roi)+"%"}</b></div></div>
     <h3>Final selected functionalities</h3><div class="table-scroll"><table><thead><tr><th>Capability / variant / LLM</th><th class="num">Runs/mo</th><th class="num">Tokens/run</th><th class="num">AI USD/mo</th></tr></thead><tbody>
-    ${e.rows.map(item=>`<tr><td><b>${item.feature}</b><small>${item.variant}</small><small>${item.model} &middot; ${item.backendPrediction?"synthetic-trained project":item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${number(item.perRun.input+item.perRun.output)}</td><td class="num">${money(item.api)}</td></tr>`).join("")}
+    ${e.rows.map(item=>`<tr><td><b>${esc(item.feature)}</b><small>${esc(item.variant)}</small><small>${esc(item.model)} &middot; ${isMeasured(item)?"measured-data pilot":item.backendPrediction?"synthetic-trained project":item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${number(item.perRun.input+item.perRun.output)}</td><td class="num">${money(item.api)}</td></tr>`).join("")}
     <tr><td>Integration routing<small>${e.coordinator}; ${number(e.pairs.length)} assumed pairs</small></td><td class="num">${number(e.routingRuns)}</td><td class="num">&mdash;</td><td class="num">${money(e.monthlyApi-e.rows.reduce((sum,item)=>sum+item.api,0))}</td></tr></tbody></table></div>
     ${row("Total monthly tokens (exact)",number(e.totalTokens))}${row("Input / output",`${number(e.input)} / ${number(e.output)}`)}${row("Monthly AI API",money(e.monthlyApi))}${row("Monthly tools",money(e.tools))}${row("Monthly AI/tool reserve",money(e.reserveCost))}${row("Monthly human review",money(e.reviewCost))}${row("Other monthly operating cost",money(e.operating))}
     <div class="divider"></div><h3>Delivery team</h3>${e.team.map(role=>row(role.role,`${role.people} people / ${role.fte.toFixed(2)} FTE / ${number(role.hours)} h`)).join("")}
     ${row("One-time setup labor",money(e.setupLabor))}${row("One-time setup AI + reserve",money(e.setupAI))}${row("One-time setup tokens",number(e.setupTokens.input+e.setupTokens.output))}
     <div class="divider"></div><h3>Value case</h3>${row("Monthly gross benefit",money(e.benefit))}${row("Monthly net value",money(e.net))}${row("12-month benefit",money(e.yearBenefit))}${row("12-month total cost (including setup)",money(e.yearCost))}${row("12-month net value",money(e.yearBenefit-e.yearCost))}${row("Payback",e.payback===null?"Not reached":number(e.payback)+" months")}
     ${e.warnings.map(message=>`<div class="error">${message}</div>`).join("")}
-    <details><summary>Inspect feature vectors &amp; custom descriptions</summary>${e.rows.map(item=>`<div class="proposal-line"><b>${item.feature} / ${item.variant}</b><p class="help">${Object.entries(item.atomCounts).map(([atom,count])=>`${esc(atom)} &times; ${count}`).join(", ")}; ${item.backendPrediction?"frozen backend feature vector (see export)":"context "+number($("context").value)+" tokens; brief "+item.briefInput+" tokens"}; model ${item.model}.</p>${item.description?`<p class="help">Brief: ${esc(item.description)}</p>`:""}${item.backendPrediction&&projectScenario?`<p class="help">Functions: ${projectScenario.result.bricks.map(brick=>esc(brick.name)).join("; ")}</p>`:""}</div>`).join("")}</details>
+    <details><summary>Inspect feature vectors &amp; custom descriptions</summary>${e.rows.map(item=>`<div class="proposal-line"><b>${esc(item.feature)} / ${esc(item.variant)}</b><p class="help">${Object.entries(item.atomCounts).map(([atom,count])=>`${esc(atom)} &times; ${count}`).join(", ")}; ${item.backendPrediction?"frozen backend feature vector (see export)":"context "+number($("context").value)+" tokens; brief "+item.briefInput+" tokens"}; model ${esc(item.model)}.</p>${item.description?`<p class="help">Brief: ${esc(item.description)}</p>`:""}${item.featureId==="project-pipeline"&&projectScenario?`<p class="help">Functions: ${projectScenario.result.bricks.map(brick=>esc(brick.name)).join("; ")}</p>`:""}</div>`).join("")}</details>
     <p class="fine">Capacity value is not guaranteed cash. Compare accepted outcomes, effort, quality and incremental margin with the client before making a commitment. No calibrated confidence intervals are available.</p>`;
   $("export-json").value=JSON.stringify(exportData(),null,2);$("download-status").textContent="";
   $("review-dialog").showModal();
@@ -520,28 +559,115 @@ async function backendJson(path,options={}) {
 }
 function setPipelineBusy(busy) {
   pipelineBusy=busy;
-  ["run-pipeline","security-example","novel-example","brief","brief-model","brief-focus","project-runs","new-function","decompose","example"].forEach(id=>$(id).disabled=busy);
-  $("run-pipeline").textContent=busy?"Project active in background operations...":"Start step-by-step + open operations";
+  ["run-pipeline","security-example","novel-example","brief","brief-model","brief-focus","project-runs","new-function","decompose","example","pipeline-runtime","execution-mode"].forEach(id=>$(id).disabled=busy);
+  updateRuntimeChoice();
+}
+function updateRuntimeChoice() {
+  const live=$("pipeline-runtime").value==="foundry";
+  $("azure-notice").hidden=!live;
+  $("runtime-badge").textContent=live?"Foundry selected / explicit paid run":"Offline selected / no provider calls";
+  $("pipeline-basis").textContent=live?"GPT-5.4 / measured-data pilot":"Offline / synthetic";
+  $("brief-model-help").textContent=live?"Pinned Azure GPT-5.4 deployment; no browser model override.":"Offline scenario rate card only; no model is called.";
+  if(live){$("brief-model").innerHTML='<option value="gpt">GPT-5.4 / configured Azure deployment</option>';}
+  else if($("brief-model").options.length===1){$("brief-model").innerHTML=modelOptions("gpt-mini");}
+  $("brief-model").disabled=pipelineBusy||live;
+  $("run-pipeline").disabled=pipelineBusy||(live&&runtimeStatus.enabled!==true);
+  $("run-pipeline").textContent=pipelineBusy?"Project active in background operations...":`Start ${live?"paid Foundry":"offline"} ${$("execution-mode").value==="step"?"step-by-step":"automatic"} + open operations`;
+}
+function rawDetails(title,value,open=false) {
+  return `<details ${open?"open":""}><summary>${esc(title)}</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto">${esc(JSON.stringify(value??{},null,2))}</pre></details>`;
+}
+function renderMeasuredCatalog() {
+  const openBricks=new Set([...$("measured-catalog").querySelectorAll("details[data-measured-feature][open]")].map(element=>element.dataset.measuredFeature));
+  const groups=new Map();
+  measuredCatalog.forEach((item,index)=>{
+    const [featureId,variantId]=String(item.id).split(":");
+    const feature=CATALOG.find(feature=>feature.id===featureId);
+    const known=feature?.variants.some(variant=>variant.id===variantId);
+    const supported=item.supported===true&&finiteTokens(item)&&known&&item.model_id==="gpt-5.4";
+    const selected=selections.find(entry=>entry.source==="measured-catalog"&&key(entry.featureId,entry.variantId)===item.id);
+    if(!groups.has(featureId))groups.set(featureId,{feature,entries:[]});
+    groups.get(featureId).entries.push({item,index,supported,selected,known});
+  });
+  const hasForecasts=[...groups.values()].some(group=>group.entries.some(entry=>entry.supported));
+  const first=$(hasForecasts?"measured-marketplace":"manual-marketplace");
+  const second=$(hasForecasts?"manual-marketplace":"measured-marketplace");
+  if(first.nextElementSibling!==second)first.parentNode.insertBefore(first,second);
+  $("measured-catalog").innerHTML=[...groups].map(([featureId,{feature,entries}])=>{
+    const chosen=entries.filter(entry=>entry.selected).length;
+    const available=entries.filter(entry=>entry.supported).length;
+    return `<article class="card ${chosen?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature?.color||"#96b6a3"}" aria-hidden="true"></span><small>${esc(feature?.category||"Custom capability")}</small></div>
+      <div><h3>${esc(feature?.name||entries[0].item.name||featureId)}</h3><p>${esc(feature?.description||"A custom source-bound function. Inspect its scope before quoting.")}</p></div>
+      <div class="tags"><span>GPT-5.4</span><span>${available?`${available} trained forecast${available===1?"":"s"}`:"Awaiting supported forecasts"}</span></div>
+      <div class="picked">${chosen?`${chosen} selected`:entries.length+" variations to explore"}</div>
+      <details class="brick-options" data-measured-feature="${esc(featureId)}" ${openBricks.has(featureId)||chosen?"open":""}><summary>${chosen?"Edit brick":"Explore brick"} &rarr; <small>Choose multiple variations</small></summary>
+      ${entries.map(({item,index,supported,selected,known})=>`<div class="measured-variant"><label><input type="checkbox" data-measured="${index}" ${supported?"":"disabled"} ${selected?"checked":""}> ${esc(item.name||item.id)}</label>
+        <p class="help">${supported?`${number(item.input_tokens)} input + ${number(item.output_tokens)} output predicted tokens/run`:item.supported===true&&!known?"Use the complete project workflow for this custom contract":"Not yet supported / no financial prediction"}</p>
+        <p class="help">Scope: ${esc(typeof item.scope==="object"?JSON.stringify(item.scope):item.scope||"fixed backend reference context")}</p>
+        ${selected?`<label>Runs / month<input data-measured-volume="${index}" type="number" min="0" max="1000000" step="1" value="${selected.runs}" required></label>`:""}
+        ${rawDetails("Prediction and provenance",item)}</div>`).join("")}</details></article>`;
+  }).join("")||'<p class="help">No measured-data catalog is available yet. An explicitly started Foundry pilot must finish measurement and training first. No synthetic forecast is substituted here.</p>';
+}
+async function refreshMeasuredCatalog() {
+  const generation=++catalogGeneration;
+  if(location.protocol==="file:"){renderMeasuredCatalog();return;}
+  $("refresh-catalog").disabled=true;
+  try{
+    const data=await backendJson("/api/catalog");
+    if(generation!==catalogGeneration)return;
+    if(!data||(!Array.isArray(data.catalog)&&!Array.isArray(data.items)))throw new PipelineError("Invalid catalog response: expected a stored item list.");
+    const items=Array.isArray(data.catalog)?data.catalog:data.items;
+    if(items.some(item=>!item||typeof item.id!=="string"))throw new PipelineError("Invalid catalog response: every contract needs an ID.");
+    catalogMetadata=data;
+    measuredCatalog=items.map(item=>({...item,contract_id:item.id,id:item.id.includes(":")?item.id:item.feature_id?key(item.feature_id,item.id):item.id}));
+    $("catalog-status").textContent=`Stored catalog: ${measuredCatalog.length} entries · ${data.source||runtimeStatus.source||"source not reported"} · ${data.version||"no trained version"}. Reading it does not consume provider credits.`;
+    renderMeasuredCatalog();
+  }catch(error){
+    if(!(error instanceof PipelineError))throw error;
+    if(generation!==catalogGeneration)return;
+    $("catalog-status").textContent="Measured catalog unavailable: "+error.message+". No fallback predictions shown.";
+    measuredCatalog=[];renderMeasuredCatalog();
+  }finally{if(generation===catalogGeneration)$("refresh-catalog").disabled=false;}
+}
+function selectMeasured(index,checked) {
+  const prediction=measuredCatalog[index];
+  if(!prediction||prediction.supported!==true||!finiteTokens(prediction)||prediction.model_id!=="gpt-5.4"){$("status").textContent="This contract has no supported GPT-5.4 forecast. Nothing was added.";return;}
+  const [featureId,variantId]=String(prediction.id).split(":");
+  if(!CATALOG.find(feature=>feature.id===featureId)?.variants.some(variant=>variant.id===variantId)){$("status").textContent="Use the complete project workflow for this custom contract. Nothing was added.";return;}
+  if(!checked){selections=selections.filter(item=>key(item.featureId,item.variantId)!==prediction.id);}
+  else{
+    if(!$("defaultRuns").checkValidity()){$("status").textContent="Set valid starting monthly usage first.";renderMeasuredCatalog();return;}
+    selections=selections.filter(item=>item.source==="measured-catalog"&&key(item.featureId,item.variantId)!==prediction.id);
+    const item=record(featureId,variantId,"gpt-5.4",Number($("defaultRuns").value),"measured-catalog");
+    selections.push({...item,backendPrediction:{...prediction},predictionSource:"measured-foundry",backendFeatures:prediction.features||{},backendRunId:prediction.run_id||catalogMetadata.run_id});
+    projectScenario=null;
+  }
+  refresh("Measured-data catalog build updated. Manual/whole-project choices are separate; each checked forecast counts once.");
 }
 function renderPipelineResult(run) {
   const r=run.result;
-  if(!r||!Array.isArray(r.bricks)||!r.bricks.length||!r.after||!Number.isFinite(r.after.total_tokens)||!r.training)throw new PipelineError("Completed run is missing its prediction or training artifact. Nothing was added to the estimate.");
-  const missing=r.requirements.filter(item=>item.status==="missing").length,partial=r.requirements.filter(item=>item.status==="partial").length;
-  $("pipeline-result").innerHTML=`<div class="notice"><b>Real model fitting, synthetic measurements.</b> This run processed the sample document corpus and fitted a local regression. Its test error measures agreement with the simulator only.</div>
-    <h3>Your proposed project functions</h3><div class="impact-grid">${r.bricks.map(brick=>`<div class="impact"><h3>${esc(brick.name)}</h3><p>${brick.novel?"New function: expanded the feature schema.":"Reused function from the demo catalog."}</p><div class="tags">${brick.atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div></div>`).join("")}</div>
-    <div class="review-metrics"><div><small>Before new training</small><b>${r.before.supported?compact(r.before.total_tokens):"Not covered"}</b><small>${esc(r.before.reason)}</small></div><div><small>After training / one project run</small><b>${compact(r.after.total_tokens)}</b><small>${number(r.after.input_tokens)} input + ${number(r.after.output_tokens)} output</small></div><div><small>AI estimate / month</small><b>${money(r.after.usd_per_month)}</b><small>${number(run.request.runs_per_month)} complete project executions</small></div></div>
-    <p class="help">${number(r.training.train_count)} synthetic training samples; ${number(r.training.test_count)} separate synthetic test samples. ${r.feature_names.length} features. Model version: ${esc(r.training.version)}.</p>
-    <p class="help">${r.documents.length} sample documents linked to the wiki. ${missing} reference requirements have no matching evidence and ${partial} have partial evidence. Text matches are not proof that controls work. Inspect document text and the checklist in operations.</p>
-    <p class="help">Add the complete workflow as <b>one project brick</b> so its internal functions are not charged twice. Staffing and ROI remain editable commercial assumptions, separate from this synthetic-trained token prediction.</p>
-    <label style="margin-top:14px"><input id="approve-pipeline" type="checkbox"> I reviewed the proposed functions and understand this is a sample-corpus, synthetic-data estimate.</label>
-    <button id="use-pipeline" class="primary wide" disabled>Replace build with this complete pipeline</button>`;
+  if(!r||!Array.isArray(r.bricks)||!r.after||!r.training)throw new PipelineError("Completed run is missing prediction or training artifacts. Nothing was added.");
+  const live=run.request?.runtime==="foundry"||r.training.source==="measured-foundry";
+  const supported=finiteTokens(r.after)&&r.after.supported!==false&&r.bricks.length>0;
+  const before=r.before||{}, requirements=Array.isArray(r.requirements)?r.requirements:[];
+  const missing=requirements.filter(item=>item.status==="missing").length,partial=requirements.filter(item=>item.status==="partial").length;
+  $("pipeline-result").innerHTML=`<div class="notice"><b>${live?"Measured source-bound calls, fitted pilot predictions.":"Real model fitting, synthetic measurements."}</b> ${live?"GPT-5.4 agent discussion and workload measurements are real provider calls. Forecasts are regression outputs, not measured customer executions; small held-out pilot MAE is not production accuracy.":"Test error measures agreement with the simulator only."}</div>
+    <h3>Your proposed project functions</h3><div class="impact-grid">${r.bricks.map(brick=>`<div class="impact"><h3>${esc(brick.name||brick.id)}</h3><p>${brick.novel?"New function / inspect measured coverage.":"Proposed source-bound function."}</p><div class="tags">${(Array.isArray(brick.atoms)?brick.atoms:[]).map(atom=>`<span>${esc(atom)}</span>`).join("")}</div></div>`).join("")}</div>
+    <div class="review-metrics"><div><small>Before new training</small><b>${before.supported&&Number.isFinite(before.total_tokens)?compact(before.total_tokens):"Not covered"}</b><small>${esc(before.reason||"")}</small></div><div><small>After training / whole project forecast</small><b>${supported?compact(r.after.input_tokens+r.after.output_tokens):"Unsupported / abstained"}</b><small>${supported?number(r.after.input_tokens)+" input + "+number(r.after.output_tokens)+" output":esc(r.after.reason||"No supported estimate. Tokens are not zero.")}</small></div><div><small>AI estimate / month (backend pinned rates)</small><b>${supported&&Number.isFinite(r.after.usd_per_month)?money(r.after.usd_per_month):"Not available"}</b><small>${number(run.request.runs_per_month)} complete executions; separate from pilot spend</small></div></div>
+    <p class="help">${number(r.training.train_count)} ${live?"measured":"synthetic"} training rows; ${number(r.training.test_count)} held-out rows. ${Array.isArray(r.feature_names)?r.feature_names.length:"Unreported"} features. Model version: ${esc(r.training.version||"not reported")}.</p>
+    <p class="help">${Array.isArray(r.documents)?r.documents.length:0} fictional documents. ${live?"Requirement labels are source statements only; inspect the raw evidence rather than inferring a compliance score.":missing+" missing and "+partial+" partial reference requirements."} This is not evidence of working controls or compliance.</p>
+    ${live?rawDetails("Orchestration usage / paid pilot spend (not workload forecast)",r.orchestration,true)+rawDetails("Measured workload usage (not predicted customer volume)",r.workload,true)+rawDetails("Three agents: proposals, peer review, orchestrator acceptance and dissent",r.agents,true)+rawDetails("Orchestrator decisions and retained dissent",{adjudication:r.adjudication,dissent:r.dissent},true):""}
+    ${rawDetails("Training / held-out evaluation / coefficients",r.training)}${rawDetails("Pinned rate provenance",r.rates)}${rawDetails("Full result / unsupported scopes / limitations",r)}
+    ${supported?`<p class="help">Use the complete workflow once, without double-counting internal functions. Frozen tokens do not track shared context edits. Staffing, commercial USD and ROI remain assumptions.</p><label style="margin-top:14px"><input id="approve-pipeline" type="checkbox"> I reviewed the functions and understand the ${live?"uncalibrated measured-data pilot":"synthetic-data"} boundary.</label><button id="use-pipeline" class="primary wide" disabled>Replace build with this complete pipeline</button>`:'<div class="error">No financial apply action: unsupported workload coverage must be resolved before quoting this project.</div>'}`;
+  if(live)refreshMeasuredCatalog();
 }
 async function pollPipeline(id,generation) {
   if(generation!==pipelineGeneration)return;
   try {
     const run=await backendJson(`/api/runs/${encodeURIComponent(id)}`);
     if(generation!==pipelineGeneration)return;
-    const last=run.events[run.events.length-1];
+    const events=Array.isArray(run.events)?run.events:[];
+    const last=events[events.length-1];
     $("pipeline-status").textContent=`Run ${run.id} / ${run.status}${last?" / "+last.message:""}`;
     if(run.status==="failed")throw new PipelineError(run.error||"The backend run failed. Inspect its event log.");
     if(run.status==="cancelled"){
@@ -549,14 +675,16 @@ async function pollPipeline(id,generation) {
       $("backend-status").textContent="Project cancelled. No new estimate was added. You can start another step-by-step run.";return;
     }
     if(run.status==="waiting"){
-      $("pipeline-status").textContent=`Paused before ${run.next_stage.replaceAll("_"," ")}. ${run.events.length} stages completed. Open background operations and click Next step.`;
+      const ids=(Array.isArray(run.stages)?run.stages:[]).map(stage=>typeof stage==="string"?stage:stage.id);
+      const completed=ids.indexOf(run.next_stage);
+      $("pipeline-status").textContent=`Paused before ${String(run.next_stage||"next stage").replaceAll("_"," ")}. ${completed>=0?completed+" stages completed; ":""}${events.length} events. Open operations and click Next step.`;
       $("backend-status").textContent="Waiting for your next step, not a replay. Later backend stages have not executed.";
     }else{
       $("backend-status").textContent="The backend is executing an approved stage. Its output will appear in operations.";
     }
     if(run.status==="completed"){
       pipelineRun=run;renderPipelineResult(run);setPipelineBusy(false);
-      $("backend-status").textContent="Complete. Both HTML pages show the same persisted backend run. No live LLM calls were made.";return;
+      $("backend-status").textContent=`Complete. Both pages show the same saved run. ${run.request?.runtime==="foundry"?"Foundry usage is measured separately in operations; workload forecasts remain an uncalibrated pilot.":"Offline run: no live LLM calls."}`;return;
     }
     pipelineTimer=setTimeout(()=>pollPipeline(id,generation),700);
   }catch(error){
@@ -573,7 +701,9 @@ async function runPipeline() {
   if(description.length<20||!$("project-runs").checkValidity()){
     $("backend-status").textContent="Enter a project description of at least 20 characters and a whole number of monthly executions between 0 and 1,000,000.";return;
   }
-  const request={description,model_id:$("brief-model").value,runs_per_month:Number($("project-runs").value),new_function:$("new-function").value.trim(),execution_mode:"step"};
+  const runtime=$("pipeline-runtime").value;
+  if(runtime==="foundry"&&runtimeStatus.enabled!==true){$("backend-status").textContent="Foundry is not approved by the server. No paid request sent.";return;}
+  const request={description,model_id:runtime==="foundry"?"gpt":$("brief-model").value,runs_per_month:Number($("project-runs").value),new_function:$("new-function").value.trim(),execution_mode:$("execution-mode").value,runtime};
   const popup=window.open("/marketplace-operations-demo.html?pending=1","token-yield-operations");
   setPipelineBusy(true);pipelineRun=null;clearTimeout(pipelineTimer);const generation=++pipelineGeneration;
   $("refresh-pipeline").disabled=true;
@@ -582,6 +712,7 @@ async function runPipeline() {
   $("backend-status").textContent=popup?"The companion operations page is opening.":"Your browser blocked the companion popup. Use Open background operations below.";
   try {
     const run=await backendJson("/api/runs",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(request)});
+    if(generation!==pipelineGeneration)return;
     const operations=`/marketplace-operations-demo.html?run=${encodeURIComponent(run.id)}`;
     $("operations-link").href=operations;if(popup&&!popup.closed)popup.location.href=operations;
     $("refresh-pipeline").disabled=false;
@@ -589,37 +720,59 @@ async function runPipeline() {
     await pollPipeline(run.id,generation);
   }catch(error){
     if(!(error instanceof PipelineError))throw error;
+    if(generation!==pipelineGeneration)return;
     setPipelineBusy(false);$("pipeline-status").textContent=error.message;
   }
 }
 function usePipeline() {
-  if(!pipelineRun||!$("approve-pipeline")?.checked)return;
-  const r=pipelineRun.result,atoms=r.bricks.flatMap(brick=>brick.atoms);
+  if(!pipelineRun||!$("approve-pipeline")?.checked||!finiteTokens(pipelineRun.result?.after))return;
+  const r=pipelineRun.result,atoms=r.bricks.flatMap(brick=>Array.isArray(brick.atoms)?brick.atoms:[]);
+  const live=pipelineRun.request.runtime==="foundry"||r.training.source==="measured-foundry";
   const prior=CATALOG.findIndex(feature=>feature.id==="project-pipeline");if(prior>=0)CATALOG.splice(prior,1);
-  CATALOG.unshift({id:"project-pipeline",name:"Document assurance pipeline",category:"Intelligence",color:"#96b6a3",
-    description:r.bricks.map(brick=>brick.name).join(" + "),backendPrediction:r.after,backendFeatures:r.features,backendRequest:pipelineRun.request,backendRunId:pipelineRun.id,
-    variants:[{id:"workflow",name:`${r.bricks.length} linked functions / complete workflow`,description:"One execution processes the sample documents through the complete approved pipeline. Tokens come from the fitted synthetic-data regression.",
+  CATALOG.unshift({id:"project-pipeline",name:live?"Foundry proposed project":"Document assurance pipeline",category:"Intelligence",color:"#96b6a3",
+    description:r.bricks.map(brick=>brick.name).join(" + "),backendPrediction:r.after,backendFeatures:r.features,backendRequest:{...pipelineRun.request,model_id:live?"gpt-5.4":pipelineRun.request.model_id},backendRunId:pipelineRun.id,predictionSource:live?"measured-foundry":"synthetic",
+    variants:[{id:"workflow",name:`${r.bricks.length} linked functions / complete workflow`,description:`Whole-project frozen ${live?"measured-data pilot":"synthetic-data"} regression forecast; not a live production execution.`,
       atoms,hours:[r.bricks.length*8,r.bricks.length*4,r.bricks.length*6],review:5,tool:0}]});
   projectScenario=pipelineRun;
   selections=[record("project-pipeline","workflow",pipelineRun.request.model_id,pipelineRun.request.runs_per_month,"backend",pipelineRun.request.description)];
-  category="All";$("search").value="";renderFilters();refresh("Build replaced with the complete project workflow. Its fitted synthetic-token prediction is now used by the cost and ROI calculation.");
+  category="All";$("search").value="";renderFilters();refresh(`Build replaced with one complete ${live?"measured-data pilot":"synthetic-trained"} workflow. Token forecast feeds planning USD, staffing and ROI; not a production quote.`);
   $("use-pipeline").disabled=true;
 }
 async function connectBackend() {
+  const generation=pipelineGeneration;
   if(location.protocol==="file:"){$("backend-status").textContent="Manual catalog preview works offline. The project pipeline needs the local server: python -m examples.marketplace_demo_server.";return;}
   try {
     const health=await backendJson("/api/health");
+    if(generation!==pipelineGeneration)return;
     if(health.status!=="ok")throw new PipelineError("This address is not reporting a healthy marketplace backend. Check the server's port and open the URL printed in its terminal.");
-    $("backend-status").textContent="Local backend connected. Start a project, then use Next step in operations to execute each stage; no provider credits are used.";
+    try{
+      const runtime=await backendJson("/api/runtime");
+      if(generation!==pipelineGeneration)return;
+      if(!runtime||typeof runtime.enabled!=="boolean")throw new PipelineError("Invalid runtime response: approval state was not reported.");
+      runtimeStatus=runtime;
+      $("pipeline-runtime").querySelector('[value="foundry"]').disabled=runtimeStatus.enabled!==true;
+      $("runtime-status").textContent=runtimeStatus.enabled===true?"Foundry approved by server · "+(runtimeStatus.model_id||runtimeStatus.deployment||"GPT-5.4")+" · cap "+(Number.isFinite(runtimeStatus.cap_usd)?money(runtimeStatus.cap_usd):"server-controlled")+" · settled safety spend "+(Number.isFinite(runtimeStatus.spend_usd)?money(runtimeStatus.spend_usd):"unreported")+" · reserved "+(Number.isFinite(runtimeStatus.reserved_usd)?money(runtimeStatus.reserved_usd):"unreported")+". "+(runtimeStatus.source||"")+" / no calls started by this page.":"Server has not enabled Foundry. Offline simulation remains available; no browser budget override.";
+    }catch(error){
+      if(!(error instanceof PipelineError))throw error;
+      if(generation!==pipelineGeneration)return;
+      runtimeStatus={enabled:false};
+      $("pipeline-runtime").querySelector('[value="foundry"]').disabled=true;
+      $("runtime-status").textContent="Runtime approval unavailable: "+error.message+" Paid start is disabled; offline remains available.";
+    }
+    updateRuntimeChoice();refreshMeasuredCatalog();
+    $("backend-status").textContent="Backend connected. Select the runtime and execution mode before starting. Loading or refreshing saved runs does not call a model.";
     const id=new URLSearchParams(location.search).get("run");
     if(id){
       $("refresh-pipeline").disabled=false;
-      const run=await backendJson(`/api/runs/${encodeURIComponent(id)}`);setMode("custom");
-      $("brief").value=run.request.description;$("brief-model").value=run.request.model_id;$("project-runs").value=run.request.runs_per_month;$("new-function").value=run.request.new_function||"";
+      const run=await backendJson(`/api/runs/${encodeURIComponent(id)}`);
+      if(generation!==pipelineGeneration)return;
+      setMode("custom");
+      $("pipeline-runtime").value=run.request.runtime||"offline";$("execution-mode").value=run.request.execution_mode||"step";updateRuntimeChoice();
+      $("brief").value=run.request.description;$("brief-model").value=run.request.runtime==="foundry"?"gpt":run.request.model_id;$("project-runs").value=run.request.runs_per_month;$("new-function").value=run.request.new_function||"";
       $("pipeline-progress").hidden=false;$("operations-link").href=`/marketplace-operations-demo.html?run=${encodeURIComponent(id)}`;
       setPipelineBusy(true);await pollPipeline(id,++pipelineGeneration);
     }
-  }catch(error){if(!(error instanceof PipelineError))throw error;$("backend-status").textContent=error.message;}
+  }catch(error){if(!(error instanceof PipelineError))throw error;if(generation===pipelineGeneration)$("backend-status").textContent=error.message;}
 }
 document.querySelectorAll(".model-options").forEach(select=>select.innerHTML=modelOptions("gpt-mini"));
 $("model-rates").innerHTML=`<table><thead><tr><th>Scenario LLM</th><th>Input USD / 1M</th><th>Output USD / 1M</th><th>Input factor</th><th>Output factor</th></tr></thead><tbody>${MODELS.map(model=>`<tr><td>${model.name}</td>${["input","output","inputFactor","outputFactor"].map(property=>`<td><input aria-label="${model.name} ${property}" type="number" min="${property.includes("Factor")?0.1:0}" max="${property.includes("Factor")?10:10000}" step="0.01" required value="${model[property]}" data-model="${model.id}" data-property="${property}" style="min-width:85px;width:100%"></td>`).join("")}</tr>`).join("")}</tbody></table>`;
@@ -656,6 +809,19 @@ $("example").addEventListener("click",()=>{
 ["brief","brief-focus","brief-model"].forEach(id=>$(id).addEventListener("input",invalidateProposal));
 ["project-runs","new-function"].forEach(id=>$(id).addEventListener("input",invalidateProposal));
 $("run-pipeline").addEventListener("click",runPipeline);
+$("pipeline-runtime").addEventListener("change",()=>{invalidateProposal();updateRuntimeChoice();});
+$("execution-mode").addEventListener("change",updateRuntimeChoice);
+$("refresh-catalog").addEventListener("click",refreshMeasuredCatalog);
+["measured-input-rate","measured-output-rate"].forEach(id=>$(id).addEventListener("input",renderQuote));
+$("measured-catalog").addEventListener("change",event=>{
+  if(event.target.dataset.measured!==undefined)selectMeasured(Number(event.target.dataset.measured),event.target.checked);
+  if(event.target.dataset.measuredVolume!==undefined){
+    if(!event.target.checkValidity()){event.target.reportValidity();return;}
+    const entry=measuredCatalog[Number(event.target.dataset.measuredVolume)];
+    const selected=selections.find(item=>key(item.featureId,item.variantId)===entry?.id);
+    if(selected){selected.runs=Number(event.target.value);renderQuote();}
+  }
+});
 $("refresh-pipeline").addEventListener("click",()=>{
   clearTimeout(pipelineTimer);pipelineGeneration++;connectBackend();
 });
@@ -666,7 +832,7 @@ $("security-example").addEventListener("click",()=>{
 });
 $("novel-example").addEventListener("click",()=>{
   if(!$("brief").value.trim())$("security-example").click();
-  invalidateProposal();$("new-function").value="Policy-as-code validation";$("status").textContent="New function added. Run again to see baseline abstention, feature expansion, synthetic sampling and refitting.";
+  invalidateProposal();$("new-function").value="Policy-as-code validation";$("status").textContent="New function requested. Run again to inspect coverage, baseline abstention, feature expansion and retraining. Unsupported scopes remain explicit.";
 });
 $("pipeline-result").addEventListener("change",()=>{if($("use-pipeline"))$("use-pipeline").disabled=!$("approve-pipeline").checked;});
 $("pipeline-result").addEventListener("click",event=>{if(event.target.id==="use-pipeline")usePipeline();});
@@ -684,7 +850,8 @@ $("download").addEventListener("click",()=>{
   const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="token-yield-sales-scenario.json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   $("download-status").textContent="Download requested. If your browser blocks it, expand the copyable JSON below.";
 });
-renderFilters();loadStarter();
+window.addEventListener("pagehide",()=>{pipelineGeneration++;catalogGeneration++;clearTimeout(pipelineTimer);});
+renderFilters();refresh();updateRuntimeChoice();
 if(new URLSearchParams(location.search).get("mode")==="custom"||new URLSearchParams(location.search).has("run")){
   selections=[];setMode("custom");refresh("Start with a project description. The estimate updates after you approve its complete pipeline.");
 }
