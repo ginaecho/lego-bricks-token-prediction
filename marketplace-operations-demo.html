@@ -72,7 +72,7 @@
   const $ = id => document.getElementById(id);
   const tabs = ['overview', 'wiki', 'requirements', 'training'];
   const stages = [['decompose','Decompose brief'],['wiki','Link documents'],['requirements','Evidence & gaps'],['features','Engineer features'],['predict_before','Baseline prediction'],['simulate','Synthetic presimulation'],['train','Fit Ridge model'],['evaluate','Synthetic test evaluation'],['predict_after','Re-predict'],['complete','Finalize result']];
-  const liveStages = [['propose','Three agent proposals'],['discuss','Peer review / discussion'],['adjudicate','Orchestrator / accept & dissent'],['wiki','Link fictional sources'],['requirements','Evidence & gaps'],['features','Engineer feature schema'],['predict_before','Before retraining'],['measure','Measure workload calls'],['train','Train / retrain regression'],['evaluate','Held-out pilot evaluation'],['predict_after','Forecast project & catalog'],['complete','Finalize artifacts']];
+  const liveStages = [['novelty','New vs. existing brick review'],['propose','Three agent proposals'],['discuss','Peer review / discussion'],['adjudicate','Orchestrator / accept & dissent'],['wiki','Link fictional sources'],['requirements','Evidence & gaps'],['features','Engineer feature schema'],['predict_before','Before retraining'],['measure','Measure workload calls'],['train','Train / retrain regression'],['evaluate','Held-out pilot evaluation'],['predict_after','Forecast project & catalog'],['complete','Finalize artifacts']];
   const liveRun = () => state.snapshot?.request?.runtime === 'foundry';
   function runStages() {
     const fallback=liveRun()?liveStages:stages;
@@ -391,8 +391,8 @@
         payload('Pre-predicted catalog / fixed reference context',result.catalog),
         payload('Full final result / limitations',result));
     }
-    const discussion=events.filter(event=>['propose','discuss','adjudicate'].includes(event.stage));
-    overview.append(node('h3','Three-agent discussion + orchestrator decisions'));
+    const discussion=events.filter(event=>['novelty','propose','discuss','adjudicate'].includes(event.stage));
+    overview.append(node('h3','New-brick review + three-agent discussion + orchestrator decisions'));
     if(!discussion.length)overview.append(node('p','No role outputs yet. Start/advance the corresponding stage explicitly.','empty'));
     discussion.forEach(event=>overview.append(payload('#'+text(event.seq)+' · '+stageName(event.stage)+' · '+text(event.message),event.data,true)));
     const training=$('view-training');

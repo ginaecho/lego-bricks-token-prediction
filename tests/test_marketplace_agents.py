@@ -49,9 +49,16 @@ class MockProvider:
                       "dissent": ["Insufficient evidence"] if self.disagree else []}
         elif task == "adjudicate":
             answer = {"summary": "Explicit reconciliation", "bricks": selected, "evidence": evidence,
-                      "agreed": True, "dissent": [], "unsupported": [],
+                      "agreed": True, "dissent": [], "unsupported": [], "proposed_new_function": "",
                       "decisions": [{"id": b["id"], "decision": "include",
                                      "rationale": "Scoped source task"} for b in selected]}
+        elif task == "novelty":
+            answer = {"decision": "establish", "reuse_id": "", "new_name": payload["custom_function"],
+                      "rationale": "Genuinely new capability not covered by the catalog."}
+        elif task == "decompose":
+            answer = {"atoms": {"extract": 2, "classify": 1, "score": 0, "plan": 1,
+                                "retrieve": 1, "verify": 1, "write": 1},
+                      "rationale": "Bounded decomposition over the fixed atom vocabulary."}
         elif task == "features":
             answer = {"builder": "atoms_context_v1", "rationale": "Use fixed source-size descriptors."}
         elif task == "fit":
@@ -268,6 +275,87 @@ def test_invalid_telemetry_keeps_reservation_and_halts(tmp_path, config, request
     assert json.loads(evidence.read_text())["output"]
 
 
+def test_citation_matches_across_whitespace_but_not_paraphrase():
+    docs = source_documents("train-0", 0)
+    words = docs[0]["text"].split()
+    assert len(words) >= 3
+    reflowed = f"{words[0]}   {words[1]}\n\t{words[2]}"  # identical words, different whitespace
+    base = {"answer": "ok", "limitations": ["source only"]}
+    validate_message("workload", {**base, "evidence": [
+        {"document_id": docs[0]["id"], "quote": reflowed}]}, docs, contracts())
+    with pytest.raises(ValueError, match="exact supplied document span"):
+        validate_message("workload", {**base, "evidence": [
+            {"document_id": docs[0]["id"],
+             "quote": "fabricated span absent from every supplied source zzz"}]}, docs, contracts())
+
+
+def _reject_workload_citation(result):
+    answer = json.loads(result.output)
+    answer["evidence"] = [{"document_id": answer["evidence"][0]["document_id"],
+                           "quote": "fabricated span absent from every supplied source zzz"}]
+    return replace(result, output=json.dumps(answer))
+
+
+def test_settled_workload_content_failure_retries_then_never_halts(tmp_path, config, request_data):
+    provider = MockProvider()
+    def always_bad(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return _reject_workload_citation(result) if json.loads(prompt)["task"] == "workload" else result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=always_bad)
+    with pytest.raises(engine.ContentContractError):
+        run(runtime, request_data, tmp_path / "run")
+    status = runtime.public_status()
+    assert status["reserved_usd"] == 0        # the call settled; nothing is retained
+    assert status["halted"] is None           # a settled content failure never halts the campaign
+    assert status["spend_usd"] > 0            # rejected generations were honestly paid for
+    assert status["enabled"] is True          # the campaign can still run
+    assert not (tmp_path / "state" / "current.json").exists()
+    workload_calls = [c for c in provider.calls if c["payload"]["task"] == "workload"]
+    assert len(workload_calls) == engine.WORKLOAD_ATTEMPTS  # bounded retry on one job, then fail
+
+
+def test_bounded_retry_recovers_a_transient_citation_failure(tmp_path, config, request_data):
+    provider = MockProvider()
+    seen = {"n": 0}
+    def flaky(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        if json.loads(prompt)["task"] == "workload" and seen["n"] < 1:
+            seen["n"] += 1
+            return _reject_workload_citation(result)
+        return result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=flaky)
+    result, events, _ = run(runtime, request_data, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert runtime.public_status()["halted"] is None
+    assert result["workload"]["calls"] == 96   # only conforming measurements become rows
+    workload_calls = [c for c in provider.calls if c["payload"]["task"] == "workload"]
+    assert len(workload_calls) == 97           # 96 accepted + 1 rejected retry, each paid
+    assert result["usage_ledger"]["response_calls"] == 107
+    assert any("retrying a fresh paid call" in e["message"] for e in events)
+
+
+def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, config, request_data, monkeypatch):
+    provider = MockProvider()
+    truncated = {"done": False}
+    def transport(url, headers, body, timeout):
+        payload = json.loads(body)
+        result = provider(payload["input"], target="mock", output_cap=payload["max_output_tokens"])
+        if json.loads(payload["input"])["task"] == "workload" and not truncated["done"]:
+            truncated["done"] = True
+            result = replace(result, status="incomplete")  # truncated at the cap; usage still reported
+        return raw_response(result)
+    monkeypatch.setattr(engine, "_default_transport", transport)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, token_provider=lambda: "mock-token")
+    result, events, _ = run(runtime, request_data, tmp_path / "runs")
+    status = runtime.public_status()
+    assert status["halted"] is None            # known usage is settled; never an unknown-telemetry halt
+    assert status["reserved_usd"] == 0         # nothing is left reserved
+    assert result["training"]["pilot_published"] is True
+    assert result["workload"]["calls"] == 96   # the truncated output never becomes a training row
+    assert result["usage_ledger"]["response_calls"] == 107   # truncated call was paid for, then retried
+    assert any("retrying a fresh paid call" in e["message"] for e in events)
+
+
 def test_holdout_not_seen_in_selection_and_not_fitted(tmp_path, config, request_data, monkeypatch):
     provider = MockProvider()
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
@@ -312,19 +400,80 @@ def test_novel_measurement_reuses_train_only_and_restart_model_persists(tmp_path
     assert all("first" not in r["group"] for r in newer["training"]["rows"] if r["split"] == "holdout")
 
 
-@pytest.mark.parametrize("external,disagree,accepted", [(True, False, True), (False, True, True),
-                                                     (False, False, False)])
-def test_unsupported_scope_dissent_or_rejection_never_publishes(
-    tmp_path, config, request_data, external, disagree, accepted
+def test_novelty_reuse_when_agent_matches_existing_brick(tmp_path, config, request_data):
+    provider = MockProvider()
+    def reuse(prompt, **kwargs):
+        result = provider(prompt, **kwargs)
+        if json.loads(prompt)["task"] == "novelty":
+            answer = {"decision": "reuse", "reuse_id": "review", "new_name": "",
+                      "rationale": "Already covered by the document review brick."}
+            return replace(result, output=json.dumps(answer))
+        return result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=reuse)
+    result, events, _ = run(runtime, {**request_data, "new_function": "Documentation gap checker"},
+                            tmp_path / "run")
+    assert result["requested_custom"] == "review"       # mapped to the existing brick
+    assert len(result["catalog"]) == 16                 # nothing new established
+    assert not any(c["payload"]["task"] == "decompose" for c in provider.calls)
+    assert any("reused as an existing brick" in e["message"] for e in events)
+
+
+def test_novelty_establishes_agent_decomposed_brick_and_persists_for_reuse(tmp_path, config, request_data):
+    request = {**request_data, "new_function": "Compliance evidence mapper"}
+    first_provider = MockProvider()
+    first = engine.AgentRuntime(tmp_path / "state", config, dispatch=first_provider)
+    result, events, _ = run(first, request, tmp_path / "first", run_id="first")
+    novel = next(b for b in result["catalog"] if b["novel"])
+    assert result["requested_custom"] == novel["id"]
+    assert novel["atoms"] == {"extract": 2, "classify": 1, "score": 0, "plan": 1,
+                              "retrieve": 1, "verify": 1, "write": 1}   # agent-chosen decomposition
+    assert novel["supported"] is True and novel["input_tokens"] is not None
+    assert len(result["catalog"]) == 17 and result["training"]["pilot_published"] is True
+    assert any(c["payload"]["task"] == "decompose" for c in first_provider.calls)
+    assert any("Established a new basic brick" in e["message"] for e in events)
+    # The established brick persists; the same request reuses its measured train rows next run.
+    second = engine.AgentRuntime(tmp_path / "state", config, dispatch=MockProvider())
+    assert any(b["novel"] and b["supported"] for b in second.catalog()["items"])
+    newer, _, _ = run(second, request, tmp_path / "second", run_id="second")
+    assert len(newer["catalog"]) == 17
+    assert newer["training"]["reused_train_count"] == 68   # 64 standard + 4 established-brick rows
+    assert newer["training"]["new_holdout_count"] == 34
+
+
+def test_deterministic_guardrail_vetoes_near_duplicate_establish(tmp_path, config, request_data):
+    provider = MockProvider()   # tries to establish new_name == custom_function
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
+    result, events, _ = run(runtime, {**request_data, "new_function": "Deep research"}, tmp_path / "run")
+    assert result["requested_custom"] == "deep"          # guardrail forced reuse of the near duplicate
+    assert len(result["catalog"]) == 16                  # establish blocked
+    assert not any(c["payload"]["task"] == "decompose" for c in provider.calls)
+    assert any("guardrail vetoed establish" in e["message"] for e in events)
+
+
+@pytest.mark.parametrize("external,disagree,accepted,publishes", [
+    (True, False, True, True), (False, True, True, True), (False, False, False, False)])
+def test_project_scope_blocks_forecast_but_catalog_publishes_on_accepted_metrics(
+    tmp_path, config, request_data, external, disagree, accepted, publishes
 ):
     provider = MockProvider(disagree=disagree, accepted=accepted)
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
     if external:
         request_data = {**request_data, "description": "Perform live web research for current security regulations."}
     result, _, _ = run(runtime, request_data, tmp_path / "run")
+    # The whole-project forecast stays blocked on any project-scope or measurement problem.
     assert result["after"]["supported"] is False
     assert result["after"]["total"] is None and result["after"]["usd_per_run"] is None
-    assert not (tmp_path / "state" / "current.json").exists()
+    # Catalog/model publication depends only on measured-pilot integrity (metric acceptance),
+    # not on a single custom project's scope or decomposition dissent.
+    assert (tmp_path / "state" / "current.json").exists() is publishes
+    assert result["training"]["pilot_published"] is publishes
+    if publishes:
+        published = engine.AgentRuntime(tmp_path / "state", config, dispatch=MockProvider())
+        supported = [b for b in published.catalog()["items"] if b["supported"]]
+        assert supported, "measured standard bricks should publish supported forecasts"
+        assert all(b["pilot_version"] == result["training"]["version"] for b in supported)
+    else:
+        assert not (tmp_path / "state" / "current.json").exists()
     if disagree:
         assert result["dissent"]
         assert all(m["public_output"]["dissent"] for m in result["agents"] if m["kind"] == "discuss")
@@ -386,7 +535,7 @@ def test_root_artifact_contract_and_request_before_first_callback(tmp_path, conf
     with pytest.raises(engine.AgentCancelled):
         runtime.run_pipeline(request_data, root, run_id="server-run",
                              on_event=lambda event: None, before_stage=gate)
-    assert stages == ["propose"] and not provider.calls
+    assert stages == ["novelty"] and not provider.calls
     assert not (root / "request.json").exists()
     assert runtime.public_status()["approval_id"] == "marketplace-agent-pilot-usd25-v1"
 
@@ -446,7 +595,7 @@ def test_duplicate_or_unselected_include_decisions_rejected():
     docs = source_documents("train-0", 0)
     value = {"summary": "Decision", "bricks": [{"id": "extract", "quantity": 1}],
              "evidence": [{"document_id": docs[0]["id"], "quote": docs[0]["text"]}],
-             "agreed": True, "dissent": [], "unsupported": [],
+             "agreed": True, "dissent": [], "unsupported": [], "proposed_new_function": "",
              "decisions": [{"id": "extract", "decision": "include", "rationale": "Evidence task"}]}
     validate_message("adjudicate", value, docs, contracts())
     for extra in (
@@ -473,10 +622,14 @@ def test_agreement_flags_cannot_hide_unresolved_decisions(tmp_path, config, requ
         return replace(result, output=json.dumps(answer))
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=disputed)
     result, _, _ = run(runtime, request_data, tmp_path / "runs")
+    # Fabricated agreement cannot make the whole-project forecast supported when
+    # peer revisions differ or an orchestrator decision is still pending review.
     assert not result["after"]["supported"]
     assert result["after"]["total"] is None
-    assert not result["training"]["pilot_published"]
-    assert not (tmp_path / "state" / "current.json").exists()
+    # The independently measured brick catalog still publishes on accepted metrics;
+    # the unresolved decision only blocks the custom project's whole forecast.
+    assert result["training"]["pilot_published"] is True
+    assert (tmp_path / "state" / "current.json").exists()
 
 
 def test_measured_rate_separates_cache_and_reasoning_safety(tmp_path, config, request_data):
@@ -674,15 +827,26 @@ def settled_schema_failure(tmp_path, config, request_data, monkeypatch, request)
         run(runtime, request_data, tmp_path / "runs")
     path = next((tmp_path / "runs" / "test-run" / "agent-artifacts").glob("*.json"))
     evidence = json.loads(path.read_text())
+    # A settled content failure no longer halts the campaign. Manual recovery still exists
+    # to clear a halt persisted by an earlier engine build, so reconstruct that legacy
+    # halted-with-settled-call state (spend recorded, no reservation retained) directly.
+    evidence["status"] = "failed"
+    evidence["error_type"] = "ValueError"
     if legacy:
         for key in ("transport_protocol", "request_payload", "request_sha256"):
             evidence.pop(key)
-        engine._write(path, evidence)
-        state_path = tmp_path / "state" / "budget.json"
-        state = json.loads(state_path.read_text())
+    engine._write(path, evidence)
+    state_path = tmp_path / "state" / "budget.json"
+    state = json.loads(state_path.read_text())
+    state["halted"] = ("Dispatch/telemetry/contract failure; no automatic retry. "
+                       "Unknown telemetry retains full reservation. Manual audit required.")
+    if legacy:
         for key in ("halted_call_id", "halted_run_id", "halted_evidence_sha256"):
-            state.pop(key)
-        engine._write(state_path, state)
+            state.pop(key, None)
+    else:
+        state.update(halted_call_id=evidence["id"], halted_run_id="test-run",
+                     halted_evidence_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+    engine._write(state_path, state)
     kwargs = {"run_id": "test-run", "call_id": evidence["id"],
               "evidence_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
               "approval_id": runtime.approval_id,
