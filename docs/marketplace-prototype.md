@@ -14,7 +14,63 @@ not a production storefront or a purchasing system.
 > does not call the repository's trained predictor or a model provider.
 > Business benefits are hypotheses, not measured improvements.
 
-## Try the prototype
+## Sales conversation demo
+
+Open [marketplace-sales-demo.html](../marketplace-sales-demo.html) directly in
+a browser. This separate prototype builds on marketplace layout A; the original
+three-layout explorer remains available. No server or dependencies are needed.
+
+The demo provides two entry paths to the same estimate:
+
+1. Choose **Build with bricks**, click Research or Personalized discovery, and
+   select multiple variations. Set each variation's execution LLM, monthly runs,
+   setup hours, review minutes, and tool fee.
+2. Choose **Describe your idea**, load the research example or enter a brief,
+   preview its simulated decomposition, inspect the matched phrases, and
+   approve the mapping. Existing matching variants are replaced with defaults,
+   not duplicated; unrelated selections remain.
+
+The brief mapper uses local keyword rules, not an LLM. Unknown intent is
+reported without adding anything. Negations, conditions and unrecognized
+requirements require human interpretation. Editing the brief invalidates
+its pending proposal. Approval preserves the description and catalog mapping.
+
+Both flows show input/output tokens, AI cost, tool fees, recurring review,
+one-time setup labor, and role capacity for data scientists, architects and
+consultants. Staffing is an hours-based scenario, not a learned prediction.
+FTE divides setup hours by delivery weeks and weekly capacity; rounded-up
+people counts are not full-time hiring recommendations.
+
+The client value case uses unique monthly cases, before/after manual effort,
+labor value, a realization percentage and optional incremental contribution.
+Benefits are not multiplied by the number of selected bricks.
+
+```text
+monthly gross benefit = released hours x labor value x realization + contribution
+monthly net value = monthly gross benefit - recurring cost
+first-year cost = setup cost + 12 x recurring cost
+12-month ROI = (12 x monthly gross benefit - first-year cost) / first-year cost
+payback months = setup cost / positive monthly net value
+```
+
+Zero cost makes ROI undefined; nonpositive net value does not reach payback.
+Zero workloads produce no assumed benefit but can still incur setup and
+declared operating costs. Time increases remain negative benefits.
+This is an undiscounted scenario with full operation from month one, not a
+cash-flow forecast or causal impact estimate.
+
+All coefficients and rates are illustrative and editable. No trained predictor
+supports these variants or model choices in this demo. Named LLM rate cards
+are placeholders, not verified provider prices. The same pure calculation
+feeds the sidebar, review, ROI and JSON export. Review the build to download
+the scenario or copy its full JSON if the browser blocks downloads.
+
+Browser checks cover multi-selection, per-variant LLMs, approval and stale
+proposals, unknown briefs, invalid inputs, empty builds, zero workloads,
+negative ROI, role capacity, numeric reconciliation, and mobile layout.
+These checks verify the prototype's behavior, not empirical model accuracy.
+
+## Try the original prototype
 
 Open [marketplace-prototype.html](../marketplace-prototype.html) in a modern
 browser. No server, package installation, API key, or network connection is

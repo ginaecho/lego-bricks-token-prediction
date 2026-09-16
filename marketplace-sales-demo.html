@@ -1,0 +1,535 @@
+<!doctype html>
+<!-- Throwaway sales-flow prototype, based on feat/marketplace. No provider calls or trained predictions. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Yield | Marketplace sales studio</title>
+<style>
+:root{--ink:#20352e;--muted:#65746c;--green:#27674e;--lime:#def29d;--line:#dfe6dc;--paper:#f7f8f3;--amber:#846322}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 "Segoe UI",system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}
+button,a,input,select,textarea,summary{outline-offset:4px} :focus-visible{outline:2px solid var(--green)}
+h1,h2,h3,p{margin:0}h1{font-size:clamp(32px,4.3vw,55px);letter-spacing:-2px;line-height:1.08;font-weight:650}
+h2{font-size:21px;letter-spacing:-.5px}h3{font-size:16px}a{color:var(--green)}small,.muted{color:var(--muted)}small{font-size:11px}
+header{background:white;border-bottom:1px solid var(--line)}.header-inner{max-width:1440px;margin:auto;padding:18px 36px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.brand{display:flex;gap:12px;align-items:center;font-size:21px;font-weight:750;letter-spacing:-.7px}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--green);display:grid;grid-template-columns:7px 7px;place-content:center;gap:4px}.logo i{background:var(--lime);width:7px;height:7px;border-radius:2px}
+.header-links{display:flex;align-items:center;gap:20px;font-size:12px}.pill{display:inline-block;padding:4px 9px;border-radius:20px;background:#edf4e9;color:#376247;font-size:11px}.pill.amber{background:#f7efdc;color:var(--amber)}
+main{max-width:1440px;margin:auto;padding:35px 36px 60px}.intro{display:flex;justify-content:space-between;align-items:center;gap:28px;margin-bottom:26px}.intro p{max-width:595px;margin-top:15px;color:var(--muted)}
+.eyebrow{text-transform:uppercase;letter-spacing:1.7px;font-weight:700;font-size:10px;color:var(--green);margin-bottom:10px}
+.steps{display:flex;gap:16px;font-size:11px;color:var(--muted)}.steps span{display:flex;align-items:center;gap:6px}.steps b{display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;width:24px;height:24px}.steps span:first-child b{background:var(--green);color:white}
+.notice{border:1px solid #e9dfc4;background:#faf6eb;border-radius:9px;padding:11px 14px;margin-bottom:24px;font-size:12px;color:#71592e}
+.mode-bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:24px}.mode{padding:11px 18px;border:1px solid var(--line);border-radius:8px;background:white}.mode.active{background:var(--ink);color:white;border-color:var(--ink)}.mode-bar small{margin-left:auto}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:26px;align-items:start}.section-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}.section-head p{font-size:12px;color:var(--muted);margin-top:3px}
+.panel{padding:23px;border:1px solid var(--line);background:white;border-radius:13px;margin-bottom:22px}
+.search{width:100%;padding:11px 14px;background:white;border:1px solid var(--line);border-radius:8px}.filters{display:flex;gap:7px;margin:15px 0;flex-wrap:wrap}
+.filter,.secondary{border:1px solid var(--line);border-radius:7px;background:white;padding:8px 12px;font-size:12px}.filter.active{background:var(--ink);color:white}
+.catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{display:flex;flex-direction:column;gap:13px;background:white;border:1px solid var(--line);border-radius:12px;padding:20px}.card.selected{border-color:#80a78b}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.brick{--brick:#e7c374;position:relative;width:40px;height:30px;background:var(--brick);border-radius:4px;box-shadow:inset 0 -5px #0000000c;margin:5px 0 2px}
+.brick:before,.brick:after{content:"";position:absolute;top:-5px;width:10px;height:6px;border-radius:3px 3px 0 0;background:var(--brick)}.brick:before{left:6px}.brick:after{right:6px}
+.card p{font-size:12px;color:var(--muted);margin-top:5px;min-height:36px}.card-title{border:0;padding:0;background:none;font-weight:650;text-align:left;font-size:17px}
+.tags{display:flex;flex-wrap:wrap;gap:5px}.tags span{background:#f0f3ec;color:#5f7164;border-radius:4px;padding:3px 6px;font-size:10px}.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:12px;border-top:1px solid #eef1e9}.card-bottom small{display:block;font-size:10px}
+.selected .secondary{background:#edf4e8;color:var(--green)}.picked{font-size:11px;color:var(--green);min-height:18px}
+.cart{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}.cart-title{display:flex;align-items:center;justify-content:space-between}.cart-items{margin:15px 0;max-height:270px;overflow:auto}
+.cart-item{display:flex;align-items:start;gap:9px;padding:9px 0;border-bottom:1px solid #f0f3ed;font-size:12px}.cart-item .item{flex:1}.cart-item small{display:block;font-size:10px}.dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;margin-top:6px}.remove{background:none;border:0;padding:0 5px;color:var(--muted);font-size:20px;line-height:1.2}
+.estimate{background:#f0f5e9;padding:18px;border-radius:9px;margin:15px -5px}.estimate .eyebrow{font-size:9px}.amount{font-size:38px;letter-spacing:-1.5px;line-height:1.2;font-weight:650;margin:7px 0}.amount small{font-size:12px;font-weight:400;letter-spacing:0}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:12px;margin:9px 0}.row span{color:var(--muted)}.row b{text-align:right}.divider{border-top:1px solid var(--line);margin:14px 0}
+.primary{border:0;background:var(--green);color:white;border-radius:7px;padding:12px 16px;font-weight:600;font-size:12px}.wide{width:100%;margin-top:12px}.text-button{border:0;background:none;text-decoration:underline;color:var(--muted);font-size:11px;padding:8px}
+.fine{font-size:11px;color:var(--muted);margin-top:10px}.empty{padding:24px 0;color:var(--muted);font-size:13px}.section-space{margin-top:28px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-top:17px}.form-grid.two{grid-template-columns:1fr 1fr}label{display:block;font-size:12px;font-weight:600}label small{display:block;font-weight:400;margin:3px 0}
+input[type=number],select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:white;margin-top:5px}textarea{resize:vertical;min-height:130px;line-height:1.6}
+.help{font-size:12px;color:var(--muted);margin-top:7px}details{margin-top:18px}summary{cursor:pointer;font-size:12px;font-weight:600}.table-scroll{overflow:auto;margin-top:16px}table{width:100%;border-collapse:collapse;font-size:12px;text-align:left}th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px;font-weight:600}th,td{padding:11px 9px;border-bottom:1px solid var(--line);vertical-align:top}td small{display:block}td.num,th.num{text-align:right;white-space:nowrap}
+.yield-panel{background:#213d31;color:white;padding:25px;border-radius:13px;margin-top:25px}.yield-panel .eyebrow{color:#cfdfa6}.yield-panel p,.yield-panel small{color:#bfd0c2}.yield-head{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}.metric{padding:15px;border:1px solid #ffffff25;border-radius:8px}.metric strong{display:block;font-size:29px;font-weight:600;letter-spacing:-.8px}.metric small{font-size:11px}
+.positive{color:#d4eca3}.negative{color:#ffc0a5}.comparison{display:flex;gap:8px;height:9px;margin:12px 0;border-radius:6px;overflow:hidden;background:#ffffff18}.comparison span{background:#cde6a3}
+.impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:17px}.impact{background:#f2f5ed;border-radius:8px;padding:15px}.impact p{font-size:12px;margin-top:6px;color:var(--muted)}
+.custom-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.proposal{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}.proposal-line{padding:13px;border:1px solid var(--line);border-radius:8px;margin:10px 0}
+.proposal-line label{display:flex;align-items:center;gap:9px}.proposal-line p{font-size:12px;color:var(--muted);margin-top:6px}.error{border:1px solid #d9a38a;background:#fff0e8;color:#943a24;padding:12px;border-radius:8px;margin:15px 0;font-size:12px}
+.status{font-size:12px;color:var(--green);min-height:20px;margin-bottom:10px}.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:17px;font-size:11px}.flow span{background:#f0f3ec;border:1px solid var(--line);padding:7px;border-radius:6px}
+dialog{border:1px solid var(--line);border-radius:15px;max-width:780px;width:calc(100% - 32px);max-height:90vh;padding:27px;color:var(--ink);box-shadow:0 24px 90px #12271d38}dialog::backdrop{background:#132b2166}.dialog-head{display:flex;justify-content:space-between;gap:20px;margin-bottom:13px}.close{border:1px solid var(--line);background:white;width:32px;height:32px;border-radius:50%;font-size:19px;flex-shrink:0}
+.variant-row{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;padding:16px;border:1px solid var(--line);border-radius:9px;margin:12px 0}.variant-row:has(input:checked){border-color:#80a78b;background:#f6f9f1}.variant-row input[type=checkbox]{width:17px;height:17px;margin-top:4px;accent-color:var(--green)}
+.variant-row .form-grid{margin-top:10px;gap:12px}.variant-row p{font-size:12px;color:var(--muted);margin-top:4px}.dialog-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:18px}.review-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.review-metrics div{background:#f0f5e9;padding:14px;border-radius:8px}.review-metrics b{display:block;font-size:23px}
+footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:20px}
+[hidden]{display:none!important}
+@media(min-width:1500px){main{padding-top:42px}}@media(max-width:1050px){.workspace{grid-template-columns:minmax(0,1fr) 310px}.header-inner,main{padding-left:22px;padding-right:22px}.steps{display:none}.form-grid{grid-template-columns:1fr 1fr}.card{padding:16px}}
+@media(max-width:780px){.workspace{grid-template-columns:1fr}.cart{position:static;max-height:none;overflow:visible}.header-links a{display:none}.intro{display:block}.catalog{grid-template-columns:1fr 1fr}.mode-bar small{margin-left:0}.metrics,.review-metrics{grid-template-columns:1fr}.form-grid,.form-grid.two,.impact-grid{grid-template-columns:1fr}.header-inner,main{padding-left:16px;padding-right:16px}.yield-head{align-items:start}.variant-row .form-grid{grid-template-columns:1fr}.dialog-footer{flex-wrap:wrap}}
+@media(max-width:480px){.catalog{grid-template-columns:1fr}.header-links{gap:0}.pill{font-size:10px}.mode{flex:1;font-size:12px;padding:10px}.brand{font-size:18px}}
+</style>
+</head>
+<body>
+<header><div class="header-inner">
+  <div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Token Yield</div>
+  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><span>Sales studio</span><span class="pill amber">Simulation / no API calls</span></div>
+</div></header>
+<main>
+  <section class="intro"><div><div class="eyebrow">The functionality marketplace</div><h1>Your next product.<br>One brick at a time.</h1><p>Shape the solution together. Explore the capabilities, the team, and the value they could create &mdash; not just the tokens they consume.</p></div>
+    <div class="steps"><span><b>1</b> Choose &amp; customize</span><span><b>2</b> Shape your estimate</span><span><b>3</b> Make the value case</span></div>
+  </section>
+  <div class="notice"><b>Sales-flow prototype.</b> Can sales and a client turn selected capabilities or a brief into a transparent value case? All token coefficients, LLM factors, prices, staffing, and ROI are <b>editable illustrative assumptions</b>. No trained predictor or live LLM is connected; variants and model choices are not calibrated.</div>
+  <nav class="mode-bar" aria-label="Demo flows">
+    <button class="mode active" id="manual-tab" aria-pressed="true">01 &nbsp; Build with bricks</button>
+    <button class="mode" id="custom-tab" aria-pressed="false">02 &nbsp; Describe your idea</button>
+    <small>Two ways in. One transparent estimate.</small>
+  </nav>
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+  <div class="workspace">
+    <div>
+      <section id="custom-panel" class="panel" hidden>
+        <div class="section-head"><div><div class="eyebrow">Demo 02 / brief to bricks</div><h2>What would you like to build?</h2><p>Describe research or a whole solution. Review the proposed mapping before adding it.</p></div><span class="pill amber">Local simulation</span></div>
+        <label for="brief">Customized description</label>
+        <textarea id="brief" maxlength="6000" placeholder="For example: Deep research into competitors, web research with cited sources, and personalized discovery based on customer interests."></textarea>
+        <div class="form-grid two">
+          <label>Focus area<select id="brief-focus"><option value="all">Whole solution</option><option value="research">Research</option><option value="recommend">Personalized discovery</option><option value="support">AI customer support</option><option value="documents">Document automation</option></select></label>
+          <label>Preferred execution LLM<select id="brief-model" class="model-options"></select><small>This selects a scenario rate card; it does not call this model.</small></label>
+        </div>
+        <div class="custom-actions"><button class="primary" id="decompose">Preview decomposition (simulated)</button><button class="secondary" id="example">Load research example</button></div>
+        <p class="help">This preview uses visible keyword rules, not an LLM. Unsupported, negative, or conditional requirements need human clarification. A production LLM would propose this same catalog mapping, followed by approval and a calibrated predictor.</p>
+        <div class="flow"><span>Your description</span>&rarr;<span>Simulated catalog mapping</span>&rarr;<span>You approve</span>&rarr;<span>Illustrative feature estimator</span>&rarr;<span>Cost + value case</span></div>
+        <div id="proposal" class="proposal" hidden></div>
+      </section>
+      <section aria-labelledby="catalog-heading">
+        <div class="section-head"><div><h2 id="catalog-heading">The functionality marketplace</h2><p>Click a brick to zoom in. Mix variants and choose an LLM for each.</p></div><button id="starter" class="secondary">Load sales example</button></div>
+        <label for="search" class="muted">Find a functionality or variation</label><input class="search" id="search" type="search" placeholder="Try research, personalized discovery, or documents">
+        <div class="filters" id="filters" aria-label="Catalog categories"></div>
+        <div class="catalog" id="catalog"></div>
+      </section>
+      <section class="panel section-space" aria-labelledby="assumptions-heading">
+        <div class="eyebrow">Shape your estimate</div><h2 id="assumptions-heading">Shared planning assumptions</h2><p class="help">Monthly runs are set per selected variant. Multiple variants are separate workloads, not mutually exclusive research depths.</p>
+        <div class="form-grid">
+          <label>New variant runs / month<input id="defaultRuns" type="number" min="0" max="1000000" step="1" value="1000"><small>Applies when adding variants, not existing ones.</small></label>
+          <label>Context tokens / run<input id="context" type="number" min="0" max="100000" step="1" value="500"><small>Additional input per variant execution.</small></label>
+          <label>Integration complexity<select id="complexity"><option value="1">Standard / shared APIs</option><option value="1.6">Custom systems / 1.6x</option><option value="2.4">Legacy systems / 2.4x</option></select><small>Affects routing and setup, not variant tokens.</small></label>
+          <label>Coordinator LLM<select id="coordinator" class="model-options"></select><small>Rates one-time setup and recurring routing.</small></label>
+          <label>Cost reserve %<input id="reserve" type="number" min="0" max="100" step="1" value="20"><small>AI + tool cost only; not extra tokens.</small></label>
+          <label>Other operating cost USD / month<input id="operating" type="number" min="0" max="10000000" step="0.01" value="150"><small>Hosting, licenses, monitoring; explicit allowance.</small></label>
+        </div>
+        <details><summary>Edit scenario LLM rates and token factors</summary><p class="help">Names identify hypothetical execution choices. These are <b>not current provider prices</b>. Token factors are untrained assumptions, not model-quality scores. Output includes all billed output; no cache discount or extra reasoning charge.</p><div id="model-rates" class="table-scroll"></div></details>
+        <details><summary>Show the LEGO-style estimator and evidence boundary</summary>
+          <p class="help">The atomic coefficients are reused from the original marketplace demo. Variant task repetitions, model factors, staffing hours and tool fees are illustrative extensions. No runtime, research depth, or outcome is validated.</p>
+          <div class="table-scroll"><table><thead><tr><th>Atomic task</th><th class="num">Input tokens</th><th class="num">Output tokens</th></tr></thead><tbody id="atom-table"></tbody></table></div>
+          <p class="help">Per variant input = ceil((sum of atomic input + context + custom-brief characters / 4) &times; scenario input factor). Output = ceil(sum of atomic output &times; scenario output factor). Multiply each by its own monthly runs, then rate the input and output separately.</p>
+          <p class="help">Between distinct selected capabilities, each pair routes min(left runs, right runs) times. Routing uses 120 input + 30 output tokens per paired run. Each pair adds 18,000 input + 6,000 output setup tokens, plus 4 architect and 4 consultant setup hours. Integration complexity scales those amounts. This is a planning assumption, not a real dependency graph.</p>
+        </details>
+      </section>
+      <section class="panel" aria-labelledby="team-heading">
+        <div class="eyebrow">Delivery effort / assumptions, not a hiring recommendation</div><h2 id="team-heading">The team behind the build</h2>
+        <p class="help">Setup hours are summed once across selected variants. FTE = role hours / (delivery weeks &times; hours per week). People = rounded-up FTE; fractional workloads can be shared across projects. Changing the timeline changes capacity, not total labor cost.</p>
+        <div class="form-grid">
+          <label>Delivery weeks<input id="weeks" type="number" min="1" max="104" step="1" value="6"></label>
+          <label>Hours / person / week<input id="weekHours" type="number" min="1" max="60" step="1" value="32"></label>
+          <label>Data scientist USD / hour<input id="dsRate" type="number" min="0" max="5000" step="0.01" value="110"></label>
+          <label>Architect USD / hour<input id="archRate" type="number" min="0" max="5000" step="0.01" value="140"></label>
+          <label>Consultant USD / hour<input id="consultRate" type="number" min="0" max="5000" step="0.01" value="85"></label>
+          <label>Review cost USD / hour<input id="reviewRate" type="number" min="0" max="5000" step="0.01" value="55"><small>Recurring review is costed separately from setup.</small></label>
+        </div>
+        <div id="team-summary"></div>
+      </section>
+      <section class="panel" aria-labelledby="value-heading">
+        <div class="eyebrow">Token yield / the client value case</div><h2 id="value-heading">What is a better outcome worth?</h2><p class="help">Count unique client cases once, not once per brick. A workflow can invoke several variants; benefits are not automatically multiplied when adding capabilities.</p>
+        <div class="form-grid">
+          <label>Unique client cases / month<input id="cases" type="number" min="0" max="1000000" step="1" value="1000"></label>
+          <label>Manual baseline minutes / case<input id="before" type="number" min="0" max="10000" step="0.1" value="30"></label>
+          <label>Remaining manual minutes / case<input id="after" type="number" min="0" max="10000" step="0.1" value="8"><small>Excludes extra AI review already costed separately.</small></label>
+          <label>Client labor value USD / hour<input id="laborValue" type="number" min="0" max="5000" step="0.01" value="65"></label>
+          <label>Realized share of time value %<input id="realization" type="number" min="0" max="100" step="1" value="60"><small>Not all released capacity becomes cash savings.</small></label>
+          <label>Additional contribution USD / month<input id="contribution" type="number" min="0" max="10000000" step="0.01" value="0"><small>Optional incremental margin, not revenue. Avoid double counting.</small></label>
+        </div>
+        <p class="help">Time released = unique cases &times; (before &minus; after) / 60. Monthly gross benefit = time released &times; labor value &times; realized share + incremental contribution. Negative time savings remain negative. Zero selected workloads or zero client cases produce no benefits.</p>
+        <div id="yield-summary" class="yield-panel"></div>
+        <details><summary>What must be proven with the client?</summary><div class="impact-grid">
+          <div class="impact"><h3>Productivity, without quality loss</h3><p>Measure minutes per accepted case, reviewer effort, rework, and acceptance rate against the manual baseline. Validate whether released capacity is redeployed or removed.</p></div>
+          <div class="impact"><h3>Better customer experiences</h3><p>Test conversion, useful recommendations, customer satisfaction and retention against a control. Add incremental contribution only when supported by evidence.</p></div>
+          <div class="impact"><h3>Capacity &amp; reliability</h3><p>Validate throughput, latency, provider limits and failure rates. Selected workload counts are not a service-level guarantee.</p></div>
+          <div class="impact"><h3>Responsible resource use</h3><p>Measure energy per accepted outcome and sensitive-data handling. Token savings alone do not prove carbon savings, quality or ROI.</p></div>
+        </div></details>
+      </section>
+    </div>
+    <aside class="panel cart" aria-labelledby="build-heading">
+      <div class="cart-title"><h2 id="build-heading">Your build</h2><span id="build-count" class="pill"></span></div>
+      <p class="fine">A client-facing solution, shaped together.</p><div id="cart-items" class="cart-items"></div>
+      <div id="quote-error" class="error" role="alert" hidden></div>
+      <div id="quote-summary"></div>
+      <button class="primary wide" id="review">Review build &amp; value case &rarr;</button>
+      <p class="fine"><a href="#value-heading">Explore ROI and client-impact assumptions &darr;</a></p>
+      <div style="text-align:center"><button class="text-button" id="clear">Clear build</button></div>
+      <p class="fine">Illustrative, not a trained forecast, invoice, staffing commitment or guaranteed return. All amounts in USD. No work is executed. Export includes assumptions and full calculation details.</p>
+    </aside>
+  </div>
+  <footer><span>Token Yield &middot; Marketplace sales-flow prototype &middot; based on feat/marketplace</span><span>Private by design: in-memory, offline, no telemetry.</span></footer>
+</main>
+<dialog id="configure" aria-labelledby="configure-title">
+  <div class="dialog-head"><div><div class="eyebrow">Zoom into your brick</div><h2 id="configure-title"></h2></div><button class="close" data-close="configure" aria-label="Close configuration">&times;</button></div>
+  <p id="configure-description" class="help"></p>
+  <p class="help">Select one or more variations. Each executes and is charged separately. Set its LLM, volume and human-effort assumptions.</p>
+  <form id="variant-form"><div id="variant-options"></div><div class="dialog-footer"><small>Changes apply only when saved.</small><button class="primary" type="submit">Save selections</button></div></form>
+</dialog>
+<dialog id="review-dialog" aria-labelledby="review-title">
+  <div class="dialog-head"><div><div class="eyebrow">Demo estimate / not a commercial quote</div><h2 id="review-title">Your build. Your value case.</h2></div><button class="close" data-close="review-dialog" aria-label="Close review">&times;</button></div>
+  <div id="review-body"></div><div class="dialog-footer"><small>Local download only. No customer data is sent.</small><button id="download" class="primary">Download estimate JSON</button></div>
+  <p id="download-status" class="help" role="status"></p>
+  <details><summary>Copyable JSON / use if your browser blocks downloads</summary><label for="export-json">Full scenario, assumptions and calculation details</label><textarea id="export-json" readonly rows="10" spellcheck="false"></textarea></details>
+</dialog>
+<script>
+"use strict";
+const ATOMS = {
+  Retrieve:[1800,220], Draft:[900,450], Validate:[500,90], Classify:[400,70],
+  Score:[650,100], Summarise:[1400,300], Report:[700,400], Extract:[1200,200],
+  Transform:[800,180], Plan:[900,350], Notify:[300,90]
+};
+// Atomic defaults come from the original branch; variant effort and prices below are scenario assumptions.
+const CATALOG = [
+  {id:"recommend",name:"Personalized discovery",category:"Customer experience",color:"#e8af94",description:"Make the next product feel like the right product.",variants:[
+    {id:"interests",name:"Interest-based recommendations",description:"Match stated preferences to the next best option.",atoms:["Classify","Score","Draft"],hours:[32,12,20],review:0.3,tool:0},
+    {id:"behavior",name:"Behavioral personalization",description:"Use browsing and purchase signals to rank relevant options.",atoms:["Extract","Classify","Score","Score","Draft"],hours:[64,24,24],review:0.5,tool:0},
+    {id:"journey",name:"Journey recommendations",description:"Guide a customer through a contextual next-best-action journey.",atoms:["Classify","Plan","Score","Draft","Validate"],hours:[48,24,32],review:0.5,tool:0}]},
+  {id:"research",name:"Research",category:"Intelligence",color:"#e7c374",description:"Turn questions and source material into decision-ready evidence.",variants:[
+    {id:"normal",name:"Normal research",description:"Summarize supplied context and prepare a concise research note.",atoms:["Retrieve","Summarise","Report"],hours:[20,8,16],review:2,tool:0},
+    {id:"web",name:"Web research",description:"Search external sources, extract evidence, and verify citations.",atoms:["Retrieve","Retrieve","Extract","Validate","Report"],hours:[32,16,24],review:3,tool:0.02},
+    {id:"deep",name:"Deep research",description:"Plan multiple research passes, compare evidence, and synthesize findings.",atoms:["Plan","Retrieve","Retrieve","Retrieve","Extract","Summarise","Summarise","Validate","Report"],hours:[56,24,40],review:6,tool:0.08}]},
+  {id:"support",name:"AI customer support",category:"Customer experience",color:"#d6b4e9",description:"Helpful, grounded answers. Even when your team is offline.",variants:[
+    {id:"faq",name:"Knowledge-base answers",description:"Ground responses in an approved support library.",atoms:["Retrieve","Draft","Validate"],hours:[24,12,24],review:0.5,tool:0},
+    {id:"triage",name:"Ticket triage & routing",description:"Classify incoming requests and draft the right next action.",atoms:["Classify","Score","Draft","Notify"],hours:[28,16,24],review:1,tool:0}]},
+  {id:"search",name:"Smart product search",category:"Customer experience",color:"#b7c99a",description:"Help customers find what they mean, not just what they type.",variants:[
+    {id:"semantic",name:"Semantic search",description:"Retrieve and classify relevant catalog results.",atoms:["Retrieve","Classify"],hours:[32,16,16],review:0.1,tool:0},
+    {id:"compare",name:"Product comparison",description:"Score alternatives and explain the trade-offs.",atoms:["Retrieve","Score","Report"],hours:[40,16,24],review:0.3,tool:0}]},
+  {id:"insights",name:"Customer insights",category:"Intelligence",color:"#a8c9e0",description:"Turn scattered feedback into themes your team can act on.",variants:[
+    {id:"feedback",name:"Feedback analysis",description:"Classify, summarize and report customer themes.",atoms:["Classify","Summarise","Report"],hours:[32,12,24],review:2,tool:0},
+    {id:"sentiment",name:"Sentiment & prioritization",description:"Score sentiment and prioritize recurring issues.",atoms:["Classify","Score","Summarise","Report"],hours:[40,16,28],review:2,tool:0}]},
+  {id:"documents",name:"Document automation",category:"Operations",color:"#c9b4a3",description:"Extract, reshape, and check data without repetitive work.",variants:[
+    {id:"extract",name:"Structured extraction",description:"Extract fields, normalize data and validate the output.",atoms:["Extract","Transform","Validate"],hours:[32,16,20],review:1,tool:0},
+    {id:"review",name:"Document review",description:"Extract evidence and create a reviewer-ready report.",atoms:["Extract","Validate","Summarise","Report"],hours:[40,16,32],review:3,tool:0}]},
+  {id:"onboard",name:"Guided onboarding",category:"Operations",color:"#a7cebf",description:"Give every new customer a clear, personalized next step.",variants:[
+    {id:"guided",name:"Guided setup",description:"Plan onboarding steps, draft guidance and send notifications.",atoms:["Plan","Draft","Notify"],hours:[20,16,24],review:0.5,tool:0},
+    {id:"adaptive",name:"Adaptive onboarding",description:"Adapt the path to customer needs and validate readiness.",atoms:["Classify","Plan","Draft","Validate","Notify"],hours:[32,20,32],review:1,tool:0}]}
+];
+const MODELS = [
+  {id:"gpt-mini",name:"GPT-5 mini",input:0.25,output:2,inputFactor:1,outputFactor:1},
+  {id:"gpt",name:"GPT-5",input:1.25,output:10,inputFactor:1,outputFactor:1.2},
+  {id:"claude",name:"Claude Sonnet",input:3,output:15,inputFactor:1.1,outputFactor:1.1},
+  {id:"gemini",name:"Gemini Flash",input:0.3,output:2.5,inputFactor:0.95,outputFactor:1.05}
+];
+const LIMITATIONS = [
+  "Offline sales simulation; no live LLM, trained predictor or provider connection.",
+  "Atomic token coefficients inherited from feat/marketplace are illustrative, not fitted.",
+  "Variant tasks, context conversion, LLM factors, rates, staffing and tool fees are editable scenario assumptions.",
+  "No calibrated ranges or demonstrated coverage for these capabilities, variants or model runtimes.",
+  "Custom decomposition is keyword-based, requires approval, and may miss intent or constraints.",
+  "Selected variants execute separately; no free sharing, batching discount or downstream handoff is inferred.",
+  "Benefits are client assumptions, not causal evidence, cash savings, outcome guarantees or carbon claims.",
+  "Costs exclude undeclared taxes, vendor discounts, financing and failures/retries. No cache discount.",
+  "Staff headcount assumes evenly distributable work; scheduling, skills and parallel delivery are unverified."
+];
+const $ = id => document.getElementById(id);
+const esc = value => String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+const number = value => new Intl.NumberFormat("en-US",{maximumFractionDigits:1}).format(value);
+const money = value => new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(value);
+const compact = value => value >= 1e6 ? `${number(value/1e6)}M` : value >= 1000 ? `${number(value/1000)}K` : number(value);
+const key = (feature,variant) => `${feature}:${variant}`;
+const fields = ["defaultRuns","context","complexity","reserve","operating","weeks","weekHours","dsRate","archRate","consultRate","reviewRate","cases","before","after","laborValue","realization","contribution"];
+class InputError extends Error {}
+let selections = [], category = "All", editingFeature = null, proposal = null, latestEstimate = null, mode = "manual";
+const modelOptions = selected => MODELS.map(model => `<option value="${model.id}" ${model.id===selected?"selected":""}>${model.name}</option>`).join("");
+function assumptions() {
+  for (const id of fields) if (!$(id).checkValidity()) throw new InputError(`Check "${$(id).closest("label").childNodes[0].textContent.trim()}": enter a value within the displayed limits.`);
+  return Object.fromEntries(fields.map(id => [id,Number($(id).value)]));
+}
+function record(featureId,variantId,modelId="gpt-mini",runs=1000,source="catalog",description="") {
+  const variant = CATALOG.find(item => item.id===featureId).variants.find(item => item.id===variantId);
+  return {featureId,variantId,modelId,runs,hours:[...variant.hours],review:variant.review,tool:variant.tool,source,description};
+}
+// One pure calculation feeds the sidebar, review, business case and exported estimate.
+function calculate(items,a,models,coordinatorId) {
+  const rows = items.map(item => {
+    const feature = CATALOG.find(entry => entry.id===item.featureId);
+    const variant = feature.variants.find(entry => entry.id===item.variantId);
+    const model = models.find(entry => entry.id===item.modelId);
+    const atomCounts = variant.atoms.reduce((counts,atom) => ({...counts,[atom]:(counts[atom]||0)+1}),{});
+    const raw = variant.atoms.reduce((sum,atom) => [sum[0]+ATOMS[atom][0],sum[1]+ATOMS[atom][1]],[0,0]);
+    const briefInput = Math.ceil(item.description.length/4);
+    const perRun = {input:Math.ceil((raw[0]+a.context+briefInput)*model.inputFactor),output:Math.ceil(raw[1]*model.outputFactor)};
+    const tokens = {input:perRun.input*item.runs,output:perRun.output*item.runs};
+    const api = (tokens.input*model.input+tokens.output*model.output)/1e6;
+    return {...item,feature:feature.name,variant:variant.name,model:model.name,atomCounts,briefInput,perRun,tokens,api,
+      toolCost:item.tool*item.runs,reviewHours:item.review*item.runs/60,
+      featureVector:{capability:item.featureId,variation:item.variantId,model:item.modelId,atomCounts,contextTokens:a.context,briefInputTokens:briefInput}};
+  });
+  const groups = [...new Set(rows.map(row=>row.featureId))].map(id=>({id,runs:rows.filter(row=>row.featureId===id).reduce((sum,row)=>sum+row.runs,0)}));
+  const coordinator = models.find(model=>model.id===coordinatorId);
+  const pairs = [];
+  groups.forEach((left,i)=>groups.slice(i+1).forEach(right=>pairs.push({left:left.id,right:right.id,runs:Math.min(left.runs,right.runs)})));
+  const routingRuns = pairs.reduce((sum,pair)=>sum+pair.runs,0);
+  const routing = {input:Math.ceil(120*routingRuns*a.complexity*coordinator.inputFactor),output:Math.ceil(30*routingRuns*a.complexity*coordinator.outputFactor)};
+  const setupTokens = {input:Math.ceil(18000*pairs.length*a.complexity*coordinator.inputFactor),output:Math.ceil(6000*pairs.length*a.complexity*coordinator.outputFactor)};
+  const rate = tokens => (tokens.input*coordinator.input+tokens.output*coordinator.output)/1e6;
+  const input = rows.reduce((sum,row)=>sum+row.tokens.input,0)+routing.input;
+  const output = rows.reduce((sum,row)=>sum+row.tokens.output,0)+routing.output;
+  const monthlyApi = rows.reduce((sum,row)=>sum+row.api,0)+rate(routing);
+  const tools = rows.reduce((sum,row)=>sum+row.toolCost,0);
+  const reviewHours = rows.reduce((sum,row)=>sum+row.reviewHours,0);
+  const reviewCost = reviewHours*a.reviewRate;
+  const reserveCost = (monthlyApi+tools)*a.reserve/100;
+  const operating = rows.length ? a.operating : 0;
+  const monthlyCost = monthlyApi+tools+reserveCost+reviewCost+operating;
+  const roleNames = ["Data scientist","Architect","Consultant"];
+  const roleRates = [a.dsRate,a.archRate,a.consultRate];
+  const team = roleNames.map((name,i)=>{
+    const hours=rows.reduce((sum,row)=>sum+row.hours[i],0)+(i>0 ? 4*pairs.length*a.complexity : 0);
+    const fte=hours/(a.weeks*a.weekHours);
+    return {role:name,hours,fte,people:Math.ceil(fte),rate:roleRates[i],cost:hours*roleRates[i]};
+  });
+  const setupAI = rate(setupTokens)*(1+a.reserve/100);
+  const setupLabor = team.reduce((sum,role)=>sum+role.cost,0);
+  const setupCost = setupLabor+setupAI;
+  const runs = rows.reduce((sum,row)=>sum+row.runs,0);
+  const benefitCases = runs>0 ? a.cases : 0;
+  const hoursSaved = benefitCases*(a.before-a.after)/60;
+  const timeValue = hoursSaved*a.laborValue*a.realization/100;
+  const contribution = benefitCases>0 ? a.contribution : 0;
+  const benefit = timeValue+contribution;
+  const net = benefit-monthlyCost;
+  const yearCost = setupCost+12*monthlyCost,yearBenefit=12*benefit;
+  const roi = yearCost>0 ? (yearBenefit-yearCost)/yearCost*100 : null;
+  const payback = net>0 ? setupCost/net : null;
+  const warnings=[];
+  if (benefitCases>runs) warnings.push("Unique client cases exceed total selected variant runs. Reconcile coverage before relying on benefits.");
+  if (rows.length && runs===0) warnings.push("No recurring workloads: benefits are zero. Setup labor and the operating allowance remain.");
+  if (a.after>a.before) warnings.push("The proposed workflow takes longer than the manual baseline; negative time value is included.");
+  return {rows,groups,pairs,routing,routingRuns,setupTokens,coordinator:coordinator.name,input,output,totalTokens:input+output,
+    monthlyApi,tools,reserveCost,reviewHours,reviewCost,operating,monthlyCost,team,setupAI,setupLabor,setupCost,runs,
+    benefitCases,hoursSaved,timeValue,contribution,benefit,net,yearCost,yearBenefit,roi,payback,
+    benefitPerMillionTokens:input+output>0 ? benefit/(input+output)*1e6 : null,warnings};
+}
+function renderCatalog() {
+  const query=$("search").value.trim().toLowerCase();
+  const visible=CATALOG.filter(feature=>(category==="All"||feature.category===category)&&`${feature.name} ${feature.description} ${feature.variants.map(v=>v.name).join(" ")}`.toLowerCase().includes(query));
+  $("catalog").innerHTML=visible.map(feature=>{
+    const chosen=selections.filter(item=>item.featureId===feature.id);
+    const atoms=[...new Set(feature.variants.flatMap(variant=>variant.atoms))];
+    return `<article class="card ${chosen.length?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature.color}" aria-hidden="true"></span><small>${feature.category}</small></div>
+      <div><h3><button class="card-title" data-configure="${feature.id}">${feature.name}</button></h3><p>${feature.description}</p></div>
+      <div class="tags">${atoms.map(atom=>`<span>${atom}</span>`).join("")}</div><div class="picked">${chosen.length ? chosen.map(item=>feature.variants.find(v=>v.id===item.variantId).name).join(" + ") : `${feature.variants.length} variations to explore`}</div>
+      <div class="card-bottom"><div><b>${chosen.length ? chosen.length+" selected" : "Choose your depth"}</b><small>Multi-select &middot; LLM per variation</small></div><button class="secondary" data-configure="${feature.id}" aria-label="Configure ${feature.name}">${chosen.length?"Edit brick":"Explore brick"} &rarr;</button></div></article>`;
+  }).join("")||'<p class="empty">No matching functionalities. Try another search or category.</p>';
+}
+function row(label,value) {return `<div class="row"><span>${label}</span><b>${value}</b></div>`;}
+function renderQuote() {
+  $("cart-items").innerHTML=selections.map(item=>{
+    const feature=CATALOG.find(f=>f.id===item.featureId),variant=feature.variants.find(v=>v.id===item.variantId),model=MODELS.find(m=>m.id===item.modelId);
+    return `<div class="cart-item"><span class="dot" style="background:${feature.color}"></span><div class="item"><b>${feature.name}</b><small>${variant.name} &middot; ${model.name}</small><small>${number(item.runs)} runs/month${item.source==="custom"?" &middot; approved brief mapping":""}</small></div><button class="remove" data-remove="${key(item.featureId,item.variantId)}" aria-label="Remove ${variant.name}">&times;</button></div>`;
+  }).join("")||'<p class="empty">Start with one capability.<br>Your build and value case will appear here.</p>';
+  $("build-count").textContent=`${new Set(selections.map(item=>item.featureId)).size} bricks / ${selections.length} variants`;
+  try {
+    const a=assumptions();
+    const invalidRate=[...$("model-rates").querySelectorAll("input")].find(input=>!input.checkValidity());
+    if(invalidRate) throw new InputError("Check scenario LLM rates: enter nonnegative prices and token factors between 0.1 and 10.");
+    if([...$("atom-table").querySelectorAll("input")].some(input=>!input.checkValidity())) throw new InputError("Atomic token assumptions must be whole numbers between 0 and 1,000,000.");
+    latestEstimate=calculate(selections,a,MODELS,$("coordinator").value);
+  } catch(error) {
+    if(!(error instanceof InputError))throw error;
+    latestEstimate=null;
+    $("quote-error").textContent=error.message;$("quote-error").hidden=false;
+    $("quote-summary").innerHTML="";$("team-summary").innerHTML="";$("yield-summary").innerHTML='<p>Resolve invalid assumptions to calculate a value case.</p>';
+    $("review").disabled=true;return;
+  }
+  $("quote-error").hidden=true;
+  const e=latestEstimate;
+  $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">Estimated AI usage / illustrative</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
+    ${row("Input tokens",compact(e.input))}${row("Output tokens",compact(e.output))}${row("Total tokens / month",compact(e.totalTokens))}
+    <small>${number(e.pairs.length)} assumed connections &middot; routing included</small></div>
+    ${row("Tools + AI/tool reserve",money(e.tools+e.reserveCost))}${row("Human review",money(e.reviewCost))}${row("Other operating allowance",money(e.operating))}
+    <div class="divider"></div>${row("Total recurring / month",money(e.monthlyCost))}${row("One-time setup (AI + labor)",money(e.setupCost))}
+    <div class="divider"></div><div class="eyebrow">Illustrative delivery team</div>${e.team.map(role=>row(role.role,`${role.people} people <small>(${role.fte.toFixed(2)} FTE)</small>`)).join("")}
+    <div class="divider"></div>${row("Net value / month",`<span class="${e.net<0?"":"muted"}">${money(e.net)}</span>`)}${row("12-month ROI",e.roi===null?"Not defined":number(e.roi)+"%")}
+    <p class="fine">ROI includes setup labor and recurring costs. Labor value is released capacity, not guaranteed cash.</p>`;
+  $("team-summary").innerHTML=`<div class="table-scroll"><table><thead><tr><th>Setup role</th><th class="num">Hours</th><th class="num">FTE</th><th class="num">People</th><th class="num">USD</th></tr></thead><tbody>${e.team.map(role=>`<tr><td>${role.role}</td><td class="num">${number(role.hours)}</td><td class="num">${role.fte.toFixed(2)}</td><td class="num">${role.people}</td><td class="num">${money(role.cost)}</td></tr>`).join("")}</tbody></table></div>
+    <p class="help">Setup labor ${money(e.setupLabor)} + setup AI with reserve ${money(e.setupAI)}. Recurring review: ${number(e.reviewHours)} hours/month, ${money(e.reviewCost)}. Adjust role hours and review minutes inside each brick.</p>`;
+  $("yield-summary").innerHTML=`<div class="yield-head"><div><div class="eyebrow">The return on your build</div><h2>From token spend to client impact.</h2></div><span class="pill">Client assumptions</span></div>
+    <div class="metrics"><div class="metric"><small>Time released / month</small><strong>${number(e.hoursSaved)} h</strong><small>before additional review cost</small></div>
+    <div class="metric"><small>Net value / month</small><strong class="${e.net>=0?"positive":"negative"}">${money(e.net)}</strong><small>benefit minus recurring costs</small></div>
+    <div class="metric"><small>12-month ROI</small><strong class="${e.roi>=0?"positive":"negative"}">${e.roi===null?"Not defined":number(e.roi)+"%"}</strong><small>includes one-time implementation</small></div></div>
+    <p>${money(e.benefit)} assumed monthly gross benefit &minus; ${money(e.monthlyCost)} recurring cost = ${money(e.net)} monthly net value.</p>
+    <div class="comparison" aria-hidden="true"><span style="width:${e.benefit>0?Math.max(0,Math.min(100,e.net/e.benefit*100)):0}%"></span></div>
+    <p><b>Payback:</b> ${e.payback===null?"Not reached at these assumptions":number(e.payback)+" months"} &nbsp;&middot;&nbsp; <b>Gross benefit per 1M tokens:</b> ${e.benefitPerMillionTokens===null?"Not defined":money(e.benefitPerMillionTokens)}</p>
+    <p class="fine">12-month benefit ${money(e.yearBenefit)}. Total first-year cost ${money(e.yearCost)}. ROI = (benefit &minus; total cost) / total cost. Linear undiscounted planning scenario, with full workload from month 1; no ramp-up or causal outcome guarantee.</p>
+    ${e.warnings.map(message=>`<p class="negative" style="margin-top:10px">${message}</p>`).join("")}`;
+  $("review").disabled=!selections.length;
+}
+function refresh(message) {renderCatalog();renderQuote();if(message)$("status").textContent=message;}
+function field(label,name,value,step="0.1",max="100000") {return `<label>${label}<input name="${name}" type="number" min="0" max="${max}" step="${step}" value="${value}" required></label>`;}
+function configure(id) {
+  let a;try{a=assumptions();}catch(error){if(!(error instanceof InputError))throw error;$("status").textContent=error.message;return;}
+  editingFeature=CATALOG.find(feature=>feature.id===id);
+  $("configure-title").textContent=editingFeature.name;$("configure-description").textContent=editingFeature.description;
+  $("variant-options").innerHTML=editingFeature.variants.map(variant=>{
+    const item=selections.find(item=>item.featureId===id&&item.variantId===variant.id);
+    const draft=item||record(id,variant.id,"gpt-mini",a.defaultRuns);
+    return `<section class="variant-row"><input type="checkbox" name="pick-${variant.id}" id="pick-${variant.id}" ${item?"checked":""} aria-label="Select ${variant.name}">
+      <div><label for="pick-${variant.id}">${variant.name}</label><p>${variant.description}</p><div class="tags">${variant.atoms.map(atom=>`<span>${atom}</span>`).join("")}</div>
+      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}">${modelOptions(draft.modelId)}</select></label>${field("Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
+      <details><summary>Edit effort &amp; tool assumptions</summary><div class="form-grid two">
+      ${field("Data scientist setup hours",`ds-${variant.id}`,draft.hours[0])}${field("Architect setup hours",`arch-${variant.id}`,draft.hours[1])}${field("Consultant setup hours",`consult-${variant.id}`,draft.hours[2])}
+      ${field("Review minutes / run",`review-${variant.id}`,draft.review,"0.1","10000")}${field("Tool fee USD / run",`tool-${variant.id}`,draft.tool,"0.01","10000")}
+      </div></details>${item?.description?`<p>Approved brief: ${esc(item.description)}</p>`:""}</div></section>`;
+  }).join("");
+  $("configure").showModal();
+}
+function saveVariants(event) {
+  event.preventDefault();
+  const form=event.currentTarget,featureId=editingFeature.id;
+  const updated=editingFeature.variants.filter(variant=>form.elements[`pick-${variant.id}`].checked).map(variant=>{
+    const previous=selections.find(item=>item.featureId===featureId&&item.variantId===variant.id);
+    const val=name=>Number(form.elements[`${name}-${variant.id}`].value);
+    return {...record(featureId,variant.id,form.elements[`model-${variant.id}`].value,val("runs"),previous?.source||"catalog",previous?.description||""),
+      hours:[val("ds"),val("arch"),val("consult")],review:val("review"),tool:val("tool")};
+  });
+  selections=[...selections.filter(item=>item.featureId!==featureId),...updated];
+  $("configure").close();refresh(`${editingFeature.name}: saved ${updated.length} variation${updated.length===1?"":"s"}.`);
+}
+// Deliberately local and narrow: preserve matched evidence and require human approval, never impersonate an LLM.
+function decomposeBrief(text,focus) {
+  const rules=[
+    ["research","deep",/\b(deep research|in-depth research|multi[- ]pass research)\b/i],
+    ["research","web",/\b(web research|web search|search the web|online sources|cited sources)\b/i],
+    ["research","normal",/\b(normal research|basic research|desk research)\b/i],
+    ["recommend","interests",/\b(personali[sz]ed discovery|customer interests|interest[- ]based|recommendations)\b/i],
+    ["recommend","behavior",/\b(behavio[u]ral personali[sz]ation|browsing|purchase history)\b/i],
+    ["recommend","journey",/\b(next[- ]best[- ]action|journey recommendations)\b/i],
+    ["support","faq",/\b(customer support|faq|knowledge[- ]base)\b/i],
+    ["support","triage",/\b(ticket triage|ticket routing)\b/i],
+    ["search","semantic",/\b(semantic search|product search)\b/i],
+    ["search","compare",/\b(product comparison|compare products)\b/i],
+    ["insights","feedback",/\b(customer insights|feedback analysis|customer feedback)\b/i],
+    ["insights","sentiment",/\bsentiment\b/i],
+    ["documents","extract",/\b(document automation|extract fields|structured extraction)\b/i],
+    ["documents","review",/\b(document review|review documents)\b/i],
+    ["onboard","guided",/\b(guided onboarding|guided setup)\b/i],
+    ["onboard","adaptive",/\badaptive onboarding\b/i]
+  ];
+  const matches=rules.flatMap(([featureId,variantId,pattern])=>{
+    const match=text.match(pattern);
+    return match&&(focus==="all"||focus===featureId)?[{featureId,variantId,evidence:match[0]}]:[];
+  });
+  if(!matches.some(item=>item.featureId==="research")&&(focus==="all"||focus==="research")&&/\bresearch\b/i.test(text))
+    matches.push({featureId:"research",variantId:"normal",evidence:"research (generic; depth needs confirmation)"});
+  return matches;
+}
+function previewBrief() {
+  const text=$("brief").value.trim();$("proposal").hidden=false;
+  if(!text){proposal=null;$("proposal").innerHTML='<div class="error" role="alert">Enter a description before previewing its decomposition.</div>';return;}
+  const matches=decomposeBrief(text,$("brief-focus").value);
+  proposal={text,matches,modelId:$("brief-model").value};
+  if(!matches.length){$("proposal").innerHTML='<div class="error" role="alert">No supported catalog mapping found. Nothing was estimated or added. Choose a capability manually, or try an explicit phrase such as "deep research" or "web research".</div>';return;}
+  $("proposal").innerHTML=`<h3>Review the proposed LEGO mapping</h3><p class="help">Matched phrases are shown below. Uncheck incorrect suggestions. All other details in your brief remain unverified; this simulation cannot understand exclusions, compliance, deliverables, deadlines or quality targets.</p>
+    ${matches.map((match,index)=>{
+      const feature=CATALOG.find(item=>item.id===match.featureId),variant=feature.variants.find(item=>item.id===match.variantId);
+      const existing=selections.some(item=>item.featureId===match.featureId&&item.variantId===match.variantId);
+      return `<div class="proposal-line"><label><input type="checkbox" data-proposal="${index}" checked> ${feature.name} / ${variant.name}</label><p>Matched: "${esc(match.evidence)}" &middot; ${MODELS.find(model=>model.id===proposal.modelId).name}</p>
+      <div class="tags">${variant.atoms.map(atom=>`<span>${atom}</span>`).join("")}</div>${existing?'<p><b>Already selected:</b> approval replaces its LLM, runs and effort with scenario defaults; it will not be counted twice.</p>':""}</div>`;
+    }).join("")}
+    <label><input type="checkbox" id="approve-mapping"> I have checked intent, exclusions and missing requirements in this simulated mapping.</label>
+    <div class="custom-actions"><button class="primary" id="apply-proposal" disabled>Approve &amp; add to build</button><button class="secondary" id="discard-proposal">Discard proposal</button></div>`;
+}
+function invalidateProposal() {
+  if(proposal){proposal=null;$("proposal").hidden=true;$("status").textContent="Description or preference changed. Preview again before approving.";}
+}
+function applyProposal() {
+  if(!proposal||!$("approve-mapping")?.checked)return;
+  let a;try{a=assumptions();}catch(error){if(!(error instanceof InputError))throw error;$("status").textContent=error.message;return;}
+  const approved=[...$("proposal").querySelectorAll("[data-proposal]:checked")].map(input=>proposal.matches[Number(input.dataset.proposal)]);
+  if(!approved.length){$("status").textContent="Select at least one proposed variation to approve.";return;}
+  const replacements=new Set(approved.map(item=>key(item.featureId,item.variantId)));
+  selections=[...selections.filter(item=>!replacements.has(key(item.featureId,item.variantId))),
+    ...approved.map(item=>record(item.featureId,item.variantId,proposal.modelId,a.defaultRuns,"custom",proposal.text))];
+  proposal=null;$("proposal").hidden=true;
+  refresh(`Approved ${approved.length} simulated mappings. Review volumes and effort in each brick; tokens and ROI use the shared scenario estimator.`);
+}
+function setMode(next) {
+  mode=next;$("custom-panel").hidden=next!=="custom";
+  ["manual","custom"].forEach(name=>{$(`${name}-tab`).classList.toggle("active",name===next);$(`${name}-tab`).setAttribute("aria-pressed",String(name===next));});
+  $("status").textContent=next==="custom"?"Demo 02: describe, inspect and approve. Your existing build is preserved.":"Demo 01: click a capability to select variations and LLMs. Your existing build is preserved.";
+}
+function loadStarter() {
+  selections=[record("recommend","interests"),record("research","web")];
+  category="All";$("search").value="";
+  renderFilters();refresh("Sales example loaded: personalized discovery + web research, 1,000 runs each. Shared assumptions are unchanged.");
+}
+function renderFilters() {
+  $("filters").innerHTML=["All","Customer experience","Intelligence","Operations"].map(name=>`<button class="filter ${category===name?"active":""}" data-category="${name}" aria-pressed="${category===name}">${name==="All"?"All bricks":name}</button>`).join("");
+}
+function exportData() {
+  const a=assumptions();
+  return {schema:"token-yield-marketplace-sales-demo-v1",createdAt:new Date().toISOString(),basis:"illustrative-simulation",
+    trainedPredictorConnected:false,liveLLMConnected:false,sourceBranch:"feat/marketplace",flow:mode,
+    assumptions:{...a,coordinatorId:$("coordinator").value},modelScenarioRates:MODELS,atomicScenarioTokens:ATOMS,
+    selections,estimate:calculate(selections,a,MODELS,$("coordinator").value),limitations:LIMITATIONS};
+}
+function openReview() {
+  renderQuote();if(!latestEstimate||!selections.length)return;
+  const e=latestEstimate;
+  $("review-body").innerHTML=`<div class="notice">Illustrative scenario only. All selected functions, subtypes, models and costs below share one calculation. This is not a trained forecast.</div>
+    <div class="review-metrics"><div><small>Total tokens / month</small><b>${compact(e.totalTokens)}</b></div><div><small>Recurring cost / month</small><b>${money(e.monthlyCost)}</b></div><div><small>12-month ROI</small><b>${e.roi===null?"Not defined":number(e.roi)+"%"}</b></div></div>
+    <h3>Final selected functionalities</h3><div class="table-scroll"><table><thead><tr><th>Capability / variant / LLM</th><th class="num">Runs/mo</th><th class="num">Tokens/run</th><th class="num">AI USD/mo</th></tr></thead><tbody>
+    ${e.rows.map(item=>`<tr><td><b>${item.feature}</b><small>${item.variant}</small><small>${item.model} &middot; ${item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${number(item.perRun.input+item.perRun.output)}</td><td class="num">${money(item.api)}</td></tr>`).join("")}
+    <tr><td>Integration routing<small>${e.coordinator}; ${number(e.pairs.length)} assumed pairs</small></td><td class="num">${number(e.routingRuns)}</td><td class="num">&mdash;</td><td class="num">${money(e.monthlyApi-e.rows.reduce((sum,item)=>sum+item.api,0))}</td></tr></tbody></table></div>
+    ${row("Total monthly tokens (exact)",number(e.totalTokens))}${row("Input / output",`${number(e.input)} / ${number(e.output)}`)}${row("Monthly AI API",money(e.monthlyApi))}${row("Monthly tools",money(e.tools))}${row("Monthly AI/tool reserve",money(e.reserveCost))}${row("Monthly human review",money(e.reviewCost))}${row("Other monthly operating cost",money(e.operating))}
+    <div class="divider"></div><h3>Delivery team</h3>${e.team.map(role=>row(role.role,`${role.people} people / ${role.fte.toFixed(2)} FTE / ${number(role.hours)} h`)).join("")}
+    ${row("One-time setup labor",money(e.setupLabor))}${row("One-time setup AI + reserve",money(e.setupAI))}${row("One-time setup tokens",number(e.setupTokens.input+e.setupTokens.output))}
+    <div class="divider"></div><h3>Value case</h3>${row("Monthly gross benefit",money(e.benefit))}${row("Monthly net value",money(e.net))}${row("12-month benefit",money(e.yearBenefit))}${row("12-month total cost (including setup)",money(e.yearCost))}${row("12-month net value",money(e.yearBenefit-e.yearCost))}${row("Payback",e.payback===null?"Not reached":number(e.payback)+" months")}
+    ${e.warnings.map(message=>`<div class="error">${message}</div>`).join("")}
+    <details><summary>Inspect feature vectors &amp; custom descriptions</summary>${e.rows.map(item=>`<div class="proposal-line"><b>${item.feature} / ${item.variant}</b><p class="help">${Object.entries(item.atomCounts).map(([atom,count])=>`${atom} &times; ${count}`).join(", ")}; context ${number($("context").value)} tokens; brief ${item.briefInput} tokens; model ${item.model}.</p>${item.description?`<p class="help">Brief: ${esc(item.description)}</p>`:""}</div>`).join("")}</details>
+    <p class="fine">Capacity value is not guaranteed cash. Compare accepted outcomes, effort, quality and incremental margin with the client before making a commitment. No calibrated confidence intervals are available.</p>`;
+  $("export-json").value=JSON.stringify(exportData(),null,2);$("download-status").textContent="";
+  $("review-dialog").showModal();
+}
+document.querySelectorAll(".model-options").forEach(select=>select.innerHTML=modelOptions("gpt-mini"));
+$("model-rates").innerHTML=`<table><thead><tr><th>Scenario LLM</th><th>Input USD / 1M</th><th>Output USD / 1M</th><th>Input factor</th><th>Output factor</th></tr></thead><tbody>${MODELS.map(model=>`<tr><td>${model.name}</td>${["input","output","inputFactor","outputFactor"].map(property=>`<td><input aria-label="${model.name} ${property}" type="number" min="${property.includes("Factor")?0.1:0}" max="${property.includes("Factor")?10:10000}" step="0.01" required value="${model[property]}" data-model="${model.id}" data-property="${property}" style="min-width:85px;width:100%"></td>`).join("")}</tr>`).join("")}</tbody></table>`;
+$("atom-table").innerHTML=Object.entries(ATOMS).map(([name,tokens])=>`<tr><td>${name}</td>${tokens.map((value,channel)=>`<td class="num"><input aria-label="${name} ${channel===0?"input":"output"} tokens" type="number" min="0" max="1000000" step="1" required value="${value}" data-atom="${name}" data-channel="${channel}"></td>`).join("")}</tr>`).join("");
+$("atom-table").addEventListener("input",event=>{
+  const input=event.target;if(!input.dataset.atom)return;
+  if(input.checkValidity())ATOMS[input.dataset.atom][Number(input.dataset.channel)]=Number(input.value);
+  renderQuote();
+});
+fields.forEach(id=>{$(id).required=true;$(id).addEventListener("input",renderQuote);});
+$("coordinator").addEventListener("change",renderQuote);
+$("model-rates").addEventListener("input",event=>{
+  const input=event.target;if(!input.dataset.model)return;
+  if(input.checkValidity())MODELS.find(model=>model.id===input.dataset.model)[input.dataset.property]=Number(input.value);
+  renderQuote();
+});
+$("catalog").addEventListener("click",event=>{const button=event.target.closest("[data-configure]");if(button)configure(button.dataset.configure);});
+$("cart-items").addEventListener("click",event=>{
+  const button=event.target.closest("[data-remove]");if(!button)return;
+  selections=selections.filter(item=>key(item.featureId,item.variantId)!==button.dataset.remove);refresh("Variation removed. Estimate and value case updated.");
+});
+$("filters").addEventListener("click",event=>{const button=event.target.closest("[data-category]");if(button){category=button.dataset.category;renderFilters();renderCatalog();}});
+$("search").addEventListener("input",renderCatalog);
+$("variant-form").addEventListener("submit",saveVariants);
+document.querySelectorAll("[data-close]").forEach(button=>button.addEventListener("click",()=>$(button.dataset.close).close()));
+$("manual-tab").addEventListener("click",()=>setMode("manual"));
+$("custom-tab").addEventListener("click",()=>setMode("custom"));
+$("starter").addEventListener("click",loadStarter);
+$("clear").addEventListener("click",()=>{selections=[];proposal=null;$("proposal").hidden=true;refresh("Build cleared. No selected capabilities and no assumed benefits.");});
+$("example").addEventListener("click",()=>{
+  invalidateProposal();$("brief-focus").value="all";$("brief").value="We need deep research into competitors and web research with cited sources. Add personalized discovery based on customer interests so consultants can recommend relevant products. Human reviewers must validate the findings.";
+  $("status").textContent="Example loaded. Preview the simulated decomposition, then inspect each suggestion.";
+});
+["brief","brief-focus","brief-model"].forEach(id=>$(id).addEventListener("input",invalidateProposal));
+$("decompose").addEventListener("click",previewBrief);
+$("proposal").addEventListener("change",()=>{
+  if($("apply-proposal"))$("apply-proposal").disabled=!$("approve-mapping").checked||!$("proposal").querySelector("[data-proposal]:checked");
+});
+$("proposal").addEventListener("click",event=>{
+  if(event.target.id==="apply-proposal")applyProposal();
+  if(event.target.id==="discard-proposal"){proposal=null;$("proposal").hidden=true;$("status").textContent="Proposal discarded. Your build is unchanged.";}
+});
+$("review").addEventListener("click",openReview);
+$("download").addEventListener("click",()=>{
+  const data=exportData(),blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="token-yield-sales-scenario.json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  $("download-status").textContent="Download requested. If your browser blocks it, expand the copyable JSON below.";
+});
+renderFilters();loadStarter();
+</script>
+</body>
+</html>
