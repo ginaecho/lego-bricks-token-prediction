@@ -49,9 +49,16 @@ class MockProvider:
                       "dissent": ["Insufficient evidence"] if self.disagree else []}
         elif task == "adjudicate":
             answer = {"summary": "Explicit reconciliation", "bricks": selected, "evidence": evidence,
-                      "agreed": True, "dissent": [], "unsupported": [],
+                      "agreed": True, "dissent": [], "unsupported": [], "proposed_new_function": "",
                       "decisions": [{"id": b["id"], "decision": "include",
                                      "rationale": "Scoped source task"} for b in selected]}
+        elif task == "novelty":
+            answer = {"decision": "establish", "reuse_id": "", "new_name": payload["custom_function"],
+                      "rationale": "Genuinely new capability not covered by the catalog."}
+        elif task == "decompose":
+            answer = {"atoms": {"extract": 2, "classify": 1, "score": 0, "plan": 1,
+                                "retrieve": 1, "verify": 1, "write": 1},
+                      "rationale": "Bounded decomposition over the fixed atom vocabulary."}
         elif task == "features":
             answer = {"builder": "atoms_context_v1", "rationale": "Use fixed source-size descriptors."}
         elif task == "fit":
@@ -393,6 +400,56 @@ def test_novel_measurement_reuses_train_only_and_restart_model_persists(tmp_path
     assert all("first" not in r["group"] for r in newer["training"]["rows"] if r["split"] == "holdout")
 
 
+def test_novelty_reuse_when_agent_matches_existing_brick(tmp_path, config, request_data):
+    provider = MockProvider()
+    def reuse(prompt, **kwargs):
+        result = provider(prompt, **kwargs)
+        if json.loads(prompt)["task"] == "novelty":
+            answer = {"decision": "reuse", "reuse_id": "review", "new_name": "",
+                      "rationale": "Already covered by the document review brick."}
+            return replace(result, output=json.dumps(answer))
+        return result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=reuse)
+    result, events, _ = run(runtime, {**request_data, "new_function": "Documentation gap checker"},
+                            tmp_path / "run")
+    assert result["requested_custom"] == "review"       # mapped to the existing brick
+    assert len(result["catalog"]) == 16                 # nothing new established
+    assert not any(c["payload"]["task"] == "decompose" for c in provider.calls)
+    assert any("reused as an existing brick" in e["message"] for e in events)
+
+
+def test_novelty_establishes_agent_decomposed_brick_and_persists_for_reuse(tmp_path, config, request_data):
+    request = {**request_data, "new_function": "Compliance evidence mapper"}
+    first_provider = MockProvider()
+    first = engine.AgentRuntime(tmp_path / "state", config, dispatch=first_provider)
+    result, events, _ = run(first, request, tmp_path / "first", run_id="first")
+    novel = next(b for b in result["catalog"] if b["novel"])
+    assert result["requested_custom"] == novel["id"]
+    assert novel["atoms"] == {"extract": 2, "classify": 1, "score": 0, "plan": 1,
+                              "retrieve": 1, "verify": 1, "write": 1}   # agent-chosen decomposition
+    assert novel["supported"] is True and novel["input_tokens"] is not None
+    assert len(result["catalog"]) == 17 and result["training"]["pilot_published"] is True
+    assert any(c["payload"]["task"] == "decompose" for c in first_provider.calls)
+    assert any("Established a new basic brick" in e["message"] for e in events)
+    # The established brick persists; the same request reuses its measured train rows next run.
+    second = engine.AgentRuntime(tmp_path / "state", config, dispatch=MockProvider())
+    assert any(b["novel"] and b["supported"] for b in second.catalog()["items"])
+    newer, _, _ = run(second, request, tmp_path / "second", run_id="second")
+    assert len(newer["catalog"]) == 17
+    assert newer["training"]["reused_train_count"] == 68   # 64 standard + 4 established-brick rows
+    assert newer["training"]["new_holdout_count"] == 34
+
+
+def test_deterministic_guardrail_vetoes_near_duplicate_establish(tmp_path, config, request_data):
+    provider = MockProvider()   # tries to establish new_name == custom_function
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
+    result, events, _ = run(runtime, {**request_data, "new_function": "Deep research"}, tmp_path / "run")
+    assert result["requested_custom"] == "deep"          # guardrail forced reuse of the near duplicate
+    assert len(result["catalog"]) == 16                  # establish blocked
+    assert not any(c["payload"]["task"] == "decompose" for c in provider.calls)
+    assert any("guardrail vetoed establish" in e["message"] for e in events)
+
+
 @pytest.mark.parametrize("external,disagree,accepted,publishes", [
     (True, False, True, True), (False, True, True, True), (False, False, False, False)])
 def test_project_scope_blocks_forecast_but_catalog_publishes_on_accepted_metrics(
@@ -478,7 +535,7 @@ def test_root_artifact_contract_and_request_before_first_callback(tmp_path, conf
     with pytest.raises(engine.AgentCancelled):
         runtime.run_pipeline(request_data, root, run_id="server-run",
                              on_event=lambda event: None, before_stage=gate)
-    assert stages == ["propose"] and not provider.calls
+    assert stages == ["novelty"] and not provider.calls
     assert not (root / "request.json").exists()
     assert runtime.public_status()["approval_id"] == "marketplace-agent-pilot-usd25-v1"
 
@@ -538,7 +595,7 @@ def test_duplicate_or_unselected_include_decisions_rejected():
     docs = source_documents("train-0", 0)
     value = {"summary": "Decision", "bricks": [{"id": "extract", "quantity": 1}],
              "evidence": [{"document_id": docs[0]["id"], "quote": docs[0]["text"]}],
-             "agreed": True, "dissent": [], "unsupported": [],
+             "agreed": True, "dissent": [], "unsupported": [], "proposed_new_function": "",
              "decisions": [{"id": "extract", "decision": "include", "rationale": "Evidence task"}]}
     validate_message("adjudicate", value, docs, contracts())
     for extra in (

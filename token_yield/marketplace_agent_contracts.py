@@ -16,10 +16,25 @@ CONTRACT_VERSION = "source-proxy-v1"
 SCHEMA_VERSION = "finite-atoms-context-v1"
 TRANSPORT_PROTOCOL = "responses-strict-json-schema-v1"
 ATOMS = ("extract", "classify", "score", "plan", "retrieve", "verify", "write")
+ATOM_DESCRIPTIONS = {
+    "extract": "pull stated facts, entities or requirements from the supplied sources",
+    "classify": "assign categories, labels or routing to the input",
+    "score": "rank, rate or prioritize options",
+    "plan": "produce ordered steps or a scoped plan",
+    "retrieve": "select the relevant supplied source passages",
+    "verify": "check claims against the supplied evidence",
+    "write": "compose the final human-facing response",
+}
 FEATURE_BUILDERS = {
     "atoms_v1": ATOMS,
     "atoms_context_v1": ATOMS + ("prompt_bytes", "document_count", "source_bytes"),
 }
+# A new brick keeps the fixed atom vocabulary; only its (bounded) counts are agent-chosen.
+MAX_ATOM_COUNT = 4
+MAX_ATOM_TOTAL = 14
+# Name-token Jaccard at/above which a requested function is treated as a near-duplicate of an
+# existing brick. This is the deterministic guardrail on the agents' novelty judgment.
+DUP_SIMILARITY = 0.5
 ROLES = ("requirements_analyst", "architect", "skeptical_reviewer")
 LIMITATIONS = [
     "Limited empirical pilot, not certified predictions or validated security deliverables.",
@@ -164,6 +179,60 @@ def contracts(novel: str = "") -> list[dict]:
     return items
 
 
+def _name_tokens(text: str) -> set[str]:
+    return {token for token in re.findall(r"[a-z0-9]+", (text or "").lower()) if len(token) >= 3}
+
+
+def similarity_scores(term: str, catalog: list[dict]) -> list[dict]:
+    """Deterministic name-token Jaccard similarity of a requested function to catalog bricks.
+
+    This is the guardrail signal for the agents' novelty judgment, not a decision by itself.
+    """
+    term_tokens = _name_tokens(term)
+    scored = []
+    for brick in catalog:
+        name_tokens = _name_tokens(brick["name"]) | _name_tokens(brick.get("feature_id", ""))
+        union = term_tokens | name_tokens
+        score = len(term_tokens & name_tokens) / len(union) if union else 0.0
+        scored.append({"id": brick["id"], "name": brick["name"], "score": round(score, 4)})
+    scored.sort(key=lambda entry: (-entry["score"], entry["id"]))
+    return scored
+
+
+def custom_contract(name: str, atoms: dict) -> dict:
+    """Build a persisted custom brick from an agent-chosen atom decomposition.
+
+    The atom vocabulary stays fixed and no code is generated; only the bounded per-atom counts
+    are agent-chosen. The id/hash are deterministic in (name, atoms) so an identical decomposition
+    reuses measured rows on later runs, continuing the retraining loop.
+    """
+    if not isinstance(name, str) or not 1 <= len(name.strip()) <= 120:
+        raise ValueError("custom function name must be bounded text")
+    if not isinstance(atoms, dict) or set(atoms) != set(ATOMS):
+        raise ValueError("atoms must cover the fixed atom vocabulary exactly")
+    vector = {}
+    for key in ATOMS:
+        value = atoms[key]
+        if type(value) is not int or not 0 <= value <= MAX_ATOM_COUNT:
+            raise ValueError("each atom count must be a bounded integer")
+        vector[key] = value
+    if not 1 <= sum(vector.values()) <= MAX_ATOM_TOTAL:
+        raise ValueError("atom decomposition must have a bounded nonzero total")
+    name = name.strip()
+    item = {
+        "id": "novel_" + fingerprint({"name": name.casefold(), "atoms": vector})[:12],
+        "feature_id": "custom", "name": name, "novel": True,
+        "instruction": "Perform the requested custom function '" + name + "' as a bounded, "
+        "source-only proxy: extract the relevant supplied facts, identify one evidence gap and "
+        "draft a scoped plan. This is a prompt-contract proxy, NOT execution of the named function.",
+        "atoms": vector, "version": CONTRACT_VERSION,
+        "scope": "Custom function proxy: relevant fact extraction and scoped plan only; "
+        "not arbitrary function execution, external research, code, or certification.",
+    }
+    item["contract_hash"] = fingerprint(item)
+    return item
+
+
 def source_documents(group: str, index: int) -> list[dict]:
     """Build separate fictional source groups, with different facts and lengths."""
     org = "Fictional-" + hashlib.sha256(group.encode()).hexdigest()[:10]
@@ -249,6 +318,12 @@ def _texts(value: Any, maximum: int = 16) -> None:
         _text(text)
 
 
+def _maybe_text(value: Any, maximum: int = 120) -> None:
+    """Optional bounded text: an empty string is allowed, oversize or non-string is not."""
+    if not isinstance(value, str) or len(value) > maximum:
+        raise ValueError("optional bounded text required")
+
+
 def validate_evidence(value: Any, documents: list[dict]) -> None:
     docs = {doc["id"]: _normalize_span(doc["text"]) for doc in documents}
     if not isinstance(value, list) or not 1 <= len(value) <= 12:
@@ -287,7 +362,7 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
         expected = {"summary", "bricks", "evidence"}
         expected |= ({"limitations"} if kind == "propose" else
                      {"agreed", "critiques", "dissent"} if kind == "discuss" else
-                     {"agreed", "decisions", "dissent", "unsupported"})
+                     {"agreed", "decisions", "dissent", "unsupported", "proposed_new_function"})
         _keys(value, expected)
         _text(value["summary"])
         validate_bricks(value["bricks"], catalog)
@@ -328,6 +403,41 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
                 included = {d["id"] for d in decisions if d["decision"] == "include"}
                 if {b["id"] for b in value["bricks"]} != included:
                     raise ValueError("selected bricks must exactly match inclusion decisions")
+                # Optional capability-gap recommendation the orchestrator infers from the
+                # description; empty unless the agent recognizes a needed but absent brick.
+                _maybe_text(value["proposed_new_function"], 120)
+    elif kind == "novelty":
+        _keys(value, {"decision", "reuse_id", "new_name", "rationale"})
+        _text(value["rationale"])
+        if value["decision"] not in ("none", "reuse", "establish"):
+            raise ValueError("novelty decision must be none, reuse, or establish")
+        if not isinstance(value["reuse_id"], str) or not isinstance(value["new_name"], str):
+            raise ValueError("reuse_id and new_name must be strings")
+        if value["decision"] == "reuse":
+            if value["reuse_id"] not in {b["id"] for b in catalog}:
+                raise ValueError("reuse must name an existing catalog brick")
+            if value["new_name"]:
+                raise ValueError("reuse decision must not propose a new name")
+        elif value["decision"] == "establish":
+            _text(value["new_name"], 120)
+            if value["reuse_id"]:
+                raise ValueError("establish decision must not set reuse_id")
+        elif value["reuse_id"] or value["new_name"]:
+            raise ValueError("no-op novelty decision must leave reuse_id and new_name empty")
+    elif kind == "decompose":
+        _keys(value, {"atoms", "rationale"})
+        _text(value["rationale"])
+        atoms = value["atoms"]
+        if not isinstance(atoms, dict) or set(atoms) != set(ATOMS):
+            raise ValueError("atoms must cover the fixed atom vocabulary exactly")
+        total = 0
+        for key in ATOMS:
+            count = atoms[key]
+            if type(count) is not int or not 0 <= count <= MAX_ATOM_COUNT:
+                raise ValueError("each atom count must be a bounded integer")
+            total += count
+        if not 1 <= total <= MAX_ATOM_TOTAL:
+            raise ValueError("atom decomposition must have a bounded nonzero total")
     elif kind == "features":
         _keys(value, {"builder", "rationale"})
         if value["builder"] not in FEATURE_BUILDERS:

@@ -24,14 +24,16 @@ from .foundry_dispatch import (
     DispatchResult, FoundryDispatcher, ResponseProtocolError, UsageLedger, acquire_entra_token,
 )
 from .marketplace_agent_contracts import (
-    ATOMS, CONTRACT_VERSION, FEATURE_BUILDERS, LIMITATIONS, ROLES, SCHEMA_VERSION, TRANSPORT_PROTOCOL,
-    canonical, contracts, external_scope_reason, fingerprint, numeric_features,
-    schema_from_example, source_documents, strict_json, validate_message, validate_request, workload_prompt,
+    ATOM_DESCRIPTIONS, ATOMS, CONTRACT_VERSION, DUP_SIMILARITY, FEATURE_BUILDERS, LIMITATIONS,
+    MAX_ATOM_COUNT, MAX_ATOM_TOTAL, ROLES, SCHEMA_VERSION, TRANSPORT_PROTOCOL,
+    canonical, contracts, custom_contract, external_scope_reason, fingerprint, numeric_features,
+    schema_from_example, similarity_scores, source_documents, strict_json,
+    validate_message, validate_request, workload_prompt,
 )
 from .robust import Record, RidgeLinearModel
 
 AGENT_STAGES = (
-    "propose", "discuss", "adjudicate", "wiki", "requirements", "features",
+    "novelty", "propose", "discuss", "adjudicate", "wiki", "requirements", "features",
     "predict_before", "measure", "train", "evaluate", "predict_after", "complete",
 )
 MODEL_ID = "gpt-5.4"
@@ -64,7 +66,8 @@ class StructuredDispatcher(FoundryDispatcher):
     def initial_payload(self, prompt: str) -> dict:
         contract = strict_json(prompt)
         if contract.get("task") not in {
-            "propose", "discuss", "adjudicate", "features", "fit", "metrics", "workload"
+            "novelty", "decompose", "propose", "discuss", "adjudicate",
+            "features", "fit", "metrics", "workload",
         }:
             raise ValueError("unknown structured-output task")
         payload = super().initial_payload(prompt)
@@ -742,14 +745,86 @@ class AgentRuntime:
                   public)
             return public
 
-        catalog = contracts(request["new_function"])
+        catalog = contracts()
         previous = self._latest()
         if previous:
             known = {b["id"] for b in catalog}
             catalog.extend(b for b in previous.get("contracts", []) if b["id"] not in known)
+        docs = source_documents("train-0", 0)
+
+        # New-brick loop, step 1: decide whether an explicitly requested custom function is
+        # genuinely new (establish it) or already covered (reuse a similar brick). The agents
+        # decide; a deterministic name-similarity signal is the guardrail that can veto an
+        # establish of a near-duplicate. An established brick is decomposed by the agents into
+        # bounded counts of the fixed atom vocabulary, then flows through measure/train/publish
+        # and persists into the catalog so later runs reuse it.
+        enter("novelty")
+        requested_custom = None
+        proposed_new_function = ""
+        requested_term = request["new_function"]
+        if requested_term:
+            names = [{"id": b["id"], "name": b["name"], "feature_id": b["feature_id"]} for b in catalog]
+            scores = similarity_scores(requested_term, catalog)
+            best = scores[0] if scores else {"id": "", "score": 0.0}
+            establish_allowed = best["score"] < DUP_SIMILARITY
+            verdict = call("novelty", "orchestrator", {
+                "task": "novelty", "custom_function": requested_term,
+                "customer_request": request["description"], "catalog": names,
+                "similarity": scores[:5],
+                "guardrail": {"establish_allowed": establish_allowed, "threshold": DUP_SIMILARITY,
+                              "near_duplicate_id": "" if establish_allowed else best["id"]},
+                "instruction": "Decide if the requested custom function is genuinely new or already "
+                "covered by an existing brick. If establish_allowed is false a near duplicate exists "
+                "and you must reuse it. Prefer reuse when a close match exists; establish only "
+                "genuinely new work.",
+                "output_contract": {"decision": "establish", "reuse_id": "existing id or empty",
+                                    "new_name": "new function name or empty",
+                                    "rationale": "public justification"},
+            }, docs, catalog)["public_output"]
+            decision_kind = verdict["decision"]
+            if decision_kind == "establish" and not establish_allowed:
+                # Deterministic guardrail overrides an establish of a near-duplicate.
+                requested_custom = best["id"]
+                event("Deterministic guardrail vetoed establish (near duplicate); reused existing brick.",
+                      {"reuse_id": requested_custom, "similarity": scores[:5]})
+            elif decision_kind == "reuse":
+                requested_custom = verdict["reuse_id"]
+                event("Custom function reused as an existing brick after novelty review.",
+                      {"reuse_id": requested_custom, "similarity": scores[:5]})
+            elif decision_kind == "establish":
+                name = verdict["new_name"]
+                name_best = similarity_scores(name, catalog)[0] if catalog else {"id": "", "score": 0.0}
+                if name_best["score"] >= DUP_SIMILARITY:
+                    requested_custom = name_best["id"]
+                    event("Proposed new function matched an existing brick; guardrail reused it.",
+                          {"reuse_id": requested_custom, "proposed_name": name, "score": name_best["score"]})
+                else:
+                    decomposition = call("decompose", "architect", {
+                        "task": "decompose", "new_function": name,
+                        "customer_request": request["description"],
+                        "atom_vocabulary": ATOM_DESCRIPTIONS,
+                        "reference_examples": [{"name": b["name"], "atoms": b["atoms"]} for b in catalog[:6]],
+                        "bounds": {"per_atom_max": MAX_ATOM_COUNT, "total_max": MAX_ATOM_TOTAL},
+                        "instruction": "Decompose this new functionality into bounded counts of the "
+                        "fixed atom vocabulary only. Do not invent atoms or write code.",
+                        "output_contract": {"atoms": {atom: 1 for atom in ATOMS},
+                                            "rationale": "public justification"},
+                    }, docs, catalog)["public_output"]
+                    new_brick = custom_contract(name, decomposition["atoms"])
+                    requested_custom = new_brick["id"]
+                    if not any(b["id"] == new_brick["id"] for b in catalog):
+                        catalog.append(new_brick)
+                    event("Established a new basic brick from agent decomposition; entering the "
+                          "pre-simulate, feature and retraining loop.",
+                          {"brick": {key: new_brick[key] for key in ("id", "name", "atoms")}})
+            else:
+                event("Novelty review found no new capability; using the existing catalog.",
+                      {"similarity": scores[:5]})
+        else:
+            event("No custom function requested; catalog unchanged.", {})
         if len(catalog) > 20:
             raise ValueError("pilot supports at most twenty explicitly versioned contracts")
-        docs = source_documents("train-0", 0)
+
         overview = [{key: item[key] for key in ("id", "name", "scope", "instruction")}
                     for item in catalog]
         base = {
@@ -790,16 +865,19 @@ class AgentRuntime:
             **base, "task": "adjudicate", "all_proposals": [m["public_output"] for m in proposals],
             "all_discussions": [{"role": m["role"], "revision": m["public_output"]} for m in discussions],
             "instruction": "Reconcile explicit include/exclude/review decisions. Preserve dissent. "
-            "agreed=false if a material dispute remains. Include the custom proxy if requested; "
-            "unknown work is unsupported, not a fabricated capability.",
+            "agreed=false if a material dispute remains. Include the custom brick if requested; "
+            "unknown work is unsupported, not a fabricated capability. If the description clearly "
+            "needs a capability absent from the catalog, name it in proposed_new_function, else "
+            "leave it empty.",
             "output_contract": {key: value for key, value in proposal_schema.items() if key != "limitations"}
             | {"agreed": True, "decisions": [{"id": "catalog ID", "decision": "include",
                                              "rationale": "public justification"}],
-               "dissent": [], "unsupported": []},
+               "dissent": [], "unsupported": [], "proposed_new_function": "name or empty"},
         }, docs, catalog)["public_output"]
         by_id = {item["id"]: item for item in catalog}
         bricks = [{**by_id[b["id"]], "quantity": b["quantity"]} for b in decision["bricks"]]
         unsupported = list(decision["unsupported"])
+        proposed_new_function = decision["proposed_new_function"]
         dissent = [{"role": m["role"], "dissent": m["public_output"]["dissent"]}
                    for m in discussions if not m["public_output"]["agreed"] or m["public_output"]["dissent"]]
         revisions = {
@@ -814,12 +892,14 @@ class AgentRuntime:
             unsupported.append("Agent disagreement remains: human review required; no project forecast.")
         if any(item["decision"] == "review" for item in decision["decisions"]):
             unsupported.append("An orchestrator decision still requires review; no project forecast.")
-        requested_custom = next((b["id"] for b in contracts(request["new_function"]) if b["novel"]), None)
         if requested_custom and not any(b["id"] == requested_custom for b in bricks):
             unsupported.append("Requested custom function was not included; no complete project forecast.")
         scope_reason = external_scope_reason(request)
         if scope_reason:
             unsupported.append(scope_reason)
+        if proposed_new_function and not request["new_function"]:
+            event("Orchestrator recommends establishing a new basic brick for an uncovered capability.",
+                  {"proposed_new_function": proposed_new_function})
         event("Orchestrator reconciled public decisions without suppressing dissent.",
               {"decisions": decision["decisions"], "dissent": dissent, "unsupported": unsupported})
 
@@ -1035,6 +1115,7 @@ class AgentRuntime:
             "agents": messages, "orchestration": totals(messages), "workload": totals(measured),
             "measurements": measured, "budget": budget.snapshot(),
             "adjudication": decision, "dissent": dissent, "usage_ledger": ledger.snapshot(),
+            "requested_custom": requested_custom, "proposed_new_function": proposed_new_function,
             "report": {"title": "Measured Foundry prompt-contract pilot",
                        "summary": decision["summary"], "scope": "Fictional reference context only",
                        "unsupported": unsupported, "human_review_required": True},
