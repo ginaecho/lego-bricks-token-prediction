@@ -19,9 +19,22 @@ ms.topic: overview
 </p>
 
 <p align="center">
-  <strong><a href="docs/media/Token_Yield_Studio_hack_video.mp4">Watch the hackathon demo</a></strong>
+  <a href="docs/media/Token_Yield_Studio_hack_video.mp4">
+    <img src="docs/media/Token_Yield_Studio_hack_video.gif" width="440"
+         alt="Animated preview of the Token Yield Marketplace Studio hackathon story">
+  </a>
+  <a href="docs/media/Token_Yield_Explainer.mp4">
+    <img src="docs/media/Token_Yield_Explainer_preview.gif" width="440"
+         alt="Animated preview explaining the LEGO-like token prediction model">
+  </a>
+</p>
+
+<p align="center">
+  <strong><a href="docs/media/Token_Yield_Studio_hack_video.mp4">Hackathon demo</a></strong>
   &nbsp;|&nbsp;
-  <a href="docs/media/Token_Yield_Explainer.mp4">Watch the model explainer</a>
+  <strong><a href="docs/media/Token_Yield_Explainer.mp4">Model explainer</a></strong>
+  <br>
+  Select either animation to open its full MP4 with playback controls.
 </p>
 
 **Predict the cost. Prove the value. Win client approval faster.**
@@ -44,7 +57,7 @@ delivery results feed the learning loop for the next project.
 <p align="center">
   <a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">
     <img src="docs/media/Token_Yield_Live_Foundry_Demo.gif" width="800"
-         alt="Animated preview of a live Token Yield Foundry run showing agent stages, model training, prediction, and terminal evidence">
+         alt="Animated preview that starts with the Token Yield marketplace UI, then shows live terminal model training and prediction evidence">
   </a>
 </p>
 
@@ -52,8 +65,11 @@ delivery results feed the learning loop for the next project.
   <strong><a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">Open the full live demo with playback controls</a></strong>
 </p>
 
-The recorded run used GPT-5.4 and an explicitly approved USD 25 campaign cap.
-It shows the real agent workflow rather than a front-end animation.
+The recording starts with the front-end marketplace and project submission,
+then moves behind the scenes to operations and the real terminal event stream.
+It captures model measurement, training, evaluation, prediction, and cost
+reporting. The run used GPT-5.4 and an explicitly approved USD 25 campaign cap;
+it is a real agent workflow rather than a front-end animation.
 
 | Live run evidence | Result |
 | --- | ---: |
