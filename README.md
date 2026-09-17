@@ -15,13 +15,20 @@
   ▶ <b><a href="docs/media/Token_Yield_Explainer.mp4">Watch the full video</a></b>
 </p>
 
-We predict token consumption for AI projects by decomposing complex workflows
-into reusable, **LEGO-like task blocks**. Each atomic task serves as a building
-block and is represented as an input feature for model training. For a new
-project, the workflow is first broken down into these smaller components, which
-are then encoded and reconstructed through an **autoencoder-based architecture**
-to capture project complexity and structure. The resulting representation is
-used to predict overall token usage accurately.
+We investigate token and API-cost prediction by breaking work into reusable,
+**LEGO-like task blocks**. The current customer-brief model learns small
+numerical prediction formulas from measured GPT calls, not an autoencoder.
+GPT itself is not retrained.
+
+Start with the [short training explanation](docs/lego-model-training.md) or
+the [HTML results report](docs/customer-model-report.html). This model covers
+preparing a project scope, not completing a whole customer engagement.
+The earlier experiments and proposed extensions below have different scopes.
+
+Marketplace direction: see the [requirements and TODO roadmap](docs/marketplace-models/plan.md)
+and the [service selection and quoting guide](docs/marketplace-models/quoting.md).
+Shared input/output models, versioned scoping contracts, and offline pricing are
+implemented; calibrated ranges and production recommendations remain pending.
 
 **Why it matters:** AI budgets are set by guesswork and reconciled after the
 money is gone. Token Yield turns them into a line item — a credible cost range

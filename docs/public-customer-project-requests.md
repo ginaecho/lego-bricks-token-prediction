@@ -510,3 +510,243 @@ prior-spend constraints, deployment drift, frozen holdout predictions, model
 serialization, and work-preserving batching. No further paid run was started
 after completion. The saved configuration is an audit record for this attempt,
 not a reusable fresh spending authorization.
+
+## Offline project-level forecasting
+
+The same measured campaign can train whole-scoping-project forecasts without
+another model call. This extends the existing customer pipeline rather than
+introducing a separate framework or changing the historical experiment.
+
+```powershell
+.\.venv\Scripts\python.exe -m examples.customer_request_pilot `
+  --train-from-run runs\20260914_customer_scoping_v2 `
+  --run-dir runs\20260915_customer_project_forecast_v1
+```
+
+The destination must be new and outside the source run. The command performs
+no authentication, network access, or paid inference. It validates frozen
+catalog/configuration hashes, declared prompts and layouts, raw request/response
+hashes, usage telemetry, and usage-to-rate cost reconciliation before training.
+It refuses incomplete executions instead of treating partial spend as the cost
+of a completed project.
+
+### Data and model reuse
+
+* [customer_pilot.py](../token_yield/customer_pilot.py) aggregates calls and
+  writes the training artifacts.
+* [customer_models.py](../token_yield/customer_models.py) reuses the existing
+  standardization, ridge regression, serialization, and project-grouped
+  evaluation utilities from [robust.py](../token_yield/robust.py).
+* [customer_request_pilot.py](../examples/customer_request_pilot.py) exposes
+  the offline command alongside the existing preview and explicit execution
+  modes. Training and paid execution flags are mutually exclusive.
+
+One observation is one project, execution arm, and replicate. The sixty calls
+become twenty-four observations: six projects, two arms, and two repeats.
+The original split remains four training projects (sixteen observations) and
+two historical holdout projects (eight observations). Neither repeated runs
+nor constituent calls are counted as independent projects.
+
+The command separately fits input-token, output-token, and retail-rate cost
+targets. Each target compares five forms:
+
+| Form | Declared predictors |
+|------|---------------------|
+| `constant` | Intercept only |
+| `size` | Total planned prompt bytes |
+| `size+units` | Prompt bytes, total scoping units, output-token allowance |
+| `lego` | Prompt bytes, output-token allowance, four scoping-operation counts |
+| `workflow` | LEGO features plus planned call count and largest operation batch |
+
+The largest form has eight nominal predictors; constant columns are not fitted.
+Correlated counts are not independently identified per-brick prices. Ridge
+strength remains fixed at 10, and each target's form is chosen using
+leave-one-training-project-out, equal-project-weight MAE. All repetitions and
+arms of the validation project remain outside its training fold.
+
+The four measured operations remain `extract`, `classify`, `plan`, and `report`.
+They are not silently relabeled as measurements of thirteen new operations.
+The model has no measured tool, retrieval, clarification, retry, or full-delivery
+effects. Runtime and execution policy are compatibility metadata, not learned
+effects without variation. Industry labels are not fitted from one or two
+examples per industry.
+
+### Saved forecasts and their limitations
+
+The output directory contains:
+
+* `project_records.json`: the aggregated measurements, source call IDs,
+  quote-time features, original splits, and public provenance URLs.
+* `models.json`: reloadable parameters, feature definitions, training-only
+  support ranges, runtime settings, and source/code hashes.
+* `predictions.json`: forecasts labeled in-sample or historical holdout.
+* `analysis.json`: comparisons, accounting totals, and limitations.
+
+Use `forecast_project(artifact, quote, runtime)` from
+[customer_models.py](../token_yield/customer_models.py) to predict from saved
+parameters without refitting. A quote contains `context_bytes`, `prompt_bytes`,
+`planned_output_tokens`, `counts`, `planned_calls`, and
+`max_operations_per_call`. These describe the four independent scoping
+operations over the same supplied brief, not a general-purpose agent graph.
+
+The forecast reports marginal-range/layout extrapolation warnings. Changed
+runtime settings produce `unsupported` with no point estimate. Being inside
+individual training ranges does not prove joint, industry, or customer support.
+Input and output forecasts sum to the total-token forecast. The dollar forecast
+is a separately selected regression, not a repricing of those token forecasts.
+
+Both `calibrated_interval` and `upper_budget_bound` remain null. The calibration
+status is `insufficient_independent_groups_shared_template`; no independent
+calibration projects have been allocated. Training-CV residuals are not
+calibration data. The historical holdout has already been examined, so this
+comparison is retrospective rather than a new sealed evaluation.
+
+Automatic quality failures retain their incurred costs. Contract-pass counts
+are reported separately and do not establish human acceptance, cost until
+success, or quality-preserving batching. The six RFPs remain scoping contexts,
+not completed customer engagements.
+
+### September 15 training result
+
+The offline command completed and saved the
+[trained models](../runs/20260915_customer_project_forecast_v1/models.json),
+[project-level measurements](../runs/20260915_customer_project_forecast_v1/project_records.json),
+[forecasts](../runs/20260915_customer_project_forecast_v1/predictions.json), and
+[evaluation](../runs/20260915_customer_project_forecast_v1/analysis.json).
+It made no new API calls and incurred no new API cost.
+
+Training-only cross-validation selected `workflow` for input tokens and cost,
+and `lego` for output tokens. The selected forms' historical holdout MAEs are
+186.85 input tokens, 48.83 output tokens, and USD 0.0008869157 per complete
+scoping execution.
+
+| Cost predictor | Historical holdout MAE, USD |
+|----------------|----------------------------|
+| Constant | 0.0027128125 |
+| Size | 0.0025055833 |
+| Size plus units | 0.0012560179 |
+| LEGO | 0.0009583653 |
+| Workflow | 0.0008869157 |
+
+These eight held-out executions come from only two independent projects.
+Both projects exceed the training range for source-context bytes, so all eight
+forecasts carry an extrapolation warning. The results do not establish
+calibrated coverage or performance on arbitrary customer engagements.
+
+Validation passed 153 focused customer-model/pilot tests. All twenty-four saved
+forecasts reloaded without fitting, all 122 source-artifact hashes and five
+training-code hashes matched, and the original call-level trained model
+reproduced exactly using the shared utilities. Historical run files were not
+modified.
+
+## HTML explanation and new-source testing
+
+Open the [model evidence report](customer-model-report.html) for the four
+measured GPT tasks, input features, regression method, project split, error
+metrics and additional public-source scoping examples.
+
+An operation means a GPT task: Extract, Classify, Plan or Report. The four
+boxes describing input preparation and measurement are experiment-building
+steps, not these four tasks. An annotation is a requirement label or note;
+"frozen" means kept unchanged for the comparison. The trained predictor is
+a numerical regression, not a fine-tuned GPT model.
+
+The [new source catalog](../experiments/customer_requests/prospective_catalog.json)
+contains four held-out scoping inputs derived from three UNFPA requests and
+one IPU request. It also preserves source sections, selection caveats and two
+rejected examples. All complete customer engagements remain excluded:
+none was verified as fully deliverable by the four-operation harness.
+Four project IDs across two buyers do not establish four independent
+organizations or industry-wide generalization.
+
+Render the report offline with the existing reporting module:
+
+```powershell
+.\.venv\Scripts\python.exe -m token_yield.report `
+  --model-run runs\20260915_customer_project_forecast_v1 `
+  --new-catalog experiments\customer_requests\prospective_catalog.json `
+  --prospective-run runs\20260915_customer_prospective_test_v1 `
+  --output docs\customer-model-report.html
+```
+
+Omit `--prospective-run` when no evaluation has been executed. A missing or
+unfinished new evaluation is not presented as measured accuracy. The
+renderer checks the original model and source-file hashes, matches
+observation IDs, and recalculates selected-model errors from saved labels.
+
+The existing pilot CLI also supports a no-spend preview:
+
+```powershell
+.\.venv\Scripts\python.exe -m examples.customer_request_pilot `
+  --test-model runs\20260915_customer_project_forecast_v1 `
+  --catalog experiments\customer_requests\prospective_catalog.json `
+  --run-dir runs\customer_prospective_preview
+```
+
+Adding `--execute` and using a fresh output directory makes real model calls.
+This extension uses a USD 10 conservative safety ceiling and USD 9.50 stop,
+no inference retries, and two repeats of each split/batched layout.
+Do not treat those limits or an old configuration as authorization for
+another paid campaign.
+
+Before dispatch, the runner saves all predictions and fixes the model,
+catalog, call plan and selected forms. It reuses the existing prompt
+compiler, dispatcher, usage ledger and budget safeguards. Research metadata
+is preserved separately from the strict prompt-input schema.
+
+New input permissions and the revised test controller break exact identity
+with the original runtime contract. The forecast API's `unsupported` state
+is retained. The new measurement scores are therefore an explicit transfer
+evaluation of conditional predictions, not newly approved production
+quotes. No model is fitted or selected using these new outcomes, and no
+calibrated prediction interval is claimed.
+
+### September 15 new-source measurements
+
+The [new test results](../runs/20260915_customer_prospective_test_v1/prospective_evaluation.json)
+contain 40 measured calls aggregated into 16 complete executions across
+four new scoping briefs. The selected formulas were unchanged:
+
+| Target | Selected form | Average absolute error | Average percentage error |
+|--------|---------------|------------------------|--------------------------|
+| Input tokens | Workflow | 113.37 tokens | 10.39% |
+| Output tokens | LEGO | 27.10 tokens | 3.73% |
+| Retail-rate cost | Workflow | USD 0.0005800159 | 3.94% |
+
+Metrics weight project groups equally. These are conditional transfer-test
+results, not calibrated estimates for full customer engagements.
+The [pre-dispatch predictions](../runs/20260915_customer_prospective_test_v1/predictions.json)
+were saved before the first request. The
+[project-level measurements](../runs/20260915_customer_prospective_test_v1/project_records.json)
+contain 22,274 input and 11,486 output tokens, with explicitly zero cached
+and reasoning tokens. Total calculated API cost was USD 0.227975;
+conservative safety accounting settled USD 2.74268, below the USD 9.50 stop,
+with no outstanding reservations.
+
+All 40 calls and all 16 complete executions passed automatic contract
+checks. This does not establish human acceptance or semantic quality.
+All 16 forecasts retain the actual-runtime `unsupported` warning.
+
+Verification matched all 80 new request/response files to their ledgers,
+confirmed all 122 historical source files remained unchanged, and reloaded
+every selected and comparator prediction without fitting. The original
+model artifact remained byte-identical. Integration validation passed 66
+targeted tests covering the customer pilot, HTML reporting and legacy report
+behavior.
+
+### Reading and sharing these results
+
+The [short training explanation](lego-model-training.md) introduces the model
+without requiring knowledge of statistics.
+
+The published new-test files retain project-level measurements, predictions,
+evaluation results and the budget ledger. The evaluation's local model path
+is replaced with its run name; measurements, predictions and model bytes are
+unchanged. Raw request/response files, cloud deployment audits, the execution
+protocol and duplicate model/analysis snapshots remain outside this branch.
+The standard-named new-test directories ignore those files by default.
+
+The raw-file checks above describe verification performed on the complete
+local run before publication. This smaller public bundle can reproduce the
+report and prediction-error calculations, but cannot independently repeat
+the new test's raw-response audit.
