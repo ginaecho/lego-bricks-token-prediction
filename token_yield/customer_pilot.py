@@ -11,6 +11,7 @@ import hashlib
 import json
 import math
 import random
+import re
 import shutil
 import subprocess
 from dataclasses import asdict
@@ -67,35 +68,84 @@ def _require_measured_channels(raw: bytes) -> None:
 
 def load_config(path: Path) -> dict:
     config = json.loads(path.read_text(encoding="utf-8"))
-    if config.get("schema_version") != "customer-pilot-v1":
+    version = config.get("schema_version")
+    if version not in ("customer-pilot-v1", "customer-pilot-v2", "customer-pilot-v3"):
         raise ValueError("unsupported pilot configuration")
-    if config.get("endpoint") != "https://foundary-tzuc06.openai.azure.com/openai/v1":
+    if version != "customer-pilot-v1":
+        counts = config.get("project_counts")
+        if (not isinstance(counts, dict) or set(counts) != {"train", "holdout"}
+                or any(type(value) is not int for value in counts.values())
+                or counts["train"] < 3 or counts["holdout"] < 1):
+            raise ValueError("project_counts require at least three train and one holdout project")
+        if type(config.get("execution_approved")) is not bool:
+            raise ValueError("execution_approved must be an explicit boolean")
+        for field in ("catalog_sha256", "template_sha256"):
+            digest = config.get(field)
+            if (not isinstance(digest, str) or len(digest) != 64
+                    or any(char not in "0123456789abcdef" for char in digest)):
+                raise ValueError(f"{field} must be a canonical JSON SHA-256 digest")
+    if version == "customer-pilot-v3":
+        azure = config.get("azure_resource")
+        fields = {"tenant_id", "subscription_id", "resource_group", "resource_name", "region"}
+        if (not isinstance(azure, dict) or set(azure) != fields
+                or any(not isinstance(value, str) or not value.strip()
+                       for value in azure.values())):
+            raise ValueError("v3 requires an explicit azure_resource identity")
+        for field in ("tenant_id", "subscription_id"):
+            if not re.fullmatch(
+                r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", azure[field]
+            ):
+                raise ValueError(f"azure_resource {field} must be a UUID")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,62}[a-z0-9]", azure["resource_name"]):
+            raise ValueError("azure_resource resource_name must be a valid DNS label")
+        if config.get("endpoint") not in {
+            f"https://{azure['resource_name']}.{suffix}/openai/v1"
+            for suffix in ("openai.azure.com", "services.ai.azure.com")
+        }:
+            raise ValueError("endpoint must be this resource's OpenAI v1 inference URL, not a project URL")
+        if (not isinstance(config.get("deployment"), str) or not config["deployment"].strip()
+                or config.get("model_name") != "gpt-5.4"):
+            raise ValueError("v3 requires a deployment name for the pinned GPT-5.4 model")
+    elif config.get("endpoint") != "https://foundary-tzuc06.openai.azure.com/openai/v1":
         raise ValueError("this approval covers only the specified Azure endpoint")
-    if (config.get("deployment") != "gpt-5.4"
+    if ((version != "customer-pilot-v3" and config.get("deployment") != "gpt-5.4")
             or config.get("expected_response_model") != "gpt-5.4"
             or config.get("deployment_version") != "2026-03-05"
             or config.get("deployment_sku") != "GlobalStandard"):
         raise ValueError("pilot requires the approved pinned GPT-5.4 deployment")
     cap, stop = config.get("cap_usd"), config.get("stop_usd")
+    approved_cap, approved_stop = 50, 48
+    if version == "customer-pilot-v3":
+        approval = config.get("budget_approval")
+        if (not isinstance(approval, dict)
+                or set(approval) != {"cap_usd", "stop_usd", "max_calls", "basis"}
+                or type(approval["max_calls"]) is not int or approval["max_calls"] < 1
+                or not isinstance(approval["basis"], str) or not approval["basis"].strip()):
+            raise ValueError("v3 requires an explicit budget_approval and fixed max_calls")
+        approved_cap, approved_stop = approval["cap_usd"], approval["stop_usd"]
+        if (any(type(n) not in (int, float) or not math.isfinite(n)
+                for n in (approved_cap, approved_stop))
+                or not 0 < approved_stop <= approved_cap):
+            raise ValueError("budget_approval must contain finite positive cumulative ceilings")
     if any(type(n) not in (int, float) or not math.isfinite(n) for n in (cap, stop)):
         raise ValueError("budget values must be finite numbers")
-    if not 0 < stop <= cap <= 50:
-        raise ValueError("budget must satisfy 0 < stop <= cap <= approved USD 50")
+    if not 0 < stop <= cap <= approved_cap:
+        raise ValueError("budget must satisfy 0 < stop <= cap <= approved ceiling")
     prior = config["prior_attempt"]
     prior_cost, prior_safety = prior["rated_cost_usd"], prior["settled_safety_usd"]
     if (any(type(n) not in (int, float) or not math.isfinite(n)
             for n in (prior_cost, prior_safety))
             or not 0 <= prior_cost <= prior_safety
             or prior["active_reserved_usd"] != 0
-            or cap + prior_safety > 50 or stop + prior_safety > 48):
+            or cap + prior_safety > approved_cap or stop + prior_safety > approved_stop):
         raise ValueError("reconciled prior spend must fit the cumulative approval and stop")
     if (type(config.get("replicates")) is not int or config["replicates"] != 2
             or type(config.get("seed")) is not int
             or type(config.get("max_input_tokens_per_call")) is not int
             or config["max_input_tokens_per_call"] != 32768):
-        raise ValueError("v1 requires two replicates and a 32768-token input ceiling")
+        raise ValueError("pilot requires two replicates and a 32768-token input ceiling")
     if config.get("reasoning_effort") != "none" or config.get("text_verbosity") != "low":
-        raise ValueError("v1 reasoning/verbosity must be none/low")
+        raise ValueError("pilot reasoning/verbosity must be none/low")
     pricing = Pricing(**config["pricing"])
     safety = SafetyRateCard()
     if not (0 < pricing.input_per_million <= safety.input_per_million_usd
@@ -105,16 +155,20 @@ def load_config(path: Path) -> dict:
     return config
 
 
-def _deployment_probe() -> dict:
+def _deployment_probe(config: dict) -> dict:
     az = shutil.which("az")
     if az is None:
         raise RuntimeError("Azure CLI is required to verify the deployment version")
+    azure = config["azure_resource"] if config["schema_version"] == "customer-pilot-v3" else {
+        "resource_name": "foundary-tzuc06", "resource_group": "rg-tzuc06",
+        "subscription_id": "ef669702-542a-4abc-95a6-edf9f972cd3c",
+    }
     try:
         result = subprocess.run([
             az, "cognitiveservices", "account", "deployment", "show",
-            "--name", "foundary-tzuc06", "--deployment-name", "gpt-5.4",
-            "--resource-group", "rg-tzuc06",
-            "--subscription", "ef669702-542a-4abc-95a6-edf9f972cd3c",
+            "--name", azure["resource_name"], "--deployment-name", config["deployment"],
+            "--resource-group", azure["resource_group"],
+            "--subscription", azure["subscription_id"],
             "--query", "{model:properties.model,sku:sku.name,state:properties.provisioningState,"
             "versionUpgradeOption:properties.versionUpgradeOption}", "--output", "json",
         ], capture_output=True, text=True, check=True, timeout=90)
@@ -124,14 +178,15 @@ def _deployment_probe() -> dict:
 
 
 def _audit_deployment(config: dict, run_dir: Path, phase: str) -> None:
-    metadata = _deployment_probe()
+    metadata = _deployment_probe(config)
     _write_json(run_dir / f"deployment-{phase}.json", {
         "observed_at": _now(), "metadata": metadata,
         "limitation": "Control-plane observations bracket execution; response alias "
         "does not independently attest the backend version on each call.",
     })
     model = metadata.get("model")
-    if (not isinstance(model, dict) or model.get("name") != config["deployment"]
+    model_name = config["model_name"] if config["schema_version"] == "customer-pilot-v3" else config["deployment"]
+    if (not isinstance(model, dict) or model.get("name") != model_name
             or model.get("version") != config["deployment_version"]
             or metadata.get("sku") != config["deployment_sku"]
             or metadata.get("state") != "Succeeded"):
@@ -144,9 +199,27 @@ def prepare_campaign(experiment_dir: Path) -> dict:
     template = load_template(experiment_dir / "template.json")
     config = load_config(experiment_dir / "pilot.json")
     projects = catalog["projects"]
-    if (len(projects) != 6
-            or sum(p["split"] == "train" for p in projects) != 4):
-        raise ValueError("v1 requires four training and two outcome-holdout projects")
+    project_counts = {
+        split: sum(project["split"] == split for project in projects)
+        for split in ("train", "holdout")
+    }
+    expected_counts = (
+        {"train": 4, "holdout": 2} if config["schema_version"] == "customer-pilot-v1"
+        else config["project_counts"]
+    )
+    if project_counts != expected_counts:
+        raise ValueError(
+            f"pilot project counts differ: expected {expected_counts}, got {project_counts}"
+        )
+    population_limitation = "Four train and two outcome-holdout projects cannot calibrate useful tails."
+    if config["schema_version"] != "customer-pilot-v1":
+        for name, value in (("catalog", catalog), ("template", template)):
+            if content_hash(value) != config[f"{name}_sha256"]:
+                raise ValueError(f"frozen {name} differs from the reviewed configuration")
+        population_limitation = (
+            f"{project_counts['train']} train and {project_counts['holdout']} "
+            "outcome-holdout projects remain exploratory; calibrated tails are not established."
+        )
     plans = []
     calls = []
     rng = random.Random(config["seed"])
@@ -182,7 +255,10 @@ def prepare_campaign(experiment_dir: Path) -> dict:
                     "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
                     "plan_sha256": plan.sha256,
                 })
-    return {
+    if (config["schema_version"] == "customer-pilot-v3"
+            and len(calls) != config["budget_approval"]["max_calls"]):
+        raise ValueError("planned call count differs from budget_approval max_calls")
+    campaign = {
         "schema_version": "customer-campaign-v1",
         "catalog": catalog, "template": template, "config": config,
         "catalog_sha256": content_hash(catalog), "template_sha256": content_hash(template),
@@ -191,11 +267,14 @@ def prepare_campaign(experiment_dir: Path) -> dict:
             "Scoping drafts only, not execution of customer engagements.",
             "Hand-annotated deliverable units are not known full-project workloads.",
             "Shared template prevents a source/template-independent confirmatory claim.",
-            "Four train and two outcome-holdout projects cannot calibrate useful tails.",
+            population_limitation,
             "Automatic contract checks do not establish semantic quality of free text.",
             "Rated costs use published prices; invoice reconciliation is outstanding.",
         ],
     }
+    if config["schema_version"] == "customer-pilot-v3":
+        campaign["calls_sha256"] = content_hash(calls)
+    return campaign
 
 
 def _default_transport(url: str, headers: dict, body: bytes, timeout: float) -> tuple[int, bytes]:
@@ -304,7 +383,7 @@ def execute_campaign(
     campaign: dict,
     run_dir: Path,
     *,
-    token_provider: Callable[[], str] = acquire_entra_token,
+    token_provider: Callable[[], str] | None = None,
     transport: Callable = _default_transport,
     count_probe: Callable | None = None,
 ) -> dict:
@@ -313,8 +392,24 @@ def execute_campaign(
     A failed or interrupted campaign cannot be restarted in this directory.
     Unknown charges keep their full reservation. There are no automatic retries.
     """
-    run_dir.mkdir(parents=True, exist_ok=False)
     config = campaign["config"]
+    if (config["schema_version"] != "customer-pilot-v1"
+            and config.get("execution_approved") is not True):
+        raise ValueError("pilot requires explicit execution approval before paid calls")
+    if config["schema_version"] == "customer-pilot-v3":
+        if (any(content_hash(campaign[name]) != campaign[f"{name}_sha256"]
+                for name in ("catalog", "template", "config"))
+                or content_hash(campaign["calls"]) != campaign["calls_sha256"]
+                or len(campaign["calls"]) != config["budget_approval"]["max_calls"]):
+            raise ValueError("campaign changed after preparation; regenerate and review it")
+    if token_provider is None:
+        if config["schema_version"] == "customer-pilot-v3":
+            azure = config["azure_resource"]
+            token_provider = lambda: acquire_entra_token(
+                subscription_id=azure["subscription_id"], tenant_id=azure["tenant_id"])
+        else:
+            token_provider = acquire_entra_token
+    run_dir.mkdir(parents=True, exist_ok=False)
     pricing = Pricing(**config["pricing"])
     budget = HardBudget(config["cap_usd"], config["stop_usd"])
     rows: list[dict] = []
@@ -363,6 +458,11 @@ def execute_campaign(
             if call["split"] == "holdout" and predictions is None:
                 _audit_deployment(config, run_dir, "before-holdout")
                 predictions = _freeze_predictions(campaign, rows, run_dir)
+            if config["schema_version"] == "customer-pilot-v3" and rows:
+                # Reconsult the CLI's refreshable cache before reserving spend.
+                token = token_provider()
+                if not isinstance(token, str) or not token.strip():
+                    raise ValueError("authentication returned no token")
             call_id = call["call_id"]
             output_cap = call["quote"]["planned_output_tokens"]
             reserve = budget.reserve(call_id, config["max_input_tokens_per_call"],

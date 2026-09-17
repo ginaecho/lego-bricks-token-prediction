@@ -1,0 +1,2177 @@
+{
+  "schema_version": "rfp-ingestion-report-v1",
+  "generated_at": "2026-09-16T11:16:42.749778+00:00",
+  "requested_resource_count": 21,
+  "original_catalog": {
+    "path": "experiments\\customer_requests\\catalog.json",
+    "sha256": "62b4673545fa88adb464c61ec3dcd14d29702fdf81838cf712f378fd05a315d3",
+    "verified_on": "2026-09-14",
+    "existing_measurements": "runs\\20260914_customer_scoping_v2\\records.json",
+    "project_count": 6,
+    "requirement_count": 42,
+    "split_counts": {
+      "holdout": 2,
+      "train": 4
+    },
+    "preserved_unchanged": true
+  },
+  "augmented_catalog": {
+    "path": "experiments\\customer_requests_augmented_20260916\\catalog.json",
+    "sha256": "d4b4c7af397597decd93861bdf2e513edcd0b88eaf88acc77fe1fe9da8c30d32",
+    "project_count": 27,
+    "new_project_count": 21,
+    "requirement_count": 230,
+    "new_requirement_count": 188,
+    "split_counts": {
+      "holdout": 8,
+      "train": 19
+    }
+  },
+  "policies": {
+    "new_splits": {
+      "method": "seeded_random_sample_of_new_projects",
+      "algorithm": "Python random.Random(seed).sample(sorted(new_project_ids), round(0.30 * number_of_new_projects))",
+      "user_instruction": "Randomly select ~30% of the sources as holdout.",
+      "seed": 20260916,
+      "population_order": "sorted project_id",
+      "target_holdout_fraction": 0.3,
+      "rounding": "round(0.30 * number_of_new_projects)",
+      "new_project_count": 21,
+      "new_holdout_count": 6,
+      "new_holdout_fraction": 0.2857142857142857,
+      "new_holdout_project_ids": [
+        "clean-power-alliance-real-estate-brokerage-2019",
+        "designlights-website-wcms-redesign-2020",
+        "hemisfair-augmented-reality-tree-recognition-2021",
+        "mccvb-creative-media-agency-2021",
+        "paradigm-initiative-bilingual-partnerships-engagement-assistant-2025",
+        "paradigm-initiative-londa-2025-report-design"
+      ],
+      "new_holdout_resource_indices": [
+        1,
+        3,
+        8,
+        13,
+        20,
+        21
+      ],
+      "existing_projects": "Original four train and two holdout assignments preserved unchanged."
+    },
+    "non_rfp_sources": "include_with_explicit_source_type",
+    "annotations": "New brick/owner values and scoping exclusions are assistant-authored experimental annotations, not buyer staffing claims.",
+    "raw_artifacts": "Any retained raw downloads remain in session staging, not in the repository. A null per-resource raw_artifact means no raw copy was retained.",
+    "retrieval_success": "Adequate contents of the requested resource were retrieved directly or through a documented equivalent-source fallback. Search snippets and generic landing pages do not count.",
+    "labels": "No token/cost labels generated; existing measured run files were not modified.",
+    "historical_holdout": "The original holdout split is preserved, but its previously observed outcomes are not a new blind test.",
+    "campaign": "The existing customer-pilot runner still requires six projects/four training projects. An enlarged measurement campaign needs a separately reviewed configuration/code change and authorization."
+  },
+  "stage_counts": {
+    "retrieval": {
+      "failed": 0,
+      "partial": 0,
+      "success": 21
+    },
+    "normalization": {
+      "blocked": 0,
+      "failed": 0,
+      "success": 21
+    },
+    "catalog_write": {
+      "failed": 0,
+      "not_attempted": 0,
+      "success": 21
+    }
+  },
+  "resources": [
+    {
+      "index": 1,
+      "requested_url": "https://paradigmhq.org/working-zone/call-for-report-designers-londa-2025/",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://paradigmhq.org/working-zone/call-for-report-designers-londa-2025/",
+        "retrieved_at": "2026-09-16T10:21:46.972829+00:00",
+        "source_format": "html",
+        "raw_artifact": null,
+        "sha256": "a2f6a3eeffe03860b96b59aab43138047d121d20bfe56b9bde7ee6b863fd0eb0",
+        "attempts": [
+          {
+            "url": "https://paradigmhq.org/working-zone/call-for-report-designers-londa-2025/",
+            "method": "functions.web_fetch",
+            "status": "success",
+            "http_status": null,
+            "note": "Substantive solicitation text was readable; the tool did not report HTTP status."
+          },
+          {
+            "url": "https://paradigmhq.org/working-zone/call-for-report-designers-londa-2025/",
+            "method": "Python urllib.request GET, in memory",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned HTML without relocation. Timestamp and SHA256 describe this response; raw bytes were not persisted."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 2
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "HTML: Background; Scope of Work, bullet 1",
+            "support": "The source requests English/French core and country reports, approximately 550-600 pages, with credibility, coherence and pan-African identity."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "HTML: Scope of Work, bullet 2; The design should",
+            "support": "Main and country-report covers are requested in both languages; objectives include authority, protection, inclusion and resilience."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "HTML: Scope of Work, bullet 3; The design should; The design will prioritise",
+            "support": "Country templates need full editorial layouts for print/web; readability, accessibility and consistency are explicit priorities."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "HTML: Scope of Work, bullet 4; The design will prioritise",
+            "support": "Infographics and data visualisation must communicate findings accessibly and allow easy extraction for advocacy and media."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "HTML: Scope of Work, bullet 5",
+            "support": "Illustrations and icons support thematic sections and storytelling."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "HTML: Deliverables, bullet 1",
+            "support": "Final design files must be editable, using Illustrator, InDesign or equivalent formats."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "HTML: Deliverables, bullet 2",
+            "support": "The reusable brand package includes fonts, colours and templates."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "HTML: Deliverables, bullet 3",
+            "support": "The source lists PDF for print and PNG/JPEG/SVG for web and social-media exports."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed artifacts only, not autonomous engagement delivery.",
+          "rfp denotes a commissioned report-design solicitation here; the actual source calls for expressions of interest from individual designers and design firms rather than publishing a complete procurement package. Source: Background; Who Should Apply; Required expertise and qualifications.",
+          "The source title says Londa 2025, while expressions of interest were due February 24, 2026 and responses expected February 27, 2026. These dates are historical as of retrieval. Source: Required expertise and qualifications.",
+          "The approximately 550-600 pages are not allocated between the core report, country reports or languages; no allocation is inferred. Source: Scope of Work, bullet 1.",
+          "Raw HTML was hashed in memory but not retained as an artifact; no fallback source was necessary."
+        ],
+        "error": null,
+        "project_id": "paradigm-initiative-londa-2025-report-design",
+        "title": "Call for Report Designers Londa 2025",
+        "requirement_count": 8
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "holdout",
+        "reason": null
+      }
+    },
+    {
+      "index": 2,
+      "requested_url": "https://paradigmhq.org/working-zone/vacancy-bilingual-communications-assistant-english-french/",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://paradigmhq.org/working-zone/vacancy-bilingual-communications-assistant-english-french/",
+        "retrieved_at": "2026-09-16T10:21:46.988411+00:00",
+        "source_format": "html",
+        "raw_artifact": null,
+        "sha256": "535bc992b7ddc8fd4f07206dee3cf6ad15ab4b8f689fe4a2cc93037d140f8ff0",
+        "attempts": [
+          {
+            "url": "https://paradigmhq.org/working-zone/vacancy-bilingual-communications-assistant-english-french/",
+            "method": "functions.web_fetch",
+            "status": "success",
+            "http_status": null,
+            "note": "Substantive job description, responsibilities, qualifications, KPIs and application deadline were readable."
+          },
+          {
+            "url": "https://paradigmhq.org/working-zone/vacancy-bilingual-communications-assistant-english-french/",
+            "method": "Python urllib.request GET, in memory",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned HTML without relocation. Timestamp and SHA256 describe this response; raw bytes were not persisted."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 2
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "job_posting",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "HTML: Key Responsibilities, bullet 1; KPIs, Internal / External",
+            "support": "The role develops, circulates and posts releases/statements, including publication when due."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "HTML: Key Responsibilities, bullet 2",
+            "support": "Assistance with communications and social-media plans is explicitly requested."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "HTML: Job Summary; Key Responsibilities, bullet 3",
+            "support": "The role supports strategy implementation and collaboration with teams, departments and external stakeholders."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "HTML: Key Responsibilities, bullet 4",
+            "support": "Engaging content must be created in both English and French."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "HTML: Key Responsibilities, bullet 5",
+            "support": "The assistant translates organizational content into French and English."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "HTML: Key Responsibilities, bullet 6",
+            "support": "Media monitoring includes tracking relevant news."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "HTML: Key Responsibilities, Scheduling & Publishing; KPIs, Internal / External and Social Media Management and Engagement",
+            "support": "Daily publishing covers five named platforms under the Officer's direction, with strict calendar and policy compliance."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "HTML: Key Responsibilities, Community Management",
+            "support": "Comments/messages are monitored, critical issues escalated and routine responses governed by pre-approved guidance."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "HTML: Key Responsibilities, Performance Data Gathering",
+            "support": "Weekly raw platform data are compiled in a standardized format for the Officer."
+          },
+          {
+            "requirement_id": "R10",
+            "locator": "HTML: Key Responsibilities, Content Preparation",
+            "support": "Campaign preparation includes images, simple graphics and short videos."
+          },
+          {
+            "requirement_id": "R11",
+            "locator": "HTML: Key Responsibilities, proofreading and production bullet",
+            "support": "The role proofreads and coordinates production of communications materials."
+          },
+          {
+            "requirement_id": "R12",
+            "locator": "HTML: Key Responsibilities, final bullet",
+            "support": "Information and data are researched and collected for content and strategy."
+          },
+          {
+            "requirement_id": "R13",
+            "locator": "HTML: Key Performance Indicators, Research",
+            "support": "The coverage target is at least three media/publications per quarter."
+          },
+          {
+            "requirement_id": "R14",
+            "locator": "HTML: Key Performance Indicators, Reporting",
+            "support": "Detailed, error-free activity reporting supports the Communications Manager's timely publication."
+          },
+          {
+            "requirement_id": "R15",
+            "locator": "HTML: Key Performance Indicators, Social Media Management and Engagement",
+            "support": "The posting specifies a 5% quarterly engagement increase through positive social interactions."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed artifacts only, not autonomous employment or engagement delivery.",
+          "The source labels this a full-time hybrid vacancy, with a November 11, 2025 application deadline and possible earlier filling. Source: opening job details; residence note; How to Apply.",
+          "The job-location list names five countries. The later city/residence sentence contains the inconsistent sequence 'Lusaka, Dakar, Senegal'; no corrected city assignment is inferred. Source: Job location; final hybrid-role residence note.",
+          "The stated $11,000-$15,000 gross annual remuneration, including salary/reimbursements, is employment compensation, not a consulting budget; no currency name is inferred beyond the dollar sign. Source: remuneration paragraphs.",
+          "Candidate requirements include a relevant bachelor's degree, 2-3 years of relevant communications experience and French/English proficiency, with digital/media-tool skills. Source: Education and Experience; Skills and Abilities.",
+          "The 5% quarterly KPI has no explicit baseline/calculation method; no results are guaranteed. Unspecified other assigned duties are not expanded. Source: Key Responsibilities; Social Media Management and Engagement.",
+          "Raw HTML was hashed in memory but not retained as an artifact; no fallback source was necessary."
+        ],
+        "error": null,
+        "project_id": "paradigm-initiative-bilingual-communications-assistant-2025",
+        "title": "Vacancy: Bilingual Communications Assistant (English/French)",
+        "requirement_count": 15
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 3,
+      "requested_url": "https://paradigmhq.org/working-zone/vacancy-partnerships-and-engagements-assistant/",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://paradigmhq.org/working-zone/vacancy-partnerships-and-engagements-assistant/",
+        "retrieved_at": "2026-09-16T10:21:46.977702+00:00",
+        "source_format": "html",
+        "raw_artifact": null,
+        "sha256": "7576a00e98ede77be52ea2d8350b387135fc1cdd8ac08c4c1f2383a863718caa",
+        "attempts": [
+          {
+            "url": "https://paradigmhq.org/working-zone/vacancy-partnerships-and-engagements-assistant/",
+            "method": "functions.web_fetch",
+            "status": "success",
+            "http_status": null,
+            "note": "Substantive vacancy responsibilities, KPIs, qualifications and application deadline were readable."
+          },
+          {
+            "url": "https://paradigmhq.org/working-zone/vacancy-partnerships-and-engagements-assistant/",
+            "method": "Python urllib.request GET, in memory",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned HTML without relocation. Timestamp and SHA256 describe this response; raw bytes were not persisted."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 2
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "job_posting",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "HTML: Partnership & Research Support, bullet 1",
+            "support": "Community-team updates are gathered for the Net Rights Coalition."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "HTML: Partnership & Research Support, bullet 2; KPIs, Reporting & Documentation",
+            "support": "Unit/stakeholder dashboards are maintained, critical issues flagged and dashboards updated every Friday."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "HTML: Partnership & Research Support, bullet 3; KPIs, Partnership & Database Management; Monitoring Approach",
+            "support": "Contact and interaction records must stay current, with quarterly verified updates and quality reviews."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "HTML: Partnership & Research Support, bullet 4; KPIs, Partnership & Database Management",
+            "support": "Agreements, concept notes and MoUs are drafted for senior review; the document KPI is three working days after request."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "HTML: Partnership & Research Support, bullet 5; KPIs, Partnership & Database Management",
+            "support": "Meetings require agendas, minutes and action points; scheduling/minutes have a stated 24-hour KPI."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "HTML: Partnership & Research Support, bullet 6",
+            "support": "Preliminary research concerns prospective partners, institutions and donors aligned with digital rights and inclusion."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "HTML: Partnership & Research Support, bullet 7",
+            "support": "The role updates unit folders for access and sharing."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "HTML: Partnership & Research Support, bullet 8",
+            "support": "Research assistance is requested for digital-advocacy briefs."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "HTML: Engagement and Event Support, bullet 1",
+            "support": "Planning/execution support centers on DRIF and other PIN events."
+          },
+          {
+            "requirement_id": "R10",
+            "locator": "HTML: Engagement and Event Support, bullet 2; KPIs, Event & Engagement Support",
+            "support": "Invitations, RSVPs, venues, travel and materials have the stated three-week, one-week and seven-working-day lead times."
+          },
+          {
+            "requirement_id": "R11",
+            "locator": "HTML: Engagement and Event Support, bullet 3",
+            "support": "External conference/workshop participation requires registration and logistics support."
+          },
+          {
+            "requirement_id": "R12",
+            "locator": "HTML: Communication and Documentation, bullet 1",
+            "support": "Partnership/engagement reporting is supported by compiling data and documentation."
+          },
+          {
+            "requirement_id": "R13",
+            "locator": "HTML: Communication and Documentation, bullet 2; KPIs, Reporting & Documentation",
+            "support": "Records must be filed, scanned and archived; filing is required within 48 hours of execution."
+          },
+          {
+            "requirement_id": "R14",
+            "locator": "HTML: Communication and Documentation, bullet 3; KPIs, Reporting & Documentation",
+            "support": "Publications and research are distributed to partners, with a two-working-day publication-distribution target."
+          },
+          {
+            "requirement_id": "R15",
+            "locator": "HTML: Administrative Duties, bullet 1; KPIs, Administrative Support",
+            "support": "Shared calendars and team schedules are managed with daily calendar updates."
+          },
+          {
+            "requirement_id": "R16",
+            "locator": "HTML: Administrative Duties, bullet 2; KPIs, Administrative Support",
+            "support": "Invoice processing is coordinated with finance and has a five-working-day target."
+          },
+          {
+            "requirement_id": "R17",
+            "locator": "HTML: KPIs, Administrative Support; Monitoring Approach; Competencies, Use of productivity tools",
+            "support": "Monitoring uses deadline/completion logs, weekly check-ins and deadlines, weekly timesheets and prompt Smartsheet updates."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed artifacts only, not autonomous employment or engagement delivery.",
+          "The source describes full-time hybrid employment and names Kenya, Senegal, Cameroon, Zambia and Zimbabwe; its later residence wording mixes a city and country names and is not silently corrected. Source: opening job details; final hybrid-role note.",
+          "Applications closed November 12, 2025, with possible earlier filling. The stated $11,000-$15,000 gross annual salary/reimbursements is employment remuneration, not a consulting budget; no currency name is inferred. Source: Remuneration and Benefits; How to Apply.",
+          "Candidate requirements include a relevant first degree, 1-2 years in administrative/support/coordination work and English/French fluency. Source: Education and Experience; Knowledge, Skills, and Abilities.",
+          "The source gives a 24-hour scheduling/minutes target and a two-working-day distribution target without fully defining their trigger times; no timing anchor is invented. Unspecified other assigned duties are not expanded. Source: KPIs; Roles and Responsibilities.",
+          "Raw HTML was hashed in memory but not retained as an artifact; no fallback source was necessary."
+        ],
+        "error": null,
+        "project_id": "paradigm-initiative-bilingual-partnerships-engagement-assistant-2025",
+        "title": "Vacancy: Bilingual Partnerships and Engagement Assistant",
+        "requirement_count": 17
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "holdout",
+        "reason": null
+      }
+    },
+    {
+      "index": 4,
+      "requested_url": "https://slls.org/en/rfp-employee-retention-credit/",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://slls.org/en/rfp-employee-retention-credit/",
+        "retrieved_at": "2026-09-16T10:21:48.498555+00:00",
+        "source_format": "html",
+        "raw_artifact": null,
+        "sha256": "5b4d202455da5bbaacbda1e5ff03a6fa9e881fae3e0153b5b817602ad205337e",
+        "attempts": [
+          {
+            "url": "https://slls.org/en/rfp-employee-retention-credit/",
+            "method": "functions.web_fetch",
+            "status": "success",
+            "http_status": null,
+            "note": "Substantive eligibility, claim, tax-opinion and historical-timeline provisions were readable."
+          },
+          {
+            "url": "https://slls.org/en/rfp-employee-retention-credit/",
+            "method": "Python urllib.request GET, in memory",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned HTML without relocation. Timestamp and SHA256 describe this response; raw bytes were not persisted."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 2
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "HTML: Purpose of RFP; Deliverables, paragraph 1",
+            "support": "Eligibility analysis covers payroll/internal records from March 13, 2020 to September 30, 2021, including 941/finance records to be released after selection."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "HTML: Purpose of RFP; Deliverables, paragraph 1",
+            "support": "Claim preparation and submission proceed only if SLLS qualifies and use SLLS team support."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "HTML: Brief Overview; Purpose of RFP; Deliverables, paragraph 1",
+            "support": "A tax opinion regarding eligibility is explicitly required."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Human/private-input classifications are safeguards, not assertions that the source requires a particular professional license.",
+          "RFP issued January 9, 2023; proposals due January 28; award on/by January 31; implementation February 1-June 30, 2023 with possible extension. Source: Timeline; Proposal Delivery and Due Date.",
+          "SLLS requested an estimated timeline aimed at receipt by end-2023 and stated IRS processing might take up to 10 months; these are historical planning assumptions, not verified current processing times or guaranteed receipts. Source: Deliverables, paragraph 2.",
+          "The source requests a cost estimate and prefers deferred payment; it does not state a fee ceiling. Proposal page limits, references and proposed-contract submission are not normalized as delivery work. Source: Deliverables, paragraph 2.",
+          "Raw HTML was hashed in memory but not retained as an artifact; no fallback source was necessary."
+        ],
+        "error": null,
+        "project_id": "slls-employee-retention-credit-2023",
+        "title": "Request for Proposals: Employee Retention Credit",
+        "requirement_count": 3
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 5,
+      "requested_url": "https://slls.org/en/website-rfp/",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://slls.org/en/website-rfp/",
+        "retrieved_at": "2026-09-16T10:21:48.430803+00:00",
+        "source_format": "html",
+        "raw_artifact": null,
+        "sha256": "915abe6f7572478e9c3bffffb3aaa3daaad2ed54bcd4720335cfca40b940ca4a",
+        "attempts": [
+          {
+            "url": "https://slls.org/en/website-rfp/",
+            "method": "functions.web_fetch",
+            "status": "success",
+            "http_status": null,
+            "note": "Design, functionality, additional-needs and timeline sections were readable."
+          },
+          {
+            "url": "https://slls.org/en/website-rfp/",
+            "method": "Python urllib.request GET, in memory",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned HTML without relocation. Timestamp and SHA256 describe this response; raw bytes were not persisted."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 2
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "HTML: Overview; Design Goals, opening paragraph",
+            "support": "The source requires accessibility, usability, responsiveness, brand consistency and a common style sheet."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "HTML: Design Goals, homepage minimums",
+            "support": "The nine homepage bullets specify legal help, search, impact/testimonials, updates, newsletter signup, donations, urgent popups, adjustable navigation and disaster-service content."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "HTML: Functionality Goals, opening paragraph",
+            "support": "The CMS should be easy to manage and extend; WordPress/Divi is a preference rather than a mandate."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "HTML: Functionality Goals, bullet 1",
+            "support": "Pages need FAQ-style dropdown capability."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "HTML: Functionality Goals, bullet 2",
+            "support": "A clickable location map and ZIP-code office search are required."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "HTML: Functionality Goals, bullet 3",
+            "support": "The website needs multiple blogs covering news, blog content and jobs."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "HTML: Functionality Goals, bullet 4",
+            "support": "The events page must embed a calendar."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "HTML: Functionality Goals, bullet 5",
+            "support": "The resources area must be categorized and searchable."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "HTML: Functionality Goals, bullet 6",
+            "support": "Staff must be able to create forms/registrations when needed."
+          },
+          {
+            "requirement_id": "R10",
+            "locator": "HTML: Functionality Goals, bullet 7",
+            "support": "Integration is requested with the named Bloomerang CRM."
+          },
+          {
+            "requirement_id": "R11",
+            "locator": "HTML: Functionality Goals, bullet 8",
+            "support": "Redirect-link creation is an explicit need."
+          },
+          {
+            "requirement_id": "R12",
+            "locator": "HTML: Additional Needs, bullet 1",
+            "support": "All blog items and some existing pages must transfer to the new site."
+          },
+          {
+            "requirement_id": "R13",
+            "locator": "HTML: Additional Needs, bullet 2",
+            "support": "Website hosting is included in the requested services."
+          },
+          {
+            "requirement_id": "R14",
+            "locator": "HTML: Additional Needs, bullet 3",
+            "support": "GA4 setup is explicitly listed."
+          },
+          {
+            "requirement_id": "R15",
+            "locator": "HTML: Additional Needs, bullet 4",
+            "support": "The website needs SEO and control of social-sharing metadata."
+          },
+          {
+            "requirement_id": "R16",
+            "locator": "HTML: Additional Needs, bullet 5",
+            "support": "TLS versions 1.2 and 1.3 are explicitly specified."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed artifacts only; actual customer implementation requires authorized humans/inputs.",
+          "The historical proposal deadline was March 1, 2023 and the desired soft launch was June 2023. Source: Timeline; Proposal Requirements.",
+          "WordPress/Divi is preferred, not mandatory. No specific accessibility standard, approved budget, hosting duration or complete migration inventory is provided in the source. Source: Functionality Goals; Additional Needs; Proposal Requirements.",
+          "Raw HTML was hashed in memory but not retained as an artifact; no fallback source was necessary."
+        ],
+        "error": null,
+        "project_id": "slls-website-redesign-2023",
+        "title": "Request for Proposals: Website Redesign",
+        "requirement_count": 16
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 6,
+      "requested_url": "https://slls.org/en/salary-study-rfp/",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://slls.org/en/salary-study-rfp/",
+        "retrieved_at": "2026-09-16T10:21:48.375465+00:00",
+        "source_format": "html",
+        "raw_artifact": null,
+        "sha256": "c98044673c30ac6972f37980e600cba44a46bc44705cb6e32dc9a0ad04838137",
+        "attempts": [
+          {
+            "url": "https://slls.org/en/salary-study-rfp/",
+            "method": "functions.web_fetch",
+            "status": "success",
+            "http_status": null,
+            "note": "Substantive HTML scope, compensation background and staged timeline were readable."
+          },
+          {
+            "url": "https://slls.org/en/salary-study-rfp/",
+            "method": "Python urllib.request GET, in memory",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned HTML without relocation. Timestamp and SHA256 describe this response; raw bytes were not persisted."
+          },
+          {
+            "url": "https://slls.org/wp-content/uploads/Salary-Study-Request-for-Proposal-SLLS-Final-Revised-8-30-2023.pdf",
+            "method": "Python urllib.request and pypdf BytesIO, initial batched verification",
+            "status": "partial",
+            "http_status": null,
+            "note": "Supplemental attachment verification produced truncated tool output; the batch also emitted PDF repair warnings. Repeated with bounded output below; original HTML retrieval remained successful."
+          },
+          {
+            "url": "https://slls.org/wp-content/uploads/Salary-Study-Request-for-Proposal-SLLS-Final-Revised-8-30-2023.pdf",
+            "method": "Python urllib.request and pypdf BytesIO, bounded output",
+            "status": "success",
+            "http_status": 200,
+            "note": "Official linked four-page PDF corroborated scope and staged timeline. Read at 2026-09-16T10:24:39.075786+00:00; SHA256 033075143a865744b56d6040bd93cd67189249a4a082a3f632b7b7835e132a8c. Raw bytes were not retained. This was corroboration, not a replacement source."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 1,
+          "success": 3
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "HTML: I. Overview; III. This Project, bullet 1; official linked PDF p.1 lines 45-49 and p.2 lines 31-32",
+            "support": "All positions need market salary analysis, including comparison with local nonprofit/government compensation."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "HTML: III. This Project, bullet 2; IV. Steps and Timeline; official linked PDF p.2 lines 33-35 and p.3 lines 10-18",
+            "support": "Joint job-description review includes longevity measures such as new classifications, with the longevity stage dated June 30, 2024."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "HTML: III. This Project, bullet 3; IV. Steps and Timeline; official linked PDF p.2 lines 36-37 and p.3 lines 10-18",
+            "support": "Position/pay recommendations follow analysis; the first-stage salary-scale target is November 15, 2023."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "HTML: III. This Project, bullet 4; IV. Steps and Timeline; official linked PDF p.2 lines 38-39 and p.3 lines 10-18",
+            "support": "Benefits benchmarking includes health, retirement and time off; the benefits-review stage is March 31, 2024."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "HTML: III. This Project, bullet 5; official linked PDF p.2 lines 38-41",
+            "support": "The consultant recommends benefits-package changes where appropriate."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "HTML: III. This Project, bullet 6; IV. Steps and Timeline; official linked PDF p.2 lines 40-44 and p.3 lines 10-18",
+            "support": "Step increases require recommendations, with that stage dated December 31, 2023."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "HTML: III. This Project, bullet 7; official linked PDF p.2 lines 42-44",
+            "support": "The final Personnel Committee report explains research, process, recommendations and reasons."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Owner classifications do not imply authorization to make employment/pay decisions.",
+          "The official supplemental source is https://slls.org/wp-content/uploads/Salary-Study-Request-for-Proposal-SLLS-Final-Revised-8-30-2023.pdf; its four pages corroborate the scope. The draft retains the exact requested HTML URL as source_url.",
+          "HTML IV labels overall Completion of Analysis November 15, 2023 but also lists later stages through June 30, 2024. The linked PDF p.3 lines 8-18 leaves the overall completion line undated and lists the four milestones separately, subject to schedule changes. No single reconciled completion deadline is invented.",
+          "Proposals were due September 5, 2023, with selection/terms September 13, 2023. These are historical. Source: HTML IV; linked PDF p.3 lines 4-7.",
+          "Existing context includes a $15/hour starting floor, new-hire starting points through 15 years of experience, $1,800 attorney/$800 support-staff annual steps and removal of long-tenure step caps; these are baseline facts, not recommended future amounts. Leadership is off the stated scale, while the requested market study still covers all positions. Source: HTML I-II; PDF p.1 lines 36-43 and p.2 lines 14-27.",
+          "HTML II and PDF p.2 lines 26-27 reference Attachment 1. No salary table for that attachment appeared in the retrieved HTML or extracted four-page PDF text; attachment contents remain unverified, and no image-level validation was performed.",
+          "The source prefers a flat-fee proposal but supplies no fee ceiling. Proposal formalities are not counted as delivery tasks. Source: HTML V; PDF p.3 lines 40-43.",
+          "Raw responses were hashed in memory but not retained as artifacts; supplemental PDF verification was not a fallback."
+        ],
+        "error": null,
+        "project_id": "slls-compensation-analysis-2023",
+        "title": "Request for Proposals: Compensation Analysis",
+        "requirement_count": 7
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 7,
+      "requested_url": "https://slls.org/en/rfp-dei-consultant/",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://slls.org/en/rfp-dei-consultant/",
+        "retrieved_at": "2026-09-16T10:21:49.707101+00:00",
+        "source_format": "html",
+        "raw_artifact": null,
+        "sha256": "74b86540a0f207f6c506f10104d9e0401a7bc295c13b8d3075baa4fbd3540982",
+        "attempts": [
+          {
+            "url": "https://slls.org/en/rfp-dei-consultant/",
+            "method": "functions.web_fetch",
+            "status": "success",
+            "http_status": null,
+            "note": "Substantive DEI research, training and planning scope, anticipated cost ceiling and historical timeline were readable."
+          },
+          {
+            "url": "https://slls.org/en/rfp-dei-consultant/",
+            "method": "Python urllib.request GET, in memory",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned HTML without relocation. Timestamp and SHA256 describe this response; raw bytes were not persisted."
+          },
+          {
+            "url": "https://slls.org/wp-content/uploads/Diversity-Consultant-Request-for-Proposals-Final.pdf",
+            "method": "Python urllib.request and pypdf BytesIO, initial batched verification",
+            "status": "partial",
+            "http_status": null,
+            "note": "Supplemental attachment verification produced truncated tool output; the batch also emitted PDF repair warnings. Repeated with bounded output below; original HTML retrieval remained successful."
+          },
+          {
+            "url": "https://slls.org/wp-content/uploads/Diversity-Consultant-Request-for-Proposals-Final.pdf",
+            "method": "Python urllib.request and pypdf BytesIO, bounded output",
+            "status": "success",
+            "http_status": 200,
+            "note": "Official linked three-page PDF corroborated scope, the $25,000 anticipated ceiling and conflicting proposal dates. Read at 2026-09-16T10:24:38.205338+00:00; SHA256 e90b2ec5c836b2b24fb6d18576f6497306c7f894604a7e2c3baff1aa41666c71. Raw bytes were not retained. This was corroboration, not a replacement source."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 1,
+          "success": 3
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "HTML: Deliverables, paragraph 1; official linked PDF p.2 lines 25-27",
+            "support": "The source requests quantitative/qualitative research and immersive observation to find diversity/equality barriers and improve diverse-employee engagement and retention."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "HTML: Purpose of RFP; Deliverables, paragraph 1; official linked PDF p.2 lines 17-21 and 28-30",
+            "support": "Interactive training and honest discussions should promote inclusion and behavior change, supporting cultural competence and empathy."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "HTML: Deliverables, paragraph 1; official linked PDF p.2 lines 30-31",
+            "support": "Training and implementation strategies should address unconscious and implicit biases."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "HTML: Deliverables, paragraph 1; official linked PDF p.2 lines 34-35",
+            "support": "Staff need assistance identifying and addressing racial inequities linked to poverty and disparate treatment."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "HTML: Deliverables, paragraphs 1-2; official linked PDF p.2 lines 32-37 and 45-47",
+            "support": "A facilitated diversity plan addresses racial issues affecting vulnerable communities while promoting internal/external inclusion and respect."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "HTML: Deliverables, paragraph 2; official linked PDF p.2 lines 41-44",
+            "support": "SLLS and the consultant jointly determine staff/partner participation and how to obtain input."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Human facilitation and private-input requirements do not authorize delivery.",
+          "The official supplemental source is https://slls.org/wp-content/uploads/Diversity-Consultant-Request-for-Proposals-Final.pdf; its three pages corroborate the scope. The draft retains the exact requested HTML URL as source_url.",
+          "Both versions conflict on the proposal deadline: September 15, 2022 in Timeline versus September 16, 2022 in Proposal Delivery and Due Date. This conflict is preserved, not resolved. Source: HTML corresponding headings; linked PDF p.3 lines 12-22.",
+          "Issue date August 15, 2022, proposed award September 30, 2022 and implementation October 1, 2022-September 30, 2023 are historical. Source: HTML Timeline; PDF p.3 lines 13-16.",
+          "The $25,000 figure is an anticipated maximum cost, not evidence of an awarded contract or approved spend. Source: HTML Deliverables; PDF p.2 lines 35-37.",
+          "Ongoing plan review/tracking is stated as an SLLS commitment; it is not expanded into an invented consultant reporting cadence. No training-session quantity is specified. Source: HTML Deliverables; PDF p.2 lines 28-31 and 43-47.",
+          "Raw responses were hashed in memory but not retained as artifacts; supplemental PDF verification was not a fallback."
+        ],
+        "error": null,
+        "project_id": "slls-dei-consultant-2022",
+        "title": "Request for Proposals - Diversity, Equity and Inclusion Consultant",
+        "requirement_count": 6
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 8,
+      "requested_url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/montereycounty/MCCVB_AOR_RFP_FINAL_2021_86bccca1-3682-4a3a-aa4f-43831d7b7058.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/montereycounty/MCCVB_AOR_RFP_FINAL_2021_86bccca1-3682-4a3a-aa4f-43831d7b7058.pdf",
+        "retrieved_at": "2026-09-16T10:26:00.030118+00:00",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "41d2b605ea295938c72d27a5ad03db756f84e88b89f07609cd56170a110dbfcf",
+        "attempts": [
+          {
+            "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/montereycounty/MCCVB_AOR_RFP_FINAL_2021_86bccca1-3682-4a3a-aa4f-43831d7b7058.pdf",
+            "method": "Python urllib.request; in-memory pypdf 6.16.2",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned application/pdf with %PDF- signature; 14 pages parsed. Repeated exact-URL reads supplied scope and context; no fallback used."
+          },
+          {
+            "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/montereycounty/MCCVB_AOR_RFP_FINAL_2021_86bccca1-3682-4a3a-aa4f-43831d7b7058.pdf",
+            "method": "Python urllib.request with default user agent",
+            "status": "failed",
+            "http_status": 403,
+            "note": "A subsequent page-reading request returned ordinary HTTP 403; no organizational content-exclusion reason was reported."
+          },
+          {
+            "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/montereycounty/MCCVB_AOR_RFP_FINAL_2021_86bccca1-3682-4a3a-aa4f-43831d7b7058.pdf",
+            "method": "Python urllib.request with the previously successful request headers; pypdf",
+            "status": "success",
+            "http_status": 200,
+            "note": "The same exact URL returned the genuine PDF; SHA256 matched the earlier successful retrieval."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 1,
+          "partial": 0,
+          "success": 2
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 5 (printed 11), Scope of Work - Strategy",
+            "support": "Annual strategy includes creative, brand, media, and cooperative planning."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF pages 5-6 (printed 11-12), Creative & Production",
+            "support": "The agency creates and finishes cross-format advertising under existing brand standards."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 6 (printed 12), Content Planning",
+            "support": "The plan specifies audiences, actions, workload, goals, and measurement."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 6 (printed 12), Media Planning & Buying, first paragraph",
+            "support": "Research-informed media plans target priority markets and amplify owned and earned content."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 6 (printed 12), Media Planning & Buying, execution paragraph",
+            "support": "Execution explicitly includes placements, optimization, audits, payment, and billing."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF page 6 (printed 12), cooperative-program paragraph",
+            "support": "Cooperative programs support members, stakeholders, and overarching objectives."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 6 (printed 12), Reporting & Analytics; page 8 (printed 14), Measuring Success",
+            "support": "Monthly and wrap-up reports connect results to objectives; metrics include visits, partner handoffs, group RFP submissions, and social engagement."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF page 6 (printed 12), Research",
+            "support": "Research participation and provision of supporting inputs are required as needed."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "PDF page 7 (printed 13), Account Support",
+            "support": "Account support includes updates, annual summaries, meetings, and other-agency collaboration."
+          },
+          {
+            "requirement_id": "R10",
+            "locator": "PDF page 7 (printed 13), Account Support, budget paragraph",
+            "support": "Insertion schedules and annual estimated costs require prior client review and approval."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed drafts or scoping artifacts only, not autonomous delivery.",
+          "Hash computed from downloaded PDF bytes in memory; no raw PDF artifact was retained.",
+          "Historical dates and fee range: PDF page 1 (printed 7) and page 9 (printed 15), Budget & Term. The extension wording combines a total of two years with June 30, 2024; that ambiguity is not resolved by inference.",
+          "Citations show physical and printed pages, which begin at 7. Agency duties were taken from the agency scope, not the preceding description of internal marketing-team duties."
+        ],
+        "error": null,
+        "project_id": "mccvb-creative-media-agency-2021",
+        "title": "Creative and Media Buying Agency Services",
+        "requirement_count": 10
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "holdout",
+        "reason": null
+      }
+    },
+    {
+      "index": 9,
+      "requested_url": "https://www.energy.gov/sites/default/files/2014/09/f18/B4a%20Communications%20Consultant%20RFP.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://www.energy.gov/sites/default/files/2014/09/f18/B4a%20Communications%20Consultant%20RFP.pdf",
+        "retrieved_at": "2026-09-16T10:22:09.952002+00:00",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "88d34d5bce1685088d18e104de0c8a5325924cd23d9c0a1cb1f48b4587cd4a3b",
+        "attempts": [
+          {
+            "url": "https://www.energy.gov/sites/default/files/2014/09/f18/B4a%20Communications%20Consultant%20RFP.pdf",
+            "method": "Python urllib.request; in-memory pypdf 6.16.2",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned application/pdf with %PDF- signature; 8 pages parsed. Repeated exact-URL reads supplied scope and context; no fallback used."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 5, section 4, Media and Communications Materials (a)",
+            "support": "Both newsletter articles and the blog have a monthly cadence."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 5, section 4 (b)",
+            "support": "Press releases are developed collaboratively; the consultant is media liaison."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 5, section 4 (c)",
+            "support": "The consultant leads preparation of the designer solicitation."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 5, section 4 (d)-(e)",
+            "support": "Promotional collateral must be consistent and logo permissions secured."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 5, section 4 (f)",
+            "support": "All communications receive style and grammar editing."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF page 5, section 4, Web Support (g)-(i)",
+            "support": "Website duties cover updates, functional relevant links, and upgrade specifications."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 5 (j) and page 6 (k)-(m), section 4, Social Media",
+            "support": "Interview recruitment, production, archiving, and consent management are explicit."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF page 6, section 4 (n)",
+            "support": "Participant accounts and media become case studies and related stories."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "PDF page 6, section 4, Events Support (o)",
+            "support": "Event support includes materials and attendee outreach with program leaders."
+          },
+          {
+            "requirement_id": "R10",
+            "locator": "PDF page 6, section 4, Information Gathering and Repository (p)-(q)",
+            "support": "Research includes media and best-practice materials from fellow grantees."
+          },
+          {
+            "requirement_id": "R11",
+            "locator": "PDF page 6, section 4 (r)",
+            "support": "A dedicated photo and video repository is requested."
+          },
+          {
+            "requirement_id": "R12",
+            "locator": "PDF page 6, section 4 (s)",
+            "support": "The consultant identifies recognition and funding-award opportunities."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed drafts or scoping artifacts only, not autonomous delivery.",
+          "Hash computed from downloaded PDF bytes in memory; no raw PDF artifact was retained.",
+          "Issuer, contract and February 17, 2012 deadline: PDF pages 1-2. Page 3 describes as-needed hourly work beginning around March 1, 2012.",
+          "PDF pages 5-6 give approximate service-time shares: media/materials 30%, web 10%, Social Media 30%, events 10%, and information/repository 20%. These are not measured workloads.",
+          "The section called Social Media specifies interviews and stories; it does not justify inventing platform-management or paid-advertising tasks."
+        ],
+        "error": null,
+        "project_id": "university-park-step-up-communications-2012",
+        "title": "Communications Consultant - Contract UP-2012-01",
+        "requirement_count": 12
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 10,
+      "requested_url": "https://www.svcleanenergy.org/wp-content/uploads/SVCE-RFP-Marketing-Advertising-Services_11-12-2021_digital2.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://www.svcleanenergy.org/wp-content/uploads/SVCE-RFP-Marketing-Advertising-Services_11-12-2021_digital2.pdf",
+        "retrieved_at": "2026-09-16T10:22:11.782109+00:00",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "3001445c08b81e6ac398f1b8564a0e5274c6568ceb3a4d7907b95f6fd53905da",
+        "attempts": [
+          {
+            "url": "https://www.svcleanenergy.org/wp-content/uploads/SVCE-RFP-Marketing-Advertising-Services_11-12-2021_digital2.pdf",
+            "method": "Python urllib.request; in-memory pypdf 6.16.2",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned application/pdf with %PDF- signature; 31 pages parsed. Repeated exact-URL reads supplied scope and context; no fallback used."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 11, section 16, Tasks 1(a)-(c)",
+            "support": "Planning addresses diverse customer circumstances and the two stated 2022 themes."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 11, section 16, Task 2(a)-(b)",
+            "support": "Creative requirements give channel variants, minimum executions, two videos, durations, and one radio ad."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 11, section 16, Task 2(c)",
+            "support": "Three additional target languages and conditional SVCE translation services are specified."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 11, geographic-targeting paragraph and Task 3",
+            "support": "Placement includes rate negotiation and avoiding wasted delivery outside the service area."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 11, section 16, Task 4",
+            "support": "Campaign reports must lead to improvement recommendations."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed drafts or scoping artifacts only, not autonomous delivery.",
+          "Hash computed from downloaded PDF bytes in memory; no raw PDF artifact was retained.",
+          "Release and deadline are November 12 and December 10, 2021 (PDF page 1); the recurring 2/21 Version footer does not replace those dates.",
+          "Scope and partnership objectives: PDF pages 10-12, section 16. Page 3 permits multiple, partial, or no awards; one firm is not guaranteed the entire scope.",
+          "Page 11 lists video counts and durations without resolving allocation by campaign or version; no multiplied total asset count is inferred. Page 12 leaves deployment timing flexible."
+        ],
+        "error": null,
+        "project_id": "svce-marketing-advertising-2021",
+        "title": "Marketing and Advertising Services",
+        "requirement_count": 5
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 11,
+      "requested_url": "https://www.phi.org/wp-content/uploads/migration/uploads/files/RFP_PHI%20Insurance%20Broker_3Aug2018_FINAL.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://www.phi.org/wp-content/uploads/migration/uploads/files/RFP_PHI%20Insurance%20Broker_3Aug2018_FINAL.pdf",
+        "retrieved_at": "2026-09-16T10:22:10.030947+00:00",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "8a3d600cba2b524b9f4990f80b9fb788cdf89ce880739b2b75d4b1deb436327c",
+        "attempts": [
+          {
+            "url": "https://www.phi.org/wp-content/uploads/migration/uploads/files/RFP_PHI%20Insurance%20Broker_3Aug2018_FINAL.pdf",
+            "method": "Python urllib.request; in-memory pypdf 6.16.2",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned application/pdf with %PDF- signature; 6 pages parsed. Repeated exact-URL reads supplied scope and context; no fallback used."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 2, section B, first two service bullets",
+            "support": "Assessment combines coverage recommendations with market and exposure trends."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 2, section B, third service bullet",
+            "support": "Applicable pools and cost-sharing arrangements require evaluation."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 2, section B, fourth-fifth service bullets",
+            "support": "Claims support and insurer intermediation are required."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 2, section B, sixth service bullet",
+            "support": "Premium estimates are due at least one month ahead of renewals."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 2, section B, seventh-ninth service bullets",
+            "support": "The broker negotiates and binds coverage and aligns renewals."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF page 2, section B, tenth service bullet",
+            "support": "Insurance documents must accurately reflect agreed terms."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 2, section B, eleventh-twelfth service bullets",
+            "support": "Ongoing advice and carrier-request coordination are required."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF page 2, section B, final service bullet",
+            "support": "Compliance guidance covers laws and funder requirements."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed drafts or scoping artifacts only, not autonomous delivery.",
+          "Hash computed from downloaded PDF bytes in memory; no raw PDF artifact was retained.",
+          "Scope is section B, PDF pages 1-2; the August 31, 2018 deadline is on page 4; the funding-dependent term of up to five years is on page 6, section G.1.",
+          "The $50,000-$100,000,000-plus figures on page 1 describe PHI-administered projects, not the brokerage procurement budget.",
+          "A service-description question on page 3 uses benefits-brokerage wording; normalization follows the operative property, liability, workers-compensation and foreign-package scope on pages 1-2 rather than inventing an employee-benefits engagement."
+        ],
+        "error": null,
+        "project_id": "phi-insurance-broker-2018",
+        "title": "Insurance Broker",
+        "requirement_count": 8
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 12,
+      "requested_url": "https://www.morrowcountyor.gov/sites/default/files/fileattachments/county_administration/page/6721/rfp_project_management_august_2017-_8-18-17.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://www.morrowcountyor.gov/sites/default/files/fileattachments/county_administration/page/6721/rfp_project_management_august_2017-_8-18-17.pdf",
+        "retrieved_at": "2026-09-16T10:22:10.323441+00:00",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "52a87f53bda58f5fb9b091466fe90533547e0d773ff1833aef087dbd725d6461",
+        "attempts": [
+          {
+            "url": "https://www.morrowcountyor.gov/sites/default/files/fileattachments/county_administration/page/6721/rfp_project_management_august_2017-_8-18-17.pdf",
+            "method": "Python urllib.request; in-memory pypdf 6.16.2",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned application/pdf with %PDF- signature; 9 pages parsed. Repeated exact-URL reads supplied scope and context; no fallback used."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 6, section 6(1); pages 3-4, section 2",
+            "support": "Planning uses the named buildings, approximate areas, and preliminary accommodation needs."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 6, section 6(2); page 3, section 2",
+            "support": "Advice covers capacity and land-use, labor, environmental, and building requirements."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 6, section 6(3)",
+            "support": "Existing staff information and new data support an approval-ready needs proposal."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 6, section 6(4)",
+            "support": "Options and estimates are developed with continuing public input."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 6, section 6(5); page 4, section 2",
+            "support": "The source requests three public meetings in the named locations, with possible additional outreach."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF page 6, section 6(6); page 3, section 2",
+            "support": "The contractor must account accurately for labor, travel, and other costs."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed drafts or scoping artifacts only, not autonomous delivery.",
+          "Hash computed from downloaded PDF bytes in memory; no raw PDF artifact was retained.",
+          "Issue date August 18, 2017 and deadline September 21, 2017 are on PDF page 2; the cover gives BOC17-2.",
+          "Page 3 mentions assistance across phases and implementation of selected options as described in the scope. Duties follow section 6, rather than treating the RFP as a stand-alone construction contract.",
+          "The 22-plus figure and building areas are approximate (pages 3-4). Two additional sheriff facilities may warrant evaluation; at least three public meetings are requested, with further outreach possible."
+        ],
+        "error": null,
+        "project_id": "morrow-county-facility-project-management-2017",
+        "title": "Project Management Services for Facility Planning - BOC17-2",
+        "requirement_count": 6
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 13,
+      "requested_url": "https://files.cleanpoweralliance.org/uploads/2019/08/CPA-RFP-Real-Estate-Brokerage-Services_8.5.2019-001.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://files.cleanpoweralliance.org/uploads/2019/08/CPA-RFP-Real-Estate-Brokerage-Services_8.5.2019-001.pdf",
+        "retrieved_at": "2026-09-16T10:22:09.911334+00:00",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "dcf90461e07540acedaf03e9f17736f3900dcae88fd4e0377696bf9504b4d544",
+        "attempts": [
+          {
+            "url": "https://files.cleanpoweralliance.org/uploads/2019/08/CPA-RFP-Real-Estate-Brokerage-Services_8.5.2019-001.pdf",
+            "method": "Python urllib.request; in-memory pypdf 6.16.2",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned application/pdf with %PDF- signature; 8 pages parsed. Repeated exact-URL reads supplied scope and context; no fallback used."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 6, Attachment A, sections I and II(a)",
+            "support": "Location, board space, building readiness, and energy criteria inform review of staffing and space needs."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 6, Attachment A, II(b)",
+            "support": "Marketing materials communicate the required building program and commercial parameters."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 6, Attachment A, II(b)-(c); page 7, continuation of II(c)",
+            "support": "Broker engagement includes inquiries, market outreach, initial compliance assessment, and tours."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 7, Attachment A, II(d)",
+            "support": "Evaluation confirms proposal merit and costs before recommending shortlisted options."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 7, Attachment A, II(e)",
+            "support": "Negotiations require pre-approved principles and written documentation."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF page 7, Attachment A, II(f)",
+            "support": "Final recommendations require CPA approval and potentially committee presentation support."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 7, Attachment A, II(g)",
+            "support": "Approved transactions require completion of lease documentation."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed drafts or scoping artifacts only, not autonomous delivery.",
+          "Hash computed from downloaded PDF bytes in memory; no raw PDF artifact was retained.",
+          "Issuer, California licensure, August 5, 2019 release, and September 9, 2019-June 30, 2020 expected work period: PDF page 1. Additional fees would have to be disclosed.",
+          "Attachment A is physical PDF pages 6-7, printed A-1/A-2. CPA may choose all or some transaction services, and section III makes additional services separately negotiable."
+        ],
+        "error": null,
+        "project_id": "clean-power-alliance-real-estate-brokerage-2019",
+        "title": "Commercial Real Estate Brokerage, Tenant Representation & Consulting Services",
+        "requirement_count": 7
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "holdout",
+        "reason": null
+      }
+    },
+    {
+      "index": 14,
+      "requested_url": "https://incouragecf.org/wp-content/uploads/2015/04/Incourage-Construction-Manager-RFP.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://incouragecf.org/wp-content/uploads/2015/04/Incourage-Construction-Manager-RFP.pdf",
+        "retrieved_at": "2026-09-16T10:22:10.507889+00:00",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "c14ea9913e784d0de333091a602313c3981f739730e260f786a4a71879958a9d",
+        "attempts": [
+          {
+            "url": "https://incouragecf.org/wp-content/uploads/2015/04/Incourage-Construction-Manager-RFP.pdf",
+            "method": "Python urllib.request; in-memory pypdf 6.16.2",
+            "status": "success",
+            "http_status": 200,
+            "note": "Exact URL returned application/pdf with %PDF- signature; 7 pages parsed. Repeated exact-URL reads supplied scope and context; no fallback used."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 3, section 2.1, Consultation",
+            "support": "Preconstruction consultation integrates design choices, constructability, costs, and scheduling."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 3, section 2.1, Preliminary Cost Estimates",
+            "support": "Progressive estimates rely on design information and the referenced probable-cost exhibit."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 3, section 2.1, Guaranteed Maximum Price Proposal and Contract Time; page 4 continuation",
+            "support": "The GMP proposal needs its basis, cost breakdown, schedule, and owner acceptance."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 4, Subcontractors and Suppliers",
+            "support": "Competitive proposals and the specific subcontractor distance rule constrain procurement."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 1, sections 1.1-1.2; page 4, section 2.2 and Changes in the Work",
+            "support": "Construction uses the stated authorization trigger and signed written changes."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF page 4, section 2.2, Administration, first paragraph",
+            "support": "A construction schedule and monthly completion reporting are explicit obligations."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 4, section 2.2, Administration, second paragraph",
+            "support": "Cost controls compare actual and estimated costs and feed monthly variance reports."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF page 5, continuation of construction-phase obligations",
+            "support": "Performance must meet regulatory and employment-program obligations."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "PDF page 5, section 4, Insurance and Bonds",
+            "support": "The CM must maintain required insurance for every phase."
+          },
+          {
+            "requirement_id": "R10",
+            "locator": "PDF page 6, section 5(l), equipment note",
+            "support": "Owner-direct equipment purchase is possible and requires coordinated installation."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. agent_draft permits proposed drafts or scoping artifacts only, not autonomous delivery.",
+          "Hash computed from downloaded PDF bytes in memory; no raw PDF artifact was retained.",
+          "Historical deadline February 13, 2015: PDF pages 1 and 6. Building area and delivery model: pages 1-2. Final scope remains subject to post-selection collaboration (page 7).",
+          "Page 1 states a general preference for vendors within 200 miles; page 4 separately requires subcontractors within 50 miles absent owner approval. The requirements preserve the stricter operative subcontractor rule.",
+          "The over-$8-million amount on page 7 is a prior-project experience criterion, not this project budget.",
+          "Exhibits A-C are referenced on page 2 but were not retrieved. Owner input and fee allocations are in page 5, section 3; excess-GMP risk is on page 4."
+        ],
+        "error": null,
+        "project_id": "incourage-tribune-construction-management-2015",
+        "title": "Tribune Building Project - Construction Management Services",
+        "requirement_count": 10
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 15,
+      "requested_url": "https://treasurer.delaware.gov/wp-content/uploads/sites/55/2020/02/Endowment-Manager-RFP-2020-FInal.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://treasurer.delaware.gov/wp-content/uploads/sites/55/2020/02/Endowment-Manager-RFP-2020-FInal.pdf",
+        "retrieved_at": "2026-09-16T10:20:09.264763Z",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "43ac8725f7001f068be8601be3c6cc06b50801eae7c9992428054e2e14d126d6",
+        "attempts": [
+          {
+            "url": "https://treasurer.delaware.gov/wp-content/uploads/sites/55/2020/02/Endowment-Manager-RFP-2020-FInal.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "success",
+            "http_status": 200,
+            "note": "HTTP 200; parsed 59 PDF pages in memory (595378 bytes). No raw artifact saved."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 28, Appendix A.I",
+            "support": "The manager is a fiduciary responsible for portfolio investment under the guidelines."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 28, Appendix A.I",
+            "support": "Ancillary advice includes guideline revisions and analysis of their portfolio impact."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 28, Appendix A.II and reporting table",
+            "support": "The paragraph requires these reporting cadences; the table details monthly and quarterly content."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 28, Appendix A.II, Monthly reporting",
+            "support": "Monthly reporting includes transactions and custodial value and interest reconciliation."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 28, Appendix A.II, Event-Driven reporting",
+            "support": "Organizational developments affecting the manager must be reported."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF page 29, Appendix A.III",
+            "support": "The meeting agenda includes strategy, performance and organizational reviews."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Agent-draft work is limited to proposed artifacts; no engagement is being performed.",
+          "PDF pages 1-5 support the buyer, historical schedule, term and portfolio context. Minimum eligibility is ten years managing at least $1 billion, or five years managing at least $250 million for Delaware-headquartered firms.",
+          "Appendix A mentions annual reports but does not provide a separate annual-content row; no annual specifications were invented. Appendix B page 41 provides exceptions for certain pooled vehicles, so its restrictions are not represented as universally identical.",
+          "Raw bytes were hashed and parsed in memory only. Evidence uses physical PDF page numbers."
+        ],
+        "error": null,
+        "project_id": "delaware-endowment-investment-management-2020",
+        "title": "Investment Management Services for the Endowment Portfolio (TRE20103-ENDOWMGRS)",
+        "requirement_count": 6
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 16,
+      "requested_url": "https://cdn.ymaws.com/www.cajpa.org/resource/resmgr/files/accreditation/28._Appendix_Z-Sample_Invest.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://cdn.ymaws.com/www.cajpa.org/resource/resmgr/files/accreditation/28._Appendix_Z-Sample_Invest.pdf",
+        "retrieved_at": "2026-09-16T10:20:09.266861Z",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "ea1bb65aa7b42689dd00b326025cd3acf50f9f62d78871d8ce1bd2f64af08242",
+        "attempts": [
+          {
+            "url": "https://cdn.ymaws.com/www.cajpa.org/resource/resmgr/files/accreditation/28._Appendix_Z-Sample_Invest.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "success",
+            "http_status": 200,
+            "note": "HTTP 200; parsed 9 PDF pages in memory (49230 bytes). No raw artifact saved."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "sample_template",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 4, II. Scope of Services, item 1",
+            "support": "Investment management follows the JPA policy and liquidity needs, with discretion specified by the issuer."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 4, II. Scope of Services, item 2",
+            "support": "The sample requires monthly written reporting and availability for oral board reporting."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 4, II. Scope of Services, item 3",
+            "support": "Policy revisions are reviewed annually and routed through management to the board."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Agent-draft work is limited to proposed artifacts; no engagement is being performed.",
+          "Unknown issuer: page 1 labels this a sample and uses [Name of JPA]; page 3 explicitly calls its background sample information. Hosting by CAJPA is not evidence that CAJPA is the buyer.",
+          "Page 8 refers to an auditor in its selection boilerplate despite the investment-management scope; this inconsistency is retained as a template defect, not a separate audit assignment.",
+          "The three requirements follow the three explicit scope services on page 4. Raw PDF was processed in memory only."
+        ],
+        "error": null,
+        "project_id": "cajpa-hosted-sample-investment-management-2010",
+        "title": "Sample RFP for Investment Management Services",
+        "requirement_count": 3
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 17,
+      "requested_url": "https://unmhealth.org/about/_files/_files-current-bids/rfp-426-20-strategic-healthcare-consultant-and-preparation-of-plan-issuance-9-2-2020.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://unmhealth.org/about/_files/_files-current-bids/rfp-426-20-strategic-healthcare-consultant-and-preparation-of-plan-issuance-9-2-2020.pdf",
+        "retrieved_at": "2026-09-16T10:20:09.268669Z",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "26a63b0c597cbfffae655ef6d3354dd13717e13a83878c58d45b318b4a4e55c0",
+        "attempts": [
+          {
+            "url": "https://unmhealth.org/about/_files/_files-current-bids/rfp-426-20-strategic-healthcare-consultant-and-preparation-of-plan-issuance-9-2-2020.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "success",
+            "http_status": 200,
+            "note": "HTTP 200; parsed 31 PDF pages in memory (600527 bytes). No raw artifact saved."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF pages 9-10, Exhibit A.2 and A.3(a)",
+            "support": "The plan covers three to five years and integrates existing plans through four phases over 12 weeks."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF page 11, Exhibit A.4(a)(i), items 1-5",
+            "support": "The formal plan includes market demographics, service-area shares, trends and leakage analysis."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 11, Exhibit A.4(a)(i)(6)",
+            "support": "The survey includes 20-30 interviews for qualitative input."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 11, Exhibit A.4(a)(i)(7-8) and A.4(a)(ii)",
+            "support": "The plan connects changing care demand and national trends to organizational growth opportunities."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 11, Exhibit A.3(b)(vi-viii) and A.4(a)(iii)",
+            "support": "Financial and investment strategy informs goals, tactics and implementation resource needs."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF pages 10-12, Exhibit A.3(b)(v), A.4(a)(i)(4) and A.4(a)(iv)",
+            "support": "The specified forecasting horizons and leadership discussions must account for pandemic effects."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 12, Exhibit A.4(a)(v-vi)",
+            "support": "Facility deficiencies and alternative responses to future service needs are required deliverables."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF page 12, Exhibit A.4(a)(vii)",
+            "support": "Referral dynamics and service use are linked to inpatient growth scenarios."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "PDF page 12, Exhibit A.4(a)(viii)",
+            "support": "The consultant evaluates service consolidation and expansion with other organizations."
+          },
+          {
+            "requirement_id": "R10",
+            "locator": "PDF pages 11-12, Exhibit A.3(b)(ix) and A.4(a)(ix)",
+            "support": "Technology recommendations address integration, facilities and IT infrastructure."
+          },
+          {
+            "requirement_id": "R11",
+            "locator": "PDF page 12, paragraphs following Exhibit A.4(a)(ix)",
+            "support": "Consultants work with leadership and may present and answer questions at requested meetings."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Agent-draft work is limited to proposed artifacts; no engagement is being performed.",
+          "Contract-term conflict: PDF page 3 states an initial four-year term; PDF page 12 states an anticipated three-year term. Neither is silently selected.",
+          "Physical PDF pages 9-12 are Exhibit A printed pages 1-4. Planning horizon, 12-week process and 20-30 interviews are distinct quantities, not interchangeable contract terms.",
+          "Raw PDF was hashed and parsed in memory only."
+        ],
+        "error": null,
+        "project_id": "unmh-strategic-healthcare-consulting-2020",
+        "title": "Strategic Healthcare Consultant and Preparation of Strategic Plan (RFP 426-20)",
+        "requirement_count": 11
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 18,
+      "requested_url": "https://duluthmn.gov/media/10293/20-09aa-rfp-for-case-management-software-final.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://duluthmn.gov/media/10293/20-09aa-rfp-for-case-management-software-final.pdf",
+        "retrieved_at": "2026-09-16T10:20:09.269945Z",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "b14c8bdd767df942e63c59c19380256eebe7c6a0ecf238c5312173708a757e10",
+        "attempts": [
+          {
+            "url": "https://duluthmn.gov/media/10293/20-09aa-rfp-for-case-management-software-final.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "success",
+            "http_status": 200,
+            "note": "HTTP 200; parsed 20 PDF pages in memory (96121 bytes). No raw artifact saved."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF pages 2 and 9-10, I-1 and IV-2.1",
+            "support": "The acquisition includes implementation and infrastructure; technical requirements specify environment, encryption and expected users."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF pages 9-10, IV-2.1(c-d) and IV-2.2",
+            "support": "The RFP asks about directory/remote-client compatibility and identifies document, Office and courts interfaces."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 10, IV-2.3",
+            "support": "TCP3 criminal migration is required; civil conversion is conditional."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 10, IV-2.4",
+            "support": "Case management combines these records and functions under differentiated access levels."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 10, IV-2.5",
+            "support": "The task module schedules, prioritizes, alerts, assigns and tracks work."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF pages 10-11, IV-2.6",
+            "support": "Document functions cover court/evidence interfaces, disclosure controls, generated records and victim/witness separation."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 11, IV-2.7",
+            "support": "Contract management combines lifecycle dates, reminders and categorized reports."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF page 11, IV-2.8",
+            "support": "Claims require financial tracking and a litigation transition."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "PDF page 11, IV-2.9",
+            "support": "Reporting covers financial updates, pending matters and victim-grant reporting."
+          },
+          {
+            "requirement_id": "R10",
+            "locator": "PDF page 11, IV-2.10",
+            "support": "Email and calendaring connect case files, Outlook and court dates."
+          },
+          {
+            "requirement_id": "R11",
+            "locator": "PDF pages 11-12, IV-2.11",
+            "support": "Administrative controls support remote use, field validation, deduplication and concurrent viewing with one editor."
+          },
+          {
+            "requirement_id": "R12",
+            "locator": "PDF pages 12 and 17, IV-2.12 and Attachment D",
+            "support": "Training covers administrators, supervisors and end users; maintenance includes updates and support."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Agent-draft work is limited to proposed artifacts; no engagement is being performed.",
+          "PDF page 11 describes working off-line but also says anywhere with internet access; offline update/synchronization expectations require clarification rather than an invented resolution.",
+          "Active Directory and Citrix are compatibility questions, not asserted existing integrations. On-premise requirements are conditional on that deployment model.",
+          "The twelve requirements follow IV-2 items 1-12. Physical PDF page numbers are used; raw PDF was processed in memory only."
+        ],
+        "error": null,
+        "project_id": "duluth-city-attorney-case-management-2020",
+        "title": "City Attorney\u2019s Office Case Management Software Solution",
+        "requirement_count": 12
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 19,
+      "requested_url": "http://www.itsc.org/Documents/Risk_Assessment_RFP_FINAL%2020Mar2020.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://web.archive.org/web/20201001083926id_/http://itsc.org/Documents/Risk_Assessment_RFP_FINAL%2020Mar2020.pdf",
+        "retrieved_at": "2026-09-16T10:26:02.101788Z",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "e581894e562ff815ebdb6c185a11fb3f46b0306a506bfefaa02f5acd60acb101",
+        "attempts": [
+          {
+            "url": "http://www.itsc.org/Documents/Risk_Assessment_RFP_FINAL%2020Mar2020.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "success",
+            "http_status": 200,
+            "note": "HTTP 200; parsed 15 PDF pages in memory (452716 bytes). No raw artifact saved."
+          },
+          {
+            "url": "https://www.itsc.org/Documents/Risk_Assessment_RFP_FINAL%2020Mar2020.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "failed",
+            "http_status": null,
+            "note": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.itsc.org'. (_ssl.c:1032)>"
+          },
+          {
+            "url": "https://itsc.org/Documents/Risk_Assessment_RFP_FINAL%2020Mar2020.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "failed",
+            "http_status": null,
+            "note": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'itsc.org'. (_ssl.c:1032)>"
+          },
+          {
+            "url": "https://archive.org/wayback/available?url=http%3A%2F%2Fwww.itsc.org%2FDocuments%2FRisk_Assessment_RFP_FINAL%252020Mar2020.pdf&timestamp=20200320",
+            "method": "Python urllib.request GET",
+            "status": "partial",
+            "http_status": 200,
+            "note": "Archive availability metadata identified capture 20201001083926; metadata alone was not source retrieval."
+          },
+          {
+            "url": "https://web.archive.org/web/20201001083926id_/http://itsc.org/Documents/Risk_Assessment_RFP_FINAL%2020Mar2020.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "success",
+            "http_status": 200,
+            "note": "HTTP 200; parsed 15 PDF pages in memory (452716 bytes). No raw artifact saved. SHA-256 matches the exact HTTP PDF byte-for-byte."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 2,
+          "partial": 1,
+          "success": 2
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF pages 3-4, Purpose and Project Scope",
+            "support": "The SSP-based plan starts with 18 control groups and uses existing penetration-test results before subsequent reviews."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF pages 3-5, Purpose, Background and Project Scope item 1",
+            "support": "Assessment covers IDH-controlled AWS and controls for the Moderate-classified system."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF page 5, Project Scope item 2",
+            "support": "The policy work includes benchmarking, management review and revisions."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 5, Project Scope item 3",
+            "support": "The scope specifies these testing perspectives and coordination and non-impact constraints."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF pages 3 and 5, Purpose and item 3 deliverables",
+            "support": "Reports include risk exposure, tested scenarios and remediation; identified deficiencies require action plans."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF page 6, Project Scope item 4",
+            "support": "Malware protection and associated threats are a separate assessment component."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 6, Project Scope item 5",
+            "support": "The logon review spans internal and external user classes."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF pages 6-7, Project Scope item 6",
+            "support": "Maturity assessment includes peer comparison, risk ratings, mitigation recommendations and annual follow-up."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "PDF page 7, Project Scope item 7",
+            "support": "The final written report and presentation communicate risk and prioritized improvements to management."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Agent-draft work is limited to proposed artifacts; no engagement is being performed.",
+          "Exact HTTP URL succeeded. Both https://www.itsc.org and https://itsc.org equivalents failed hostname certificate validation; TLS verification was not disabled.",
+          "Archive availability API identified capture 20201001083926. The HTTPS archive PDF was actually fetched with HTTP 200 and SHA-256 e581894e562ff815ebdb6c185a11fb3f46b0306a506bfefaa02f5acd60acb101, matching the original HTTP bytes. A focused web search found no relevant results.",
+          "Date conflict: cover says March 20, 2020; PDF page 10 lists issue March 30 and proposal due May 6, while page 3 says April 17.",
+          "Count conflict: PDF page 11 schedules initial plus 2021-2023 assessments; page 14 alternates initial plus two subsequent assessments and initial plus three annual assessments. These are not reconciled by assumption.",
+          "Buyer is NASWA/CESER UI Integrity Center, supported by PDF page 3, not merely ITSC as file host. Data-handling limits are on PDF page 7. Physical PDF page numbers are one higher than printed body-page labels; no raw file saved."
+        ],
+        "error": null,
+        "project_id": "naswa-idh-security-risk-assessment-2020",
+        "title": "Information Systems Risk Assessment for the Integrity Data Hub",
+        "requirement_count": 9
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "train",
+        "reason": null
+      }
+    },
+    {
+      "index": 20,
+      "requested_url": "https://hemisfair.org/wp-content/uploads/2021/06/05.25.2021-RFP-Hemisfair-Augmented-Reality-Project.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://hemisfair.org/wp-content/uploads/2021/06/05.25.2021-RFP-Hemisfair-Augmented-Reality-Project.pdf",
+        "retrieved_at": "2026-09-16T10:20:09.274119Z",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "7b86bcc26a4d2de9447a39f8fb183cdfc95218c101fae510b628fbae323b644a",
+        "attempts": [
+          {
+            "url": "https://hemisfair.org/wp-content/uploads/2021/06/05.25.2021-RFP-Hemisfair-Augmented-Reality-Project.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "success",
+            "http_status": 200,
+            "note": "HTTP 200; parsed 10 PDF pages in memory (1278325 bytes). No raw artifact saved."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF pages 4, 6 and 8, Project Description and Deliverables 1 and 9",
+            "support": "The scope covers about 230 trees, mobile platforms, branding and Hemisfair ownership."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF pages 6-7, Deliverable 2",
+            "support": "Activation uses QR/GPS; the vendor designs and produces 250 badges, with installation by staff."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF pages 4 and 7, Project Description and Deliverable 3",
+            "support": "Claimed and unclaimed trees produce different recognition or program-information experiences."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF page 7, Deliverable 4",
+            "support": "The menu includes tree search and navigation, donation/program details and sponsor recognition."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 7, Deliverable 5",
+            "support": "Accessibility requirements are specified; Spanish translation is expressly conditional."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF pages 7-8, Deliverable 6(a-b)",
+            "support": "Non-programmer staff must maintain donor information within defined media parameters and obtain further badges."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF page 8, Deliverable 6(c)",
+            "support": "The RFP specifies training for two staff members."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF page 8, Deliverable 7",
+            "support": "An AR-app FAQ is a required website deliverable."
+          },
+          {
+            "requirement_id": "R9",
+            "locator": "PDF page 8, Deliverable 8",
+            "support": "The app requires one year of warranty service and support."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Agent-draft work is limited to proposed artifacts; no engagement is being performed.",
+          "PDF pages 1-2 identify HPARC and the budget; pages 4-8 define coverage, deliverables and rollout dates. The separate Hemisfair Conservancy supports the initiative but is not substituted for the issuing corporation.",
+          "No minimum OS versions or device-support matrix is specified; broad all-model compatibility needs implementation clarification.",
+          "The source calls its staff tool a Customer Management System; the normalized wording describes its explicit donor-content maintenance purpose. Raw PDF was processed in memory only."
+        ],
+        "error": null,
+        "project_id": "hemisfair-augmented-reality-tree-recognition-2021",
+        "title": "Hemisfair Augmented Reality Project: Tree Donor Recognition",
+        "requirement_count": 9
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "holdout",
+        "reason": null
+      }
+    },
+    {
+      "index": 21,
+      "requested_url": "https://designlights.org/wp-content/uploads/2021/01/DLC_Website-RFP_5-6-20_FINAL.pdf",
+      "retrieval": {
+        "status": "success",
+        "retrieved_url": "https://designlights.org/wp-content/uploads/2021/01/DLC_Website-RFP_5-6-20_FINAL.pdf",
+        "retrieved_at": "2026-09-16T10:20:09.277341Z",
+        "source_format": "pdf",
+        "raw_artifact": null,
+        "sha256": "c7bdeca4017e60ebf26fdf60883d936aad5a8fda60fb5794041f615bf9615580",
+        "attempts": [
+          {
+            "url": "https://designlights.org/wp-content/uploads/2021/01/DLC_Website-RFP_5-6-20_FINAL.pdf",
+            "method": "Python urllib.request GET; pypdf 6.16.2 for PDFs",
+            "status": "success",
+            "http_status": 200,
+            "note": "HTTP 200; parsed 39 PDF pages in memory (537891 bytes). No raw artifact saved."
+          }
+        ],
+        "error": null,
+        "attempt_counts": {
+          "failed": 0,
+          "partial": 0,
+          "success": 1
+        }
+      },
+      "normalization": {
+        "status": "success",
+        "source_type": "rfp",
+        "evidence": [
+          {
+            "requirement_id": "R1",
+            "locator": "PDF page 10, section 2.1, Task 1",
+            "support": "Planning depends on existing stakeholder research and includes structure, CMS, hosting and templates."
+          },
+          {
+            "requirement_id": "R2",
+            "locator": "PDF pages 10-11, section 2.2, Task 2",
+            "support": "Redesign provides audience-specific paths, visual elements and SEO-oriented presentation."
+          },
+          {
+            "requirement_id": "R3",
+            "locator": "PDF pages 10-11, sections 2.0 and 2.2",
+            "support": "The scope distinguishes visual/portal integration and editable templates from excluded QPL/AMS functional changes."
+          },
+          {
+            "requirement_id": "R4",
+            "locator": "PDF pages 9-11, section 1.8(5) and section 2.2",
+            "support": "The requested design includes search, news, blog, engagement, social functions and advanced analytics support."
+          },
+          {
+            "requirement_id": "R5",
+            "locator": "PDF page 11, section 2.2",
+            "support": "The solution must adapt to device resolution and support mobile content rearrangement and UX testing."
+          },
+          {
+            "requirement_id": "R6",
+            "locator": "PDF pages 9 and 11, section 1.8(4)(a) and section 2.2",
+            "support": "Content migration services and import of existing applicable content are explicitly requested."
+          },
+          {
+            "requirement_id": "R7",
+            "locator": "PDF pages 26-27, sections 4.3.3 and 4.3.14",
+            "support": "System access must be encrypted and SLAs must be supplied by the OEM."
+          },
+          {
+            "requirement_id": "R8",
+            "locator": "PDF pages 9 and 28-29, sections 1.8(2-3) and 4.5",
+            "support": "The RFP specifies standard daytime support and training/documentation capabilities."
+          }
+        ],
+        "review_notes": [
+          "Brick and owner values are assistant-authored experimental annotations, not buyer staffing statements. Agent-draft work is limited to proposed artifacts; no engagement is being performed.",
+          "PDF page 30, section 5.3, explicitly names Efficiency Forward, Inc. DBA DesignLights Consortium as issuer. Physical PDF pages are one higher than the printed 1-of-38 body numbering.",
+          "Sections 3-4 contain a broad vendor-capability questionnaire. Only explicit obligations and scope-linked functions are normalized, not every possible product feature.",
+          "Section 6.5 on PDF page 34 lists website development/testing as Task 3 although the main scope details Tasks 1-2; implementation and testing are included without inventing a missing task specification.",
+          "Section 4.5.18 asks for five-year maintenance pricing, which is not asserted as a guaranteed five-year contract. Raw PDF was hashed and parsed in memory only."
+        ],
+        "error": null,
+        "project_id": "designlights-website-wcms-redesign-2020",
+        "title": "Website Design and Development and Web Content Management Solution",
+        "requirement_count": 8
+      },
+      "catalog_write": {
+        "status": "success",
+        "split": "holdout",
+        "reason": null
+      }
+    }
+  ]
+}

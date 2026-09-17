@@ -1,0 +1,71 @@
+{
+  "schema_version": "customer-pilot-v3",
+  "project_counts": {
+    "train": 19,
+    "holdout": 8
+  },
+  "catalog_sha256": "45b99d9fbfbd99aaf974ced78eeb6a7142935a89b82dd108af3a12babc281180",
+  "template_sha256": "ba6781573d8f3e4c4c711fe44844ef1b899931899194b4953dd16ba1722fa29a",
+  "execution_approved": true,
+  "endpoint": "https://msfoundry-hackathon.openai.azure.com/openai/v1",
+  "deployment": "gpt-5.4",
+  "expected_response_model": "gpt-5.4",
+  "deployment_version": "2026-03-05",
+  "deployment_sku": "GlobalStandard",
+  "reasoning_effort": "none",
+  "text_verbosity": "low",
+  "replicates": 2,
+  "seed": 20260916,
+  "cap_usd": 453.43,
+  "stop_usd": 453.43,
+  "prior_attempt": {
+    "run": "runs\\20260914_customer_scoping_v2",
+    "included_runs": [
+      "runs\\20260914_customer_scoping_v1",
+      "runs\\20260914_customer_scoping_v2"
+    ],
+    "accounting": "Cumulative through the completed v2 run: its cumulative rated cost and its settled safety amount plus the reconciled v1 safety amount. Not an invoice total.",
+    "rated_cost_usd": 0.38838,
+    "settled_safety_usd": 4.70392,
+    "active_reserved_usd": 0
+  },
+  "max_input_tokens_per_call": 32768,
+  "pricing": {
+    "input_per_million": 2.5,
+    "cached_input_per_million": 0.25,
+    "output_per_million": 15.0
+  },
+  "pricing_source": {
+    "url": "https://prices.azure.com/api/retail/prices",
+    "region": "eastus",
+    "retrieved_on": "2026-09-17",
+    "effective_start": "2026-03-01",
+    "unit": "1M tokens",
+    "input_meter_id": "47f0cadd-c117-5d35-a4ae-8188060f6c98",
+    "cached_input_meter_id": "30da9f7b-f023-559b-9e3a-5c2bbbe53ec6",
+    "output_meter_id": "4bb43761-9ad5-5d42-80ef-d50965d72e07",
+    "boundary": "Standard Global synchronous requests, short context. Retail-rate calculated cost, not reconciled invoice, discounts, tax, or procurement budget. Batching here means merging work into one normal request, not the Azure Batch API."
+  },
+  "authorization": {
+    "execution": "User approved step 3, supplied this replacement Azure deployment, and selected eight new-source holdout projects. Execution is limited to this reviewed 270-call campaign.",
+    "inputs": "Only the 27 normalized public-source briefs in this pinned catalog, their requirement annotations and exclusions, and the pinned scoping template. The corpus includes two labeled job postings and one labeled sample template; neither represents an issued RFP.",
+    "tools": "None. No source fetch, private data, client contact, deployment, or full-project execution.",
+    "retries": "None. Stop after transport, telemetry, output-cap, or identity failure; preserve uncertain reservations.",
+    "quality": "Automatic contract checks are necessary but not sufficient. Free-text drafts require human review before quality-preserving optimization can be promoted.",
+    "holdout": "All six previously examined projects are development/training sources in this revision. Eight of the 21 new sources are held out; all operations and repetitions stay with their project. Historical catalogs and measured records remain unchanged."
+  },
+  "azure_resource": {
+    "tenant_id": "b1a4f7cb-a159-44a6-ac48-6674e85c4ddc",
+    "subscription_id": "109dcffa-eb1f-41b5-96c1-1d22ba987d66",
+    "resource_group": "brb-dev-ne",
+    "resource_name": "msfoundry-hackathon",
+    "region": "eastus"
+  },
+  "model_name": "gpt-5.4",
+  "budget_approval": {
+    "cap_usd": 458.14,
+    "stop_usd": 458.14,
+    "max_calls": 270,
+    "basis": "User authorized paid generation and said: Don't stop, you have an unlimited budget. This revision instead authorizes only the fixed 270-call workload under a finite ceiling covering all worst-case safety reservations. Prior Azure safety accounting is included; no automatic retry, restart, or additional campaign is authorized."
+  }
+}

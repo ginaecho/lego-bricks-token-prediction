@@ -5,6 +5,7 @@ from types import SimpleNamespace
 import pytest
 
 from token_yield.foundry_dispatch import (
+    AuthenticationError,
     FoundryDispatcher,
     HttpRequestSpec,
     ResponseProtocolError,
@@ -85,6 +86,62 @@ def test_acquires_token_from_entra_environment_without_cli():
     assert token == "secret-token"
     assert calls[0][0].endswith("/tenant/oauth2/v2.0/token")
     assert b"scope=https%3A%2F%2Fresource.example%2F.default" in calls[0][1]
+
+
+def test_scoped_auth_uses_subscription_and_verifies_returned_tenant():
+    invocations = []
+
+    def runner(command, **kwargs):
+        invocations.append(command)
+        return SimpleNamespace(returncode=0, stdout=json.dumps({
+            "accessToken": "scoped-secret", "tenant": "tenant", "subscription": "subscription",
+        }))
+
+    assert acquire_entra_token(
+        runner, subscription_id="subscription", tenant_id="tenant",
+        environment={"AZURE_TENANT_ID": "other", "AZURE_CLIENT_ID": "ambient",
+                     "AZURE_CLIENT_SECRET": "must-not-use"},
+        oauth_post=lambda *args: pytest.fail("scoped authentication must use the selected CLI account"),
+    ) == "scoped-secret"
+    assert invocations == [[
+        "az", "account", "get-access-token", "--resource",
+        "https://cognitiveservices.azure.com", "--subscription", "subscription",
+        "--output", "json",
+    ]]
+
+
+@pytest.mark.parametrize("metadata", [
+    {}, None, [], {"tenant": "other", "subscription": "subscription", "accessToken": "secret"},
+    {"tenant": "tenant", "subscription": "other", "accessToken": "secret"},
+    {"tenant": "tenant", "subscription": "subscription"},
+    {"tenant": "tenant", "subscription": "subscription", "accessToken": ""},
+])
+def test_scoped_auth_rejects_missing_or_wrong_identity(metadata):
+    with pytest.raises(AuthenticationError):
+        acquire_entra_token(
+            lambda *args, **kwargs: SimpleNamespace(returncode=0, stdout=json.dumps(metadata)),
+            subscription_id="subscription", tenant_id="tenant",
+        )
+
+
+def test_scoped_auth_rejects_invalid_json():
+    with pytest.raises(AuthenticationError, match="invalid authentication metadata"):
+        acquire_entra_token(
+            lambda *args, **kwargs: SimpleNamespace(returncode=0, stdout="not JSON"),
+            subscription_id="subscription", tenant_id="tenant",
+        )
+
+
+@pytest.mark.parametrize("scope", [
+    {"subscription_id": "subscription"}, {"tenant_id": "tenant"},
+    {"subscription_id": "", "tenant_id": "tenant"},
+])
+def test_scoped_auth_never_falls_back_on_incomplete_scope(scope):
+    with pytest.raises(ValueError, match="requires subscription_id and tenant_id"):
+        acquire_entra_token(
+            lambda *args, **kwargs: pytest.fail("must not invoke CLI with incomplete scope"),
+            **scope,
+        )
 
 
 def test_dispatches_tool_loop_records_calls_fetch_and_usage_by_target():

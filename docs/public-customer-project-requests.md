@@ -347,6 +347,138 @@ paid run without reconciling prior reservations and remaining authorization.
 The USD 50 approval is a total additional spending limit, not a new allowance
 per directory. No automatic restart or ambiguous-attempt replay is provided.
 
+## Augmented campaign setup: September 16, 2026
+
+`experiments\customer_requests_augmented_20260916` contains a separate catalog
+with 27 projects and 230 requirements, its ingestion report, and matching
+`template.json` and `pilot.json` files. The original six projects and their
+splits are unchanged. The expansion includes two explicitly labeled job
+postings and one sample template; not every source is an issued RFP.
+
+The new `customer-pilot-v2` configuration declares `project_counts` explicitly:
+19 training projects and 8 holdout projects. The runner requires these counts
+to match the catalog, with at least three training projects for the existing
+leave-one-project-out fitting procedure and at least one holdout project.
+The original `customer-pilot-v1` configuration still requires four training
+and two holdout projects.
+
+The v2 configuration also pins the canonical JSON SHA-256 hashes of its catalog
+and template. These are `content_hash()` values, not raw-file hashes from the
+ingestion report. Changes to requirements, annotations, splits, instructions,
+or output limits require review and updated pins; changing whitespace alone
+does not change the canonical identity.
+
+The operation template is unchanged from the original pilot: four independent
+scoping operations, a 1,600-token allowance per operation, and 6,400 tokens for
+the combined call. GPT-5.4 version `2026-03-05`, Global Standard, reasoning
+`none`, verbosity `low`, two replicates, and the 32,768-token input ceiling are
+preserved. Preparing the entire augmented catalog describes a fresh 270-call
+campaign: 190 training calls and 80 holdout calls. Preparation executes nothing
+and does not merge existing measurements. Executing this full plan later would
+remeasure the original six projects alongside the 21 new sources.
+
+The user selected carry-forward budgeting rather than a new allowance. The
+configuration's `prior_attempt` aggregates both earlier customer-scoping runs:
+USD 0.38838 cumulative retail-rate cost and USD 4.70392 conservative safety
+accounting, with no active reservations. This leaves a USD 45.29608 run cap
+and USD 43.29608 operational stop within the original USD 50 / USD 48 ceilings.
+The price metadata retains its actual September 14 retrieval date; no fresh
+price or deployment observation is implied by offline setup. Budget stops can
+halt collection before all planned calls complete.
+
+**Paid execution is disabled.** The new configuration has
+`execution_approved: false`; the runner rejects it before creating a run
+directory, authenticating, counting tokens, or generating responses, even if
+`--execute` is supplied. Enabling that field requires separate explicit
+authorization after reviewing the inputs, protocol, and remaining budget.
+No new metered labels or completed run are claimed by this setup.
+
+An offline preview can be created in a new, single-use directory:
+
+```powershell
+python -m examples.customer_request_pilot `
+  --experiment-dir experiments\customer_requests_augmented_20260916 `
+  --run-dir runs\customer-augmented-preview
+```
+
+All calls from a project inherit its catalog split. The original two holdout
+projects already have observed outcomes, so the combined holdout is not wholly
+new blind evidence. Labels would still measure the four-operation scoping
+protocol, not full customer delivery or every annotated brick type.
+
+## Replacement Foundry deployment and fresh holdout: September 17, 2026
+
+`experiments\customer_requests_fresh_holdout_20260917` is a separate revision,
+not an edit to the earlier catalogs, previews, or measured runs. It retains
+all 27 source briefs and 230 requirements. All six previously examined
+projects are now training/development sources; eight of the 21 new projects
+are holdout. Selection uses `random.Random(20260916).sample(sorted(new_ids), 8)`
+without generation outcomes. `split_revision.json` records every old and new
+assignment and links back to the original ingestion evidence.
+
+The `customer-pilot-v3` configuration uses the resource's OpenAI v1 endpoint,
+`https://msfoundry-hackathon.openai.azure.com/openai/v1`, rather than the
+Foundry project URL ending in `/api/projects/foundry-hackathon`. Its
+`azure_resource` object records the tenant, subscription, resource group,
+resource name, and region used for deployment metadata and authentication.
+The model remains GPT-5.4 `2026-03-05`, Global Standard, in `eastus`.
+The observed allocation is 5,000 requests/minute and 500,000 tokens/minute;
+this shared quota does not guarantee that throttling cannot occur.
+
+Scoped authentication obtains a token for the configured subscription and
+checks the returned tenant/subscription, without changing the Azure CLI's
+default account or using unrelated service-principal environment credentials.
+The refreshable CLI cache is consulted before each generation request so a
+long campaign does not retain one expiring bearer token for the entire run.
+Tokens and authorization headers are not saved. Deployment metadata is still
+checked before generation, before holdout, and after completion.
+
+The user authorized paid collection without a budget restriction. Instead of
+accepting infinity or disabling spending protection, v3 records a finite
+`budget_approval`: a USD 453.43 run cap/stop covers the sum of all 270
+worst-case safety reservations (USD 453.4272). The cumulative approval is
+USD 458.14, including USD 4.70392 of prior Azure safety accounting. These
+conservative safety values are not expected charges. Normal synchronous
+eastus retail rates were retrieved on September 17: USD 2.50/M input,
+USD 0.25/M cached input, and USD 15.00/M output. The exact meters and
+control-plane observations are retained in `integration_report.json`.
+
+V3 retains explicit execution approval, reviewed catalog/template hashes,
+the fixed call count, and finite cumulative budget validation. It also
+fingerprints all prepared calls and rejects changed inputs/configuration or
+calls before execution. V1/v2 retain their historical endpoint and USD 50
+cumulative cap restrictions. Output limits, exact usage requirements,
+single-use run directories, and no-automatic-retry behavior remain unchanged.
+Creating this integration configuration does not itself generate labels.
+
+### Completed fresh-holdout token collection
+
+The completed dataset is
+`runs\20260917_customer_scoping_fresh_holdout_v1\records.json`.
+All 270 requests completed with measured usage: 190 training calls from
+19 projects and 80 holdout calls from eight previously unmeasured projects.
+No generation attempts were retried. The earlier Azure datasets and the
+separate Copilot metering probe are not merged into these records.
+
+The campaign consumed 212,892 input tokens and 119,139 output tokens:
+332,031 total tokens. Cached input was 2,048 tokens (a subset of input), and
+reasoning usage was explicitly zero. Retail-rated cost was USD 2.314707,
+not a reconciled invoice. Conservative settled safety accounting was
+USD 28.08564, with no outstanding reservations.
+
+Of the 270 responses, 244 met the automatic artifact contract and 26 were
+flagged for format or requirement-coverage defects. All still have valid
+consumption labels; quality flags remain available for separate analysis
+rather than silently filtering incurred usage. These labels measure scoping
+requests, not successful delivery of the underlying customer projects.
+
+For token regression, the target is `usage.total_tokens` (or the separate
+input/output channels), not `rated_cost_usd`. `quote` contains the
+pre-execution features. The runner's saved `models.json` and `predictions.json`
+remain USD-cost models; their holdout predictions were frozen before the
+first holdout request. The input-only counting capability was unavailable on
+this deployment, but generation responses supplied the actual usage channels.
+
 ## Training and evidence artifacts
 
 ### Where the training data points are

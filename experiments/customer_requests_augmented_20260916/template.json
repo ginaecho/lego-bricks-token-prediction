@@ -1,0 +1,36 @@
+{
+  "schema_version": "customer-scoping-v1",
+  "unit_definition": "One listed requirement per Extract, Classify, or Plan unit; one project scoping report per Report unit. These are not full-project execution units.",
+  "scope": "Public-request scoping only. Do not fetch sources, access private inputs, contact customers, deploy anything, or claim delivery.",
+  "max_output_tokens_per_operation": 1600,
+  "operations": [
+    {
+      "id": "extract",
+      "brick": "extract",
+      "units": "requirements",
+      "depends_on": [],
+      "instruction": "Return an array of objects with exactly requirement_id and evidence. Include each listed requirement once in order. evidence must equal its supplied text exactly."
+    },
+    {
+      "id": "classify",
+      "brick": "classify",
+      "units": "requirements",
+      "depends_on": [],
+      "instruction": "Return an array of objects with exactly requirement_id, brick, owner. Include every requirement in order and preserve the supplied experimental brick and owner annotations exactly; they are not buyer staffing claims."
+    },
+    {
+      "id": "plan",
+      "brick": "plan",
+      "units": "requirements",
+      "depends_on": [],
+      "instruction": "Return an array with every requirement in order. Each object has exactly requirement_id, owner, prerequisite_status, review_required, and proposed_artifact. Preserve owner. Set prerequisite_status to unverified and review_required to true. proposed_artifact is a concise, specific proposed scoping artifact (20-300 characters), not completed work or invented findings. Discovering delivery dependencies requires additional authorized inputs."
+    },
+    {
+      "id": "report",
+      "brick": "report",
+      "units": "project",
+      "depends_on": [],
+      "instruction": "Return an object with exactly source_url, requirement_ids, exclusions, delivery_status, and summary. Preserve the supplied URL, ordered requirement IDs, and all exclusion strings exactly. delivery_status must be not_executed. summary is a concise scoping summary (40-600 characters) that describes the requested work and missing evidence without inventing outcomes or claiming delivery."
+    }
+  ]
+}

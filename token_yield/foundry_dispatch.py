@@ -175,14 +175,20 @@ def acquire_entra_token(
     *,
     environment: Optional[Mapping[str, str]] = None,
     oauth_post: Callable[[str, bytes, float], bytes] = _default_oauth_post,
+    subscription_id: Optional[str] = None,
+    tenant_id: Optional[str] = None,
 ) -> str:
-    """Acquire an in-memory bearer token from Entra environment or Azure CLI."""
+    """Acquire an in-memory token, using only CLI for an explicitly scoped account."""
 
+    scoped = subscription_id is not None or tenant_id is not None
+    if scoped and any(not isinstance(value, str) or not value.strip()
+                      for value in (subscription_id, tenant_id)):
+        raise ValueError("scoped authentication requires subscription_id and tenant_id")
     env = os.environ if environment is None else environment
     tenant = env.get("AZURE_TENANT_ID")
     client = env.get("AZURE_CLIENT_ID")
     secret = env.get("AZURE_CLIENT_SECRET")
-    if tenant and client and secret:
+    if not scoped and tenant and client and secret:
         token_url = (
             f"https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
         )
@@ -213,11 +219,13 @@ def acquire_entra_token(
         "get-access-token",
         "--resource",
         resource,
-        "--query",
-        "accessToken",
-        "--output",
-        "tsv",
     ]
+    if scoped:
+        # Azure CLI forbids combining --tenant and --subscription. Check the
+        # returned tenant instead of relying on the user's default account.
+        command.extend(["--subscription", subscription_id, "--output", "json"])
+    else:
+        command.extend(["--query", "accessToken", "--output", "tsv"])
     try:
         completed = command_runner(
             command,
@@ -229,7 +237,20 @@ def acquire_entra_token(
         raise AuthenticationError("Azure CLI token acquisition failed") from exc
     if getattr(completed, "returncode", 1) != 0:
         raise AuthenticationError("Azure CLI token acquisition failed")
-    token = str(getattr(completed, "stdout", "")).strip()
+    if scoped:
+        try:
+            auth = json.loads(completed.stdout)
+        except (AttributeError, TypeError, json.JSONDecodeError) as exc:
+            raise AuthenticationError("Azure CLI returned invalid authentication metadata") from exc
+        if (not isinstance(auth, dict) or auth.get("tenant") != tenant_id
+                or auth.get("subscription") != subscription_id):
+            raise AuthenticationError("Azure CLI token tenant/subscription differs from configuration")
+        token = auth.get("accessToken")
+        if not isinstance(token, str):
+            raise AuthenticationError("Azure CLI returned no access token")
+        token = token.strip()
+    else:
+        token = str(getattr(completed, "stdout", "")).strip()
     if not token:
         raise AuthenticationError("Azure CLI returned an empty access token")
     return token
