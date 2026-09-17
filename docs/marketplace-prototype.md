@@ -170,9 +170,20 @@ validated numeric rows, training reuse, fresh holdouts, metric reviews, forecast
 and publication. Expand each event for public output. It is an **in-process
 operation stream, not a shell**; there is no shell endpoint, generated code
 execution, fake command typing or hidden model reasoning.
+The primary surface is a compact near-black monospace terminal: gray timestamped
+role/activity lines and orange recorded values, with full raw event data available
+on expansion. Dissent and errors remain visible without expanding the raw data.
+The feed does not record executed shell commands, so the console never invents
+green prompt-prefixed command lines. A green cursor indicates an active run only;
+waiting gates are labeled waiting, and mocked runs retain their mock provenance.
+Follow scrolls within the terminal; uncheck it or scroll upward to pause following
+without stopping event ingestion. Re-enable Follow to return to the newest event.
 Read-only persisted replay, missing runs, disconnection, failure and cancellation
 are explicit. Next releases exactly the current gate; cancellation cannot undo
 an in-flight request. Opening any page does not invoke a provider.
+Saved completed, failed and cancelled runs (and all persisted replay snapshots)
+have no live cursor or automatic polling. Refresh is read-only. Forecasts remain
+additive independent-brick estimates, not measured combinations.
 
 ### Original public-metadata-inspired scenarios
 
