@@ -5,30 +5,27 @@ from copy import deepcopy
 ARCHIVE_V2 = {
     "id": "archive-exceptions-v2",
     "version": "2.0.0",
-    "title": "Archive Atelier v2 / fictional policy laboratory",
+    "title": "Archive Manager v2",
     "repository": "paperless-ngx/paperless-ngx",
     "url": "https://github.com/paperless-ngx/paperless-ngx",
     "observed": "2026-09-17",
     "metadata_url": "https://api.github.com/repos/paperless-ngx/paperless-ngx",
     "metadata_summary": "Document-management theme from the original scenario's metadata research only.",
-    "inspiration": "Original invented demo policies, not Paperless policies or legal advice. "
-    "Only the document-management theme is repository-inspired; no source or policy text copied.",
-    "source_origin": "Original invented demonstration policies, not Paperless policies.",
-    "description": "Archive Atelier v2 is an explicitly fictional policy laboratory. "
-    "From its bundled v2 policy, record register and evidence notes, build a retention "
-    "exception ledger: extract stated obligations and periods, classify exceptions using "
-    "the supplied taxonomy, verify supporting passages and summarize missing evidence. "
-    "Record the record ID, class, clock-start event/date, stated period, exception codes, "
-    "owner, supporting document IDs and exact quotes, and unresolved questions. Mark "
-    "unstated dates or rules unknown and preserve conflicting statements for review. "
-    "Do not invent missing approvals, resolve ambiguity by assumption, or perform deletion. "
-    "All rules and records are invented demonstration data, not Paperless policies, "
-    "real legal/security authority, legal advice or a compliance assessment.",
+    "inspiration": "Only the document-management theme is repository-inspired; "
+    "no source or policy text is copied.",
+    "source_origin": "Archive Manager's own retention policies for this workload.",
+    "description": "A document-storage company keeps a retention policy, a record register "
+    "and evidence notes. Each record needs to be reviewed to work out how long it should be "
+    "kept, with exceptions flagged using the company's exception categories, each exception "
+    "backed by a supporting quote, and anything still unclear listed for a manager to check. "
+    "Record the record ID, class, clock-start event/date, stated period, exception codes, owner, "
+    "supporting document IDs and exact quotes, and unresolved questions. Mark anything unstated "
+    "as unknown, keep conflicting notes for review, and do not guess, add missing approvals, or delete anything.",
     "new_function": "Retention exception ledger",
     "exercise": "Versioned source-alignment test; novelty, dissent and forecasts are not predetermined.",
 }
 
-_POLICY = """Fictional Archive Atelier policy AA-POL-2.0: retain invoice records for 24 calendar months after invoice closure.
+_POLICY = """Archive Manager policy AA-POL-2.0: retain invoice records for 24 calendar months after invoice closure.
 Retain correspondence for 90 elapsed days after case closure; retain master media for 12 calendar months after project completion.
 A start date is required to calculate a scheduled end. Missing starts and unscheduled record classes remain unknown.
 Calendar-month periods use the same day in the target month, or its last day if unavailable. Dates are ISO calendar dates.
@@ -45,7 +42,7 @@ EARLY_DISPOSAL_REPORTED: a supplied note reports disposal before a calculable ba
 OWNER_UNKNOWN: no accountable owner is documented.
 APPROVED_EXTENSION: a record-specific named-owner approval states an explicit extended end date.
 No exception can be claimed absent supporting passages; no applicable exception may be reported as such only within supplied evidence.
-All policy obligations above are invented internal demo rules. They are not Paperless rules, external legal/security authority, legal advice or a compliance determination."""
+All policy obligations above are Archive Manager's internal retention rules. They are not Paperless rules, external legal/security authority, legal advice or a compliance determination."""
 
 _CASES = (
     (

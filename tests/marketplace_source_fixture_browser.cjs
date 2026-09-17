@@ -27,7 +27,7 @@ async function main(){
     await page.goto(base+"/marketplace-sales-demo.html");
     await page.getByRole("button",{name:"02 Describe your idea",exact:true}).click();
     await page.locator('[data-scenario="0"]').click();
-    assert.match(await page.locator("#scenario-heading").innerText(),/Versioned fictional policy/);
+    assert.match(await page.locator("#scenario-heading").innerText(),/Archive Manager v2/);
     assert.match(await page.locator("#scenario-context").innerText(),/original three reviewed cases are unchanged/);
     assert.equal(await page.locator("#brief").inputValue(),scenario.description);
     assert.equal(posts.length,0,"Loading a scenario must not execute it");

@@ -6,18 +6,17 @@ No repository source or customer documents are copied into provider prompts.
 SCENARIOS = [
     {
         "id": "archive-exceptions",
-        "title": "Archive Atelier",
+        "title": "Archive Manager",
         "repository": "paperless-ngx/paperless-ngx",
         "url": "https://github.com/paperless-ngx/paperless-ngx",
         "metadata_url": "https://api.github.com/repos/paperless-ngx/paperless-ngx",
         "observed": "2026-09-17",
         "metadata_summary": "Community document scanning, indexing and archiving.",
         "license_metadata": "GPL-3.0",
-        "inspiration": "Document management inspired a fictional retention-exception review.",
-        "description": "Invented Archive Atelier manages supplied fictional document statements. "
-        "Build a retention exception ledger: extract stated retention obligations, classify "
-        "exceptions, verify supporting passages and write a concise ledger with missing evidence. "
-        "Use only the bundled fictional reference documents; mark unstated dates unknown.",
+        "inspiration": "Document management inspired a retention-exception review.",
+        "description": "A document-storage company keeps many documents and needs each one "
+        "reviewed to work out how long it should be kept, with a list of the records where that "
+        "is unclear or needs a manager to check.",
         "new_function": "Retention exception ledger",
         "exercise": "Explicit capability review and possible creation; agent verdict is not predetermined.",
     },
@@ -37,7 +36,7 @@ SCENARIOS = [
         "a concise ledger with missing evidence. Compare existing contracts before adding a brick; "
         "this register asks for the same bounded document transformation as a ledger.",
         "new_function": "Retention exception register",
-        "exercise": "Similar reuse review after Archive Atelier; lexical overlap is not proof.",
+        "exercise": "Similar reuse review after Archive Manager; lexical overlap is not proof.",
     },
     {
         "id": "support-handoffs",
