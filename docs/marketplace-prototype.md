@@ -223,6 +223,30 @@ Numeric forecasts remain withheld for unsupported scope, unresolved project
 decisions, incompatible models/contracts or predictors outside measured support.
 The local input/output ridge models are retrained; GPT is never fine-tuned.
 
+### Forecast provenance in sales estimates
+
+Stored models supply `source` to the public catalog, each brick prediction, and
+whole-project forecasts. Sales selections, quotes, configuration dialogs, reviews
+and JSON exports retain that evidence source. `measured-foundry`,
+`mocked-test-provider` and offline `synthetic` evidence have distinct labels and
+export bases. Absent or conflicting provenance is labeled `unknown`; neither a
+Foundry runtime route nor a GPT-5.4 model name establishes measured evidence.
+Saved legacy results can use their explicit result/training source, never the
+currently connected runtime as a substitute.
+
+`forecastMode: reference-context` controls frozen GPT-5.4 forecast arithmetic
+separately from `predictionSource`. Mock reference forecasts use the same frozen
+tokens and commercial rates as measured reference forecasts, with no invented
+routing/setup tokens. Context and token-factor changes do not change these
+snapshots. Manual/offline scenario calculations retain their existing behavior.
+Mixed reference evidence sources cannot form a single quote.
+
+Exported `liveLLMConnected` requires both enabled server runtime metadata and
+`runtimeSource: measured-foundry`; a mock runtime never sets it. This reports
+server configuration, not a new authentication/availability probe or a claim that
+reading a saved quote made a model call. Historical evidence provenance remains
+independent from current runtime availability.
+
 ### No-paid-call validation
 
 Use a separate loopback port and scratch state; do not point tests at a live ledger:
@@ -243,13 +267,22 @@ npm install --prefix .feedback-tools --no-save --no-package-lock playwright
 $env:PLAYWRIGHT_MODULE = Join-Path (Get-Location) '.feedback-tools\node_modules\playwright'
 $env:PLAYWRIGHT_CHANNEL = 'msedge'
 node tests\marketplace_feedback_browser.cjs
+node tests\marketplace_provenance_browser.cjs
 ```
 
 Use the repository's configured Python environment. Browser tests use installed
 Edge; omit `PLAYWRIGHT_CHANNEL` when Playwright Chromium is installed.
 They refuse non-mock provenance before any POST, exercise three persistent runs,
 stepping/cancellation, 1440px desktop and 390px mobile layouts, no paid auto-start,
-run-ID links, disconnection/reconnect and stale-output clearing. Screenshots and
+run-ID links, disconnection/reconnect and stale-output clearing. Both whole-project
+approval and multi-brick catalog selection are checked through quote/export,
+including source labels, the live-connection flag and unchanged frozen arithmetic.
+The separate provenance browser suite intercepts **all HTTP** with local fixtures
+to cover measured, mock, offline, missing and conflicting evidence, plus a stored
+measured forecast viewed on a mock runtime. No real provider is called by these
+fixtures, including the measured-provenance response-path test. Its report is
+saved under `.feedback-provenance-check`.
+Screenshots and
 a JSON report are written under `.feedback-browser-check`, not committed.
 For a repeat of the creation tests, use a **new mock-only** directory/server;
 do not reset or replace any paid campaign state.

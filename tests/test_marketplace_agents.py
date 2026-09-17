@@ -760,6 +760,10 @@ def test_all_actual_transport_calls_use_strict_schemas_and_full_body_reservation
     assert len(seen) == 106 and seen.count("workload") == 96
     assert set(seen) == {"propose", "discuss", "adjudicate", "features", "workload", "fit", "metrics"}
     assert result["training"]["source"] == "measured-foundry"
+    assert result["after"]["source"] == "measured-foundry"
+    assert all(item["source"] == "measured-foundry" for item in result["after"]["per_brick"])
+    assert runtime.catalog()["source"] == "measured-foundry"
+    assert all(item["source"] == "measured-foundry" for item in runtime.catalog()["items"])
     assert result["orchestration"]["calls"] == 10 and result["workload"]["calls"] == 96
 
 

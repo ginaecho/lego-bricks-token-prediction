@@ -17,6 +17,35 @@ from token_yield.marketplace_mock import MockProvider
 from token_yield.marketplace_scenarios import SCENARIOS
 
 
+@pytest.mark.parametrize("source", ["mocked-test-provider", "measured-foundry", None])
+def test_stored_forecast_provenance_is_not_inferred_from_runtime(
+        tmp_path, config, request_data, monkeypatch, source):
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=MockProvider())
+    result, _, _ = run(runtime, request_data, tmp_path / "runs")
+    assert result["after"]["source"] == "mocked-test-provider"
+    assert all(item["source"] == "mocked-test-provider" for item in result["after"]["per_brick"])
+    model = runtime._latest()
+    assert model is not None
+    # Exercise metadata response paths, not paid inference or relabeling persisted evidence.
+    model = {**model, "source": source}
+    monkeypatch.setattr(runtime, "_latest", lambda: model)
+    expected = source or "unknown"
+    catalog = runtime.catalog()
+    assert catalog["source"] == expected
+    assert all(item["source"] == expected for item in catalog["items"])
+    assert all(item["forecast_mode"] == "reference-context" for item in catalog["items"])
+    assert any(item["supported"] for item in catalog["items"])
+    forecast = runtime._prediction(result["bricks"], model, 10, [])
+    assert forecast["source"] == expected
+    assert all(item["source"] == expected for item in forecast["per_brick"])
+    if source != "measured-foundry":
+        assert all("measured" not in item["reason"] for item in catalog["items"])
+    empty = runtime._forecast_brick(engine.contracts()[0], None)
+    assert empty["source"] == "unknown" and empty["supported"] is False
+    unsupported = runtime._prediction(result["bricks"], model, 10, ["Unsupported scope"])
+    assert unsupported["source"] == expected and unsupported["supported"] is False
+
+
 def test_three_original_scenarios_persistent_loop(tmp_path, config, request_data):
     provider = MockProvider()
     state = tmp_path / "state"

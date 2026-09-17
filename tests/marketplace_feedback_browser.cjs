@@ -3,8 +3,9 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || "playwright");
+const {checkQuote} = require("./marketplace_provenance_browser.cjs");
 const base = process.env.MARKETPLACE_URL || "http://127.0.0.1:8772";
-const output = path.resolve(".feedback-browser-check");
+const output = path.resolve(process.env.MARKETPLACE_EVIDENCE || ".feedback-browser-check");
 fs.mkdirSync(output, {recursive:true});
 async function main() {
   assert.match(base, /^http:\/\/(127\.0\.0\.1|localhost):\d+$/);
@@ -68,7 +69,26 @@ async function main() {
       assert.match(await consolePage.locator("#terminal").innerText(),/Publication finished/);
       report.runs.push({id,outcome:snapshot.result.capability_reviews[0].outcome,
                         reused:snapshot.result.training.reused_train_count,version:snapshot.result.training.version});
+      await sales.locator("#approve-pipeline").check();
+      await sales.locator("#use-pipeline").click();
+      await checkQuote(sales,snapshot.result.source);
     }
+    const catalogPage=await context.newPage();
+    await catalogPage.goto(base+"/marketplace-sales-demo.html");
+    await catalogPage.waitForFunction(()=>document.querySelector("#catalog-status").textContent.startsWith("Stored catalog:"));
+    const catalogSnapshot=await (await fetch(base+"/api/catalog")).json();
+    assert.equal(catalogSnapshot.source,runtime.source);
+    assert.ok(catalogSnapshot.items.every(item=>item.source===runtime.source));
+    const available=catalogPage.locator("[data-measured]:enabled");
+    assert.ok(await available.count()>=2);
+    for(let index=0;index<2;index++){
+      const box=available.nth(index);
+      await box.evaluate(element=>element.closest("details[data-measured-feature]").open=true);
+      await box.check();
+    }
+    await checkQuote(catalogPage,catalogSnapshot.source);
+    await catalogPage.close();
+    report.checks.push("project approval and multi-brick catalog quote/export preserve mock source and frozen arithmetic");
     for(const width of [1440,390]){
       for(const [name,p] of [["sales",sales],["console",consolePage]]){
         await p.setViewportSize({width,height:width===390?844:1000});

@@ -463,6 +463,8 @@ class AgentRuntime:
             items.extend(b for b in model.get("contracts", []) if b["id"] not in known)
         return {"items": [self._forecast_brick(b, model) for b in items],
                 "model_id": MODEL_ID, "version": model["version"] if model else None,
+                "source": model.get("source") or "unknown" if model else "unknown",
+                "forecast_mode": "reference-context",
                 "scope": "Reference-context-only prompt-contract proxies", "limitations": LIMITATIONS}
 
     def _cost(self, inputs: float, outputs: float) -> float:
@@ -476,7 +478,9 @@ class AgentRuntime:
         )}
         result.update(model_id=MODEL_ID, supported=False, input_tokens=None, output_tokens=None,
                       total_tokens=None, usd_per_run=None, pilot_version=None,
-                      reason="No compatible measured pilot evidence for this contract.")
+                      source=model.get("source") or "unknown" if model else "unknown",
+                      forecast_mode="reference-context",
+                      reason="No compatible pilot evidence for this contract.")
         if not model or not permitted or model.get("compatibility") != self._compatibility:
             return result
         if model.get("contract_hashes", {}).get(brick["id"]) != brick["contract_hash"]:
@@ -489,7 +493,7 @@ class AgentRuntime:
         vector = [values[name] for name in names]
         if any(not low <= value <= high
                for value, (low, high) in zip(vector, model["feature_bounds"])):
-            result["reason"] = "Reference features exceed measured training support."
+            result["reason"] = "Reference features exceed stored training support."
             return result
         predicted = {}
         for target in ("input", "output"):
@@ -505,7 +509,8 @@ class AgentRuntime:
             supported=True, input_tokens=predicted["input"], output_tokens=predicted["output"],
             total_tokens=sum(predicted.values()),
             usd_per_run=self._cost(predicted["input"], predicted["output"]),
-            pilot_version=model["version"], reason="Limited measured reference-context pilot; uncertified.",
+            pilot_version=model["version"],
+            reason=f"Limited {result['source']} reference-context pilot; uncertified.",
         )
         return result
 
@@ -515,11 +520,13 @@ class AgentRuntime:
         supported = not unsupported and all(item["supported"] for item in forecasts)
         result = {"supported": supported, "reason": "; ".join(unsupported) if unsupported else
                   "Reference-context pilot only." if supported else
-                  "At least one selected prompt contract lacks compatible measured support.",
+                  "At least one selected prompt contract lacks compatible training support.",
                   "input": None, "output": None, "total": None,
                   "input_tokens": None, "output_tokens": None, "total_tokens": None,
                   "usd_per_run": None, "usd_per_month": None, "per_brick": forecasts,
-                  "model_id": MODEL_ID, "version": model["version"] if model else None}
+                  "model_id": MODEL_ID, "version": model["version"] if model else None,
+                  "source": model.get("source") or "unknown" if model else "unknown",
+                  "forecast_mode": "reference-context"}
         if supported:
             inputs = sum(f["input_tokens"] * b["quantity"] for f, b in zip(forecasts, bricks))
             outputs = sum(f["output_tokens"] * b["quantity"] for f, b in zip(forecasts, bricks))
