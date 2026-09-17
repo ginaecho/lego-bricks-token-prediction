@@ -74,6 +74,54 @@ class ProspectiveTransport:
         }).encode()
 
 
+def test_offline_token_training_preserves_sources_and_reloads(prospective_inputs, tmp_path, monkeypatch):
+    from token_yield.customer_models import forecast_tokens
+    from token_yield.robust import ConstantModel, RidgeLinearModel
+
+    _, _, source = prospective_inputs
+    original = {path: path.read_bytes() for path in source.iterdir() if path.is_file()}
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("offline training must not contact providers; reload must not fit")
+
+    monkeypatch.setattr(customer_pilot, "_default_transport", forbidden)
+    monkeypatch.setattr(customer_pilot, "acquire_entra_token", forbidden)
+    destination = tmp_path / "token-models"
+    result = customer_pilot.train_token_forecast(source, destination)
+    assert result["spent_usd"] == 0 and result["status"] == "trained_exploratory"
+    assert result["training_calls"] == 40 and result["holdout_calls"] == 20
+    assert result["training_projects"] == 4 and result["holdout_projects"] == 2
+    assert all(path.read_bytes() == raw for path, raw in original.items())
+    artifact = json.loads((destination / "models.json").read_text(encoding="utf-8"))
+    predictions = json.loads((destination / "predictions.json").read_text(encoding="utf-8"))
+    assert "pricing" not in artifact["runtime"]
+    assert "records.json" in artifact["provenance"]["source_file_sha256"]
+    assert len(predictions) == 60
+    assert json.loads((destination / "analysis.json").read_text(encoding="utf-8")) == result
+    measured = {row["call_id"]: row for row in json.loads(original[source / "records.json"])}
+    monkeypatch.setattr(ConstantModel, "fit", forbidden)
+    monkeypatch.setattr(RidgeLinearModel, "fit", forbidden)
+    for prediction in predictions:
+        reloaded = forecast_tokens(artifact, measured[prediction["call_id"]]["quote"], artifact["runtime"])
+        assert reloaded["point_estimate"] == prediction["point_estimate"]
+    with pytest.raises(FileExistsError):
+        customer_pilot.train_token_forecast(source, destination)
+    with pytest.raises(ValueError, match="outside"):
+        customer_pilot.train_token_forecast(source, source / "nested")
+
+
+def test_offline_token_training_rejects_tampered_measurements(prospective_inputs, tmp_path):
+    _, _, source = prospective_inputs
+    path = next(source.glob("*.response.json"))
+    response = json.loads(path.read_text(encoding="utf-8"))
+    response["usage"]["input_tokens"] += 1
+    path.write_text(json.dumps(response), encoding="utf-8")
+    destination = tmp_path / "rejected-token-models"
+    with pytest.raises(ValueError, match="raw response"):
+        customer_pilot.train_token_forecast(source, destination)
+    assert not destination.exists()
+
+
 def test_prospective_freezes_all_channels_without_fit_and_preserves_sources(
         prospective_inputs, tmp_path, monkeypatch):
     from token_yield import customer_models

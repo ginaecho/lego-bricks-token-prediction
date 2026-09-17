@@ -986,3 +986,72 @@ def train_project_forecast(source_run: Path, run_dir: Path) -> dict:
                         ("predictions.json", predictions), ("analysis.json", summary)):
         _write_json(run_dir / name, value)
     return summary
+
+
+def train_token_forecast(source_run: Path, run_dir: Path) -> dict:
+    """Fit and persist call-level token models offline from audited measurements."""
+    from .customer_models import evaluate_token_models, fit_token_models, forecast_tokens
+
+    source_run, run_dir = source_run.resolve(), run_dir.resolve()
+    if run_dir == source_run or source_run in run_dir.parents:
+        raise ValueError("training output must be outside the frozen source run")
+    if run_dir.exists():
+        raise FileExistsError(f"training output already exists: {run_dir}")
+    raw = {name: (source_run / name).read_bytes() for name in ("protocol.json", "records.json")}
+    campaign, measured = json.loads(raw["protocol.json"]), json.loads(raw["records.json"])
+    # The existing aggregate validator also verifies every call against the frozen protocol.
+    aggregate_project_rows(campaign, measured)
+    hashes = _verify_training_responses(source_run, campaign, measured)
+    hashes.update({name: hashlib.sha256(value).hexdigest() for name, value in raw.items()})
+    config = campaign["config"]
+    runtime = {
+        "deployment": config["deployment"], "deployment_version": config["deployment_version"],
+        "reasoning_effort": config["reasoning_effort"], "text_verbosity": config["text_verbosity"],
+        "template_sha256": campaign["template_sha256"],
+        "execution_code_sha256": campaign["code_sha256"],
+        "execution_policy": config["authorization"],
+        "max_input_tokens_per_call": config["max_input_tokens_per_call"],
+    }
+    training = [row for row in measured if row["split"] == "train"]
+    holdout = [row for row in measured if row["split"] == "holdout"]
+    models = fit_token_models(training, runtime)
+    models["provenance"] = {
+        "source_run": source_run.name, "source_file_sha256": hashes,
+        "catalog_sha256": campaign["catalog_sha256"],
+        "training_code_sha256": {
+            name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
+            for name in ("customer_models.py", "customer_pilot.py", "customer_decomposition.py",
+                         "robust.py", "economics.py")
+        },
+    }
+    # Exercise the same JSON boundary that a later marketplace consumer will use.
+    models = json.loads(canonical_json(models))
+    predictions = [
+        {"call_id": row["call_id"], "project_id": row["project_id"], "split": row["split"],
+         "operations": row["operations"],
+         "evaluation_role": "in_sample" if row["split"] == "train" else "historical_holdout",
+         **forecast_tokens(models, row["quote"], runtime)}
+        for row in sorted(measured, key=lambda row: row["call_id"])
+    ]
+    evaluation = evaluate_token_models(models, holdout)
+    summary = {
+        "status": "trained_exploratory",
+        "source_run": source_run.name,
+        "training_calls": len(training), "holdout_calls": len(holdout),
+        "training_projects": len(models["training_project_ids"]),
+        "holdout_projects": evaluation["n_projects"],
+        "selected_forms": evaluation["selected_forms"],
+        "holdout": evaluation,
+        "spent_usd": 0,
+        "scope": models["scope"],
+        "calibrated_interval": None, "upper_budget_bound": None,
+        "calibration_status": models["calibration_status"],
+        "limitations": campaign["limitations"] + models["limitations"] + [
+            "Historical holdout results were previously examined; this is retrospective evaluation.",
+        ],
+    }
+    run_dir.mkdir(parents=True, exist_ok=False)
+    for name, value in (("models.json", models), ("predictions.json", predictions),
+                        ("analysis.json", summary)):
+        _write_json(run_dir / name, value)
+    return summary

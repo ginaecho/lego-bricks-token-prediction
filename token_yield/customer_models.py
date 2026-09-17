@@ -32,6 +32,9 @@ _PROJECT_FEATURES = {
     "workflow": (*_FEATURES["lego"], "planned_calls", "max_operations_per_call"),
 }
 _PROJECT_TARGETS = ("input_tokens", "output_tokens", "rated_cost_usd")
+_TOKEN_SCHEMA = "customer-call-tokens-v1"
+_TOKEN_CHANNEL_SCHEMA = "customer-call-token-channel-v1"
+_TOKEN_TARGETS = ("input_tokens", "output_tokens")
 
 
 def _mapping(value: object, label: str) -> dict:
@@ -319,6 +322,14 @@ def _fit_target_models(rows: list[dict], *, target: str = "rated_cost_usd",
             "planned_calls": "Number of declared requests, not realized tool or retry counts.",
             "max_operations_per_call": "Largest declared batch of independent scoping operations.",
         })
+    elif target in _TOKEN_TARGETS:
+        artifact.update(
+            schema_version=_TOKEN_CHANNEL_SCHEMA,
+            target=target,
+            observation_unit="single_metered_call",
+            selection_metric=f"equal_project_weight_mae_{target}",
+            prediction_floor=artifact.pop("prediction_floor_usd"),
+        )
     return artifact
 
 
@@ -558,6 +569,169 @@ def evaluate_project_models(artifact: dict, rows: list[dict]) -> dict:
         "n_projects": len({row["project_id"] for row in rows}),
         "selected_forms": {target: artifact["channels"][target]["selected_form"]
                            for target in _PROJECT_TARGETS},
+        "scores": scores,
+        "calibrated_interval": None,
+        "upper_budget_bound": None,
+    }
+
+
+def _token_quote_features(quote: dict) -> dict:
+    values = _quote_features(quote)
+    if set(quote) != {"context_bytes", "prompt_bytes", "planned_output_tokens", "counts"}:
+        raise ValueError("token quote must contain exactly the declared quote-time fields")
+    if values["total_scoping_units"] == 0:
+        raise ValueError("token quote requires a nonempty operation selection")
+    return values
+
+
+def fit_token_models(rows: list[dict], runtime: dict) -> dict:
+    """Fit shared call-level input/output predictors, never a language model.
+
+    Training uses measured calls and project-grouped model selection. Runtime
+    is a caller-verified frozen contract, not a learned explanatory variable.
+    """
+    runtime = _runtime_contract(runtime)
+    completed, excluded = _completed_rows(rows, training=True)
+    values = [_token_quote_features(row["quote"]) for row in completed]
+    return {
+        "schema_version": _TOKEN_SCHEMA,
+        "scope": "public_request_scoping_calls_not_full_customer_delivery",
+        "runtime": runtime,
+        "training_project_ids": sorted({row["project_id"] for row in completed}),
+        "training_call_ids": [row["call_id"] for row in completed],
+        "excluded_call_ids": excluded,
+        "channels": {
+            target: _fit_target_models(completed, target=target)
+            for target in _TOKEN_TARGETS
+        },
+        "support": {
+            "feature_ranges": {
+                name: [min(value[name] for value in values),
+                       max(value[name] for value in values)]
+                for name in values[0]
+            },
+            "operation_combinations": sorted({
+                tuple(name for name in _UNITS if value[name] > 0) for value in values
+            }),
+            "interpretation": "Marginal ranges and observed combinations are not joint/domain support.",
+        },
+        "calibrated_interval": None,
+        "upper_budget_bound": None,
+        "calibration_status": _CALIBRATION_STATUS,
+        "limitations": [
+            "Research-only estimates for the original four-operation scoping template.",
+            "No causal per-brick prices or independent coefficient identification is established.",
+            "Metered quality-rejected completions retain their incurred token consumption.",
+            "No sequential handoffs, tools, retries, or new execution versions were measured.",
+            "Winning training-CV error is not an unbiased new-test estimate.",
+            "API rating and marketplace selling prices are not token prediction targets.",
+        ],
+    }
+
+
+def _token_channels(artifact: dict) -> dict:
+    artifact = _mapping(artifact, "artifact")
+    if artifact.get("schema_version") != _TOKEN_SCHEMA:
+        raise ValueError("unsupported token artifact schema_version")
+    channels = _mapping(_required(artifact, "channels"), "channels")
+    if set(channels) != set(_TOKEN_TARGETS):
+        raise ValueError("token artifact requires input_tokens and output_tokens channels")
+    for target, channel in channels.items():
+        channel = _mapping(channel, "channel")
+        if (channel.get("schema_version") != _TOKEN_CHANNEL_SCHEMA
+                or channel.get("target") != target):
+            raise ValueError("token channel schema or target mismatch")
+    return channels
+
+
+def _token_prediction(channel: dict, quote: dict, form: str | None = None) -> float:
+    form = channel["selected_form"] if form is None else form
+    if form not in _FEATURES:
+        raise ValueError("unknown token model form")
+    forms = _mapping(_required(channel, "forms"), "forms")
+    if set(forms) != set(_FEATURES):
+        raise ValueError("token channel must contain all four model forms")
+    result = _mapping(forms[form], "form")
+    if result["features"] != list(_FEATURES[form]):
+        raise ValueError("token model features do not match form")
+    model = _model_from_params(result["model"], form)
+    return _predict(model, _features(_token_quote_features(quote), form))
+
+
+def forecast_tokens(artifact: dict, quote: dict, runtime: dict) -> dict:
+    """Reload token parameters without fitting; report unsupported runtime."""
+    channels = _token_channels(artifact)
+    values = _token_quote_features(quote)
+    runtime = _runtime_contract(runtime)
+    result = {
+        "point_estimate": None,
+        "support": {"status": "unsupported", "reasons": ["runtime_contract_mismatch"]},
+        "calibrated_interval": None,
+        "upper_budget_bound": None,
+        "calibration_status": _CALIBRATION_STATUS,
+        "scope": artifact["scope"],
+    }
+    if canonical_json(runtime) != canonical_json(_runtime_contract(artifact["runtime"])):
+        return result
+    support = _mapping(_required(artifact, "support"), "support")
+    ranges = _mapping(_required(support, "feature_ranges"), "feature_ranges")
+    if set(ranges) != set(values):
+        raise ValueError("support feature ranges must match token features")
+    reasons = []
+    for name, value in values.items():
+        bounds = ranges[name]
+        if not isinstance(bounds, list) or len(bounds) != 2:
+            raise ValueError("support ranges must contain two numeric bounds")
+        lower, upper = (_number(bound, name) for bound in bounds)
+        if lower > upper:
+            raise ValueError("support lower bound exceeds upper bound")
+        if not lower <= value <= upper:
+            reasons.append(f"outside_training_range:{name}")
+    combinations = _required(support, "operation_combinations")
+    if not isinstance(combinations, list) or not combinations:
+        raise ValueError("support requires observed operation combinations")
+    for combination in combinations:
+        if (not isinstance(combination, (list, tuple)) or not combination
+                or list(combination) != [name for name in _UNITS if name in combination]):
+            raise ValueError("invalid observed operation combination")
+    selected = [name for name in _UNITS if values[name] > 0]
+    if selected not in [list(combination) for combination in combinations]:
+        reasons.append("unmeasured_operation_combination")
+    point = {target: _token_prediction(channel, quote) for target, channel in channels.items()}
+    point["total_tokens"] = _number(sum(point.values()), "total_tokens")
+    result.update(
+        point_estimate=point,
+        support={"status": "extrapolation" if reasons else "within_observed_ranges",
+                 "reasons": reasons},
+    )
+    return result
+
+
+def evaluate_token_models(artifact: dict, rows: list[dict]) -> dict:
+    """Score frozen token channels on disjoint historical holdout projects."""
+    channels = _token_channels(artifact)
+    rows, excluded = _completed_rows(rows, training=False)
+    if excluded or any(row["split"] != "holdout" for row in rows):
+        raise ValueError("token evaluation requires complete holdout observations")
+    if set(artifact["training_project_ids"]) & {row["project_id"] for row in rows}:
+        raise ValueError("training and evaluation project groups must be disjoint")
+    scores = {}
+    for target, channel in channels.items():
+        scores[target] = {}
+        for form in _FEATURES:
+            predictions = {
+                row["call_id"]: _token_prediction(channel, row["quote"], form) for row in rows
+            }
+            metrics = _errors(rows, predictions, target)
+            scores[target][form] = {
+                name: metrics[name] for name in ("mae", "per_project_mae", "call_weighted_mae")
+            }
+    return {
+        "method": "historical_holdout_retrospective_not_new_sealed_test",
+        "metric": "equal_project_weight_mae_tokens",
+        "n_calls": len(rows),
+        "n_projects": len({row["project_id"] for row in rows}),
+        "selected_forms": {target: channel["selected_form"] for target, channel in channels.items()},
         "scores": scores,
         "calibrated_interval": None,
         "upper_budget_bound": None,

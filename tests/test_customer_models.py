@@ -15,6 +15,130 @@ from token_yield.robust import ConstantModel, Record, RidgeLinearModel
 FORMS = ("constant", "size", "size+units", "lego")
 
 
+def test_token_channels_use_measured_targets_and_grouped_selection():
+    rows = synthetic_test_rows()
+    for index, row in enumerate(rows):
+        row["usage"].update(input_tokens=100 + index * 10, output_tokens=30 + index,
+                            total_tokens=130 + index * 11)
+    artifact = customer_models.fit_token_models(rows, {"template": "test-v1"})
+    for target, channel in artifact["channels"].items():
+        assert channel["target"] == target
+        assert channel["selection_metric"] == f"equal_project_weight_mae_{target}"
+        assert "prediction_floor_usd" not in channel
+        assert channel["selected_form"] == min(FORMS, key=lambda f: channel["cv_mae"][f])
+        for form in FORMS:
+            errors = {}
+            for project in artifact["training_project_ids"]:
+                training = [
+                    Record(independent_features(row, form), row["usage"][target], row["project_id"])
+                    for row in sorted(rows, key=lambda row: row["call_id"])
+                    if row["project_id"] != project
+                ]
+                model = (ConstantModel.fit(training) if form == "constant"
+                         else RidgeLinearModel.fit(training, alpha=10.0))
+                residuals = []
+                for row in rows:
+                    if row["project_id"] == project:
+                        prediction = max(0.0, model.predict(independent_features(row, form)))
+                        assert channel["forms"][form]["cv_predictions"][row["call_id"]] == pytest.approx(
+                            prediction)
+                        residuals.append(abs(row["usage"][target] - prediction))
+                errors[project] = sum(residuals) / len(residuals)
+            assert channel["cv_mae"][form] == pytest.approx(sum(errors.values()) / len(errors))
+    changed = copy.deepcopy(rows)
+    for row in changed:
+        row["rated_cost_usd"] *= 100
+        row["quality_accepted"] = True
+    assert customer_models.fit_token_models(changed, artifact["runtime"]) == artifact
+    assert customer_models.fit_token_models(list(reversed(rows)), artifact["runtime"]) == artifact
+
+
+def test_token_reload_forecast_and_evaluation_never_refit(monkeypatch):
+    rows = synthetic_test_rows()
+    runtime = {"template": "test-v1", "model": "test-model"}
+    artifact = json.loads(json.dumps(customer_models.fit_token_models(rows, runtime)))
+    expected = customer_models.forecast_tokens(artifact, rows[0]["quote"], runtime)
+    assert expected["point_estimate"] == {"input_tokens": 80, "output_tokens": 20, "total_tokens": 100}
+    assert expected["support"]["status"] == "within_observed_ranges"
+    assert expected["calibrated_interval"] is None and expected["upper_budget_bound"] is None
+    holdout = copy.deepcopy(rows)
+    for row in holdout:
+        row.update(split="holdout", project_id="held-out-" + row["project_id"])
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("forecast and evaluation must never fit")
+
+    monkeypatch.setattr(ConstantModel, "fit", forbidden)
+    monkeypatch.setattr(RidgeLinearModel, "fit", forbidden)
+    assert customer_models.forecast_tokens(artifact, rows[0]["quote"], runtime) == expected
+    evaluation = customer_models.evaluate_token_models(artifact, holdout)
+    assert evaluation["selected_forms"] == {"input_tokens": "constant", "output_tokens": "constant"}
+    assert all(score["mae"] == 0 for forms in evaluation["scores"].values() for score in forms.values())
+    assert "retrospective" in evaluation["method"]
+    with pytest.raises(ValueError, match="schema_version"):
+        predict_cost(artifact["channels"]["input_tokens"], rows[0]["quote"])
+
+
+def test_token_forecast_flags_unsupported_conditions():
+    rows = synthetic_test_rows()
+    artifact = customer_models.fit_token_models(rows, {"template": "v1"})
+    quote = copy.deepcopy(rows[0]["quote"])
+    mismatch = customer_models.forecast_tokens(artifact, quote, {"template": "v2"})
+    assert mismatch["point_estimate"] is None
+    assert mismatch["support"]["reasons"] == ["runtime_contract_mismatch"]
+    quote["counts"] = {"extract": 0, "classify": 1, "plan": 0, "report": 0}
+    quote["prompt_bytes"] = 100000
+    forecast = customer_models.forecast_tokens(artifact, quote, artifact["runtime"])
+    assert forecast["support"]["status"] == "extrapolation"
+    assert "unmeasured_operation_combination" in forecast["support"]["reasons"]
+    assert "outside_training_range:prompt_bytes" in forecast["support"]["reasons"]
+
+
+@pytest.mark.parametrize("mutation", ["empty", "unknown", "negative", "boolean", "extra", "nan"])
+def test_token_quotes_reject_invalid_inputs_during_fit_and_forecast(mutation):
+    rows = synthetic_test_rows()
+    artifact = customer_models.fit_token_models(rows, {"template": "v1"})
+    quote = rows[0]["quote"]
+    if mutation == "empty":
+        quote["counts"] = dict.fromkeys(quote["counts"], 0)
+    elif mutation == "unknown":
+        quote["counts"]["retrieve"] = 1
+    elif mutation == "extra":
+        quote["actual_output_tokens"] = 99
+    else:
+        quote["prompt_bytes"] = {"negative": -1, "boolean": True, "nan": float("nan")}[mutation]
+    with pytest.raises((TypeError, ValueError)):
+        customer_models.fit_token_models(rows, artifact["runtime"])
+    with pytest.raises((TypeError, ValueError)):
+        customer_models.forecast_tokens(artifact, quote, artifact["runtime"])
+
+
+def test_token_training_and_evaluation_enforce_project_boundaries():
+    rows = synthetic_test_rows()
+    artifact = customer_models.fit_token_models(rows, {"template": "v1"})
+    with pytest.raises(ValueError, match="holdout"):
+        customer_models.evaluate_token_models(artifact, rows)
+    rows[0]["split"] = "holdout"
+    with pytest.raises(ValueError, match="holdout"):
+        customer_models.fit_token_models(rows, artifact["runtime"])
+    for row in rows:
+        row["split"] = "holdout"
+    with pytest.raises(ValueError, match="disjoint"):
+        customer_models.evaluate_token_models(artifact, rows)
+
+
+def test_token_artifact_rejects_swapped_channels_and_malformed_support():
+    rows = synthetic_test_rows()
+    artifact = customer_models.fit_token_models(rows, {"template": "v1"})
+    altered = copy.deepcopy(artifact)
+    altered["channels"]["input_tokens"] = altered["channels"]["output_tokens"]
+    with pytest.raises(ValueError, match="target mismatch"):
+        customer_models.forecast_tokens(altered, rows[0]["quote"], artifact["runtime"])
+    artifact["support"]["feature_ranges"]["prompt_bytes"] = [1, 0]
+    with pytest.raises(ValueError, match="lower bound"):
+        customer_models.forecast_tokens(artifact, rows[0]["quote"], artifact["runtime"])
+
+
 def synthetic_test_rows():
     """Unequal synthetic project sizes expose accidental call-weighted CV."""
     rows = []

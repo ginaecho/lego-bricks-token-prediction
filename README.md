@@ -25,6 +25,11 @@ the [HTML results report](docs/customer-model-report.html). This model covers
 preparing a project scope, not completing a whole customer engagement.
 The earlier experiments and proposed extensions below have different scopes.
 
+Marketplace direction: see the [requirements and TODO roadmap](docs/marketplace-models/plan.md)
+and the [service selection and quoting guide](docs/marketplace-models/quoting.md).
+Shared input/output models, versioned scoping contracts, and offline pricing are
+implemented; calibrated ranges and production recommendations remain pending.
+
 **Why it matters:** AI budgets are set by guesswork and reconciled after the
 money is gone. Token Yield turns them into a line item — a credible cost range
 at scoping time, the expensive-outlier risk located before dispatch, and a

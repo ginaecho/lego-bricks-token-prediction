@@ -1,0 +1,200 @@
+{
+  "schema_version": "marketplace-measurements-v1",
+  "campaign_sha256": "15291599f92c5e94f9b42f4b356aa1a3647eac69bfa5065d2119cc2ac0a0e669",
+  "calls_sha256": "3ac88dba3da361219001cb003c111d1c27dadced8bee7e3c41241703d4e01214",
+  "authorization": {
+    "additional_cap_usd": 50.0,
+    "approval_id": "marketplace-additional-usd50-v1",
+    "execution_gate": "--execute required; single-use approval claim across run directories",
+    "historical_spend_charged_to_this_approval": false,
+    "inputs": "Only the six existing local paraphrases, annotations and exclusions.",
+    "operational_stop_usd": 48.0,
+    "user_approval": ["Up to USD 50", "Reuse the six approved paraphrased briefs for execution-variant measurements"],
+    "permissions": "Permission to use local paraphrases only; no source license expansion.",
+    "prohibited": ["source downloads", "private inputs", "tools", "customer contact", "cloud resource changes", "full engagement execution"],
+    "retries": "No automatic retries or resume; unknown charges retain full reservations."
+  },
+  "provenance": {
+    "catalog_path": "experiments\\customer_requests\\catalog.json",
+    "catalog_sha256": "aa644aea92e7fd6d922687f70f3bacee320cf6a19b7cbb0b26a7f9ae5faf26f1",
+    "runtime_file_sha256": {
+      "budget.py": "6307a21aab7386a1297b759fa1a436e295d9581a42d5c7110856b8daab40d896",
+      "customer_decomposition.py": "1eae24c659408d62051531fe48cc05a1f6536e05b035115f147f8d6b7b1b8255",
+      "customer_pilot.py": "72721f27b83eb6e236d8822a7a0fdd9351fef9886db6abd5f54fa7fba9057cab",
+      "economics.py": "0d81485da685de9313e3a3e389b9032ddb9a93c540b753627f473361cd203531",
+      "foundry_dispatch.py": "5ce975313ee7620395b028e79c61d59fd54b91fab32983dc64feb24864d53590",
+      "marketplace_measurements.py": "3a243fa7c93bfef52a9c1d266c2b89b48e4eae7326935a2cfdca2daf5c108240"
+    },
+    "source_file_sha256": {
+      "catalog.json": "62b4673545fa88adb464c61ec3dcd14d29702fdf81838cf712f378fd05a315d3",
+      "pilot.json": "5bc3decb8aa0fd53b2524d0dd3d74ae7f68e3a687579d5e9d9620606fc98de7c",
+      "template.json": "cc47f80157ee9a5ddb2bca83d44244388ff863a6f6eb9a4f0afa390ea19e3f6c"
+    },
+    "template_sha256": "ba6781573d8f3e4c4c711fe44844ef1b899931899194b4953dd16ba1722fa29a"
+  },
+  "config": {
+    "cap_usd": 50.0,
+    "deployment": "gpt-5.4",
+    "deployment_sku": "GlobalStandard",
+    "deployment_version": "2026-03-05",
+    "endpoint": "https://foundary-tzuc06.openai.azure.com/openai/v1",
+    "expected_response_model": "gpt-5.4",
+    "pricing": {
+      "cached_input_per_million": 0.25,
+      "input_per_million": 2.5,
+      "output_per_million": 15.0
+    },
+    "pricing_source": {
+      "boundary": "Standard Global synchronous requests, short context. Retail-rate calculated cost, not reconciled invoice, discounts, tax, or procurement budget. Batching here means merging work into one normal request, not the Azure Batch API.",
+      "cached_input_meter_id": "781c01c1-b89f-57d8-98f9-d6a746505093",
+      "effective_start": "2026-03-01",
+      "input_meter_id": "6dc15256-2348-5f90-9e58-98ee417bc714",
+      "output_meter_id": "d88ed52a-9046-55e0-9931-e2d6a4d9c59f",
+      "region": "germanywestcentral",
+      "retrieved_on": "2026-09-14",
+      "unit": "1M tokens",
+      "url": "https://prices.azure.com/api/retail/prices"
+    },
+    "reasoning_effort": "none",
+    "stop_usd": 48.0,
+    "text_verbosity": "low"
+  },
+  "projects": [
+    {
+      "context_bytes": 1658,
+      "counts": {"classify": 8, "extract": 8, "plan": 8, "report": 1},
+      "deduplication_group": "paradigm-website-redesign",
+      "group": "train",
+      "original_split": "train",
+      "plan_sha256": "34cde841aaf32dfd7c34439aa36fd66c304aaa65757f238499e966be53e183d9",
+      "project_id": "paradigm-website-redesign",
+      "project_sha256": "9c302ea3ea272af476abf8ec777be276922d4fefa2b6af0faed5a155f820a7b9",
+      "requirement_count": 8,
+      "source_url": "https://paradigmhq.org/working-zone/website-redesign-request-for-proposal/"
+    },
+    {
+      "context_bytes": 1327,
+      "counts": {"classify": 4, "extract": 4, "plan": 4, "report": 1},
+      "deduplication_group": "slls-disaster-dashboard",
+      "group": "train",
+      "original_split": "train",
+      "plan_sha256": "c5e2d58170c6a073cda675018d0da24a75e4a27d1a78683a6e045e7cc0b0b6ad",
+      "project_id": "slls-disaster-dashboard",
+      "project_sha256": "229b39f5debb7af7ac6cdddd0960ac404da180013bee93b93b8f6a7334ca372f",
+      "requirement_count": 4,
+      "source_url": "https://slls.org/en/disaster-technology-rfp/"
+    },
+    {
+      "context_bytes": 1714,
+      "counts": {"classify": 6, "extract": 6, "plan": 6, "report": 1},
+      "deduplication_group": "climateworks-plastic-demand-review",
+      "group": "train",
+      "original_split": "train",
+      "plan_sha256": "a40fa7a03d92b5ee1cf6efbd06639a9ee8c67889135ddc84ad35771fb53779d7",
+      "project_id": "climateworks-plastic-demand-review",
+      "project_sha256": "b1ac2c02b42e4c5c1175cf20aad102da0bad831304d6076f20f4da9ee6a28f90",
+      "requirement_count": 6,
+      "source_url": "https://www.climateworks.org/programs/industry/request-for-proposals-plastic-demand-reduction-literature-review/"
+    },
+    {
+      "context_bytes": 1645,
+      "counts": {"classify": 8, "extract": 8, "plan": 8, "report": 1},
+      "deduplication_group": "campus-compact-evaluation",
+      "group": "train",
+      "original_split": "train",
+      "plan_sha256": "34fb4caef70bf893f6103d3ab9f0857321e25add79cf40463f9bc52fdc6e6b69",
+      "project_id": "campus-compact-evaluation",
+      "project_sha256": "a3af2d440bc6c74acbe52dd47d19e733f17513e4031aef37e9ed6f6a5b2a08bf",
+      "requirement_count": 8,
+      "source_url": "https://compact.org/news/request-for-proposals-measurement-evaluation-consultant"
+    },
+    {
+      "context_bytes": 1747,
+      "counts": {"classify": 8, "extract": 8, "plan": 8, "report": 1},
+      "deduplication_group": "handmade-arcade-strategic-plan",
+      "group": "historical_holdout",
+      "original_split": "holdout",
+      "plan_sha256": "ed8bea27f0655f0a5557955ee34e50cbb26f405ce32636880067abafc2c835e0",
+      "project_id": "handmade-arcade-strategic-plan",
+      "project_sha256": "d999a5be8dba096ada33d9586a6e9d3db194c086dfa63ee06c89012aa14870d0",
+      "requirement_count": 8,
+      "source_url": "https://www.handmadearcade.org/rfp-strategic-planning-consultant"
+    },
+    {
+      "context_bytes": 1868,
+      "counts": {"classify": 8, "extract": 8, "plan": 8, "report": 1},
+      "deduplication_group": "a4l-security-assessment",
+      "group": "historical_holdout",
+      "original_split": "holdout",
+      "plan_sha256": "854470d835905f5542888297d6d2a8543be2de5d86f6a9b2c8df4b2e8bb33384",
+      "project_id": "a4l-security-assessment",
+      "project_sha256": "841b5304d549829f1d809208b7599d68b94030f8f6c8360af5ca46cfde29ba77",
+      "requirement_count": 8,
+      "source_url": "https://a4l.org/request-for-proposal-rfp/"
+    }
+  ],
+  "grouping": {
+    "calibration_projects": 0,
+    "fresh_test_projects": 0,
+    "historical_holdout_projects": 2,
+    "restriction": "Historical holdout labels must not train, calibrate or select models.",
+    "train_projects": 4,
+    "unit": "project_id; all variants/repeats of a brief stay together"
+  },
+  "variation_matrix": {
+    "input_sizes": "original briefs only; no truncation or augmentation",
+    "layouts": [
+      {"batches": [["extract"], ["classify"], ["plan"], ["report"]], "semantics": "independent-original-brief", "status": "supported", "variant": "standalone-v1"},
+      {"batches": [["extract", "classify"], ["plan", "report"]], "semantics": "independent-original-brief", "status": "supported", "variant": "paired-v1"},
+      {"batches": [["extract", "classify", "plan", "report"]], "semantics": "independent-original-brief", "status": "supported", "variant": "batched-v1"},
+      {"batches": [["extract"], ["classify", "plan", "report"]], "semantics": "independent-original-brief", "status": "supported", "variant": "intermediate-mask-1-v1"},
+      {"batches": [["extract"], ["classify"], ["plan", "report"]], "semantics": "independent-original-brief", "status": "supported", "variant": "intermediate-mask-3-v1"},
+      {"batches": [["extract", "classify", "plan"], ["report"]], "semantics": "independent-original-brief", "status": "supported", "variant": "intermediate-mask-4-v1"},
+      {"batches": [["extract"], ["classify", "plan"], ["report"]], "semantics": "independent-original-brief", "status": "supported", "variant": "intermediate-mask-5-v1"},
+      {"batches": [["extract", "classify"], ["plan"], ["report"]], "semantics": "independent-original-brief", "status": "supported", "variant": "intermediate-mask-6-v1"}
+    ],
+    "ordering": "Projects retain original order; layout order rotates by project index.",
+    "quantities": "original listed requirements only; no synthetic quantity scaling",
+    "replicates": 1,
+    "unsupported": [
+      {
+        "reason": "Handoffs change v1 independent semantics. A separate validated template, contracts and research authorization are required.",
+        "status": "blocked",
+        "variant": "sequential-handoff-v2"
+      }
+    ]
+  },
+  "acceptance_criteria": [
+    "Every layout preserves all four operations and per-service unit counts exactly once.",
+    "Completed response with all five measured usage channels and pinned model identity.",
+    "Original check_output contract must pass; failure halts rather than retrying.",
+    "Failed/incomplete attempts remain evidence and never become zero-cost successes.",
+    "Human draft-quality review required; automatic checks do not prove noninferiority.",
+    "No new unseen-project, calibration, coverage, universal discount or delivery claims."
+  ],
+  "preview": {
+    "automatic_retries": 0,
+    "cost_note": "Bounds, not a prediction or invoice. Output includes per-operation caps; safety reserves output and reasoning separately. Runtime may stop before the whole matrix completes; USD48 guard takes precedence.",
+    "expected_cost_usd": null,
+    "max_calls_per_dispatch": 1,
+    "planned_calls": 120,
+    "planned_project_layouts": 48,
+    "tools": 0,
+    "total_reservation_usd": 139.69784,
+    "uncached_retail_bound_usd": 6.71023
+  },
+  "limitations": [
+    "Research variants of the same six briefs; not independent calibration or fresh testing.",
+    "All eight contiguous independent layouts are planned once per brief; no repeated measurements, independent replication or randomized causal claim.",
+    "No workflow predictor fitting until new measurements exist; historical percentages are not discounts.",
+    "Retail prices are inherited from the local 2026-09-14 snapshot, not re-queried.",
+    "Input reservations are local byte bounds, not provider-attested counts; a provider invoice is not controlled by this application-side safety guard."
+  ],
+  "service_versions": {
+    "extract": "marketplace-services-v1:ba6781573d8f3e4c4c711fe44844ef1b899931899194b4953dd16ba1722fa29a",
+    "classify": "marketplace-services-v1:ba6781573d8f3e4c4c711fe44844ef1b899931899194b4953dd16ba1722fa29a",
+    "plan": "marketplace-services-v1:ba6781573d8f3e4c4c711fe44844ef1b899931899194b4953dd16ba1722fa29a",
+    "report": "marketplace-services-v1:ba6781573d8f3e4c4c711fe44844ef1b899931899194b4953dd16ba1722fa29a"
+  },
+  "template_version": "customer-scoping-v1"
+}
