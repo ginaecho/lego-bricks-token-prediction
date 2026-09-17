@@ -326,6 +326,23 @@ def _reject_workload_citation(result):
     return replace(result, output=json.dumps(answer))
 
 
+INSTRUCTION_TEXT_CITATION = (
+    "For the source-only capability 'Retention exception ledger', execute each ordered atom step once "
+    "on the supplied documents. Later steps may use earlier results. Return one result per step, even "
+    "if evidence is missing; do not invent source facts."
+)
+
+
+def _replace_first_citation(result, quote):
+    answer = json.loads(result.output)
+    answer["evidence"] = [{"document_id": answer["evidence"][0]["document_id"], "quote": quote}]
+    return replace(result, output=json.dumps(answer))
+
+
+def _stage_calls(provider, task):
+    return [c for c in provider.calls if c["payload"]["task"] == task]
+
+
 def test_settled_workload_content_failure_retries_then_never_halts(tmp_path, config, request_data):
     provider = MockProvider()
     def always_bad(prompt, *, target, output_cap):
@@ -362,9 +379,84 @@ def test_bounded_retry_recovers_a_transient_citation_failure(tmp_path, config, r
     assert len(workload_calls) == 97           # 96 accepted + 1 rejected retry, each paid
     assert result["usage_ledger"]["response_calls"] == 107
     retry_events = [e for e in events if e["message"] == (
-        "Bounded workload retry authorized after source-citation rejection.")]
+        "Bounded stage retry authorized after content/citation rejection.")]
     assert retry_events and retry_events[0]["data"]["retry_policy"] == (
-        engine.WORKLOAD_RETRY_POLICY["policy"])
+        engine.CONTENT_RETRY_POLICY["policy"])
+
+
+@pytest.mark.parametrize("stage,expected_calls", [
+    ("propose", 4),
+    ("discuss", 4),
+    ("adjudicate", 2),
+    ("workload", 97),
+])
+def test_bounded_retry_recovers_transient_bad_citation_at_each_cited_stage(
+        tmp_path, config, request_data, stage, expected_calls):
+    provider = MockProvider()
+    seen = {"bad": False}
+    def flaky(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        if json.loads(prompt)["task"] == stage and not seen["bad"]:
+            seen["bad"] = True
+            return _replace_first_citation(result, INSTRUCTION_TEXT_CITATION)
+        return result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=flaky)
+    result, events, _ = run(runtime, request_data, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert len(_stage_calls(provider, stage)) == expected_calls
+    assert any(e["message"] == "Bounded stage retry authorized after content/citation rejection."
+               and e["data"]["operation"] == stage
+               and e["data"]["retry_policy"] == engine.CONTENT_RETRY_POLICY["policy"]
+               for e in events)
+
+
+@pytest.mark.parametrize("stage", ["propose", "discuss", "adjudicate", "workload"])
+def test_persistent_instruction_text_citation_fails_after_stage_retry_bound(
+        tmp_path, config, request_data, stage):
+    provider = MockProvider()
+    def always_bad(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return (_replace_first_citation(result, INSTRUCTION_TEXT_CITATION)
+                if json.loads(prompt)["task"] == stage else result)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=always_bad)
+    with pytest.raises(engine.ContentContractError, match="exact supplied document span"):
+        run(runtime, request_data, tmp_path / "run")
+    assert runtime.public_status()["halted"] is None
+    assert runtime.public_status()["reserved_usd"] == 0
+    assert len(_stage_calls(provider, stage)) == engine.CONTENT_CONTRACT_ATTEMPTS
+
+
+def test_f70d_instruction_text_propose_failure_retries_and_recovers(
+        tmp_path, config, request_data):
+    provider = MockProvider()
+    seen = {"bad": False}
+    def flaky_propose(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        if json.loads(prompt)["task"] == "propose" and not seen["bad"]:
+            seen["bad"] = True
+            return _replace_first_citation(result, INSTRUCTION_TEXT_CITATION)
+        return result
+    request = {**request_data, "new_function": "Retention exception ledger"}
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=flaky_propose)
+    result, events, _ = run(runtime, request, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert len(_stage_calls(provider, "propose")) == 4
+    assert any(e["message"] == "Bounded stage retry authorized after content/citation rejection."
+               and e["data"]["operation"] == "propose" for e in events)
+
+
+def test_f70d_instruction_text_propose_failure_fails_after_bound(
+        tmp_path, config, request_data):
+    provider = MockProvider()
+    def always_bad_propose(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return (_replace_first_citation(result, INSTRUCTION_TEXT_CITATION)
+                if json.loads(prompt)["task"] == "propose" else result)
+    request = {**request_data, "new_function": "Retention exception ledger"}
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=always_bad_propose)
+    with pytest.raises(engine.ContentContractError, match="exact supplied document span"):
+        run(runtime, request, tmp_path / "run")
+    assert len(_stage_calls(provider, "propose")) == engine.CONTENT_CONTRACT_ATTEMPTS
 
 
 def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, config, request_data, monkeypatch):
@@ -386,7 +478,7 @@ def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, con
     assert result["training"]["pilot_published"] is True
     assert result["workload"]["calls"] == 96   # the truncated output never becomes a training row
     assert result["usage_ledger"]["response_calls"] == 107   # truncated call was paid for, then retried
-    assert any(e["message"] == "Bounded workload retry authorized after source-citation rejection."
+    assert any(e["message"] == "Bounded stage retry authorized after content/citation rejection."
                for e in events)
 
 
