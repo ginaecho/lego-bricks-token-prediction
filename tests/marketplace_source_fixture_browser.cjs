@@ -41,6 +41,19 @@ async function main(){
     assert.ok(response.ok());
     const creation=await response.json(),id=creation.id;
     assert.match(id,/^[0-9a-f]{32}$/);
+    const terminal=await context.newPage();
+    terminal.on("pageerror",error=>errors.push(error.message));
+    await terminal.goto(`${base}/marketplace-console.html?run=${id}`);
+    if(runtime.measurement_policy){
+      await terminal.waitForFunction(()=>document.querySelector("#connection").textContent.includes("live backend"));
+      const firstCount=await terminal.locator("#terminal details").count();
+      for(const width of [1440,390]){
+        await terminal.setViewportSize({width,height:width===390?844:1000});
+        assert.equal(await terminal.locator("#activity").isVisible(),true);
+        await terminal.screenshot({path:path.join(output,`policy-live-${width}.png`)});
+      }
+      await terminal.waitForFunction(count=>document.querySelectorAll("#terminal details").length>count,firstCount);
+    }
     let saved;
     for(let attempt=0;attempt<240;attempt++){
       saved=await (await fetch(`${base}/api/runs/${id}`)).json();
@@ -53,9 +66,13 @@ async function main(){
     assert.equal(saved.result.source,"mocked-test-provider");
     assert.equal(saved.result.composition.measured_combinations,false);
     assert.ok(saved.result.documents.every(d=>d.id.startsWith("archive-exceptions-v2-")));
-    const terminal=await context.newPage();
-    terminal.on("pageerror",error=>errors.push(error.message));
-    await terminal.goto(`${base}/marketplace-console.html?run=${id}`);
+    if(runtime.measurement_policy){
+      assert.equal(saved.result.measurement_policy.rounds,4);
+      assert.equal(saved.result.measurement_policy.policy.cost_basis,"simulated-rate-card");
+      await terminal.waitForFunction(()=>document.querySelector("#terminal").textContent.includes("Calibration reward recorded."));
+      assert.match(await terminal.locator("#terminal").innerText(),/propensity=/);
+      assert.match(await terminal.locator("#terminal").innerText(),/reward=/);
+    }
     await terminal.waitForFunction(()=>document.querySelector("#connection").textContent.includes("Saved terminal"));
     for(const width of [1440,390]){
       await page.setViewportSize({width,height:width===390?844:1000});
@@ -70,6 +87,7 @@ async function main(){
     }
     assert.equal(posts.length,1);assert.deepEqual(errors,[]);assert.deepEqual(escaped,[]);
     const report={runId:id,source:saved.result.source,scenario:scenario.id,status:saved.status,
+      measurementPolicy:saved.result.measurement_policy||null,
       training:saved.result.training,checks:["exact v2 input plumbing","no execution on load",
         "one explicit mock run","fictional labels","desktop/mobile replay","no page errors or overflow",
         "no external browser requests","not measured combinations"]};

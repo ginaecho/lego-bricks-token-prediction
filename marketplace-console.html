@@ -104,6 +104,11 @@ function appendEvent(event){
   fields(data,["new_workload_calls","reused_train_rows","train_count","test_count","reused_train_count","new_holdout_count","reused_holdout_count","alpha"]);
   fields(data,["input_tokens","output_tokens","input_mae","output_mae","supported","published","publication_requested","production_promoted","version"]);
   fields(data,["rated_usd","safety_usd","source","model_id"]);
+  fields(data,["decision_id","action","step","mode","propensity","reward","before_mae","after_mae","cost_usd","cost_basis","updates"]);
+  if(data.probabilities)line("probabilities "+JSON.stringify(data.probabilities));
+  if(data.scores)line("policy "+JSON.stringify(data.scores));
+  if(data.baseline)line("baseline "+JSON.stringify(data.baseline));
+  if(data.reason)line("stopped: "+String(data.reason),"error");
   if(data.usage)line("usage "+JSON.stringify(data.usage));
   if(data.features)line("features "+JSON.stringify(data.features));
   if(data.builder)line("builder "+JSON.stringify(data.builder.builder??data.builder));

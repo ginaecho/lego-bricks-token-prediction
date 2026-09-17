@@ -79,8 +79,16 @@ async function main(){
       await page.locator("#follow").uncheck();
       await page.locator("#viewport").evaluate(el=>{el.scrollTop=0;});
       snapshot.events.push(event(27,"measure","Frozen source-group split before measurements and fitting.",
-        {new_workload_calls:6,reused_train_rows:4}));
+        {new_workload_calls:6,reused_train_rows:4,decision_id:"fixture-policy:1",action:"ordered_fixture",
+          propensity:.9,reward:-.25,before_mae:4,after_mae:5,cost_usd:.001,
+          cost_basis:"simulated-rate-card",updates:2,
+          probabilities:{ordered_fixture:.9,brick:.1},scores:{ordered_fixture:{n:2,q:-.25}},
+          baseline:{policy:"uniform-random"}}));
       await page.waitForFunction(()=>document.querySelectorAll("#terminal details").length===27);
+      assert.match(await page.locator("#terminal").innerText(),/propensity=0.9/);
+      assert.match(await page.locator("#terminal").innerText(),/reward=-0.25/);
+      assert.match(await page.locator("#terminal").innerText(),/simulated-rate-card/);
+      assert.match(await page.locator("#terminal").innerText(),/uniform-random/);
       assert.equal(await page.locator("#viewport").evaluate(el=>el.scrollTop),0,"Paused user position is preserved");
       assert.match(await page.locator("#scroll-state").innerText(),/paused/);
       await page.locator("#follow").check();

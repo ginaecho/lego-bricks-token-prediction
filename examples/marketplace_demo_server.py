@@ -430,6 +430,8 @@ def create_parser() -> argparse.ArgumentParser:
                         help="Use explicit synthetic provider fixtures; no authentication or network calls.")
     parser.add_argument("--source-fixture", choices=["archive-exceptions-v2"],
                         help="Explicit fictional source version; requires --mock-agents and separate test state.")
+    parser.add_argument("--measurement-policy", action="store_true",
+                        help="Offline reward-based measurement bandit; requires --mock-agents.")
     return parser
 
 
@@ -443,6 +445,9 @@ def main() -> int:
         return 2
     if args.source_fixture and not args.mock_agents:
         print("--source-fixture requires --mock-agents; no paid execution is approved", file=sys.stderr)
+        return 2
+    if args.measurement_policy and not args.mock_agents:
+        print("--measurement-policy requires --mock-agents; no paid policy approval exists", file=sys.stderr)
         return 2
     if args.campaign_file and not args.enable_foundry:
         print("--campaign-file requires explicit --enable-foundry", file=sys.stderr)
@@ -479,6 +484,7 @@ def main() -> int:
             runtime = AgentRuntime(args.run_dir / "mock-state", config,
                                    dispatch=MockProvider(delay=.015),
                                    source_fixture=args.source_fixture,
+                                   measurement_policy=args.measurement_policy,
                                    token_provider=lambda: (_ for _ in ()).throw(AssertionError("No mock authentication")))
         store = RunStore(args.run_dir, agent_runtime=runtime)
         with make_server(args.port, store=store) as server:

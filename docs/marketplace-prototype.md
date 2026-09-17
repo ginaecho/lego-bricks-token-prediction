@@ -287,12 +287,86 @@ old holdouts are never promoted or reused. Holdouts are fresh run-specific group
 but share fictional templates: this is a small exploratory pilot, not independent
 production validation. Rejected metric reviews do not publish a new current model.
 
-**Measured combinations are unavailable.** Project composition is explicitly
+**Measured marketplace combinations are unavailable.** Project composition is explicitly
 the sum of independent brick forecasts, not a jointly executed workflow.
 No cross-brick interaction costs or shared-context savings are measured.
 Numeric forecasts remain withheld for unsupported scope, unresolved project
 decisions, incompatible models/contracts or predictors outside measured support.
 The local input/output ridge models are retrained; GPT is never fine-tuned.
+
+### Opt-in measurement reinforcement pilot
+
+`--measurement-policy --mock-agents` enables a genuine reward-updated
+epsilon-greedy bandit. It is not a contextual model, static priority ranking,
+LLM reinforcement fine-tuning, or production field-feedback ingestion.
+The existing default pipeline and source fixtures remain unchanged.
+Use separate mock state, not either paid ledger:
+
+```powershell
+python -m examples.marketplace_demo_server --port 8786 --run-dir .feedback-measurement-policy --mock-agents --source-fixture archive-exceptions-v2 --measurement-policy
+```
+
+Select the visibly MOCK agent runtime in the sales page and start explicitly.
+The compact terminal shows actual policy decisions, propensities, executed
+steps, measured usage/cost, signed calibration rewards, durable updates and
+supervised ridge versions. Existing waiting, follow/pause and replay behavior
+is unchanged. No command prompts or invented timing are added.
+
+The finite action set contains the first two selected source-only brick
+contracts and their one fixed-order compound. The compound makes two new
+validated provider calls over the same source documents, in the recorded order.
+Counts and costs come from both executions, not sums of stored forecasts.
+Numeric compound predictors sum the known per-call operation/context features.
+There is no generated-output handoff, shared-context optimization, arbitrary
+composition support or financial application of compound estimates.
+
+Four adaptive measurements per run bound exploration. Initially unobserved
+actions are selected uniformly. Afterwards, with epsilon 0.2, each action has
+probability `epsilon / action_count`, plus `(1-epsilon) / tied_best_count`
+when it has the highest mean reward. Every decision records these probabilities,
+the random draw, prior scores, predictor/context, and a uniform-random baseline.
+The update is `Q[a] = Q[a] + (reward - Q[a]) / N[a]`.
+
+For mean absolute input/output token error on calibration records:
+
+```text
+reward = clip(
+  (MAE_before - MAE_after) / max(MAE_before, 1)
+  * 0.001 / marginal_measurement_rated_USD,
+  -1, 1
+)
+```
+
+Regression produces negative reward. Zero/missing cost, missing telemetry,
+invalid metrics, conflicting duplicate feedback or provenance mismatch fail
+explicitly; there is no fabricated neutral reward. Mock costs are simulated
+rate-card costs, not dollars spent. Seed/calibration overhead is separately
+metered in workload totals; it is not included in the marginal reward.
+Runtime execution remains mock-only pending independent review and separate
+paid authorization. The policy store also validates real-provenance observation
+schemas offline; that test does not establish a real provider measurement.
+
+Policy mode partitions compatibility from legacy and ordinary v2 models.
+Training uses source templates 0/1/2 plus one additional execution of template0,
+not a fourth independent source group. Template3 is calibration only. Its
+outcomes update selection and therefore cannot certify generalization.
+Templates4/5 are final acceptance holdouts, dispatched only after the policy
+loop and final ridge parameters are frozen. Their results never update rewards,
+features, action scores or regularization. Calibration and compound rows are
+saved in separate run artifacts and are not silently promoted by training reuse.
+
+The append-only SQLite audit is transactionally committed, hash-linked and
+rejects updates/deletes. Repeated identical feedback is idempotent; conflicting
+duplicates or reused measurement IDs fail. Pending decisions after interruption
+block another choice for manual audit, without resetting accounting. Each
+partition includes source/contract/runtime compatibility and the action schema.
+
+Synthetic tests prove real ridge refits, signed rewards, changed choices,
+restart persistence, source/split isolation and comparison with uniform sampling
+at equal virtual cost. They also retain a counterexample where cumulative
+calibration error is worse than uniform sampling. No claim of universal
+efficiency, semantic correctness or unseen-workload accuracy follows from this
+small template-based pilot.
 
 ### Forecast provenance in sales estimates
 

@@ -33,6 +33,8 @@ from .marketplace_agent_contracts import (
 from .robust import Record, RidgeLinearModel
 from .marketplace_scenarios import SCENARIOS, scenario_for_request
 from .marketplace_source_fixtures import ARCHIVE_V2, fixture_documents, fixture_scenario
+from .measurement_policy import POLICY_VERSION, SPLIT_PROTOCOL
+from .marketplace_measurement import AdaptiveMeasurements
 
 AGENT_STAGES = (
     "novelty", "propose", "discuss", "adjudicate", "wiki", "requirements", "features",
@@ -176,7 +178,13 @@ class AgentRuntime:
         token_provider: Callable[[], str] | None = None,
         campaign: dict | None = None,
         source_fixture: str | None = None,
+        measurement_policy: bool = False,
     ) -> None:
+        if type(measurement_policy) is not bool:
+            raise ValueError("measurement_policy must be a boolean")
+        if measurement_policy and (dispatch is None or campaign is not None):
+            raise ValueError("measurement policy is offline mock-only pending independent review")
+        self.measurement_policy = measurement_policy
         self.source_fixture = fixture_scenario(source_fixture) if source_fixture is not None else None
         if self.source_fixture and (dispatch is None or campaign is not None):
             raise ValueError("Versioned source fixtures are offline mock-only; no paid approval exists")
@@ -230,6 +238,11 @@ class AgentRuntime:
             self._compatibility = fingerprint({
                 "base": self._compatibility, "source_fixture": self.source_fixture,
                 "source_content": [self._documents(f"fixture-{index}", index) for index in range(6)],
+            })
+        if self.measurement_policy:
+            self._compatibility = fingerprint({
+                "base": self._compatibility, "measurement_policy": POLICY_VERSION,
+                "split_protocol": SPLIT_PROTOCOL,
             })
         with _exclusive(self.state_dir):
             path = self.state_dir / "budget.json"
@@ -330,6 +343,7 @@ class AgentRuntime:
             "source": "mocked-test-provider" if self._dispatch_hook else "measured-foundry",
             "limitations": LIMITATIONS,
             **({"source_fixture": self.source_fixture} if self.source_fixture else {}),
+            "measurement_policy": POLICY_VERSION if self.measurement_policy else None,
         }
 
     def close(self) -> None:
@@ -1057,6 +1071,12 @@ class AgentRuntime:
         event("Pre-measurement forecast frozen; missing evidence stays unsupported.", before)
 
         enter("measure")
+        if self.measurement_policy and unsupported:
+            raise ValueError("Measurement policy requires resolved scope and dissent: " + "; ".join(unsupported))
+        adaptive = AdaptiveMeasurements(
+            runtime=self, bricks=bricks, names=names, source=source, run_id=run_id,
+            run_dir=run_dir, call=call, event=event, cancel=cancel, write=_write, read=_read,
+        ) if self.measurement_policy else None
         reuse_rows = []
         rows_dir = self.state_dir / "rows"
         if rows_dir.exists():
@@ -1065,14 +1085,15 @@ class AgentRuntime:
                 if (row.get("compatibility") == self._compatibility and row.get("split") == "train"
                         and row.get("brick_id") in by_id
                         and row.get("contract_hash") == by_id[row["brick_id"]]["contract_hash"]
-                        and row.get("source") == source):
+                        and row.get("source") == source
+                        and (not adaptive or row.get("group") in {"train-0", "train-1", "train-2"})):
                     self._validate_reused_row(
                         row, by_id[row["brick_id"]],
                         source_fixture=self.source_fixture["id"] if self.source_fixture else None)
                     reuse_rows.append(row)
         jobs, reused, reused_keys = [], [], set()
         for brick in catalog:
-            for index in range(6):
+            for index in ((0, 1, 2, 0, 4, 5) if adaptive else range(6)):
                 split = "train" if index < 4 else "holdout"
                 group = f"train-{index}" if split == "train" else f"holdout-{run_id}-{index}"
                 documents = self._documents(group, index)
@@ -1092,12 +1113,17 @@ class AgentRuntime:
                 "holdout_policy": "Fresh run-specific document groups; never reused for tuning. "
                 "Old holdouts are excluded, not promoted to training.",
                 "template_limitation": LIMITATIONS[4]}
+        if adaptive:
+            plan.update(policy=POLICY_VERSION, split_protocol=SPLIT_PROTOCOL,
+                        calibration_index=3, policy_actions=adaptive.spec,
+                        seed_repeat="One additional train-0 execution; not a new source group.",
+                        final_holdouts="Dispatched only after final ridge parameters are frozen.")
         _write(artifact_dir / "frozen-split.json", plan)
         event("Frozen source-group split before measurements and fitting.",
               {"new_workload_calls": len(jobs), "reused_train_rows": len(reused),
                "split_evidence": "agent-artifacts\\frozen-split.json"})
         rows = list(reused)
-        for job in jobs:
+        def measure_job(job: dict) -> dict:
             brick = by_id[job["brick_id"]]
             observed = None
             for attempt in range(WORKLOAD_ATTEMPTS):
@@ -1126,10 +1152,15 @@ class AgentRuntime:
                 "measurement": observed,
             }
             _write(rows_dir / f"{row['id']}.json", row)
-            rows.append(row)
             event("Validated measurement row persisted.",
                   {key: row[key] for key in ("id", "brick_id", "group", "split", "source",
                                              "features", "input_tokens", "output_tokens", "contract_hash")})
+            return row
+        for job in jobs:
+            if not adaptive or job["split"] == "train":
+                rows.append(measure_job(job))
+        if adaptive:
+            rows = adaptive.run(rows)
         train_rows = [row for row in rows if row["split"] == "train"]
         holdout_rows = [row for row in rows if row["split"] == "holdout"]
         if {r["group"] for r in train_rows} & {r["group"] for r in holdout_rows}:
@@ -1159,6 +1190,17 @@ class AgentRuntime:
         }, docs, catalog)["public_output"]
         models = {target: self._fit(train_rows, names, target, float(fit_choice["alpha"]))
                   for target in ("input", "output")}
+        if adaptive:
+            _write(artifact_dir / "final-parameters-before-holdouts.json", {
+                "models": {t: asdict(m) for t, m in models.items()},
+                "alpha": fit_choice["alpha"], "train_ids": [r["id"] for r in train_rows],
+                "policy": adaptive.report(),
+            })
+            event("Final ridge parameters frozen; dispatching untouched acceptance holdouts.",
+                  {"source": source, "train_count": len(train_rows)})
+            holdout_rows = [measure_job(j) for j in jobs if j["split"] == "holdout"]
+            holdout_rows.extend(adaptive.final_holdouts())
+            rows.extend(holdout_rows)
         version = uuid.uuid4().hex
         candidate = {
             "version": version, "status": "uncertified-pilot", "source": source,
@@ -1175,6 +1217,7 @@ class AgentRuntime:
             "train_ids": [r["id"] for r in train_rows], "holdout_ids": [r["id"] for r in holdout_rows],
             "frozen_split_sha256": fingerprint(plan), "alpha": fit_choice["alpha"],
             "tuning": candidates, "production_promoted": False,
+            **({"measurement_policy": adaptive.report()} if adaptive else {}),
         }
         _write(artifact_dir / "candidate-model.json", candidate)
         holdout_predictions = [
@@ -1246,6 +1289,7 @@ class AgentRuntime:
             "composition": {"kind": "sum-of-independent-brick-forecasts",
                             "measured_combinations": False, "interaction_costs_supported": False},
             "scenario": self.source_fixture or scenario_for_request(request),
+            **({"measurement_policy": adaptive.report()} if adaptive else {}),
             "report": {"title": "Measured Foundry prompt-contract pilot",
                        "summary": decision["summary"], "scope": "Fictional reference context only",
                        "unsupported": unsupported, "human_review_required": True},
