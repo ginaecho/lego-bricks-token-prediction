@@ -32,6 +32,14 @@ FEATURE_BUILDERS = {
 # A new brick keeps the fixed atom vocabulary; only its (bounded) counts are agent-chosen.
 MAX_ATOM_COUNT = 4
 MAX_ATOM_TOTAL = 14
+
+
+class ContractSchemaError(ValueError):
+    """Generated output has invalid JSON shape or field types; never retry automatically."""
+
+
+class CitationValidationError(ValueError):
+    """Generated output cites a well-formed but unsupported source span; retry is allowed."""
 # Lexical evidence only: not a semantic-equivalence threshold.
 DUP_SIMILARITY = 0.5
 ROLES = ("requirements_analyst", "architect", "skeptical_reviewer")
@@ -351,14 +359,14 @@ def _maybe_text(value: Any, maximum: int = 120) -> None:
 def validate_evidence(value: Any, documents: list[dict]) -> None:
     docs = {doc["id"]: _citation_match_key(doc["text"]) for doc in documents}
     if not isinstance(value, list) or not 1 <= len(value) <= 12:
-        raise ValueError("one to twelve source citations required")
+        raise ContractSchemaError("one to twelve source citations required")
     for entry in value:
         _keys(entry, {"document_id", "quote"})
         _text(entry["document_id"], 180)
         _text(entry["quote"], 1200)
         if (entry["document_id"] not in docs
                 or _citation_match_key(entry["quote"]) not in docs[entry["document_id"]]):
-            raise ValueError("citation must quote an exact supplied document span")
+            raise CitationValidationError("citation must quote an exact supplied document span")
 
 
 def validate_bricks(value: Any, catalog: list[dict]) -> None:

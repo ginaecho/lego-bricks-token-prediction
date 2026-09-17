@@ -24,8 +24,9 @@ from .foundry_dispatch import (
     DispatchResult, FoundryDispatcher, ResponseProtocolError, UsageLedger, acquire_entra_token,
 )
 from .marketplace_agent_contracts import (
-    ATOM_DESCRIPTIONS, ATOMS, CONTRACT_VERSION, FEATURE_BUILDERS, LIMITATIONS,
-    MAX_ATOM_COUNT, MAX_ATOM_TOTAL, ROLES, SCHEMA_VERSION, TRANSPORT_PROTOCOL,
+    ATOM_DESCRIPTIONS, ATOMS, CONTRACT_VERSION, CitationValidationError,
+    FEATURE_BUILDERS, LIMITATIONS, MAX_ATOM_COUNT, MAX_ATOM_TOTAL, ROLES,
+    SCHEMA_VERSION, TRANSPORT_PROTOCOL,
     canonical, contracts, custom_contract, external_scope_reason, fingerprint, numeric_features,
     schema_from_example, similarity_scores, source_documents, strict_json,
     validate_message, validate_request, workload_prompt,
@@ -74,6 +75,11 @@ class ContentContractError(ValueError):
     contract (invalid JSON or a bad source citation). The budget is already settled,
     so this is a content problem, not a budget risk: it must never halt the campaign
     and may be retried with a fresh, separately-metered paid call."""
+
+    def __init__(self, message: str, *, category: str, retryable: bool) -> None:
+        super().__init__(message)
+        self.category = category
+        self.retryable = retryable
 
 
 class StructuredDispatcher(FoundryDispatcher):
@@ -775,7 +781,8 @@ class AgentRuntime:
                                     rated_usd=cost, safety_usd=settled, response_calls=[asdict(rc)])
                     _write(evidence_path, evidence)
                     raise ContentContractError(
-                        f"provider response failed the response protocol: {protocol_exc}"
+                        f"provider response failed the response protocol: {protocol_exc}",
+                        category="response_protocol", retryable=True,
                     ) from protocol_exc
                 evidence.update(output=response.output, response_id=response.response_id,
                                 observed_model=response.model, observed_status=response.status)
@@ -818,8 +825,14 @@ class AgentRuntime:
                 try:
                     parsed = strict_json(response.output)
                     validate_message(kind, parsed, docs, catalog)
+                except CitationValidationError as content_exc:
+                    raise ContentContractError(
+                        str(content_exc), category="source_citation", retryable=True,
+                    ) from content_exc
                 except Exception as content_exc:
-                    raise ContentContractError(str(content_exc)) from content_exc
+                    raise ContentContractError(
+                        str(content_exc), category="schema", retryable=False,
+                    ) from content_exc
                 evidence.update(status="validated", public_output=parsed)
                 _write(evidence_path, evidence)
             except BaseException as exc:
@@ -862,14 +875,11 @@ class AgentRuntime:
                 try:
                     return call(kind, role, payload, docs, catalog, workload=workload)
                 except ContentContractError as exc:
-                    retryable = (
-                        "citation" in str(exc).casefold()
-                        or "provider response failed the response protocol" in str(exc).casefold()
-                    )
-                    if not retryable or attempt + 1 >= CONTENT_CONTRACT_ATTEMPTS:
+                    if not exc.retryable or attempt + 1 >= CONTENT_CONTRACT_ATTEMPTS:
                         raise
                     event("Bounded stage retry authorized after content/citation rejection.",
                           {"operation": kind, "role": role, "attempt": attempt + 1,
+                           "error_category": exc.category,
                            "max_attempts": CONTENT_CONTRACT_ATTEMPTS,
                            "retry_policy": CONTENT_RETRY_POLICY["policy"]})
             raise RuntimeError("unreachable retry loop state")

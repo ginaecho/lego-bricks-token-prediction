@@ -339,8 +339,19 @@ def _replace_first_citation(result, quote):
     return replace(result, output=json.dumps(answer))
 
 
+def _mutate_json_output(result, mutate):
+    answer = json.loads(result.output)
+    mutate(answer)
+    return replace(result, output=json.dumps(answer))
+
+
 def _stage_calls(provider, task):
     return [c for c in provider.calls if c["payload"]["task"] == task]
+
+
+def _retry_events(events):
+    return [e for e in events if e["message"] ==
+            "Bounded stage retry authorized after content/citation rejection."]
 
 
 def test_settled_workload_content_failure_retries_then_never_halts(tmp_path, config, request_data):
@@ -378,10 +389,10 @@ def test_bounded_retry_recovers_a_transient_citation_failure(tmp_path, config, r
     workload_calls = [c for c in provider.calls if c["payload"]["task"] == "workload"]
     assert len(workload_calls) == 97           # 96 accepted + 1 rejected retry, each paid
     assert result["usage_ledger"]["response_calls"] == 107
-    retry_events = [e for e in events if e["message"] == (
-        "Bounded stage retry authorized after content/citation rejection.")]
+    retry_events = _retry_events(events)
     assert retry_events and retry_events[0]["data"]["retry_policy"] == (
         engine.CONTENT_RETRY_POLICY["policy"])
+    assert retry_events[0]["data"]["error_category"] == "source_citation"
 
 
 @pytest.mark.parametrize("stage,expected_calls", [
@@ -404,10 +415,66 @@ def test_bounded_retry_recovers_transient_bad_citation_at_each_cited_stage(
     result, events, _ = run(runtime, request_data, tmp_path / "run")
     assert result["training"]["pilot_published"] is True
     assert len(_stage_calls(provider, stage)) == expected_calls
-    assert any(e["message"] == "Bounded stage retry authorized after content/citation rejection."
-               and e["data"]["operation"] == stage
+    assert any(e["data"]["operation"] == stage
                and e["data"]["retry_policy"] == engine.CONTENT_RETRY_POLICY["policy"]
-               for e in events)
+               and e["data"]["error_category"] == "source_citation"
+               for e in _retry_events(events))
+
+
+@pytest.mark.parametrize("mutation", [
+    lambda answer: answer.update(evidence="not-an-array"),
+    lambda answer: answer.update(evidence=[]),
+    lambda answer: answer.pop("summary"),
+])
+def test_schema_failure_fails_closed_without_stage_retry(
+        tmp_path, config, request_data, mutation):
+    provider = MockProvider()
+    def malformed_schema(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return (_mutate_json_output(result, mutation)
+                if json.loads(prompt)["task"] == "propose" else result)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=malformed_schema)
+    events = []
+    with pytest.raises(engine.ContentContractError):
+        runtime.run_pipeline(request_data, tmp_path / "run", run_id="test-run",
+                             on_event=events.append, before_stage=lambda stage: None)
+    assert len(_stage_calls(provider, "propose")) == 1
+    assert _retry_events(events) == []
+    state = json.loads((tmp_path / "state" / "budget.json").read_text())
+    assert state["calls"] == 1 and len(state["budget"]["settled_requests"]) == 1
+    assert state["budget"]["active_reserved_usd"] == 0 and state["halted"] is None
+
+
+def test_paraphrase_citation_retries_then_recovers(tmp_path, config, request_data):
+    provider = MockProvider()
+    seen = {"bad": False}
+    def paraphrase_once(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        if json.loads(prompt)["task"] == "propose" and not seen["bad"]:
+            seen["bad"] = True
+            return _replace_first_citation(
+                result, "Retain master media after project completion for 12 calendar months.")
+        return result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=paraphrase_once)
+    result, events, _ = run(runtime, request_data, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert len(_stage_calls(provider, "propose")) == 4
+    assert any(e["data"]["operation"] == "propose" for e in _retry_events(events))
+
+
+def test_case_drift_citation_needs_no_retry(tmp_path, config, request_data):
+    provider = MockProvider()
+    def case_drift(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        if json.loads(prompt)["task"] == "propose":
+            answer = json.loads(result.output)
+            return _replace_first_citation(result, answer["evidence"][0]["quote"].lower())
+        return result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=case_drift)
+    result, events, _ = run(runtime, request_data, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert len(_stage_calls(provider, "propose")) == 3
+    assert _retry_events(events) == []
 
 
 @pytest.mark.parametrize("stage", ["propose", "discuss", "adjudicate", "workload"])
@@ -441,8 +508,7 @@ def test_f70d_instruction_text_propose_failure_retries_and_recovers(
     result, events, _ = run(runtime, request, tmp_path / "run")
     assert result["training"]["pilot_published"] is True
     assert len(_stage_calls(provider, "propose")) == 4
-    assert any(e["message"] == "Bounded stage retry authorized after content/citation rejection."
-               and e["data"]["operation"] == "propose" for e in events)
+    assert any(e["data"]["operation"] == "propose" for e in _retry_events(events))
 
 
 def test_f70d_instruction_text_propose_failure_fails_after_bound(
@@ -478,8 +544,7 @@ def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, con
     assert result["training"]["pilot_published"] is True
     assert result["workload"]["calls"] == 96   # the truncated output never becomes a training row
     assert result["usage_ledger"]["response_calls"] == 107   # truncated call was paid for, then retried
-    assert any(e["message"] == "Bounded stage retry authorized after content/citation rejection."
-               for e in events)
+    assert any(e["data"]["error_category"] == "response_protocol" for e in _retry_events(events))
 
 
 def test_holdout_not_seen_in_selection_and_not_fitted(tmp_path, config, request_data, monkeypatch):
