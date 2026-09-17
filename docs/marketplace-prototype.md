@@ -352,8 +352,17 @@ steps, measured usage/cost, signed calibration rewards, durable updates and
 supervised ridge versions. Existing waiting, follow/pause and replay behavior
 is unchanged. No command prompts or invented timing are added.
 
-The finite action set contains the first two selected source-only brick
-contracts and their one fixed-order compound. The compound makes two new
+The finite action set contains two selected source-only brick contracts and
+their one fixed-order pair. A resolved requested capability (new or reused,
+explicit or description-detected) is mandatory. Without one, all selected novel
+capabilities are mandatory; more than two requires explicit scope narrowing,
+not silent omission. Remaining slots prefer novel contracts, then lexical
+contract IDs. Included IDs and pair order are sorted, independent of proposal
+ordering. An availability event and saved action schema explain eligible,
+required, included and excluded contracts and the two-single bound. Selection
+protocol, contracts and feature names partition policy history; reordering the
+same selection preserves its identity, changed actions/contracts do not.
+The pair makes two new
 validated provider calls over the same source documents, in the recorded order.
 Counts and costs come from both executions, not sums of stored forecasts.
 Numeric compound predictors sum the known per-call operation/context features.

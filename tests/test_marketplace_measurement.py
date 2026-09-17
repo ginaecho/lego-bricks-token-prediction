@@ -2,6 +2,7 @@
 
 import json
 import random
+import itertools
 from dataclasses import replace
 
 import pytest
@@ -10,6 +11,8 @@ from test_marketplace_agents import MockProvider, config, request_data, run  # n
 from token_yield import marketplace_agents as engine
 from token_yield.measurement_policy import ROUNDS
 from token_yield.measurement_policy import MeasurementPolicy
+from token_yield.marketplace_agent_contracts import contracts, custom_contract, FEATURE_BUILDERS
+from token_yield.marketplace_measurement import AdaptiveMeasurements, select_actions
 
 
 def test_real_execution_rewards_frozen_holdouts_and_restart(tmp_path, config, request_data):
@@ -57,6 +60,99 @@ def test_real_execution_rewards_frozen_holdouts_and_restart(tmp_path, config, re
     assert second["training"]["reused_holdout_count"] == 0
     default = engine.AgentRuntime(tmp_path / "state", config, dispatch=MockProvider())
     assert default.public_status()["version"] is None
+
+
+def test_novel_last_is_a_selectable_action(tmp_path, config):
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=MockProvider(), measurement_policy=True)
+    existing = contracts()[:2]
+    novel = custom_contract("Retention exception ledger", existing[0]["atoms"])
+    adapter = AdaptiveMeasurements(
+        runtime=runtime, bricks=[*existing, novel], names=list(FEATURE_BUILDERS["atoms_context_v1"]),
+        source="mocked-test-provider", run_id="novel-last", run_dir=tmp_path / "runs",
+        call=lambda *a, **k: pytest.fail("No provider needed for action-availability regression"),
+        event=lambda *a: None, cancel=lambda: None, write=engine._write, read=engine._read)
+    assert novel["id"] in adapter.actions
+    assert novel["id"] in [b["id"] for b in adapter.actions[adapter.compound_id]]
+
+
+def test_action_order_bound_and_policy_identity(tmp_path, config):
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=MockProvider(), measurement_policy=True)
+    existing = contracts()[:3]
+    novel = custom_contract("Retention exception ledger", existing[0]["atoms"])
+    def build(bricks, required=None):
+        return AdaptiveMeasurements(
+            runtime=runtime, bricks=bricks, requested_id=required,
+            names=list(FEATURE_BUILDERS["atoms_context_v1"]), source="mocked-test-provider",
+            run_id="availability", run_dir=tmp_path / "runs",
+            call=lambda *a, **k: pytest.fail("No dispatch in action-schema test"), event=lambda *a: None,
+            cancel=lambda: None, write=engine._write, read=engine._read)
+    first = build([*existing, novel], novel["id"])
+    for permutation in itertools.permutations([*existing, novel]):
+        other = build(list(permutation), novel["id"])
+        assert other.policy.path == first.policy.path
+        assert other.actions == first.actions
+        assert novel["id"] in other.spec["selection"]["required"]
+        assert len(other.spec["selection"]["excluded"]) == 2
+        assert len(other.actions) == 3
+    # Description-detected then reused capability can have a different admission
+    # rationale without losing scores for the identical executable actions.
+    assert build([novel, *existing]).policy.path == first.policy.path
+    changed = custom_contract("Different requested ledger", existing[0]["atoms"])
+    assert build([*existing, changed], changed["id"]).policy.path != first.policy.path
+    mutated = {**novel, "contract_hash": engine.fingerprint({"changed": novel["contract_hash"]})}
+    assert build([*existing, mutated], novel["id"]).policy.path != first.policy.path
+    with pytest.raises(ValueError, match="not in the supported"):
+        select_actions(existing, novel["id"])
+    with pytest.raises(ValueError, match="more than two required"):
+        select_actions([custom_contract(f"Ledger {i}", novel["atoms"]) for i in range(3)])
+    # Explicit reuse of an ordinary contract is also mandatory.
+    singles, _ = select_actions([*existing, novel], existing[-1]["id"])
+    assert existing[-1]["id"] in [b["id"] for b in singles]
+
+
+@pytest.mark.parametrize("mode", ["explicit", "description"])
+def test_new_action_executions_rewards_and_reordered_resume(tmp_path, config, request_data, mode):
+    from token_yield.marketplace_mock import MockProvider as ProtocolFixture
+    provider = ProtocolFixture()
+    reorder = False
+    def dispatch(prompt, **kwargs):
+        result = provider(prompt, **kwargs)
+        value = json.loads(result.output)
+        if reorder and "bricks" in value:
+            value["bricks"].reverse()
+            return replace(result, output=json.dumps(value))
+        return result
+    request = {**request_data, "new_function": "Retention exception ledger"} if mode == "explicit" else {
+        **request_data, "description": "Summarize source-only handoff obligations and evidence gaps."}
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=dispatch, measurement_policy=True)
+    first, events, _ = run(runtime, request, tmp_path / "runs", run_id=mode + "-new")
+    novel = first["requested_custom"]
+    assert novel and first["bricks"][-1]["id"] == novel
+    report = first["measurement_policy"]
+    assert novel in report["actions"]
+    compound = next(key for key in report["actions"] if key.startswith("ordered_"))
+    assert novel in [b["id"] for b in report["actions"][compound]]
+    choices = [e["data"]["action"] for e in events if e["message"] == "Measurement policy decision."]
+    assert novel in choices and compound in choices
+    assert report["policy"]["scores"][novel]["n"] >= 1
+    assert report["policy"]["scores"][compound]["n"] >= 1
+    assert report["policy"]["updates"] == ROUNDS
+    calibration_path = (tmp_path / "runs" / (mode + "-new") / "agent-artifacts" /
+                        "measurement-policy" / "calibration.json")
+    calibration = json.loads(calibration_path.read_text())["rows"]
+    assert {row["brick_id"] for row in calibration} == set(report["actions"])
+    assert all(call["status"] == "validated" and call["source"] == "mocked-test-provider"
+               for row in calibration for call in row["measurements"])
+    assert first["composition"]["measured_combinations"] is False
+    assert report["selection"]["excluded"]
+    reorder = True
+    restarted = engine.AgentRuntime(tmp_path / "state", config, dispatch=dispatch, measurement_policy=True)
+    second, _, _ = run(restarted, request, tmp_path / "runs", run_id=mode + "-resume")
+    assert second["bricks"][0]["id"] == novel
+    assert second["measurement_policy"]["policy"]["compatibility"] == report["policy"]["compatibility"]
+    assert second["measurement_policy"]["policy"]["updates"] == 2 * ROUNDS
+    assert second["measurement_policy"]["actions"] == report["actions"]
+    assert second["training"]["reused_train_count"] > 0
 
 
 def test_dissent_and_paid_mode_do_not_enter_bandit(tmp_path, config, request_data):

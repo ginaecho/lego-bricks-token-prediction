@@ -14,18 +14,48 @@ from dataclasses import asdict
 from .marketplace_agent_contracts import fingerprint, numeric_features, workload_prompt
 from .measurement_policy import MeasurementPolicy, POLICY_VERSION, ROUNDS
 
+ACTION_SELECTION_VERSION = "requested-novel-first-v1"
+
+
+def select_actions(bricks: list[dict], requested_id: str | None = None) -> tuple[list[dict], dict]:
+    """Keep required capability coverage within two singles, independent of input order."""
+    selected = {}
+    for brick in bricks:
+        existing = selected.get(brick["id"])
+        if existing and existing["contract_hash"] != brick["contract_hash"]:
+            raise ValueError("conflicting selected contract identities")
+        selected[brick["id"]] = brick
+    if not selected:
+        raise ValueError("measurement policy requires a supported selected contract")
+    if requested_id is not None and requested_id not in selected:
+        raise ValueError("requested measurement capability is not in the supported selection")
+    required = ({requested_id} if requested_id is not None else
+                {key for key, value in selected.items() if value.get("novel")})
+    if len(required) > 2:
+        raise ValueError("more than two required novel actions; narrow scope rather than discard capabilities")
+    ranked = sorted(selected, key=lambda key: (
+        key not in required, not bool(selected[key].get("novel")), key))
+    included = sorted(ranked[:2])
+    audit = {
+        "version": ACTION_SELECTION_VERSION, "requested_id": requested_id,
+        "eligible": sorted(selected), "required": sorted(required), "included": included,
+        "excluded": [{"id": key, "reason": "two-single action bound after required/novel priority"}
+                     for key in sorted(selected) if key not in included],
+        "ranking": "required capability, other novel capability, lexical contract ID",
+        "pair_order": "lexical contract ID; same original documents per independent call; no handoff",
+    }
+    return [selected[key] for key in included], audit
+
 
 class AdaptiveMeasurements:
     """Run an opt-in bandit using the existing metered call and ridge fit helpers."""
 
     def __init__(self, *, runtime, bricks, names, source, run_id, run_dir, call, event,
-                 cancel, write, read):
+                 cancel, write, read, requested_id: str | None = None):
         self.runtime, self.names, self.source = runtime, names, source
         self.run_id, self.run_dir = run_id, run_dir
         self.call, self.event, self.cancel, self.write, self.read = call, event, cancel, write, read
-        singles = list({b["id"]: b for b in bricks}.values())[:2]
-        if not singles:
-            raise ValueError("measurement policy requires a supported selected contract")
+        singles, selection = select_actions(bricks, requested_id)
         self.actions = {b["id"]: [b] for b in singles}
         self.compound_id = None
         if len(singles) == 2:
@@ -34,8 +64,13 @@ class AdaptiveMeasurements:
         self.spec = {"version": POLICY_VERSION, "actions": {
             key: [{"id": b["id"], "contract_hash": b["contract_hash"]} for b in steps]
             for key, steps in self.actions.items()}, "ordered_same_sources": True,
-            "output_handoff": False, "marketplace_combination_quote": False}
-        partition = fingerprint({"runtime": runtime._compatibility, "spec": self.spec, "names": names})
+            "output_handoff": False, "marketplace_combination_quote": False,
+            "selection": selection}
+        partition = fingerprint({
+            "runtime": runtime._compatibility,
+            "spec": {key: value for key, value in self.spec.items() if key != "selection"},
+            "selection_version": ACTION_SELECTION_VERSION, "names": names,
+        })
         self.policy = MeasurementPolicy(
             runtime.state_dir / "measurement-policy" / f"{partition}.sqlite",
             compatibility=partition, source=source, actions=list(self.actions))
@@ -43,6 +78,8 @@ class AdaptiveMeasurements:
             raise RuntimeError("unsettled policy decision from prior execution; manual audit required")
         self.artifacts = run_dir / "agent-artifacts" / "measurement-policy"
         self.write(self.artifacts / "action-contracts.json", self.spec)
+        self.event("Measurement action availability resolved.", {
+            "source": source, "selection": selection, "actions": self.spec["actions"]})
         self.calibration = []
         self.observations = []
 

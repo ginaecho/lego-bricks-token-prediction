@@ -1102,6 +1102,7 @@ class AgentRuntime:
         adaptive = AdaptiveMeasurements(
             runtime=self, bricks=bricks, names=names, source=source, run_id=run_id,
             run_dir=run_dir, call=call, event=event, cancel=cancel, write=_write, read=_read,
+            requested_id=requested_custom,
         ) if self.measurement_policy else None
         reuse_rows = []
         rows_dir = self.state_dir / "rows"
