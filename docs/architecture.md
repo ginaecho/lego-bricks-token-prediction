@@ -67,22 +67,29 @@ The request can:
 
 The system does not treat every new phrase as a new capability.
 
-### 2. Decompose into bricks
+### 2. Decompose into versioned building blocks
 
-The decomposition layer converts plain English into named, countable work:
+The decomposition layer converts plain English into named, countable work.
+Token Yield contains several deliberately separate vocabularies because they
+belong to different experiments and model contracts:
 
-* Review
-* Extract
-* Classify
-* Retrieve
-* Reconcile
-* Draft
-* Remediate
-* Validate
-* Report
+| Vocabulary | Implemented blocks | Purpose |
+| --- | --- | --- |
+| Live agent marketplace | `extract`, `classify`, `score`, `plan`, `retrieve`, `verify`, `write` | The seven atoms used by the Foundry agent pipeline and its feature builders |
+| Customer-scoping model | `extract`, `classify`, `plan`, `report` | The four operations measured for public-request scoping |
+| Broader research catalog | Twenty primitives in `token_yield/tasks.py` | Experimental vocabulary used by composition and taxonomy studies |
 
-Each brick is both a business capability and a model feature. A decomposition
-records which bricks are required, how many units are expected, and how much
+The original Review, Extract, Classify, Retrieve, Reconcile, Draft, Remediate,
+Validate, and Report set was the first measured composition experiment. It is
+not the universal vocabulary for every marketplace model.
+
+At the business level, the concept can be described with familiar actions such
+as Search, Retrieve, Extract, Classify, Analyze, Generate, Evaluate, Validate,
+Transform, and Report. These labels are an explanatory taxonomy, not an
+additional trained feature schema.
+
+Each trained model stores its exact vocabulary and version. A decomposition
+records which blocks are required, how many units are expected, and how much
 source context they consume.
 
 When the agent proposes a new capability, it must express the function using

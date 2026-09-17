@@ -195,20 +195,33 @@ Client request
     -> actual usage, quality, and client feedback improve future predictions
 ```
 
-The model uses nine enterprise document-work bricks:
+## What is a basic block?
 
-* Review
-* Extract
-* Classify
-* Retrieve
-* Reconcile
-* Draft
-* Remediate
-* Validate
-* Report
+A basic block describes one repeatable action inside an agentic project. The
+names below are a business-friendly way to explain the idea:
 
-Each brick is a measured input feature. The same project object supports the
-initial forecast, the itemised quote, and quote-to-actual reconciliation.
+| Basic block | Meaning in an agentic project | Current code mapping |
+| --- | --- | --- |
+| Search | Find relevant information in an authorized external source | `fetch` or `retrieve`; the live pilot is source-only and does not browse |
+| Retrieve | Fetch specific information from a known source or knowledge base | `retrieve` |
+| Extract | Pull structured information from documents or text | `extract` |
+| Classify | Categorize, label, or route information | `classify` |
+| Analyze | Reason over information to derive findings | A composition of `score`, `plan`, and `verify` |
+| Generate | Produce text, code, recommendations, or other content | `write` |
+| Evaluate | Assess an output against criteria | `score` and `verify` |
+| Validate | Check correctness or compliance against explicit rules | `verify`; `validate` in the broader research catalog |
+| Transform | Convert information from one representation to another | `transform` in the broader research catalog |
+| Report | Present findings or results in a structured artifact | `write`; `report` in the customer-scoping model |
+
+Token Yield does not force every experiment into one permanent list. Each
+model artifact records the exact, versioned vocabulary it was trained on. The
+live marketplace currently measures seven low-level atoms: `extract`,
+`classify`, `score`, `plan`, `retrieve`, `verify`, and `write`. These combine
+into customer-facing capabilities such as research, document review, support,
+recommendations, and reporting.
+
+The same decomposition supports the initial forecast, itemised quote, and
+quote-to-actual reconciliation.
 
 ## What the experiments show
 
