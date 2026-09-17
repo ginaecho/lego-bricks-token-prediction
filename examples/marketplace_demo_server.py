@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATIC_ROUTES = frozenset({
     "/marketplace-sales-demo.html", "/marketplace-operations-demo.html",
     "/marketplace-prototype.html",
+    "/marketplace-console.html",
 })
 MAX_BODY = 32768
 
@@ -213,7 +214,7 @@ class RunStore:
         with self.lock:
             current = self.runs.get(run_id)
             if current is not None:
-                return copy.deepcopy(current)
+                return {**copy.deepcopy(current), "replay": False}
             if not re.fullmatch(r"[0-9a-f]{32}", run_id):
                 return None
             saved = self.run_dir / run_id / "run.json"
@@ -225,7 +226,7 @@ class RunStore:
             if run["status"] in ("queued", "waiting", "running"):
                 run.update(status="failed", next_stage=None, result=None,
                            error="Server restarted during execution. This historical run cannot resume; any uncertain charges remain reserved.")
-            return run
+            return {**run, "replay": True}
 
     def runtime_status(self) -> dict[str, Any]:
         if self.agent_runtime is None:
@@ -319,6 +320,12 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
                 self._reply(200, store.catalog())
             elif path == "/api/runs":
                 self._reply(200, store.listing())
+            elif path == "/api/scenarios":
+                from token_yield.marketplace_scenarios import SCENARIOS
+
+                fixture = store.agent_runtime.source_fixture if store.agent_runtime else None
+                self._reply(200, {"source": "fictional-policy-fixture" if fixture else "invented-public-metadata-inspired",
+                                  "scenarios": [fixture] if fixture else SCENARIOS})
             elif re.fullmatch(r"/api/runs/[0-9a-f]{32}", path):
                 run = store.get(path.rsplit("/", 1)[-1])
                 self._reply(200 if run else 404, run or {"error": "run not found"})
@@ -417,6 +424,16 @@ def create_parser() -> argparse.ArgumentParser:
                         help="New approved total campaign cap (maximum USD 25), not a per-run cap.")
     parser.add_argument("--agent-approval-id",
                         help="Explicit new campaign approval identifier; previous pilot approval is not reused.")
+    parser.add_argument("--campaign-file", type=Path,
+                        help="Reviewed campaign JSON; execution_enabled must be true after independent verification.")
+    parser.add_argument("--mock-agents", action="store_true",
+                        help="Use explicit synthetic provider fixtures; no authentication or network calls.")
+    parser.add_argument("--source-fixture", choices=["archive-exceptions-v2"],
+                        help="Fictional source version; mock-only unless a separately approved --scope-file is supplied.")
+    parser.add_argument("--scope-file", type=Path,
+                        help="Separately reviewed and user-approved v2 scope under the existing campaign ledger.")
+    parser.add_argument("--measurement-policy", action="store_true",
+                        help="Offline reward-based measurement bandit; requires --mock-agents.")
     return parser
 
 
@@ -425,7 +442,24 @@ def main() -> int:
     if not 1 <= args.port <= 65535:
         print("--port must be in 1..65535", file=sys.stderr)
         return 2
-    if args.enable_foundry and (
+    if args.mock_agents and (args.enable_foundry or args.campaign_file):
+        print("--mock-agents cannot be combined with paid campaign flags", file=sys.stderr)
+        return 2
+    if args.scope_file and (args.mock_agents or not args.enable_foundry or not args.campaign_file
+                           or not args.source_fixture or not args.agent_state_dir):
+        print("--scope-file requires real v2 mode, original campaign and explicit existing agent state",
+              file=sys.stderr)
+        return 2
+    if args.source_fixture and not args.mock_agents and not args.scope_file:
+        print("--source-fixture requires --mock-agents; no paid execution is approved", file=sys.stderr)
+        return 2
+    if args.measurement_policy and not args.mock_agents:
+        print("--measurement-policy requires --mock-agents; no paid policy approval exists", file=sys.stderr)
+        return 2
+    if args.campaign_file and not args.enable_foundry:
+        print("--campaign-file requires explicit --enable-foundry", file=sys.stderr)
+        return 2
+    if args.enable_foundry and not args.campaign_file and (
             args.agent_budget_usd is None or not 0 < args.agent_budget_usd <= 25
             or not args.agent_approval_id or not args.agent_approval_id.strip()):
         print("--enable-foundry requires --agent-budget-usd in (0,25] and --agent-approval-id",
@@ -438,9 +472,29 @@ def main() -> int:
 
             runtime = AgentRuntime(
                 args.agent_state_dir or args.run_dir / "agent-state",
-                args.agent_config, cap_usd=args.agent_budget_usd,
-                approval_id=args.agent_approval_id,
+                args.agent_config, cap_usd=args.agent_budget_usd or 25,
+                approval_id=args.agent_approval_id or "marketplace-new-25usd-pilot",
+                campaign=json.loads(args.campaign_file.read_text(encoding="utf-8")) if args.campaign_file else None,
+                source_fixture=args.source_fixture,
+                scope_file=args.scope_file,
             )
+        elif args.mock_agents:
+            from token_yield.marketplace_agents import APPROVED_ENDPOINT, MODEL_ID, AgentRuntime
+            from token_yield.marketplace_mock import MockProvider
+
+            args.run_dir.mkdir(parents=True, exist_ok=True)
+            config = args.run_dir / "mock-connection.json"
+            write_json(config, {
+                "endpoint": APPROVED_ENDPOINT, "deployment": MODEL_ID, "expected_response_model": MODEL_ID,
+                "deployment_version": "2026-03-05", "deployment_sku": "GlobalStandard",
+                "reasoning_effort": "none", "text_verbosity": "low",
+                "pricing": {"input_per_million": 2.5, "cached_input_per_million": .25, "output_per_million": 15.0},
+            })
+            runtime = AgentRuntime(args.run_dir / "mock-state", config,
+                                   dispatch=MockProvider(delay=.015),
+                                   source_fixture=args.source_fixture,
+                                   measurement_policy=args.measurement_policy,
+                                   token_provider=lambda: (_ for _ in ()).throw(AssertionError("No mock authentication")))
         store = RunStore(args.run_dir, agent_runtime=runtime)
         with make_server(args.port, store=store) as server:
             print(json.dumps({"stage": "server", "url": f"http://127.0.0.1:{args.port}/marketplace-sales-demo.html",

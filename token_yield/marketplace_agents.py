@@ -24,13 +24,18 @@ from .foundry_dispatch import (
     DispatchResult, FoundryDispatcher, ResponseProtocolError, UsageLedger, acquire_entra_token,
 )
 from .marketplace_agent_contracts import (
-    ATOM_DESCRIPTIONS, ATOMS, CONTRACT_VERSION, DUP_SIMILARITY, FEATURE_BUILDERS, LIMITATIONS,
+    ATOM_DESCRIPTIONS, ATOMS, CONTRACT_VERSION, FEATURE_BUILDERS, LIMITATIONS,
     MAX_ATOM_COUNT, MAX_ATOM_TOTAL, ROLES, SCHEMA_VERSION, TRANSPORT_PROTOCOL,
     canonical, contracts, custom_contract, external_scope_reason, fingerprint, numeric_features,
     schema_from_example, similarity_scores, source_documents, strict_json,
     validate_message, validate_request, workload_prompt,
 )
 from .robust import Record, RidgeLinearModel
+from .marketplace_scenarios import SCENARIOS, scenario_for_request
+from .marketplace_source_fixtures import ARCHIVE_V2, fixture_documents, fixture_scenario
+from .measurement_policy import POLICY_VERSION, SPLIT_PROTOCOL
+from .marketplace_measurement import AdaptiveMeasurements
+from .marketplace_scope import FIXTURE_ID, canonical_state_dir, validate_scope
 
 AGENT_STAGES = (
     "novelty", "propose", "discuss", "adjudicate", "wiki", "requirements", "features",
@@ -67,7 +72,7 @@ class StructuredDispatcher(FoundryDispatcher):
         contract = strict_json(prompt)
         if contract.get("task") not in {
             "novelty", "decompose", "propose", "discuss", "adjudicate",
-            "features", "fit", "metrics", "workload",
+            "features", "fit", "metrics", "workload", "contract_review", "contract_reconcile",
         }:
             raise ValueError("unknown structured-output task")
         payload = super().initial_payload(prompt)
@@ -108,8 +113,9 @@ def _read(path: Path) -> dict:
 @contextmanager
 def _exclusive(directory: Path):
     """Reject concurrent owners; OS locking releases automatically after crashes."""
+    directory = canonical_state_dir(directory)
     directory.mkdir(parents=True, exist_ok=True)
-    key = str(directory.resolve()).casefold()
+    key = str(directory)
     with _LOCKS_LOCK:
         lock = _LOCKS.setdefault(key, threading.Lock())
     if not lock.acquire(blocking=False):
@@ -161,7 +167,7 @@ class AgentRuntime:
     Args:
         state_dir: Persistent state shared by every live run and restart.
         config_path: Existing approved connection JSON; its old approval is ignored.
-        cap_usd: New pilot approval, at most US$25; operational stop is at most $24.
+        cap_usd: Legacy pilot approval, at most US$25 unless an explicit campaign is supplied.
         approval_id: Persistent identity of this new approval (not old campaign).
         dispatch: Optional MOCKED-test hook ``(prompt, *, target, output_cap)``.
         token_provider: Optional in-memory authentication hook.
@@ -172,17 +178,54 @@ class AgentRuntime:
         approval_id: str = APPROVAL_ID, *,
         dispatch: Callable[..., DispatchResult] | None = None,
         token_provider: Callable[[], str] | None = None,
+        campaign: dict | None = None,
+        source_fixture: str | None = None,
+        measurement_policy: bool = False,
+        scope_file: Path | None = None,
     ) -> None:
-        if type(cap_usd) not in (int, float) or not math.isfinite(cap_usd) or not 0 < cap_usd <= 25:
+        if type(measurement_policy) is not bool:
+            raise ValueError("measurement_policy must be a boolean")
+        if measurement_policy and (dispatch is None or campaign is not None):
+            raise ValueError("measurement policy is offline mock-only pending independent review")
+        self.measurement_policy = measurement_policy
+        self.scope_file = Path(scope_file).resolve() if scope_file is not None else None
+        self.scope_authorization = None
+        if self.scope_file:
+            if dispatch is not None or campaign is None or source_fixture != FIXTURE_ID:
+                raise ValueError("scope file requires real v2 source binding and the existing campaign")
+            budget_path = canonical_state_dir(state_dir) / "budget.json"
+            if not budget_path.is_file():
+                raise RuntimeError("v2 scope cannot initialize a new funding ledger")
+            self.scope_authorization = _read(self.scope_file)
+            validate_scope(self.scope_authorization, campaign, _read(budget_path), state_dir)
+        self.source_fixture = fixture_scenario(source_fixture) if source_fixture is not None else None
+        if self.source_fixture and not self.scope_authorization and (dispatch is None or campaign is not None):
+            raise ValueError("Versioned source fixtures are offline mock-only; no paid approval exists")
+        self.campaign = None
+        if campaign is not None:
+            expected = {"approval_id", "cap_usd", "stop_usd", "execution_enabled", "scenario_ids"}
+            if (not isinstance(campaign, dict) or set(campaign) != expected
+                    or campaign["approval_id"] != "marketplace-feedback-three-demos-50usd"
+                    or campaign["execution_enabled"] is not True
+                    or campaign["scenario_ids"] != [item["id"] for item in SCENARIOS]):
+                raise ValueError("reviewed three-scenario campaign must be explicitly execution_enabled")
+            cap = _finite_amount(campaign["cap_usd"])
+            stop = _finite_amount(campaign["stop_usd"])
+            if not 0 < stop < cap <= 50 or stop > 48:
+                raise ValueError("campaign requires 0 < stop < cap <= US$50 and stop <= US$48")
+            self.campaign = strict_json(canonical(campaign))
+            cap_usd, approval_id = cap, campaign["approval_id"]
+        if (type(cap_usd) not in (int, float) or not math.isfinite(cap_usd)
+                or not 0 < cap_usd <= (50 if self.campaign else 25)):
             raise ValueError("new pilot cap must be finite, positive, and at most US$25")
         if not isinstance(approval_id, str) or not approval_id.strip():
             raise ValueError("new approval identity required")
-        self.state_dir = Path(state_dir).resolve()
+        self.state_dir = canonical_state_dir(state_dir)
         self.config_path = Path(config_path).resolve()
         self.config = _read(self.config_path)
         self._validate_config(self.config)
         self.cap_usd = float(cap_usd)
-        self.stop_usd = min(24.0, self.cap_usd * .96)
+        self.stop_usd = float(self.campaign["stop_usd"]) if self.campaign else min(24.0, self.cap_usd * .96)
         self.approval_id = approval_id
         self._closed = threading.Event()
         self._dispatch_hook = dispatch
@@ -196,11 +239,24 @@ class AgentRuntime:
             "text_verbosity": self.config["text_verbosity"],
             "budget_rates": asdict(SafetyRateCard()), "mocked": dispatch is not None,
         }
+        if self.campaign:
+            self._pin["campaign"] = self.campaign
+            self._pin["scenario_fingerprint"] = fingerprint(SCENARIOS)
         self._compatibility = fingerprint({
             "pin": self._pin, "schema": SCHEMA_VERSION, "builders": FEATURE_BUILDERS,
             "prompt_protocol": CONTRACT_VERSION,
             "transport_protocol": TRANSPORT_PROTOCOL,
         })
+        if self.source_fixture:
+            self._compatibility = fingerprint({
+                "base": self._compatibility, "source_fixture": self.source_fixture,
+                "source_content": [self._documents(f"fixture-{index}", index) for index in range(6)],
+            })
+        if self.measurement_policy:
+            self._compatibility = fingerprint({
+                "base": self._compatibility, "measurement_policy": POLICY_VERSION,
+                "split_protocol": SPLIT_PROTOCOL,
+            })
         with _exclusive(self.state_dir):
             path = self.state_dir / "budget.json"
             if not path.exists():
@@ -276,6 +332,11 @@ class AgentRuntime:
             raise ValueError("model registry fingerprint mismatch")
         return model
 
+    def _documents(self, group: str, index: int) -> list[dict]:
+        if self.source_fixture:
+            return fixture_documents(self.source_fixture["id"], group, index)
+        return source_documents(group, index)
+
     def public_status(self) -> dict:
         """Return public connection/budget metadata without secrets or tokens."""
         state = _read(self.state_dir / "budget.json")
@@ -294,6 +355,9 @@ class AgentRuntime:
             "version": model["version"] if model else None,
             "source": "mocked-test-provider" if self._dispatch_hook else "measured-foundry",
             "limitations": LIMITATIONS,
+            **({"source_fixture": self.source_fixture} if self.source_fixture else {}),
+            "measurement_policy": POLICY_VERSION if self.measurement_policy else None,
+            "scope_id": self.scope_authorization["scope_id"] if self.scope_authorization else None,
         }
 
     def close(self) -> None:
@@ -443,6 +507,8 @@ class AgentRuntime:
             items.extend(b for b in model.get("contracts", []) if b["id"] not in known)
         return {"items": [self._forecast_brick(b, model) for b in items],
                 "model_id": MODEL_ID, "version": model["version"] if model else None,
+                "source": model.get("source") or "unknown" if model else "unknown",
+                "forecast_mode": "reference-context",
                 "scope": "Reference-context-only prompt-contract proxies", "limitations": LIMITATIONS}
 
     def _cost(self, inputs: float, outputs: float) -> float:
@@ -456,7 +522,9 @@ class AgentRuntime:
         )}
         result.update(model_id=MODEL_ID, supported=False, input_tokens=None, output_tokens=None,
                       total_tokens=None, usd_per_run=None, pilot_version=None,
-                      reason="No compatible measured pilot evidence for this contract.")
+                      source=model.get("source") or "unknown" if model else "unknown",
+                      forecast_mode="reference-context",
+                      reason="No compatible pilot evidence for this contract.")
         if not model or not permitted or model.get("compatibility") != self._compatibility:
             return result
         if model.get("contract_hashes", {}).get(brick["id"]) != brick["contract_hash"]:
@@ -464,12 +532,12 @@ class AgentRuntime:
         counts = model.get("per_brick", {}).get(brick["id"], {})
         if counts.get("train", 0) < 4 or counts.get("holdout", 0) < 2:
             return result
-        values = numeric_features(brick, source_documents("train-0", 0))
+        values = numeric_features(brick, self._documents("train-0", 0))
         names = model["feature_names"]
         vector = [values[name] for name in names]
         if any(not low <= value <= high
                for value, (low, high) in zip(vector, model["feature_bounds"])):
-            result["reason"] = "Reference features exceed measured training support."
+            result["reason"] = "Reference features exceed stored training support."
             return result
         predicted = {}
         for target in ("input", "output"):
@@ -485,7 +553,8 @@ class AgentRuntime:
             supported=True, input_tokens=predicted["input"], output_tokens=predicted["output"],
             total_tokens=sum(predicted.values()),
             usd_per_run=self._cost(predicted["input"], predicted["output"]),
-            pilot_version=model["version"], reason="Limited measured reference-context pilot; uncertified.",
+            pilot_version=model["version"],
+            reason=f"Limited {result['source']} reference-context pilot; uncertified.",
         )
         return result
 
@@ -495,11 +564,13 @@ class AgentRuntime:
         supported = not unsupported and all(item["supported"] for item in forecasts)
         result = {"supported": supported, "reason": "; ".join(unsupported) if unsupported else
                   "Reference-context pilot only." if supported else
-                  "At least one selected prompt contract lacks compatible measured support.",
+                  "At least one selected prompt contract lacks compatible training support.",
                   "input": None, "output": None, "total": None,
                   "input_tokens": None, "output_tokens": None, "total_tokens": None,
                   "usd_per_run": None, "usd_per_month": None, "per_brick": forecasts,
-                  "model_id": MODEL_ID, "version": model["version"] if model else None}
+                  "model_id": MODEL_ID, "version": model["version"] if model else None,
+                  "source": model.get("source") or "unknown" if model else "unknown",
+                  "forecast_mode": "reference-context"}
         if supported:
             inputs = sum(f["input_tokens"] * b["quantity"] for f, b in zip(forecasts, bricks))
             outputs = sum(f["output_tokens"] * b["quantity"] for f, b in zip(forecasts, bricks))
@@ -530,6 +601,17 @@ class AgentRuntime:
             if _read(self.config_path) != self.config:
                 raise RuntimeError("connection configuration changed; refusing paid calls")
             budget, budget_state = self._load_budget()
+            if self.scope_authorization:
+                if _read(self.scope_file) != self.scope_authorization:
+                    raise RuntimeError("scope authorization changed; refusing execution")
+                validate_scope(self.scope_authorization, self.campaign, budget_state, self.state_dir)
+                authorization_path = (self.state_dir / "scope-authorizations" /
+                                      f"{fingerprint(self.scope_authorization)}.json")
+                if authorization_path.exists():
+                    if _read(authorization_path) != self.scope_authorization:
+                        raise RuntimeError("scope audit integrity failure")
+                else:
+                    _write(authorization_path, self.scope_authorization)
             if budget_state.get("halted"):
                 raise RuntimeError(budget_state["halted"])
             marker = self.state_dir / "run-ids" / f"{run_id}.json"
@@ -537,13 +619,23 @@ class AgentRuntime:
                 raise RuntimeError("run ID already attempted; automatic retry/resume is forbidden")
             run_dir.mkdir(parents=True, exist_ok=False)
             _write(run_dir / "request.json", request)
-            _write(marker, {"run_id": run_id, "started": _now(), "artifact_dir": str(run_dir)})
+            _write(marker, {"run_id": run_id, "started": _now(), "artifact_dir": str(run_dir),
+                            **({"scope_authorization_sha256": fingerprint(self.scope_authorization)}
+                               if self.scope_authorization else {})})
             return self._run(request, run_dir, run_id, on_event, before_stage, check_cancel,
                              budget, budget_state)
 
     def _run(self, request: dict, run_dir: Path, run_id: str,
              on_event: Callable, before_stage: Callable, check_cancel: Callable | None,
              budget: HardBudget, budget_state: dict) -> dict:
+        if self.campaign and not self.scope_authorization and scenario_for_request(request) is None:
+            raise ValueError("This campaign funds only the three unchanged reviewed scenario briefs.")
+        if not self.source_fixture and request["description"] == ARCHIVE_V2["description"]:
+            raise ValueError("Versioned scenario requires its explicit versioned source fixture")
+        if self.source_fixture and (
+                request["description"] != self.source_fixture["description"]
+                or request.get("new_function", "") != self.source_fixture["new_function"]):
+            raise ValueError("Source fixture requires its exact versioned scenario request")
         events, messages, measured = [], [], []
         ledger = UsageLedger()
         source = "mocked-test-provider" if self._dispatch_hook else "measured-foundry"
@@ -569,10 +661,14 @@ class AgentRuntime:
 
         def enter(name: str) -> None:
             nonlocal stage
+            if stage:
+                event("Operation completed.", {"operation": stage, "state": "completed"})
             stage = name
             cancel()
+            event("Operation awaiting execution gate.", {"operation": stage, "state": "waiting"})
             before_stage(name)
             cancel()
+            event("Operation started.", {"operation": stage, "state": "running"})
 
         def call(kind: str, role: str, payload: dict | str, docs: list[dict],
                  catalog: list[dict], *, workload: bool = False) -> dict:
@@ -612,6 +708,9 @@ class AgentRuntime:
                         "request_payload": request_payload, "request_sha256": request_sha256,
                         "input_bound": input_bound, "output_cap": output_cap, "time": _now()}
             _write(evidence_path, evidence)
+            event("Provider operation reserved; dispatch starting.",
+                  {"operation": kind, "role": role, "state": "running", "source": source,
+                   "call_id": call_id, "input_bound": input_bound, "output_cap": output_cap})
             attempted = False
             settled_ok = False
             pre_recorded = len(ledger.calls(target))
@@ -733,6 +832,7 @@ class AgentRuntime:
                 event("Settled output rejected by strict contract; budget intact, no halt."
                       if content_only else "Call failed closed; inspect evidence and persistent budget.",
                       {"evidence": str(evidence_path.relative_to(run_dir)), "role": role,
+                       "operation": kind, "state": "failed",
                        "content_rejected": content_only, "halted": budget_state.get("halted")})
                 raise
             public = {key: evidence[key] for key in (
@@ -750,78 +850,131 @@ class AgentRuntime:
         if previous:
             known = {b["id"] for b in catalog}
             catalog.extend(b for b in previous.get("contracts", []) if b["id"] not in known)
-        docs = source_documents("train-0", 0)
+        docs = self._documents("train-0", 0)
 
-        # New-brick loop, step 1: decide whether an explicitly requested custom function is
-        # genuinely new (establish it) or already covered (reuse a similar brick). The agents
-        # decide; a deterministic name-similarity signal is the guardrail that can veto an
-        # establish of a near-duplicate. An established brick is decomposed by the agents into
-        # bounded counts of the fixed atom vocabulary, then flows through measure/train/publish
-        # and persists into the catalog so later runs reuse it.
         enter("novelty")
         requested_custom = None
         proposed_new_function = ""
-        requested_term = request["new_function"]
-        if requested_term:
-            names = [{"id": b["id"], "name": b["name"], "feature_id": b["feature_id"]} for b in catalog]
-            scores = similarity_scores(requested_term, catalog)
-            best = scores[0] if scores else {"id": "", "score": 0.0}
-            establish_allowed = best["score"] < DUP_SIMILARITY
+        capability_reviews = []
+        capability_blockers = []
+
+        def resolve_capability(term: str, origin: str) -> str | None:
+            review = {"requested": term, "origin": origin, "outcome": "review",
+                      "contract_version": CONTRACT_VERSION, "model_before": previous["version"] if previous else None}
+            capability_reviews.append(review)
+            reason = external_scope_reason({**request, "new_function": term})
+            if reason:
+                review.update(outcome="unsupported", rationale=reason)
+                capability_blockers.append(reason)
+                event("Capability scope rejected before creation.", review)
+                return None
+            scores = similarity_scores(term, catalog)
+            exact = next((score for score in scores if score["exact"]), None)
+            review["matches"] = scores[:5]
+            event("Deterministic similarity evidence; semantic decision remains with agents.", review)
             verdict = call("novelty", "orchestrator", {
-                "task": "novelty", "custom_function": requested_term,
-                "customer_request": request["description"], "catalog": names,
+                "task": "novelty", "custom_function": term,
+                "customer_request": request["description"],
+                "catalog": [{key: b[key] for key in ("id", "name", "scope", "instruction")} for b in catalog],
                 "similarity": scores[:5],
-                "guardrail": {"establish_allowed": establish_allowed, "threshold": DUP_SIMILARITY,
-                              "near_duplicate_id": "" if establish_allowed else best["id"]},
-                "instruction": "Decide if the requested custom function is genuinely new or already "
-                "covered by an existing brick. If establish_allowed is false a near duplicate exists "
-                "and you must reuse it. Prefer reuse when a close match exists; establish only "
-                "genuinely new work.",
+                "guardrail": {"exact_duplicate_id": exact["id"] if exact else "",
+                              "lexical_threshold_is_not_equivalence": True},
+                "instruction": "Decide novelty against catalog contract meanings. Exact normalized "
+                "names must reuse. Lexical overlap alone cannot establish semantic equivalence. "
+                "Explain the scope comparison; return none when ambiguous rather than force creation.",
                 "output_contract": {"decision": "establish", "reuse_id": "existing id or empty",
                                     "new_name": "new function name or empty",
                                     "rationale": "public justification"},
             }, docs, catalog)["public_output"]
-            decision_kind = verdict["decision"]
-            if decision_kind == "establish" and not establish_allowed:
-                # Deterministic guardrail overrides an establish of a near-duplicate.
-                requested_custom = best["id"]
-                event("Deterministic guardrail vetoed establish (near duplicate); reused existing brick.",
-                      {"reuse_id": requested_custom, "similarity": scores[:5]})
-            elif decision_kind == "reuse":
-                requested_custom = verdict["reuse_id"]
-                event("Custom function reused as an existing brick after novelty review.",
-                      {"reuse_id": requested_custom, "similarity": scores[:5]})
-            elif decision_kind == "establish":
+            review["agent_verdict"] = verdict
+            if exact or verdict["decision"] == "reuse":
+                reuse_id = exact["id"] if exact else verdict["reuse_id"]
+                review.update(outcome="reused", brick_id=reuse_id,
+                              rationale="Exact normalized name guardrail." if exact else verdict["rationale"])
+                event("Capability reused; no duplicate contract created.", review)
+                return reuse_id
+            if verdict["decision"] == "establish":
                 name = verdict["new_name"]
-                name_best = similarity_scores(name, catalog)[0] if catalog else {"id": "", "score": 0.0}
-                if name_best["score"] >= DUP_SIMILARITY:
-                    requested_custom = name_best["id"]
-                    event("Proposed new function matched an existing brick; guardrail reused it.",
-                          {"reuse_id": requested_custom, "proposed_name": name, "score": name_best["score"]})
-                else:
-                    decomposition = call("decompose", "architect", {
-                        "task": "decompose", "new_function": name,
+                name_exact = next((score for score in similarity_scores(name, catalog) if score["exact"]), None)
+                if name_exact:
+                    review.update(outcome="reused", brick_id=name_exact["id"],
+                                  rationale="Proposed name is an exact catalog duplicate.")
+                    event("Proposed capability name reused.", review)
+                    return name_exact["id"]
+                if external_scope_reason({**request, "new_function": name}):
+                    capability_blockers.append("Proposed capability exceeds source-only scope.")
+                    review.update(outcome="unsupported")
+                    event("Proposed capability rejected.", review)
+                    return None
+                contract_base = {
+                        "new_function": name,
                         "customer_request": request["description"],
                         "atom_vocabulary": ATOM_DESCRIPTIONS,
-                        "reference_examples": [{"name": b["name"], "atoms": b["atoms"]} for b in catalog[:6]],
                         "bounds": {"per_atom_max": MAX_ATOM_COUNT, "total_max": MAX_ATOM_TOTAL},
-                        "instruction": "Decompose this new functionality into bounded counts of the "
-                        "fixed atom vocabulary only. Do not invent atoms or write code.",
+                        "execution": "Counts compile into ordered source-only steps, one result per step. "
+                        "No arbitrary tools, code or external action. Preserve disagreement.",
                         "output_contract": {"atoms": {atom: 1 for atom in ATOMS},
                                             "rationale": "public justification"},
-                    }, docs, catalog)["public_output"]
-                    new_brick = custom_contract(name, decomposition["atoms"])
-                    requested_custom = new_brick["id"]
-                    if not any(b["id"] == new_brick["id"] for b in catalog):
-                        catalog.append(new_brick)
-                    event("Established a new basic brick from agent decomposition; entering the "
-                          "pre-simulate, feature and retraining loop.",
-                          {"brick": {key: new_brick[key] for key in ("id", "name", "atoms")}})
-            else:
-                event("Novelty review found no new capability; using the existing catalog.",
-                      {"similarity": scores[:5]})
+                        "output_contract_semantics": "Formatting example only: output_contract shows "
+                        "JSON keys and value types. Its numbers are not proposed atom counts, required "
+                        "or default allocations, or targets. Its boolean and list values are not "
+                        "requested votes or a request to omit dissent. Choose substantive values "
+                        "independently from the customer request, source-only execution and bounds.",
+                }
+                independent = [call("decompose", role, {
+                    **contract_base, "task": "decompose", "role": role,
+                    "instruction": "Independently propose bounded atom counts for this capability. "
+                    "Requirements analyst checks task coverage; architect checks ordered interfaces; "
+                    "skeptical reviewer checks evidence limits and unsupported external actions.",
+                }, docs, catalog) for role in ROLES]
+                review_schema = {**contract_base["output_contract"], "agreed": True, "dissent": []}
+                revisions = [call("contract_review", role, {
+                    **contract_base, "task": "contract_review", "role": role,
+                    "all_proposals": [{"role": p["role"], "proposal": p["public_output"]} for p in independent],
+                    "instruction": "Review all three independent proposals. Return your final bounded "
+                    "atom counts. agreed concerns the final substantive contract you return, not the "
+                    "formatting example or approval of every discarded proposal. Explain resolved "
+                    "historical differences in rationale. Preserve genuine unresolved scope, interface "
+                    "or evidence objections in dissent, even when final counts match. If you do not "
+                    "agree, return agreed=false and explain in dissent. Do not assume other reviewers agree.",
+                    "output_contract": review_schema,
+                }, docs, catalog) for role in ROLES]
+                reconciliation = call("contract_reconcile", "orchestrator", {
+                    **contract_base, "task": "contract_reconcile",
+                    "all_reviews": [{"role": p["role"], "review": p["public_output"]} for p in revisions],
+                    "instruction": "Reconcile the final peer reviews, not superseded independent "
+                    "alternatives or the formatting example. Assess the final substantive contract "
+                    "and carry forward every final-review false vote or dissent; do not erase, "
+                    "weaken or convert it to assent. Matching atom counts alone do not resolve "
+                    "scope, interface or evidence objections. Explain historical differences in "
+                    "rationale. Preserve unresolved disagreement with agreed=false and explicit dissent.",
+                    "output_contract": review_schema,
+                }, docs, catalog)["public_output"]
+                review["discussion"] = [{"role": p["role"], **p["public_output"]} for p in revisions]
+                review["reconciliation"] = reconciliation
+                votes = [p["public_output"] for p in revisions] + [reconciliation]
+                if (any(not v["agreed"] or v["dissent"] for v in votes)
+                        or len({canonical(v["atoms"]) for v in votes}) != 1):
+                    capability_blockers.append("New capability contract disagreement requires human review.")
+                    review.update(outcome="review", rationale=capability_blockers[-1])
+                    event("Contract not established: unresolved three-role disagreement.", review)
+                    return None
+                new_brick = custom_contract(name, reconciliation["atoms"])
+                if len(catalog) >= 20:
+                    raise ValueError("pilot supports at most twenty explicitly versioned contracts")
+                catalog.append(new_brick)
+                review.update(outcome="established", brick_id=new_brick["id"], contract=new_brick)
+                event("Reconciled contract established; measurement and publication still pending.", review)
+                return new_brick["id"]
+            capability_blockers.append("Capability novelty is unresolved; no complete project forecast.")
+            review.update(rationale=verdict["rationale"])
+            event("Capability novelty unresolved.", review)
+            return None
+
+        if request["new_function"]:
+            requested_custom = resolve_capability(request["new_function"], "explicit")
         else:
-            event("No custom function requested; catalog unchanged.", {})
+            event("Description-only request; missing capabilities will be reviewed after adjudication.")
         if len(catalog) > 20:
             raise ValueError("pilot supports at most twenty explicitly versioned contracts")
 
@@ -874,9 +1027,18 @@ class AgentRuntime:
                                              "rationale": "public justification"}],
                "dissent": [], "unsupported": [], "proposed_new_function": "name or empty"},
         }, docs, catalog)["public_output"]
+        proposed_new_function = decision["proposed_new_function"]
+        if proposed_new_function and not request["new_function"]:
+            event("Missing capability detected; entering automatic novelty and contract review.",
+                  {"proposed_new_function": proposed_new_function})
+            requested_custom = resolve_capability(proposed_new_function, "description")
+            if requested_custom and not any(b["id"] == requested_custom for b in decision["bricks"]):
+                decision["bricks"].append({"id": requested_custom, "quantity": 1})
+                decision["decisions"].append({"id": requested_custom, "decision": "include",
+                                               "rationale": "Auto-detected gap resolved by capability review."})
         by_id = {item["id"]: item for item in catalog}
         bricks = [{**by_id[b["id"]], "quantity": b["quantity"]} for b in decision["bricks"]]
-        unsupported = list(decision["unsupported"])
+        unsupported = list(decision["unsupported"]) + capability_blockers
         proposed_new_function = decision["proposed_new_function"]
         dissent = [{"role": m["role"], "dissent": m["public_output"]["dissent"]}
                    for m in discussions if not m["public_output"]["agreed"] or m["public_output"]["dissent"]]
@@ -897,9 +1059,6 @@ class AgentRuntime:
         scope_reason = external_scope_reason(request)
         if scope_reason:
             unsupported.append(scope_reason)
-        if proposed_new_function and not request["new_function"]:
-            event("Orchestrator recommends establishing a new basic brick for an uncovered capability.",
-                  {"proposed_new_function": proposed_new_function})
         event("Orchestrator reconciled public decisions without suppressing dissent.",
               {"decisions": decision["decisions"], "dissent": dissent, "unsupported": unsupported})
 
@@ -920,7 +1079,7 @@ class AgentRuntime:
             "feature_definition": "Fixed numeric operation counts and optional serialized prompt/source "
             "UTF-8 byte lengths. No target-derived features. No code generation or execution.",
             "training_predictors_only": [
-                {"id": b["id"], "values": numeric_features(b, source_documents("train-0", 0))}
+                {"id": b["id"], "values": numeric_features(b, docs)}
                 for b in catalog
             ],
             "instruction": "Choose one finite builder. No holdout or labels are available.",
@@ -929,6 +1088,9 @@ class AgentRuntime:
         names = list(FEATURE_BUILDERS[feature_choice["builder"]])
         features = {name: sum(numeric_features(b, docs)[name] * b["quantity"] for b in bricks)
                     for name in names}
+        event("Actual numeric predictors computed; no target-derived features.",
+              {"builder": feature_choice, "features": features,
+               "per_brick": [{"id": b["id"], "values": numeric_features(b, docs)} for b in catalog]})
 
         enter("predict_before")
         before = self._prediction(bricks, previous, request["runs_per_month"], unsupported)
@@ -936,6 +1098,13 @@ class AgentRuntime:
         event("Pre-measurement forecast frozen; missing evidence stays unsupported.", before)
 
         enter("measure")
+        if self.measurement_policy and unsupported:
+            raise ValueError("Measurement policy requires resolved scope and dissent: " + "; ".join(unsupported))
+        adaptive = AdaptiveMeasurements(
+            runtime=self, bricks=bricks, names=names, source=source, run_id=run_id,
+            run_dir=run_dir, call=call, event=event, cancel=cancel, write=_write, read=_read,
+            requested_id=requested_custom,
+        ) if self.measurement_policy else None
         reuse_rows = []
         rows_dir = self.state_dir / "rows"
         if rows_dir.exists():
@@ -944,15 +1113,18 @@ class AgentRuntime:
                 if (row.get("compatibility") == self._compatibility and row.get("split") == "train"
                         and row.get("brick_id") in by_id
                         and row.get("contract_hash") == by_id[row["brick_id"]]["contract_hash"]
-                        and row.get("source") == source):
-                    self._validate_reused_row(row, by_id[row["brick_id"]])
+                        and row.get("source") == source
+                        and (not adaptive or row.get("group") in {"train-0", "train-1", "train-2"})):
+                    self._validate_reused_row(
+                        row, by_id[row["brick_id"]],
+                        source_fixture=self.source_fixture["id"] if self.source_fixture else None)
                     reuse_rows.append(row)
         jobs, reused, reused_keys = [], [], set()
         for brick in catalog:
-            for index in range(6):
+            for index in ((0, 1, 2, 0, 4, 5) if adaptive else range(6)):
                 split = "train" if index < 4 else "holdout"
                 group = f"train-{index}" if split == "train" else f"holdout-{run_id}-{index}"
-                documents = source_documents(group, index)
+                documents = self._documents(group, index)
                 prompt = workload_prompt(brick, documents)
                 key = (brick["id"], group, fingerprint(prompt))
                 row = next((r for r in reuse_rows if
@@ -969,18 +1141,23 @@ class AgentRuntime:
                 "holdout_policy": "Fresh run-specific document groups; never reused for tuning. "
                 "Old holdouts are excluded, not promoted to training.",
                 "template_limitation": LIMITATIONS[4]}
+        if adaptive:
+            plan.update(policy=POLICY_VERSION, split_protocol=SPLIT_PROTOCOL,
+                        calibration_index=3, policy_actions=adaptive.spec,
+                        seed_repeat="One additional train-0 execution; not a new source group.",
+                        final_holdouts="Dispatched only after final ridge parameters are frozen.")
         _write(artifact_dir / "frozen-split.json", plan)
         event("Frozen source-group split before measurements and fitting.",
               {"new_workload_calls": len(jobs), "reused_train_rows": len(reused),
                "split_evidence": "agent-artifacts\\frozen-split.json"})
         rows = list(reused)
-        for job in jobs:
+        def measure_job(job: dict) -> dict:
             brick = by_id[job["brick_id"]]
             observed = None
             for attempt in range(WORKLOAD_ATTEMPTS):
                 try:
                     observed = call("workload", brick["id"], workload_prompt(brick, job["documents"]),
-                                    job["documents"], catalog, workload=True)
+                                    job["documents"], [brick], workload=True)
                     break
                 except ContentContractError:
                     # The provider call is settled and paid, but its output failed the strict
@@ -1003,7 +1180,15 @@ class AgentRuntime:
                 "measurement": observed,
             }
             _write(rows_dir / f"{row['id']}.json", row)
-            rows.append(row)
+            event("Validated measurement row persisted.",
+                  {key: row[key] for key in ("id", "brick_id", "group", "split", "source",
+                                             "features", "input_tokens", "output_tokens", "contract_hash")})
+            return row
+        for job in jobs:
+            if not adaptive or job["split"] == "train":
+                rows.append(measure_job(job))
+        if adaptive:
+            rows = adaptive.run(rows)
         train_rows = [row for row in rows if row["split"] == "train"]
         holdout_rows = [row for row in rows if row["split"] == "holdout"]
         if {r["group"] for r in train_rows} & {r["group"] for r in holdout_rows}:
@@ -1033,6 +1218,17 @@ class AgentRuntime:
         }, docs, catalog)["public_output"]
         models = {target: self._fit(train_rows, names, target, float(fit_choice["alpha"]))
                   for target in ("input", "output")}
+        if adaptive:
+            _write(artifact_dir / "final-parameters-before-holdouts.json", {
+                "models": {t: asdict(m) for t, m in models.items()},
+                "alpha": fit_choice["alpha"], "train_ids": [r["id"] for r in train_rows],
+                "policy": adaptive.report(),
+            })
+            event("Final ridge parameters frozen; dispatching untouched acceptance holdouts.",
+                  {"source": source, "train_count": len(train_rows)})
+            holdout_rows = [measure_job(j) for j in jobs if j["split"] == "holdout"]
+            holdout_rows.extend(adaptive.final_holdouts())
+            rows.extend(holdout_rows)
         version = uuid.uuid4().hex
         candidate = {
             "version": version, "status": "uncertified-pilot", "source": source,
@@ -1049,6 +1245,7 @@ class AgentRuntime:
             "train_ids": [r["id"] for r in train_rows], "holdout_ids": [r["id"] for r in holdout_rows],
             "frozen_split_sha256": fingerprint(plan), "alpha": fit_choice["alpha"],
             "tuning": candidates, "production_promoted": False,
+            **({"measurement_policy": adaptive.report()} if adaptive else {}),
         }
         _write(artifact_dir / "candidate-model.json", candidate)
         holdout_predictions = [
@@ -1116,6 +1313,16 @@ class AgentRuntime:
             "measurements": measured, "budget": budget.snapshot(),
             "adjudication": decision, "dissent": dissent, "usage_ledger": ledger.snapshot(),
             "requested_custom": requested_custom, "proposed_new_function": proposed_new_function,
+            "capability_reviews": capability_reviews,
+            "composition": {"kind": "sum-of-independent-brick-forecasts",
+                            "measured_combinations": False, "interaction_costs_supported": False},
+            "scenario": self.source_fixture or scenario_for_request(request),
+            **({"scope_authorization": {
+                "scope_id": self.scope_authorization["scope_id"],
+                "sha256": fingerprint(self.scope_authorization),
+                "funding": "existing-campaign-only",
+            }} if self.scope_authorization else {}),
+            **({"measurement_policy": adaptive.report()} if adaptive else {}),
             "report": {"title": "Measured Foundry prompt-contract pilot",
                        "summary": decision["summary"], "scope": "Fictional reference context only",
                        "unsupported": unsupported, "human_review_required": True},
@@ -1142,15 +1349,19 @@ class AgentRuntime:
                                                      "run_id": run_id})
             training["pilot_published"] = True
             _write(run_dir / "result.json", result)
+        event("Publication finished.", {"state": "completed", "published": publish,
+                                        "version": version if publish else None,
+                                        "source": source, "production_promoted": False})
         return result
 
     @staticmethod
-    def _validate_reused_row(row: dict, brick: dict) -> None:
+    def _validate_reused_row(row: dict, brick: dict, *, source_fixture: str | None = None) -> None:
         """Require inspectable, unchanged provider evidence before reusing labels."""
         group = row.get("group")
         if group not in {f"train-{i}" for i in range(4)}:
             raise ValueError("unrecognized training source group")
-        documents = source_documents(group, int(group[-1]))
+        documents = (fixture_documents(source_fixture, group, int(group[-1])) if source_fixture
+                     else source_documents(group, int(group[-1])))
         evidence = _read(Path(row["evidence"]))
         if (fingerprint(evidence) != row["evidence_sha256"]
                 or evidence.get("status") != "validated"

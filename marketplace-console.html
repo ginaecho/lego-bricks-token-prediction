@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brickworks / runtime terminal</title>
+<style>
+:root{color-scheme:dark;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#111816;color:#bdc6bf;font-size:13px}
+*{box-sizing:border-box}body{margin:0;height:100vh;height:100dvh;display:flex;flex-direction:column}
+button,input{font:inherit;color:inherit;background:#19211e;border:1px solid #3a4840;border-radius:4px;padding:5px 8px;min-width:0}
+button{cursor:pointer}button:disabled{opacity:.4;cursor:default}a{color:#a9b9ae;text-decoration:none}a:hover{text-decoration:underline}
+button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible,#viewport:focus-visible{outline:2px solid #ebac6d;outline-offset:2px}
+header{background:#242c27;padding:9px 16px;display:flex;align-items:center;gap:13px;color:#a6b1a8}
+.lights{display:flex;gap:6px;flex:none}.lights i{width:10px;height:10px;border-radius:50%;background:#de8a4b}.lights i:nth-child(2){background:#e6be56}.lights i:nth-child(3){background:#9bae98}
+#title{font-size:12px;font-weight:400;margin:0;flex:1;overflow-wrap:anywhere}#mode{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#a6b1a8}
+#mode[data-live="true"]{color:#91c69d}.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:9px 16px;border-bottom:1px solid #29332d}
+form{display:flex;flex:1;min-width:230px}form label{display:flex;align-items:center;gap:8px;width:100%}#run-id{width:34ch;max-width:100%;flex:1}
+nav,.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}nav{font-size:12px}.controls{padding:7px 16px;gap:8px;border-bottom:1px solid #222d26}
+.controls label{display:flex;align-items:center;gap:5px;margin-left:auto;font-size:12px}#follow{accent-color:#91c69d}
+main{flex:1;min-height:0;display:flex;flex-direction:column}#viewport{flex:1;min-height:0;overflow:auto;overflow-wrap:anywhere;padding:16px 20px;scrollbar-color:#3b4a40 #111816}
+#terminal{line-height:1.65}.event{margin:0 0 10px}summary{cursor:pointer;list-style:none}summary::-webkit-details-marker{display:none}
+.event-head{display:block}.stamp{color:#839087;font-size:11px}.stage{color:#a9b8ad}.message{color:#c4cdc6}
+.output{display:block;padding-left:18px;white-space:pre-wrap;overflow-wrap:anywhere}.result{color:#f0aa6a}.dissent,.error{color:#ffac9a}
+.raw{font-size:11px;color:#a3b5a7;border-left:1px solid #405447;margin:6px 0 12px 18px;padding:6px 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+summary::after{content:" +";font-size:10px;color:#718378}.event[open]>summary::after{content:" -"}
+#activity{padding:4px 0 8px;align-items:center;gap:10px;color:#91c69d;display:flex}#activity[hidden]{display:none}
+.cursor{width:8px;height:16px;background:#91c69d;animation:blink 1.2s step-end infinite;flex:none}
+@keyframes blink{50%{opacity:0}}@media(prefers-reduced-motion:reduce){.cursor{animation:none}}
+footer{padding:8px 16px;border-top:1px solid #29332d;font-size:11px;line-height:1.6;color:#95a398;overflow-wrap:anywhere}
+#connection{color:#aebcb1}#run-error{color:#ffac9a}#run-error:empty{display:none}.muted{color:#819086}#empty{margin:0;color:#819086}
+@media(min-width:1000px){form{flex:0 1 520px}nav{margin-left:auto}}
+@media(max-width:500px){header{padding:9px 10px;gap:8px}.lights{gap:4px}.lights i{width:8px;height:8px}
+.toolbar,.controls,footer{padding:8px 10px}.toolbar{gap:8px}form{flex-basis:100%;min-width:0}nav{gap:16px}
+#viewport{padding:12px 10px}#terminal{font-size:12px}.output{padding-left:10px}#mode{font-size:10px}}
+</style>
+</head>
+<body>
+<header><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+<h1 id="title">no run · token-yield harness</h1><span id="mode">idle</span></header>
+<div class="toolbar">
+<form id="open-run"><label>Run <input id="run-id" aria-label="Run ID" pattern="[0-9a-f]{32}" maxlength="32" required placeholder="Saved or active run ID"><button>Open</button></label></form>
+<nav><a id="sales" href="/marketplace-sales-demo.html">Sales studio</a><a id="operations" href="/marketplace-operations-demo.html">Detailed operations</a></nav>
+</div>
+<div class="controls"><button id="refresh" type="button">Refresh</button><button id="next" type="button" disabled>Next stage</button><button id="cancel" type="button" disabled>Cancel</button><label><input id="follow" type="checkbox" checked>Follow</label></div>
+<main><section id="viewport" tabindex="0" role="log" aria-live="off" aria-label="Backend event terminal">
+<div id="terminal"><p id="empty">Open a run to follow its backend events.</p></div>
+<div id="activity" hidden><span class="cursor" aria-hidden="true"></span><span id="activity-text"></span></div>
+</section></main>
+<footer><div id="connection" role="status" aria-live="polite">No run selected.</div><div id="run-summary"></div>
+<div id="run-error" role="alert"></div><div class="muted">Backend logs, not shell commands · Forecasts are additive, not measured combinations<span id="scroll-state"></span></div></footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id), activeStatuses=["queued","running","waiting"];
+let id=new URLSearchParams(location.search).get("run")||"", seen=0, timer=null, run=null, generation=0, requestSerial=0, controlling=false;
+async function json(path,options={}){
+  const response=await fetch(path,{...options,signal:AbortSignal.timeout(15000)});
+  const data=await response.json();if(!response.ok)throw Error(data.error||`HTTP ${response.status}`);return data;
+}
+function controls(){
+  $("next").disabled=controlling||!run||run.replay||run.status!=="waiting"||!run.next_stage;
+  $("cancel").disabled=controlling||!run||run.replay||!activeStatuses.includes(run.status);
+}
+function activity(label,live=false,text=""){
+  $("title").textContent=`${label} · token-yield harness`;
+  $("mode").textContent=live?"live":label;
+  $("mode").dataset.live=String(live);
+  $("activity").hidden=!live;
+  $("activity-text").textContent=text;
+}
+function links(){
+  $("sales").href=`/marketplace-sales-demo.html?run=${encodeURIComponent(id)}`;
+  $("operations").href=`/marketplace-operations-demo.html?run=${encodeURIComponent(id)}`;
+}
+function follow(){
+  if($("follow").checked)$("viewport").scrollTop=$("viewport").scrollHeight;
+  $("scroll-state").textContent=$("follow").checked?"":" · Scroll paused";
+}
+function timestamp(value){
+  if(typeof value!=="string")return "";
+  const match=value.match(/T(\d{2}:\d{2}:\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/);
+  return match?match[1]+match[2]:value;
+}
+function appendEvent(event){
+  const detail=document.createElement("details"), summary=document.createElement("summary"), pre=document.createElement("pre");
+  detail.className="event";detail.dataset.seq=String(event.seq??seen+1);
+  const data=event.data&&typeof event.data==="object"?event.data:{};
+  const head=document.createElement("span");head.className="event-head";
+  const stamp=document.createElement("span");stamp.className="stamp";
+  stamp.textContent=`${timestamp(event.time)} #${event.seq??seen+1} `;
+  const stage=document.createElement("span");stage.className="stage";
+  stage.textContent=`[log ${event.stage||"operation"}${data.role?" / "+data.role:""}] `;
+  const message=document.createElement("span");message.className="message";
+  message.textContent=event.message||event.title||"Backend event";
+  if(data.state==="failed"||/failed|rejected|disagreement|dissent/i.test(message.textContent))message.classList.add("error");
+  head.append(stamp,stage,message);summary.append(head);
+  function line(text,style="result"){
+    const span=document.createElement("span");span.className="output "+style;span.textContent=text;summary.append(span);
+  }
+  function fields(value,keys){
+    const pairs=keys.filter(key=>Object.hasOwn(value,key)).map(key=>`${key}=${JSON.stringify(value[key])}`);
+    if(pairs.length)line(pairs.join(" · "));
+  }
+  fields(data,["outcome","brick_id","origin","proposed_new_function","state","split","group"]);
+  fields(data,["new_workload_calls","reused_train_rows","train_count","test_count","reused_train_count","new_holdout_count","reused_holdout_count","alpha"]);
+  fields(data,["input_tokens","output_tokens","input_mae","output_mae","supported","published","publication_requested","production_promoted","version"]);
+  fields(data,["rated_usd","safety_usd","source","model_id"]);
+  fields(data,["decision_id","action","step","mode","propensity","reward","before_mae","after_mae","cost_usd","cost_basis","updates"]);
+  if(data.probabilities)line("probabilities "+JSON.stringify(data.probabilities));
+  if(data.scores)line("policy "+JSON.stringify(data.scores));
+  if(data.baseline)line("baseline "+JSON.stringify(data.baseline));
+  if(data.selection)line("action availability "+JSON.stringify(data.selection));
+  if(data.reason)line("stopped: "+String(data.reason),"error");
+  if(data.usage)line("usage "+JSON.stringify(data.usage));
+  if(data.features)line("features "+JSON.stringify(data.features));
+  if(data.builder)line("builder "+JSON.stringify(data.builder.builder??data.builder));
+  const output=data.public_output||data.review;
+  if(output&&typeof output==="object"){
+    fields(output,["decision","reuse_id","new_name","atoms","agreed","accepted","builder","alpha"]);
+    if(Array.isArray(output.bricks))line("selection "+output.bricks.map(b=>`${b.id} x${b.quantity}`).join(" · "));
+    const conclusion=output.summary||output.rationale;
+    if(typeof conclusion==="string")line(conclusion.length>220?conclusion.slice(0,220)+"… [full output below]":conclusion,"message");
+  }
+  // Preserve every nested objection, including true votes with nonempty dissent.
+  function objections(value,role=""){
+    if(!value||typeof value!=="object")return;
+    const speaker=value.role||role;
+    for(const [key,child] of Object.entries(value)){
+      if((key==="dissent"||key==="unsupported")&&Array.isArray(child)){
+        for(const item of child){
+          if(typeof item==="string")line(`${key}${speaker?" / "+speaker:""}: ${item}`,"dissent");
+          else objections(item,speaker);
+        }
+      }else if(key==="agreed"&&child===false)line(`vote${speaker?" / "+speaker:""}: false`,"dissent");
+      else if(key==="accepted"&&child===false)line("metric review: rejected","dissent");
+      else if(child&&typeof child==="object")objections(child,speaker);
+    }
+  }
+  objections(data);
+  pre.className="raw";pre.textContent=JSON.stringify(event.data??event,null,2);
+  detail.append(summary,pre);$("terminal").append(detail);seen++;
+}
+async function poll(token){
+  clearTimeout(timer);
+  const serial=++requestSerial, target=id;
+  if(!/^[0-9a-f]{32}$/.test(target)){
+    run=null;controls();activity("idle");$("connection").textContent="Empty or invalid run ID. No calls started.";return;
+  }
+  try{
+    const data=await json(`/api/runs/${target}`);if(token!==generation||serial!==requestSerial)return;
+    if(data.id!==target||!Array.isArray(data.events)||!["queued","running","waiting","completed","failed","cancelled"].includes(data.status)||
+      data.events.some(e=>!e||typeof e!=="object"))throw Error("Invalid run snapshot");
+    run=data;controls();links();
+    const source=data.result?.source||data.events.find(e=>e.data?.source)?.data.source||
+      (data.request?.runtime==="offline"?"synthetic offline":"provenance pending");
+    const live=!data.replay&&activeStatuses.includes(data.status);
+    const label=!live?"replay":data.status==="running"?
+      (source==="measured-foundry"?"model running":source==="mocked-test-provider"?"mock running":"run active"):data.status;
+    activity(label,live,data.status==="waiting"?`waiting before ${data.next_stage||"next stage"}`:
+      data.status==="queued"?"queued":"awaiting backend event");
+    $("connection").textContent=data.replay?"Persisted replay / read-only":
+      live?"Connected / live backend events":"Saved terminal / replay / "+data.status;
+    $("run-summary").textContent=`Run ${target} | ${data.status} | ${source} | ${data.events.length} events`+
+      (data.next_stage?` | Waiting before ${data.next_stage}`:"");
+    if(data.result?.training&&Object.hasOwn(data.result.training,"pilot_published"))
+      $("run-summary").textContent+=` | Published: ${data.result.training.pilot_published} | Model ${data.result.training.version??"not reported"}`;
+    $("run-error").textContent=data.error||"";
+    if(data.events.length<seen){$("terminal").replaceChildren();seen=0;}
+    const added=data.events.slice(seen);if(added.length&&seen===0)$("terminal").replaceChildren();
+    for(const event of added)appendEvent(event);
+    if(added.length)follow();
+    if(live)timer=setTimeout(()=>poll(token),700);
+  }catch(error){
+    if(token!==generation||serial!==requestSerial)return;
+    run=null;controls();activity("disconnected");
+    $("connection").textContent="Disconnected / unavailable: "+error.message;
+    $("run-summary").textContent=`Run ${target} | stale snapshot | ${seen} saved events`;
+    $("run-error").textContent="Refresh to reconnect. Retained output is not live.";
+  }
+}
+function openRun(){
+  generation++;requestSerial++;clearTimeout(timer);seen=0;run=null;controls();activity("loading");
+  $("terminal").replaceChildren();$("run-summary").textContent="Awaiting backend snapshot.";
+  $("run-error").textContent="";$("connection").textContent="Connecting (read only).";
+  $("run-id").value=id;links();poll(generation);
+}
+$("open-run").addEventListener("submit",e=>{e.preventDefault();id=$("run-id").value.trim();history.replaceState(null,"",`?run=${encodeURIComponent(id)}`);openRun();});
+$("refresh").addEventListener("click",()=>poll(generation));
+$("follow").addEventListener("change",follow);
+$("viewport").addEventListener("scroll",()=>{
+  const view=$("viewport");
+  if(view.scrollHeight-view.scrollTop-view.clientHeight>32){$("follow").checked=false;follow();}
+});
+async function control(action){
+  if(!run||controlling||run.replay||!activeStatuses.includes(run.status)||
+    (action==="next"&&(run.status!=="waiting"||!run.next_stage)))return;
+  const token=generation,target=id,body=action==="next"?{stage:run.next_stage}:{};
+  controlling=true;controls();
+  try{
+    await json(`/api/runs/${target}/${action}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(token===generation)await poll(token);
+  }catch(error){
+    if(token===generation){clearTimeout(timer);requestSerial++;run=null;activity("control error");
+      $("connection").textContent="Control rejected: "+error.message;
+      $("run-summary").textContent=`Run ${target} | stale snapshot | ${seen} saved events`;
+      $("run-error").textContent="Refresh to verify backend state.";}
+  }finally{controlling=false;controls();}
+}
+$("next").addEventListener("click",()=>control("next"));$("cancel").addEventListener("click",()=>control("cancel"));
+openRun();
+</script>
+</body>
+</html>

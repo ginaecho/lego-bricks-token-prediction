@@ -63,14 +63,14 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 <body>
 <header><div class="header-inner">
   <div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Token Yield</div>
-  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><span>Sales studio</span><span id="runtime-badge" class="pill amber">Offline selected</span></div>
+  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><a href="marketplace-console.html">Execution console</a><span>Sales studio</span><span id="runtime-badge" class="pill amber">Offline selected</span></div>
 </div></header>
 <main>
   <section class="intro"><div><div class="eyebrow">The functionality marketplace</div><h1>Your next product.<br>One brick at a time.</h1><p>Shape the solution together. Explore the capabilities, the team, and the value they could create &mdash; not just the tokens they consume.</p></div>
     <div class="steps"><span><b>1</b> Choose &amp; customize</span><span><b>2</b> Shape your estimate</span><span><b>3</b> Make the value case</span></div>
   </section>
   <section id="yield-summary" class="yield-panel" aria-label="Return on your build"></section>
-  <div class="notice"><b>Planning pilot, not a production quote.</b> Manual bricks and the offline pipeline remain explicit simulations. The opt-in Foundry pipeline uses an orchestrator and three agents, source-bound fictional fixtures, measured workload calls and regression predictions. Predictions are not measured execution totals or validated production accuracy. No live web research or real customer-document ingestion. Staffing, ROI and commercial rates remain assumptions.</div>
+  <div class="notice"><b>Planning pilot, not a production quote.</b> Manual bricks and the offline pipeline remain explicit simulations. The opt-in agent pipeline uses an orchestrator and three agents, source-bound fictional fixtures and regression predictions. Only measured-foundry evidence represents provider workload calls; MOCK mode uses synthetic protocol fixtures and makes no paid calls. Predictions are not execution totals or validated production accuracy. No live web research or real customer-document ingestion. Staffing, ROI and commercial rates remain assumptions.</div>
   <nav class="mode-bar" aria-label="Demo flows">
     <button class="mode active" id="manual-tab" aria-pressed="true">01 &nbsp; Build with bricks</button>
     <button class="mode" id="custom-tab" aria-pressed="false">02 &nbsp; Describe your idea</button>
@@ -86,7 +86,12 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Execution controls<select id="execution-mode"><option value="step">Step-by-step / pause before each stage</option><option value="automatic">Automatic / run all approved stages</option></select></label>
         </div>
         <p id="runtime-status" class="help" role="status">Checking server runtime approval. No model calls occur on page load.</p>
-        <div id="azure-notice" class="notice" hidden><b>Before you start:</b> Your submitted brief and optional function are sent to the configured Azure GPT-5.4 deployment. Use fictional information only. Workloads use original fictional fixtures; no real documents are ingested. Starting a Foundry run authorizes paid agent discussion and measurement under the server-only shared US$25 pilot cap. Automatic mode proceeds without further stage approval; step mode waits for Next. Cancellation cannot undo an in-flight call.</div>
+        <div id="azure-notice" class="notice" hidden><b>Before you start:</b> Paid mode sends the submitted brief and optional function to the configured Azure GPT-5.4 deployment under the campaign limits shown above. On a MOCKED server no network calls occur and all provider labels are synthetic. Use fictional information only. Workloads use bundled reference documents, not repository code or customer documents. Automatic mode proceeds without further stage approval; step mode waits for Next. Cancellation cannot undo an in-flight call.</div>
+        <details open><summary id="scenario-heading">🧱 Three little project stories / new-function workshop</summary>
+          <p id="scenario-context" class="help">Original invented briefs inspired only by public repository metadata, not customer results or copied code. Load in order to explore creation, similar reuse and description-only detection across persistent runs. Loading never starts a provider call.</p>
+          <div id="scenario-cards" class="impact-grid">Connect to the local server to load cited scenarios.</div>
+          <p class="help">Leave the function field empty for automatic gap detection. A detected capability enters novelty review, three-role contract proposals and discussion, reconciliation, measurement and retraining without copying a name. Ambiguous contracts stay unresolved. Offline keyword simulation does not implement this agent loop.</p>
+        </details>
         <label for="brief">Customized description</label>
         <textarea id="brief" maxlength="6000" placeholder="For example: Deep research into competitors, web research with cited sources, and personalized discovery based on customer interests."></textarea>
         <div class="form-grid two">
@@ -94,7 +99,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Execution model<select id="brief-model" class="model-options"></select><small id="brief-model-help">Offline scenario rate card only; no model is called.</small></label>
         </div>
         <div class="form-grid two">
-          <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>One execution runs the complete document-checking pipeline once.</small></label>
+          <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>Planning volume. Agent-mode totals sum independent brick forecasts, not measured workflow combinations.</small></label>
           <label>New function to explore (optional)<input id="new-function" class="search" maxlength="120" placeholder="For example: Policy-as-code validation"><small>Requests feature expansion and retraining. Unsupported tasks must abstain, not become zero-cost predictions.</small></label>
         </div>
         <div class="custom-actions"><button class="primary" id="run-pipeline">Start step-by-step + open operations</button><button class="secondary" id="security-example">Load security project</button><button class="secondary" id="novel-example">Try a new function</button></div>
@@ -104,8 +109,10 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         <div class="flow"><span>Brief + proposals</span>&rarr;<span>Discussion + adjudication</span>&rarr;<span>Documents + features</span>&rarr;<span>Measure / train / evaluate</span>&rarr;<span>Predict project + catalog</span></div>
         <div id="pipeline-progress" class="proposal" hidden>
           <a id="operations-link" target="token-yield-operations" rel="noopener">Open background operations &nearr;</a>
+          <a id="console-link" href="marketplace-console.html" target="token-yield-console" rel="noopener">Open terminal-style execution console &nearr;</a>
           <button class="secondary" id="refresh-pipeline" disabled>Refresh project status</button>
           <p id="pipeline-status" class="help" role="status"></p>
+          <div id="capability-status" aria-live="polite"></div>
           <div id="pipeline-result"></div>
         </div>
         <details><summary>Quick catalog preview / original keyword-only demo</summary>
@@ -115,14 +122,14 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         </details>
       </section>
       <section id="measured-marketplace" class="section-space" aria-labelledby="measured-heading">
-        <div class="section-head"><div><div class="eyebrow">Measured-data predictor / stored catalog</div><h2 id="measured-heading">Pre-predicted GPT-5.4 bricks</h2></div><button id="refresh-catalog" class="secondary">Refresh catalog (no model calls)</button></div>
+        <div class="section-head"><div><div class="eyebrow">Stored pilot predictor / inspect provider provenance</div><h2 id="measured-heading">Pre-predicted GPT-5.4 bricks</h2></div><button id="refresh-catalog" class="secondary">Refresh catalog (no model calls)</button></div>
         <p class="help">Little bricks. A bigger possibility. Explore a capability, then mix the variations you need. Only supported, trained forecasts can be selected.</p>
         <details class="catalog-settings"><summary>Forecast assumptions &amp; commercial rates</summary>
-        <p class="help">Stored forecasts at a fixed measured reference context and pinned GPT-5.4 model. These are predictions, not new measured calls. Selecting them replaces manual or whole-project selections; each selected variant is counted once, with no invented integration tokens. Shared context and scenario model factors do not change these frozen tokens. Monthly volume and the separate commercial rate below remain explicit.</p>
+        <p class="help">Stored forecasts at a fixed reference context and pinned GPT-5.4 model. Each forecast retains its measured, MOCK/synthetic or unknown evidence source; the model name is not proof of live calls. Selecting them replaces manual or whole-project selections; each selected variant is counted once, with no invented integration tokens. Shared context and scenario model factors do not change these frozen tokens. Monthly volume and the separate commercial rate below remain explicit.</p>
         <div class="form-grid two"><label>Commercial input USD / 1M tokens<input id="measured-input-rate" type="number" min="0" max="10000" step="0.01" value="2.5" required></label><label>Commercial output USD / 1M tokens<input id="measured-output-rate" type="number" min="0" max="10000" step="0.01" value="15" required></label></div>
         <p class="help">Starting rates: pinned pilot reference $2.50 input / $15 output per million, not a guaranteed current provider price. Editing these rates changes planning USD only, never actual server spend.</p>
         </details>
-        <p id="catalog-status" class="help" role="status">No measured catalog loaded. Refresh reads saved predictions only.</p>
+        <p id="catalog-status" class="help" role="status">No stored catalog loaded. Refresh reads saved predictions only.</p>
         <div id="measured-catalog" class="catalog measured-catalog"></div>
       </section>
       <section id="manual-marketplace" class="section-space" aria-labelledby="catalog-heading">
@@ -194,7 +201,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
       <p class="fine">Uncalibrated planning pilot, not an invoice, staffing commitment or guaranteed return. Measured-data forecasts are source-bound and do not validate the proposed production service. Staffing and ROI are assumptions. Export includes provenance and calculation details.</p>
     </aside>
   </div>
-  <footer><span>Token Yield &middot; Marketplace sales-flow prototype</span><span>Manual mode is local. Explicit Foundry runs send the brief to Azure; run artifacts are saved locally.</span></footer>
+  <footer><span>Token Yield &middot; Marketplace sales-flow prototype</span><span>Manual and MOCK modes are local. Explicit live Foundry runs send the brief to Azure; run artifacts are saved locally.</span></footer>
 </main>
 <dialog id="configure" aria-labelledby="configure-title">
   <div class="dialog-head"><div><div class="eyebrow">Zoom into your brick</div><h2 id="configure-title"></h2></div><button class="close" data-close="configure" aria-label="Close configuration">&times;</button></div>
@@ -204,7 +211,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 </dialog>
 <dialog id="review-dialog" aria-labelledby="review-title">
   <div class="dialog-head"><div><div class="eyebrow">Demo estimate / not a commercial quote</div><h2 id="review-title">Your build. Your value case.</h2></div><button class="close" data-close="review-dialog" aria-label="Close review">&times;</button></div>
-  <div id="review-body"></div><div class="dialog-footer"><small>This download is local. Foundry run submissions separately send your brief to Azure.</small><button id="download" class="primary">Download estimate JSON</button></div>
+  <div id="review-body"></div><div class="dialog-footer"><small>This download is local. Only live Foundry run submissions send your brief to Azure; MOCK mode does not.</small><button id="download" class="primary">Download estimate JSON</button></div>
   <p id="download-status" class="help" role="status"></p>
   <details><summary>Copyable JSON / use if your browser blocks downloads</summary><label for="export-json">Full scenario, assumptions and calculation details</label><textarea id="export-json" readonly rows="10" spellcheck="false"></textarea></details>
 </dialog>
@@ -248,7 +255,7 @@ const MODELS = [
   {id:"gemini",name:"Gemini Flash",input:0.3,output:2.5,inputFactor:0.95,outputFactor:1.05}
 ];
 const LIMITATIONS = [
-  "Manual catalog and offline runs are simulations. Explicit Foundry runs use measured source-bound calls; resulting forecasts remain an uncalibrated pilot, not production quotes.",
+  "Manual catalog and offline runs are simulations. MOCK providers use synthetic protocol fixtures. Only measured-foundry provenance denotes measured source-bound calls; resulting forecasts remain an uncalibrated pilot, not production quotes.",
   "Atomic token coefficients inherited from feat/marketplace are illustrative, not fitted.",
   "Variant tasks, context conversion, LLM factors, rates, staffing and tool fees are editable scenario assumptions.",
   "No calibrated ranges or demonstrated coverage for these capabilities, variants or model runtimes.",
@@ -271,9 +278,16 @@ let selections = [], category = "All", editingFeature = null, proposal = null, l
 let pipelineRun=null, pipelineBusy=false, pipelineTimer=null, pipelineGeneration=0, projectScenario=null;
 let runtimeStatus={enabled:false}, measuredCatalog=[], catalogMetadata={}, catalogGeneration=0;
 const finiteTokens = prediction => prediction?.supported!==false && Number.isFinite(prediction?.input_tokens) && prediction.input_tokens>=0 && Number.isFinite(prediction?.output_tokens) && prediction.output_tokens>=0;
-const isMeasured = item => item.predictionSource==="measured-foundry";
-const measuredRates = () => ({id:"gpt-5.4",name:"GPT-5.4 · measured-data forecast",input:Number($("measured-input-rate").value),output:Number($("measured-output-rate").value),inputFactor:1,outputFactor:1});
-const itemModel = item => isMeasured(item) ? measuredRates() : MODELS.find(model=>model.id===item.modelId);
+// A runtime route/model name chooses arithmetic, never the evidence label.
+const isReferenceForecast = item => item.forecastMode==="reference-context";
+function evidenceSource(...sources) {
+  const reported=[...new Set(sources.filter(source=>source!==undefined&&source!==null&&source!==""))];
+  return reported.length===1&&["measured-foundry","mocked-test-provider","synthetic"].includes(reported[0])?reported[0]:"unknown";
+}
+const evidenceLabel = source => ({"measured-foundry":"measured-data pilot forecast","mocked-test-provider":"MOCK synthetic-provider forecast","synthetic":"synthetic-data forecast"})[source]||"unknown-provenance forecast";
+const projectSource = result => evidenceSource(result.after?.source,result.training?.source,result.source);
+const measuredRates = () => ({id:"gpt-5.4",name:"GPT-5.4 · reference-context scenario rates",input:Number($("measured-input-rate").value),output:Number($("measured-output-rate").value),inputFactor:1,outputFactor:1});
+const itemModel = item => isReferenceForecast(item) ? measuredRates() : MODELS.find(model=>model.id===item.modelId);
 const modelOptions = selected => MODELS.map(model => `<option value="${model.id}" ${model.id===selected?"selected":""}>${model.name}</option>`).join("");
 function assumptions() {
   for (const id of fields) if (!$(id).checkValidity()) throw new InputError(`Check "${$(id).closest("label").childNodes[0].textContent.trim()}": enter a value within the displayed limits.`);
@@ -282,16 +296,16 @@ function assumptions() {
 function record(featureId,variantId,modelId="gpt-mini",runs=1000,source="catalog",description="") {
   const feature=CATALOG.find(item => item.id===featureId),variant=feature.variants.find(item => item.id===variantId);
   return {featureId,variantId,modelId:feature.backendRequest?.model_id||modelId,runs,hours:[...variant.hours],review:variant.review,tool:variant.tool,source,description,
-    ...(feature.backendPrediction?{backendPrediction:feature.backendPrediction,backendFeatures:feature.backendFeatures,backendRunId:feature.backendRunId,predictionSource:feature.predictionSource}:{})};
+    ...(feature.backendPrediction?{backendPrediction:feature.backendPrediction,backendFeatures:feature.backendFeatures,backendRunId:feature.backendRunId,predictionSource:feature.predictionSource,forecastMode:feature.forecastMode}:{})};
 }
 // One pure calculation feeds the sidebar, review, business case and exported estimate.
 function calculate(items,a,models,coordinatorId) {
-  const measured=items.some(isMeasured);
-  if(measured && !items.every(isMeasured))throw new InputError("Measured predictions cannot be mixed with illustrative or synthetic selections. Choose one estimation basis.");
+  const reference=items.some(isReferenceForecast);
+  if(reference && (!items.every(isReferenceForecast)||new Set(items.map(item=>item.predictionSource)).size>1))throw new InputError("Reference forecasts cannot be mixed with other evidence sources or illustrative selections. Choose one estimation basis.");
   const rows = items.map(item => {
     const feature = CATALOG.find(entry => entry.id===item.featureId);
     const variant = feature.variants.find(entry => entry.id===item.variantId);
-    const model = isMeasured(item) ? measuredRates() : models.find(entry => entry.id===item.modelId);
+    const model = isReferenceForecast(item) ? measuredRates() : models.find(entry => entry.id===item.modelId);
     if(item.backendPrediction && !finiteTokens(item.backendPrediction))throw new InputError("Unsupported prediction: no financial estimate is available.");
     const atomCounts = variant.atoms.reduce((counts,atom) => ({...counts,[atom]:(counts[atom]||0)+1}),{});
     const raw = item.backendPrediction ? [0,0] : variant.atoms.reduce((sum,atom) => [sum[0]+ATOMS[atom][0],sum[1]+ATOMS[atom][1]],[0,0]);
@@ -302,10 +316,10 @@ function calculate(items,a,models,coordinatorId) {
     const api = (tokens.input*model.input+tokens.output*model.output)/1e6;
     return {...item,feature:feature.name,variant:variant.name,model:model.name,atomCounts,briefInput,perRun,tokens,api,
       toolCost:item.tool*item.runs,reviewHours:item.review*item.runs/60,
-      featureVector:item.backendPrediction ? {source:item.predictionSource||"synthetic-trained-project",runId:item.backendRunId,scope:item.backendPrediction.scope,version:item.backendPrediction.version,...item.backendFeatures} :
+      featureVector:item.backendPrediction ? {...item.backendFeatures,source:item.predictionSource||"unknown",runId:item.backendRunId,scope:item.backendPrediction.scope,version:item.backendPrediction.version} :
         {capability:item.featureId,variation:item.variantId,model:item.modelId,atomCounts,contextTokens:a.context,briefInputTokens:briefInput}};
   });
-  const groups = measured ? [] : [...new Set(rows.map(row=>row.featureId))].map(id=>({id,runs:rows.filter(row=>row.featureId===id).reduce((sum,row)=>sum+row.runs,0)}));
+  const groups = reference ? [] : [...new Set(rows.map(row=>row.featureId))].map(id=>({id,runs:rows.filter(row=>row.featureId===id).reduce((sum,row)=>sum+row.runs,0)}));
   const coordinator = models.find(model=>model.id===coordinatorId);
   const pairs = [];
   groups.forEach((left,i)=>groups.slice(i+1).forEach(right=>pairs.push({left:left.id,right:right.id,runs:Math.min(left.runs,right.runs)})));
@@ -367,7 +381,7 @@ function row(label,value) {return `<div class="row"><span>${label}</span><b>${va
 function renderQuote() {
   $("cart-items").innerHTML=selections.map(item=>{
     const feature=CATALOG.find(f=>f.id===item.featureId),variant=feature.variants.find(v=>v.id===item.variantId),model=itemModel(item);
-    return `<div class="cart-item"><span class="dot" style="background:${feature.color}"></span><div class="item"><b>${esc(feature.name)}</b><small>${esc(variant.name)} &middot; ${esc(model.name)}</small><small>${number(item.runs)} runs/month${item.source==="custom"?" &middot; approved brief mapping":""}</small></div><button class="remove" data-remove="${esc(key(item.featureId,item.variantId))}" aria-label="Remove ${esc(variant.name)}">&times;</button></div>`;
+    return `<div class="cart-item"><span class="dot" style="background:${feature.color}"></span><div class="item"><b>${esc(feature.name)}</b><small>${esc(variant.name)} &middot; ${esc(model.name)}</small>${item.backendPrediction?`<small>${esc(evidenceLabel(item.predictionSource))}</small>`:""}<small>${number(item.runs)} runs/month${item.source==="custom"?" &middot; approved brief mapping":""}</small></div><button class="remove" data-remove="${esc(key(item.featureId,item.variantId))}" aria-label="Remove ${esc(variant.name)}">&times;</button></div>`;
   }).join("")||'<p class="empty">Start with one capability.<br>Your build and value case will appear here.</p>';
   $("build-count").textContent=`${new Set(selections.map(item=>item.featureId)).size} bricks / ${selections.length} variants`;
   if(!selections.length){
@@ -380,7 +394,7 @@ function renderQuote() {
   }
   try {
     const a=assumptions();
-    if(selections.some(isMeasured) && ["measured-input-rate","measured-output-rate"].some(id=>!$(id).checkValidity()))throw new InputError("Check commercial measured-prediction rates: use nonnegative USD per million.");
+    if(selections.some(isReferenceForecast) && ["measured-input-rate","measured-output-rate"].some(id=>!$(id).checkValidity()))throw new InputError("Check commercial reference-forecast rates: use nonnegative USD per million.");
     const invalidRate=[...$("model-rates").querySelectorAll("input")].find(input=>!input.checkValidity());
     if(invalidRate) throw new InputError("Check scenario LLM rates: enter nonnegative prices and token factors between 0.1 and 10.");
     if([...$("atom-table").querySelectorAll("input")].some(input=>!input.checkValidity())) throw new InputError("Atomic token assumptions must be whole numbers between 0 and 1,000,000.");
@@ -394,9 +408,9 @@ function renderQuote() {
   }
   $("quote-error").hidden=true;
   const e=latestEstimate;
-  $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">${selections.some(isMeasured)?"Measured-data forecast / uncalibrated pilot":"Estimated AI usage / illustrative"}</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
+  $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">${selections.some(item=>item.backendPrediction)?esc(evidenceLabel(evidenceSource(...selections.filter(item=>item.backendPrediction).map(item=>item.predictionSource)))):"Estimated AI usage / illustrative"}</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
     ${row("Input tokens",compact(e.input))}${row("Output tokens",compact(e.output))}${row("Total tokens / month",compact(e.totalTokens))}
-    <small>${selections.some(isMeasured)?"Fixed reference context / GPT-5.4. No synthetic routing or setup tokens added; actual pilot orchestration spend is separate.":number(e.pairs.length)+" assumed connections · routing included"}</small></div>
+    <small>${selections.some(isReferenceForecast)?"Fixed reference context / GPT-5.4. No synthetic routing or setup tokens added; pilot accounting is separate and retains its provider source.":number(e.pairs.length)+" assumed connections · routing included"}</small></div>
     ${row("Tools + AI/tool reserve",money(e.tools+e.reserveCost))}${row("Human review",money(e.reviewCost))}${row("Other operating allowance",money(e.operating))}
     <div class="divider"></div>${row("Total recurring / month",money(e.monthlyCost))}${row("One-time setup (AI + labor)",money(e.setupCost))}
     <div class="divider"></div><div class="eyebrow">Illustrative delivery team</div>${e.team.map(role=>row(role.role,`${role.people} people <small>(${role.fte.toFixed(2)} FTE)</small>`)).join("")}
@@ -426,8 +440,8 @@ function configure(id) {
     const draft=item||record(id,variant.id,"gpt-mini",a.defaultRuns);
     return `<section class="variant-row"><input type="checkbox" name="pick-${variant.id}" id="pick-${variant.id}" ${item?"checked":""} aria-label="Select ${variant.name}">
       <div><label for="pick-${variant.id}">${esc(variant.name)}</label><p>${esc(variant.description)}</p><div class="tags">${variant.atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div>
-      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}" ${draft.backendPrediction?"disabled":""}>${isMeasured(draft)?'<option value="gpt-5.4">GPT-5.4 / fixed measured reference</option>':modelOptions(draft.modelId)}</select></label>${field("Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
-      ${draft.backendPrediction?`<p>Frozen ${isMeasured(draft)?"measured-data pilot":"synthetic-trained"} forecast. Context and token factors do not change this snapshot. Volume and commercial rates change planning USD only; use the pipeline to measure and retrain.</p>`:""}
+      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}" ${draft.backendPrediction?"disabled":""}>${isReferenceForecast(draft)?'<option value="gpt-5.4">GPT-5.4 / fixed reference context</option>':modelOptions(draft.modelId)}</select></label>${field("Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
+      ${draft.backendPrediction?`<p>Frozen ${esc(evidenceLabel(draft.predictionSource))}. Context and token factors do not change this snapshot. Volume and commercial rates change planning USD only; use the pipeline to measure and retrain.</p>`:""}
       <details><summary>Edit effort &amp; tool assumptions</summary><div class="form-grid two">
       ${field("Data scientist setup hours",`ds-${variant.id}`,draft.hours[0])}${field("Architect setup hours",`arch-${variant.id}`,draft.hours[1])}${field("Consultant setup hours",`consult-${variant.id}`,draft.hours[2])}
       ${field("Review minutes / run",`review-${variant.id}`,draft.review,"0.1","10000")}${field("Tool fee USD / run",`tool-${variant.id}`,draft.tool,"0.01","10000")}
@@ -442,11 +456,11 @@ function saveVariants(event) {
     const previous=selections.find(item=>item.featureId===featureId&&item.variantId===variant.id);
     const val=name=>Number(form.elements[`${name}-${variant.id}`].value);
     return {...record(featureId,variant.id,form.elements[`model-${variant.id}`].value,val("runs"),previous?.source||"catalog",previous?.description||""),
-      ...(previous?.backendPrediction?{backendPrediction:previous.backendPrediction,backendFeatures:previous.backendFeatures,backendRunId:previous.backendRunId,predictionSource:previous.predictionSource,modelId:previous.modelId}:{}),
+      ...(previous?.backendPrediction?{backendPrediction:previous.backendPrediction,backendFeatures:previous.backendFeatures,backendRunId:previous.backendRunId,predictionSource:previous.predictionSource,forecastMode:previous.forecastMode,modelId:previous.modelId}:{}),
       hours:[val("ds"),val("arch"),val("consult")],review:val("review"),tool:val("tool")};
   });
-  if(updated.some(isMeasured) && !updated.every(isMeasured)){$("status").textContent="Do not mix measured and manual variants. Select measured variants in the pre-predicted catalog.";return;}
-  selections=[...selections.filter(item=>item.featureId!==featureId && (!updated.length || isMeasured(item)===updated.some(isMeasured))),...updated];
+  if(updated.some(isReferenceForecast) && !updated.every(isReferenceForecast)){$("status").textContent="Do not mix reference forecasts and manual variants. Select stored forecasts in the pre-predicted catalog.";return;}
+  selections=[...selections.filter(item=>item.featureId!==featureId && (!updated.length || isReferenceForecast(item)===updated.some(isReferenceForecast))),...updated];
   $("configure").close();refresh(`${editingFeature.name}: saved ${updated.length} variation${updated.length===1?"":"s"}.`);
 }
 // Deliberately local and narrow: preserve matched evidence and require human approval, never impersonate an LLM.
@@ -503,7 +517,7 @@ function applyProposal() {
   const approved=[...$("proposal").querySelectorAll("[data-proposal]:checked")].map(input=>proposal.matches[Number(input.dataset.proposal)]);
   if(!approved.length){$("status").textContent="Select at least one proposed variation to approve.";return;}
   const replacements=new Set(approved.map(item=>key(item.featureId,item.variantId)));
-  selections=[...selections.filter(item=>!isMeasured(item)&&!replacements.has(key(item.featureId,item.variantId))),
+  selections=[...selections.filter(item=>!isReferenceForecast(item)&&!replacements.has(key(item.featureId,item.variantId))),
     ...approved.map(item=>record(item.featureId,item.variantId,proposal.modelId,a.defaultRuns,"custom",proposal.text))];
   proposal=null;$("proposal").hidden=true;
   refresh(`Approved ${approved.length} simulated mappings. Review volumes and effort in each brick; tokens and ROI use the shared scenario estimator.`);
@@ -523,19 +537,21 @@ function renderFilters() {
 }
 function exportData() {
   const a=assumptions();
-  return {schema:"token-yield-marketplace-sales-demo-v1",createdAt:new Date().toISOString(),basis:selections.some(isMeasured)?"measured-data-pilot-forecast":"illustrative-simulation",
-    trainedPredictorConnected:selections.some(item=>item.backendPrediction),trainingDataSource:selections.some(isMeasured)?"measured-foundry":selections.some(item=>item.backendPrediction)?"synthetic":null,
-    projectScenario:selections.some(item=>item.featureId==="project-pipeline")?projectScenario:null,catalogMetadata,commercialMeasuredRates:measuredRates(),liveLLMConnected:runtimeStatus.enabled===true,sourceBranch:"feat/marketplace",flow:mode,
+  const forecasts=selections.filter(item=>item.backendPrediction),source=evidenceSource(...forecasts.map(item=>item.predictionSource));
+  return {schema:"token-yield-marketplace-sales-demo-v1",createdAt:new Date().toISOString(),basis:!forecasts.length?"illustrative-simulation":({"measured-foundry":"measured-data-pilot-forecast","mocked-test-provider":"mocked-provider-pilot-forecast","synthetic":"synthetic-data-forecast"})[source]||"unknown-provenance-forecast",
+    trainedPredictorConnected:forecasts.length>0,trainingDataSource:forecasts.length?source:null,
+    projectScenario:selections.some(item=>item.featureId==="project-pipeline")?projectScenario:null,catalogMetadata,commercialMeasuredRates:measuredRates(),liveLLMConnected:runtimeStatus.enabled===true&&runtimeStatus.source==="measured-foundry",runtimeSource:runtimeStatus.source||"unknown",sourceBranch:"feat/marketplace",flow:mode,
     assumptions:{...a,coordinatorId:$("coordinator").value},modelScenarioRates:MODELS,atomicScenarioTokens:ATOMS,
     selections,estimate:selections.length?calculate(selections,a,MODELS,$("coordinator").value):null,limitations:LIMITATIONS};
 }
 function openReview() {
   renderQuote();if(!latestEstimate||!selections.length)return;
   const e=latestEstimate;
-  $("review-body").innerHTML=`<div class="notice">${e.rows.some(isMeasured)?"Measured-data regression forecasts at a fixed GPT-5.4 reference context. These predictions are not actual billed calls. Orchestration/training spend is reported separately in operations. No invented integration tokens are included.":e.rows.some(item=>item.backendPrediction)?"Real regression predictions trained on synthetic samples, not measured LLM usage.":"Illustrative scenario only; catalog tokens use fixed coefficients."} No production accuracy or ROI is established. Staffing and benefits remain assumptions.</div>
+  const source=evidenceSource(...e.rows.filter(item=>item.backendPrediction).map(item=>item.predictionSource));
+  $("review-body").innerHTML=`<div class="notice">${!e.rows.some(item=>item.backendPrediction)?"Illustrative scenario only; catalog tokens use fixed coefficients.":source==="measured-foundry"?"Measured-data regression forecasts at a fixed GPT-5.4 reference context. These predictions are not actual billed calls. Orchestration/training spend is reported separately in operations. No invented integration tokens are included.":source==="mocked-test-provider"?"MOCK synthetic-provider regression forecasts. Outputs and token labels are local test fixtures, not paid LLM evidence.":source==="synthetic"?"Real regression predictions trained on synthetic samples, not measured LLM usage.":"Unknown-provenance forecasts: provider evidence was absent or inconsistent. No measured or live evidence claim is available."} No production accuracy or ROI is established. Staffing and benefits remain assumptions.</div>
     <div class="review-metrics"><div><small>Total tokens / month</small><b>${compact(e.totalTokens)}</b></div><div><small>Recurring cost / month</small><b>${money(e.monthlyCost)}</b></div><div><small>12-month ROI</small><b>${e.roi===null?"Not defined":number(e.roi)+"%"}</b></div></div>
     <h3>Final selected functionalities</h3><div class="table-scroll"><table><thead><tr><th>Capability / variant / LLM</th><th class="num">Runs/mo</th><th class="num">Tokens/run</th><th class="num">AI USD/mo</th></tr></thead><tbody>
-    ${e.rows.map(item=>`<tr><td><b>${esc(item.feature)}</b><small>${esc(item.variant)}</small><small>${esc(item.model)} &middot; ${isMeasured(item)?"measured-data pilot":item.backendPrediction?"synthetic-trained project":item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${number(item.perRun.input+item.perRun.output)}</td><td class="num">${money(item.api)}</td></tr>`).join("")}
+    ${e.rows.map(item=>`<tr><td><b>${esc(item.feature)}</b><small>${esc(item.variant)}</small><small>${esc(item.model)} &middot; ${item.backendPrediction?esc(evidenceLabel(item.predictionSource)):item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${number(item.perRun.input+item.perRun.output)}</td><td class="num">${money(item.api)}</td></tr>`).join("")}
     <tr><td>Integration routing<small>${e.coordinator}; ${number(e.pairs.length)} assumed pairs</small></td><td class="num">${number(e.routingRuns)}</td><td class="num">&mdash;</td><td class="num">${money(e.monthlyApi-e.rows.reduce((sum,item)=>sum+item.api,0))}</td></tr></tbody></table></div>
     ${row("Total monthly tokens (exact)",number(e.totalTokens))}${row("Input / output",`${number(e.input)} / ${number(e.output)}`)}${row("Monthly AI API",money(e.monthlyApi))}${row("Monthly tools",money(e.tools))}${row("Monthly AI/tool reserve",money(e.reserveCost))}${row("Monthly human review",money(e.reviewCost))}${row("Other monthly operating cost",money(e.operating))}
     <div class="divider"></div><h3>Delivery team</h3>${e.team.map(role=>row(role.role,`${role.people} people / ${role.fte.toFixed(2)} FTE / ${number(role.hours)} h`)).join("")}
@@ -564,15 +580,38 @@ function setPipelineBusy(busy) {
 }
 function updateRuntimeChoice() {
   const live=$("pipeline-runtime").value==="foundry";
+  const mocked=runtimeStatus.source==="mocked-test-provider",measured=runtimeStatus.source==="measured-foundry";
   $("azure-notice").hidden=!live;
-  $("runtime-badge").textContent=live?"Foundry selected / explicit paid run":"Offline selected / no provider calls";
-  $("pipeline-basis").textContent=live?"GPT-5.4 / measured-data pilot":"Offline / synthetic";
+  $("runtime-badge").textContent=live?(mocked?"MOCK agents / no paid calls":measured?"Foundry selected / explicit paid run":"Agent route selected / provider source unknown"):"Offline selected / no provider calls";
+  $("pipeline-basis").textContent=live?(mocked?"MOCK provider / real local fitting":measured?"GPT-5.4 / measured-data pilot":"Unknown provider provenance"):"Offline / synthetic";
   $("brief-model-help").textContent=live?"Pinned Azure GPT-5.4 deployment; no browser model override.":"Offline scenario rate card only; no model is called.";
   if(live){$("brief-model").innerHTML='<option value="gpt">GPT-5.4 / configured Azure deployment</option>';}
   else if($("brief-model").options.length===1){$("brief-model").innerHTML=modelOptions("gpt-mini");}
   $("brief-model").disabled=pipelineBusy||live;
   $("run-pipeline").disabled=pipelineBusy||(live&&runtimeStatus.enabled!==true);
-  $("run-pipeline").textContent=pipelineBusy?"Project active in background operations...":`Start ${live?"paid Foundry":"offline"} ${$("execution-mode").value==="step"?"step-by-step":"automatic"} + open operations`;
+  $("run-pipeline").textContent=pipelineBusy?"Project active in background operations...":`Start ${live?(mocked?"MOCK agents":"paid Foundry"):"offline"} ${$("execution-mode").value==="step"?"step-by-step":"automatic"} + open operations`;
+}
+let scenarios=[];
+async function loadScenarios(){
+  try{
+    const data=await backendJson("/api/scenarios");scenarios=data.scenarios;
+    if(data.source==="fictional-policy-fixture"){
+      $("scenario-heading").textContent="🧱 Versioned fictional policy laboratory";
+      $("scenario-context").textContent="Separate v2 source fixtures; the original three reviewed cases are unchanged. Invented policies are not legal advice or real authority. Offline tests do not establish model agreement or grant paid approval. Loading never starts a provider call.";
+    }
+    $("scenario-cards").innerHTML=scenarios.map((item,index)=>`<div class="impact"><h3>${index+1}. ${esc(item.title)}</h3><p>${esc(item.exercise)}</p><p class="help">${esc(item.inspiration)}</p><a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.repository)}</a><p class="help">Metadata checked ${esc(item.observed)}. Invented fixture.</p><button class="secondary" data-scenario="${index}">Load ${esc(item.title)}</button></div>`).join("");
+  }catch(error){$("scenario-cards").textContent="Scenario metadata unavailable: "+error.message;}
+}
+$("scenario-cards").addEventListener("click",event=>{
+  const button=event.target.closest("[data-scenario]");if(!button||pipelineBusy)return;
+  const item=scenarios[Number(button.dataset.scenario)];if(!item)return;
+  invalidateProposal();$("brief").value=item.description;$("new-function").value=item.new_function;
+  $("capability-status").replaceChildren();$("status").textContent=`Loaded invented ${item.title}. Review runtime before explicitly starting. No calls started.`;
+});
+function renderCapabilityProgress(run){
+  const reviews=run.result?.capability_reviews||run.events.filter(e=>e.data?.requested&&e.data?.origin).map(e=>e.data);
+  const latest=new Map(reviews.map(review=>[review.requested,review]));
+  $("capability-status").innerHTML=Array.from(latest.values()).map(review=>`<div class="notice"><b>${esc(review.requested)} / ${esc(review.outcome)}</b><p>${esc(review.origin)} request · ${esc(review.contract_version||"version pending")}. ${esc(review.rationale||review.agent_verdict?.rationale||"Review in progress; not established yet.")}</p>${rawDetails("Candidate matches, lexical limitations and agent contract discussion",review)}</div>`).join("");
 }
 function rawDetails(title,value,open=false) {
   return `<details ${open?"open":""}><summary>${esc(title)}</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto">${esc(JSON.stringify(value??{},null,2))}</pre></details>`;
@@ -602,11 +641,12 @@ function renderMeasuredCatalog() {
       <div class="picked">${chosen?`${chosen} selected`:entries.length+" variations to explore"}</div>
       <details class="brick-options" data-measured-feature="${esc(featureId)}" ${openBricks.has(featureId)||chosen?"open":""}><summary>${chosen?"Edit brick":"Explore brick"} &rarr; <small>Choose multiple variations</small></summary>
       ${entries.map(({item,index,supported,selected,known})=>`<div class="measured-variant"><label><input type="checkbox" data-measured="${index}" ${supported?"":"disabled"} ${selected?"checked":""}> ${esc(item.name||item.id)}</label>
+        <p class="help">${esc(evidenceLabel(evidenceSource(item.source,catalogMetadata.source)))}</p>
         <p class="help">${supported?`${number(item.input_tokens)} input + ${number(item.output_tokens)} output predicted tokens/run`:item.supported===true&&!known?"Use the complete project workflow for this custom contract":"Not yet supported / no financial prediction"}</p>
         <p class="help">Scope: ${esc(typeof item.scope==="object"?JSON.stringify(item.scope):item.scope||"fixed backend reference context")}</p>
         ${selected?`<label>Runs / month<input data-measured-volume="${index}" type="number" min="0" max="1000000" step="1" value="${selected.runs}" required></label>`:""}
         ${rawDetails("Prediction and provenance",item)}</div>`).join("")}</details></article>`;
-  }).join("")||'<p class="help">No measured-data catalog is available yet. An explicitly started Foundry pilot must finish measurement and training first. No synthetic forecast is substituted here.</p>';
+  }).join("")||'<p class="help">No stored pilot catalog is available yet. A run must finish data collection and training first. Provider provenance is reported per forecast; no fallback predictions are substituted.</p>';
 }
 async function refreshMeasuredCatalog() {
   const generation=++catalogGeneration;
@@ -620,7 +660,7 @@ async function refreshMeasuredCatalog() {
     if(items.some(item=>!item||typeof item.id!=="string"))throw new PipelineError("Invalid catalog response: every contract needs an ID.");
     catalogMetadata=data;
     measuredCatalog=items.map(item=>({...item,contract_id:item.id,id:item.id.includes(":")?item.id:item.feature_id?key(item.feature_id,item.id):item.id}));
-    $("catalog-status").textContent=`Stored catalog: ${measuredCatalog.length} entries · ${data.source||runtimeStatus.source||"source not reported"} · ${data.version||"no trained version"}. Reading it does not consume provider credits.`;
+    $("catalog-status").textContent=`Stored catalog: ${measuredCatalog.length} entries · ${data.source||"source not reported"} · ${data.version||"no trained version"}. Reading it does not consume provider credits.`;
     renderMeasuredCatalog();
   }catch(error){
     if(!(error instanceof PipelineError))throw error;
@@ -639,27 +679,28 @@ function selectMeasured(index,checked) {
     if(!$("defaultRuns").checkValidity()){$("status").textContent="Set valid starting monthly usage first.";renderMeasuredCatalog();return;}
     selections=selections.filter(item=>item.source==="measured-catalog"&&key(item.featureId,item.variantId)!==prediction.id);
     const item=record(featureId,variantId,"gpt-5.4",Number($("defaultRuns").value),"measured-catalog");
-    selections.push({...item,backendPrediction:{...prediction},predictionSource:"measured-foundry",backendFeatures:prediction.features||{},backendRunId:prediction.run_id||catalogMetadata.run_id});
+    selections.push({...item,backendPrediction:{...prediction},predictionSource:evidenceSource(prediction.source,catalogMetadata.source),forecastMode:"reference-context",backendFeatures:prediction.features||{},backendRunId:prediction.run_id||catalogMetadata.run_id});
     projectScenario=null;
   }
-  refresh("Measured-data catalog build updated. Manual/whole-project choices are separate; each checked forecast counts once.");
+  refresh("Stored catalog build updated. Evidence source is retained for each forecast. Manual/whole-project choices are separate; each checked forecast counts once.");
 }
 function renderPipelineResult(run) {
   const r=run.result;
   if(!r||!Array.isArray(r.bricks)||!r.after||!r.training)throw new PipelineError("Completed run is missing prediction or training artifacts. Nothing was added.");
-  const live=run.request?.runtime==="foundry"||r.training.source==="measured-foundry";
+  const source=projectSource(r),live=source==="measured-foundry",mocked=source==="mocked-test-provider";
+  const reference=r.after.forecast_mode==="reference-context"||r.after.model_id==="gpt-5.4";
   const supported=finiteTokens(r.after)&&r.after.supported!==false&&r.bricks.length>0;
   const before=r.before||{}, requirements=Array.isArray(r.requirements)?r.requirements:[];
   const missing=requirements.filter(item=>item.status==="missing").length,partial=requirements.filter(item=>item.status==="partial").length;
-  $("pipeline-result").innerHTML=`<div class="notice"><b>${live?"Measured source-bound calls, fitted pilot predictions.":"Real model fitting, synthetic measurements."}</b> ${live?"GPT-5.4 agent discussion and workload measurements are real provider calls. Forecasts are regression outputs, not measured customer executions; small held-out pilot MAE is not production accuracy.":"Test error measures agreement with the simulator only."}</div>
-    <h3>Your proposed project functions</h3><div class="impact-grid">${r.bricks.map(brick=>`<div class="impact"><h3>${esc(brick.name||brick.id)}</h3><p>${brick.novel?"New function / inspect measured coverage.":"Proposed source-bound function."}</p><div class="tags">${(Array.isArray(brick.atoms)?brick.atoms:[]).map(atom=>`<span>${esc(atom)}</span>`).join("")}</div></div>`).join("")}</div>
+  $("pipeline-result").innerHTML=`<div class="notice"><b>${mocked?"MOCK provider fixtures / real local model fitting.":live?"Measured source-bound calls, fitted pilot predictions.":source==="synthetic"?"Real model fitting, synthetic measurements.":"Unknown-provenance forecasts."}</b> ${mocked?"No paid calls. Outputs and token labels are synthetic protocol fixtures, not LLM performance evidence.":live?"GPT-5.4 discussion and workload measurements are provider calls. Forecasts are regression outputs, not measured customer executions; small held-out pilot MAE is not production accuracy.":source==="synthetic"?"Test error measures agreement with the simulator only.":"Evidence source is absent or inconsistent; no measured or live evidence claim is available."} Composition uses independent brick forecasts, not a measured combination; interaction costs are unavailable.</div>
+    <h3>Your proposed project functions</h3><div class="impact-grid">${r.bricks.map(brick=>`<div class="impact"><h3>${esc(brick.name||brick.id)}</h3><p>${brick.novel?"New function / inspect training coverage.":"Proposed source-bound function."}</p><div class="tags">${(Array.isArray(brick.atoms)?brick.atoms:Object.entries(brick.atoms||{}).filter(([,count])=>count>0).map(([atom,count])=>`${atom} × ${count}`)).map(atom=>`<span>${esc(atom)}</span>`).join("")}</div></div>`).join("")}</div>
     <div class="review-metrics"><div><small>Before new training</small><b>${before.supported&&Number.isFinite(before.total_tokens)?compact(before.total_tokens):"Not covered"}</b><small>${esc(before.reason||"")}</small></div><div><small>After training / whole project forecast</small><b>${supported?compact(r.after.input_tokens+r.after.output_tokens):"Unsupported / abstained"}</b><small>${supported?number(r.after.input_tokens)+" input + "+number(r.after.output_tokens)+" output":esc(r.after.reason||"No supported estimate. Tokens are not zero.")}</small></div><div><small>AI estimate / month (backend pinned rates)</small><b>${supported&&Number.isFinite(r.after.usd_per_month)?money(r.after.usd_per_month):"Not available"}</b><small>${number(run.request.runs_per_month)} complete executions; separate from pilot spend</small></div></div>
-    <p class="help">${number(r.training.train_count)} ${live?"measured":"synthetic"} training rows; ${number(r.training.test_count)} held-out rows. ${Array.isArray(r.feature_names)?r.feature_names.length:"Unreported"} features. Model version: ${esc(r.training.version||"not reported")}.</p>
+    <p class="help">${number(r.training.train_count)} ${esc(source)} training rows; ${number(r.training.test_count)} held-out rows. Reused training: ${number(r.training.reused_train_count||0)}; fresh holdouts: ${number(r.training.new_holdout_count||r.training.test_count)}. ${Array.isArray(r.feature_names)?r.feature_names.length:"Unreported"} features. Model version: ${esc(r.training.version||"not reported")}.</p>
     <p class="help">${Array.isArray(r.documents)?r.documents.length:0} fictional documents. ${live?"Requirement labels are source statements only; inspect the raw evidence rather than inferring a compliance score.":missing+" missing and "+partial+" partial reference requirements."} This is not evidence of working controls or compliance.</p>
-    ${live?rawDetails("Orchestration usage / paid pilot spend (not workload forecast)",r.orchestration,true)+rawDetails("Measured workload usage (not predicted customer volume)",r.workload,true)+rawDetails("Three agents: proposals, peer review, orchestrator acceptance and dissent",r.agents,true)+rawDetails("Orchestrator decisions and retained dissent",{adjudication:r.adjudication,dissent:r.dissent},true):""}
+    ${reference?rawDetails(live?"Orchestration usage / paid pilot spend (not workload forecast)":"Orchestration accounting / "+evidenceLabel(source),r.orchestration,true)+rawDetails(live?"Measured workload usage (not predicted customer volume)":"Workload accounting / "+evidenceLabel(source),r.workload,true)+rawDetails("Three agents: proposals, peer review, orchestrator acceptance and dissent",r.agents,true)+rawDetails("Orchestrator decisions and retained dissent",{adjudication:r.adjudication,dissent:r.dissent},true):""}
     ${rawDetails("Training / held-out evaluation / coefficients",r.training)}${rawDetails("Pinned rate provenance",r.rates)}${rawDetails("Full result / unsupported scopes / limitations",r)}
-    ${supported?`<p class="help">Use the complete workflow once, without double-counting internal functions. Frozen tokens do not track shared context edits. Staffing, commercial USD and ROI remain assumptions.</p><label style="margin-top:14px"><input id="approve-pipeline" type="checkbox"> I reviewed the functions and understand the ${live?"uncalibrated measured-data pilot":"synthetic-data"} boundary.</label><button id="use-pipeline" class="primary wide" disabled>Replace build with this complete pipeline</button>`:'<div class="error">No financial apply action: unsupported workload coverage must be resolved before quoting this project.</div>'}`;
-  if(live)refreshMeasuredCatalog();
+    ${supported?`<p class="help">Use the complete workflow once, without double-counting internal functions. Frozen tokens do not track shared context edits. Staffing, commercial USD and ROI remain assumptions.</p><label style="margin-top:14px"><input id="approve-pipeline" type="checkbox"> I reviewed the functions and understand the ${esc(evidenceLabel(source))} boundary.</label><button id="use-pipeline" class="primary wide" disabled>Replace build with this complete pipeline</button>`:'<div class="error">No financial apply action: unsupported workload coverage must be resolved before quoting this project.</div>'}`;
+  if(reference)refreshMeasuredCatalog();
 }
 async function pollPipeline(id,generation) {
   if(generation!==pipelineGeneration)return;
@@ -668,6 +709,8 @@ async function pollPipeline(id,generation) {
     if(generation!==pipelineGeneration)return;
     const events=Array.isArray(run.events)?run.events:[];
     const last=events[events.length-1];
+    renderCapabilityProgress(run);
+    $("console-link").href=`/marketplace-console.html?run=${encodeURIComponent(run.id)}`;
     $("pipeline-status").textContent=`Run ${run.id} / ${run.status}${last?" / "+last.message:""}`;
     if(run.status==="failed")throw new PipelineError(run.error||"The backend run failed. Inspect its event log.");
     if(run.status==="cancelled"){
@@ -684,7 +727,7 @@ async function pollPipeline(id,generation) {
     }
     if(run.status==="completed"){
       pipelineRun=run;renderPipelineResult(run);setPipelineBusy(false);
-      $("backend-status").textContent=`Complete. Both pages show the same saved run. ${run.request?.runtime==="foundry"?"Foundry usage is measured separately in operations; workload forecasts remain an uncalibrated pilot.":"Offline run: no live LLM calls."}`;return;
+      $("backend-status").textContent=`Complete. All pages show the same saved run. ${evidenceLabel(projectSource(run.result))}; source evidence is separate from runtime availability.`;return;
     }
     pipelineTimer=setTimeout(()=>pollPipeline(id,generation),700);
   }catch(error){
@@ -708,6 +751,7 @@ async function runPipeline() {
   setPipelineBusy(true);pipelineRun=null;clearTimeout(pipelineTimer);const generation=++pipelineGeneration;
   $("refresh-pipeline").disabled=true;
   $("proposal").hidden=true;proposal=null;$("pipeline-result").innerHTML="";$("pipeline-progress").hidden=false;
+  $("capability-status").replaceChildren();$("console-link").href="/marketplace-console.html";
   $("operations-link").href="/marketplace-operations-demo.html?pending=1";$("pipeline-status").textContent="Submitting project to the local backend...";
   $("backend-status").textContent=popup?"The companion operations page is opening.":"Your browser blocked the companion popup. Use Open background operations below.";
   try {
@@ -727,15 +771,15 @@ async function runPipeline() {
 function usePipeline() {
   if(!pipelineRun||!$("approve-pipeline")?.checked||!finiteTokens(pipelineRun.result?.after))return;
   const r=pipelineRun.result,atoms=r.bricks.flatMap(brick=>Array.isArray(brick.atoms)?brick.atoms:[]);
-  const live=pipelineRun.request.runtime==="foundry"||r.training.source==="measured-foundry";
+  const source=projectSource(r),reference=r.after.forecast_mode==="reference-context"||r.after.model_id==="gpt-5.4";
   const prior=CATALOG.findIndex(feature=>feature.id==="project-pipeline");if(prior>=0)CATALOG.splice(prior,1);
-  CATALOG.unshift({id:"project-pipeline",name:live?"Foundry proposed project":"Document assurance pipeline",category:"Intelligence",color:"#96b6a3",
-    description:r.bricks.map(brick=>brick.name).join(" + "),backendPrediction:r.after,backendFeatures:r.features,backendRequest:{...pipelineRun.request,model_id:live?"gpt-5.4":pipelineRun.request.model_id},backendRunId:pipelineRun.id,predictionSource:live?"measured-foundry":"synthetic",
-    variants:[{id:"workflow",name:`${r.bricks.length} linked functions / complete workflow`,description:`Whole-project frozen ${live?"measured-data pilot":"synthetic-data"} regression forecast; not a live production execution.`,
+  CATALOG.unshift({id:"project-pipeline",name:source==="measured-foundry"?"Foundry proposed project":source==="mocked-test-provider"?"MOCK proposed project":source==="synthetic"?"Document assurance pipeline":"Unknown-provenance project",category:"Intelligence",color:"#96b6a3",
+    description:r.bricks.map(brick=>brick.name).join(" + "),backendPrediction:r.after,backendFeatures:r.features,backendRequest:{...pipelineRun.request,model_id:reference?"gpt-5.4":pipelineRun.request.model_id},backendRunId:pipelineRun.id,predictionSource:source,forecastMode:reference?"reference-context":"offline-project",
+    variants:[{id:"workflow",name:`${r.bricks.length} linked functions / complete workflow`,description:`Whole-project frozen ${evidenceLabel(source)}; not a live production execution.`,
       atoms,hours:[r.bricks.length*8,r.bricks.length*4,r.bricks.length*6],review:5,tool:0}]});
   projectScenario=pipelineRun;
   selections=[record("project-pipeline","workflow",pipelineRun.request.model_id,pipelineRun.request.runs_per_month,"backend",pipelineRun.request.description)];
-  category="All";$("search").value="";renderFilters();refresh(`Build replaced with one complete ${live?"measured-data pilot":"synthetic-trained"} workflow. Token forecast feeds planning USD, staffing and ROI; not a production quote.`);
+  category="All";$("search").value="";renderFilters();refresh(`Build replaced with one complete ${evidenceLabel(source)} workflow. Token forecast feeds planning USD, staffing and ROI; not a production quote.`);
   $("use-pipeline").disabled=true;
 }
 async function connectBackend() {
@@ -751,7 +795,7 @@ async function connectBackend() {
       if(!runtime||typeof runtime.enabled!=="boolean")throw new PipelineError("Invalid runtime response: approval state was not reported.");
       runtimeStatus=runtime;
       $("pipeline-runtime").querySelector('[value="foundry"]').disabled=runtimeStatus.enabled!==true;
-      $("runtime-status").textContent=runtimeStatus.enabled===true?"Foundry approved by server · "+(runtimeStatus.model_id||runtimeStatus.deployment||"GPT-5.4")+" · cap "+(Number.isFinite(runtimeStatus.cap_usd)?money(runtimeStatus.cap_usd):"server-controlled")+" · settled safety spend "+(Number.isFinite(runtimeStatus.spend_usd)?money(runtimeStatus.spend_usd):"unreported")+" · reserved "+(Number.isFinite(runtimeStatus.reserved_usd)?money(runtimeStatus.reserved_usd):"unreported")+". "+(runtimeStatus.source||"")+" / no calls started by this page.":"Server has not enabled Foundry. Offline simulation remains available; no browser budget override.";
+      $("runtime-status").textContent=runtimeStatus.enabled===true?(runtimeStatus.source==="mocked-test-provider"?"MOCK runtime enabled / no live LLM":runtimeStatus.source==="measured-foundry"?"Foundry approved by server":"Runtime enabled / provider source unknown")+" · "+(runtimeStatus.model_id||runtimeStatus.deployment||"GPT-5.4")+" · cap "+(Number.isFinite(runtimeStatus.cap_usd)?money(runtimeStatus.cap_usd):"server-controlled")+" · settled safety accounting "+(Number.isFinite(runtimeStatus.spend_usd)?money(runtimeStatus.spend_usd):"unreported")+" · reserved "+(Number.isFinite(runtimeStatus.reserved_usd)?money(runtimeStatus.reserved_usd):"unreported")+". "+(runtimeStatus.source||"")+" / no calls started by this page.":"Server has not enabled Foundry. Offline simulation remains available; no browser budget override.";
     }catch(error){
       if(!(error instanceof PipelineError))throw error;
       if(generation!==pipelineGeneration)return;
@@ -759,7 +803,7 @@ async function connectBackend() {
       $("pipeline-runtime").querySelector('[value="foundry"]').disabled=true;
       $("runtime-status").textContent="Runtime approval unavailable: "+error.message+" Paid start is disabled; offline remains available.";
     }
-    updateRuntimeChoice();refreshMeasuredCatalog();
+    updateRuntimeChoice();refreshMeasuredCatalog();loadScenarios();
     $("backend-status").textContent="Backend connected. Select the runtime and execution mode before starting. Loading or refreshing saved runs does not call a model.";
     const id=new URLSearchParams(location.search).get("run");
     if(id){

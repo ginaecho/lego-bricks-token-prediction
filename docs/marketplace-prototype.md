@@ -154,6 +154,359 @@ than charging its internal functions twice. Unsupported results have no
 financial apply action. Reference-context pilot forecasts do not establish
 accuracy for arbitrary customer documents or live-web research.
 
+## Feedback workshop and execution console
+
+The sales studio remains additive: manual variant selection, empty initial build,
+ROI at the top, offline fitting and explicitly enabled Foundry runs are preserved.
+In **Describe your idea**, the new-function workshop provides three original
+invented briefs. Loading a brief never submits it or switches to paid mode.
+All provider workloads still use bundled fictional reference documents, not
+the cited repositories' code or real scheduling/support/archive records.
+
+The new [execution console](../marketplace-console.html) displays the same run ID
+as sales and detailed operations. It polls actual backend snapshots, appends
+chronological persisted events and exposes operation starts, waits, roles,
+validated numeric rows, training reuse, fresh holdouts, metric reviews, forecasts
+and publication. Expand each event for public output. It is an **in-process
+operation stream, not a shell**; there is no shell endpoint, generated code
+execution, fake command typing or hidden model reasoning.
+The primary surface is a compact near-black monospace terminal: gray timestamped
+role/activity lines and orange recorded values, with full raw event data available
+on expansion. Dissent and errors remain visible without expanding the raw data.
+The feed does not record executed shell commands, so the console never invents
+green prompt-prefixed command lines. A green cursor indicates an active run only;
+waiting gates are labeled waiting, and mocked runs retain their mock provenance.
+Follow scrolls within the terminal; uncheck it or scroll upward to pause following
+without stopping event ingestion. Re-enable Follow to return to the newest event.
+Read-only persisted replay, missing runs, disconnection, failure and cancellation
+are explicit. Next releases exactly the current gate; cancellation cannot undo
+an in-flight request. Opening any page does not invoke a provider.
+Saved completed, failed and cancelled runs (and all persisted replay snapshots)
+have no live cursor or automatic polling. Refresh is read-only. Forecasts remain
+additive independent-brick estimates, not measured combinations.
+
+### Archive Atelier v2 fictional policy laboratory
+
+The separate `archive-exceptions-v2` source version addresses the original
+Archive Atelier source-domain mismatch without changing any of the three
+reviewed original scenarios. Its [source fixtures](../token_yield/marketplace_source_fixtures.py)
+are original invented policies and records, not Paperless policies, legal advice,
+real legal/security authority or evidence of compliance.
+
+The version supplies explicit invoice, correspondence and master-media retention
+periods and their clock-start events, a documented exception taxonomy, and six
+linked policy/register/evidence groups. Counterexamples retain missing starts,
+unsigned extension requests, conflicting dates/classes/owners, and mismatched
+hold-release identifiers. Agents must still justify conclusions against actual
+passages; no approval, consensus, forecast or successful outcome is prescribed.
+
+Run this version only on a separate mock server and state directory:
+
+```console
+python -m examples.marketplace_demo_server --port 8784 --run-dir .feedback-archive-v2 --mock-agents --source-fixture archive-exceptions-v2
+```
+
+That server's `/api/scenarios` exposes the distinctly labeled v2 brief for the
+existing sales scenario selector. Its normal agent request format is unchanged.
+Load the v2 story, select the Foundry protocol in the runtime dropdown, and verify
+the status and Start button explicitly say MOCK before starting. On this server
+that protocol is backed only by mocked responses, not a paid provider. The
+separate keyword-only Offline mode does not exercise the versioned source flow.
+The runtime rejects a mismatched brief or a v2 brief sent without its source
+fixture. Without the new flag, the original three scenarios and original source
+generator remain unchanged. Paid v2 construction requires the separate
+source-bound scope and subsequent run authorization described below.
+Neither the original three-scenario approval nor an offline source-review PASS
+alone permits paid v2 execution, including through direct Python use.
+
+Project discussion, requirements, feature extraction, workload groups, reuse
+validation and catalog forecasts all use the bound source version. Fixture
+metadata and content are included in model compatibility, preventing old-context
+models or training rows from becoming v2 evidence. Training groups are reusable;
+holdout identifiers are fresh per run. Six template-based cases are not a
+representative benchmark or independent human-authored holdout corpus.
+
+Offline tests validate source plumbing, exact-span citations, unknowns/conflicts,
+retained dissent and compatibility. Existing mock responses test protocol
+execution only: they do not establish real-model understanding, quality,
+agreement or semantic accuracy. Some of the general-purpose catalog contracts
+may remain unsupported by these deliberately domain-specific documents.
+
+Independent review and a subsequent explicit user authorization are required
+before any paid evaluation. Passing offline tests grants no paid permission.
+The two cancelled paid attempts and their accumulated costs remain unchanged.
+
+### Preparing v2 scope under the existing USD50 campaign
+
+Offline engineering supports additive v2 scope authorization without editing
+the original three-scenario approval or creating another funding ledger.
+The preparation command only reads those files and writes a new disabled
+request. Use an output path outside tracked source and do not overwrite files:
+
+```powershell
+python -m token_yield.marketplace_scope --campaign .feedback-paid-campaign\approval.json --state .feedback-paid-campaign\state --output <new-session-scope-file.json>
+```
+
+Version 2 of the scope binds one canonical funding directory, its filesystem
+device/directory identity and its derived shared runtime lock, as well as the
+exact original funding pin, USD50 total, USD48 stop,
+v2 description and source content, all baseline settlements and prior call count.
+The historical minimum is USD1.49220 and22 calls. Existing reservations,
+unknown telemetry, removed/changed settlements, incompatible source/config or
+exhausted budget fail closed. New settlements may be added to the same ledger;
+no original settlement is overwritten or reallocated.
+Resolved directory aliases (including junctions/symlinks and platform-specific
+case normalization) use that same store and lock. A copied, moved or replaced
+directory is rejected even with identical settlements and campaign IDs. A budget
+file pointing outside its store is rejected. No automatic migration or recovery
+is provided. Old version-1 scope files are retained but cannot authorize the new
+guard; prepare a new disabled version-2 request and review it separately.
+
+Generated scope has pending independent review and `run_authorization.approved`
+false. After independent engineering review, a subsequent explicit user decision
+with its evidence reference is required. Never set these fields from a test PASS
+alone. The application trusts this local operator approval record, not a
+cryptographic identity/signature or an independently authenticated human.
+
+A future authorized server uses `--scope-file` with `--source-fixture`,
+`--enable-foundry`, the unchanged `--campaign-file` and explicit existing
+`--agent-state-dir`. The scope cannot initialize a new ledger or combine with
+mock dispatch or `--measurement-policy`. Its contents are rechecked before every
+run and a content-addressed authorization copy is retained in state. The run
+marker records the scope hash before any dispatch, including for cancelled runs.
+The exact v2 brief/function is mandatory; scope does not authorize arbitrary
+requests or silently change the original three stories.
+
+No prepared scope constitutes execution approval. Server8780 is not restarted
+by preparation or tests. No old or mock model can become measured v2 evidence:
+the existing source/contract/funding/provenance compatibility checks require a
+freshly measured compatible predictor. No paid v2 success is currently claimed.
+
+### Original public-metadata-inspired scenarios
+
+Metadata was independently queried on 2026-09-17 through the GitHub repository API.
+Only domain ideas were used; no licensed repository source was copied into prompts.
+These are invented fixtures, not customers, production results or endorsements.
+
+| Story | Public metadata source | Original invented exercise |
+| --- | --- | --- |
+| Archive Atelier | [paperless-ngx](https://github.com/paperless-ngx/paperless-ngx), [API](https://api.github.com/repos/paperless-ngx/paperless-ngx): document scanning/indexing/archiving; GPL-3.0 metadata | Request a source-only retention exception ledger and review novelty |
+| Booking Blocks | [cal.diy](https://github.com/calcom/cal.diy), [API lookup](https://api.github.com/repos/calcom/cal.com): scheduling; the cal.com lookup redirected to cal.diy; MIT metadata | Compare a retention exception register with the previously published ledger |
+| Care Crew | [Chatwoot](https://github.com/chatwoot/chatwoot), [API](https://api.github.com/repos/chatwoot/chatwoot): chat/email/omnichannel support; license metadata NOASSERTION | Leave the function field empty and infer a handoff obligation mapping gap |
+
+Run them in order against one persistent state directory to inspect compatible
+training-row reuse. Live outcomes are not predetermined: agents may reuse,
+establish, abstain or disagree. The mock provider has explicitly labeled,
+rule-based fixture outputs, including register/ledger normalization and a handoff
+keyword. Those rules exist only in the mock module, not the live orchestrator.
+
+### Contract and prediction boundaries
+
+Both explicit requests and description-inferred gaps enter the same capability
+resolver. Exact normalized names reuse. Name-token Jaccard scores provide
+candidate evidence only, never semantic equivalence. An orchestrator compares
+contract scope and may leave ambiguity unresolved.
+
+Creation now requires three independent atom proposals, three peer reviews of
+all proposals, and orchestrator reconciliation. Disagreement, differing final
+atom counts or out-of-scope work prevents establishing that contract. The finite
+atom counts compile into ordered source-only steps, and workload outputs must
+contain exactly one result for each step in order, plus valid source citations.
+This is a bounded document transformation, not arbitrary named-function execution.
+Output shape and citations are checked; semantic correctness still requires
+human review, and mock outputs are not evidence of live model capability.
+
+Contract prompts label `output_contract` values as formatting examples: numeric
+ones are not proposed or required allocations, and `true`/`[]` do not request
+assent or omission of dissent. Reviewers judge their final substantive contract;
+resolved differences from discarded proposals belong in the rationale. Genuine
+unresolved objections remain dissent even if every final count matches.
+Reconciliation must carry forward final-review false votes and dissent, not
+reinterpret them as assent. The existing schema, validation and unanimous
+no-dissent gate remain unchanged; prior public messages remain intact.
+Offline regressions check transmitted prompt semantics and veto preservation,
+not whether a future live model will interpret the clarification successfully.
+
+The `source-atoms-v2` compatibility fingerprint excludes older execution contracts
+from predictions and training reuse without deleting historical evidence.
+Contracts, steps, hashes, feature builders, reference-context bounds and model
+versions are saved. Reused training rows require intact original evidence hashes;
+old holdouts are never promoted or reused. Holdouts are fresh run-specific groups
+but share fictional templates: this is a small exploratory pilot, not independent
+production validation. Rejected metric reviews do not publish a new current model.
+
+**Measured marketplace combinations are unavailable.** Project composition is explicitly
+the sum of independent brick forecasts, not a jointly executed workflow.
+No cross-brick interaction costs or shared-context savings are measured.
+Numeric forecasts remain withheld for unsupported scope, unresolved project
+decisions, incompatible models/contracts or predictors outside measured support.
+The local input/output ridge models are retrained; GPT is never fine-tuned.
+
+### Opt-in measurement reinforcement pilot
+
+`--measurement-policy --mock-agents` enables a genuine reward-updated
+epsilon-greedy bandit. It is not a contextual model, static priority ranking,
+LLM reinforcement fine-tuning, or production field-feedback ingestion.
+The existing default pipeline and source fixtures remain unchanged.
+Use separate mock state, not either paid ledger:
+
+```powershell
+python -m examples.marketplace_demo_server --port 8786 --run-dir .feedback-measurement-policy --mock-agents --source-fixture archive-exceptions-v2 --measurement-policy
+```
+
+Select the visibly MOCK agent runtime in the sales page and start explicitly.
+The compact terminal shows actual policy decisions, propensities, executed
+steps, measured usage/cost, signed calibration rewards, durable updates and
+supervised ridge versions. Existing waiting, follow/pause and replay behavior
+is unchanged. No command prompts or invented timing are added.
+
+The finite action set contains two selected source-only brick contracts and
+their one fixed-order pair. A resolved requested capability (new or reused,
+explicit or description-detected) is mandatory. Without one, all selected novel
+capabilities are mandatory; more than two requires explicit scope narrowing,
+not silent omission. Remaining slots prefer novel contracts, then lexical
+contract IDs. Included IDs and pair order are sorted, independent of proposal
+ordering. An availability event and saved action schema explain eligible,
+required, included and excluded contracts and the two-single bound. Selection
+protocol, contracts and feature names partition policy history; reordering the
+same selection preserves its identity, changed actions/contracts do not.
+The pair makes two new
+validated provider calls over the same source documents, in the recorded order.
+Counts and costs come from both executions, not sums of stored forecasts.
+Numeric compound predictors sum the known per-call operation/context features.
+There is no generated-output handoff, shared-context optimization, arbitrary
+composition support or financial application of compound estimates.
+
+Four adaptive measurements per run bound exploration. Initially unobserved
+actions are selected uniformly. Afterwards, with epsilon 0.2, each action has
+probability `epsilon / action_count`, plus `(1-epsilon) / tied_best_count`
+when it has the highest mean reward. Every decision records these probabilities,
+the random draw, prior scores, predictor/context, and a uniform-random baseline.
+The update is `Q[a] = Q[a] + (reward - Q[a]) / N[a]`.
+
+For mean absolute input/output token error on calibration records:
+
+```text
+reward = clip(
+  (MAE_before - MAE_after) / max(MAE_before, 1)
+  * 0.001 / marginal_measurement_rated_USD,
+  -1, 1
+)
+```
+
+Regression produces negative reward. Zero/missing cost, missing telemetry,
+invalid metrics, conflicting duplicate feedback or provenance mismatch fail
+explicitly; there is no fabricated neutral reward. Mock costs are simulated
+rate-card costs, not dollars spent. Seed/calibration overhead is separately
+metered in workload totals; it is not included in the marginal reward.
+Runtime execution remains mock-only pending independent review and separate
+paid authorization. The policy store also validates real-provenance observation
+schemas offline; that test does not establish a real provider measurement.
+
+Policy mode partitions compatibility from legacy and ordinary v2 models.
+Training uses source templates 0/1/2 plus one additional execution of template0,
+not a fourth independent source group. Template3 is calibration only. Its
+outcomes update selection and therefore cannot certify generalization.
+Templates4/5 are final acceptance holdouts, dispatched only after the policy
+loop and final ridge parameters are frozen. Their results never update rewards,
+features, action scores or regularization. Calibration and compound rows are
+saved in separate run artifacts and are not silently promoted by training reuse.
+
+The append-only SQLite audit is transactionally committed, hash-linked and
+rejects updates/deletes. Repeated identical feedback is idempotent; conflicting
+duplicates or reused measurement IDs fail. Pending decisions after interruption
+block another choice for manual audit, without resetting accounting. Each
+partition includes source/contract/runtime compatibility and the action schema.
+
+Synthetic tests prove real ridge refits, signed rewards, changed choices,
+restart persistence, source/split isolation and comparison with uniform sampling
+at equal virtual cost. They also retain a counterexample where cumulative
+calibration error is worse than uniform sampling. No claim of universal
+efficiency, semantic correctness or unseen-workload accuracy follows from this
+small template-based pilot.
+
+### Forecast provenance in sales estimates
+
+Stored models supply `source` to the public catalog, each brick prediction, and
+whole-project forecasts. Sales selections, quotes, configuration dialogs, reviews
+and JSON exports retain that evidence source. `measured-foundry`,
+`mocked-test-provider` and offline `synthetic` evidence have distinct labels and
+export bases. Absent or conflicting provenance is labeled `unknown`; neither a
+Foundry runtime route nor a GPT-5.4 model name establishes measured evidence.
+Saved legacy results can use their explicit result/training source, never the
+currently connected runtime as a substitute.
+
+`forecastMode: reference-context` controls frozen GPT-5.4 forecast arithmetic
+separately from `predictionSource`. Mock reference forecasts use the same frozen
+tokens and commercial rates as measured reference forecasts, with no invented
+routing/setup tokens. Context and token-factor changes do not change these
+snapshots. Manual/offline scenario calculations retain their existing behavior.
+Mixed reference evidence sources cannot form a single quote.
+
+Exported `liveLLMConnected` requires both enabled server runtime metadata and
+`runtimeSource: measured-foundry`; a mock runtime never sets it. This reports
+server configuration, not a new authentication/availability probe or a claim that
+reading a saved quote made a model call. Historical evidence provenance remains
+independent from current runtime availability.
+
+### No-paid-call validation
+
+Use a separate loopback port and scratch state; do not point tests at a live ledger:
+
+```powershell
+python -m examples.marketplace_demo_server --port 8772 --run-dir .feedback-browser --mock-agents
+```
+
+Open <http://127.0.0.1:8772/marketplace-sales-demo.html?mode=custom>.
+Select the agent runtime, which is visibly labeled **MOCK**, then start explicitly.
+`--mock-agents` cannot combine with paid flags, uses no authentication and never
+dispatches network requests. Its durable accounting amounts test the budget
+protocol with synthetic usage; they are not actual spending.
+
+```powershell
+python -m pytest tests\test_marketplace_agents.py tests\test_marketplace_demo.py tests\test_marketplace_feedback.py -q --basetemp=.feedback-tests
+npm install --prefix .feedback-tools --no-save --no-package-lock playwright
+$env:PLAYWRIGHT_MODULE = Join-Path (Get-Location) '.feedback-tools\node_modules\playwright'
+$env:PLAYWRIGHT_CHANNEL = 'msedge'
+node tests\marketplace_feedback_browser.cjs
+node tests\marketplace_provenance_browser.cjs
+```
+
+Use the repository's configured Python environment. Browser tests use installed
+Edge; omit `PLAYWRIGHT_CHANNEL` when Playwright Chromium is installed.
+They refuse non-mock provenance before any POST, exercise three persistent runs,
+stepping/cancellation, 1440px desktop and 390px mobile layouts, no paid auto-start,
+run-ID links, disconnection/reconnect and stale-output clearing. Both whole-project
+approval and multi-brick catalog selection are checked through quote/export,
+including source labels, the live-connection flag and unchanged frozen arithmetic.
+The separate provenance browser suite intercepts **all HTTP** with local fixtures
+to cover measured, mock, offline, missing and conflicting evidence, plus a stored
+measured forecast viewed on a mock runtime. No real provider is called by these
+fixtures, including the measured-provenance response-path test. Its report is
+saved under `.feedback-provenance-check`.
+Screenshots and
+a JSON report are written under `.feedback-browser-check`, not committed.
+For a repeat of the creation tests, use a **new mock-only** directory/server;
+do not reset or replace any paid campaign state.
+
+### Prepared later campaign
+
+`examples/marketplace-feedback-campaign.json` is a **disabled preparation artifact**:
+USD 50 maximum additional authorization, USD 48 operational stop, a new fixed
+approval identity, and only the three unchanged reviewed scenario briefs.
+It neither executes calls nor changes the historical USD 25 campaign.
+The legacy CLI cap remains USD 25.
+
+Only after independent phase-one verification may the operator enable a reviewed
+copy and explicitly provide `--enable-foundry --campaign-file <reviewed-copy>`
+with the existing pinned connection and a new, durably retained
+`--agent-state-dir`. Do not execute this during phase-one validation.
+Campaign configuration and scenario metadata are pinned in the new ledger.
+Changing that pin cannot reset spending; another campaign cannot open the old
+ledger. Unknown usage retains reservations and halts execution. All attempts,
+retries and role calls count against the cap. No cross-campaign row import is
+implemented: prior evidence is conservatively excluded, not silently reused.
+
 ## Sales conversation demo
 
 Open [marketplace-sales-demo.html](../marketplace-sales-demo.html) directly in

@@ -59,6 +59,10 @@ class MockProvider:
             answer = {"atoms": {"extract": 2, "classify": 1, "score": 0, "plan": 1,
                                 "retrieve": 1, "verify": 1, "write": 1},
                       "rationale": "Bounded decomposition over the fixed atom vocabulary."}
+        elif task in ("contract_review", "contract_reconcile"):
+            answer = {"atoms": {"extract": 2, "classify": 1, "score": 0, "plan": 1,
+                                "retrieve": 1, "verify": 1, "write": 1},
+                      "rationale": "Reviewed all peer contract proposals.", "agreed": True, "dissent": []}
         elif task == "features":
             answer = {"builder": "atoms_context_v1", "rationale": "Use fixed source-size descriptors."}
         elif task == "fit":
@@ -68,6 +72,9 @@ class MockProvider:
         elif task == "workload":
             answer = {"answer": "Owner and missing restoration evidence extracted from fictional sources.",
                       "evidence": evidence, "limitations": ["Not a certification."]}
+            if payload.get("steps"):
+                answer["atom_results"] = [{"step_id": s["id"], "result": "Mock source-only result"}
+                                          for s in payload["steps"]]
         else:
             raise AssertionError(task)
         text = json.dumps(answer)
@@ -415,7 +422,7 @@ def test_novelty_reuse_when_agent_matches_existing_brick(tmp_path, config, reque
     assert result["requested_custom"] == "review"       # mapped to the existing brick
     assert len(result["catalog"]) == 16                 # nothing new established
     assert not any(c["payload"]["task"] == "decompose" for c in provider.calls)
-    assert any("reused as an existing brick" in e["message"] for e in events)
+    assert result["capability_reviews"][0]["outcome"] == "reused"
 
 
 def test_novelty_establishes_agent_decomposed_brick_and_persists_for_reuse(tmp_path, config, request_data):
@@ -430,7 +437,7 @@ def test_novelty_establishes_agent_decomposed_brick_and_persists_for_reuse(tmp_p
     assert novel["supported"] is True and novel["input_tokens"] is not None
     assert len(result["catalog"]) == 17 and result["training"]["pilot_published"] is True
     assert any(c["payload"]["task"] == "decompose" for c in first_provider.calls)
-    assert any("Established a new basic brick" in e["message"] for e in events)
+    assert result["capability_reviews"][0]["outcome"] == "established"
     # The established brick persists; the same request reuses its measured train rows next run.
     second = engine.AgentRuntime(tmp_path / "state", config, dispatch=MockProvider())
     assert any(b["novel"] and b["supported"] for b in second.catalog()["items"])
@@ -440,14 +447,14 @@ def test_novelty_establishes_agent_decomposed_brick_and_persists_for_reuse(tmp_p
     assert newer["training"]["new_holdout_count"] == 34
 
 
-def test_deterministic_guardrail_vetoes_near_duplicate_establish(tmp_path, config, request_data):
+def test_deterministic_guardrail_vetoes_exact_duplicate_establish(tmp_path, config, request_data):
     provider = MockProvider()   # tries to establish new_name == custom_function
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
     result, events, _ = run(runtime, {**request_data, "new_function": "Deep research"}, tmp_path / "run")
-    assert result["requested_custom"] == "deep"          # guardrail forced reuse of the near duplicate
+    assert result["requested_custom"] == "deep"          # exact normalized name, not lexical overlap
     assert len(result["catalog"]) == 16                  # establish blocked
     assert not any(c["payload"]["task"] == "decompose" for c in provider.calls)
-    assert any("guardrail vetoed establish" in e["message"] for e in events)
+    assert result["capability_reviews"][0]["rationale"] == "Exact normalized name guardrail."
 
 
 @pytest.mark.parametrize("external,disagree,accepted,publishes", [
@@ -753,6 +760,10 @@ def test_all_actual_transport_calls_use_strict_schemas_and_full_body_reservation
     assert len(seen) == 106 and seen.count("workload") == 96
     assert set(seen) == {"propose", "discuss", "adjudicate", "features", "workload", "fit", "metrics"}
     assert result["training"]["source"] == "measured-foundry"
+    assert result["after"]["source"] == "measured-foundry"
+    assert all(item["source"] == "measured-foundry" for item in result["after"]["per_brick"])
+    assert runtime.catalog()["source"] == "measured-foundry"
+    assert all(item["source"] == "measured-foundry" for item in runtime.catalog()["items"])
     assert result["orchestration"]["calls"] == 10 and result["workload"]["calls"] == 96
 
 

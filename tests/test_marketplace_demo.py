@@ -437,7 +437,8 @@ def test_saved_run_is_read_only_after_restart(artifact_dir):
     run_id = store.submit(REQUEST)
     original = _wait_terminal(store, run_id)
     restarted = server_module.RunStore(artifact_dir)
-    assert restarted.get(run_id) == original
+    assert restarted.get(run_id) == {**original, "replay": True}
+    assert original["replay"] is False
     assert restarted.get("../request") is None
     assert restarted.listing() == {"runs": []}
     with pytest.raises(KeyError):
