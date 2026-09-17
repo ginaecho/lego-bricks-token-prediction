@@ -185,7 +185,7 @@ Saved completed, failed and cancelled runs (and all persisted replay snapshots)
 have no live cursor or automatic polling. Refresh is read-only. Forecasts remain
 additive independent-brick estimates, not measured combinations.
 
-### Archive Atelier v2 fictional policy laboratory (offline only)
+### Archive Atelier v2 fictional policy laboratory
 
 The separate `archive-exceptions-v2` source version addresses the original
 Archive Atelier source-domain mismatch without changing any of the three
@@ -214,8 +214,10 @@ that protocol is backed only by mocked responses, not a paid provider. The
 separate keyword-only Offline mode does not exercise the versioned source flow.
 The runtime rejects a mismatched brief or a v2 brief sent without its source
 fixture. Without the new flag, the original three scenarios and original source
-generator remain unchanged. The v2 source version is rejected for paid runtimes
-and for the existing three-scenario campaign, including through direct Python use.
+generator remain unchanged. Paid v2 construction requires the separate
+source-bound scope and subsequent run authorization described below.
+Neither the original three-scenario approval nor an offline source-review PASS
+alone permits paid v2 execution, including through direct Python use.
 
 Project discussion, requirements, feature extraction, workload groups, reuse
 validation and catalog forecasts all use the bound source version. Fixture
@@ -233,6 +235,44 @@ may remain unsupported by these deliberately domain-specific documents.
 Independent review and a subsequent explicit user authorization are required
 before any paid evaluation. Passing offline tests grants no paid permission.
 The two cancelled paid attempts and their accumulated costs remain unchanged.
+
+### Preparing v2 scope under the existing USD50 campaign
+
+Offline engineering supports additive v2 scope authorization without editing
+the original three-scenario approval or creating another funding ledger.
+The preparation command only reads those files and writes a new disabled
+request. Use an output path outside tracked source and do not overwrite files:
+
+```powershell
+python -m token_yield.marketplace_scope --campaign .feedback-paid-campaign\approval.json --state .feedback-paid-campaign\state --output <new-session-scope-file.json>
+```
+
+The scope binds the exact original funding pin, USD50 total, USD48 stop,
+v2 description and source content, all baseline settlements and prior call count.
+The historical minimum is USD1.49220 and22 calls. Existing reservations,
+unknown telemetry, removed/changed settlements, incompatible source/config or
+exhausted budget fail closed. New settlements may be added to the same ledger;
+no original settlement is overwritten or reallocated.
+
+Generated scope has pending independent review and `run_authorization.approved`
+false. After independent engineering review, a subsequent explicit user decision
+with its evidence reference is required. Never set these fields from a test PASS
+alone. The application trusts this local operator approval record, not a
+cryptographic identity/signature or an independently authenticated human.
+
+A future authorized server uses `--scope-file` with `--source-fixture`,
+`--enable-foundry`, the unchanged `--campaign-file` and explicit existing
+`--agent-state-dir`. The scope cannot initialize a new ledger or combine with
+mock dispatch or `--measurement-policy`. Its contents are rechecked before every
+run and a content-addressed authorization copy is retained in state. The run
+marker records the scope hash before any dispatch, including for cancelled runs.
+The exact v2 brief/function is mandatory; scope does not authorize arbitrary
+requests or silently change the original three stories.
+
+No prepared scope constitutes execution approval. Server8780 is not restarted
+by preparation or tests. No old or mock model can become measured v2 evidence:
+the existing source/contract/funding/provenance compatibility checks require a
+freshly measured compatible predictor. No paid v2 success is currently claimed.
 
 ### Original public-metadata-inspired scenarios
 

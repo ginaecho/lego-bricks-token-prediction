@@ -596,7 +596,7 @@ async function loadScenarios(){
   try{
     const data=await backendJson("/api/scenarios");scenarios=data.scenarios;
     if(data.source==="fictional-policy-fixture"){
-      $("scenario-heading").textContent="🧱 Versioned fictional policy laboratory / offline review";
+      $("scenario-heading").textContent="🧱 Versioned fictional policy laboratory";
       $("scenario-context").textContent="Separate v2 source fixtures; the original three reviewed cases are unchanged. Invented policies are not legal advice or real authority. Offline tests do not establish model agreement or grant paid approval. Loading never starts a provider call.";
     }
     $("scenario-cards").innerHTML=scenarios.map((item,index)=>`<div class="impact"><h3>${index+1}. ${esc(item.title)}</h3><p>${esc(item.exercise)}</p><p class="help">${esc(item.inspiration)}</p><a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.repository)}</a><p class="help">Metadata checked ${esc(item.observed)}. Invented fixture.</p><button class="secondary" data-scenario="${index}">Load ${esc(item.title)}</button></div>`).join("");

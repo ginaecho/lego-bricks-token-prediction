@@ -35,6 +35,7 @@ from .marketplace_scenarios import SCENARIOS, scenario_for_request
 from .marketplace_source_fixtures import ARCHIVE_V2, fixture_documents, fixture_scenario
 from .measurement_policy import POLICY_VERSION, SPLIT_PROTOCOL
 from .marketplace_measurement import AdaptiveMeasurements
+from .marketplace_scope import FIXTURE_ID, validate_scope
 
 AGENT_STAGES = (
     "novelty", "propose", "discuss", "adjudicate", "wiki", "requirements", "features",
@@ -179,14 +180,25 @@ class AgentRuntime:
         campaign: dict | None = None,
         source_fixture: str | None = None,
         measurement_policy: bool = False,
+        scope_file: Path | None = None,
     ) -> None:
         if type(measurement_policy) is not bool:
             raise ValueError("measurement_policy must be a boolean")
         if measurement_policy and (dispatch is None or campaign is not None):
             raise ValueError("measurement policy is offline mock-only pending independent review")
         self.measurement_policy = measurement_policy
+        self.scope_file = Path(scope_file).resolve() if scope_file is not None else None
+        self.scope_authorization = None
+        if self.scope_file:
+            if dispatch is not None or campaign is None or source_fixture != FIXTURE_ID:
+                raise ValueError("scope file requires real v2 source binding and the existing campaign")
+            budget_path = Path(state_dir).resolve() / "budget.json"
+            if not budget_path.is_file():
+                raise RuntimeError("v2 scope cannot initialize a new funding ledger")
+            self.scope_authorization = _read(self.scope_file)
+            validate_scope(self.scope_authorization, campaign, _read(budget_path))
         self.source_fixture = fixture_scenario(source_fixture) if source_fixture is not None else None
-        if self.source_fixture and (dispatch is None or campaign is not None):
+        if self.source_fixture and not self.scope_authorization and (dispatch is None or campaign is not None):
             raise ValueError("Versioned source fixtures are offline mock-only; no paid approval exists")
         self.campaign = None
         if campaign is not None:
@@ -344,6 +356,7 @@ class AgentRuntime:
             "limitations": LIMITATIONS,
             **({"source_fixture": self.source_fixture} if self.source_fixture else {}),
             "measurement_policy": POLICY_VERSION if self.measurement_policy else None,
+            "scope_id": self.scope_authorization["scope_id"] if self.scope_authorization else None,
         }
 
     def close(self) -> None:
@@ -587,6 +600,17 @@ class AgentRuntime:
             if _read(self.config_path) != self.config:
                 raise RuntimeError("connection configuration changed; refusing paid calls")
             budget, budget_state = self._load_budget()
+            if self.scope_authorization:
+                if _read(self.scope_file) != self.scope_authorization:
+                    raise RuntimeError("scope authorization changed; refusing execution")
+                validate_scope(self.scope_authorization, self.campaign, budget_state)
+                authorization_path = (self.state_dir / "scope-authorizations" /
+                                      f"{fingerprint(self.scope_authorization)}.json")
+                if authorization_path.exists():
+                    if _read(authorization_path) != self.scope_authorization:
+                        raise RuntimeError("scope audit integrity failure")
+                else:
+                    _write(authorization_path, self.scope_authorization)
             if budget_state.get("halted"):
                 raise RuntimeError(budget_state["halted"])
             marker = self.state_dir / "run-ids" / f"{run_id}.json"
@@ -594,17 +618,19 @@ class AgentRuntime:
                 raise RuntimeError("run ID already attempted; automatic retry/resume is forbidden")
             run_dir.mkdir(parents=True, exist_ok=False)
             _write(run_dir / "request.json", request)
-            _write(marker, {"run_id": run_id, "started": _now(), "artifact_dir": str(run_dir)})
+            _write(marker, {"run_id": run_id, "started": _now(), "artifact_dir": str(run_dir),
+                            **({"scope_authorization_sha256": fingerprint(self.scope_authorization)}
+                               if self.scope_authorization else {})})
             return self._run(request, run_dir, run_id, on_event, before_stage, check_cancel,
                              budget, budget_state)
 
     def _run(self, request: dict, run_dir: Path, run_id: str,
              on_event: Callable, before_stage: Callable, check_cancel: Callable | None,
              budget: HardBudget, budget_state: dict) -> dict:
-        if self.campaign and scenario_for_request(request) is None:
+        if self.campaign and not self.scope_authorization and scenario_for_request(request) is None:
             raise ValueError("This campaign funds only the three unchanged reviewed scenario briefs.")
         if not self.source_fixture and request["description"] == ARCHIVE_V2["description"]:
-            raise ValueError("Versioned scenario requires its explicit offline source fixture")
+            raise ValueError("Versioned scenario requires its explicit versioned source fixture")
         if self.source_fixture and (
                 request["description"] != self.source_fixture["description"]
                 or request.get("new_function", "") != self.source_fixture["new_function"]):
@@ -1289,6 +1315,11 @@ class AgentRuntime:
             "composition": {"kind": "sum-of-independent-brick-forecasts",
                             "measured_combinations": False, "interaction_costs_supported": False},
             "scenario": self.source_fixture or scenario_for_request(request),
+            **({"scope_authorization": {
+                "scope_id": self.scope_authorization["scope_id"],
+                "sha256": fingerprint(self.scope_authorization),
+                "funding": "existing-campaign-only",
+            }} if self.scope_authorization else {}),
             **({"measurement_policy": adaptive.report()} if adaptive else {}),
             "report": {"title": "Measured Foundry prompt-contract pilot",
                        "summary": decision["summary"], "scope": "Fictional reference context only",

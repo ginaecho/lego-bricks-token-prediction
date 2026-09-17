@@ -429,7 +429,9 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("--mock-agents", action="store_true",
                         help="Use explicit synthetic provider fixtures; no authentication or network calls.")
     parser.add_argument("--source-fixture", choices=["archive-exceptions-v2"],
-                        help="Explicit fictional source version; requires --mock-agents and separate test state.")
+                        help="Fictional source version; mock-only unless a separately approved --scope-file is supplied.")
+    parser.add_argument("--scope-file", type=Path,
+                        help="Separately reviewed and user-approved v2 scope under the existing campaign ledger.")
     parser.add_argument("--measurement-policy", action="store_true",
                         help="Offline reward-based measurement bandit; requires --mock-agents.")
     return parser
@@ -443,7 +445,12 @@ def main() -> int:
     if args.mock_agents and (args.enable_foundry or args.campaign_file):
         print("--mock-agents cannot be combined with paid campaign flags", file=sys.stderr)
         return 2
-    if args.source_fixture and not args.mock_agents:
+    if args.scope_file and (args.mock_agents or not args.enable_foundry or not args.campaign_file
+                           or not args.source_fixture or not args.agent_state_dir):
+        print("--scope-file requires real v2 mode, original campaign and explicit existing agent state",
+              file=sys.stderr)
+        return 2
+    if args.source_fixture and not args.mock_agents and not args.scope_file:
         print("--source-fixture requires --mock-agents; no paid execution is approved", file=sys.stderr)
         return 2
     if args.measurement_policy and not args.mock_agents:
@@ -468,6 +475,8 @@ def main() -> int:
                 args.agent_config, cap_usd=args.agent_budget_usd or 25,
                 approval_id=args.agent_approval_id or "marketplace-new-25usd-pilot",
                 campaign=json.loads(args.campaign_file.read_text(encoding="utf-8")) if args.campaign_file else None,
+                source_fixture=args.source_fixture,
+                scope_file=args.scope_file,
             )
         elif args.mock_agents:
             from token_yield.marketplace_agents import APPROVED_ENDPOINT, MODEL_ID, AgentRuntime
