@@ -35,7 +35,7 @@ from .marketplace_scenarios import SCENARIOS, scenario_for_request
 from .marketplace_source_fixtures import ARCHIVE_V2, fixture_documents, fixture_scenario
 from .measurement_policy import POLICY_VERSION, SPLIT_PROTOCOL
 from .marketplace_measurement import AdaptiveMeasurements
-from .marketplace_scope import FIXTURE_ID, validate_scope
+from .marketplace_scope import FIXTURE_ID, canonical_state_dir, validate_scope
 
 AGENT_STAGES = (
     "novelty", "propose", "discuss", "adjudicate", "wiki", "requirements", "features",
@@ -113,8 +113,9 @@ def _read(path: Path) -> dict:
 @contextmanager
 def _exclusive(directory: Path):
     """Reject concurrent owners; OS locking releases automatically after crashes."""
+    directory = canonical_state_dir(directory)
     directory.mkdir(parents=True, exist_ok=True)
-    key = str(directory.resolve()).casefold()
+    key = str(directory)
     with _LOCKS_LOCK:
         lock = _LOCKS.setdefault(key, threading.Lock())
     if not lock.acquire(blocking=False):
@@ -192,11 +193,11 @@ class AgentRuntime:
         if self.scope_file:
             if dispatch is not None or campaign is None or source_fixture != FIXTURE_ID:
                 raise ValueError("scope file requires real v2 source binding and the existing campaign")
-            budget_path = Path(state_dir).resolve() / "budget.json"
+            budget_path = canonical_state_dir(state_dir) / "budget.json"
             if not budget_path.is_file():
                 raise RuntimeError("v2 scope cannot initialize a new funding ledger")
             self.scope_authorization = _read(self.scope_file)
-            validate_scope(self.scope_authorization, campaign, _read(budget_path))
+            validate_scope(self.scope_authorization, campaign, _read(budget_path), state_dir)
         self.source_fixture = fixture_scenario(source_fixture) if source_fixture is not None else None
         if self.source_fixture and not self.scope_authorization and (dispatch is None or campaign is not None):
             raise ValueError("Versioned source fixtures are offline mock-only; no paid approval exists")
@@ -219,7 +220,7 @@ class AgentRuntime:
             raise ValueError("new pilot cap must be finite, positive, and at most US$25")
         if not isinstance(approval_id, str) or not approval_id.strip():
             raise ValueError("new approval identity required")
-        self.state_dir = Path(state_dir).resolve()
+        self.state_dir = canonical_state_dir(state_dir)
         self.config_path = Path(config_path).resolve()
         self.config = _read(self.config_path)
         self._validate_config(self.config)
@@ -603,7 +604,7 @@ class AgentRuntime:
             if self.scope_authorization:
                 if _read(self.scope_file) != self.scope_authorization:
                     raise RuntimeError("scope authorization changed; refusing execution")
-                validate_scope(self.scope_authorization, self.campaign, budget_state)
+                validate_scope(self.scope_authorization, self.campaign, budget_state, self.state_dir)
                 authorization_path = (self.state_dir / "scope-authorizations" /
                                       f"{fingerprint(self.scope_authorization)}.json")
                 if authorization_path.exists():

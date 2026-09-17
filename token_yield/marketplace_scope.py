@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -15,7 +16,7 @@ from .marketplace_agent_contracts import canonical, fingerprint, strict_json
 from .marketplace_scenarios import SCENARIOS
 from .marketplace_source_fixtures import fixture_documents, fixture_scenario
 
-SCOPE_ID = "archive-atelier-v2-existing50-v1"
+SCOPE_ID = "archive-atelier-v2-existing50-v2"
 FIXTURE_ID = "archive-exceptions-v2"
 HISTORICAL_SAFETY_USD = 1.49220
 HISTORICAL_CALLS = 22
@@ -58,11 +59,31 @@ def _funding(campaign: dict, state: dict) -> None:
         raise RuntimeError("unknown or reserved telemetry blocks scope authorization; no recovery")
 
 
-def prepare_scope(campaign: dict, state: dict) -> dict:
+def canonical_state_dir(directory: Path) -> Path:
+    """Use one resolved, platform-normalized directory for approval and locking."""
+    return Path(os.path.normcase(str(Path(directory).resolve())))
+
+
+def funding_store_identity(directory: Path) -> dict:
+    root = canonical_state_dir(directory)
+    ledger = root / "budget.json"
+    if not root.is_dir() or not ledger.is_file():
+        raise ValueError("existing funding store and budget.json required")
+    if canonical_state_dir(ledger) != ledger:
+        raise ValueError("funding store must own its budget file, not an external ledger alias")
+    stat = root.stat()
+    if not stat.st_ino:
+        raise ValueError("funding store filesystem identity is unavailable")
+    return {"canonical_path": str(root), "directory_device": stat.st_dev,
+            "directory_inode": stat.st_ino, "lock_path": str(root / "runtime.lock")}
+
+
+def prepare_scope(campaign: dict, state: dict, state_dir: Path) -> dict:
     """Return a disabled, source-bound approval request without changing state."""
     _funding(campaign, state)
     return {
-        "scope_id": SCOPE_ID, "version": 1, "funding": "existing-campaign-only",
+        "scope_id": SCOPE_ID, "version": 2, "funding": "existing-campaign-only",
+        "funding_store": funding_store_identity(state_dir),
         "campaign_fingerprint": fingerprint(campaign), "funding_pin": fingerprint(state["pin"]),
         "cap_usd": 50, "stop_usd": 48, "source_fixture": FIXTURE_ID,
         "source_fingerprint": source_identity(), "measurement_policy_enabled": False,
@@ -74,12 +95,14 @@ def prepare_scope(campaign: dict, state: dict) -> dict:
     }
 
 
-def validate_scope(scope: dict, campaign: dict, state: dict) -> None:
+def validate_scope(scope: dict, campaign: dict, state: dict, state_dir: Path) -> None:
     """Require separate review/run consent and preserve every baseline settlement."""
     _funding(campaign, state)
-    expected = prepare_scope(campaign, state)
+    expected = prepare_scope(campaign, state, state_dir)
     if not isinstance(scope, dict) or set(scope) != set(expected):
         raise ValueError("exact versioned scope authorization fields required")
+    if scope["funding_store"] != expected["funding_store"]:
+        raise ValueError("scope authorization mismatch: funding store identity or shared lock")
     for key in set(expected) - {"baseline", "review", "run_authorization"}:
         if scope[key] != expected[key] or type(scope[key]) is not type(expected[key]):
             raise ValueError(f"scope authorization mismatch: {key}")
@@ -119,7 +142,7 @@ def main() -> int:
     try:
         campaign = strict_json(args.campaign.read_text(encoding="utf-8"))
         state = strict_json((args.state / "budget.json").read_text(encoding="utf-8"))
-        scope = prepare_scope(campaign, state)
+        scope = prepare_scope(campaign, state, args.state)
         # Exclusive creation cannot overwrite an existing approval or budget.
         with args.output.open("x", encoding="utf-8") as stream:
             stream.write(canonical(scope) + "\n")

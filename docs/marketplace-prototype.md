@@ -247,12 +247,20 @@ request. Use an output path outside tracked source and do not overwrite files:
 python -m token_yield.marketplace_scope --campaign .feedback-paid-campaign\approval.json --state .feedback-paid-campaign\state --output <new-session-scope-file.json>
 ```
 
-The scope binds the exact original funding pin, USD50 total, USD48 stop,
+Version 2 of the scope binds one canonical funding directory, its filesystem
+device/directory identity and its derived shared runtime lock, as well as the
+exact original funding pin, USD50 total, USD48 stop,
 v2 description and source content, all baseline settlements and prior call count.
 The historical minimum is USD1.49220 and22 calls. Existing reservations,
 unknown telemetry, removed/changed settlements, incompatible source/config or
 exhausted budget fail closed. New settlements may be added to the same ledger;
 no original settlement is overwritten or reallocated.
+Resolved directory aliases (including junctions/symlinks and platform-specific
+case normalization) use that same store and lock. A copied, moved or replaced
+directory is rejected even with identical settlements and campaign IDs. A budget
+file pointing outside its store is rejected. No automatic migration or recovery
+is provided. Old version-1 scope files are retained but cannot authorize the new
+guard; prepare a new disabled version-2 request and review it separately.
 
 Generated scope has pending independent review and `run_authorization.approved`
 false. After independent engineering review, a subsequent explicit user decision
