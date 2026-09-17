@@ -87,8 +87,8 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         </div>
         <p id="runtime-status" class="help" role="status">Checking server runtime approval. No model calls occur on page load.</p>
         <div id="azure-notice" class="notice" hidden><b>Before you start:</b> Paid mode sends the submitted brief and optional function to the configured Azure GPT-5.4 deployment under the campaign limits shown above. On a MOCKED server no network calls occur and all provider labels are synthetic. Use fictional information only. Workloads use bundled reference documents, not repository code or customer documents. Automatic mode proceeds without further stage approval; step mode waits for Next. Cancellation cannot undo an in-flight call.</div>
-        <details open><summary>🧱 Three little project stories / new-function workshop</summary>
-          <p class="help">Original invented briefs inspired only by public repository metadata, not customer results or copied code. Load in order to explore creation, similar reuse and description-only detection across persistent runs. Loading never starts a provider call.</p>
+        <details open><summary id="scenario-heading">🧱 Three little project stories / new-function workshop</summary>
+          <p id="scenario-context" class="help">Original invented briefs inspired only by public repository metadata, not customer results or copied code. Load in order to explore creation, similar reuse and description-only detection across persistent runs. Loading never starts a provider call.</p>
           <div id="scenario-cards" class="impact-grid">Connect to the local server to load cited scenarios.</div>
           <p class="help">Leave the function field empty for automatic gap detection. A detected capability enters novelty review, three-role contract proposals and discussion, reconciliation, measurement and retraining without copying a name. Ambiguous contracts stay unresolved. Offline keyword simulation does not implement this agent loop.</p>
         </details>
@@ -595,6 +595,10 @@ let scenarios=[];
 async function loadScenarios(){
   try{
     const data=await backendJson("/api/scenarios");scenarios=data.scenarios;
+    if(data.source==="fictional-policy-fixture"){
+      $("scenario-heading").textContent="🧱 Versioned fictional policy laboratory / offline review";
+      $("scenario-context").textContent="Separate v2 source fixtures; the original three reviewed cases are unchanged. Invented policies are not legal advice or real authority. Offline tests do not establish model agreement or grant paid approval. Loading never starts a provider call.";
+    }
     $("scenario-cards").innerHTML=scenarios.map((item,index)=>`<div class="impact"><h3>${index+1}. ${esc(item.title)}</h3><p>${esc(item.exercise)}</p><p class="help">${esc(item.inspiration)}</p><a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.repository)}</a><p class="help">Metadata checked ${esc(item.observed)}. Invented fixture.</p><button class="secondary" data-scenario="${index}">Load ${esc(item.title)}</button></div>`).join("");
   }catch(error){$("scenario-cards").textContent="Scenario metadata unavailable: "+error.message;}
 }

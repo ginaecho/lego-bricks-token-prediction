@@ -32,6 +32,7 @@ from .marketplace_agent_contracts import (
 )
 from .robust import Record, RidgeLinearModel
 from .marketplace_scenarios import SCENARIOS, scenario_for_request
+from .marketplace_source_fixtures import ARCHIVE_V2, fixture_documents, fixture_scenario
 
 AGENT_STAGES = (
     "novelty", "propose", "discuss", "adjudicate", "wiki", "requirements", "features",
@@ -174,7 +175,11 @@ class AgentRuntime:
         dispatch: Callable[..., DispatchResult] | None = None,
         token_provider: Callable[[], str] | None = None,
         campaign: dict | None = None,
+        source_fixture: str | None = None,
     ) -> None:
+        self.source_fixture = fixture_scenario(source_fixture) if source_fixture is not None else None
+        if self.source_fixture and (dispatch is None or campaign is not None):
+            raise ValueError("Versioned source fixtures are offline mock-only; no paid approval exists")
         self.campaign = None
         if campaign is not None:
             expected = {"approval_id", "cap_usd", "stop_usd", "execution_enabled", "scenario_ids"}
@@ -221,6 +226,11 @@ class AgentRuntime:
             "prompt_protocol": CONTRACT_VERSION,
             "transport_protocol": TRANSPORT_PROTOCOL,
         })
+        if self.source_fixture:
+            self._compatibility = fingerprint({
+                "base": self._compatibility, "source_fixture": self.source_fixture,
+                "source_content": [self._documents(f"fixture-{index}", index) for index in range(6)],
+            })
         with _exclusive(self.state_dir):
             path = self.state_dir / "budget.json"
             if not path.exists():
@@ -296,6 +306,11 @@ class AgentRuntime:
             raise ValueError("model registry fingerprint mismatch")
         return model
 
+    def _documents(self, group: str, index: int) -> list[dict]:
+        if self.source_fixture:
+            return fixture_documents(self.source_fixture["id"], group, index)
+        return source_documents(group, index)
+
     def public_status(self) -> dict:
         """Return public connection/budget metadata without secrets or tokens."""
         state = _read(self.state_dir / "budget.json")
@@ -314,6 +329,7 @@ class AgentRuntime:
             "version": model["version"] if model else None,
             "source": "mocked-test-provider" if self._dispatch_hook else "measured-foundry",
             "limitations": LIMITATIONS,
+            **({"source_fixture": self.source_fixture} if self.source_fixture else {}),
         }
 
     def close(self) -> None:
@@ -488,7 +504,7 @@ class AgentRuntime:
         counts = model.get("per_brick", {}).get(brick["id"], {})
         if counts.get("train", 0) < 4 or counts.get("holdout", 0) < 2:
             return result
-        values = numeric_features(brick, source_documents("train-0", 0))
+        values = numeric_features(brick, self._documents("train-0", 0))
         names = model["feature_names"]
         vector = [values[name] for name in names]
         if any(not low <= value <= high
@@ -573,6 +589,12 @@ class AgentRuntime:
              budget: HardBudget, budget_state: dict) -> dict:
         if self.campaign and scenario_for_request(request) is None:
             raise ValueError("This campaign funds only the three unchanged reviewed scenario briefs.")
+        if not self.source_fixture and request["description"] == ARCHIVE_V2["description"]:
+            raise ValueError("Versioned scenario requires its explicit offline source fixture")
+        if self.source_fixture and (
+                request["description"] != self.source_fixture["description"]
+                or request.get("new_function", "") != self.source_fixture["new_function"]):
+            raise ValueError("Source fixture requires its exact versioned scenario request")
         events, messages, measured = [], [], []
         ledger = UsageLedger()
         source = "mocked-test-provider" if self._dispatch_hook else "measured-foundry"
@@ -787,7 +809,7 @@ class AgentRuntime:
         if previous:
             known = {b["id"] for b in catalog}
             catalog.extend(b for b in previous.get("contracts", []) if b["id"] not in known)
-        docs = source_documents("train-0", 0)
+        docs = self._documents("train-0", 0)
 
         enter("novelty")
         requested_custom = None
@@ -1016,7 +1038,7 @@ class AgentRuntime:
             "feature_definition": "Fixed numeric operation counts and optional serialized prompt/source "
             "UTF-8 byte lengths. No target-derived features. No code generation or execution.",
             "training_predictors_only": [
-                {"id": b["id"], "values": numeric_features(b, source_documents("train-0", 0))}
+                {"id": b["id"], "values": numeric_features(b, docs)}
                 for b in catalog
             ],
             "instruction": "Choose one finite builder. No holdout or labels are available.",
@@ -1044,14 +1066,16 @@ class AgentRuntime:
                         and row.get("brick_id") in by_id
                         and row.get("contract_hash") == by_id[row["brick_id"]]["contract_hash"]
                         and row.get("source") == source):
-                    self._validate_reused_row(row, by_id[row["brick_id"]])
+                    self._validate_reused_row(
+                        row, by_id[row["brick_id"]],
+                        source_fixture=self.source_fixture["id"] if self.source_fixture else None)
                     reuse_rows.append(row)
         jobs, reused, reused_keys = [], [], set()
         for brick in catalog:
             for index in range(6):
                 split = "train" if index < 4 else "holdout"
                 group = f"train-{index}" if split == "train" else f"holdout-{run_id}-{index}"
-                documents = source_documents(group, index)
+                documents = self._documents(group, index)
                 prompt = workload_prompt(brick, documents)
                 key = (brick["id"], group, fingerprint(prompt))
                 row = next((r for r in reuse_rows if
@@ -1221,7 +1245,7 @@ class AgentRuntime:
             "capability_reviews": capability_reviews,
             "composition": {"kind": "sum-of-independent-brick-forecasts",
                             "measured_combinations": False, "interaction_costs_supported": False},
-            "scenario": scenario_for_request(request),
+            "scenario": self.source_fixture or scenario_for_request(request),
             "report": {"title": "Measured Foundry prompt-contract pilot",
                        "summary": decision["summary"], "scope": "Fictional reference context only",
                        "unsupported": unsupported, "human_review_required": True},
@@ -1254,12 +1278,13 @@ class AgentRuntime:
         return result
 
     @staticmethod
-    def _validate_reused_row(row: dict, brick: dict) -> None:
+    def _validate_reused_row(row: dict, brick: dict, *, source_fixture: str | None = None) -> None:
         """Require inspectable, unchanged provider evidence before reusing labels."""
         group = row.get("group")
         if group not in {f"train-{i}" for i in range(4)}:
             raise ValueError("unrecognized training source group")
-        documents = source_documents(group, int(group[-1]))
+        documents = (fixture_documents(source_fixture, group, int(group[-1])) if source_fixture
+                     else source_documents(group, int(group[-1])))
         evidence = _read(Path(row["evidence"]))
         if (fingerprint(evidence) != row["evidence_sha256"]
                 or evidence.get("status") != "validated"

@@ -323,7 +323,9 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
             elif path == "/api/scenarios":
                 from token_yield.marketplace_scenarios import SCENARIOS
 
-                self._reply(200, {"source": "invented-public-metadata-inspired", "scenarios": SCENARIOS})
+                fixture = store.agent_runtime.source_fixture if store.agent_runtime else None
+                self._reply(200, {"source": "fictional-policy-fixture" if fixture else "invented-public-metadata-inspired",
+                                  "scenarios": [fixture] if fixture else SCENARIOS})
             elif re.fullmatch(r"/api/runs/[0-9a-f]{32}", path):
                 run = store.get(path.rsplit("/", 1)[-1])
                 self._reply(200 if run else 404, run or {"error": "run not found"})
@@ -426,6 +428,8 @@ def create_parser() -> argparse.ArgumentParser:
                         help="Reviewed campaign JSON; execution_enabled must be true after independent verification.")
     parser.add_argument("--mock-agents", action="store_true",
                         help="Use explicit synthetic provider fixtures; no authentication or network calls.")
+    parser.add_argument("--source-fixture", choices=["archive-exceptions-v2"],
+                        help="Explicit fictional source version; requires --mock-agents and separate test state.")
     return parser
 
 
@@ -436,6 +440,9 @@ def main() -> int:
         return 2
     if args.mock_agents and (args.enable_foundry or args.campaign_file):
         print("--mock-agents cannot be combined with paid campaign flags", file=sys.stderr)
+        return 2
+    if args.source_fixture and not args.mock_agents:
+        print("--source-fixture requires --mock-agents; no paid execution is approved", file=sys.stderr)
         return 2
     if args.campaign_file and not args.enable_foundry:
         print("--campaign-file requires explicit --enable-foundry", file=sys.stderr)
@@ -471,6 +478,7 @@ def main() -> int:
             })
             runtime = AgentRuntime(args.run_dir / "mock-state", config,
                                    dispatch=MockProvider(delay=.015),
+                                   source_fixture=args.source_fixture,
                                    token_provider=lambda: (_ for _ in ()).throw(AssertionError("No mock authentication")))
         store = RunStore(args.run_dir, agent_runtime=runtime)
         with make_server(args.port, store=store) as server:

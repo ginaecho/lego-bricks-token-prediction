@@ -185,6 +185,55 @@ Saved completed, failed and cancelled runs (and all persisted replay snapshots)
 have no live cursor or automatic polling. Refresh is read-only. Forecasts remain
 additive independent-brick estimates, not measured combinations.
 
+### Archive Atelier v2 fictional policy laboratory (offline only)
+
+The separate `archive-exceptions-v2` source version addresses the original
+Archive Atelier source-domain mismatch without changing any of the three
+reviewed original scenarios. Its [source fixtures](../token_yield/marketplace_source_fixtures.py)
+are original invented policies and records, not Paperless policies, legal advice,
+real legal/security authority or evidence of compliance.
+
+The version supplies explicit invoice, correspondence and master-media retention
+periods and their clock-start events, a documented exception taxonomy, and six
+linked policy/register/evidence groups. Counterexamples retain missing starts,
+unsigned extension requests, conflicting dates/classes/owners, and mismatched
+hold-release identifiers. Agents must still justify conclusions against actual
+passages; no approval, consensus, forecast or successful outcome is prescribed.
+
+Run this version only on a separate mock server and state directory:
+
+```console
+python -m examples.marketplace_demo_server --port 8784 --run-dir .feedback-archive-v2 --mock-agents --source-fixture archive-exceptions-v2
+```
+
+That server's `/api/scenarios` exposes the distinctly labeled v2 brief for the
+existing sales scenario selector. Its normal agent request format is unchanged.
+Load the v2 story, select the Foundry protocol in the runtime dropdown, and verify
+the status and Start button explicitly say MOCK before starting. On this server
+that protocol is backed only by mocked responses, not a paid provider. The
+separate keyword-only Offline mode does not exercise the versioned source flow.
+The runtime rejects a mismatched brief or a v2 brief sent without its source
+fixture. Without the new flag, the original three scenarios and original source
+generator remain unchanged. The v2 source version is rejected for paid runtimes
+and for the existing three-scenario campaign, including through direct Python use.
+
+Project discussion, requirements, feature extraction, workload groups, reuse
+validation and catalog forecasts all use the bound source version. Fixture
+metadata and content are included in model compatibility, preventing old-context
+models or training rows from becoming v2 evidence. Training groups are reusable;
+holdout identifiers are fresh per run. Six template-based cases are not a
+representative benchmark or independent human-authored holdout corpus.
+
+Offline tests validate source plumbing, exact-span citations, unknowns/conflicts,
+retained dissent and compatibility. Existing mock responses test protocol
+execution only: they do not establish real-model understanding, quality,
+agreement or semantic accuracy. Some of the general-purpose catalog contracts
+may remain unsupported by these deliberately domain-specific documents.
+
+Independent review and a subsequent explicit user authorization are required
+before any paid evaluation. Passing offline tests grants no paid permission.
+The two cancelled paid attempts and their accumulated costs remain unchanged.
+
 ### Original public-metadata-inspired scenarios
 
 Metadata was independently queried on 2026-09-17 through the GitHub repository API.
