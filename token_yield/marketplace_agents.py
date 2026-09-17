@@ -82,17 +82,36 @@ class ContentContractError(ValueError):
         self.retryable = retryable
 
 
-def _dissent_classification(note: str, agreed: bool, final_atoms: dict, atoms: dict | None) -> str:
-    if not agreed or (atoms is not None and atoms != final_atoms):
+def _dissent_classification(
+    note: str, agreed: bool, final_atoms: dict, atoms: dict | None, *,
+    all_agreed: bool, all_atoms_match: bool,
+) -> str:
+    if not agreed or not all_agreed or not all_atoms_match or (atoms is not None and atoms != final_atoms):
         return "unresolved_substantive"
     lowered = note.casefold()
-    if "scor" in lowered and final_atoms.get("score") == 0:
+    substantive = (
+        "infeasible", "cannot", "can't", "missing", "insufficient", "ungrounded",
+        "grounding", "source evidence", "evidence is missing", "interface", "contract-shape",
+        "contract shape", "schema", "required", "must include", "must be nonzero",
+    )
+    if any(marker in lowered for marker in substantive):
+        return "unresolved_substantive"
+    resolved_score = (
+        "score" in lowered or "scoring" in lowered
+    ) and final_atoms.get("score") == 0 and any(marker in lowered for marker in (
+        "out of scope", "optional", "no strong basis", "not rank", "not ranking",
+        "score zero", "score=0", "zero scoring is not needed",
+    ))
+    if resolved_score:
         return "resolved_advisory"
-    return "advisory"
+    return "unresolved_substantive"
 
 
 def _establishment_notes(reviews: list[dict], reconciliation: dict) -> list[dict]:
     final_atoms = reconciliation["atoms"]
+    votes = [item["public_output"] for item in reviews] + [reconciliation]
+    all_agreed = all(vote["agreed"] for vote in votes)
+    all_atoms_match = all(vote.get("atoms") == final_atoms for vote in votes)
     notes = []
     for item in reviews:
         output = item["public_output"]
@@ -101,13 +120,16 @@ def _establishment_notes(reviews: list[dict], reconciliation: dict) -> list[dict
                 "role": item["role"], "note": note, "agreed": output["agreed"],
                 "atoms_match_final": output.get("atoms") == final_atoms,
                 "classification": _dissent_classification(
-                    note, output["agreed"], final_atoms, output.get("atoms")),
+                    note, output["agreed"], final_atoms, output.get("atoms"),
+                    all_agreed=all_agreed, all_atoms_match=all_atoms_match),
             })
     for note in reconciliation.get("dissent", []):
         notes.append({
             "role": "orchestrator", "note": note, "agreed": reconciliation["agreed"],
             "atoms_match_final": True,
-            "classification": _dissent_classification(note, reconciliation["agreed"], final_atoms, final_atoms),
+            "classification": _dissent_classification(
+                note, reconciliation["agreed"], final_atoms, final_atoms,
+                all_agreed=all_agreed, all_atoms_match=all_atoms_match),
         })
     return notes
 

@@ -611,7 +611,10 @@ $("scenario-cards").addEventListener("click",event=>{
 function renderCapabilityProgress(run){
   const reviews=run.result?.capability_reviews||run.events.filter(e=>e.data?.requested&&e.data?.origin).map(e=>e.data);
   const latest=new Map(reviews.map(review=>[review.requested,review]));
-  const human=run.establishment_request?`<div class="notice"><b>Awaiting human approval</b><p>New functionality governance gate for ${esc(run.establishment_request.requested)}. Approval is bound to contract hash ${esc(run.establishment_request.contract_hash)} and is distinct from sales quote approval.</p>${rawDetails("Agreement, dissent and approval payload",run.establishment_request,true)}</div>`:"";
+  const waiting=run.status==="waiting"&&run.next_stage==="human_establishment_approval";
+  const decision=run.establishment_decision||run.result?.capability_reviews?.find(review=>review.human_establishment_decision)?.human_establishment_decision;
+  const human=waiting&&run.establishment_request?`<div class="notice"><b>Awaiting human approval</b><p>New functionality governance gate for ${esc(run.establishment_request.requested)}. Approval is bound to contract hash ${esc(run.establishment_request.contract_hash)} and is distinct from sales quote approval.</p>${rawDetails("Agreement, dissent and approval payload",run.establishment_request,true)}</div>`:
+    decision?`<div class="notice"><b>Human ${esc(decision.decision==="approve"?"approved":"rejected")} by ${esc(decision.actor)} at ${esc(decision.timestamp)}</b><p>Decision bound to contract hash ${esc(decision.contract_hash)}. The retained request below is audit history, not the current approval state.</p>${rawDetails("Human establishment audit",{decision,request:run.establishment_request},false)}</div>`:"";
   $("capability-status").innerHTML=human+Array.from(latest.values()).map(review=>`<div class="notice"><b>${esc(review.requested)} / ${esc(review.outcome)}</b><p>${esc(review.origin)} request · ${esc(review.contract_version||"version pending")}. ${esc(review.rationale||review.agent_verdict?.rationale||"Review in progress; not established yet.")}</p>${rawDetails("Candidate matches, lexical limitations and agent contract discussion",review)}</div>`).join("");
 }
 function rawDetails(title,value,open=false) {

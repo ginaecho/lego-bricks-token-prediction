@@ -750,6 +750,35 @@ def test_human_establishment_preserves_resolved_and_unresolved_notes(
         "Scoring remains out of scope and should be score zero."]
 
 
+@pytest.mark.parametrize("note", [
+    "Required source evidence is missing; retention periods cannot be grounded.",
+    "Scoring is required; zero scoring makes this contract infeasible.",
+    "Scoring is excluded, but the downstream interface cannot accept the required records.",
+])
+def test_human_establishment_classifies_substantive_agreed_true_notes_as_blockers(
+        tmp_path, config, request_data, note):
+    provider = MockProvider()
+    captured = []
+    def dissenting(prompt, **kwargs):
+        result = provider(prompt, **kwargs)
+        payload = json.loads(prompt)
+        if payload["task"] == "contract_review":
+            answer = json.loads(result.output)
+            answer["dissent"] = [note]
+            return replace(result, output=json.dumps(answer))
+        return result
+    def approve(pending):
+        captured.append(pending)
+        return approve_establishment(pending)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=dissenting)
+    run(runtime, {**request_data, "new_function": "Governed retention ledger"},
+        tmp_path / "run", establishment_decision=approve)
+    assert captured[0]["unresolved_substantive"]
+    assert {entry["note"] for entry in captured[0]["unresolved_substantive"]} == {note}
+    assert {entry["classification"] for entry in captured[0]["notes"][:3]} == {
+        "unresolved_substantive"}
+
+
 def test_human_establishment_surfaces_substantive_objection_and_rejects_stale_hash(
         tmp_path, config, request_data):
     provider = MockProvider()
