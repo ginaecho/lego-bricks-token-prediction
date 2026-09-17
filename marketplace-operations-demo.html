@@ -18,7 +18,7 @@
 <body>
 <header>
   <div class="brand">Token<span>Yield</span> <span class="muted small">/ operations</span></div>
-  <nav class="header-links" aria-label="Main navigation"><span id="runtime-badge" class="badge">Select a runtime in sales</span><a id="sales-link" href="/marketplace-sales-demo.html">← Sales studio</a></nav>
+  <nav class="header-links" aria-label="Main navigation"><span id="runtime-badge" class="badge">Select a runtime in sales</span><a id="console-link" href="/marketplace-console.html">Execution console</a><a id="sales-link" href="/marketplace-sales-demo.html">← Sales studio</a></nav>
 </header>
 <main>
   <section class="intro">
@@ -32,7 +32,7 @@
   </div>
   <div id="connection" class="connection" role="status">Connecting to the local backend…</div>
   <div id="error" class="error" role="alert" hidden></div>
-  <div id="azure-notice" class="note" hidden><b>Foundry / paid Azure execution:</b> Advancing this run may send its submitted brief and optional function to the configured GPT-5.4 deployment. Fixtures are original and fictional; no real documents are ingested and no live web research is performed. The US$25 shared pilot cap is server-only. Predictions and ROI are not actual provider bills or production quotes. Cancellation cannot undo an in-flight call.</div>
+  <div id="azure-notice" class="note" hidden><b>Server-controlled agent runtime:</b> In paid mode, advancing this run may send its brief and optional function to the pinned GPT-5.4 deployment under the configured campaign cap. MOCKED servers use synthetic fixtures without networking. No real documents are ingested. Predictions and ROI are not actual provider bills or production quotes. Cancellation cannot undo an in-flight call.</div>
   <section class="run-summary" aria-label="Selected run">
     <div><div class="eyebrow">Request being observed</div><p id="brief">Opening this page never starts a run. Submit a request in the sales studio, then select it here.</p><div id="run-meta" class="run-meta"></div></div>
     <span id="status" class="badge">No run selected</span>
@@ -253,7 +253,9 @@
         $('status').className = 'badge status-' + run.status;
         const request = run.request || {};
         $('brief').textContent = request.description || '(No description supplied)';
-        $('runtime-badge').textContent=liveRun()?'Foundry / GPT-5.4 / measured pilot':'Offline / synthetic / no provider calls';
+        const mocked=run.result?.source==='mocked-test-provider'||run.events.some(e=>e.data?.source==='mocked-test-provider');
+        $('runtime-badge').textContent=liveRun()?(mocked?'MOCK agents / synthetic usage / no paid calls':'Foundry / GPT-5.4 / measured pilot'):'Offline / synthetic / no provider calls';
+        $('console-link').href='/marketplace-console.html?run='+encodeURIComponent(run.id);
         $('azure-notice').hidden=!liveRun();
         $('run-meta').textContent = 'Run ' + run.id + ' · Runtime ' + text(request.runtime||'offline') + ' · Model ' + (liveRun()?'GPT-5.4 (pinned deployment)':text(request.model_id)) + ' · ' + number(request.runs_per_month) + ' runs / month' + (request.new_function ? ' · New function: ' + text(request.new_function) : '');
         state.lastCount = run.events.length;
@@ -376,7 +378,8 @@
     $('awaiting').hidden=true;
     $('artifact-count').textContent=result?'Measured-data pilot / stored result':'Live artifacts / '+events.length+' events';
     const overview=$('view-overview');
-    overview.replaceChildren(node('div','GPT-5.4 / source-bound measured pilot. Agent discussion and workload measurements are actual calls; token forecasts are regression predictions. Orchestration spend is separate from forecast workload USD. No production accuracy, web research, or compliance guarantee.','note'));
+    const mocked=result?.source==='mocked-test-provider'||events.some(e=>e.data?.source==='mocked-test-provider');
+    overview.replaceChildren(node('div',(mocked?'MOCK provider: public outputs and usage are synthetic fixtures. No paid calls. Local regression computation is real. ':'GPT-5.4 / source-bound pilot: provider calls and separate orchestration accounting. ')+'Forecast sums are not measured combinations. No production accuracy, interaction-cost, web research or compliance guarantee.','note'));
     if(result){
       const before=result.before||{},after=result.after||{};
       const supported=after.supported===true&&Number.isFinite(after.input_tokens)&&Number.isFinite(after.output_tokens);

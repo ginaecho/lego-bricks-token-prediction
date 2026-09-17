@@ -63,7 +63,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 <body>
 <header><div class="header-inner">
   <div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Token Yield</div>
-  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><span>Sales studio</span><span id="runtime-badge" class="pill amber">Offline selected</span></div>
+  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><a href="marketplace-console.html">Execution console</a><span>Sales studio</span><span id="runtime-badge" class="pill amber">Offline selected</span></div>
 </div></header>
 <main>
   <section class="intro"><div><div class="eyebrow">The functionality marketplace</div><h1>Your next product.<br>One brick at a time.</h1><p>Shape the solution together. Explore the capabilities, the team, and the value they could create &mdash; not just the tokens they consume.</p></div>
@@ -86,7 +86,12 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Execution controls<select id="execution-mode"><option value="step">Step-by-step / pause before each stage</option><option value="automatic">Automatic / run all approved stages</option></select></label>
         </div>
         <p id="runtime-status" class="help" role="status">Checking server runtime approval. No model calls occur on page load.</p>
-        <div id="azure-notice" class="notice" hidden><b>Before you start:</b> Your submitted brief and optional function are sent to the configured Azure GPT-5.4 deployment. Use fictional information only. Workloads use original fictional fixtures; no real documents are ingested. Starting a Foundry run authorizes paid agent discussion and measurement under the server-only shared US$25 pilot cap. Automatic mode proceeds without further stage approval; step mode waits for Next. Cancellation cannot undo an in-flight call.</div>
+        <div id="azure-notice" class="notice" hidden><b>Before you start:</b> Paid mode sends the submitted brief and optional function to the configured Azure GPT-5.4 deployment under the campaign limits shown above. On a MOCKED server no network calls occur and all provider labels are synthetic. Use fictional information only. Workloads use bundled reference documents, not repository code or customer documents. Automatic mode proceeds without further stage approval; step mode waits for Next. Cancellation cannot undo an in-flight call.</div>
+        <details open><summary>🧱 Three little project stories / new-function workshop</summary>
+          <p class="help">Original invented briefs inspired only by public repository metadata, not customer results or copied code. Load in order to explore creation, similar reuse and description-only detection across persistent runs. Loading never starts a provider call.</p>
+          <div id="scenario-cards" class="impact-grid">Connect to the local server to load cited scenarios.</div>
+          <p class="help">Leave the function field empty for automatic gap detection. A detected capability enters novelty review, three-role contract proposals and discussion, reconciliation, measurement and retraining without copying a name. Ambiguous contracts stay unresolved. Offline keyword simulation does not implement this agent loop.</p>
+        </details>
         <label for="brief">Customized description</label>
         <textarea id="brief" maxlength="6000" placeholder="For example: Deep research into competitors, web research with cited sources, and personalized discovery based on customer interests."></textarea>
         <div class="form-grid two">
@@ -94,7 +99,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Execution model<select id="brief-model" class="model-options"></select><small id="brief-model-help">Offline scenario rate card only; no model is called.</small></label>
         </div>
         <div class="form-grid two">
-          <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>One execution runs the complete document-checking pipeline once.</small></label>
+          <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>Planning volume. Agent-mode totals sum independent brick forecasts, not measured workflow combinations.</small></label>
           <label>New function to explore (optional)<input id="new-function" class="search" maxlength="120" placeholder="For example: Policy-as-code validation"><small>Requests feature expansion and retraining. Unsupported tasks must abstain, not become zero-cost predictions.</small></label>
         </div>
         <div class="custom-actions"><button class="primary" id="run-pipeline">Start step-by-step + open operations</button><button class="secondary" id="security-example">Load security project</button><button class="secondary" id="novel-example">Try a new function</button></div>
@@ -104,8 +109,10 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         <div class="flow"><span>Brief + proposals</span>&rarr;<span>Discussion + adjudication</span>&rarr;<span>Documents + features</span>&rarr;<span>Measure / train / evaluate</span>&rarr;<span>Predict project + catalog</span></div>
         <div id="pipeline-progress" class="proposal" hidden>
           <a id="operations-link" target="token-yield-operations" rel="noopener">Open background operations &nearr;</a>
+          <a id="console-link" href="marketplace-console.html" target="token-yield-console" rel="noopener">Open terminal-style execution console &nearr;</a>
           <button class="secondary" id="refresh-pipeline" disabled>Refresh project status</button>
           <p id="pipeline-status" class="help" role="status"></p>
+          <div id="capability-status" aria-live="polite"></div>
           <div id="pipeline-result"></div>
         </div>
         <details><summary>Quick catalog preview / original keyword-only demo</summary>
@@ -564,15 +571,34 @@ function setPipelineBusy(busy) {
 }
 function updateRuntimeChoice() {
   const live=$("pipeline-runtime").value==="foundry";
+  const mocked=runtimeStatus.source==="mocked-test-provider";
   $("azure-notice").hidden=!live;
-  $("runtime-badge").textContent=live?"Foundry selected / explicit paid run":"Offline selected / no provider calls";
-  $("pipeline-basis").textContent=live?"GPT-5.4 / measured-data pilot":"Offline / synthetic";
+  $("runtime-badge").textContent=live?(mocked?"MOCK agents / no paid calls":"Foundry selected / explicit paid run"):"Offline selected / no provider calls";
+  $("pipeline-basis").textContent=live?(mocked?"MOCK provider / real local fitting":"GPT-5.4 / measured-data pilot"):"Offline / synthetic";
   $("brief-model-help").textContent=live?"Pinned Azure GPT-5.4 deployment; no browser model override.":"Offline scenario rate card only; no model is called.";
   if(live){$("brief-model").innerHTML='<option value="gpt">GPT-5.4 / configured Azure deployment</option>';}
   else if($("brief-model").options.length===1){$("brief-model").innerHTML=modelOptions("gpt-mini");}
   $("brief-model").disabled=pipelineBusy||live;
   $("run-pipeline").disabled=pipelineBusy||(live&&runtimeStatus.enabled!==true);
-  $("run-pipeline").textContent=pipelineBusy?"Project active in background operations...":`Start ${live?"paid Foundry":"offline"} ${$("execution-mode").value==="step"?"step-by-step":"automatic"} + open operations`;
+  $("run-pipeline").textContent=pipelineBusy?"Project active in background operations...":`Start ${live?(mocked?"MOCK agents":"paid Foundry"):"offline"} ${$("execution-mode").value==="step"?"step-by-step":"automatic"} + open operations`;
+}
+let scenarios=[];
+async function loadScenarios(){
+  try{
+    const data=await backendJson("/api/scenarios");scenarios=data.scenarios;
+    $("scenario-cards").innerHTML=scenarios.map((item,index)=>`<div class="impact"><h3>${index+1}. ${esc(item.title)}</h3><p>${esc(item.exercise)}</p><p class="help">${esc(item.inspiration)}</p><a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.repository)}</a><p class="help">Metadata checked ${esc(item.observed)}. Invented fixture.</p><button class="secondary" data-scenario="${index}">Load ${esc(item.title)}</button></div>`).join("");
+  }catch(error){$("scenario-cards").textContent="Scenario metadata unavailable: "+error.message;}
+}
+$("scenario-cards").addEventListener("click",event=>{
+  const button=event.target.closest("[data-scenario]");if(!button||pipelineBusy)return;
+  const item=scenarios[Number(button.dataset.scenario)];if(!item)return;
+  invalidateProposal();$("brief").value=item.description;$("new-function").value=item.new_function;
+  $("capability-status").replaceChildren();$("status").textContent=`Loaded invented ${item.title}. Review runtime before explicitly starting. No calls started.`;
+});
+function renderCapabilityProgress(run){
+  const reviews=run.result?.capability_reviews||run.events.filter(e=>e.data?.requested&&e.data?.origin).map(e=>e.data);
+  const latest=new Map(reviews.map(review=>[review.requested,review]));
+  $("capability-status").innerHTML=Array.from(latest.values()).map(review=>`<div class="notice"><b>${esc(review.requested)} / ${esc(review.outcome)}</b><p>${esc(review.origin)} request · ${esc(review.contract_version||"version pending")}. ${esc(review.rationale||review.agent_verdict?.rationale||"Review in progress; not established yet.")}</p>${rawDetails("Candidate matches, lexical limitations and agent contract discussion",review)}</div>`).join("");
 }
 function rawDetails(title,value,open=false) {
   return `<details ${open?"open":""}><summary>${esc(title)}</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto">${esc(JSON.stringify(value??{},null,2))}</pre></details>`;
@@ -648,13 +674,14 @@ function renderPipelineResult(run) {
   const r=run.result;
   if(!r||!Array.isArray(r.bricks)||!r.after||!r.training)throw new PipelineError("Completed run is missing prediction or training artifacts. Nothing was added.");
   const live=run.request?.runtime==="foundry"||r.training.source==="measured-foundry";
+  const mocked=r.source==="mocked-test-provider";
   const supported=finiteTokens(r.after)&&r.after.supported!==false&&r.bricks.length>0;
   const before=r.before||{}, requirements=Array.isArray(r.requirements)?r.requirements:[];
   const missing=requirements.filter(item=>item.status==="missing").length,partial=requirements.filter(item=>item.status==="partial").length;
-  $("pipeline-result").innerHTML=`<div class="notice"><b>${live?"Measured source-bound calls, fitted pilot predictions.":"Real model fitting, synthetic measurements."}</b> ${live?"GPT-5.4 agent discussion and workload measurements are real provider calls. Forecasts are regression outputs, not measured customer executions; small held-out pilot MAE is not production accuracy.":"Test error measures agreement with the simulator only."}</div>
-    <h3>Your proposed project functions</h3><div class="impact-grid">${r.bricks.map(brick=>`<div class="impact"><h3>${esc(brick.name||brick.id)}</h3><p>${brick.novel?"New function / inspect measured coverage.":"Proposed source-bound function."}</p><div class="tags">${(Array.isArray(brick.atoms)?brick.atoms:[]).map(atom=>`<span>${esc(atom)}</span>`).join("")}</div></div>`).join("")}</div>
+  $("pipeline-result").innerHTML=`<div class="notice"><b>${mocked?"MOCK provider fixtures / real local model fitting.":live?"Measured source-bound calls, fitted pilot predictions.":"Real model fitting, synthetic measurements."}</b> ${mocked?"No paid calls. Outputs and token labels are synthetic protocol fixtures, not LLM performance evidence.":live?"GPT-5.4 discussion and workload measurements are provider calls. Forecasts are regression outputs, not measured customer executions; small held-out pilot MAE is not production accuracy.":"Test error measures agreement with the simulator only."} Composition is a sum of independently measured brick forecasts, not a measured combination; interaction costs are unavailable.</div>
+    <h3>Your proposed project functions</h3><div class="impact-grid">${r.bricks.map(brick=>`<div class="impact"><h3>${esc(brick.name||brick.id)}</h3><p>${brick.novel?"New function / inspect measured coverage.":"Proposed source-bound function."}</p><div class="tags">${(Array.isArray(brick.atoms)?brick.atoms:Object.entries(brick.atoms||{}).filter(([,count])=>count>0).map(([atom,count])=>`${atom} × ${count}`)).map(atom=>`<span>${esc(atom)}</span>`).join("")}</div></div>`).join("")}</div>
     <div class="review-metrics"><div><small>Before new training</small><b>${before.supported&&Number.isFinite(before.total_tokens)?compact(before.total_tokens):"Not covered"}</b><small>${esc(before.reason||"")}</small></div><div><small>After training / whole project forecast</small><b>${supported?compact(r.after.input_tokens+r.after.output_tokens):"Unsupported / abstained"}</b><small>${supported?number(r.after.input_tokens)+" input + "+number(r.after.output_tokens)+" output":esc(r.after.reason||"No supported estimate. Tokens are not zero.")}</small></div><div><small>AI estimate / month (backend pinned rates)</small><b>${supported&&Number.isFinite(r.after.usd_per_month)?money(r.after.usd_per_month):"Not available"}</b><small>${number(run.request.runs_per_month)} complete executions; separate from pilot spend</small></div></div>
-    <p class="help">${number(r.training.train_count)} ${live?"measured":"synthetic"} training rows; ${number(r.training.test_count)} held-out rows. ${Array.isArray(r.feature_names)?r.feature_names.length:"Unreported"} features. Model version: ${esc(r.training.version||"not reported")}.</p>
+    <p class="help">${number(r.training.train_count)} ${live&&!mocked?"measured":"synthetic"} training rows; ${number(r.training.test_count)} held-out rows. Reused training: ${number(r.training.reused_train_count||0)}; fresh holdouts: ${number(r.training.new_holdout_count||r.training.test_count)}. ${Array.isArray(r.feature_names)?r.feature_names.length:"Unreported"} features. Model version: ${esc(r.training.version||"not reported")}.</p>
     <p class="help">${Array.isArray(r.documents)?r.documents.length:0} fictional documents. ${live?"Requirement labels are source statements only; inspect the raw evidence rather than inferring a compliance score.":missing+" missing and "+partial+" partial reference requirements."} This is not evidence of working controls or compliance.</p>
     ${live?rawDetails("Orchestration usage / paid pilot spend (not workload forecast)",r.orchestration,true)+rawDetails("Measured workload usage (not predicted customer volume)",r.workload,true)+rawDetails("Three agents: proposals, peer review, orchestrator acceptance and dissent",r.agents,true)+rawDetails("Orchestrator decisions and retained dissent",{adjudication:r.adjudication,dissent:r.dissent},true):""}
     ${rawDetails("Training / held-out evaluation / coefficients",r.training)}${rawDetails("Pinned rate provenance",r.rates)}${rawDetails("Full result / unsupported scopes / limitations",r)}
@@ -668,6 +695,8 @@ async function pollPipeline(id,generation) {
     if(generation!==pipelineGeneration)return;
     const events=Array.isArray(run.events)?run.events:[];
     const last=events[events.length-1];
+    renderCapabilityProgress(run);
+    $("console-link").href=`/marketplace-console.html?run=${encodeURIComponent(run.id)}`;
     $("pipeline-status").textContent=`Run ${run.id} / ${run.status}${last?" / "+last.message:""}`;
     if(run.status==="failed")throw new PipelineError(run.error||"The backend run failed. Inspect its event log.");
     if(run.status==="cancelled"){
@@ -684,7 +713,7 @@ async function pollPipeline(id,generation) {
     }
     if(run.status==="completed"){
       pipelineRun=run;renderPipelineResult(run);setPipelineBusy(false);
-      $("backend-status").textContent=`Complete. Both pages show the same saved run. ${run.request?.runtime==="foundry"?"Foundry usage is measured separately in operations; workload forecasts remain an uncalibrated pilot.":"Offline run: no live LLM calls."}`;return;
+      $("backend-status").textContent=`Complete. All pages show the same saved run. ${run.result?.source==="mocked-test-provider"?"MOCK fixture: no paid calls; real local fitting with synthetic labels.":run.request?.runtime==="foundry"?"Foundry usage is measured separately in operations; workload forecasts remain an uncalibrated pilot.":"Offline run: no live LLM calls."}`;return;
     }
     pipelineTimer=setTimeout(()=>pollPipeline(id,generation),700);
   }catch(error){
@@ -708,6 +737,7 @@ async function runPipeline() {
   setPipelineBusy(true);pipelineRun=null;clearTimeout(pipelineTimer);const generation=++pipelineGeneration;
   $("refresh-pipeline").disabled=true;
   $("proposal").hidden=true;proposal=null;$("pipeline-result").innerHTML="";$("pipeline-progress").hidden=false;
+  $("capability-status").replaceChildren();$("console-link").href="/marketplace-console.html";
   $("operations-link").href="/marketplace-operations-demo.html?pending=1";$("pipeline-status").textContent="Submitting project to the local backend...";
   $("backend-status").textContent=popup?"The companion operations page is opening.":"Your browser blocked the companion popup. Use Open background operations below.";
   try {
@@ -759,7 +789,7 @@ async function connectBackend() {
       $("pipeline-runtime").querySelector('[value="foundry"]').disabled=true;
       $("runtime-status").textContent="Runtime approval unavailable: "+error.message+" Paid start is disabled; offline remains available.";
     }
-    updateRuntimeChoice();refreshMeasuredCatalog();
+    updateRuntimeChoice();refreshMeasuredCatalog();loadScenarios();
     $("backend-status").textContent="Backend connected. Select the runtime and execution mode before starting. Loading or refreshing saved runs does not call a model.";
     const id=new URLSearchParams(location.search).get("run");
     if(id){

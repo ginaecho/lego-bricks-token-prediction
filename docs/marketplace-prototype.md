@@ -154,6 +154,124 @@ than charging its internal functions twice. Unsupported results have no
 financial apply action. Reference-context pilot forecasts do not establish
 accuracy for arbitrary customer documents or live-web research.
 
+## Feedback workshop and execution console
+
+The sales studio remains additive: manual variant selection, empty initial build,
+ROI at the top, offline fitting and explicitly enabled Foundry runs are preserved.
+In **Describe your idea**, the new-function workshop provides three original
+invented briefs. Loading a brief never submits it or switches to paid mode.
+All provider workloads still use bundled fictional reference documents, not
+the cited repositories' code or real scheduling/support/archive records.
+
+The new [execution console](../marketplace-console.html) displays the same run ID
+as sales and detailed operations. It polls actual backend snapshots, appends
+chronological persisted events and exposes operation starts, waits, roles,
+validated numeric rows, training reuse, fresh holdouts, metric reviews, forecasts
+and publication. Expand each event for public output. It is an **in-process
+operation stream, not a shell**; there is no shell endpoint, generated code
+execution, fake command typing or hidden model reasoning.
+Read-only persisted replay, missing runs, disconnection, failure and cancellation
+are explicit. Next releases exactly the current gate; cancellation cannot undo
+an in-flight request. Opening any page does not invoke a provider.
+
+### Original public-metadata-inspired scenarios
+
+Metadata was independently queried on 2026-09-17 through the GitHub repository API.
+Only domain ideas were used; no licensed repository source was copied into prompts.
+These are invented fixtures, not customers, production results or endorsements.
+
+| Story | Public metadata source | Original invented exercise |
+| --- | --- | --- |
+| Archive Atelier | [paperless-ngx](https://github.com/paperless-ngx/paperless-ngx), [API](https://api.github.com/repos/paperless-ngx/paperless-ngx): document scanning/indexing/archiving; GPL-3.0 metadata | Request a source-only retention exception ledger and review novelty |
+| Booking Blocks | [cal.diy](https://github.com/calcom/cal.diy), [API lookup](https://api.github.com/repos/calcom/cal.com): scheduling; the cal.com lookup redirected to cal.diy; MIT metadata | Compare a retention exception register with the previously published ledger |
+| Care Crew | [Chatwoot](https://github.com/chatwoot/chatwoot), [API](https://api.github.com/repos/chatwoot/chatwoot): chat/email/omnichannel support; license metadata NOASSERTION | Leave the function field empty and infer a handoff obligation mapping gap |
+
+Run them in order against one persistent state directory to inspect compatible
+training-row reuse. Live outcomes are not predetermined: agents may reuse,
+establish, abstain or disagree. The mock provider has explicitly labeled,
+rule-based fixture outputs, including register/ledger normalization and a handoff
+keyword. Those rules exist only in the mock module, not the live orchestrator.
+
+### Contract and prediction boundaries
+
+Both explicit requests and description-inferred gaps enter the same capability
+resolver. Exact normalized names reuse. Name-token Jaccard scores provide
+candidate evidence only, never semantic equivalence. An orchestrator compares
+contract scope and may leave ambiguity unresolved.
+
+Creation now requires three independent atom proposals, three peer reviews of
+all proposals, and orchestrator reconciliation. Disagreement, differing final
+atom counts or out-of-scope work prevents establishing that contract. The finite
+atom counts compile into ordered source-only steps, and workload outputs must
+contain exactly one result for each step in order, plus valid source citations.
+This is a bounded document transformation, not arbitrary named-function execution.
+Output shape and citations are checked; semantic correctness still requires
+human review, and mock outputs are not evidence of live model capability.
+
+The `source-atoms-v2` compatibility fingerprint excludes older execution contracts
+from predictions and training reuse without deleting historical evidence.
+Contracts, steps, hashes, feature builders, reference-context bounds and model
+versions are saved. Reused training rows require intact original evidence hashes;
+old holdouts are never promoted or reused. Holdouts are fresh run-specific groups
+but share fictional templates: this is a small exploratory pilot, not independent
+production validation. Rejected metric reviews do not publish a new current model.
+
+**Measured combinations are unavailable.** Project composition is explicitly
+the sum of independent brick forecasts, not a jointly executed workflow.
+No cross-brick interaction costs or shared-context savings are measured.
+Numeric forecasts remain withheld for unsupported scope, unresolved project
+decisions, incompatible models/contracts or predictors outside measured support.
+The local input/output ridge models are retrained; GPT is never fine-tuned.
+
+### No-paid-call validation
+
+Use a separate loopback port and scratch state; do not point tests at a live ledger:
+
+```powershell
+python -m examples.marketplace_demo_server --port 8772 --run-dir .feedback-browser --mock-agents
+```
+
+Open <http://127.0.0.1:8772/marketplace-sales-demo.html?mode=custom>.
+Select the agent runtime, which is visibly labeled **MOCK**, then start explicitly.
+`--mock-agents` cannot combine with paid flags, uses no authentication and never
+dispatches network requests. Its durable accounting amounts test the budget
+protocol with synthetic usage; they are not actual spending.
+
+```powershell
+python -m pytest tests\test_marketplace_agents.py tests\test_marketplace_demo.py tests\test_marketplace_feedback.py -q --basetemp=.feedback-tests
+npm install --prefix .feedback-tools --no-save --no-package-lock playwright
+$env:PLAYWRIGHT_MODULE = Join-Path (Get-Location) '.feedback-tools\node_modules\playwright'
+$env:PLAYWRIGHT_CHANNEL = 'msedge'
+node tests\marketplace_feedback_browser.cjs
+```
+
+Use the repository's configured Python environment. Browser tests use installed
+Edge; omit `PLAYWRIGHT_CHANNEL` when Playwright Chromium is installed.
+They refuse non-mock provenance before any POST, exercise three persistent runs,
+stepping/cancellation, 1440px desktop and 390px mobile layouts, no paid auto-start,
+run-ID links, disconnection/reconnect and stale-output clearing. Screenshots and
+a JSON report are written under `.feedback-browser-check`, not committed.
+For a repeat of the creation tests, use a **new mock-only** directory/server;
+do not reset or replace any paid campaign state.
+
+### Prepared later campaign
+
+`examples/marketplace-feedback-campaign.json` is a **disabled preparation artifact**:
+USD 50 maximum additional authorization, USD 48 operational stop, a new fixed
+approval identity, and only the three unchanged reviewed scenario briefs.
+It neither executes calls nor changes the historical USD 25 campaign.
+The legacy CLI cap remains USD 25.
+
+Only after independent phase-one verification may the operator enable a reviewed
+copy and explicitly provide `--enable-foundry --campaign-file <reviewed-copy>`
+with the existing pinned connection and a new, durably retained
+`--agent-state-dir`. Do not execute this during phase-one validation.
+Campaign configuration and scenario metadata are pinned in the new ledger.
+Changing that pin cannot reset spending; another campaign cannot open the old
+ledger. Unknown usage retains reservations and halts execution. All attempts,
+retries and role calls count against the cap. No cross-campaign row import is
+implemented: prior evidence is conservatively excluded, not silently reused.
+
 ## Sales conversation demo
 
 Open [marketplace-sales-demo.html](../marketplace-sales-demo.html) directly in

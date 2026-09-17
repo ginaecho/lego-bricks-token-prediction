@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brickworks / execution console</title>
+<style>
+:root{color-scheme:dark;font-family:ui-monospace,Consolas,monospace;background:#141b28;color:#e1ecf5}
+*{box-sizing:border-box}body{margin:0}header{background:#d9eadf;color:#233b34;padding:22px}header>div,main{max-width:1150px;margin:auto}h1{font-size:clamp(23px,4vw,34px);margin:12px 0}a{color:#97e4cb}header a{color:#234b42}nav,.controls{display:flex;gap:14px;flex-wrap:wrap}main{padding:20px}p{line-height:1.6}button,input,select{font:inherit;padding:10px;border-radius:8px;border:1px solid #618c81;background:#243347;color:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}label{display:flex;gap:8px;align-items:center;flex-wrap:wrap}input{min-width:0;max-width:100%;flex:1}.controls{padding:14px 0}.badge{padding:8px;background:#263b46;border-left:4px solid #a0d7bd;margin:12px 0;overflow-wrap:anywhere}#connection{color:#f3d394}#terminal{border:1px solid #43655e;border-radius:12px;padding:12px;min-height:180px}details{padding:10px 0;border-bottom:1px solid #30414e}summary{cursor:pointer;overflow-wrap:anywhere;line-height:1.6}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.6;margin:8px 0;color:#b6dace}#run-summary{overflow-wrap:anywhere}.brick{display:inline-block;background:#cbb8e9;color:#362447;padding:10px 14px;border-radius:5px;border-bottom:5px solid #a28bc0;font-weight:bold}.brick:before{content:"● ● ●";display:block;letter-spacing:8px;font-size:10px}.muted{color:#aec2d1}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #f1cf91}#empty{color:#aec2d1}@media(max-width:500px){main,header{padding:14px}.controls>*{max-width:100%}button{flex:1}#terminal{padding:8px}}
+</style>
+</head>
+<body>
+<header><div><span class="brick" aria-hidden="true">BRICKWORKS</span>
+<h1>Watch the work, not a performance.</h1>
+<nav><a id="sales" href="/marketplace-sales-demo.html">Sales studio</a><a id="operations" href="/marketplace-operations-demo.html">Detailed operations</a></nav>
+</div></header>
+<main>
+<p>Chronological <b>in-process backend operations</b>, not a shell. No typed-command animation, arbitrary command execution or hidden model reasoning. Expand an event for actual public output, numeric predictors and evidence references.</p>
+<form id="open-run"><label>Run ID <input id="run-id" pattern="[0-9a-f]{32}" maxlength="32" required placeholder="Paste a saved run ID"><button>Open run (read only)</button></label></form>
+<p id="connection" role="status" aria-live="polite">No run selected. No provider calls started.</p>
+<div id="run-summary" class="badge">Empty console. Start a run explicitly in the sales studio.</div>
+<div class="controls"><button id="refresh" type="button">Refresh</button><button id="next" type="button" disabled>Next stage</button><button id="cancel" type="button" disabled>Cancel unfinished run</button><label><input id="follow" type="checkbox" checked> Follow newest event</label></div>
+<p class="muted">Mock provider labels are synthetic. Local regression fitting is real computation. Forecast sums are not measured combinations. Paid attempts and orchestration are accounted separately from customer-volume forecasts.</p>
+<section id="terminal" aria-label="Backend operation event log"><p id="empty">No backend events yet.</p></section>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+let id=new URLSearchParams(location.search).get("run")||"", seen=0, timer=null, run=null, generation=0, controlling=false;
+async function json(path,options={}){
+  const response=await fetch(path,{...options,signal:AbortSignal.timeout(15000)});
+  const data=await response.json();if(!response.ok)throw Error(data.error||`HTTP ${response.status}`);return data;
+}
+function controls(){
+  $("next").disabled=controlling||!run||run.replay||run.status!=="waiting";
+  $("cancel").disabled=controlling||!run||run.replay||!["queued","running","waiting"].includes(run.status);
+}
+function links(){
+  $("sales").href=`/marketplace-sales-demo.html?run=${encodeURIComponent(id)}`;
+  $("operations").href=`/marketplace-operations-demo.html?run=${encodeURIComponent(id)}`;
+}
+async function poll(token){
+  clearTimeout(timer);
+  if(!/^[0-9a-f]{32}$/.test(id)){run=null;controls();$("connection").textContent="Empty or invalid run ID. No calls started.";return;}
+  try{
+    const data=await json(`/api/runs/${id}`);if(token!==generation)return;
+    if(data.id!==id||!Array.isArray(data.events))throw Error("Invalid run snapshot");
+    run=data;controls();links();
+    const source=data.result?.source||data.events.find(e=>e.data?.source)?.data.source||
+      (data.request.runtime==="offline"?"synthetic offline":"Provider provenance pending");
+    $("connection").textContent=data.replay?"Persisted replay / read-only historical evidence":
+      ["completed","failed","cancelled"].includes(data.status)?"Saved terminal run / no new execution":"Connected / polling live backend state";
+    $("run-summary").textContent=`Run ${id} | ${data.status} | ${source} | ${data.events.length} events`+
+      (data.next_stage?` | Waiting before ${data.next_stage}`:"")+(data.error?` | ${data.error}`:"")+
+      (data.result?` | Published: ${data.result.training?.pilot_published===true} | Model ${data.result.training?.version||"not reported"}`:"");
+    if(data.events.length<seen){$("terminal").replaceChildren();seen=0;}
+    const added=data.events.slice(seen);if(added.length&&seen===0)$("terminal").replaceChildren();
+    for(const event of added){
+      const detail=document.createElement("details"), summary=document.createElement("summary"), pre=document.createElement("pre");
+      summary.textContent=`[${event.seq??seen+1}] ${event.time||""} ${event.stage||"operation"} :: ${event.message||event.title||"Backend event"}`;
+      pre.textContent=JSON.stringify(event.data??event,null,2);
+      detail.append(summary,pre);$("terminal").append(detail);seen++;
+    }
+    if(added.length&&$("follow").checked)$("terminal").lastElementChild?.scrollIntoView({block:"nearest"});
+    if(!["completed","failed","cancelled"].includes(data.status))timer=setTimeout(()=>poll(token),700);
+  }catch(error){
+    if(token!==generation)return;
+    run=null;controls();$("connection").textContent="Disconnected / unavailable: "+error.message+
+      ". Prior events remain historical, not current success. Refresh to reconnect.";
+  }
+}
+function openRun(){
+  generation++;clearTimeout(timer);seen=0;run=null;controls();
+  $("terminal").replaceChildren();$("run-summary").textContent="Awaiting backend snapshot; no success assumed.";
+  $("run-id").value=id;poll(generation);
+}
+$("open-run").addEventListener("submit",e=>{e.preventDefault();id=$("run-id").value.trim();history.replaceState(null,"",`?run=${encodeURIComponent(id)}`);openRun();});
+$("refresh").addEventListener("click",()=>poll(generation));
+async function control(action){
+  if(!run||controlling)return;
+  const body=action==="next"?{stage:run.next_stage}:{};
+  controlling=true;controls();
+  try{await json(`/api/runs/${id}/${action}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});await poll(generation);}
+  catch(error){$("connection").textContent="Control rejected: "+error.message;}
+  finally{controlling=false;controls();}
+}
+$("next").addEventListener("click",()=>control("next"));$("cancel").addEventListener("click",()=>control("cancel"));
+openRun();
+</script>
+</body>
+</html>
