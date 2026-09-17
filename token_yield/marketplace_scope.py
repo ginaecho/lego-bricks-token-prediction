@@ -16,10 +16,12 @@ from .marketplace_agent_contracts import canonical, fingerprint, strict_json
 from .marketplace_scenarios import SCENARIOS
 from .marketplace_source_fixtures import fixture_documents, fixture_scenario
 
-SCOPE_ID = "archive-atelier-v2-existing50-v2"
+SCOPE_ID = "archive-manager-v2-existing100-v2"
 FIXTURE_ID = "archive-exceptions-v2"
 HISTORICAL_SAFETY_USD = 1.49220
 HISTORICAL_CALLS = 22
+CAMPAIGN_CAP_USD = 100
+CAMPAIGN_STOP_USD = 96
 
 
 def source_identity() -> str:
@@ -35,25 +37,26 @@ def _funding(campaign: dict, state: dict) -> None:
             or not isinstance(state["budget"]["settled_requests"], dict)):
         raise ValueError("complete existing funding ledger required")
     if campaign != {
-        "approval_id": "marketplace-feedback-three-demos-50usd", "cap_usd": 50,
-        "stop_usd": 48, "execution_enabled": True,
+        "approval_id": "marketplace-feedback-three-demos-50usd", "cap_usd": CAMPAIGN_CAP_USD,
+        "stop_usd": CAMPAIGN_STOP_USD, "execution_enabled": True,
         "scenario_ids": [s["id"] for s in SCENARIOS],
     } or campaign["execution_enabled"] is not True:
-        raise ValueError("exact unchanged original USD50/USD48 approval required")
+        raise ValueError("exact user-authorized USD100/USD96 approval required")
     pin, budget = state["pin"], state["budget"]
     if (pin.get("campaign") != campaign or pin.get("mocked") is not False
             or pin.get("scenario_fingerprint") != fingerprint(SCENARIOS)
-            or pin.get("cap_usd") != 50 or pin.get("stop_usd") != 48
-            or budget.get("cap_usd") != 50 or budget.get("operational_stop_usd") != 48):
+            or pin.get("cap_usd") != CAMPAIGN_CAP_USD or pin.get("stop_usd") != CAMPAIGN_STOP_USD
+            or budget.get("cap_usd") != CAMPAIGN_CAP_USD
+            or budget.get("operational_stop_usd") != CAMPAIGN_STOP_USD):
         raise ValueError("scope must use the existing real campaign funding pin")
     spent = budget["settled_safety_usd"]
     amounts = list(budget["settled_requests"].values())
     if (type(spent) not in (int, float) or not math.isfinite(spent)
-            or spent + 1e-9 < HISTORICAL_SAFETY_USD or spent >= 48
+            or spent + 1e-9 < HISTORICAL_SAFETY_USD or spent >= CAMPAIGN_STOP_USD
             or type(state["calls"]) is not int or state["calls"] < HISTORICAL_CALLS
             or any(type(a) not in (int, float) or not math.isfinite(a) or a < 0 for a in amounts)
             or not math.isclose(sum(amounts), spent, rel_tol=1e-12, abs_tol=1e-9)):
-        raise ValueError("historical settled spending/calls must be preserved within USD48 stop")
+        raise ValueError("historical settled spending/calls must be preserved within USD96 stop")
     if (state.get("halted") is not None or budget["active_reservations"]
             or budget["active_reserved_usd"] != 0):
         raise RuntimeError("unknown or reserved telemetry blocks scope authorization; no recovery")
@@ -85,7 +88,7 @@ def prepare_scope(campaign: dict, state: dict, state_dir: Path) -> dict:
         "scope_id": SCOPE_ID, "version": 2, "funding": "existing-campaign-only",
         "funding_store": funding_store_identity(state_dir),
         "campaign_fingerprint": fingerprint(campaign), "funding_pin": fingerprint(state["pin"]),
-        "cap_usd": 50, "stop_usd": 48, "source_fixture": FIXTURE_ID,
+        "cap_usd": CAMPAIGN_CAP_USD, "stop_usd": CAMPAIGN_STOP_USD, "source_fixture": FIXTURE_ID,
         "source_fingerprint": source_identity(), "measurement_policy_enabled": False,
         "baseline": {"calls": state["calls"],
                      "settled_requests": dict(state["budget"]["settled_requests"]),

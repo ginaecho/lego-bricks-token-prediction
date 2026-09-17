@@ -46,9 +46,17 @@ APPROVED_ENDPOINT = "https://foundary-tzuc06.openai.azure.com/openai/v1"
 APPROVAL_ID = "marketplace-new-25usd-pilot"
 MAX_CALLS_PER_RUN = 144
 MAX_CALLS_TOTAL = 1024
+CAMPAIGN_CAP_USD = 100
+CAMPAIGN_STOP_USD = 96
 WORKLOAD_OUTPUT_CAP = 1536
 AGENT_OUTPUT_CAP = 1536
 WORKLOAD_ATTEMPTS = 3
+WORKLOAD_RETRY_POLICY = {
+    "policy": "bounded-per-workload-content-contract",
+    "max_attempts": WORKLOAD_ATTEMPTS,
+    "retryable_error": "settled workload output failed JSON/source-citation validation",
+    "row_acceptance": "only validated outputs become measurement rows",
+}
 MAX_INPUT_BOUND = 32768
 _LOCKS: dict[str, threading.Lock] = {}
 _LOCKS_LOCK = threading.Lock()
@@ -211,12 +219,12 @@ class AgentRuntime:
                 raise ValueError("reviewed three-scenario campaign must be explicitly execution_enabled")
             cap = _finite_amount(campaign["cap_usd"])
             stop = _finite_amount(campaign["stop_usd"])
-            if not 0 < stop < cap <= 50 or stop > 48:
-                raise ValueError("campaign requires 0 < stop < cap <= US$50 and stop <= US$48")
+            if not 0 < stop < cap <= CAMPAIGN_CAP_USD or stop > CAMPAIGN_STOP_USD:
+                raise ValueError("campaign requires 0 < stop < cap <= US$100 and stop <= US$96")
             self.campaign = strict_json(canonical(campaign))
             cap_usd, approval_id = cap, campaign["approval_id"]
         if (type(cap_usd) not in (int, float) or not math.isfinite(cap_usd)
-                or not 0 < cap_usd <= (50 if self.campaign else 25)):
+                or not 0 < cap_usd <= (CAMPAIGN_CAP_USD if self.campaign else 25)):
             raise ValueError("new pilot cap must be finite, positive, and at most US$25")
         if not isinstance(approval_id, str) or not approval_id.strip():
             raise ValueError("new approval identity required")
@@ -1140,7 +1148,8 @@ class AgentRuntime:
                 "reused_train_ids": [r["id"] for r in reused],
                 "holdout_policy": "Fresh run-specific document groups; never reused for tuning. "
                 "Old holdouts are excluded, not promoted to training.",
-                "template_limitation": LIMITATIONS[4]}
+                "template_limitation": LIMITATIONS[4],
+                "workload_retry_policy": WORKLOAD_RETRY_POLICY}
         if adaptive:
             plan.update(policy=POLICY_VERSION, split_protocol=SPLIT_PROTOCOL,
                         calibration_index=3, policy_actions=adaptive.spec,
@@ -1160,13 +1169,14 @@ class AgentRuntime:
                                     job["documents"], [brick], workload=True)
                     break
                 except ContentContractError:
-                    # The provider call is settled and paid, but its output failed the strict
-                    # source-citation contract. Retry a fresh, separately-metered paid call a
-                    # bounded number of times; only conforming measurements become training rows.
+                    # This reviewed policy is a bounded per-workload replacement, not an
+                    # automatic full-run retry; every attempted provider call remains settled.
                     if attempt + 1 >= WORKLOAD_ATTEMPTS:
                         raise
-                    event("Workload output failed the source-citation contract; retrying a fresh paid call.",
-                          {"brick_id": brick["id"], "group": job["group"], "attempt": attempt + 1})
+                    event("Bounded workload retry authorized after source-citation rejection.",
+                          {"brick_id": brick["id"], "group": job["group"], "attempt": attempt + 1,
+                           "max_attempts": WORKLOAD_ATTEMPTS,
+                           "retry_policy": WORKLOAD_RETRY_POLICY["policy"]})
             row = {
                 "id": observed["id"], "run_id": run_id, "brick_id": brick["id"],
                 "group": job["group"], "split": job["split"], "source": source,

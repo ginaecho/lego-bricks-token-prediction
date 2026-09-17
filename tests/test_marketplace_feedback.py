@@ -283,7 +283,7 @@ def test_prepared_campaign_disabled_and_legacy_cap_unchanged(tmp_path, config):
         engine.AgentRuntime(tmp_path / "legacy", config, cap_usd=50, dispatch=MockProvider())
 
 
-@pytest.mark.parametrize("field,value", [("cap_usd", 51), ("stop_usd", 50), ("stop_usd", 0),
+@pytest.mark.parametrize("field,value", [("cap_usd", 101), ("stop_usd", 97), ("stop_usd", 0),
                                         ("cap_usd", float("nan")), ("cap_usd", True),
                                         ("scenario_ids", ["unapproved"])])
 def test_campaign_rejects_unsafe_configuration(tmp_path, config, field, value):
@@ -297,7 +297,7 @@ def test_campaign_new_identity_restricts_scope_and_cannot_reset_old_ledger(tmp_p
     provider = MockProvider()
     enabled = {**campaign(), "execution_enabled": True}
     runtime = engine.AgentRuntime(tmp_path / "new", config, campaign=enabled, dispatch=provider)
-    assert runtime.cap_usd == 50 and runtime.stop_usd == 48
+    assert runtime.cap_usd == 100 and runtime.stop_usd == 96
     with pytest.raises(ValueError, match="three unchanged"):
         run(runtime, request_data, tmp_path / "runs")
     assert provider.calls == []
@@ -307,7 +307,7 @@ def test_campaign_new_identity_restricts_scope_and_cannot_reset_old_ledger(tmp_p
         engine.AgentRuntime(old.state_dir, config, campaign=enabled, dispatch=provider)
     assert (old.state_dir / "budget.json").read_bytes() == before
     with pytest.raises(RuntimeError, match="mutation"):
-        engine.AgentRuntime(runtime.state_dir, config, campaign={**enabled, "stop_usd": 47}, dispatch=provider)
+        engine.AgentRuntime(runtime.state_dir, config, campaign={**enabled, "stop_usd": 95}, dispatch=provider)
 
 
 def test_cancel_at_contract_review_stops_without_publication(tmp_path, config, request_data):
@@ -334,7 +334,7 @@ def test_new_50_campaign_retains_unknown_telemetry_and_blocks_restart(tmp_path, 
     with pytest.raises(TimeoutError):
         run(runtime, request, tmp_path / "runs")
     status = runtime.public_status()
-    assert status["cap_usd"] == 50 and status["stop_usd"] == 48
+    assert status["cap_usd"] == 100 and status["stop_usd"] == 96
     assert status["reserved_usd"] > 0 and status["enabled"] is False
     provider = MockProvider()
     restarted = engine.AgentRuntime(runtime.state_dir, config, campaign=enabled, dispatch=provider)

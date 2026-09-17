@@ -185,10 +185,10 @@ Saved completed, failed and cancelled runs (and all persisted replay snapshots)
 have no live cursor or automatic polling. Refresh is read-only. Forecasts remain
 additive independent-brick estimates, not measured combinations.
 
-### Archive Atelier v2 fictional policy laboratory
+### Archive Manager v2 fictional policy laboratory
 
 The separate `archive-exceptions-v2` source version addresses the original
-Archive Atelier source-domain mismatch without changing any of the three
+Archive Manager source-domain mismatch without changing any of the three
 reviewed original scenarios. Its [source fixtures](../token_yield/marketplace_source_fixtures.py)
 are original invented policies and records, not Paperless policies, legal advice,
 real legal/security authority or evidence of compliance.
@@ -227,19 +227,23 @@ holdout identifiers are fresh per run. Six template-based cases are not a
 representative benchmark or independent human-authored holdout corpus.
 
 Offline tests validate source plumbing, exact-span citations, unknowns/conflicts,
-retained dissent and compatibility. Existing mock responses test protocol
+retained dissent and compatibility. Citation validation is a reviewed exact-span
+normalization: whitespace and letter case may differ, but the quote must still be
+one contiguous substring from one supplied document. Paraphrase, reordered text,
+omitted internal words and cross-document stitching remain invalid. Existing mock responses test protocol
 execution only: they do not establish real-model understanding, quality,
 agreement or semantic accuracy. Some of the general-purpose catalog contracts
 may remain unsupported by these deliberately domain-specific documents.
 
 Independent review and a subsequent explicit user authorization are required
 before any paid evaluation. Passing offline tests grants no paid permission.
-The two cancelled paid attempts and their accumulated costs remain unchanged.
+The three failed/cancelled paid attempts and their accumulated costs remain
+unchanged.
 
-### Preparing v2 scope under the existing USD50 campaign
+### Preparing v2 scope under the existing USD100 campaign
 
 Offline engineering supports additive v2 scope authorization without editing
-the original three-scenario approval or creating another funding ledger.
+the original approval identity or creating another funding ledger.
 The preparation command only reads those files and writes a new disabled
 request. Use an output path outside tracked source and do not overwrite files:
 
@@ -249,9 +253,9 @@ python -m token_yield.marketplace_scope --campaign .feedback-paid-campaign\appro
 
 Version 2 of the scope binds one canonical funding directory, its filesystem
 device/directory identity and its derived shared runtime lock, as well as the
-exact original funding pin, USD50 total, USD48 stop,
+exact user-authorized funding pin, USD100 total, USD96 stop,
 v2 description and source content, all baseline settlements and prior call count.
-The historical minimum is USD1.49220 and22 calls. Existing reservations,
+The historical minimum is USD1.49220 and 22 calls. Existing reservations,
 unknown telemetry, removed/changed settlements, incompatible source/config or
 exhausted budget fail closed. New settlements may be added to the same ledger;
 no original settlement is overwritten or reallocated.

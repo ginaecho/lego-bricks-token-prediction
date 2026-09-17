@@ -26,7 +26,7 @@ def funding(tmp_path, config):
     ledger = runtime.state_dir / "budget.json"
     state = json.loads(ledger.read_text())
     # Synthetic historical accounting fixture, never the user's ledger.
-    budget = engine.HardBudget(50, 48)
+    budget = engine.HardBudget(100, 96)
     budget._settled = {f"fixture-history-{i}": 1.49220 / 22 for i in range(22)}
     state.update(budget=budget.snapshot(), calls=22)
     ledger.write_text(json.dumps(state), encoding="utf-8")
@@ -176,7 +176,7 @@ def test_preparation_disabled_and_two_independent_gates(funding):
 
 
 @pytest.mark.parametrize("field,value", [
-    ("cap_usd", 51), ("stop_usd", 49), ("funding", "new-campaign"),
+    ("cap_usd", 101), ("stop_usd", 97), ("funding", "new-campaign"),
     ("source_fixture", "archive-exceptions"), ("source_fingerprint", "tampered"),
     ("funding_pin", "another-state"), ("measurement_policy_enabled", True),
 ])
@@ -204,7 +204,7 @@ def test_historical_spend_unknowns_and_stop_are_not_overridden(funding, change):
     elif change == "halt":
         updated["halted"] = "unknown telemetry"
     elif change == "stop":
-        updated["budget"]["settled_safety_usd"] = 48
+        updated["budget"]["settled_safety_usd"] = 96
     else:
         updated["calls"] = 0
     with pytest.raises((ValueError, RuntimeError)):

@@ -19,6 +19,7 @@ from token_yield.marketplace_agent_contracts import (
     FEATURE_BUILDERS, ROLES, contracts, numeric_features, source_documents,
     schema_from_example, strict_json, validate_message,
 )
+from token_yield.marketplace_source_fixtures import fixture_documents
 
 
 class MockProvider:
@@ -296,6 +297,28 @@ def test_citation_matches_across_whitespace_but_not_paraphrase():
              "quote": "fabricated span absent from every supplied source zzz"}]}, docs, contracts())
 
 
+def test_citation_allows_letter_case_only_for_exact_contiguous_span():
+    docs = fixture_documents("archive-exceptions-v2", "train-2", 2)
+    base = {"answer": "ok", "limitations": ["source only"]}
+    validate_message("workload", {**base, "evidence": [
+        {"document_id": docs[0]["id"],
+         "quote": "Retain master media for 12 calendar months after project completion."},
+        {"document_id": docs[0]["id"],
+         "quote": "Retain invoice records for 24 calendar months after invoice closure."}]},
+        docs, contracts())
+    with pytest.raises(ValueError, match="exact supplied document span"):
+        validate_message("workload", {**base, "evidence": [
+            {"document_id": docs[0]["id"],
+             "quote": "Retain master media after project completion for 12 calendar months."}]},
+            docs, contracts())
+    with pytest.raises(ValueError, match="exact supplied document span"):
+        validate_message("workload", {**base, "evidence": [
+            {"document_id": docs[0]["id"],
+             "quote": "Retain invoice records for 24 calendar months after invoice closure. "
+                      "INV-30 is an invoice closed 2024-05-15, owner Chen."}]},
+            docs, contracts())
+
+
 def _reject_workload_citation(result):
     answer = json.loads(result.output)
     answer["evidence"] = [{"document_id": answer["evidence"][0]["document_id"],
@@ -338,7 +361,10 @@ def test_bounded_retry_recovers_a_transient_citation_failure(tmp_path, config, r
     workload_calls = [c for c in provider.calls if c["payload"]["task"] == "workload"]
     assert len(workload_calls) == 97           # 96 accepted + 1 rejected retry, each paid
     assert result["usage_ledger"]["response_calls"] == 107
-    assert any("retrying a fresh paid call" in e["message"] for e in events)
+    retry_events = [e for e in events if e["message"] == (
+        "Bounded workload retry authorized after source-citation rejection.")]
+    assert retry_events and retry_events[0]["data"]["retry_policy"] == (
+        engine.WORKLOAD_RETRY_POLICY["policy"])
 
 
 def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, config, request_data, monkeypatch):
@@ -360,7 +386,8 @@ def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, con
     assert result["training"]["pilot_published"] is True
     assert result["workload"]["calls"] == 96   # the truncated output never becomes a training row
     assert result["usage_ledger"]["response_calls"] == 107   # truncated call was paid for, then retried
-    assert any("retrying a fresh paid call" in e["message"] for e in events)
+    assert any(e["message"] == "Bounded workload retry authorized after source-citation rejection."
+               for e in events)
 
 
 def test_holdout_not_seen_in_selection_and_not_fitted(tmp_path, config, request_data, monkeypatch):
