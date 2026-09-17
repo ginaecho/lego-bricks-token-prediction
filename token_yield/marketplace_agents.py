@@ -852,6 +852,11 @@ class AgentRuntime:
                         "No arbitrary tools, code or external action. Preserve disagreement.",
                         "output_contract": {"atoms": {atom: 1 for atom in ATOMS},
                                             "rationale": "public justification"},
+                        "output_contract_semantics": "Formatting example only: output_contract shows "
+                        "JSON keys and value types. Its numbers are not proposed atom counts, required "
+                        "or default allocations, or targets. Its boolean and list values are not "
+                        "requested votes or a request to omit dissent. Choose substantive values "
+                        "independently from the customer request, source-only execution and bounds.",
                 }
                 independent = [call("decompose", role, {
                     **contract_base, "task": "decompose", "role": role,
@@ -863,13 +868,23 @@ class AgentRuntime:
                 revisions = [call("contract_review", role, {
                     **contract_base, "task": "contract_review", "role": role,
                     "all_proposals": [{"role": p["role"], "proposal": p["public_output"]} for p in independent],
-                    "instruction": "Review all three proposals; revise counts and explain agreement or dissent.",
+                    "instruction": "Review all three independent proposals. Return your final bounded "
+                    "atom counts. agreed concerns the final substantive contract you return, not the "
+                    "formatting example or approval of every discarded proposal. Explain resolved "
+                    "historical differences in rationale. Preserve genuine unresolved scope, interface "
+                    "or evidence objections in dissent, even when final counts match. If you do not "
+                    "agree, return agreed=false and explain in dissent. Do not assume other reviewers agree.",
                     "output_contract": review_schema,
                 }, docs, catalog) for role in ROLES]
                 reconciliation = call("contract_reconcile", "orchestrator", {
                     **contract_base, "task": "contract_reconcile",
                     "all_reviews": [{"role": p["role"], "review": p["public_output"]} for p in revisions],
-                    "instruction": "Reconcile the contract. Do not suppress unresolved disagreement.",
+                    "instruction": "Reconcile the final peer reviews, not superseded independent "
+                    "alternatives or the formatting example. Assess the final substantive contract "
+                    "and carry forward every final-review false vote or dissent; do not erase, "
+                    "weaken or convert it to assent. Matching atom counts alone do not resolve "
+                    "scope, interface or evidence objections. Explain historical differences in "
+                    "rationale. Preserve unresolved disagreement with agreed=false and explicit dissent.",
                     "output_contract": review_schema,
                 }, docs, catalog)["public_output"]
                 review["discussion"] = [{"role": p["role"], **p["public_output"]} for p in revisions]

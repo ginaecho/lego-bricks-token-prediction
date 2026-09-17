@@ -208,6 +208,17 @@ This is a bounded document transformation, not arbitrary named-function executio
 Output shape and citations are checked; semantic correctness still requires
 human review, and mock outputs are not evidence of live model capability.
 
+Contract prompts label `output_contract` values as formatting examples: numeric
+ones are not proposed or required allocations, and `true`/`[]` do not request
+assent or omission of dissent. Reviewers judge their final substantive contract;
+resolved differences from discarded proposals belong in the rationale. Genuine
+unresolved objections remain dissent even if every final count matches.
+Reconciliation must carry forward final-review false votes and dissent, not
+reinterpret them as assent. The existing schema, validation and unanimous
+no-dissent gate remain unchanged; prior public messages remain intact.
+Offline regressions check transmitted prompt semantics and veto preservation,
+not whether a future live model will interpret the clarification successfully.
+
 The `source-atoms-v2` compatibility fingerprint excludes older execution contracts
 from predictions and training reuse without deleting historical evidence.
 Contracts, steps, hashes, feature builders, reference-context bounds and model

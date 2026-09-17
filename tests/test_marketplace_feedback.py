@@ -11,7 +11,8 @@ import pytest
 from test_marketplace_agents import config, request_data, run  # noqa: F401
 from token_yield import marketplace_agents as engine
 from token_yield.marketplace_agent_contracts import (
-    ATOMS, ROLES, custom_contract, numeric_features, source_documents, validate_message, workload_prompt,
+    ATOMS, ROLES, custom_contract, numeric_features, schema_from_example, source_documents,
+    validate_message, workload_prompt,
 )
 from token_yield.marketplace_mock import MockProvider
 from token_yield.marketplace_scenarios import SCENARIOS
@@ -114,6 +115,128 @@ def test_atom_counts_change_executed_contract_and_require_ordered_results():
     output["atom_results"].reverse()
     with pytest.raises(ValueError, match="ordered"):
         validate_message("workload", output, docs, [b])
+
+
+def _mock_contract_stage(tmp_path, config, request_data, provider):
+    events = []
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
+
+    def stop_before_project(stage):
+        if stage == "propose":
+            raise engine.AgentCancelled("Contract-only test: no later stages")
+
+    with pytest.raises(engine.AgentCancelled, match="Contract-only test"):
+        runtime.run_pipeline({
+            **request_data, "description": SCENARIOS[0]["description"],
+            "new_function": SCENARIOS[0]["new_function"],
+        }, tmp_path / "runs", run_id="contract-only", on_event=events.append,
+            before_stage=stop_before_project)
+    return next(event["data"] for event in reversed(events) if event["data"].get("outcome"))
+
+
+def test_contract_prompts_distinguish_format_from_final_decisions(tmp_path, config, request_data):
+    provider = MockProvider()
+    review = _mock_contract_stage(tmp_path, config, request_data, provider)
+    assert review["outcome"] == "established"
+    contract_calls = [p for p in provider.calls if p["task"] != "novelty"]
+    assert len(contract_calls) == 7
+    for payload in contract_calls:
+        note = payload.get("output_contract_semantics", "")
+        assert "Formatting example only" in note
+        assert "not proposed atom counts" in note
+        assert "not requested votes" in note
+        assert set(payload["output_contract"]["atoms"].values()) == {1}
+        schema = schema_from_example(payload["output_contract"])
+        atom_properties = schema["properties"]["atoms"]["properties"]
+        assert all(value == {"type": "integer"} for value in atom_properties.values())
+        if payload["task"] != "decompose":
+            assert schema["properties"]["agreed"] == {"type": "boolean"}
+            assert "final" in payload["instruction"]
+            assert "unresolved" in payload["instruction"]
+    reviews = [p for p in contract_calls if p["task"] == "contract_review"]
+    assert all("rationale" in p["instruction"] and "discarded" in p["instruction"] for p in reviews)
+    reconciliation = contract_calls[-1]
+    assert reconciliation["task"] == "contract_reconcile"
+    assert "carry forward" in reconciliation["instruction"]
+    assert len(reconciliation["all_reviews"]) == 3
+
+
+@pytest.mark.parametrize("role", [*ROLES, "orchestrator"])
+@pytest.mark.parametrize("veto", ["false_vote", "dissent", "different_counts", "unexplained_false"])
+def test_final_contract_objections_survive_identical_format_and_history(
+        tmp_path, config, request_data, role, veto):
+    provider = MockProvider()
+    final_atoms = {"extract": 3, "classify": 2, "score": 1, "plan": 2,
+                   "retrieve": 2, "verify": 2, "write": 2}
+    objection = "Unresolved source-only verification boundary."
+
+    def respond(prompt, **kwargs):
+        response = provider(prompt, **kwargs)
+        payload = json.loads(prompt)
+        if payload["task"] in ("contract_review", "contract_reconcile"):
+            value = json.loads(response.output)
+            value.update(atoms=dict(final_atoms), agreed=True, dissent=[])
+            if payload.get("role", "orchestrator") == role:
+                if veto == "false_vote":
+                    value.update(agreed=False, dissent=[objection])
+                elif veto == "unexplained_false":
+                    value["agreed"] = False
+                elif veto == "dissent":
+                    value["dissent"] = [objection]
+                else:
+                    value["atoms"]["extract"] = 2
+            response = replace(response, output=json.dumps(value))
+        return response
+
+    if veto == "unexplained_false":
+        with pytest.raises(engine.ContentContractError, match="disagreement requires dissent"):
+            _mock_contract_stage(tmp_path, config, request_data, respond)
+        events = (tmp_path / "runs" / "contract-only" / "events.jsonl").read_text()
+        assert "Reconciled contract established" not in events
+        return
+
+    review = _mock_contract_stage(tmp_path, config, request_data, respond)
+    assert review["outcome"] == "review"
+    assert "contract" not in review
+    retained = (review["reconciliation"] if role == "orchestrator"
+                else next(r for r in review["discussion"] if r["role"] == role))
+    if veto == "false_vote":
+        assert retained["agreed"] is False and retained["dissent"] == [objection]
+    elif veto == "dissent":
+        assert retained["agreed"] is True and retained["dissent"] == [objection]
+    else:
+        assert retained["atoms"]["extract"] == 2
+    assert len(provider.calls) == 8
+
+
+def test_final_consensus_keeps_superseded_independent_proposals(tmp_path, config, request_data):
+    provider = MockProvider()
+    final_atoms = {"extract": 3, "classify": 2, "score": 1, "plan": 2,
+                   "retrieve": 2, "verify": 2, "write": 2}
+
+    def respond(prompt, **kwargs):
+        response = provider(prompt, **kwargs)
+        payload = json.loads(prompt)
+        value = json.loads(response.output)
+        if payload["task"] == "decompose":
+            value["atoms"]["extract"] = ROLES.index(payload["role"]) + 1
+        elif payload["task"] in ("contract_review", "contract_reconcile"):
+            value.update(atoms=final_atoms, agreed=True, dissent=[],
+                         rationale="MOCK: earlier alternatives resolved by the final allocation.")
+        return replace(response, output=json.dumps(value))
+
+    review = _mock_contract_stage(tmp_path, config, request_data, respond)
+    assert review["outcome"] == "established"
+    assert review["contract"]["atoms"] == final_atoms
+    for payload in provider.calls:
+        if payload["task"] == "contract_review":
+            assert [p["proposal"]["atoms"]["extract"] for p in payload["all_proposals"]] == [1, 2, 3]
+        elif payload["task"] == "contract_reconcile":
+            assert all(r["review"]["atoms"] == final_atoms for r in payload["all_reviews"])
+    artifacts = list((tmp_path / "runs" / "contract-only" / "agent-artifacts").glob("*.json"))
+    proposals = [json.loads(path.read_text()) for path in artifacts]
+    assert sorted(p["public_output"]["atoms"]["extract"]
+                  for p in proposals if p["kind"] == "decompose") == [1, 2, 3]
 
 
 @pytest.mark.parametrize("mode", ["dissent", "mismatched_counts"])
