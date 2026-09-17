@@ -54,6 +54,9 @@ input[type=number],select,textarea{width:100%;padding:9px 10px;border:1px solid 
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}.metric{padding:15px;border:1px solid #ffffff25;border-radius:8px}.metric strong{display:block;font-size:29px;font-weight:600;letter-spacing:-.8px}.metric small{font-size:11px}
 .positive{color:#d4eca3}.negative{color:#ffc0a5}.comparison{display:flex;gap:8px;height:9px;margin:12px 0;border-radius:6px;overflow:hidden;background:#ffffff18}.comparison span{background:#cde6a3}
 .impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:17px}.impact{background:#f2f5ed;border-radius:8px;padding:15px}.impact p{font-size:12px;margin-top:6px;color:var(--muted)}
+.feedback-items{display:grid;gap:14px;margin-top:17px}.feedback-card{border:1px solid var(--line);border-radius:9px;padding:15px}.feedback-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}.feedback-head small{color:var(--muted)}
+.star-rating{display:flex;gap:3px;margin:10px 0}.star{background:none;border:0;padding:2px;font-size:24px;line-height:1;color:#c3cdba;cursor:pointer}.star.active{color:#d69a1f}.star:hover{color:#d69a1f}.star:focus-visible{outline:2px solid var(--green);border-radius:4px}
+.feedback-card .form-grid.two{margin-top:10px;gap:12px}.feedback-status{min-height:16px}
 .custom-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.proposal{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}.proposal-line{padding:13px;border:1px solid var(--line);border-radius:8px;margin:10px 0}
 .proposal-line label{display:flex;align-items:center;gap:9px}.proposal-line p{font-size:12px;color:var(--muted);margin-top:6px}.error{border:1px solid #d9a38a;background:#fff0e8;color:#943a24;padding:12px;border-radius:8px;margin:15px 0;font-size:12px}
 .status{font-size:12px;color:var(--green);min-height:20px;margin-bottom:10px}.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:17px;font-size:11px}.flow span{background:#f0f3ec;border:1px solid var(--line);padding:7px;border-radius:6px}
@@ -75,7 +78,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 </div></header>
 <main>
   <section class="intro"><div><div class="eyebrow">The functionality marketplace</div><h1>Your next product.<br>One brick at a time.</h1><p>Shape the solution together. Explore the capabilities, the team, and the value they could create &mdash; not just the tokens they consume.</p></div>
-    <div class="steps"><span><b>1</b> Choose &amp; customize</span><span><b>2</b> Shape your estimate</span><span><b>3</b> Make the value case</span></div>
+    <div class="steps"><span><b>1</b> Choose &amp; customize</span><span><b>2</b> Shape your estimate</span><span><b>3</b> Make the value case</span><span><b>4</b> Close the loop</span></div>
   </section>
   <section id="yield-summary" class="yield-panel" aria-label="Return on your build"></section>
   <div class="notice"><b>Planning pilot, not a production quote.</b> Every number here is either a transparent simulation or an explicitly-sourced pilot forecast &mdash; never a guaranteed price or validated accuracy. <button type="button" class="open-trust" data-open="trust-dialog">See exactly what's assumed vs. measured &rarr;</button></div>
@@ -197,6 +200,18 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <div class="impact"><h3>Responsible resource use</h3><p>Measure energy per accepted outcome and sensitive-data handling. Token savings alone do not prove carbon savings, quality or ROI.</p></div>
         </div></details>
       </section>
+      <section class="panel" aria-labelledby="feedback-heading" id="feedback-loop">
+        <div class="eyebrow">Step 4 / the learning loop</div><h2 id="feedback-heading">Close the loop: today's estimate trains tomorrow's</h2>
+        <p class="help">Every estimate above is a forecast made <em>before</em> the build runs. Once a build is delivered, its real measured usage and the client's judgment of the outcome become new evidence &mdash; not just a record, but training data for the next estimate.</p>
+        <div class="impact-grid">
+          <div class="impact"><h3>1. Deliver</h3><p>The approved build runs for real clients. Actual token usage per brick is measured, the same way pre-predicted bricks were measured.</p></div>
+          <div class="impact"><h3>2. Report</h3><p>Actual usage and the client's rating of the outcome are logged against the original forecast &mdash; not edited into it.</p></div>
+          <div class="impact"><h3>3. Retrain</h3><p>New measured rows join the training set. The prediction model (and the value-case assumptions) improve for the <em>next</em> project, especially for brick combinations with little prior evidence.</p></div>
+        </div>
+        <p class="help">This is why early estimates for brand-new or rarely-combined bricks stay conservative or unsupported: there is no outcome evidence yet. The loop is what replaces that gap over time.</p>
+        <p class="help">Rate each brick in your build separately &mdash; usage and satisfaction can differ a lot brick to brick, even within one project.</p>
+        <div id="feedback-items" class="feedback-items"></div>
+      </section>
     </div>
     <aside class="panel cart" aria-labelledby="build-heading">
       <div class="cart-title"><h2 id="build-heading">Your build</h2><span id="build-count" class="pill"></span></div>
@@ -293,6 +308,7 @@ const fields = ["defaultRuns","context","complexity","reserve","operating","week
 class InputError extends Error {}
 class PipelineError extends Error {}
 let selections = [], category = "All", editingFeature = null, proposal = null, latestEstimate = null, mode = "manual";
+let feedbackState = {};
 let pipelineRun=null, pipelineBusy=false, pipelineTimer=null, pipelineGeneration=0, projectScenario=null;
 let runtimeStatus={enabled:false}, measuredCatalog=[], catalogMetadata={}, catalogGeneration=0;
 const finiteTokens = prediction => prediction?.supported!==false && Number.isFinite(prediction?.input_tokens) && prediction.input_tokens>=0 && Number.isFinite(prediction?.output_tokens) && prediction.output_tokens>=0;
@@ -466,7 +482,26 @@ function renderQuote() {
     ${e.warnings.map(message=>`<p class="negative" style="margin-top:10px">${message}</p>`).join("")}`;
   $("review").disabled=!selections.length;
 }
-function refresh(message) {renderCatalog();renderQuote();renderMeasuredCatalog();if(message)$("status").textContent=message;}
+const FEEDBACK_CATEGORIES = [
+  ["quality","Quality below expectations"],["cost","Cost higher than expected"],["speed","Slower than expected"],
+  ["met","Met expectations as planned"],["exceeded","Exceeded expectations"]];
+function renderFeedback() {
+  if(!selections.length){
+    $("feedback-items").innerHTML='<p class="empty">Add a brick to your build to record its delivered outcome here.</p>';
+    return;
+  }
+  $("feedback-items").innerHTML=selections.map(item=>{
+    const feature=CATALOG.find(f=>f.id===item.featureId),variant=feature.variants.find(v=>v.id===item.variantId),id=key(item.featureId,item.variantId),state=feedbackState[id]||{rating:0,category:"",reason:"",status:""};
+    return `<div class="feedback-card" data-feedback="${esc(id)}">
+      <div class="feedback-head"><b>${esc(feature.name)}</b><small>${esc(variant.name)}</small></div>
+      <div class="star-rating" role="radiogroup" aria-label="Client rating for ${esc(feature.name)} / ${esc(variant.name)}">${[1,2,3,4,5].map(n=>`<button type="button" class="star ${n<=state.rating?"active":""}" data-star="${n}" role="radio" aria-checked="${n===state.rating}" aria-label="${n} star${n>1?"s":""}">&#9733;</button>`).join("")}</div>
+      <label>Outcome<select data-feedback-category><option value="">Select&hellip;</option>${FEEDBACK_CATEGORIES.map(([value,label])=>`<option value="${value}" ${state.category===value?"selected":""}>${label}</option>`).join("")}</select></label>
+      <label>Reason / notes<textarea data-feedback-reason rows="2" placeholder="What happened? (optional but helps retraining)" style="min-height:60px">${esc(state.reason)}</textarea></label>
+      <div class="dialog-footer"><small class="feedback-status help" role="status">${esc(state.status)||"Illustrative only \u2014 no data leaves your browser."}</small><button type="button" class="primary" data-feedback-submit>Record</button></div>
+    </div>`;
+  }).join("");
+}
+function refresh(message) {renderCatalog();renderQuote();renderMeasuredCatalog();renderFeedback();if(message)$("status").textContent=message;}
 function field(label,name,value,step="0.1",max="100000") {return `<label>${label}<input name="${name}" type="number" min="0" max="${max}" step="${step}" value="${value}" required></label>`;}
 function configure(id) {
   let a;try{a=assumptions();}catch(error){if(!(error instanceof InputError))throw error;$("status").textContent=error.message;return;}
@@ -937,6 +972,26 @@ $("proposal").addEventListener("click",event=>{
   if(event.target.id==="discard-proposal"){proposal=null;$("proposal").hidden=true;$("status").textContent="Proposal discarded. Your build is unchanged.";}
 });
 $("review").addEventListener("click",openReview);
+$("feedback-items").addEventListener("click",event=>{
+  const id=event.target.closest("[data-feedback]")?.dataset.feedback;if(!id)return;
+  const star=event.target.closest("[data-star]");
+  if(star){feedbackState[id]={...(feedbackState[id]||{rating:0,category:"",reason:"",status:""}),rating:Number(star.dataset.star)};renderFeedback();return;}
+  if(event.target.closest("[data-feedback-submit]")){
+    const state=feedbackState[id]||{rating:0,category:"",reason:"",status:""};
+    if(!state.rating){state.status="Select a star rating before recording.";feedbackState[id]=state;renderFeedback();return;}
+    if(!state.category){state.status="Select an outcome before recording.";feedbackState[id]=state;renderFeedback();return;}
+    state.status=`Recorded (demo only): ${state.rating}\u2605, "${FEEDBACK_CATEGORIES.find(([value])=>value===state.category)[1]}"${state.reason?`, notes: "${state.reason}"`:""}. Joins the training set for this brick.`;
+    feedbackState[id]=state;renderFeedback();
+  }
+});
+$("feedback-items").addEventListener("change",event=>{
+  const id=event.target.closest("[data-feedback]")?.dataset.feedback;if(!id||event.target.dataset.feedbackCategory===undefined)return;
+  feedbackState[id]={...(feedbackState[id]||{rating:0,category:"",reason:"",status:""}),category:event.target.value};
+});
+$("feedback-items").addEventListener("input",event=>{
+  const id=event.target.closest("[data-feedback]")?.dataset.feedback;if(!id||event.target.dataset.feedbackReason===undefined)return;
+  feedbackState[id]={...(feedbackState[id]||{rating:0,category:"",reason:"",status:""}),reason:event.target.value};
+});
 $("download").addEventListener("click",()=>{
   const data=exportData(),blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="token-yield-sales-scenario.json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
