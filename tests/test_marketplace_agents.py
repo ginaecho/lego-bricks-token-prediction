@@ -445,6 +445,41 @@ def test_schema_failure_fails_closed_without_stage_retry(
     assert state["budget"]["active_reserved_usd"] == 0 and state["halted"] is None
 
 
+@pytest.mark.parametrize("mutation", [
+    lambda answer: (
+        answer.update(evidence=[{"document_id": answer["evidence"][0]["document_id"],
+                                 "quote": INSTRUCTION_TEXT_CITATION}]),
+        answer.update(limitations="not-array"),
+    ),
+    lambda answer: answer.update(evidence=[
+        {"document_id": answer["evidence"][0]["document_id"], "quote": INSTRUCTION_TEXT_CITATION},
+        {"document_id": answer["evidence"][0]["document_id"], "quote": 27},
+    ]),
+    lambda answer: answer.update(evidence=[
+        {"document_id": answer["evidence"][0]["document_id"], "quote": 27},
+        {"document_id": answer["evidence"][0]["document_id"], "quote": INSTRUCTION_TEXT_CITATION},
+    ]),
+])
+def test_mixed_schema_and_citation_errors_fail_closed_before_retry(
+        tmp_path, config, request_data, mutation):
+    provider = MockProvider()
+    def mixed_error(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return (_mutate_json_output(result, mutation)
+                if json.loads(prompt)["task"] == "propose" else result)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=mixed_error)
+    events = []
+    with pytest.raises(engine.ContentContractError) as excinfo:
+        runtime.run_pipeline(request_data, tmp_path / "run", run_id="test-run",
+                             on_event=events.append, before_stage=lambda stage: None)
+    assert excinfo.value.category == "schema" and excinfo.value.retryable is False
+    assert len(_stage_calls(provider, "propose")) == 1
+    assert _retry_events(events) == []
+    state = json.loads((tmp_path / "state" / "budget.json").read_text())
+    assert state["calls"] == 1 and len(state["budget"]["settled_requests"]) == 1
+    assert state["budget"]["active_reserved_usd"] == 0 and state["halted"] is None
+
+
 def test_paraphrase_citation_retries_then_recovers(tmp_path, config, request_data):
     provider = MockProvider()
     seen = {"bad": False}

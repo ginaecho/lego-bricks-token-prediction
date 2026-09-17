@@ -356,17 +356,29 @@ def _maybe_text(value: Any, maximum: int = 120) -> None:
         raise ValueError("optional bounded text required")
 
 
-def validate_evidence(value: Any, documents: list[dict]) -> None:
-    docs = {doc["id"]: _citation_match_key(doc["text"]) for doc in documents}
+def _validate_evidence_schema(value: Any) -> None:
     if not isinstance(value, list) or not 1 <= len(value) <= 12:
         raise ContractSchemaError("one to twelve source citations required")
     for entry in value:
-        _keys(entry, {"document_id", "quote"})
-        _text(entry["document_id"], 180)
-        _text(entry["quote"], 1200)
+        try:
+            _keys(entry, {"document_id", "quote"})
+            _text(entry["document_id"], 180)
+            _text(entry["quote"], 1200)
+        except ValueError as exc:
+            raise ContractSchemaError(str(exc)) from exc
+
+
+def _validate_evidence_grounding(value: list[dict], documents: list[dict]) -> None:
+    docs = {doc["id"]: _citation_match_key(doc["text"]) for doc in documents}
+    for entry in value:
         if (entry["document_id"] not in docs
                 or _citation_match_key(entry["quote"]) not in docs[entry["document_id"]]):
             raise CitationValidationError("citation must quote an exact supplied document span")
+
+
+def validate_evidence(value: Any, documents: list[dict]) -> None:
+    _validate_evidence_schema(value)
+    _validate_evidence_grounding(value, documents)
 
 
 def validate_bricks(value: Any, catalog: list[dict]) -> None:
@@ -390,6 +402,7 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
         if any(brick.get("steps") for brick in catalog):
             expected.add("atom_results")
         _keys(value, expected)
+        _validate_evidence_schema(value["evidence"])
         if "atom_results" in expected:
             steps = catalog[0]["steps"]
             results = value["atom_results"]
@@ -402,7 +415,7 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
                 _text(result["result"], 600)
         _text(value["answer"], 2400)
         _texts(value["limitations"])
-        validate_evidence(value["evidence"], docs)
+        _validate_evidence_grounding(value["evidence"], docs)
     elif kind in ("propose", "discuss", "adjudicate"):
         expected = {"summary", "bricks", "evidence"}
         expected |= ({"limitations"} if kind == "propose" else
@@ -411,7 +424,7 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
         _keys(value, expected)
         _text(value["summary"])
         validate_bricks(value["bricks"], catalog)
-        validate_evidence(value["evidence"], docs)
+        _validate_evidence_schema(value["evidence"])
         if kind == "propose":
             _texts(value["limitations"])
         else:
@@ -451,6 +464,7 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
                 # Optional capability-gap recommendation the orchestrator infers from the
                 # description; empty unless the agent recognizes a needed but absent brick.
                 _maybe_text(value["proposed_new_function"], 120)
+        _validate_evidence_grounding(value["evidence"], docs)
     elif kind == "novelty":
         _keys(value, {"decision", "reuse_id", "new_name", "rationale"})
         _text(value["rationale"])
