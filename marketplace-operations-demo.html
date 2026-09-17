@@ -41,6 +41,11 @@
     <div><strong id="step-heading">Select a run to inspect or advance</strong><p id="step-help">Opening this page does not execute a stage. Start a step-by-step request in the sales studio.</p></div>
     <div class="step-actions"><button class="button primary" id="next-stage" type="button" disabled>Next step</button><button class="button" id="cancel-run" type="button" disabled>Cancel run</button></div>
   </section>
+  <section class="step-controls" id="human-approval" aria-label="Human establishment approval" hidden>
+    <div><strong>Awaiting human approval for a new functionality</strong><p id="human-approval-help">Review the exact contract hash, atom vector and preserved dissent before approving or rejecting.</p></div>
+    <div class="step-actions"><label>Actor <input id="human-actor" value="local-operator" maxlength="80"></label><button class="button primary" id="approve-establishment" type="button">Approve establishment</button><button class="button" id="reject-establishment" type="button">Reject</button></div>
+    <div id="human-approval-details" class="small"></div>
+  </section>
   <ol id="stage-progress" class="stage-progress" aria-label="Backend stage progress"></ol>
   <section id="latest-stage" class="latest-stage" aria-label="Latest completed stage output" hidden></section>
   <div class="workspace">
@@ -288,10 +293,12 @@
   function updateStepControls() {
     const run = state.snapshot;
     const waiting = run && run.status === 'waiting' && typeof run.next_stage === 'string' && run.next_stage.trim();
-    $('next-stage').disabled = !waiting || state.actionPending;
+    const establishment = waiting && run.next_stage === 'human_establishment_approval';
+    $('next-stage').disabled = !waiting || establishment || state.actionPending;
     $('cancel-run').disabled = !run || !['queued','running','waiting'].includes(run.status) || state.actionPending;
     $('reload-run').disabled = !state.id || state.actionPending;
     $('next-stage').textContent = waiting ? 'Next step: ' + stageName(run.next_stage) : 'Next step';
+    renderHumanApproval(run, establishment);
     if (state.actionPending) {
       $('step-heading').textContent = 'Sending control request to the backend…';
       $('step-help').textContent = 'Controls stay disabled until a fresh backend snapshot confirms the next gate.';
@@ -299,8 +306,8 @@
       $('step-heading').textContent = state.id ? 'Waiting for a valid backend snapshot' : 'Select a run to inspect or advance';
       $('step-help').textContent = 'No stage is executed merely by opening this page. Controls require a connected, paused run.';
     } else if (waiting) {
-      $('step-heading').textContent = 'Waiting for you / Next: ' + stageName(run.next_stage);
-      $('step-help').textContent = 'This stage has not run. Next executes only this backend stage; inspect its output before continuing.' + (liveRun()?' Agent and measurement stages use paid Azure calls under the server-only cap.':' Offline mode consumes no provider credits.');
+      $('step-heading').textContent = establishment ? 'Awaiting human establishment approval' : 'Waiting for you / Next: ' + stageName(run.next_stage);
+      $('step-help').textContent = establishment ? 'Human approval or rejection is required for the exact proposed contract hash; Next cannot bypass this governance gate.' : 'This stage has not run. Next executes only this backend stage; inspect its output before continuing.' + (liveRun()?' Agent and measurement stages use paid Azure calls under the server-only cap.':' Offline mode consumes no provider credits.');
     } else if (run.status === 'completed') {
       $('step-heading').textContent = (run.request?.execution_mode === 'step' ? 'Step-by-step run completed' : 'Automatic / historical run completed') + ' · no replay';
       $('step-help').textContent = 'These are stored execution events and results. Create a new step-by-step request in the sales studio to execute again.';
@@ -311,6 +318,45 @@
       $('step-heading').textContent = run.request?.execution_mode === 'step' ? 'Backend executing · wait for the next gate' : 'Automatic execution · observing live';
       $('step-help').textContent = 'Only backend events mark stages done. Next is available only when the backend reports waiting.';
     }
+  }
+  function renderHumanApproval(run, establishment) {
+    const panel = $('human-approval'), request = run?.establishment_request;
+    panel.hidden = !establishment || !request;
+    $('approve-establishment').disabled = $('reject-establishment').disabled = state.actionPending || !request;
+    if (!request) return;
+    $('human-approval-details').innerHTML = '<p><b>' + text(request.requested) + '</b> · contract <code>' + text(request.contract_hash) + '</code></p>' +
+      '<p>Atoms: <code>' + text(JSON.stringify(request.proposed_atoms || {})) + '</code></p>' +
+      payload('Agreement, dissent and governance notes', request, true).outerHTML;
+  }
+  async function decideEstablishment(decision) {
+    const run = state.snapshot, request = run?.establishment_request;
+    if (!run || !request || state.actionPending) return;
+    const actor = $('human-actor').value.trim();
+    if (!actor) { showError('Actor is required for human establishment approval.'); return; }
+    clearTimeout(state.timer);
+    const generation = ++state.generation;
+    state.actionPending = true;
+    updateStepControls();
+    clearError();
+    try {
+      const response = await getJSON('/api/runs/' + encodeURIComponent(run.id) + '/establishment', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({decision, actor, contract_hash: request.contract_hash})
+      });
+      if (!response || response.id !== run.id) throw new RequestError('Unexpected establishment response: run ID did not match.');
+    } catch (error) {
+      if (!(error instanceof RequestError)) throw error;
+      if (generation !== state.generation) return;
+      showError('Human establishment decision was not confirmed. ' + error.message + ' The backend rejects stale or mismatched contract hashes.');
+    } finally {
+      if (generation === state.generation) {
+        state.actionPending = false;
+        state.snapshot = null;
+        updateStepControls();
+      }
+    }
+    if (generation === state.generation) await poll(generation);
   }
   function renderProgress(events) {
     const run = state.snapshot;
@@ -672,6 +718,8 @@
   $('run-select').addEventListener('change', event => selectRun(event.target.value));
   $('next-stage').addEventListener('click', () => controlRun('next'));
   $('cancel-run').addEventListener('click', () => controlRun('cancel'));
+  $('approve-establishment').addEventListener('click', () => decideEstablishment('approve'));
+  $('reject-establishment').addEventListener('click', () => decideEstablishment('reject'));
   $('refresh-runs').addEventListener('click', () => { clearError(); listRuns(); });
   $('reload-run').addEventListener('click', () => {
     if (!state.id) return;

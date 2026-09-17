@@ -8,6 +8,7 @@ from __future__ import annotations
 import hashlib
 import json
 import threading
+import time
 from dataclasses import replace
 from pathlib import Path
 
@@ -114,6 +115,18 @@ def run(runtime, request, path, run_id="test-run", **kwargs):
     result = runtime.run_pipeline(request, path, run_id=run_id, on_event=events.append,
                                   before_stage=stages.append, **kwargs)
     return result, events, stages
+
+
+def approve_establishment(pending, *, actor="OFFLINE TEST approver"):
+    return {"decision": "approve", "contract_hash": pending["contract_hash"],
+            "actor": actor, "timestamp": "2026-09-17T00:00:00+00:00",
+            "reason": "Offline test approval for exact contract hash."}
+
+
+def reject_establishment(pending, *, actor="OFFLINE TEST rejecter"):
+    return {"decision": "reject", "contract_hash": pending["contract_hash"],
+            "actor": actor, "timestamp": "2026-09-17T00:00:00+00:00",
+            "reason": "Offline test rejection for exact contract hash."}
 
 
 def test_independent_proposals_actual_peer_discussion_and_separate_usage(tmp_path, config, request_data):
@@ -540,7 +553,8 @@ def test_f70d_instruction_text_propose_failure_retries_and_recovers(
         return result
     request = {**request_data, "new_function": "Retention exception ledger"}
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=flaky_propose)
-    result, events, _ = run(runtime, request, tmp_path / "run")
+    result, events, _ = run(runtime, request, tmp_path / "run",
+                            establishment_decision=approve_establishment)
     assert result["training"]["pilot_published"] is True
     assert len(_stage_calls(provider, "propose")) == 4
     assert any(e["data"]["operation"] == "propose" for e in _retry_events(events))
@@ -556,7 +570,7 @@ def test_f70d_instruction_text_propose_failure_fails_after_bound(
     request = {**request_data, "new_function": "Retention exception ledger"}
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=always_bad_propose)
     with pytest.raises(engine.ContentContractError, match="exact supplied document span"):
-        run(runtime, request, tmp_path / "run")
+        run(runtime, request, tmp_path / "run", establishment_decision=approve_establishment)
     assert len(_stage_calls(provider, "propose")) == engine.CONTENT_CONTRACT_ATTEMPTS
 
 
@@ -612,7 +626,8 @@ def test_novel_measurement_reuses_train_only_and_restart_model_persists(tmp_path
     second = engine.AgentRuntime(tmp_path / "state", config, dispatch=second_provider)
     assert second.public_status()["version"] == result["training"]["version"]
     new_request = {**request_data, "new_function": "Policy document parsing"}
-    newer, _, _ = run(second, new_request, tmp_path / "second", run_id="second")
+    newer, _, _ = run(second, new_request, tmp_path / "second", run_id="second",
+                      establishment_decision=approve_establishment)
     assert newer["before"]["supported"] is False
     assert newer["after"]["supported"] is True
     assert newer["training"]["reused_train_count"] == 64
@@ -648,7 +663,8 @@ def test_novelty_establishes_agent_decomposed_brick_and_persists_for_reuse(tmp_p
     request = {**request_data, "new_function": "Compliance evidence mapper"}
     first_provider = MockProvider()
     first = engine.AgentRuntime(tmp_path / "state", config, dispatch=first_provider)
-    result, events, _ = run(first, request, tmp_path / "first", run_id="first")
+    result, events, _ = run(first, request, tmp_path / "first", run_id="first",
+                            establishment_decision=approve_establishment)
     novel = next(b for b in result["catalog"] if b["novel"])
     assert result["requested_custom"] == novel["id"]
     assert novel["atoms"] == {"extract": 2, "classify": 1, "score": 0, "plan": 1,
@@ -664,6 +680,133 @@ def test_novelty_establishes_agent_decomposed_brick_and_persists_for_reuse(tmp_p
     assert len(newer["catalog"]) == 17
     assert newer["training"]["reused_train_count"] == 68   # 64 standard + 4 established-brick rows
     assert newer["training"]["new_holdout_count"] == 34
+
+
+def test_human_establishment_gate_requires_callback_before_measurement(tmp_path, config, request_data):
+    provider = MockProvider()
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
+    with pytest.raises(RuntimeError, match="human establishment approval callback required"):
+        run(runtime, {**request_data, "new_function": "Governed retention ledger"}, tmp_path / "run")
+    assert not any(c["payload"]["task"] == "workload" for c in provider.calls)
+    assert not (tmp_path / "state" / "current.json").exists()
+
+
+def test_human_establishment_approval_establishes_measures_and_publishes_new_brick(
+        tmp_path, config, request_data):
+    provider = MockProvider()
+    approvals = []
+    def approve(pending):
+        approvals.append(pending)
+        return approve_establishment(pending, actor="Ada Approver")
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
+    result, events, _ = run(runtime, {**request_data, "new_function": "Governed retention ledger"},
+                            tmp_path / "run", establishment_decision=approve)
+    novel = next(b for b in result["catalog"] if b["novel"])
+    assert result["requested_custom"] == novel["id"]
+    assert result["capability_reviews"][0]["outcome"] == "established"
+    assert result["capability_reviews"][0]["human_establishment_decision"]["actor"] == "Ada Approver"
+    assert approvals[0]["contract_hash"] == novel["contract_hash"]
+    assert len([r for r in result["training"]["rows"] if r["brick_id"] == novel["id"]]) == 6
+    assert novel["supported"] is True and result["training"]["pilot_published"] is True
+    assert any(e["message"] == "Human approved new capability establishment." for e in events)
+
+
+def test_human_establishment_rejection_uses_existing_proxy_bricks(
+        tmp_path, config, request_data):
+    provider = MockProvider()
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
+    result, events, _ = run(runtime, {**request_data, "new_function": "Governed retention ledger"},
+                            tmp_path / "run", establishment_decision=reject_establishment)
+    assert result["requested_custom"] is None
+    assert not any(b["novel"] for b in result["catalog"])
+    assert result["capability_reviews"][0]["outcome"] == "human_rejected"
+    assert all(not row["brick_id"].startswith("novel_") for row in result["training"]["rows"])
+    assert any(e["message"] == "Human rejected new capability establishment." for e in events)
+
+
+def test_human_establishment_preserves_resolved_and_unresolved_notes(
+        tmp_path, config, request_data):
+    provider = MockProvider()
+    captured = []
+    def dissenting(prompt, **kwargs):
+        result = provider(prompt, **kwargs)
+        payload = json.loads(prompt)
+        if payload["task"] == "contract_review":
+            answer = json.loads(result.output)
+            answer["dissent"] = ["Scoring remains out of scope and should be score zero."]
+            return replace(result, output=json.dumps(answer))
+        return result
+    def approve(pending):
+        captured.append(pending)
+        return approve_establishment(pending)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=dissenting)
+    result, _, _ = run(runtime, {**request_data, "new_function": "Governed retention ledger"},
+                       tmp_path / "run", establishment_decision=approve)
+    notes = captured[0]["notes"]
+    assert [note["note"] for note in notes[:3]] == [
+        "Scoring remains out of scope and should be score zero."] * 3
+    assert {note["classification"] for note in notes[:3]} == {"resolved_advisory"}
+    assert result["capability_reviews"][0]["discussion"][0]["dissent"] == [
+        "Scoring remains out of scope and should be score zero."]
+
+
+def test_human_establishment_surfaces_substantive_objection_and_rejects_stale_hash(
+        tmp_path, config, request_data):
+    provider = MockProvider()
+    captured = []
+    def objecting(prompt, **kwargs):
+        result = provider(prompt, **kwargs)
+        payload = json.loads(prompt)
+        if payload["task"] == "contract_review" and payload["role"] == "skeptical_reviewer":
+            answer = json.loads(result.output)
+            answer.update(agreed=False, dissent=["Interface feasibility remains unresolved."])
+            return replace(result, output=json.dumps(answer))
+        return result
+    def stale(pending):
+        captured.append(pending)
+        decision = approve_establishment(pending)
+        decision["contract_hash"] = "0" * 64
+        return decision
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=objecting)
+    with pytest.raises(ValueError, match="exact contract hash"):
+        run(runtime, {**request_data, "new_function": "Governed retention ledger"},
+            tmp_path / "run", establishment_decision=stale)
+    assert captured[0]["unresolved_substantive"][0]["note"] == "Interface feasibility remains unresolved."
+    assert captured[0]["unresolved_substantive"][0]["classification"] == "unresolved_substantive"
+
+
+def test_server_establishment_gate_waits_and_rejects_stale_contract_hash(
+        tmp_path, config, request_data):
+    from examples.marketplace_demo_server import RunStore, StageConflictError
+
+    provider = MockProvider()
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
+    store = RunStore(tmp_path / "runs", agent_runtime=runtime, stage_timeout=15)
+    run_id = store.submit({**request_data, "new_function": "Governed retention ledger"})
+    deadline = time.monotonic() + 10
+    snapshot = None
+    while time.monotonic() < deadline:
+        snapshot = store.get(run_id)
+        if snapshot and snapshot["status"] == "waiting":
+            break
+        time.sleep(0.05)
+    assert snapshot["next_stage"] == "human_establishment_approval"
+    pending = snapshot["establishment_request"]
+    assert pending["contract_hash"]
+    assert not any(c["payload"]["task"] == "workload" for c in provider.calls)
+    with pytest.raises(ValueError, match="exact contract_hash"):
+        store.decide_establishment(run_id, {
+            "decision": "approve", "contract_hash": "0" * 64, "actor": "Mallory"})
+    store.decide_establishment(run_id, {
+        "decision": "approve", "contract_hash": pending["contract_hash"], "actor": "Ada"})
+    deadline = time.monotonic() + 20
+    while time.monotonic() < deadline:
+        snapshot = store.get(run_id)
+        if snapshot and snapshot["status"] in ("completed", "failed", "cancelled"):
+            break
+        time.sleep(0.05)
+    assert snapshot["status"] == "completed"
+    assert snapshot["result"]["requested_custom"].startswith("novel_")
 
 
 def test_deterministic_guardrail_vetoes_exact_duplicate_establish(tmp_path, config, request_data):

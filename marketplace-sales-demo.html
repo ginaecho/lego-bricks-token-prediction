@@ -611,7 +611,8 @@ $("scenario-cards").addEventListener("click",event=>{
 function renderCapabilityProgress(run){
   const reviews=run.result?.capability_reviews||run.events.filter(e=>e.data?.requested&&e.data?.origin).map(e=>e.data);
   const latest=new Map(reviews.map(review=>[review.requested,review]));
-  $("capability-status").innerHTML=Array.from(latest.values()).map(review=>`<div class="notice"><b>${esc(review.requested)} / ${esc(review.outcome)}</b><p>${esc(review.origin)} request · ${esc(review.contract_version||"version pending")}. ${esc(review.rationale||review.agent_verdict?.rationale||"Review in progress; not established yet.")}</p>${rawDetails("Candidate matches, lexical limitations and agent contract discussion",review)}</div>`).join("");
+  const human=run.establishment_request?`<div class="notice"><b>Awaiting human approval</b><p>New functionality governance gate for ${esc(run.establishment_request.requested)}. Approval is bound to contract hash ${esc(run.establishment_request.contract_hash)} and is distinct from sales quote approval.</p>${rawDetails("Agreement, dissent and approval payload",run.establishment_request,true)}</div>`:"";
+  $("capability-status").innerHTML=human+Array.from(latest.values()).map(review=>`<div class="notice"><b>${esc(review.requested)} / ${esc(review.outcome)}</b><p>${esc(review.origin)} request · ${esc(review.contract_version||"version pending")}. ${esc(review.rationale||review.agent_verdict?.rationale||"Review in progress; not established yet.")}</p>${rawDetails("Candidate matches, lexical limitations and agent contract discussion",review)}</div>`).join("");
 }
 function rawDetails(title,value,open=false) {
   return `<details ${open?"open":""}><summary>${esc(title)}</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto">${esc(JSON.stringify(value??{},null,2))}</pre></details>`;
@@ -720,8 +721,13 @@ async function pollPipeline(id,generation) {
     if(run.status==="waiting"){
       const ids=(Array.isArray(run.stages)?run.stages:[]).map(stage=>typeof stage==="string"?stage:stage.id);
       const completed=ids.indexOf(run.next_stage);
-      $("pipeline-status").textContent=`Paused before ${String(run.next_stage||"next stage").replaceAll("_"," ")}. ${completed>=0?completed+" stages completed; ":""}${events.length} events. Open operations and click Next step.`;
-      $("backend-status").textContent="Waiting for your next step, not a replay. Later backend stages have not executed.";
+      if(run.next_stage==="human_establishment_approval"){
+        $("pipeline-status").textContent=`Awaiting human approval for new functionality. ${events.length} events. Open operations to approve or reject the exact contract hash.`;
+        $("backend-status").textContent="Human approval is required before a new brick can be established or measured.";
+      }else{
+        $("pipeline-status").textContent=`Paused before ${String(run.next_stage||"next stage").replaceAll("_"," ")}. ${completed>=0?completed+" stages completed; ":""}${events.length} events. Open operations and click Next step.`;
+        $("backend-status").textContent="Waiting for your next step, not a replay. Later backend stages have not executed.";
+      }
     }else{
       $("backend-status").textContent="The backend is executing an approved stage. Its output will appear in operations.";
     }

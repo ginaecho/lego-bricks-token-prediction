@@ -82,6 +82,36 @@ class ContentContractError(ValueError):
         self.retryable = retryable
 
 
+def _dissent_classification(note: str, agreed: bool, final_atoms: dict, atoms: dict | None) -> str:
+    if not agreed or (atoms is not None and atoms != final_atoms):
+        return "unresolved_substantive"
+    lowered = note.casefold()
+    if "scor" in lowered and final_atoms.get("score") == 0:
+        return "resolved_advisory"
+    return "advisory"
+
+
+def _establishment_notes(reviews: list[dict], reconciliation: dict) -> list[dict]:
+    final_atoms = reconciliation["atoms"]
+    notes = []
+    for item in reviews:
+        output = item["public_output"]
+        for note in output.get("dissent", []):
+            notes.append({
+                "role": item["role"], "note": note, "agreed": output["agreed"],
+                "atoms_match_final": output.get("atoms") == final_atoms,
+                "classification": _dissent_classification(
+                    note, output["agreed"], final_atoms, output.get("atoms")),
+            })
+    for note in reconciliation.get("dissent", []):
+        notes.append({
+            "role": "orchestrator", "note": note, "agreed": reconciliation["agreed"],
+            "atoms_match_final": True,
+            "classification": _dissent_classification(note, reconciliation["agreed"], final_atoms, final_atoms),
+        })
+    return notes
+
+
 class StructuredDispatcher(FoundryDispatcher):
     """Local protocol adapter; shared dispatch/authentication behavior is unchanged."""
 
@@ -601,6 +631,7 @@ class AgentRuntime:
         self, request: dict, run_dir: Path, *, run_id: str,
         on_event: Callable[[dict], None], before_stage: Callable[[str], None],
         check_cancel: Callable[[], Any] | None = None,
+        establishment_decision: Callable[[dict], dict] | None = None,
     ) -> dict:
         """Execute once under ``run_dir / run_id``; callbacks see request.json first."""
         if self._closed.is_set():
@@ -640,10 +671,11 @@ class AgentRuntime:
                             **({"scope_authorization_sha256": fingerprint(self.scope_authorization)}
                                if self.scope_authorization else {})})
             return self._run(request, run_dir, run_id, on_event, before_stage, check_cancel,
-                             budget, budget_state)
+                             establishment_decision, budget, budget_state)
 
     def _run(self, request: dict, run_dir: Path, run_id: str,
              on_event: Callable, before_stage: Callable, check_cancel: Callable | None,
+             establishment_decision: Callable[[dict], dict] | None,
              budget: HardBudget, budget_state: dict) -> dict:
         if self.campaign and not self.scope_authorization and scenario_for_request(request) is None:
             raise ValueError("This campaign funds only the three unchanged reviewed scenario briefs.")
@@ -992,18 +1024,60 @@ class AgentRuntime:
                 review["discussion"] = [{"role": p["role"], **p["public_output"]} for p in revisions]
                 review["reconciliation"] = reconciliation
                 votes = [p["public_output"] for p in revisions] + [reconciliation]
-                if (any(not v["agreed"] or v["dissent"] for v in votes)
-                        or len({canonical(v["atoms"]) for v in votes}) != 1):
-                    capability_blockers.append("New capability contract disagreement requires human review.")
-                    review.update(outcome="review", rationale=capability_blockers[-1])
-                    event("Contract not established: unresolved three-role disagreement.", review)
-                    return None
                 new_brick = custom_contract(name, reconciliation["atoms"])
                 if len(catalog) >= 20:
                     raise ValueError("pilot supports at most twenty explicitly versioned contracts")
+                notes = _establishment_notes(revisions, reconciliation)
+                gate = {
+                    "state": "awaiting_human_establishment_approval",
+                    "requested": name, "origin": origin,
+                    "novelty_rationale": verdict["rationale"],
+                    "contract": new_brick, "contract_hash": new_brick["contract_hash"],
+                    "proposed_atoms": reconciliation["atoms"],
+                    "agreement": {
+                        "votes": [{"role": p["role"], "agreed": p["public_output"]["agreed"],
+                                   "atoms_match_final": p["public_output"]["atoms"] == reconciliation["atoms"]}
+                                  for p in revisions] + [{"role": "orchestrator",
+                                                          "agreed": reconciliation["agreed"],
+                                                          "atoms_match_final": True}],
+                        "all_agreed": all(v["agreed"] for v in votes),
+                        "all_atoms_match_final": len({canonical(v["atoms"]) for v in votes}) == 1,
+                    },
+                    "notes": notes,
+                    "unresolved_substantive": [
+                        note for note in notes if note["classification"] == "unresolved_substantive"
+                    ],
+                    "governance": "Human approval is required to establish a new functionality. "
+                    "Approval records a governance decision; it does not erase agent notes.",
+                }
+                review.update(outcome="awaiting_human_establishment_approval",
+                              rationale="Human approval required before establishing a new brick.",
+                              contract=new_brick, human_establishment=gate)
+                event("Awaiting human establishment approval.", gate)
+                if establishment_decision is None:
+                    raise RuntimeError("human establishment approval callback required")
+                decision = establishment_decision(gate)
+                if (not isinstance(decision, dict)
+                        or decision.get("contract_hash") != gate["contract_hash"]
+                        or decision.get("decision") not in ("approve", "reject")
+                        or not isinstance(decision.get("actor"), str)
+                        or not decision["actor"].strip()
+                        or not isinstance(decision.get("timestamp"), str)
+                        or not decision["timestamp"].strip()):
+                    raise ValueError("human establishment decision must bind actor, timestamp, and exact contract hash")
+                review["human_establishment_decision"] = decision
+                if decision["decision"] == "reject":
+                    review.update(outcome="human_rejected",
+                                  rationale=decision.get("reason") or "Human rejected establishment.")
+                    event("Human rejected new capability establishment.", review)
+                    return None
                 catalog.append(new_brick)
-                review.update(outcome="established", brick_id=new_brick["id"], contract=new_brick)
-                event("Reconciled contract established; measurement and publication still pending.", review)
+                review.update(outcome="established", brick_id=new_brick["id"], contract=new_brick,
+                              rationale="Human approved establishment for the exact contract hash.")
+                event("Human approved new capability establishment.",
+                      {"requested": name, "brick_id": new_brick["id"],
+                       "contract_hash": gate["contract_hash"], "decision": decision,
+                       "notes": notes})
                 return new_brick["id"]
             capability_blockers.append("Capability novelty is unresolved; no complete project forecast.")
             review.update(rationale=verdict["rationale"])

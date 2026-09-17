@@ -281,6 +281,19 @@ marker records the scope hash before any dispatch, including for cancelled runs.
 The exact v2 brief/function is mandatory; scope does not authorize arbitrary
 requests or silently change the original three stories.
 
+### Human approval before new brick establishment
+
+Agent novelty and contract review can propose a new functionality, but they do
+not establish it automatically. The backend pauses at
+`human_establishment_approval` and surfaces the novelty rationale, exact
+contract hash, atom vector, agreement votes, critiques and all dissent notes.
+Dissent is preserved as governance evidence; notes may be labeled
+resolved/advisory when reflected in the final contract or unresolved/substantive
+when an agreed flag, atom mismatch or feasibility concern remains. Approval or
+rejection requires a human actor and the exact contract hash. A stale or changed
+contract hash is rejected. Approval establishes and measures the new brick;
+rejection leaves the run on existing proxy bricks or unsupported scope.
+
 No prepared scope constitutes execution approval. Server8780 is not restarted
 by preparation or tests. No old or mock model can become measured v2 evidence:
 the existing source/contract/funding/provenance compatibility checks require a

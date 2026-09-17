@@ -12,6 +12,7 @@ import re
 import sys
 import threading
 import uuid
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -29,6 +30,10 @@ STATIC_ROUTES = frozenset({
     "/marketplace-console.html",
 })
 MAX_BODY = 32768
+
+
+def _now_server() -> str:
+    return datetime.now(timezone.utc).isoformat()
 
 
 class RunLimitError(Exception):
@@ -74,6 +79,7 @@ class RunStore:
         self.runs: dict[str, dict[str, Any]] = {}
         self._active: set[str] = set()
         self._approved: dict[str, str] = {}
+        self._establishment_decisions: dict[str, dict[str, Any]] = {}
         self._cancelled: set[str] = set()
         self._finalizing: set[str] = set()
         self.previous_run_count = (
@@ -116,6 +122,32 @@ class RunStore:
             run.update(status="running", next_stage=None)
             self.condition.notify_all()
 
+    def decide_establishment(self, run_id: str, decision: dict[str, Any]) -> None:
+        """Approve or reject exactly the pending new-brick contract hash."""
+        with self.condition:
+            run = self.runs[run_id]
+            pending = run.get("establishment_request")
+            if (run["status"] != "waiting" or run.get("next_stage") != "human_establishment_approval"
+                    or not isinstance(pending, dict)):
+                raise StageConflictError("No pending establishment approval for this run.")
+            if (not isinstance(decision, dict)
+                    or set(decision) - {"decision", "contract_hash", "actor", "reason"}
+                    or decision.get("decision") not in ("approve", "reject")
+                    or decision.get("contract_hash") != pending.get("contract_hash")
+                    or not isinstance(decision.get("actor"), str)
+                    or not decision["actor"].strip()
+                    or not isinstance(decision.get("reason", ""), str)):
+                raise ValueError("establishment decision requires approve/reject, actor, and exact contract_hash")
+            record = {
+                "decision": decision["decision"], "contract_hash": decision["contract_hash"],
+                "actor": decision["actor"].strip(), "reason": decision.get("reason", "").strip(),
+                "timestamp": _now_server(),
+            }
+            self._establishment_decisions[run_id] = record
+            run.update(status="running", next_stage=None, establishment_decision=record)
+            write_json(self.run_dir / run_id / "run.json", run)
+            self.condition.notify_all()
+
     def cancel(self, run_id: str) -> None:
         """Cancel cooperatively at a stage boundary, before finalization starts."""
         with self.condition:
@@ -151,6 +183,26 @@ class RunStore:
                 # Final artifact publication is indivisible from the user's perspective.
                 self._finalizing.add(run_id)
 
+    def _establishment_decision(self, run_id: str, request: dict[str, Any]) -> dict[str, Any]:
+        with self.condition:
+            if run_id in self._cancelled:
+                raise PipelineCancelled("Cancelled before human establishment approval.")
+            run = self.runs[run_id]
+            run.update(status="waiting", next_stage="human_establishment_approval",
+                       establishment_request=copy.deepcopy(request))
+            write_json(self.run_dir / run_id / "run.json", run)
+            self.condition.notify_all()
+            approved = self.condition.wait_for(
+                lambda: run_id in self._cancelled or run_id in self._establishment_decisions,
+                timeout=self.stage_timeout,
+            )
+            if run_id in self._cancelled:
+                raise PipelineCancelled("Cancelled while waiting for human establishment approval.")
+            if not approved:
+                run.update(status="failed", next_stage=None)
+                raise TimeoutError("Human establishment approval timed out.")
+            return self._establishment_decisions.pop(run_id)
+
     def _event(self, run_id: str, event: dict[str, Any]) -> None:
         with self.lock:
             self.runs[run_id]["events"].append(copy.deepcopy(event))
@@ -178,6 +230,7 @@ class RunStore:
                 result = self.agent_runtime.run_pipeline(
                     request, self.run_dir, **callbacks,
                     check_cancel=lambda: self._check_cancel(run_id),
+                    establishment_decision=lambda pending: self._establishment_decision(run_id, pending),
                 )
             else:
                 request.pop("runtime", None)
@@ -341,7 +394,7 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
         def do_POST(self) -> None:
             if not self._trusted():
                 return
-            control = re.fullmatch(r"/api/runs/([0-9a-f]{32})/(next|cancel)", self.path)
+            control = re.fullmatch(r"/api/runs/([0-9a-f]{32})/(next|cancel|establishment)", self.path)
             if self.path != "/api/runs" and not control:
                 self._reply(404, {"error": "route not found"})
                 return
@@ -371,6 +424,14 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
                     if control[2] == "next":
                         if set(request) != {"stage"} or not isinstance(request["stage"], str):
                             raise ValueError("next requires exactly one string stage")
+                    elif control[2] == "establishment":
+                        if (set(request) - {"decision", "contract_hash", "actor", "reason"}
+                                or request.get("decision") not in ("approve", "reject")
+                                or not isinstance(request.get("contract_hash"), str)
+                                or not isinstance(request.get("actor"), str)
+                                or not request["actor"].strip()
+                                or not isinstance(request.get("reason", ""), str)):
+                            raise ValueError("establishment requires decision, contract_hash and actor")
                     elif request:
                         raise ValueError("cancel requires an empty object")
                 else:
@@ -386,6 +447,8 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
                     run_id = control[1]
                     if control[2] == "next":
                         store.approve(run_id, request["stage"])
+                    elif control[2] == "establishment":
+                        store.decide_establishment(run_id, request)
                     else:
                         store.cancel(run_id)
                 else:
@@ -401,6 +464,9 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
                 return
             except RuntimeUnavailableError as exc:
                 self._reply(409, {"error": str(exc)})
+                return
+            except ValueError as exc:
+                self._reply(400, {"error": str(exc)})
                 return
             self._reply(202, {"id": run_id} if control else {
                 "id": run_id, "operations_url": f"/marketplace-operations-demo.html?run={run_id}"})
