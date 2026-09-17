@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Token Yield | Marketplace sales studio</title>
 <style>
-:root{--ink:#20352e;--muted:#65746c;--green:#27674e;--lime:#def29d;--line:#dfe6dc;--paper:#f7f8f3;--amber:#846322}
+:root{--ink:#20352e;--muted:#556056;--green:#27674e;--lime:#def29d;--line:#dfe6dc;--paper:#f7f8f3;--amber:#846322}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 "Segoe UI",system-ui,sans-serif}
 button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}
 button,a,input,select,textarea,summary{outline-offset:4px} :focus-visible{outline:2px solid var(--green)}
@@ -20,6 +20,14 @@ main{max-width:1440px;margin:auto;padding:35px 36px 60px}.intro{display:flex;jus
 .eyebrow{text-transform:uppercase;letter-spacing:1.7px;font-weight:700;font-size:10px;color:var(--green);margin-bottom:10px}
 .steps{display:flex;gap:16px;font-size:11px;color:var(--muted)}.steps span{display:flex;align-items:center;gap:6px}.steps b{display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;width:24px;height:24px}.steps span:first-child b{background:var(--green);color:white}
 .notice{border:1px solid #e9dfc4;background:#faf6eb;border-radius:9px;padding:11px 14px;margin-bottom:24px;font-size:12px;color:#71592e}
+.info-link{border:0;background:none;padding:0;color:var(--green);font-size:inherit;font-weight:600;text-decoration:underline;cursor:pointer}
+.open-trust{border:0;background:none;padding:0;color:var(--green);font:inherit;text-decoration:underline;cursor:pointer}
+.card-top-meta{display:flex;flex-direction:column;align-items:flex-end;gap:5px;text-align:right}
+.cost-chip{display:inline-block;background:#eaf2e4;color:#2f5a41;border-radius:20px;padding:3px 9px;font-size:10.5px;font-weight:650;white-space:nowrap}
+#trust-list{margin:14px 0 0;padding-left:20px;font-size:12px;color:var(--ink)}#trust-list li{margin-bottom:10px;line-height:1.5}
+.sticky-total{position:fixed;left:0;right:0;bottom:0;z-index:20;display:none;align-items:center;justify-content:space-between;gap:14px;background:var(--ink);color:white;padding:13px 16px;box-shadow:0 -8px 24px #0b1a1330}
+.sticky-total b{font-size:15px}.sticky-total a{color:var(--lime);font-size:12px;font-weight:600;white-space:nowrap}.sticky-total>span{display:flex;flex-direction:column;gap:1px}.sticky-total small{color:#cfe0d4}
+@media(max-width:780px){.sticky-total.is-visible{display:flex}body:has(.sticky-total.is-visible){padding-bottom:62px}}
 .mode-bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:24px}.mode{padding:11px 18px;border:1px solid var(--line);border-radius:8px;background:white}.mode.active{background:var(--ink);color:white;border-color:var(--ink)}.mode-bar small{margin-left:auto}
 .workspace{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:26px;align-items:start}.section-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}.section-head p{font-size:12px;color:var(--muted);margin-top:3px}
 .panel{padding:23px;border:1px solid var(--line);background:white;border-radius:13px;margin-bottom:22px}
@@ -55,7 +63,7 @@ dialog{border:1px solid var(--line);border-radius:15px;max-width:780px;width:cal
 footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:20px}
 [hidden]{display:none!important}
 @media(min-width:1500px){main{padding-top:42px}}@media(max-width:1050px){.workspace{grid-template-columns:minmax(0,1fr) 310px}.header-inner,main{padding-left:22px;padding-right:22px}.steps{display:none}.form-grid{grid-template-columns:1fr 1fr}.card{padding:16px}}
-@media(max-width:780px){.workspace{grid-template-columns:1fr}.cart{position:static;max-height:none;overflow:visible}.header-links a{display:none}.intro{display:block}.catalog{grid-template-columns:1fr 1fr}.mode-bar small{margin-left:0}.metrics,.review-metrics{grid-template-columns:1fr}.form-grid,.form-grid.two,.impact-grid{grid-template-columns:1fr}.header-inner,main{padding-left:16px;padding-right:16px}.yield-head{align-items:start}.variant-row .form-grid{grid-template-columns:1fr}.dialog-footer{flex-wrap:wrap}}
+@media(max-width:780px){.workspace{grid-template-columns:1fr}.cart{position:static;max-height:none;overflow:visible}.header-links a,.header-links .open-trust{display:none}.intro{display:block}.catalog{grid-template-columns:1fr 1fr}.mode-bar small{margin-left:0}.metrics,.review-metrics{grid-template-columns:1fr}.form-grid,.form-grid.two,.impact-grid{grid-template-columns:1fr}.header-inner,main{padding-left:16px;padding-right:16px}.yield-head{align-items:start}.variant-row .form-grid{grid-template-columns:1fr}.dialog-footer{flex-wrap:wrap}}
 @media(max-width:480px){.catalog{grid-template-columns:1fr}.header-links{gap:0}.pill{font-size:10px}.mode{flex:1;font-size:12px;padding:10px}.brand{font-size:18px}}
 @media(prefers-reduced-motion:reduce){.card{transition:none}}
 </style>
@@ -63,14 +71,14 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 <body>
 <header><div class="header-inner">
   <div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Token Yield</div>
-  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><a href="marketplace-console.html">Execution console</a><span>Sales studio</span><span id="runtime-badge" class="pill amber">Offline selected</span></div>
+  <div class="header-links"><button type="button" class="open-trust" data-open="trust-dialog">How estimates work</button><a href="marketplace-prototype.html?variant=A">Original marketplace</a><a href="marketplace-console.html">Execution console</a><span>Sales studio</span><span id="runtime-badge" class="pill amber">Offline selected</span></div>
 </div></header>
 <main>
   <section class="intro"><div><div class="eyebrow">The functionality marketplace</div><h1>Your next product.<br>One brick at a time.</h1><p>Shape the solution together. Explore the capabilities, the team, and the value they could create &mdash; not just the tokens they consume.</p></div>
     <div class="steps"><span><b>1</b> Choose &amp; customize</span><span><b>2</b> Shape your estimate</span><span><b>3</b> Make the value case</span></div>
   </section>
   <section id="yield-summary" class="yield-panel" aria-label="Return on your build"></section>
-  <div class="notice"><b>Planning pilot, not a production quote.</b> Manual bricks and the offline pipeline remain explicit simulations. The opt-in agent pipeline uses an orchestrator and three agents, source-bound fictional fixtures and regression predictions. Only measured-foundry evidence represents provider workload calls; MOCK mode uses synthetic protocol fixtures and makes no paid calls. Predictions are not execution totals or validated production accuracy. No live web research or real customer-document ingestion. Staffing, ROI and commercial rates remain assumptions.</div>
+  <div class="notice"><b>Planning pilot, not a production quote.</b> Every number here is either a transparent simulation or an explicitly-sourced pilot forecast &mdash; never a guaranteed price or validated accuracy. <button type="button" class="open-trust" data-open="trust-dialog">See exactly what's assumed vs. measured &rarr;</button></div>
   <nav class="mode-bar" aria-label="Demo flows">
     <button class="mode active" id="manual-tab" aria-pressed="true">01 &nbsp; Build with bricks</button>
     <button class="mode" id="custom-tab" aria-pressed="false">02 &nbsp; Describe your idea</button>
@@ -123,8 +131,8 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
       </section>
       <section id="measured-marketplace" class="section-space" aria-labelledby="measured-heading">
         <div class="section-head"><div><div class="eyebrow">Stored pilot predictor / inspect provider provenance</div><h2 id="measured-heading">Pre-predicted GPT-5.4 bricks</h2></div><button id="refresh-catalog" class="secondary">Refresh catalog (no model calls)</button></div>
-        <p class="help">Little bricks. A bigger possibility. Explore a capability, then mix the variations you need. Only supported, trained forecasts can be selected.</p>
-        <details class="catalog-settings"><summary>Forecast assumptions &amp; commercial rates</summary>
+        <p id="measured-intro" class="help">Little bricks. A bigger possibility. Explore a capability, then mix the variations you need. Only supported, trained forecasts can be selected.</p>
+        <details id="measured-settings" class="catalog-settings"><summary>Forecast assumptions &amp; commercial rates</summary>
         <p class="help">Stored forecasts at a fixed reference context and pinned GPT-5.4 model. Each forecast retains its measured, MOCK/synthetic or unknown evidence source; the model name is not proof of live calls. Selecting them replaces manual or whole-project selections; each selected variant is counted once, with no invented integration tokens. Shared context and scenario model factors do not change these frozen tokens. Monthly volume and the separate commercial rate below remain explicit.</p>
         <div class="form-grid two"><label>Commercial input USD / 1M tokens<input id="measured-input-rate" type="number" min="0" max="10000" step="0.01" value="2.5" required></label><label>Commercial output USD / 1M tokens<input id="measured-output-rate" type="number" min="0" max="10000" step="0.01" value="15" required></label></div>
         <p class="help">Starting rates: pinned pilot reference $2.50 input / $15 output per million, not a guaranteed current provider price. Editing these rates changes planning USD only, never actual server spend.</p>
@@ -140,8 +148,8 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
       </section>
       <section class="panel section-space" aria-labelledby="assumptions-heading">
         <div class="eyebrow">Shape your estimate</div><h2 id="assumptions-heading">How often will you use each feature?</h2>
-        <p class="help">One run means using a selected option once, such as completing one web research request. Open a brick to set how many times you expect to use each option per month.</p>
-        <p class="help"><b>Example:</b> 100 web research requests + 20 deep research requests = 120 research requests per month. The estimate includes the cost of both. Selecting deep research does not replace web research; uncheck an option if you do not need it.</p>
+        <p class="help">One run = one use of a selected option per month (for example, one web research request). Open a brick to set expected monthly uses per option.</p>
+        <details><summary>See a worked example</summary><p class="help"><b>Example:</b> 100 web research requests + 20 deep research requests = 120 research requests per month. The estimate includes the cost of both. Selecting deep research does not replace web research; uncheck an option if you do not need it.</p></details>
         <div class="form-grid">
           <label>Starting monthly usage for new options<input id="defaultRuns" type="number" min="0" max="1000000" step="1" value="1000"><small>Prefills the number of uses when you add an option. To change an option already in your build, open its brick and edit its monthly runs.</small></label>
           <label>Manual context tokens / run<input id="context" type="number" min="0" max="100000" step="1" value="500"><small>Manual simulation only. Frozen backend predictions do not track edits to this context.</small></label>
@@ -181,7 +189,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Realized share of time value %<input id="realization" type="number" min="0" max="100" step="1" value="60"><small>Not all released capacity becomes cash savings.</small></label>
           <label>Additional contribution USD / month<input id="contribution" type="number" min="0" max="10000000" step="0.01" value="0"><small>Optional incremental margin, not revenue. Avoid double counting.</small></label>
         </div>
-        <p class="help">Time released = unique cases &times; (before &minus; after) / 60. Monthly gross benefit = time released &times; labor value &times; realized share + incremental contribution. Negative time savings remain negative. Zero selected workloads or zero client cases produce no benefits.</p>
+        <details><summary>How is this calculated?</summary><p class="help">Time released = unique cases &times; (before &minus; after) / 60. Monthly gross benefit = time released &times; labor value &times; realized share + incremental contribution. Negative time savings remain negative. Zero selected workloads or zero client cases produce no benefits.</p></details>
         <details><summary>What must be proven with the client?</summary><div class="impact-grid">
           <div class="impact"><h3>Productivity, without quality loss</h3><p>Measure minutes per accepted case, reviewer effort, rework, and acceptance rate against the manual baseline. Validate whether released capacity is redeployed or removed.</p></div>
           <div class="impact"><h3>Better customer experiences</h3><p>Test conversion, useful recommendations, customer satisfaction and retention against a control. Add incremental contribution only when supported by evidence.</p></div>
@@ -203,6 +211,16 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
   </div>
   <footer><span>Token Yield &middot; Marketplace sales-flow prototype</span><span>Manual and MOCK modes are local. Explicit live Foundry runs send the brief to Azure; run artifacts are saved locally.</span></footer>
 </main>
+<div id="sticky-total" class="sticky-total" role="status" aria-live="polite">
+  <span><b id="sticky-total-amount"></b><small id="sticky-total-detail"></small></span>
+  <a href="#build-heading">View build &darr;</a>
+</div>
+<dialog id="trust-dialog" aria-labelledby="trust-title">
+  <div class="dialog-head"><div><div class="eyebrow">Read once, reference anywhere</div><h2 id="trust-title">How these estimates work</h2></div><button class="close" data-close="trust-dialog" aria-label="Close">&times;</button></div>
+  <p class="help">Every caveat that shapes a number on this page, in one place. Specific pages still link back here instead of repeating the fine print.</p>
+  <ul id="trust-list"></ul>
+  <button class="primary wide" data-close="trust-dialog">Got it</button>
+</dialog>
 <dialog id="configure" aria-labelledby="configure-title">
   <div class="dialog-head"><div><div class="eyebrow">Zoom into your brick</div><h2 id="configure-title"></h2></div><button class="close" data-close="configure" aria-label="Close configuration">&times;</button></div>
   <p id="configure-description" class="help"></p>
@@ -365,13 +383,28 @@ function calculate(items,a,models,coordinatorId) {
     benefitCases,hoursSaved,timeValue,contribution,benefit,net,yearCost,yearBenefit,roi,payback,
     benefitPerMillionTokens:input+output>0 ? benefit/(input+output)*1e6 : null,warnings};
 }
+function featureCostRange(feature) {
+  const model=MODELS[0];
+  const runs=Number($("defaultRuns")?.value)||1000;
+  const costs=feature.variants.map(variant=>{
+    const raw=variant.atoms.reduce((sum,atom)=>[sum[0]+ATOMS[atom][0],sum[1]+ATOMS[atom][1]],[0,0]);
+    return (raw[0]*model.input+raw[1]*model.output)*runs/1e6;
+  });
+  return [Math.min(...costs),Math.max(...costs)];
+}
+function costChip(lo,hi,runs) {
+  const label=lo===hi?`~${money(lo)}/mo`:`${money(lo)}&ndash;${money(hi)}/mo`;
+  return `<span class="cost-chip" title="Illustrative, ${number(runs)} runs/month at GPT-5 mini rates">${label}</span>`;
+}
 function renderCatalog() {
   const query=$("search").value.trim().toLowerCase();
+  const runs=Number($("defaultRuns")?.value)||1000;
   const visible=CATALOG.filter(feature=>(category==="All"||feature.category===category)&&`${feature.name} ${feature.description} ${feature.variants.map(v=>v.name).join(" ")}`.toLowerCase().includes(query));
   $("catalog").innerHTML=visible.map(feature=>{
     const chosen=selections.filter(item=>item.featureId===feature.id);
     const atoms=[...new Set(feature.variants.flatMap(variant=>variant.atoms))];
-    return `<article class="card ${chosen.length?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature.color}" aria-hidden="true"></span><small>${feature.category}</small></div>
+    const [lo,hi]=featureCostRange(feature);
+    return `<article class="card ${chosen.length?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature.color}" aria-hidden="true"></span><div class="card-top-meta"><small>${feature.category}</small>${costChip(lo,hi,runs)}</div></div>
       <div><h3><button class="card-title" data-configure="${feature.id}">${esc(feature.name)}</button></h3><p>${esc(feature.description)}</p></div>
       <div class="tags">${atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div><div class="picked">${chosen.length ? chosen.map(item=>esc(feature.variants.find(v=>v.id===item.variantId).name)).join(" + ") : `${feature.variants.length} variations to explore`}</div>
       <div class="card-bottom"><div><b>${chosen.length ? chosen.length+" selected" : "Choose your depth"}</b><small>Multi-select &middot; LLM per variation</small></div><button class="secondary" data-configure="${feature.id}" aria-label="Configure ${feature.name}">${chosen.length?"Edit brick":"Explore brick"} &rarr;</button></div></article>`;
@@ -390,6 +423,7 @@ function renderQuote() {
     $("quote-summary").innerHTML="";$("team-summary").innerHTML="";
     $("yield-summary").innerHTML='<div class="eyebrow">The return on your build</div><h2>From token spend to client impact.</h2><p class="fine">Choose your first brick to see estimated tokens, costs, staffing, and ROI. No estimate yet.</p>';
     $("review").disabled=true;
+    $("sticky-total").classList.remove("is-visible");
     return;
   }
   try {
@@ -404,10 +438,13 @@ function renderQuote() {
     latestEstimate=null;
     $("quote-error").textContent=error.message;$("quote-error").hidden=false;
     $("quote-summary").innerHTML="";$("team-summary").innerHTML="";$("yield-summary").innerHTML='<p>Resolve invalid assumptions to calculate a value case.</p>';
-    $("review").disabled=true;return;
+    $("review").disabled=true;$("sticky-total").classList.remove("is-visible");return;
   }
   $("quote-error").hidden=true;
   const e=latestEstimate;
+  $("sticky-total-amount").textContent=`${money(e.monthlyCost)}/mo`;
+  $("sticky-total-detail").textContent=`${selections.length} variant${selections.length===1?"":"s"} selected`;
+  $("sticky-total").classList.add("is-visible");
   $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">${selections.some(item=>item.backendPrediction)?esc(evidenceLabel(evidenceSource(...selections.filter(item=>item.backendPrediction).map(item=>item.predictionSource)))):"Estimated AI usage / illustrative"}</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
     ${row("Input tokens",compact(e.input))}${row("Output tokens",compact(e.output))}${row("Total tokens / month",compact(e.totalTokens))}
     <small>${selections.some(isReferenceForecast)?"Fixed reference context / GPT-5.4. No synthetic routing or setup tokens added; pilot accounting is separate and retains its provider source.":number(e.pairs.length)+" assumed connections · routing included"}</small></div>
@@ -632,10 +669,18 @@ function renderMeasuredCatalog() {
   const first=$(hasForecasts?"measured-marketplace":"manual-marketplace");
   const second=$(hasForecasts?"manual-marketplace":"measured-marketplace");
   if(first.nextElementSibling!==second)first.parentNode.insertBefore(first,second);
+  const isEmpty=measuredCatalog.length===0;
+  $("measured-intro").hidden=isEmpty;
+  $("measured-settings").hidden=isEmpty;
+  const runs=Number($("defaultRuns")?.value)||1000;
+  const inputRate=Number($("measured-input-rate")?.value)||0;
+  const outputRate=Number($("measured-output-rate")?.value)||0;
   $("measured-catalog").innerHTML=[...groups].map(([featureId,{feature,entries}])=>{
     const chosen=entries.filter(entry=>entry.selected).length;
     const available=entries.filter(entry=>entry.supported).length;
-    return `<article class="card ${chosen?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature?.color||"#96b6a3"}" aria-hidden="true"></span><small>${esc(feature?.category||"Custom capability")}</small></div>
+    const costs=entries.filter(entry=>entry.supported).map(({item})=>(item.input_tokens*inputRate+item.output_tokens*outputRate)*runs/1e6);
+    const chip=costs.length?costChip(Math.min(...costs),Math.max(...costs),runs):"";
+    return `<article class="card ${chosen?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature?.color||"#96b6a3"}" aria-hidden="true"></span><div class="card-top-meta"><small>${esc(feature?.category||"Custom capability")}</small>${chip}</div></div>
       <div><h3>${esc(feature?.name||entries[0].item.name||featureId)}</h3><p>${esc(feature?.description||"A custom source-bound function. Inspect its scope before quoting.")}</p></div>
       <div class="tags"><span>GPT-5.4</span><span>${available?`${available} trained forecast${available===1?"":"s"}`:"Awaiting supported forecasts"}</span></div>
       <div class="picked">${chosen?`${chosen} selected`:entries.length+" variations to explore"}</div>
@@ -819,6 +864,8 @@ async function connectBackend() {
   }catch(error){if(!(error instanceof PipelineError))throw error;if(generation===pipelineGeneration)$("backend-status").textContent=error.message;}
 }
 document.querySelectorAll(".model-options").forEach(select=>select.innerHTML=modelOptions("gpt-mini"));
+$("trust-list").innerHTML=LIMITATIONS.map(item=>`<li>${esc(item)}</li>`).join("");
+document.querySelectorAll("[data-open]").forEach(button=>button.addEventListener("click",()=>$(button.dataset.open).showModal()));
 $("model-rates").innerHTML=`<table><thead><tr><th>Scenario LLM</th><th>Input USD / 1M</th><th>Output USD / 1M</th><th>Input factor</th><th>Output factor</th></tr></thead><tbody>${MODELS.map(model=>`<tr><td>${model.name}</td>${["input","output","inputFactor","outputFactor"].map(property=>`<td><input aria-label="${model.name} ${property}" type="number" min="${property.includes("Factor")?0.1:0}" max="${property.includes("Factor")?10:10000}" step="0.01" required value="${model[property]}" data-model="${model.id}" data-property="${property}" style="min-width:85px;width:100%"></td>`).join("")}</tr>`).join("")}</tbody></table>`;
 $("atom-table").innerHTML=Object.entries(ATOMS).map(([name,tokens])=>`<tr><td>${name}</td>${tokens.map((value,channel)=>`<td class="num"><input aria-label="${name} ${channel===0?"input":"output"} tokens" type="number" min="0" max="1000000" step="1" required value="${value}" data-atom="${name}" data-channel="${channel}"></td>`).join("")}</tr>`).join("");
 $("atom-table").addEventListener("input",event=>{
@@ -856,7 +903,8 @@ $("run-pipeline").addEventListener("click",runPipeline);
 $("pipeline-runtime").addEventListener("change",()=>{invalidateProposal();updateRuntimeChoice();});
 $("execution-mode").addEventListener("change",updateRuntimeChoice);
 $("refresh-catalog").addEventListener("click",refreshMeasuredCatalog);
-["measured-input-rate","measured-output-rate"].forEach(id=>$(id).addEventListener("input",renderQuote));
+["measured-input-rate","measured-output-rate"].forEach(id=>$(id).addEventListener("input",()=>{renderQuote();renderMeasuredCatalog();}));
+$("defaultRuns").addEventListener("input",()=>{renderCatalog();renderMeasuredCatalog();});
 $("measured-catalog").addEventListener("change",event=>{
   if(event.target.dataset.measured!==undefined)selectMeasured(Number(event.target.dataset.measured),event.target.checked);
   if(event.target.dataset.measuredVolume!==undefined){
