@@ -1,85 +1,337 @@
-# Architecture
+# Token Yield architecture
 
-OpenHarness is one architectural move applied consistently: **take the
-behavioral rules out of the agent and mount them above it.** Everything else is
-a consequence of that move.
+Token Yield is a human-governed marketplace and learning system for AI work.
+It turns a project description into reusable task bricks, measures those bricks
+with agents, trains a token predictor, and returns a transparent estimate of
+cost, staffing, risk, and potential value.
 
+The system is designed around one principle:
+
+> Agents perform repeatable work. Humans approve consequential decisions.
+> Measured outcomes improve the next prediction.
+
+![Token Yield agent and learning loop](media/token-yield-agent-loop.png)
+
+## System at a glance
+
+```text
+Sales Studio                 Local control plane
+------------------------     ----------------------------------
+Project request          ->  POST /api/runs
+Scenario and assumptions ->  validated run contract
+Human approvals          ->  one-time stage gates
+Quote and ROI view       <-  run events and final artifacts
+                                |
+                                v
+Agent and model pipeline
+----------------------------------------------------------------
+Understand -> Approve -> Build features -> Train -> Predict -> Learn
+    |             |             |            |         |        |
+catalog       human gate    measurements   model     quote    feedback
+matching      and budget    and evidence   artifact  + SOW    + drift
 ```
-        ┌──────────────────────────────────────────────┐
-        │            HARNESS LAYER  (this repo)          │
-        │                                                │
-        │   module ── scope ─┐                           │
-        │   module ── scope ─┼─►  BindingEngine          │
-        │   module ── scope ─┘        │                  │
-        │                             ▼                  │
-        │                     ConformanceCheck (tiered)  │
-        │                             │                  │
-        │                             ▼                  │
-        │                     Observation stream ──► Cards│
-        └───────────────▲────────────────────────────────┘
-                        │  events (code.modified, query.executed, …)
-        ┌───────────────┴────────────────────────────────┐
-        │   AGENT (unchanged) — the test rig              │
-        │   keeps its task skills, does the work          │
-        └─────────────────────────────────────────────────┘
+
+The browser is a presentation and control surface. The Python backend owns the
+workflow, validation, model fitting, evidence, budgets, and state.
+
+## Main components
+
+| Component | Responsibility | Main implementation |
+| --- | --- | --- |
+| Marketplace Sales Studio | Captures the project, shows the proposal, and presents cost, staffing, and ROI scenarios | `marketplace-sales-demo.html` |
+| Operations Studio | Shows every stage, agent output, approval gate, model step, and final evidence | `marketplace-operations-demo.html` |
+| Runtime terminal | Exposes model and pipeline events for a technical operator | `marketplace-console.html` |
+| Local control plane | Serves the UI, validates requests, manages runs, and enforces stage controls | `examples/marketplace_demo_server.py` |
+| Offline pipeline | Demonstrates decomposition, feature engineering, fitting, evaluation, and prediction without network calls | `token_yield/marketplace_demo.py` |
+| Foundry agent runtime | Coordinates specialized agents and measured Azure AI Foundry calls | `token_yield/marketplace_agents.py` |
+| Agent contracts | Defines roles, messages, brick atoms, schemas, and validation | `token_yield/marketplace_agent_contracts.py` |
+| Brick and service catalog | Defines reusable tasks, versions, quantities, schemas, and quote-time features | `token_yield/tasks.py`, `token_yield/marketplace.py` |
+| Prediction engine | Fits candidate models and predicts input tokens, output tokens, cost, and risk | `token_yield/robust.py`, `token_yield/marketplace_models.py` |
+| Learning loop | Compares forecasts with later evidence, detects drift, and triggers governed refitting | `token_yield/learn.py`, `token_yield/measurement_policy.py` |
+| Evidence store | Persists requests, events, model artifacts, measurements, hashes, and budget state | `.demo-runs/`, approved campaign state, `runs/` |
+
+## End-to-end workflow
+
+### 1. Understand the request
+
+A client, pursuit lead, ISD lead, or project manager enters a project
+description. The orchestrator validates the request and checks whether the
+marketplace already contains the required capability.
+
+The request can:
+
+* Reuse an existing brick
+* Combine several existing bricks
+* Propose a genuinely new function
+* Stop for clarification when the request is ambiguous
+
+The system does not treat every new phrase as a new capability.
+
+### 2. Decompose into bricks
+
+The decomposition layer converts plain English into named, countable work:
+
+* Review
+* Extract
+* Classify
+* Retrieve
+* Reconcile
+* Draft
+* Remediate
+* Validate
+* Report
+
+Each brick is both a business capability and a model feature. A decomposition
+records which bricks are required, how many units are expected, and how much
+source context they consume.
+
+When the agent proposes a new capability, it must express the function using
+the approved feature vocabulary or explicitly report that the vocabulary is
+insufficient.
+
+### 3. Apply human gates
+
+The pipeline pauses before consequential steps. A person approves:
+
+* A new capability contract
+* The experiment scope
+* Paid execution and its total budget
+* Progress to the next stage in step-by-step mode
+* Publication of a new brick or model version
+
+Approvals are single-use and bound to the named stage. A stale approval cannot
+authorize a later action.
+
+### 4. Pre-simulate and measure
+
+The experiment agents run representative workloads for the selected bricks and
+their combinations. The measurement layer records:
+
+* Input, cached-input, output, reasoning, and total tokens
+* Runtime and retry information
+* Model and execution configuration
+* Contract and quality results
+* Workload provenance
+* Actual rated cost
+* Failed and incomplete attempts
+
+Failed work remains part of the cost evidence. Unknown usage is not converted
+to zero.
+
+Offline mode uses explicit synthetic measurements to demonstrate the complete
+pipeline without network calls. Foundry mode uses metered responses from the
+pinned Azure deployment under an approved campaign budget.
+
+### 5. Engineer quote-time features
+
+Feature engineering uses only information available before execution. Typical
+features include:
+
+* Brick counts
+* Context and prompt size
+* Planned output allowance
+* Number and arrangement of agent calls
+* Document and requirement counts
+* Approved workload characteristics
+
+Realized output length, final quality, and retry count are outcomes. They are
+not allowed to leak into a pre-run estimate.
+
+### 6. Train and evaluate
+
+The training layer compares simple and LEGO-like candidate models rather than
+assuming the most complex model will win.
+
+The current numerical implementation is intentionally lightweight:
+
+* Constant baselines
+* Size-based baselines
+* Size-and-unit baselines
+* LEGO ridge models
+
+Projects, not individual repeated calls, define the evaluation groups. A
+project held out for evaluation never contributes rows to model fitting.
+Artifacts preserve their features, parameters, training IDs, runtime contract,
+source hashes, and known limitations.
+
+### 7. Predict and package the proposal
+
+The selected model predicts input and output tokens. A separate rate card
+converts those tokens into API cost. Declared staffing, tool, margin, and
+business-benefit assumptions remain visible rather than being hidden inside the
+token model.
+
+The same project object can produce:
+
+* A draft statement of work
+* A staffing workbook
+* An estimate summary
+* An itemised marketplace quote
+* A quote-to-actual reconciliation record
+
+Unsupported or out-of-range requests return reasons instead of a
+success-shaped estimate.
+
+### 8. Learn from delivery
+
+After delivery, the feedback agent collects two evidence streams.
+
+Technical evidence includes:
+
+* Actual tokens and cost
+* Runtime and retries
+* Quality and acceptance
+* Human effort
+
+Business evidence includes:
+
+* Adoption
+* Time saved
+* Cost avoided
+* Revenue supported
+* Implementation and operating cost
+* Client-confirmed outcomes
+
+The standing model is scored before new evidence is absorbed. This preserves
+the surprise signal needed to detect underprediction, overprediction, and new
+work outside the fitted range.
+
+Retraining is scheduled when evidence and coverage justify it. It is not an
+automatic reaction to every event.
+
+## Agent roles
+
+The Foundry runtime separates responsibilities across bounded roles:
+
+| Role | Purpose |
+| --- | --- |
+| Orchestrator | Maintains the workflow, decisions, and handoffs |
+| Catalog agent | Finds existing capabilities and avoids duplicates |
+| Decomposition agent | Converts the request into approved feature atoms |
+| Specialist agents | Propose and challenge capability contracts |
+| Experiment agent | Builds approved measurement workloads |
+| Feature agent | Produces leakage-safe model inputs |
+| Training agent | Fits candidate models and saves artifacts |
+| Evaluation agent | Tests holdouts, regressions, and support boundaries |
+| Feedback agent | Collects technical and business outcomes |
+
+Agents exchange validated JSON contracts. Generated text is never treated as a
+measurement merely because it looks plausible.
+
+## Runtime modes
+
+| Mode | Network | Token evidence | Intended use |
+| --- | --- | --- | --- |
+| Offline | None | Synthetic | Product demonstration and local development |
+| Mock agents | None | Explicit provider fixtures | Agent coordination and policy tests |
+| Foundry | Azure AI Foundry only | Metered provider usage | Approved live experiments |
+
+Foundry is disabled by default. Enabling it requires an explicit approval ID
+and total campaign budget. The browser cannot increase that budget or change
+the approved deployment.
+
+## API and control plane
+
+The local server binds to `127.0.0.1` and exposes a small JSON API:
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/health` | Server health |
+| `GET` | `/api/runtime` | Active runtime and evidence source |
+| `GET` | `/api/catalog` | Available agent capabilities |
+| `GET` | `/api/scenarios` | Approved demo scenarios |
+| `GET` | `/api/runs` | Run summaries |
+| `GET` | `/api/runs/{id}` | Events, state, and final result |
+| `POST` | `/api/runs` | Start a validated run |
+| `POST` | `/api/runs/{id}/next` | Approve exactly the current stage |
+| `POST` | `/api/runs/{id}/cancel` | Stop at a safe stage boundary |
+
+The server rejects cross-origin browser requests, oversized or malformed JSON,
+duplicate keys, unsupported fields, stale approvals, and invalid run IDs.
+There is no user authentication because this is a loopback-only hackathon
+prototype, not a multi-user hosted service.
+
+## State and evidence
+
+Token Yield uses durable files rather than a database:
+
+```text
+.demo-runs/
+  <run-id>/
+    request.json
+    run.json
+    model and evidence artifacts
+
+<approved-agent-state>/
+  budget.json
+  run-ids/
+  agent-artifacts/
 ```
 
-The agent never imports anything from here. It just emits events. The layer
-watches from above and holds the reins.
+Writes are atomic where campaign integrity matters. Critical artifacts carry
+content hashes. Budget reservations survive failures and restarts, so an
+unknown outcome cannot be replayed as free work.
 
-## The five nouns
+There is no message broker, external database, cache, container platform, or
+production cloud deployment in the prototype.
 
-| Noun | File | What it is |
-|------|------|------------|
-| **Event** | `openharness/events.py` | one observable thing the agent did |
-| **HarnessModule** | `openharness/module.py` | a rule: `scope` + `check` + `price` |
-| **Harness** | `openharness/harness.py` | the plugin layer that binds and checks |
-| **Observation** | `openharness/trace.py` | one row of the verdict stream |
-| **HarnessCard** | `openharness/card.py` | a module characterized across sessions |
+## Cost and budget boundaries
 
-## The three properties the move buys
+Token prediction and commercial pricing remain separate:
 
-### 1. Binding is external
+```text
+predicted tokens
+    -> versioned provider rate card
+    -> estimated API cost
+    + declared tools and human review
+    -> cost basis
+    + visible margin assumption
+    -> proposed selling price
+```
 
-`Harness.observe(event)` asks every module's **scope** whether it applies. The
-scope is a predicate over the event — `on_event("code.modified")`,
-`on_event_when("query.executed", touches_pii, ...)`. If it binds, the layer runs
-the **check**; the agent's opinion never enters. Each binding records *why* it
-bound (`Binding.evidence`), so the decision is auditable.
+The runtime reserves budget before a paid call and settles it from measured
+usage afterward. It also limits concurrent work, calls per run, total campaign
+calls, and approved spend.
 
-### 2. Checks are priced
+## Testing architecture
 
-Every check declares a **tier** (`openharness/module.py :: CheckTier`):
+The test strategy mirrors the learning loop:
 
-| Tier | Cost | Accuracy | Example module |
-|------|------|----------|----------------|
-| `DETERMINISTIC` | free | 1.0 | `tdd` (reads the trace) |
-| `STATIC` | cheap | ~0.97 | `pii-guard`, `no-secrets`, `conventional-commits` |
-| `LLM_JUDGE` | priced | stated (e.g. 0.85) | `prose-style` |
+1. Validate brick and agent contracts.
+2. Test decomposition and feature construction.
+3. Verify budget and dispatch controls.
+4. Fit models with project-grouped splits.
+5. Evaluate unseen projects and compositions.
+6. Test persistence, restart, cancellation, and replay behavior.
+7. Exercise browser coordination and human approval controls.
+8. Score feedback and reward signals before model promotion.
 
-The card prints the tier and the token cost, so enforcement is a *displayed
-price*, not a hope.
+Python tests use `pytest`. Browser tests use Playwright with intercepted or
+local traffic. Default tests are offline and deterministic. Paid experiments
+are separate, explicitly approved campaigns.
 
-### 3. Everything is a unit, so everything is measurable
+See [How Token Yield is tested](how-it-was-tested.md) for the full workflow.
 
-- **Observable** — `Harness.trace` is an ordered list of `Observation`s. Each is
-  `event → module → verdict` with evidence, severity, and tokens. That is the
-  entire audit log.
-- **Testable** — `openharness/evaluate.py` runs a module against labeled
-  fixtures (`measure_accuracy`) or toggles it on/off over one session
-  (`on_off_delta`). The card's numbers come from these, not from anecdote.
+## Technology and deployment
 
-## Checks look *backward*, not forward
+The implementation uses:
 
-A conformance check receives the current event plus the task's prior events
-(`history`). This keeps the model streaming — no waiting for the future — while
-still expressing "test before code": when `code.modified` arrives, `tdd` looks
-back for a `test.written`/`test.run` that preceded it in the *same task*. Task
-histories are isolated, so a test in task A never satisfies a change in task B.
+* Python 3.9 or newer
+* Standard-library HTTP and concurrency
+* A dependency-light numerical model implementation
+* `tiktoken` for tokenization support
+* Static HTML, CSS, and JavaScript for the marketplace
+* JSON and JSONL for contracts and evidence
+* Optional Azure AI Foundry execution
 
-## Extending it
+The package is built with setuptools and tested in GitHub Actions on Python
+3.9, 3.11, and 3.12. Releases are published as GitHub releases with Zenodo
+metadata. No production hosting or infrastructure-as-code deployment is
+included.
 
-A module is just a `HarnessModule` value. Publish your own by exporting one from
-any importable module; see `modules/tdd.py` for the smallest complete example.
-Nothing about the layer is specific to the five shipped rules — they are a
-starter *materia medica*, not the framework.
+## Optional governance adapter
+
+The repository retains an optional Microsoft Agent Governance Toolkit adapter
+for policy experiments. It is not required by the Token Yield marketplace,
+prediction model, learning loop, or local demo. The core architecture remains
+functional when the optional package is not installed.

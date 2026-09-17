@@ -26,11 +26,50 @@ ms.topic: overview
 
 **Predict the cost. Prove the value. Win client approval faster.**
 
-Token Yield turns a plain-English AI project request into a transparent,
-evidence-based proposal. Agents decompose the work into reusable task bricks,
-combine the right capabilities, and predict token use, cost, and risk. People
-approve the scope and commercial assumptions. Actual delivery results feed the
-learning loop for the next project.
+AI projects are often sold before anyone can clearly explain what they will
+cost or what value they will deliver. Token Yield turns a plain-English request
+into a transparent, evidence-based proposal. Agents decompose the work into
+reusable task bricks, combine the right capabilities, and predict token use,
+cost, and risk. People approve the scope and commercial assumptions. Actual
+delivery results feed the learning loop for the next project.
+
+## Live Foundry demo
+
+<video controls preload="metadata" width="100%"
+       poster="docs/media/marketplace-cover.jpg">
+  <source src="docs/media/Token_Yield_Live_Foundry_Demo.mp4"
+          type="video/mp4">
+</video>
+
+<p align="center">
+  <a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">
+    <img src="docs/media/Token_Yield_Live_Foundry_Demo.gif" width="800"
+         alt="Animated preview of a live Token Yield Foundry run showing agent stages, model training, prediction, and terminal evidence">
+  </a>
+</p>
+
+<p align="center">
+  <strong><a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">Open the full live demo with playback controls</a></strong>
+</p>
+
+The recorded run used GPT-5.4 and an explicitly approved USD 25 campaign cap.
+It shows the real agent workflow rather than a front-end animation.
+
+| Live run evidence | Result |
+| --- | ---: |
+| Provider responses | 107 |
+| Measured usage | 56,726 input + 24,280 output = 81,006 tokens |
+| Calculated API cost from the recorded rate card | USD 0.492767 |
+| Conservative safety-budget settlement | USD 5.99052 |
+| Model data split | 64 training + 32 held-out rows |
+| Held-out model error | 95.62 input tokens + 53.19 output tokens MAE |
+| Final status | Completed; broad project quote withheld for human review |
+
+The retail-rate calculation is not an Azure invoice. The larger safety amount
+is the conservative budget guard reserved before calls. The model learned from
+the measured bricks, but the system did not publish a complete project quote
+because the requested scope exceeded the supplied evidence and agent
+disagreement remained. That abstention is part of the governance design.
 
 ## Quick start
 
@@ -178,9 +217,10 @@ measurements and evaluation context.
 * [Marketplace prototype guide](docs/marketplace-prototype.md)
 * [Marketplace model and quoting roadmap](docs/marketplace-models/plan.md)
 * [Service selection and quoting guide](docs/marketplace-models/quoting.md)
-* [Architecture](docs/architecture.md)
-* [Agent Governance Toolkit integration](docs/agt-integration.md)
-* [How the project was tested](docs/how-it-was-tested.md)
+* [Model training explanation](docs/lego-model-training.md)
+* [Experiment and prediction results](docs/composition-findings.md)
+* [Current system architecture](docs/architecture.md)
+* [Agent and model testing workflow](docs/how-it-was-tested.md)
 
 Live Azure Foundry execution is optional and requires explicit configuration,
 authorization, and budget approval. Follow the
