@@ -326,6 +326,8 @@
     if (!request) return;
     $('human-approval-details').innerHTML = '<p><b>' + text(request.requested) + '</b> · contract <code>' + text(request.contract_hash) + '</code></p>' +
       '<p>Atoms: <code>' + text(JSON.stringify(request.proposed_atoms || {})) + '</code></p>' +
+      '<p>Agreement: ' + text(request.agreement?.agreed_true_count) + ' / ' + text(request.agreement?.agent_count) + ' votes agreed · atoms match: ' + text(request.agreement?.all_atoms_match_final) + '</p>' +
+      '<ul>' + (request.notes_for_human_review || request.notes || []).map(note => '<li><b>' + text(note.role) + '</b> agreed=' + text(note.agreed) + ': ' + text(note.note) + '</li>').join('') + '</ul>' +
       payload('Agreement, dissent and governance notes', request, true).outerHTML;
   }
   async function decideEstablishment(decision) {

@@ -724,7 +724,7 @@ def test_human_establishment_rejection_uses_existing_proxy_bricks(
     assert any(e["message"] == "Human rejected new capability establishment." for e in events)
 
 
-def test_human_establishment_preserves_resolved_and_unresolved_notes(
+def test_human_establishment_surfaces_score_zero_caveat_for_review(
         tmp_path, config, request_data):
     provider = MockProvider()
     captured = []
@@ -745,7 +745,12 @@ def test_human_establishment_preserves_resolved_and_unresolved_notes(
     notes = captured[0]["notes"]
     assert [note["note"] for note in notes[:3]] == [
         "Scoring remains out of scope and should be score zero."] * 3
-    assert {note["classification"] for note in notes[:3]} == {"resolved_advisory"}
+    assert {note["review_status"] for note in notes[:3]} == {"needs_human_review"}
+    assert captured[0]["notes_for_human_review"] == notes
+    assert captured[0]["agreement"]["agent_count"] == 4
+    assert captured[0]["agreement"]["agreed_true_count"] == 4
+    assert captured[0]["agreement"]["all_atoms_match_final"] is True
+    assert captured[0]["agreement"]["final_atoms"]["score"] == 0
     assert result["capability_reviews"][0]["discussion"][0]["dissent"] == [
         "Scoring remains out of scope and should be score zero."]
 
@@ -754,8 +759,11 @@ def test_human_establishment_preserves_resolved_and_unresolved_notes(
     "Required source evidence is missing; retention periods cannot be grounded.",
     "Scoring is required; zero scoring makes this contract infeasible.",
     "Scoring is excluded, but the downstream interface cannot accept the required records.",
+    "Scoring is optional, but the workflow is impossible to implement.",
+    "Scoring is optional; retention periods are absent from the supplied documents.",
+    "Scoring is not optional.",
 ])
-def test_human_establishment_classifies_substantive_agreed_true_notes_as_blockers(
+def test_human_establishment_surfaces_all_inspector_notes_without_auto_resolution(
         tmp_path, config, request_data, note):
     provider = MockProvider()
     captured = []
@@ -773,10 +781,15 @@ def test_human_establishment_classifies_substantive_agreed_true_notes_as_blocker
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=dissenting)
     run(runtime, {**request_data, "new_function": "Governed retention ledger"},
         tmp_path / "run", establishment_decision=approve)
-    assert captured[0]["unresolved_substantive"]
-    assert {entry["note"] for entry in captured[0]["unresolved_substantive"]} == {note}
-    assert {entry["classification"] for entry in captured[0]["notes"][:3]} == {
-        "unresolved_substantive"}
+    assert "unresolved_substantive" not in captured[0]
+    assert {entry["note"] for entry in captured[0]["notes_for_human_review"][:3]} == {note}
+    assert {entry["role"] for entry in captured[0]["notes_for_human_review"][:3]} == set(ROLES)
+    assert {entry["agreed"] for entry in captured[0]["notes_for_human_review"][:3]} == {True}
+    assert {entry["review_status"] for entry in captured[0]["notes_for_human_review"][:3]} == {
+        "needs_human_review"}
+    assert captured[0]["agreement"]["agent_count"] == 4
+    assert captured[0]["agreement"]["agreed_true_count"] == 4
+    assert captured[0]["agreement"]["all_atoms_match_final"] is True
 
 
 def test_human_establishment_surfaces_substantive_objection_and_rejects_stale_hash(
@@ -800,8 +813,10 @@ def test_human_establishment_surfaces_substantive_objection_and_rejects_stale_ha
     with pytest.raises(ValueError, match="exact contract hash"):
         run(runtime, {**request_data, "new_function": "Governed retention ledger"},
             tmp_path / "run", establishment_decision=stale)
-    assert captured[0]["unresolved_substantive"][0]["note"] == "Interface feasibility remains unresolved."
-    assert captured[0]["unresolved_substantive"][0]["classification"] == "unresolved_substantive"
+    assert "unresolved_substantive" not in captured[0]
+    assert captured[0]["notes_for_human_review"][0]["note"] == "Interface feasibility remains unresolved."
+    assert captured[0]["notes_for_human_review"][0]["agreed"] is False
+    assert captured[0]["notes_for_human_review"][0]["review_status"] == "needs_human_review"
 
 
 def test_server_establishment_gate_waits_and_rejects_stale_contract_hash(
