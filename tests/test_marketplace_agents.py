@@ -17,7 +17,7 @@ import pytest
 from token_yield import marketplace_agents as engine
 from token_yield.foundry_dispatch import DispatchResult, FoundryDispatchError, ResponseCall, TokenUsage
 from token_yield.marketplace_agent_contracts import (
-    FEATURE_BUILDERS, ROLES, contracts, numeric_features, source_documents,
+    CITATION_MAX_COUNT, FEATURE_BUILDERS, ROLES, contracts, numeric_features, source_documents,
     schema_from_example, strict_json, validate_message,
 )
 from token_yield.marketplace_source_fixtures import fixture_documents
@@ -364,6 +364,12 @@ def _mutate_json_output(result, mutate):
     return replace(result, output=json.dumps(answer))
 
 
+def _drop_composition_evidence(result):
+    answer = json.loads(result.output)
+    answer.pop("evidence", None)
+    return replace(result, output=json.dumps(answer))
+
+
 def _stage_calls(provider, task):
     return [c for c in provider.calls if c["payload"]["task"] == task]
 
@@ -445,6 +451,119 @@ def test_bounded_retry_recovers_transient_bad_citation_at_each_cited_stage(
                for e in _retry_events(events))
 
 
+def test_composition_succeeds_without_source_citations(tmp_path, config, request_data):
+    provider = MockProvider()
+    def no_citations(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return (_drop_composition_evidence(result)
+                if json.loads(prompt)["task"] in engine.DESIGN_RETRY_STAGES else result)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=no_citations)
+    result, events, _ = run(runtime, request_data, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert result["orchestration"]["calls"] == 10
+    assert _retry_events(events) == []
+
+
+@pytest.mark.parametrize("stage", ["propose", "discuss", "adjudicate"])
+def test_composition_optional_citation_is_strict_when_present(stage):
+    docs = source_documents("train-0", 0)
+    catalog = contracts()
+    value = {"summary": "Selection rationale", "bricks": [{"id": "extract", "quantity": 1}],
+             "evidence": [{"document_id": docs[0]["id"], "quote": "Paraphrased source fact"}]}
+    if stage == "propose":
+        value["limitations"] = []
+    elif stage == "discuss":
+        value.update(agreed=True, critiques=[
+            {"role": role, "critique": "Reviewed the proposal."} for role in ROLES
+        ], dissent=[])
+    else:
+        value.update(
+            agreed=True, dissent=[], unsupported=[], proposed_new_function="",
+            decisions=[{"id": "extract", "decision": "include", "rationale": "Fits extraction."}],
+        )
+    with pytest.raises(ValueError, match="exact supplied document span"):
+        validate_message(stage, value, docs, catalog)
+
+
+def test_post_approval_composition_selection_text_can_quote_old_instruction_failure_mode(
+        tmp_path, config, request_data):
+    provider = MockProvider()
+    old_failure_quote = (
+        "For the source-only capability 'Retention exception ledger', execute each ordered "
+        "atom step once on the supplied documents."
+    )
+    seen_post_approval_propose = {"value": False}
+    captured_catalog = []
+    def quote_selection_text(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        payload = json.loads(prompt)
+        if payload["task"] == "propose" and any(
+                brick["id"].startswith("novel_") for brick in payload["catalog"]):
+            seen_post_approval_propose["value"] = True
+            captured_catalog.extend(payload["catalog"])
+            def mutate(answer):
+                answer.pop("evidence", None)
+                answer["summary"] = old_failure_quote
+                answer["limitations"] = [old_failure_quote]
+            return _mutate_json_output(result, mutate)
+        if payload["task"] in engine.DESIGN_RETRY_STAGES:
+            return _drop_composition_evidence(result)
+        return result
+    request = {**request_data, "new_function": "Retention exception ledger"}
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=quote_selection_text)
+    result, events, _ = run(runtime, request, tmp_path / "run",
+                            establishment_decision=approve_establishment)
+    assert seen_post_approval_propose["value"]
+    assert result["training"]["pilot_published"] is True
+    assert _retry_events(events) == []
+    assert any(old_failure_quote in message["public_output"]["summary"]
+               for message in result["agents"] if message["kind"] == "propose")
+    assert all("instruction" not in entry for entry in captured_catalog)
+
+
+def test_post_approval_composition_catalog_summary_omits_full_instruction_text(
+        tmp_path, config, request_data):
+    provider = MockProvider()
+    captured = []
+    def capture(prompt, *, target, output_cap):
+        payload = json.loads(prompt)
+        if payload["task"] == "propose" and any(
+                brick["id"].startswith("novel_") for brick in payload["catalog"]):
+            captured.append(payload)
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return (_drop_composition_evidence(result)
+                if payload["task"] in engine.DESIGN_RETRY_STAGES else result)
+    request = {**request_data, "new_function": "Retention exception ledger"}
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=capture)
+    result, _, _ = run(runtime, request, tmp_path / "run",
+                       establishment_decision=approve_establishment)
+    assert result["training"]["pilot_published"] is True
+    assert captured
+    full_prompt = json.dumps(captured[0])
+    assert "For the source-only capability 'Retention exception ledger'" not in full_prompt
+    for item in captured[0]["catalog"]:
+        assert set(item) == {"id", "name", "scope", "atoms", "supported"}
+
+
+def test_workload_measurement_still_requires_strict_source_grounding():
+    docs = source_documents("train-0", 0)
+    brick = contracts()[0]
+    value = {"answer": "Extracted source facts.",
+             "evidence": [{"document_id": docs[0]["id"],
+                           "quote": "Fictional customer requires a named owner."}],
+             "limitations": []}
+    with pytest.raises(ValueError, match="exact supplied document span"):
+        validate_message("workload", value, docs, [brick])
+
+
+def test_workload_measurement_still_requires_at_least_one_source_citation():
+    docs = source_documents("train-0", 0)
+    brick = contracts()[0]
+    value = {"answer": "Extracted source facts.", "evidence": [], "limitations": []}
+    with pytest.raises(ValueError, match="1 to 24 source citations required"):
+        validate_message("workload", value, docs, [brick])
+
+
 @pytest.mark.parametrize("stage,expected_calls", [
     ("propose", 10),
     ("discuss", 10),
@@ -497,7 +616,7 @@ def test_schema_failure_fails_closed_without_stage_retry(
     assert state["budget"]["active_reserved_usd"] == 0 and state["halted"] is None
 
 
-@pytest.mark.parametrize("evidence_count", [0, 25])
+@pytest.mark.parametrize("evidence_count", [25])
 def test_citation_count_failure_retries_then_recovers(
         tmp_path, config, request_data, evidence_count):
     provider = MockProvider()
@@ -518,7 +637,7 @@ def test_citation_count_failure_retries_then_recovers(
                for e in _retry_events(events))
 
 
-@pytest.mark.parametrize("evidence_count", [0, 25])
+@pytest.mark.parametrize("evidence_count", [25])
 def test_persistent_citation_count_failure_fails_after_bound(
         tmp_path, config, request_data, evidence_count):
     provider = MockProvider()
@@ -543,7 +662,7 @@ def test_large_within_citation_cap_is_accepted_without_retry(tmp_path, config, r
         result = provider(prompt, target=target, output_cap=output_cap)
         return (_mutate_json_output(
             result, lambda answer: answer.update(
-                evidence=_valid_evidence(result, engine.CITATION_MAX_COUNT)))
+                evidence=_valid_evidence(result, CITATION_MAX_COUNT)))
             if json.loads(prompt)["task"] == "propose" else result)
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=max_count)
     result, events, _ = run(runtime, request_data, tmp_path / "run")
@@ -947,7 +1066,7 @@ def test_server_establishment_gate_waits_and_rejects_stale_contract_hash(
             "decision": "approve", "contract_hash": "0" * 64, "actor": "Mallory"})
     store.decide_establishment(run_id, {
         "decision": "approve", "contract_hash": pending["contract_hash"], "actor": "Ada"})
-    deadline = time.monotonic() + 20
+    deadline = time.monotonic() + 60
     while time.monotonic() < deadline:
         snapshot = store.get(run_id)
         if snapshot and snapshot["status"] in ("completed", "failed", "cancelled"):

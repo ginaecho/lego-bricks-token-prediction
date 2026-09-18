@@ -436,14 +436,17 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
         _validate_evidence_count(value["evidence"])
         _validate_evidence_grounding(value["evidence"], docs)
     elif kind in ("propose", "discuss", "adjudicate"):
-        expected = {"summary", "bricks", "evidence"}
+        expected = {"summary", "bricks"}
         expected |= ({"limitations"} if kind == "propose" else
                      {"agreed", "critiques", "dissent"} if kind == "discuss" else
                      {"agreed", "decisions", "dissent", "unsupported", "proposed_new_function"})
+        if "evidence" in value:
+            expected.add("evidence")
         _keys(value, expected)
         _text(value["summary"])
         validate_bricks(value["bricks"], catalog)
-        _validate_evidence_schema(value["evidence"])
+        if "evidence" in value:
+            _validate_evidence_schema(value["evidence"])
         if kind == "propose":
             _texts(value["limitations"])
         else:
@@ -483,8 +486,9 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
                 # Optional capability-gap recommendation the orchestrator infers from the
                 # description; empty unless the agent recognizes a needed but absent brick.
                 _maybe_text(value["proposed_new_function"], 120)
-        _validate_evidence_count(value["evidence"])
-        _validate_evidence_grounding(value["evidence"], docs)
+        if value.get("evidence"):
+            _validate_evidence_count(value["evidence"])
+            _validate_evidence_grounding(value["evidence"], docs)
     elif kind == "novelty":
         _keys(value, {"decision", "reuse_id", "new_name", "rationale"})
         _text(value["rationale"])
