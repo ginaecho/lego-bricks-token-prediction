@@ -304,6 +304,7 @@ let feedbackPopup=null, feedbackPending=null, feedbackSuggestion=null;
 let learningPopup=null, learningPending=null, learnedProposal=null, internalRankings=null;
 const feedbackOrigin="http://127.0.0.1:8793";
 const savedBuildKey="token-yield-saved-build-v1";
+const measuredRateFields=["measured-input-rate","measured-output-rate"];
 let runtimeStatus={enabled:false}, measuredCatalog=[], catalogMetadata={}, catalogGeneration=0;
 const finiteTokens = prediction => prediction?.supported!==false && Number.isFinite(prediction?.input_tokens) && prediction.input_tokens>=0 && Number.isFinite(prediction?.output_tokens) && prediction.output_tokens>=0;
 // A runtime route/model name chooses arithmetic, never the evidence label.
@@ -588,23 +589,67 @@ function savedSnapshot() {
     return null;
   }
 }
+function snapshotEstimateInputs() {
+  return {
+    fields:Object.fromEntries(fields.map(id=>[id,$(id).value])),
+    coordinator:$("coordinator").value,
+    measuredRates:Object.fromEntries(measuredRateFields.map(id=>[id,$(id).value])),
+    modelScenarioRates:JSON.parse(JSON.stringify(MODELS)),
+    atomicScenarioTokens:JSON.parse(JSON.stringify(ATOMS)),
+  };
+}
+function savedInputsComplete(snapshot) {
+  const inputs=snapshot?.estimateInputs;
+  return !!(inputs&&inputs.fields&&fields.every(id=>Object.hasOwn(inputs.fields,id))
+    && inputs.measuredRates&&measuredRateFields.every(id=>Object.hasOwn(inputs.measuredRates,id))
+    && Array.isArray(inputs.modelScenarioRates)&&inputs.modelScenarioRates.length===MODELS.length
+    && inputs.atomicScenarioTokens&&Object.keys(ATOMS).every(atom=>Array.isArray(inputs.atomicScenarioTokens[atom]))
+    && typeof inputs.coordinator==="string");
+}
+function syncVisibleSelectionInputs() {
+  document.querySelectorAll("[data-measured-volume]").forEach(input=>{
+    const entry=measuredCatalog[Number(input.dataset.measuredVolume)];
+    const selected=selections.find(item=>key(item.featureId,item.variantId)===entry?.id);
+    if(selected&&input.checkValidity())selected.runs=Number(input.value);
+  });
+}
 function saveCurrentBuild() {
   if(!selections.length){$("status").textContent="Select at least one pre-predicted brick before saving.";return;}
+  syncVisibleSelectionInputs();
   const snapshot={schema:savedBuildKey,savedAt:new Date().toISOString(),selections:JSON.parse(JSON.stringify(selections)),
-    assumptions:Object.fromEntries(fields.map(id=>[id,$(id).value])),coordinator:$("coordinator").value,catalogMetadata};
+    estimateInputs:snapshotEstimateInputs(),catalogMetadata,
+    savedEstimate:selections.length?calculate(selections,assumptions(),MODELS,$("coordinator").value):null};
   localStorage.setItem(savedBuildKey,JSON.stringify(snapshot));
   renderSavedProject();$("status").textContent="Saved project updated locally. Loading and re-estimating it does not call a model.";
 }
 function restoreAssumptions(snapshot) {
-  for(const [id,value] of Object.entries(snapshot.assumptions||{}))if($(id))$(id).value=value;
-  if(snapshot.coordinator&&$("coordinator"))$("coordinator").value=snapshot.coordinator;
+  if(!savedInputsComplete(snapshot))throw new InputError("Saved project is missing quote-affecting inputs. Re-save the build rather than falling back to defaults.");
+  const inputs=snapshot.estimateInputs;
+  for(const [id,value] of Object.entries(inputs.fields))$(id).value=value;
+  for(const [id,value] of Object.entries(inputs.measuredRates))$(id).value=value;
+  inputs.modelScenarioRates.forEach(saved=>{
+    const model=MODELS.find(item=>item.id===saved.id);
+    if(!model)throw new InputError("Saved project references an unknown model rate.");
+    for(const property of ["input","output","inputFactor","outputFactor"])model[property]=Number(saved[property]);
+  });
+  for(const [atom,tokens] of Object.entries(inputs.atomicScenarioTokens)){
+    if(!ATOMS[atom]||tokens.length!==2)throw new InputError("Saved project references an unknown atom coefficient.");
+    ATOMS[atom][0]=Number(tokens[0]);ATOMS[atom][1]=Number(tokens[1]);
+  }
+  $("coordinator").value=inputs.coordinator;
+  updateEditableTables();
 }
 function loadSavedBuild() {
   const snapshot=savedSnapshot();
   if(!snapshot){$("status").textContent="No saved project yet. Build with bricks first, then save.";renderSavedProject();return false;}
-  selections=JSON.parse(JSON.stringify(snapshot.selections));projectScenario=null;restoreAssumptions(snapshot);
-  refresh("Saved project loaded. Re-estimated instantly from stored forecast provenance; no agent run started.");
-  return true;
+  try{
+    selections=JSON.parse(JSON.stringify(snapshot.selections));projectScenario=null;restoreAssumptions(snapshot);
+    refresh("Saved project loaded. Re-estimated instantly from stored forecast provenance; no agent run started.");
+    return true;
+  }catch(error){
+    if(!(error instanceof InputError))throw error;
+    $("status").textContent=error.message;renderSavedProject();return false;
+  }
 }
 function renderSavedProject() {
   const panel=$("saved-state");if(!panel)return;
@@ -618,7 +663,9 @@ function renderSavedProject() {
     const variant=feature?.variants.find(entry=>entry.id===item.variantId);
     return `<tr><td><b>${esc(feature?.name||item.featureId)}</b><small>${esc(variant?.name||item.variantId)}</small></td><td>${esc(item.source||"saved")}</td><td class="num">${number(item.runs||0)}</td><td>${esc(evidenceLabel(item.predictionSource||item.backendPrediction?.source||"unknown"))}</td></tr>`;
   }).join("");
+  const inputs=snapshot.estimateInputs;
   panel.innerHTML=`<p class="help">Saved ${snapshot.selections.length} variation${snapshot.selections.length===1?"":"s"} at ${esc(snapshot.savedAt||"unknown time")}. Editing happens by loading the build, changing the cart, then saving again.</p>
+    <p class="help">Saved commercial rates: input ${esc(inputs?.measuredRates?.["measured-input-rate"]??"missing")} / output ${esc(inputs?.measuredRates?.["measured-output-rate"]??"missing")} USD per 1M tokens. ${savedInputsComplete(snapshot)?"All quote-affecting inputs are present.":"Missing quote inputs; re-save is required."}</p>
     <div class="table-scroll"><table><thead><tr><th>Functionality</th><th>Source</th><th class="num">Runs/mo</th><th>Provenance</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="help">Re-estimate uses the same frozen forecast arithmetic shown in the cart. Sending to Tab 02 copies a narrative request only; it does not submit an agent run.</p>`;
 }
@@ -1065,9 +1112,12 @@ async function connectBackend() {
     }
   }catch(error){if(!(error instanceof PipelineError))throw error;if(generation===pipelineGeneration)$("backend-status").textContent=error.message;}
 }
+function updateEditableTables() {
+  $("model-rates").innerHTML=`<table><thead><tr><th>Scenario LLM</th><th>Input USD / 1M</th><th>Output USD / 1M</th><th>Input factor</th><th>Output factor</th></tr></thead><tbody>${MODELS.map(model=>`<tr><td>${model.name}</td>${["input","output","inputFactor","outputFactor"].map(property=>`<td><input aria-label="${model.name} ${property}" type="number" min="${property.includes("Factor")?0.1:0}" max="${property.includes("Factor")?10:10000}" step="0.01" required value="${model[property]}" data-model="${model.id}" data-property="${property}" style="min-width:85px;width:100%"></td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  $("atom-table").innerHTML=Object.entries(ATOMS).map(([name,tokens])=>`<tr><td>${name}</td>${tokens.map((value,channel)=>`<td class="num"><input aria-label="${name} ${channel===0?"input":"output"} tokens" type="number" min="0" max="1000000" step="1" required value="${value}" data-atom="${name}" data-channel="${channel}"></td>`).join("")}</tr>`).join("");
+}
 document.querySelectorAll(".model-options").forEach(select=>select.innerHTML=modelOptions("gpt-mini"));
-$("model-rates").innerHTML=`<table><thead><tr><th>Scenario LLM</th><th>Input USD / 1M</th><th>Output USD / 1M</th><th>Input factor</th><th>Output factor</th></tr></thead><tbody>${MODELS.map(model=>`<tr><td>${model.name}</td>${["input","output","inputFactor","outputFactor"].map(property=>`<td><input aria-label="${model.name} ${property}" type="number" min="${property.includes("Factor")?0.1:0}" max="${property.includes("Factor")?10:10000}" step="0.01" required value="${model[property]}" data-model="${model.id}" data-property="${property}" style="min-width:85px;width:100%"></td>`).join("")}</tr>`).join("")}</tbody></table>`;
-$("atom-table").innerHTML=Object.entries(ATOMS).map(([name,tokens])=>`<tr><td>${name}</td>${tokens.map((value,channel)=>`<td class="num"><input aria-label="${name} ${channel===0?"input":"output"} tokens" type="number" min="0" max="1000000" step="1" required value="${value}" data-atom="${name}" data-channel="${channel}"></td>`).join("")}</tr>`).join("");
+updateEditableTables();
 $("atom-table").addEventListener("input",event=>{
   const input=event.target;if(!input.dataset.atom)return;
   if(input.checkValidity())ATOMS[input.dataset.atom][Number(input.dataset.channel)]=Number(input.value);

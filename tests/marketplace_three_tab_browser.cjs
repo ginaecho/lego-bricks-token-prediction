@@ -79,21 +79,68 @@ async function checkViewport(width, height) {
     await first.evaluate(element => { element.closest("details[data-measured-feature]").open = true; });
     await first.check();
     await page.waitForFunction(() => document.querySelector("#quote-summary")?.textContent.includes("/ month"));
+    await page.locator("[data-measured-volume]").first().fill("321");
+    await page.evaluate(() => {
+      for (const [id, value] of Object.entries({
+        "measured-input-rate": "10",
+        "measured-output-rate": "60",
+        reserve: "7",
+        operating: "321.25",
+        cases: "654",
+        weeks: "9",
+        reviewRate: "77",
+      })) {
+        const input = document.getElementById(id);
+        input.value = value;
+        input.dispatchEvent(new Event("input", {bubbles: true}));
+      }
+    });
+    let savedMonthlyApi = null;
+    const savedInputs = await page.evaluate(() => ({
+      inputRate: document.querySelector("#measured-input-rate").value,
+      outputRate: document.querySelector("#measured-output-rate").value,
+      reserve: document.querySelector("#reserve").value,
+      operating: document.querySelector("#operating").value,
+      cases: document.querySelector("#cases").value,
+      weeks: document.querySelector("#weeks").value,
+      reviewRate: document.querySelector("#reviewRate").value,
+      runs: document.querySelector("[data-measured-volume]").value,
+    }));
     assert.equal(runPosts.length, 0, "Tab 01 shopping must not start an agent run");
     assert.match(await page.locator("#quote-summary").innerText(), /measured|MOCK|forecast/i);
 
-    await page.locator("#saved-tab").click();
+    await page.locator("#saved-tab").evaluate(element => element.click());
+    await page.waitForFunction(() => !document.querySelector("#saved-panel").hidden);
     assert.equal(await page.locator("#saved-panel").isVisible(), true);
     assert.equal(await page.locator("#custom-panel").isHidden(), true);
     assert.equal(await page.locator("#measured-marketplace").isHidden(), true);
     await page.locator("#save-build").click();
     await page.waitForFunction(() => document.querySelector("#saved-state")?.textContent.includes("Saved 1 variation"));
+    savedMonthlyApi = await page.evaluate(() =>
+      JSON.parse(localStorage.getItem("token-yield-saved-build-v1")).savedEstimate.monthlyApi);
     await page.locator("#clear").click();
     assert.match(await page.locator("#cart-items").innerText(), /Start with one capability/);
+    await page.reload();
+    await page.waitForFunction(() => document.querySelector("#catalog-status")?.textContent.startsWith("Stored catalog:"));
+    await page.locator("#saved-tab").click();
     await page.locator("#load-build").click();
     await page.waitForFunction(() => !document.querySelector("#cart-items")?.textContent.includes("Start with one capability"));
     await page.locator("#reestimate-saved").click();
     await page.waitForFunction(() => document.querySelector("#quote-summary")?.textContent.includes("/ month"));
+    const restoredInputs = await page.evaluate(() => ({
+      inputRate: document.querySelector("#measured-input-rate").value,
+      outputRate: document.querySelector("#measured-output-rate").value,
+      reserve: document.querySelector("#reserve").value,
+      operating: document.querySelector("#operating").value,
+      cases: document.querySelector("#cases").value,
+      weeks: document.querySelector("#weeks").value,
+      reviewRate: document.querySelector("#reviewRate").value,
+      runs: document.querySelector("[data-measured-volume]").value,
+    }));
+    assert.deepEqual(restoredInputs, savedInputs);
+    assert.notEqual(Number(restoredInputs.inputRate), 2.5);
+    assert.notEqual(Number(restoredInputs.outputRate), 15);
+    assert.equal(await page.evaluate(() => exportData().estimate.monthlyApi), savedMonthlyApi);
     await page.locator("#send-saved-custom").click();
     assert.equal(await page.locator("#custom-panel").isVisible(), true);
     assert.equal(await page.locator("#saved-panel").isHidden(), true);
