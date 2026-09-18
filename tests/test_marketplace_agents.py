@@ -373,6 +373,11 @@ def _retry_events(events):
             "Bounded stage retry authorized after content/citation rejection."]
 
 
+def _content_retry_attempts(stage):
+    return (engine.DESIGN_CONTENT_CONTRACT_ATTEMPTS
+            if stage in engine.DESIGN_RETRY_STAGES else engine.CONTENT_CONTRACT_ATTEMPTS)
+
+
 def test_settled_workload_content_failure_retries_then_never_halts(tmp_path, config, request_data):
     provider = MockProvider()
     def always_bad(prompt, *, target, output_cap):
@@ -440,6 +445,32 @@ def test_bounded_retry_recovers_transient_bad_citation_at_each_cited_stage(
                for e in _retry_events(events))
 
 
+@pytest.mark.parametrize("stage,expected_calls", [
+    ("propose", 10),
+    ("discuss", 10),
+    ("adjudicate", 8),
+])
+def test_design_stage_recovers_after_seven_invalid_citation_attempts(
+        tmp_path, config, request_data, stage, expected_calls):
+    provider = MockProvider()
+    seen = {"bad": 0}
+    def flaky(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        if json.loads(prompt)["task"] == stage and seen["bad"] < 7:
+            seen["bad"] += 1
+            return _replace_first_citation(result, INSTRUCTION_TEXT_CITATION)
+        return result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=flaky)
+    result, events, _ = run(runtime, request_data, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert len(_stage_calls(provider, stage)) == expected_calls
+    retry_events = [e for e in _retry_events(events) if e["data"]["operation"] == stage]
+    assert len(retry_events) == 7
+    assert all(e["data"]["max_attempts"] == engine.DESIGN_CONTENT_CONTRACT_ATTEMPTS
+               and e["data"]["error_category"] == "source_citation"
+               for e in retry_events)
+
+
 @pytest.mark.parametrize("mutation", [
     lambda answer: answer.update(evidence="not-an-array"),
     lambda answer: answer.update(evidence=[
@@ -502,8 +533,8 @@ def test_persistent_citation_count_failure_fails_after_bound(
         runtime.run_pipeline(request_data, tmp_path / "run", run_id="test-run",
                              on_event=events.append, before_stage=lambda stage: None)
     assert excinfo.value.category == "citation_count" and excinfo.value.retryable is True
-    assert len(_stage_calls(provider, "propose")) == engine.CONTENT_CONTRACT_ATTEMPTS
-    assert len(_retry_events(events)) == engine.CONTENT_CONTRACT_ATTEMPTS - 1
+    assert len(_stage_calls(provider, "propose")) == engine.DESIGN_CONTENT_CONTRACT_ATTEMPTS
+    assert len(_retry_events(events)) == engine.DESIGN_CONTENT_CONTRACT_ATTEMPTS - 1
 
 
 def test_large_within_citation_cap_is_accepted_without_retry(tmp_path, config, request_data):
@@ -597,11 +628,21 @@ def test_persistent_instruction_text_citation_fails_after_stage_retry_bound(
         return (_replace_first_citation(result, INSTRUCTION_TEXT_CITATION)
                 if json.loads(prompt)["task"] == stage else result)
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=always_bad)
+    events = []
     with pytest.raises(engine.ContentContractError, match="exact supplied document span"):
-        run(runtime, request_data, tmp_path / "run")
+        runtime.run_pipeline(request_data, tmp_path / "run", run_id="test-run",
+                             on_event=events.append, before_stage=lambda stage: None)
     assert runtime.public_status()["halted"] is None
     assert runtime.public_status()["reserved_usd"] == 0
-    assert len(_stage_calls(provider, stage)) == engine.CONTENT_CONTRACT_ATTEMPTS
+    assert len(_stage_calls(provider, stage)) == _content_retry_attempts(stage)
+    retry_events = [e for e in _retry_events(events) if e["data"]["operation"] == stage]
+    assert len(retry_events) == _content_retry_attempts(stage) - 1
+    assert all(e["data"]["max_attempts"] == _content_retry_attempts(stage)
+               and e["data"]["error_category"] == "source_citation"
+               for e in retry_events)
+    state = json.loads((tmp_path / "state" / "budget.json").read_text())
+    assert state["calls"] == len(provider.calls)
+    assert len(state["budget"]["settled_requests"]) == len(provider.calls)
 
 
 def test_f70d_instruction_text_propose_failure_retries_and_recovers(
@@ -634,7 +675,7 @@ def test_f70d_instruction_text_propose_failure_fails_after_bound(
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=always_bad_propose)
     with pytest.raises(engine.ContentContractError, match="exact supplied document span"):
         run(runtime, request, tmp_path / "run", establishment_decision=approve_establishment)
-    assert len(_stage_calls(provider, "propose")) == engine.CONTENT_CONTRACT_ATTEMPTS
+    assert len(_stage_calls(provider, "propose")) == engine.DESIGN_CONTENT_CONTRACT_ATTEMPTS
 
 
 def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, config, request_data, monkeypatch):

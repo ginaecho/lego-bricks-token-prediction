@@ -53,6 +53,8 @@ CAMPAIGN_STOP_USD = 96
 WORKLOAD_OUTPUT_CAP = 1536
 AGENT_OUTPUT_CAP = 1536
 CONTENT_CONTRACT_ATTEMPTS = 3
+DESIGN_CONTENT_CONTRACT_ATTEMPTS = 8
+DESIGN_RETRY_STAGES = frozenset({"propose", "discuss", "adjudicate"})
 WORKLOAD_ATTEMPTS = CONTENT_CONTRACT_ATTEMPTS
 CONTENT_RETRY_POLICY = {
     "policy": "bounded-per-stage-content-contract",
@@ -61,6 +63,8 @@ CONTENT_RETRY_POLICY = {
     "row_acceptance": "only validated outputs become measurement rows",
     "scope": "same logical stage attempt only; never a whole-run retry",
 }
+DESIGN_RETRY_POLICY = {**CONTENT_RETRY_POLICY, "max_attempts": DESIGN_CONTENT_CONTRACT_ATTEMPTS,
+                       "stages": sorted(DESIGN_RETRY_STAGES)}
 WORKLOAD_RETRY_POLICY = CONTENT_RETRY_POLICY
 MAX_INPUT_BOUND = 32768
 _LOCKS: dict[str, threading.Lock] = {}
@@ -898,17 +902,21 @@ class AgentRuntime:
 
         def retry_call(kind: str, role: str, payload: dict | str, docs: list[dict],
                        catalog: list[dict], *, workload: bool = False) -> dict:
-            for attempt in range(CONTENT_CONTRACT_ATTEMPTS):
+            max_attempts = (DESIGN_CONTENT_CONTRACT_ATTEMPTS
+                            if kind in DESIGN_RETRY_STAGES else CONTENT_CONTRACT_ATTEMPTS)
+            retry_policy = (DESIGN_RETRY_POLICY
+                            if kind in DESIGN_RETRY_STAGES else CONTENT_RETRY_POLICY)
+            for attempt in range(max_attempts):
                 try:
                     return call(kind, role, payload, docs, catalog, workload=workload)
                 except ContentContractError as exc:
-                    if not exc.retryable or attempt + 1 >= CONTENT_CONTRACT_ATTEMPTS:
+                    if not exc.retryable or attempt + 1 >= max_attempts:
                         raise
                     event("Bounded stage retry authorized after content/citation rejection.",
                           {"operation": kind, "role": role, "attempt": attempt + 1,
                            "error_category": exc.category,
-                           "max_attempts": CONTENT_CONTRACT_ATTEMPTS,
-                           "retry_policy": CONTENT_RETRY_POLICY["policy"]})
+                           "max_attempts": max_attempts,
+                           "retry_policy": retry_policy["policy"]})
             raise RuntimeError("unreachable retry loop state")
 
         catalog = contracts()
