@@ -486,7 +486,7 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
                 # Optional capability-gap recommendation the orchestrator infers from the
                 # description; empty unless the agent recognizes a needed but absent brick.
                 _maybe_text(value["proposed_new_function"], 120)
-        if value.get("evidence"):
+        if "evidence" in value:
             _validate_evidence_count(value["evidence"])
             _validate_evidence_grounding(value["evidence"], docs)
     elif kind == "novelty":

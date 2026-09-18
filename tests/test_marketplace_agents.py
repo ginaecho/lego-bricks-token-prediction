@@ -17,8 +17,8 @@ import pytest
 from token_yield import marketplace_agents as engine
 from token_yield.foundry_dispatch import DispatchResult, FoundryDispatchError, ResponseCall, TokenUsage
 from token_yield.marketplace_agent_contracts import (
-    CITATION_MAX_COUNT, FEATURE_BUILDERS, ROLES, contracts, numeric_features, source_documents,
-    schema_from_example, strict_json, validate_message,
+    CITATION_MAX_COUNT, CitationCountError, FEATURE_BUILDERS, ROLES, contracts, numeric_features,
+    source_documents, schema_from_example, strict_json, validate_message,
 )
 from token_yield.marketplace_source_fixtures import fixture_documents
 
@@ -464,12 +464,10 @@ def test_composition_succeeds_without_source_citations(tmp_path, config, request
     assert _retry_events(events) == []
 
 
-@pytest.mark.parametrize("stage", ["propose", "discuss", "adjudicate"])
-def test_composition_optional_citation_is_strict_when_present(stage):
-    docs = source_documents("train-0", 0)
-    catalog = contracts()
-    value = {"summary": "Selection rationale", "bricks": [{"id": "extract", "quantity": 1}],
-             "evidence": [{"document_id": docs[0]["id"], "quote": "Paraphrased source fact"}]}
+def _composition_message(stage, docs, *, evidence_marker):
+    value = {"summary": "Selection rationale", "bricks": [{"id": "extract", "quantity": 1}]}
+    if evidence_marker != "omitted":
+        value["evidence"] = evidence_marker
     if stage == "propose":
         value["limitations"] = []
     elif stage == "discuss":
@@ -481,8 +479,39 @@ def test_composition_optional_citation_is_strict_when_present(stage):
             agreed=True, dissent=[], unsupported=[], proposed_new_function="",
             decisions=[{"id": "extract", "decision": "include", "rationale": "Fits extraction."}],
         )
+    return value
+
+
+@pytest.mark.parametrize("stage", ["propose", "discuss", "adjudicate"])
+def test_composition_omitted_evidence_succeeds(stage):
+    docs = source_documents("train-0", 0)
+    validate_message(stage, _composition_message(stage, docs, evidence_marker="omitted"),
+                     docs, contracts())
+
+
+@pytest.mark.parametrize("stage", ["propose", "discuss", "adjudicate"])
+def test_composition_present_empty_evidence_fails_count_validation(stage):
+    docs = source_documents("train-0", 0)
+    with pytest.raises(CitationCountError, match="1 to 24 source citations required"):
+        validate_message(stage, _composition_message(stage, docs, evidence_marker=[]),
+                         docs, contracts())
+
+
+@pytest.mark.parametrize("stage", ["propose", "discuss", "adjudicate"])
+def test_composition_valid_present_citation_succeeds(stage):
+    docs = source_documents("train-0", 0)
+    evidence = [{"document_id": docs[0]["id"], "quote": docs[0]["text"].splitlines()[0]}]
+    validate_message(stage, _composition_message(stage, docs, evidence_marker=evidence),
+                     docs, contracts())
+
+
+@pytest.mark.parametrize("stage", ["propose", "discuss", "adjudicate"])
+def test_composition_optional_citation_is_strict_when_present(stage):
+    docs = source_documents("train-0", 0)
+    evidence = [{"document_id": docs[0]["id"], "quote": "Paraphrased source fact"}]
     with pytest.raises(ValueError, match="exact supplied document span"):
-        validate_message(stage, value, docs, catalog)
+        validate_message(stage, _composition_message(stage, docs, evidence_marker=evidence),
+                         docs, contracts())
 
 
 def test_post_approval_composition_selection_text_can_quote_old_instruction_failure_mode(
@@ -616,7 +645,7 @@ def test_schema_failure_fails_closed_without_stage_retry(
     assert state["budget"]["active_reserved_usd"] == 0 and state["halted"] is None
 
 
-@pytest.mark.parametrize("evidence_count", [25])
+@pytest.mark.parametrize("evidence_count", [0, 25])
 def test_citation_count_failure_retries_then_recovers(
         tmp_path, config, request_data, evidence_count):
     provider = MockProvider()
@@ -637,7 +666,7 @@ def test_citation_count_failure_retries_then_recovers(
                for e in _retry_events(events))
 
 
-@pytest.mark.parametrize("evidence_count", [25])
+@pytest.mark.parametrize("evidence_count", [0, 25])
 def test_persistent_citation_count_failure_fails_after_bound(
         tmp_path, config, request_data, evidence_count):
     provider = MockProvider()
