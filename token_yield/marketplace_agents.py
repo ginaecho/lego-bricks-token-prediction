@@ -1236,6 +1236,7 @@ class AgentRuntime:
             requested_id=requested_custom,
         ) if self.measurement_policy else None
         reuse_rows = []
+        skipped_reuse = []
         rows_dir = self.state_dir / "rows"
         if rows_dir.exists():
             for path in sorted(rows_dir.glob("*.json")):
@@ -1245,10 +1246,21 @@ class AgentRuntime:
                         and row.get("contract_hash") == by_id[row["brick_id"]]["contract_hash"]
                         and row.get("source") == source
                         and (not adaptive or row.get("group") in {"train-0", "train-1", "train-2"})):
-                    self._validate_reused_row(
-                        row, by_id[row["brick_id"]],
-                        source_fixture=self.source_fixture["id"] if self.source_fixture else None)
-                    reuse_rows.append(row)
+                    try:
+                        self._validate_reused_row(
+                            row, by_id[row["brick_id"]],
+                            source_fixture=self.source_fixture["id"] if self.source_fixture else None)
+                    except ValueError as exc:
+                        skipped_reuse.append({
+                            "id": row.get("id"), "run_id": row.get("run_id"),
+                            "brick_id": row.get("brick_id"), "group": row.get("group"),
+                            "reason": str(exc),
+                        })
+                    else:
+                        reuse_rows.append(row)
+        if skipped_reuse:
+            event("Skipped incompatible reused training rows; measuring fresh replacements.",
+                  {"count": len(skipped_reuse), "rows": skipped_reuse})
         jobs, reused, reused_keys = [], [], set()
         for brick in catalog:
             for index in ((0, 1, 2, 0, 4, 5) if adaptive else range(6)):
@@ -1268,6 +1280,7 @@ class AgentRuntime:
         plan = {"frozen_at": _now(), "compatibility": self._compatibility,
                 "feature_names": names, "jobs": jobs,
                 "reused_train_ids": [r["id"] for r in reused],
+                "skipped_reuse_rows": skipped_reuse,
                 "holdout_policy": "Fresh run-specific document groups; never reused for tuning. "
                 "Old holdouts are excluded, not promoted to training.",
                 "template_limitation": LIMITATIONS[4],
@@ -1405,6 +1418,7 @@ class AgentRuntime:
         training = {
             "source": source, "rows": rows, "train_count": len(train_rows),
             "test_count": len(holdout_rows), "reused_train_count": len(reused),
+            "skipped_reuse_count": len(skipped_reuse),
             "new_holdout_count": len(holdout_rows), "reused_holdout_count": 0,
             "holdout_evidence": "new source-document groups; shared templates, exploratory small pilot",
             "coefficients": {target: {"intercept": model.raw_intercept,

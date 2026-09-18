@@ -893,6 +893,42 @@ def test_novel_measurement_reuses_train_only_and_restart_model_persists(tmp_path
     assert all("first" not in r["group"] for r in newer["training"]["rows"] if r["split"] == "holdout")
 
 
+def test_reuse_fingerprint_mismatch_is_skipped_and_measured_fresh(tmp_path, config, request_data):
+    first_provider = MockProvider()
+    first = engine.AgentRuntime(tmp_path / "state", config, dispatch=first_provider)
+    first_result, _, _ = run(first, request_data, tmp_path / "first", run_id="first")
+    rows_dir = tmp_path / "state" / "rows"
+    stale_path = next(path for path in sorted(rows_dir.glob("*.json"))
+                      if json.loads(path.read_text())["split"] == "train")
+    stale = json.loads(stale_path.read_text())
+    stale["prompt_sha256"] = "stale-" + stale["prompt_sha256"]
+    stale_path.write_text(json.dumps(stale), encoding="utf-8")
+
+    second_provider = MockProvider()
+    second = engine.AgentRuntime(tmp_path / "state", config, dispatch=second_provider)
+    newer, events, _ = run(second, request_data, tmp_path / "second", run_id="second")
+
+    skipped = [event for event in events
+               if event["message"] == "Skipped incompatible reused training rows; measuring fresh replacements."]
+    assert skipped and skipped[0]["data"]["count"] == 1
+    assert skipped[0]["data"]["rows"][0]["id"] == stale["id"]
+    assert newer["training"]["pilot_published"] is True
+    assert newer["training"]["skipped_reuse_count"] == 1
+    assert newer["training"]["reused_train_count"] == first_result["training"]["train_count"] - 1
+    workload_calls = [c for c in second_provider.calls if c["payload"]["task"] == "workload"]
+    assert len(workload_calls) == newer["workload"]["calls"] == newer["training"]["test_count"] + 1
+    assert all(row["id"] != stale["id"] for row in newer["training"]["rows"])
+    replacements = [row for row in newer["training"]["rows"]
+                    if row["run_id"] == "second" and row["split"] == "train"]
+    assert len(replacements) == 1
+    assert replacements[0]["brick_id"] == stale["brick_id"]
+    assert replacements[0]["group"] == stale["group"]
+    by_id = {brick["id"]: brick for brick in contracts()}
+    for row in newer["training"]["rows"]:
+        if row["run_id"] != "second" and row["split"] == "train":
+            engine.AgentRuntime._validate_reused_row(row, by_id[row["brick_id"]])
+
+
 def test_novelty_reuse_when_agent_matches_existing_brick(tmp_path, config, request_data):
     provider = MockProvider()
     def reuse(prompt, **kwargs):

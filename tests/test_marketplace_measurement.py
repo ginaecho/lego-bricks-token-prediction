@@ -7,7 +7,7 @@ from dataclasses import replace
 
 import pytest
 
-from test_marketplace_agents import MockProvider, config, request_data, run  # noqa: F401
+from test_marketplace_agents import MockProvider, approve_establishment, config, request_data, run  # noqa: F401
 from token_yield import marketplace_agents as engine
 from token_yield.measurement_policy import ROUNDS
 from token_yield.measurement_policy import MeasurementPolicy
@@ -125,7 +125,8 @@ def test_new_action_executions_rewards_and_reordered_resume(tmp_path, config, re
     request = {**request_data, "new_function": "Retention exception ledger"} if mode == "explicit" else {
         **request_data, "description": "Summarize source-only handoff obligations and evidence gaps."}
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=dispatch, measurement_policy=True)
-    first, events, _ = run(runtime, request, tmp_path / "runs", run_id=mode + "-new")
+    first, events, _ = run(runtime, request, tmp_path / "runs", run_id=mode + "-new",
+                           establishment_decision=approve_establishment)
     novel = first["requested_custom"]
     assert novel and first["bricks"][-1]["id"] == novel
     report = first["measurement_policy"]
