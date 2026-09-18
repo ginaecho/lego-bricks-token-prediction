@@ -598,13 +598,37 @@ function snapshotEstimateInputs() {
     atomicScenarioTokens:JSON.parse(JSON.stringify(ATOMS)),
   };
 }
-function savedInputsComplete(snapshot) {
+function finiteSavedNumber(value, label) {
+  if(value===""||value===null||value===undefined||!Number.isFinite(Number(value)))throw new InputError(`Saved project has invalid ${label}.`);
+  return Number(value);
+}
+function validateSavedSnapshot(snapshot) {
   const inputs=snapshot?.estimateInputs;
-  return !!(inputs&&inputs.fields&&fields.every(id=>Object.hasOwn(inputs.fields,id))
-    && inputs.measuredRates&&measuredRateFields.every(id=>Object.hasOwn(inputs.measuredRates,id))
-    && Array.isArray(inputs.modelScenarioRates)&&inputs.modelScenarioRates.length===MODELS.length
-    && inputs.atomicScenarioTokens&&Object.keys(ATOMS).every(atom=>Array.isArray(inputs.atomicScenarioTokens[atom]))
-    && typeof inputs.coordinator==="string");
+  if(!snapshot||snapshot.schema!==savedBuildKey||!Array.isArray(snapshot.selections))throw new InputError("Saved project is malformed.");
+  if(!inputs||!inputs.fields||!inputs.measuredRates||!Array.isArray(inputs.modelScenarioRates)||!inputs.atomicScenarioTokens)throw new InputError("Saved project is missing quote-affecting inputs. Re-save the build rather than falling back to defaults.");
+  for(const id of fields){if(!Object.hasOwn(inputs.fields,id))throw new InputError(`Saved project is missing assumption ${id}.`);finiteSavedNumber(inputs.fields[id],`assumption ${id}`);}
+  for(const id of measuredRateFields){if(!Object.hasOwn(inputs.measuredRates,id))throw new InputError(`Saved project is missing commercial rate ${id}.`);finiteSavedNumber(inputs.measuredRates[id],`commercial rate ${id}`);}
+  if(typeof inputs.coordinator!=="string"||!MODELS.some(model=>model.id===inputs.coordinator))throw new InputError("Saved project has an unknown coordinator model.");
+  const seenModels=new Set(), expectedModels=new Set(MODELS.map(model=>model.id));
+  if(inputs.modelScenarioRates.length!==MODELS.length)throw new InputError("Saved project has incomplete model rates.");
+  for(const saved of inputs.modelScenarioRates){
+    if(!saved||typeof saved.id!=="string"||!expectedModels.has(saved.id))throw new InputError("Saved project references an unknown model rate.");
+    if(seenModels.has(saved.id))throw new InputError("Saved project has duplicate model rates.");
+    seenModels.add(saved.id);
+    for(const property of ["input","output","inputFactor","outputFactor"]){
+      if(!Object.hasOwn(saved,property))throw new InputError(`Saved project is missing model ${saved.id} ${property}.`);
+      finiteSavedNumber(saved[property],`model ${saved.id} ${property}`);
+    }
+  }
+  const expectedAtoms=Object.keys(ATOMS);
+  for(const atom of expectedAtoms){
+    const tokens=inputs.atomicScenarioTokens[atom];
+    if(!Array.isArray(tokens)||tokens.length!==2)throw new InputError(`Saved project is missing atom coefficients for ${atom}.`);
+    finiteSavedNumber(tokens[0],`atom ${atom} input`);
+    finiteSavedNumber(tokens[1],`atom ${atom} output`);
+  }
+  if(Object.keys(inputs.atomicScenarioTokens).some(atom=>!ATOMS[atom]))throw new InputError("Saved project references an unknown atom coefficient.");
+  return snapshot;
 }
 function syncVisibleSelectionInputs() {
   document.querySelectorAll("[data-measured-volume]").forEach(input=>{
@@ -623,7 +647,7 @@ function saveCurrentBuild() {
   renderSavedProject();$("status").textContent="Saved project updated locally. Loading and re-estimating it does not call a model.";
 }
 function restoreAssumptions(snapshot) {
-  if(!savedInputsComplete(snapshot))throw new InputError("Saved project is missing quote-affecting inputs. Re-save the build rather than falling back to defaults.");
+  validateSavedSnapshot(snapshot);
   const inputs=snapshot.estimateInputs;
   for(const [id,value] of Object.entries(inputs.fields))$(id).value=value;
   for(const [id,value] of Object.entries(inputs.measuredRates))$(id).value=value;
@@ -643,7 +667,9 @@ function loadSavedBuild() {
   const snapshot=savedSnapshot();
   if(!snapshot){$("status").textContent="No saved project yet. Build with bricks first, then save.";renderSavedProject();return false;}
   try{
-    selections=JSON.parse(JSON.stringify(snapshot.selections));projectScenario=null;restoreAssumptions(snapshot);
+    const candidate=validateSavedSnapshot(snapshot);
+    restoreAssumptions(candidate);
+    selections=JSON.parse(JSON.stringify(candidate.selections));projectScenario=null;
     refresh("Saved project loaded. Re-estimated instantly from stored forecast provenance; no agent run started.");
     return true;
   }catch(error){
@@ -664,8 +690,10 @@ function renderSavedProject() {
     return `<tr><td><b>${esc(feature?.name||item.featureId)}</b><small>${esc(variant?.name||item.variantId)}</small></td><td>${esc(item.source||"saved")}</td><td class="num">${number(item.runs||0)}</td><td>${esc(evidenceLabel(item.predictionSource||item.backendPrediction?.source||"unknown"))}</td></tr>`;
   }).join("");
   const inputs=snapshot.estimateInputs;
+  let validText="All quote-affecting inputs are present.";
+  try{validateSavedSnapshot(snapshot);}catch(error){if(error instanceof InputError)validText=error.message;else throw error;}
   panel.innerHTML=`<p class="help">Saved ${snapshot.selections.length} variation${snapshot.selections.length===1?"":"s"} at ${esc(snapshot.savedAt||"unknown time")}. Editing happens by loading the build, changing the cart, then saving again.</p>
-    <p class="help">Saved commercial rates: input ${esc(inputs?.measuredRates?.["measured-input-rate"]??"missing")} / output ${esc(inputs?.measuredRates?.["measured-output-rate"]??"missing")} USD per 1M tokens. ${savedInputsComplete(snapshot)?"All quote-affecting inputs are present.":"Missing quote inputs; re-save is required."}</p>
+    <p class="help">Saved commercial rates: input ${esc(inputs?.measuredRates?.["measured-input-rate"]??"missing")} / output ${esc(inputs?.measuredRates?.["measured-output-rate"]??"missing")} USD per 1M tokens. ${esc(validText)}</p>
     <div class="table-scroll"><table><thead><tr><th>Functionality</th><th>Source</th><th class="num">Runs/mo</th><th>Provenance</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="help">Re-estimate uses the same frozen forecast arithmetic shown in the cart. Sending to Tab 02 copies a narrative request only; it does not submit an agent run.</p>`;
 }

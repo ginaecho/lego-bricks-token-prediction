@@ -56,11 +56,96 @@ async function approveHumanGate(runId, actor) {
   return waitForRun(runId, run => run.status === "completed", 60000);
 }
 
+async function assertMalformedSnapshotsRejectedAtomically(page) {
+  const baseline = await page.evaluate(() => ({
+    selections: exportData().selections,
+    estimate: exportData().estimate,
+    inputs: {
+      inputRate: document.querySelector("#measured-input-rate").value,
+      outputRate: document.querySelector("#measured-output-rate").value,
+      reserve: document.querySelector("#reserve").value,
+      operating: document.querySelector("#operating").value,
+      cases: document.querySelector("#cases").value,
+      weeks: document.querySelector("#weeks").value,
+      reviewRate: document.querySelector("#reviewRate").value,
+    },
+    saved: JSON.parse(localStorage.getItem("token-yield-saved-build-v1")),
+  }));
+  const probes = [
+    snapshot => { delete snapshot.estimateInputs; },
+    snapshot => { delete snapshot.estimateInputs.fields.dsRate; },
+    snapshot => { delete snapshot.estimateInputs.measuredRates["measured-output-rate"]; },
+    snapshot => { snapshot.estimateInputs.modelScenarioRates[1] = {...snapshot.estimateInputs.modelScenarioRates[0]}; },
+    snapshot => { delete snapshot.estimateInputs.modelScenarioRates[0].output; },
+    snapshot => { snapshot.estimateInputs.modelScenarioRates[0].input = null; },
+    snapshot => { snapshot.estimateInputs.atomicScenarioTokens.Retrieve = []; },
+    snapshot => { delete snapshot.estimateInputs.atomicScenarioTokens.Retrieve; },
+    snapshot => { snapshot.estimateInputs.atomicScenarioTokens.Retrieve[1] = null; },
+    snapshot => { snapshot.estimateInputs.atomicScenarioTokens.Unknown = [1, 2]; },
+    snapshot => { snapshot.estimateInputs.coordinator = "missing-model"; },
+    snapshot => { snapshot.estimateInputs.fields.operating = null; },
+    snapshot => { snapshot.estimateInputs.measuredRates["measured-input-rate"] = "NaN"; },
+    snapshot => { snapshot.estimateInputs.modelScenarioRates.pop(); },
+  ];
+  for (const [index, mutate] of probes.entries()) {
+    await page.evaluate(({saved, index}) => {
+      const copy = JSON.parse(JSON.stringify(saved));
+      window.__malformedMutators[index](copy);
+      localStorage.setItem("token-yield-saved-build-v1", JSON.stringify(copy));
+    }, {saved: baseline.saved, index});
+    await page.locator("#load-build").click();
+    await page.waitForFunction(() => /Saved project .*missing|invalid|duplicate|unknown|malformed|incomplete/.test(document.querySelector("#status")?.textContent || ""));
+    await page.locator("#operating").evaluate(element => {
+      element.value = "999.25";
+      element.dispatchEvent(new Event("input", {bubbles: true}));
+    });
+    const current = await page.evaluate(() => ({
+      selections: exportData().selections,
+      estimate: exportData().estimate,
+      inputs: {
+        inputRate: document.querySelector("#measured-input-rate").value,
+        outputRate: document.querySelector("#measured-output-rate").value,
+        reserve: document.querySelector("#reserve").value,
+        operating: document.querySelector("#operating").value,
+        cases: document.querySelector("#cases").value,
+        weeks: document.querySelector("#weeks").value,
+        reviewRate: document.querySelector("#reviewRate").value,
+      },
+      reviewDisabled: document.querySelector("#review").disabled,
+    }));
+    assert.equal(current.selections.length, baseline.selections.length, `selection count changed for probe ${index}`);
+    assert.deepEqual(current.selections, baseline.selections, `selections changed for probe ${index}`);
+    assert.equal(current.inputs.inputRate, baseline.inputs.inputRate, `input rate changed for probe ${index}`);
+    assert.equal(current.inputs.outputRate, baseline.inputs.outputRate, `output rate changed for probe ${index}`);
+    assert.equal(current.estimate.monthlyApi, baseline.estimate.monthlyApi, `default-rate quote leak for probe ${index}`);
+    assert.equal(current.reviewDisabled, false, `valid active build disabled by rejected probe ${index}`);
+  }
+  await page.evaluate(saved => localStorage.setItem("token-yield-saved-build-v1", JSON.stringify(saved)), baseline.saved);
+}
+
 async function checkViewport(width, height) {
   const browser = await chromium.launch({headless: true, channel: process.env.PLAYWRIGHT_CHANNEL || undefined});
   const context = await browser.newContext({viewport: {width, height}});
   const page = await context.newPage();
   try {
+    await page.addInitScript(() => {
+      window.__malformedMutators = [
+        snapshot => { delete snapshot.estimateInputs; },
+        snapshot => { delete snapshot.estimateInputs.fields.dsRate; },
+        snapshot => { delete snapshot.estimateInputs.measuredRates["measured-output-rate"]; },
+        snapshot => { snapshot.estimateInputs.modelScenarioRates[1] = {...snapshot.estimateInputs.modelScenarioRates[0]}; },
+        snapshot => { delete snapshot.estimateInputs.modelScenarioRates[0].output; },
+        snapshot => { snapshot.estimateInputs.modelScenarioRates[0].input = null; },
+        snapshot => { snapshot.estimateInputs.atomicScenarioTokens.Retrieve = []; },
+        snapshot => { delete snapshot.estimateInputs.atomicScenarioTokens.Retrieve; },
+        snapshot => { snapshot.estimateInputs.atomicScenarioTokens.Retrieve[1] = null; },
+        snapshot => { snapshot.estimateInputs.atomicScenarioTokens.Unknown = [1, 2]; },
+        snapshot => { snapshot.estimateInputs.coordinator = "missing-model"; },
+        snapshot => { snapshot.estimateInputs.fields.operating = null; },
+        snapshot => { snapshot.estimateInputs.measuredRates["measured-input-rate"] = "NaN"; },
+        snapshot => { snapshot.estimateInputs.modelScenarioRates.pop(); },
+      ];
+    });
     await page.goto(`${base}/marketplace-sales-demo.html`);
     await page.waitForFunction(() => document.querySelector("#catalog-status")?.textContent.startsWith("Stored catalog:"));
     assert.equal(await page.locator("#custom-panel").isHidden(), true);
@@ -141,6 +226,7 @@ async function checkViewport(width, height) {
     assert.notEqual(Number(restoredInputs.inputRate), 2.5);
     assert.notEqual(Number(restoredInputs.outputRate), 15);
     assert.equal(await page.evaluate(() => exportData().estimate.monthlyApi), savedMonthlyApi);
+    await assertMalformedSnapshotsRejectedAtomically(page);
     await page.locator("#send-saved-custom").click();
     assert.equal(await page.locator("#custom-panel").isVisible(), true);
     assert.equal(await page.locator("#saved-panel").isHidden(), true);
