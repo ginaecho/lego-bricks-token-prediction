@@ -352,6 +352,12 @@ def _replace_first_citation(result, quote):
     return replace(result, output=json.dumps(answer))
 
 
+def _valid_evidence(result, count):
+    answer = json.loads(result.output)
+    citation = answer["evidence"][0]
+    return [{"document_id": citation["document_id"], "quote": citation["quote"]} for _ in range(count)]
+
+
 def _mutate_json_output(result, mutate):
     answer = json.loads(result.output)
     mutate(answer)
@@ -436,7 +442,9 @@ def test_bounded_retry_recovers_transient_bad_citation_at_each_cited_stage(
 
 @pytest.mark.parametrize("mutation", [
     lambda answer: answer.update(evidence="not-an-array"),
-    lambda answer: answer.update(evidence=[]),
+    lambda answer: answer.update(evidence=[
+        {"document_id": answer["evidence"][0]["document_id"], "quote": 27},
+    ]),
     lambda answer: answer.pop("summary"),
 ])
 def test_schema_failure_fails_closed_without_stage_retry(
@@ -456,6 +464,61 @@ def test_schema_failure_fails_closed_without_stage_retry(
     state = json.loads((tmp_path / "state" / "budget.json").read_text())
     assert state["calls"] == 1 and len(state["budget"]["settled_requests"]) == 1
     assert state["budget"]["active_reserved_usd"] == 0 and state["halted"] is None
+
+
+@pytest.mark.parametrize("evidence_count", [0, 25])
+def test_citation_count_failure_retries_then_recovers(
+        tmp_path, config, request_data, evidence_count):
+    provider = MockProvider()
+    seen = {"bad": False}
+    def bad_count_once(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        if json.loads(prompt)["task"] == "propose" and not seen["bad"]:
+            seen["bad"] = True
+            return _mutate_json_output(
+                result, lambda answer: answer.update(evidence=_valid_evidence(result, evidence_count)))
+        return result
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=bad_count_once)
+    result, events, _ = run(runtime, request_data, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert len(_stage_calls(provider, "propose")) == 4
+    assert any(e["data"]["operation"] == "propose"
+               and e["data"]["error_category"] == "citation_count"
+               for e in _retry_events(events))
+
+
+@pytest.mark.parametrize("evidence_count", [0, 25])
+def test_persistent_citation_count_failure_fails_after_bound(
+        tmp_path, config, request_data, evidence_count):
+    provider = MockProvider()
+    def bad_count(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return (_mutate_json_output(
+            result, lambda answer: answer.update(evidence=_valid_evidence(result, evidence_count)))
+            if json.loads(prompt)["task"] == "propose" else result)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=bad_count)
+    events = []
+    with pytest.raises(engine.ContentContractError) as excinfo:
+        runtime.run_pipeline(request_data, tmp_path / "run", run_id="test-run",
+                             on_event=events.append, before_stage=lambda stage: None)
+    assert excinfo.value.category == "citation_count" and excinfo.value.retryable is True
+    assert len(_stage_calls(provider, "propose")) == engine.CONTENT_CONTRACT_ATTEMPTS
+    assert len(_retry_events(events)) == engine.CONTENT_CONTRACT_ATTEMPTS - 1
+
+
+def test_large_within_citation_cap_is_accepted_without_retry(tmp_path, config, request_data):
+    provider = MockProvider()
+    def max_count(prompt, *, target, output_cap):
+        result = provider(prompt, target=target, output_cap=output_cap)
+        return (_mutate_json_output(
+            result, lambda answer: answer.update(
+                evidence=_valid_evidence(result, engine.CITATION_MAX_COUNT)))
+            if json.loads(prompt)["task"] == "propose" else result)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=max_count)
+    result, events, _ = run(runtime, request_data, tmp_path / "run")
+    assert result["training"]["pilot_published"] is True
+    assert len(_stage_calls(provider, "propose")) == 3
+    assert _retry_events(events) == []
 
 
 @pytest.mark.parametrize("mutation", [

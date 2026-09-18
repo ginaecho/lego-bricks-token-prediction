@@ -7,7 +7,7 @@ from dataclasses import replace
 
 import pytest
 
-from test_marketplace_agents import config, request_data, run  # noqa: F401
+from test_marketplace_agents import approve_establishment, config, request_data, run  # noqa: F401
 from token_yield import marketplace_agents as engine
 from token_yield import marketplace_source_fixtures as fixtures
 from token_yield.marketplace_agent_contracts import (
@@ -105,7 +105,8 @@ def test_versioned_sources_reach_every_consumer_and_reuse_proof(tmp_path, config
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider,
                                   source_fixture="archive-exceptions-v2")
     request = versioned_request(request_data)
-    result, events, _ = run(runtime, request, tmp_path / "runs", run_id="v2-first")
+    result, events, _ = run(runtime, request, tmp_path / "runs", run_id="v2-first",
+                            establishment_decision=approve_establishment)
     docs = fixtures.fixture_documents("archive-exceptions-v2", "train-0", 0)
     assert result["scenario"] == fixtures.ARCHIVE_V2
     assert result["documents"] == docs
@@ -140,7 +141,8 @@ def test_versioned_sources_reach_every_consumer_and_reuse_proof(tmp_path, config
     engine.AgentRuntime._validate_reused_row(row, by_id[row["brick_id"]], source_fixture="archive-exceptions-v2")
     with pytest.raises(ValueError, match="fingerprint"):
         engine.AgentRuntime._validate_reused_row(row, by_id[row["brick_id"]])
-    second, _, _ = run(runtime, request, tmp_path / "runs", run_id="v2-second")
+    second, _, _ = run(runtime, request, tmp_path / "runs", run_id="v2-second",
+                       establishment_decision=approve_establishment)
     assert second["training"]["reused_train_count"] > 0
     assert second["training"]["reused_holdout_count"] == 0
     assert second["training"]["new_holdout_count"] > 0
@@ -200,13 +202,15 @@ def test_realistic_unresolved_dissent_is_not_erased(tmp_path, config, request_da
 
     runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=dissenting,
                                   source_fixture="archive-exceptions-v2")
-    result, _, _ = run(runtime, versioned_request(request_data), tmp_path / "runs")
+    result, _, _ = run(runtime, versioned_request(request_data), tmp_path / "runs",
+                       establishment_decision=approve_establishment)
     retained = [m for m in result["agents"] if m["kind"] == kind]
     assert retained and all(m["public_output"]["dissent"] == [objection] for m in retained)
-    assert result["after"]["supported"] is False
     if kind == "contract_review":
-        assert result["capability_reviews"][0]["outcome"] == "review"
-        assert "contract" not in result["capability_reviews"][0]
+        assert result["capability_reviews"][0]["outcome"] == "established"
+        notes = result["capability_reviews"][0]["human_establishment"]["notes_for_human_review"]
+        assert all(note["note"] == objection for note in notes)
     else:
+        assert result["after"]["supported"] is False
         assert len(result["dissent"]) == 3
         assert all(objection in d["dissent"] for d in result["dissent"])

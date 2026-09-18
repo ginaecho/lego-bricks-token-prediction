@@ -32,10 +32,19 @@ FEATURE_BUILDERS = {
 # A new brick keeps the fixed atom vocabulary; only its (bounded) counts are agent-chosen.
 MAX_ATOM_COUNT = 4
 MAX_ATOM_TOTAL = 14
+CITATION_MIN_COUNT = 1
+# Archive v2 uses three linked source documents with multiple records and exception
+# passages. A bounded 24-citation cap permits thorough evidence while preventing
+# unbounded prompt/output growth and citation dumping.
+CITATION_MAX_COUNT = 24
 
 
 class ContractSchemaError(ValueError):
     """Generated output has invalid JSON shape or field types; never retry automatically."""
+
+
+class CitationCountError(ValueError):
+    """Generated output has well-formed evidence but too few or too many citations."""
 
 
 class CitationValidationError(ValueError):
@@ -292,7 +301,8 @@ def workload_prompt(brick: dict, documents: list[dict]) -> str:
         "No tools or external knowledge. Do the bounded task, not a token estimate.",
         "citation_instruction": "Quote only spans from supplied documents[].text, never this prompt, "
         "instructions, schema examples or contract text. Copy character-for-character: preserve "
-        "capitalization, punctuation, words and order. Do not paraphrase.",
+        "capitalization, punctuation, words and order. Do not paraphrase. Include between "
+        f"{CITATION_MIN_COUNT} and {CITATION_MAX_COUNT} citations.",
         "documents": documents,
         "output_contract": {"answer": "brief useful result, at most 80 words",
                             "evidence": [{"document_id": "valid supplied ID",
@@ -357,8 +367,8 @@ def _maybe_text(value: Any, maximum: int = 120) -> None:
 
 
 def _validate_evidence_schema(value: Any) -> None:
-    if not isinstance(value, list) or not 1 <= len(value) <= 12:
-        raise ContractSchemaError("one to twelve source citations required")
+    if not isinstance(value, list):
+        raise ContractSchemaError("source citations must be a list")
     for entry in value:
         try:
             _keys(entry, {"document_id", "quote"})
@@ -366,6 +376,13 @@ def _validate_evidence_schema(value: Any) -> None:
             _text(entry["quote"], 1200)
         except ValueError as exc:
             raise ContractSchemaError(str(exc)) from exc
+
+
+def _validate_evidence_count(value: list[dict]) -> None:
+    if not CITATION_MIN_COUNT <= len(value) <= CITATION_MAX_COUNT:
+        raise CitationCountError(
+            f"{CITATION_MIN_COUNT} to {CITATION_MAX_COUNT} source citations required"
+        )
 
 
 def _validate_evidence_grounding(value: list[dict], documents: list[dict]) -> None:
@@ -378,6 +395,7 @@ def _validate_evidence_grounding(value: list[dict], documents: list[dict]) -> No
 
 def validate_evidence(value: Any, documents: list[dict]) -> None:
     _validate_evidence_schema(value)
+    _validate_evidence_count(value)
     _validate_evidence_grounding(value, documents)
 
 
@@ -415,6 +433,7 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
                 _text(result["result"], 600)
         _text(value["answer"], 2400)
         _texts(value["limitations"])
+        _validate_evidence_count(value["evidence"])
         _validate_evidence_grounding(value["evidence"], docs)
     elif kind in ("propose", "discuss", "adjudicate"):
         expected = {"summary", "bricks", "evidence"}
@@ -464,6 +483,7 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
                 # Optional capability-gap recommendation the orchestrator infers from the
                 # description; empty unless the agent recognizes a needed but absent brick.
                 _maybe_text(value["proposed_new_function"], 120)
+        _validate_evidence_count(value["evidence"])
         _validate_evidence_grounding(value["evidence"], docs)
     elif kind == "novelty":
         _keys(value, {"decision", "reuse_id", "new_name", "rationale"})

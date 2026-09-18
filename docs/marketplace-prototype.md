@@ -229,8 +229,11 @@ representative benchmark or independent human-authored holdout corpus.
 Offline tests validate source plumbing, exact-span citations, unknowns/conflicts,
 retained dissent and compatibility. Citation validation is a reviewed exact-span
 normalization: whitespace and letter case may differ, but the quote must still be
-one contiguous substring from one supplied document. Paraphrase, reordered text,
-omitted internal words and cross-document stitching remain invalid. Existing mock responses test protocol
+one contiguous substring from one supplied document. The evidence count remains
+bounded: at least one citation and at most 24 citations, sized for the three
+linked Archive Manager documents and multiple record/exception passages without
+allowing unbounded citation dumping. Paraphrase, reordered text, omitted internal
+words and cross-document stitching remain invalid. Existing mock responses test protocol
 execution only: they do not establish real-model understanding, quality,
 agreement or semantic accuracy. Some of the general-purpose catalog contracts
 may remain unsupported by these deliberately domain-specific documents.
