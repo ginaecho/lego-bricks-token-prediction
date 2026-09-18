@@ -850,7 +850,17 @@ def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, con
 
 def test_holdout_not_seen_in_selection_and_not_fitted(tmp_path, config, request_data, monkeypatch):
     provider = MockProvider()
-    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=provider)
+    run_root = tmp_path / "run"
+    artifact_root = run_root / "test-run" / "agent-artifacts"
+    freeze_path = artifact_root / "final-parameters-before-holdouts.json"
+    holdout_dispatch_freeze_state = []
+    def guarded_dispatch(prompt, **kwargs):
+        payload = json.loads(prompt)
+        if payload["task"] == "workload" and any(
+                doc["id"].startswith("holdout-") for doc in payload["documents"]):
+            holdout_dispatch_freeze_state.append(freeze_path.exists())
+        return provider(prompt, **kwargs)
+    runtime = engine.AgentRuntime(tmp_path / "state", config, dispatch=guarded_dispatch)
     actual_fit = runtime._fit
     fitted_groups = []
     def guarded(rows, names, target, alpha):
@@ -858,14 +868,27 @@ def test_holdout_not_seen_in_selection_and_not_fitted(tmp_path, config, request_
         fitted_groups.extend(row["group"] for row in rows)
         return actual_fit(rows, names, target, alpha)
     monkeypatch.setattr(runtime, "_fit", guarded)
-    result, _, _ = run(runtime, request_data, tmp_path / "run")
+    result, events, _ = run(runtime, request_data, run_root)
     assert fitted_groups and all(group.startswith("train-") for group in fitted_groups)
     for call in provider.calls:
         if call["payload"]["task"] in ("features", "fit"):
             assert "holdout-" not in json.dumps(call["payload"])
             assert "test_count" not in call["payload"]
-    split = json.loads((tmp_path / "run" / "test-run" / "agent-artifacts" / "frozen-split.json").read_text())
+    split = json.loads((artifact_root / "frozen-split.json").read_text())
     assert len([j for j in split["jobs"] if j["split"] == "holdout"]) == 32
+    freeze = json.loads(freeze_path.read_text())
+    candidate = json.loads((artifact_root / "candidate-model.json").read_text())
+    assert freeze["holdout_measurement_deferred_until_after_freeze"] is True
+    assert freeze["models"] == candidate["models"]
+    assert candidate["parameter_freeze_sha256"] == engine.fingerprint(freeze)
+    assert set(freeze["train_ids"]) == set(candidate["train_ids"])
+    freeze_event = next(i for i, event in enumerate(events)
+                        if event["message"] == "Final ridge parameters frozen; dispatching untouched acceptance holdouts.")
+    first_holdout = next(i for i, event in enumerate(events)
+                         if event["message"] == "Validated measurement row persisted."
+                         and event["data"].get("split") == "holdout")
+    assert freeze_event < first_holdout
+    assert holdout_dispatch_freeze_state and all(holdout_dispatch_freeze_state)
     assert result["training"]["train_count"] == 64
     assert result["training"]["test_count"] == 32
 

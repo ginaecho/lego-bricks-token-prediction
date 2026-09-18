@@ -1385,7 +1385,7 @@ class AgentRuntime:
                                              "features", "input_tokens", "output_tokens", "contract_hash")})
             return row
         for job in jobs:
-            if not adaptive or job["split"] == "train":
+            if job["split"] == "train":
                 rows.append(measure_job(job))
         if adaptive:
             rows = adaptive.run(rows)
@@ -1418,17 +1418,23 @@ class AgentRuntime:
         }, docs, catalog)["public_output"]
         models = {target: self._fit(train_rows, names, target, float(fit_choice["alpha"]))
                   for target in ("input", "output")}
+        parameter_freeze = {
+            "models": {t: asdict(m) for t, m in models.items()},
+            "alpha": fit_choice["alpha"], "train_ids": [r["id"] for r in train_rows],
+            "source": source, "feature_names": names, "frozen_at": _now(),
+            "holdout_measurement_deferred_until_after_freeze": True,
+            **({"policy": adaptive.report()} if adaptive else {}),
+        }
+        _write(artifact_dir / "final-parameters-before-holdouts.json", parameter_freeze)
+        freeze_sha256 = fingerprint(parameter_freeze)
+        event("Final ridge parameters frozen; dispatching untouched acceptance holdouts.",
+              {"source": source, "train_count": len(train_rows),
+               "parameter_freeze": "agent-artifacts\\final-parameters-before-holdouts.json",
+               "parameter_freeze_sha256": freeze_sha256})
+        holdout_rows = [measure_job(j) for j in jobs if j["split"] == "holdout"]
         if adaptive:
-            _write(artifact_dir / "final-parameters-before-holdouts.json", {
-                "models": {t: asdict(m) for t, m in models.items()},
-                "alpha": fit_choice["alpha"], "train_ids": [r["id"] for r in train_rows],
-                "policy": adaptive.report(),
-            })
-            event("Final ridge parameters frozen; dispatching untouched acceptance holdouts.",
-                  {"source": source, "train_count": len(train_rows)})
-            holdout_rows = [measure_job(j) for j in jobs if j["split"] == "holdout"]
             holdout_rows.extend(adaptive.final_holdouts())
-            rows.extend(holdout_rows)
+        rows.extend(holdout_rows)
         version = uuid.uuid4().hex
         candidate = {
             "version": version, "status": "uncertified-pilot", "source": source,
@@ -1443,7 +1449,10 @@ class AgentRuntime:
                           "holdout": sum(r["brick_id"] == b["id"] for r in holdout_rows)}
                 for b in catalog},
             "train_ids": [r["id"] for r in train_rows], "holdout_ids": [r["id"] for r in holdout_rows],
-            "frozen_split_sha256": fingerprint(plan), "alpha": fit_choice["alpha"],
+            "frozen_split_sha256": fingerprint(plan),
+            "parameter_freeze_sha256": freeze_sha256,
+            "parameter_freeze": "agent-artifacts\\final-parameters-before-holdouts.json",
+            "alpha": fit_choice["alpha"],
             "tuning": candidates, "production_promoted": False,
             **({"measurement_policy": adaptive.report()} if adaptive else {}),
         }
