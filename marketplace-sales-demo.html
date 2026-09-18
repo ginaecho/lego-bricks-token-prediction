@@ -63,7 +63,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
 <body>
 <header><div class="header-inner">
   <div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Token Yield</div>
-  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><a href="marketplace-console.html">Execution console</a><span>Sales studio</span><span id="runtime-badge" class="pill amber">Offline selected</span></div>
+  <div class="header-links"><a href="marketplace-prototype.html?variant=A">Original marketplace</a><a href="marketplace-console.html">Execution console</a><button class="text-button" id="open-brick-learning">Learning &amp; brick rankings</button><span id="runtime-badge" class="pill amber">Offline selected</span></div>
 </div></header>
 <main>
   <section class="intro"><div><div class="eyebrow">The functionality marketplace</div><h1>Your next product.<br>One brick at a time.</h1><p>Shape the solution together. Explore the capabilities, the team, and the value they could create &mdash; not just the tokens they consume.</p></div>
@@ -74,13 +74,15 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
   <nav class="mode-bar" aria-label="Demo flows">
     <button class="mode active" id="manual-tab" aria-pressed="true">01 &nbsp; Build with bricks</button>
     <button class="mode" id="custom-tab" aria-pressed="false">02 &nbsp; Describe your idea</button>
-    <small>Two ways in. One transparent estimate.</small>
+    <button class="mode" id="saved-tab" aria-pressed="false">03 &nbsp; Saved project</button>
+    <small>Three separated scopes. Shopping is instant; describing an idea starts the agent pipeline.</small>
   </nav>
   <div id="status" class="status" role="status" aria-live="polite"></div>
   <div class="workspace">
     <div>
       <section id="custom-panel" class="panel" hidden>
         <div class="section-head"><div><div class="eyebrow">Demo 02 / project to trained estimate</div><h2>What would you like to build?</h2><p>Choose offline simulation or the server-approved real multi-agent pilot, then inspect each backend stage.</p></div><span id="pipeline-basis" class="pill amber">Offline / synthetic</span></div>
+        <div class="notice"><b>Agent trigger:</b> submitting this request starts the full backend agent pipeline. Foundry mode may spend approved GPT-5.4 calls; MOCK mode uses synthetic fixtures. Marketplace shopping in Tab 01 never starts this run.</div>
         <div class="form-grid two">
           <label>Pipeline runtime<select id="pipeline-runtime"><option value="offline">Offline / synthetic training / no provider calls</option><option value="foundry" disabled>Foundry / GPT-5.4 / server approval required</option></select></label>
           <label>Execution controls<select id="execution-mode"><option value="step">Step-by-step / pause before each stage</option><option value="automatic">Automatic / run all approved stages</option></select></label>
@@ -94,6 +96,8 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         </details>
         <label for="brief">Customized description</label>
         <textarea id="brief" maxlength="6000" placeholder="For example: Deep research into competitors, web research with cited sources, and personalized discovery based on customer interests."></textarea>
+        <div class="custom-actions"><button class="secondary" id="recommend-learned">Recommend matching bricks from feedback</button></div>
+        <p class="help">Requirements determine which bricks fit. The approved learning policy helps choose among matching options; you review before anything is added. No provider calls.</p>
         <div class="form-grid two">
           <label>Focus area<select id="brief-focus"><option value="all">Whole solution</option><option value="research">Research</option><option value="recommend">Personalized discovery</option><option value="support">AI customer support</option><option value="documents">Document automation</option></select></label>
           <label>Execution model<select id="brief-model" class="model-options"></select><small id="brief-model-help">Offline scenario rate card only; no model is called.</small></label>
@@ -121,9 +125,15 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         <div id="proposal" class="proposal" hidden></div>
         </details>
       </section>
+      <section id="saved-panel" class="panel" hidden aria-labelledby="saved-heading">
+        <div class="section-head"><div><div class="eyebrow">Demo 03 / saved project</div><h2 id="saved-heading">Saved shopped functionalities</h2><p>Edit saved functionalities, re-estimate instantly from frozen forecasts, or send the saved build to Demo 02 as a custom request.</p></div><span class="pill amber">No provider calls</span></div>
+        <div class="notice"><b>Agent trigger:</b> loading, editing, saving and re-estimating this saved build compose pre-predicted forecasts only. No paid GPT call occurs. Sending to Tab 02 copies a description; the agent starts only if you submit there.</div>
+        <div class="custom-actions"><button class="primary" id="save-build" type="button">Save current build</button><button class="secondary" id="load-build" type="button">Load saved build</button><button class="secondary" id="reestimate-saved" type="button">Re-estimate saved build</button><button class="secondary" id="send-saved-custom" type="button">Send saved build to Tab 02</button></div>
+        <div id="saved-state" class="proposal"></div>
+      </section>
       <section id="measured-marketplace" class="section-space" aria-labelledby="measured-heading">
         <div class="section-head"><div><div class="eyebrow">Stored pilot predictor / inspect provider provenance</div><h2 id="measured-heading">Pre-predicted GPT-5.4 bricks</h2></div><button id="refresh-catalog" class="secondary">Refresh catalog (no model calls)</button></div>
-        <p class="help">Little bricks. A bigger possibility. Explore a capability, then mix the variations you need. Only supported, trained forecasts can be selected.</p>
+        <p class="help">Demo 01 marketplace bricks. Little bricks. A bigger possibility. Explore a capability, then mix the variations you need. Selecting here composes frozen pre-predicted forecasts instantly; it never starts a paid agent run.</p>
         <details class="catalog-settings"><summary>Forecast assumptions &amp; commercial rates</summary>
         <p class="help">Stored forecasts at a fixed reference context and pinned GPT-5.4 model. Each forecast retains its measured, MOCK/synthetic or unknown evidence source; the model name is not proof of live calls. Selecting them replaces manual or whole-project selections; each selected variant is counted once, with no invented integration tokens. Shared context and scenario model factors do not change these frozen tokens. Monthly volume and the separate commercial rate below remain explicit.</p>
         <div class="form-grid two"><label>Commercial input USD / 1M tokens<input id="measured-input-rate" type="number" min="0" max="10000" step="0.01" value="2.5" required></label><label>Commercial output USD / 1M tokens<input id="measured-output-rate" type="number" min="0" max="10000" step="0.01" value="15" required></label></div>
@@ -134,11 +144,13 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
       </section>
       <section id="manual-marketplace" class="section-space" aria-labelledby="catalog-heading">
         <div class="section-head"><div><h2 id="catalog-heading">Manual illustrative marketplace</h2><p>Unmeasured simulation. Click a brick to choose variants and scenario LLMs.</p></div><button id="starter" class="secondary">Load sales example</button></div>
+        <label><input type="checkbox" id="internal-ranking" disabled> Show internal feedback ranking</label>
+        <p id="ranking-note" class="help">Open Learning &amp; brick rankings to inspect evidence. Rankings do not change your selected build or its token estimates.</p>
         <label for="search" class="muted">Find a functionality or variation</label><input class="search" id="search" type="search" placeholder="Try research, personalized discovery, or documents">
         <div class="filters" id="filters" aria-label="Catalog categories"></div>
         <div class="catalog" id="catalog"></div>
       </section>
-      <section class="panel section-space" aria-labelledby="assumptions-heading">
+      <section id="assumptions-panel" class="panel section-space" aria-labelledby="assumptions-heading">
         <div class="eyebrow">Shape your estimate</div><h2 id="assumptions-heading">How often will you use each feature?</h2>
         <p class="help">One run means using a selected option once, such as completing one web research request. Open a brick to set how many times you expect to use each option per month.</p>
         <p class="help"><b>Example:</b> 100 web research requests + 20 deep research requests = 120 research requests per month. The estimate includes the cost of both. Selecting deep research does not replace web research; uncheck an option if you do not need it.</p>
@@ -158,7 +170,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <p class="help">Between distinct selected capabilities, each pair routes min(left runs, right runs) times. Routing uses 120 input + 30 output tokens per paired run. Each pair adds 18,000 input + 6,000 output setup tokens, plus 4 architect and 4 consultant setup hours. Integration complexity scales those amounts. This is a planning assumption, not a real dependency graph.</p>
         </details>
       </section>
-      <section class="panel" aria-labelledby="team-heading">
+      <section id="team-panel" class="panel" aria-labelledby="team-heading">
         <div class="eyebrow">Delivery effort / assumptions, not a hiring recommendation</div><h2 id="team-heading">The team behind the build</h2>
         <p class="help">Setup hours are summed once across selected variants. FTE = role hours / (delivery weeks &times; hours per week). People = rounded-up FTE; fractional workloads can be shared across projects. Changing the timeline changes capacity, not total labor cost.</p>
         <div class="form-grid">
@@ -171,7 +183,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         </div>
         <div id="team-summary"></div>
       </section>
-      <section class="panel" aria-labelledby="value-heading">
+      <section id="value-panel" class="panel" aria-labelledby="value-heading">
         <div class="eyebrow">Token yield / the client value case</div><h2 id="value-heading">What is a better outcome worth?</h2><p class="help">Count unique client cases once, not once per brick. A workflow can invoke several variants; benefits are not automatically multiplied when adding capabilities.</p>
         <div class="form-grid">
           <label>Unique client cases / month<input id="cases" type="number" min="0" max="1000000" step="1" value="1000"></label>
@@ -190,12 +202,13 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
         </div></details>
       </section>
     </div>
-    <aside class="panel cart" aria-labelledby="build-heading">
+    <aside id="cart-panel" class="panel cart" aria-labelledby="build-heading">
       <div class="cart-title"><h2 id="build-heading">Your build</h2><span id="build-count" class="pill"></span></div>
       <p class="fine">A client-facing solution, shaped together.</p><div id="cart-items" class="cart-items"></div>
       <div id="quote-error" class="error" role="alert" hidden></div>
       <div id="quote-summary"></div>
       <button class="primary wide" id="review">Review build &amp; value case &rarr;</button>
+      <button class="secondary wide" id="delivery-feedback" style="margin-top:12px" disabled>Delivered project: give feedback</button>
       <p class="fine"><a href="#value-heading">Explore ROI and client-impact assumptions &darr;</a></p>
       <div style="text-align:center"><button class="text-button" id="clear">Clear build</button></div>
       <p class="fine">Uncalibrated planning pilot, not an invoice, staffing commitment or guaranteed return. Measured-data forecasts are source-bound and do not validate the proposed production service. Staffing and ROI are assumptions. Export includes provenance and calculation details.</p>
@@ -207,7 +220,18 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
   <div class="dialog-head"><div><div class="eyebrow">Zoom into your brick</div><h2 id="configure-title"></h2></div><button class="close" data-close="configure" aria-label="Close configuration">&times;</button></div>
   <p id="configure-description" class="help"></p>
   <p class="help">Select one or more variations. Each executes and is charged separately. Set its LLM, volume and human-effort assumptions.</p>
+  <details id="feedback-suggestion-controls"><summary>Optional: suggest from past delivery feedback</summary>
+    <label>Learning source<select id="feedback-policy-source"><option value="synthetic">Prototype / demo feedback</option><option value="real">Actual client feedback</option></select></label>
+    <button type="button" class="secondary" id="feedback-suggest">Suggest an option</button>
+    <p class="help" id="feedback-suggestion-status" role="status">You review the suggestion before saving. No approved policy means baseline exploration.</p>
+  </details>
   <form id="variant-form"><div id="variant-options"></div><div class="dialog-footer"><small>Changes apply only when saved.</small><button class="primary" type="submit">Save selections</button></div></form>
+</dialog>
+<dialog id="learning-review" aria-labelledby="learning-review-title">
+  <div class="dialog-head"><h2 id="learning-review-title">Review feedback-informed bricks</h2><button class="close" data-close="learning-review" aria-label="Close learned recommendation review">&times;</button></div>
+  <div id="learning-review-body"></div>
+  <label><input type="checkbox" id="approve-learned"> I checked the requirements, exclusions and every proposed brick. Keep my other selections unchanged.</label>
+  <div class="dialog-footer"><button class="primary" id="apply-learned" disabled>Approve &amp; add these bricks</button></div>
 </dialog>
 <dialog id="review-dialog" aria-labelledby="review-title">
   <div class="dialog-head"><div><div class="eyebrow">Demo estimate / not a commercial quote</div><h2 id="review-title">Your build. Your value case.</h2></div><button class="close" data-close="review-dialog" aria-label="Close review">&times;</button></div>
@@ -276,6 +300,10 @@ class InputError extends Error {}
 class PipelineError extends Error {}
 let selections = [], category = "All", editingFeature = null, proposal = null, latestEstimate = null, mode = "manual";
 let pipelineRun=null, pipelineBusy=false, pipelineTimer=null, pipelineGeneration=0, projectScenario=null;
+let feedbackPopup=null, feedbackPending=null, feedbackSuggestion=null;
+let learningPopup=null, learningPending=null, learnedProposal=null, internalRankings=null;
+const feedbackOrigin="http://127.0.0.1:8793";
+const savedBuildKey="token-yield-saved-build-v1";
 let runtimeStatus={enabled:false}, measuredCatalog=[], catalogMetadata={}, catalogGeneration=0;
 const finiteTokens = prediction => prediction?.supported!==false && Number.isFinite(prediction?.input_tokens) && prediction.input_tokens>=0 && Number.isFinite(prediction?.output_tokens) && prediction.output_tokens>=0;
 // A runtime route/model name chooses arithmetic, never the evidence label.
@@ -368,17 +396,22 @@ function calculate(items,a,models,coordinatorId) {
 function renderCatalog() {
   const query=$("search").value.trim().toLowerCase();
   const visible=CATALOG.filter(feature=>(category==="All"||feature.category===category)&&`${feature.name} ${feature.description} ${feature.variants.map(v=>v.name).join(" ")}`.toLowerCase().includes(query));
+  if($("internal-ranking").checked&&internalRankings)visible.sort((a,b)=>
+    (internalRankings.rows.find(r=>r.feature_id===a.id)?.rank??1000000)-(internalRankings.rows.find(r=>r.feature_id===b.id)?.rank??1000000));
   $("catalog").innerHTML=visible.map(feature=>{
     const chosen=selections.filter(item=>item.featureId===feature.id);
     const atoms=[...new Set(feature.variants.flatMap(variant=>variant.atoms))];
+    const ranking=$("internal-ranking").checked&&internalRankings?.rows.find(r=>r.feature_id===feature.id);
     return `<article class="card ${chosen.length?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature.color}" aria-hidden="true"></span><small>${feature.category}</small></div>
       <div><h3><button class="card-title" data-configure="${feature.id}">${esc(feature.name)}</button></h3><p>${esc(feature.description)}</p></div>
+      ${ranking?`<p class="help internal-brick-rank">${ranking.rank===null?"Unranked / insufficient feedback":`Internal #${number(ranking.rank)} / ${number(ranking.score)} experience score`} &middot; ${number(ranking.project_count)} projects &middot; ${esc(internalRankings.source)} / ${esc(internalRankings.stage)}</p>`:""}
       <div class="tags">${atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div><div class="picked">${chosen.length ? chosen.map(item=>esc(feature.variants.find(v=>v.id===item.variantId).name)).join(" + ") : `${feature.variants.length} variations to explore`}</div>
       <div class="card-bottom"><div><b>${chosen.length ? chosen.length+" selected" : "Choose your depth"}</b><small>Multi-select &middot; LLM per variation</small></div><button class="secondary" data-configure="${feature.id}" aria-label="Configure ${feature.name}">${chosen.length?"Edit brick":"Explore brick"} &rarr;</button></div></article>`;
   }).join("")||'<p class="empty">No matching functionalities. Try another search or category.</p>';
 }
 function row(label,value) {return `<div class="row"><span>${label}</span><b>${value}</b></div>`;}
 function renderQuote() {
+  $("delivery-feedback").disabled=!selections.length;
   $("cart-items").innerHTML=selections.map(item=>{
     const feature=CATALOG.find(f=>f.id===item.featureId),variant=feature.variants.find(v=>v.id===item.variantId),model=itemModel(item);
     return `<div class="cart-item"><span class="dot" style="background:${feature.color}"></span><div class="item"><b>${esc(feature.name)}</b><small>${esc(variant.name)} &middot; ${esc(model.name)}</small>${item.backendPrediction?`<small>${esc(evidenceLabel(item.predictionSource))}</small>`:""}<small>${number(item.runs)} runs/month${item.source==="custom"?" &middot; approved brief mapping":""}</small></div><button class="remove" data-remove="${esc(key(item.featureId,item.variantId))}" aria-label="Remove ${esc(variant.name)}">&times;</button></div>`;
@@ -429,11 +462,14 @@ function renderQuote() {
     ${e.warnings.map(message=>`<p class="negative" style="margin-top:10px">${message}</p>`).join("")}`;
   $("review").disabled=!selections.length;
 }
-function refresh(message) {renderCatalog();renderQuote();renderMeasuredCatalog();if(message)$("status").textContent=message;}
+function refresh(message) {renderCatalog();renderQuote();renderMeasuredCatalog();renderSavedProject();if(message)$("status").textContent=message;}
 function field(label,name,value,step="0.1",max="100000") {return `<label>${label}<input name="${name}" type="number" min="0" max="${max}" step="${step}" value="${value}" required></label>`;}
 function configure(id) {
+  feedbackSuggestion=null;
   let a;try{a=assumptions();}catch(error){if(!(error instanceof InputError))throw error;$("status").textContent=error.message;return;}
   editingFeature=CATALOG.find(feature=>feature.id===id);
+  $("feedback-suggestion-controls").hidden=Boolean(editingFeature.backendPrediction)||selections.some(s=>s.featureId===id&&s.backendPrediction);
+  $("feedback-suggestion-status").textContent="You review the suggestion before saving. No approved policy means baseline exploration.";
   $("configure-title").textContent=editingFeature.name;$("configure-description").textContent=editingFeature.description;
   $("variant-options").innerHTML=editingFeature.variants.map(variant=>{
     const item=selections.find(item=>item.featureId===id&&item.variantId===variant.id);
@@ -456,6 +492,10 @@ function saveVariants(event) {
     const previous=selections.find(item=>item.featureId===featureId&&item.variantId===variant.id);
     const val=name=>Number(form.elements[`${name}-${variant.id}`].value);
     return {...record(featureId,variant.id,form.elements[`model-${variant.id}`].value,val("runs"),previous?.source||"catalog",previous?.description||""),
+      ...((feedbackSuggestion?.featureId===featureId&&feedbackSuggestion.variantId===variant.id&&feedbackSuggestion.modelId===form.elements[`model-${variant.id}`].value)?
+        {feedbackDecisionId:feedbackSuggestion.decisionId,feedbackSource:feedbackSuggestion.source}:
+        previous?.modelId===form.elements[`model-${variant.id}`].value&&previous?.feedbackDecisionId?
+        {feedbackDecisionId:previous.feedbackDecisionId,feedbackSource:previous.feedbackSource}:{}),
       ...(previous?.backendPrediction?{backendPrediction:previous.backendPrediction,backendFeatures:previous.backendFeatures,backendRunId:previous.backendRunId,predictionSource:previous.predictionSource,forecastMode:previous.forecastMode,modelId:previous.modelId}:{}),
       hours:[val("ds"),val("arch"),val("consult")],review:val("review"),tool:val("tool")};
   });
@@ -523,9 +563,75 @@ function applyProposal() {
   refresh(`Approved ${approved.length} simulated mappings. Review volumes and effort in each brick; tokens and ROI use the shared scenario estimator.`);
 }
 function setMode(next) {
-  mode=next;$("custom-panel").hidden=next!=="custom";
-  ["manual","custom"].forEach(name=>{$(`${name}-tab`).classList.toggle("active",name===next);$(`${name}-tab`).setAttribute("aria-pressed",String(name===next));});
-  $("status").textContent=next==="custom"?"Demo 02: describe your project, run the backend, inspect the evidence and approve the pipeline. Your existing build is preserved.":"Demo 01: click a capability to select variations and LLMs. Your existing build is preserved.";
+  mode=next;
+  const marketplace=next==="manual", custom=next==="custom", saved=next==="saved";
+  $("custom-panel").hidden=!custom;
+  $("saved-panel").hidden=!saved;
+  $("measured-marketplace").hidden=!marketplace;
+  $("manual-marketplace").hidden=true;
+  $("assumptions-panel").hidden=custom;
+  $("team-panel").hidden=custom;
+  $("value-panel").hidden=custom;
+  $("cart-panel").hidden=custom;
+  $("yield-summary").hidden=custom;
+  ["manual","custom","saved"].forEach(name=>{$(`${name}-tab`).classList.toggle("active",name===next);$(`${name}-tab`).setAttribute("aria-pressed",String(name===next));});
+  renderSavedProject();
+  $("status").textContent=custom?"Demo 02: submit a description to start the backend agent pipeline. Paid Foundry mode spends only after explicit submit.":
+    saved?"Demo 03: edit a saved shopped build and re-estimate instantly from frozen forecasts. No model calls.":
+    "Demo 01: shop pre-predicted GPT-5.4 bricks. Selecting composes instant forecasts and never starts a paid agent run.";
+}
+function savedSnapshot() {
+  try {
+    const parsed=JSON.parse(localStorage.getItem(savedBuildKey)||"null");
+    return parsed&&Array.isArray(parsed.selections)?parsed:null;
+  } catch {
+    return null;
+  }
+}
+function saveCurrentBuild() {
+  if(!selections.length){$("status").textContent="Select at least one pre-predicted brick before saving.";return;}
+  const snapshot={schema:savedBuildKey,savedAt:new Date().toISOString(),selections:JSON.parse(JSON.stringify(selections)),
+    assumptions:Object.fromEntries(fields.map(id=>[id,$(id).value])),coordinator:$("coordinator").value,catalogMetadata};
+  localStorage.setItem(savedBuildKey,JSON.stringify(snapshot));
+  renderSavedProject();$("status").textContent="Saved project updated locally. Loading and re-estimating it does not call a model.";
+}
+function restoreAssumptions(snapshot) {
+  for(const [id,value] of Object.entries(snapshot.assumptions||{}))if($(id))$(id).value=value;
+  if(snapshot.coordinator&&$("coordinator"))$("coordinator").value=snapshot.coordinator;
+}
+function loadSavedBuild() {
+  const snapshot=savedSnapshot();
+  if(!snapshot){$("status").textContent="No saved project yet. Build with bricks first, then save.";renderSavedProject();return false;}
+  selections=JSON.parse(JSON.stringify(snapshot.selections));projectScenario=null;restoreAssumptions(snapshot);
+  refresh("Saved project loaded. Re-estimated instantly from stored forecast provenance; no agent run started.");
+  return true;
+}
+function renderSavedProject() {
+  const panel=$("saved-state");if(!panel)return;
+  const snapshot=savedSnapshot();
+  if(!snapshot){
+    panel.innerHTML='<p class="empty">No saved project yet. Build with bricks in Tab 01, then save it here.</p>';
+    return;
+  }
+  const rows=snapshot.selections.map(item=>{
+    const feature=CATALOG.find(entry=>entry.id===item.featureId);
+    const variant=feature?.variants.find(entry=>entry.id===item.variantId);
+    return `<tr><td><b>${esc(feature?.name||item.featureId)}</b><small>${esc(variant?.name||item.variantId)}</small></td><td>${esc(item.source||"saved")}</td><td class="num">${number(item.runs||0)}</td><td>${esc(evidenceLabel(item.predictionSource||item.backendPrediction?.source||"unknown"))}</td></tr>`;
+  }).join("");
+  panel.innerHTML=`<p class="help">Saved ${snapshot.selections.length} variation${snapshot.selections.length===1?"":"s"} at ${esc(snapshot.savedAt||"unknown time")}. Editing happens by loading the build, changing the cart, then saving again.</p>
+    <div class="table-scroll"><table><thead><tr><th>Functionality</th><th>Source</th><th class="num">Runs/mo</th><th>Provenance</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="help">Re-estimate uses the same frozen forecast arithmetic shown in the cart. Sending to Tab 02 copies a narrative request only; it does not submit an agent run.</p>`;
+}
+function sendSavedToCustom() {
+  if(!loadSavedBuild())return;
+  const names=selections.map(item=>{
+    const feature=CATALOG.find(entry=>entry.id===item.featureId),variant=feature?.variants.find(entry=>entry.id===item.variantId);
+    return `${feature?.name||item.featureId} / ${variant?.name||item.variantId} (${item.runs} runs per month)`;
+  });
+  setMode("custom");invalidateProposal();
+  $("brief").value=`Build a project using these saved, shopped functionalities: ${names.join("; ")}. Preserve the forecast provenance and identify any missing custom capability before measuring.`;
+  $("new-function").value="";
+  $("status").textContent="Saved build copied into Tab 02. Submit here only if you want the backend agent pipeline to run.";
 }
 function loadStarter() {
   selections=[record("recommend","interests"),record("research","web")];
@@ -563,6 +669,137 @@ function openReview() {
   $("export-json").value=JSON.stringify(exportData(),null,2);$("download-status").textContent="";
   $("review-dialog").showModal();
 }
+function openDeliveryFeedback() {
+  try {
+    const data=exportData();
+    if(!data.estimate?.rows.length)throw new Error("Select the delivered project's functionalities first.");
+    const functions=data.estimate.rows.flatMap(row=>{
+      const selected=selections.find(s=>s.featureId===row.featureId&&s.variantId===row.variantId);
+      if(row.featureId==="project-pipeline"){
+        if(!data.projectScenario?.result?.bricks?.length)throw new Error("The selected custom workflow has no original functionality breakdown. Restore its pipeline result before giving feedback.");
+        return data.projectScenario.result.bricks.map((brick,index)=>({
+          id:`project-pipeline:${index}`,feature_id:String(brick.id||brick.name),variant_id:row.variantId,
+          name:brick.name,model_id:row.modelId,model_name:row.model,estimated_tokens:null,runs:row.runs,decision_id:null
+        }));
+      }
+      return [{id:key(row.featureId,row.variantId),feature_id:row.featureId,variant_id:row.variantId,
+        name:`${row.feature} / ${row.variant}`,model_id:row.modelId,model_name:row.model,
+        estimated_tokens:row.perRun.input+row.perRun.output,runs:row.runs,decision_id:selected?.feedbackDecisionId||null}];
+    });
+    const scope={schema:"token-yield-delivery-handoff-v1",
+      title:data.projectScenario?.request?.description?.slice(0,100)||data.estimate.rows.map(r=>r.feature).join(" + "),
+      description:[...new Set(data.estimate.rows.map(r=>r.description).filter(Boolean))].join("\n"),
+      flow:mode,quote_basis:data.basis,functions,
+      staffing:data.estimate.team.map(role=>({role:role.role,hours:role.hours})),
+      estimated_project_tokens:data.estimate.totalTokens};
+    const frozen=JSON.stringify(scope);
+    const receipts=JSON.parse(localStorage.getItem("token-yield-delivery-receipts")||"[]");
+    let prior=receipts.find(r=>r.scope===frozen);
+    if(!prior){
+      prior={scope:frozen,id:crypto.randomUUID()};receipts.push(prior);
+      localStorage.setItem("token-yield-delivery-receipts",JSON.stringify(receipts));
+    }
+    const handoff={...scope,receipt_id:prior.id};
+    const params=new URLSearchParams({handoff:JSON.stringify(handoff)});
+    const opened=window.open(`${feedbackOrigin}/#${params}`,"_blank");
+    if(!opened)throw new Error("Allow the feedback tab to open, then try again.");
+    $("status").textContent="Selected scope carried to feedback. Confirm actual delivery there; a quote or measurement run is not a delivery.";
+  }catch(error){$("status").textContent=`Could not open delivery feedback: ${error.message}`;}
+}
+function requestFeedbackSuggestion(){
+  try{
+    if(!editingFeature||editingFeature.backendPrediction)throw new Error("Use the original measured option for this frozen forecast.");
+    const options=editingFeature.variants.flatMap(v=>MODELS.map(m=>({variant_id:v.id,model_id:m.id,name:`${v.name} / ${m.name}`})));
+    feedbackPending={feature_id:editingFeature.id,source:$("feedback-policy-source").value,options,
+      name:editingFeature.name,return_origin:location.origin};
+    feedbackPopup=window.open(`${feedbackOrigin}/#${new URLSearchParams({suggest:JSON.stringify(feedbackPending)})}`,"token-yield-suggestion");
+    if(!feedbackPopup)throw new Error("Allow the suggestion tab to open, then try again.");
+  }catch(error){$("feedback-suggestion-status").textContent=error.message;}
+}
+function learningCatalog(){
+  return CATALOG.filter(b=>!b.backendPrediction).map(b=>({feature_id:b.id,name:b.name,
+    options:b.variants.flatMap(v=>MODELS.map(m=>({variant_id:v.id,model_id:m.id,name:`${v.name} / ${m.name}`})))}));
+}
+function openBrickLearning(custom=false){
+  try{
+    const description=custom?$("brief").value.trim():"";
+    if(custom&&!description)throw new Error("Enter your customized description above first.");
+    if(custom&&(selections.some(s=>s.backendPrediction)||$("pipeline-runtime").value!=="offline"))
+      throw new Error("Feedback recommendations currently apply to the manual catalog. Keep the frozen measured workflow intact; use an offline catalog build to try this prototype.");
+    const matches=custom?decomposeBrief(description,$("brief-focus").value).map(m=>({
+      feature_id:m.featureId,variant_ids:[m.variantId],reason:`Matched requirement: ${m.evidence}`
+    })):[];
+    if(custom&&!matches.length)throw new Error("No supported requirement matches. Review the description or use the existing pipeline; unrelated highly ranked bricks will not be added.");
+    learningPending={request_id:crypto.randomUUID(),return_origin:location.origin,mode:custom?"custom":"manual",
+      description,catalog:learningCatalog(),matches,focus:$("brief-focus").value,selection_snapshot:JSON.stringify(selections)};
+    const {selection_snapshot,...bridge}=learningPending;
+    learningPopup=window.open(`${feedbackOrigin}/learning#${new URLSearchParams({studio:JSON.stringify(bridge)})}`,"token-yield-brick-learning");
+    if(!learningPopup)throw new Error("Allow the learning tab to open, then try again.");
+  }catch(error){$("status").textContent=error.message;}
+}
+window.addEventListener("message",event=>{
+  if(event.origin!==feedbackOrigin||event.source!==learningPopup||!learningPending)return;
+  const data=event.data;
+  if(data?.type!=="token-yield-learning-results"||data.request_id!==learningPending.request_id)return;
+  try{
+    if(!["real","synthetic"].includes(data.source)||!["candidate","active"].includes(data.stage))throw new Error("Invalid learning evidence source.");
+    if(!Array.isArray(data.rankings)||data.rankings.length!==learningPending.catalog.length||
+      new Set(data.rankings.map(r=>r.feature_id)).size!==data.rankings.length||
+      data.rankings.some(r=>!learningPending.catalog.some(b=>b.feature_id===r.feature_id)||
+        !(r.rank===null||Number.isInteger(r.rank)&&r.rank>0)||
+        !(r.score===null||Number.isFinite(r.score)&&r.score>=0&&r.score<=100)||
+        !Number.isInteger(r.project_count)||r.project_count<0))throw new Error("Invalid ranking response.");
+    if(!Array.isArray(data.recommendations))throw new Error("Invalid learned recommendations.");
+    const recommendations=data.recommendations;
+    if(recommendations.length){
+      if(learningPending.mode!=="custom"||$("brief").value.trim()!==learningPending.description||
+        $("brief-focus").value!==learningPending.focus||
+        JSON.stringify(selections)!==learningPending.selection_snapshot)throw new Error("Your brief or build changed. Request fresh recommendations before applying them.");
+      if(recommendations.length!==learningPending.matches.length||
+        new Set(recommendations.map(r=>key(r.feature_id,r.variant_id))).size!==recommendations.length||
+        learningPending.matches.some(m=>!recommendations.some(r=>r.feature_id===m.feature_id&&m.variant_ids.includes(r.variant_id)))||
+        recommendations.some(r=>!learningPending.catalog.some(b=>b.feature_id===r.feature_id&&b.options.some(o=>o.variant_id===r.variant_id&&o.model_id===r.model_id))||
+          typeof r.decision_id!=="string"||!r.decision_id))throw new Error("Recommendations do not cover the original matching requirements exactly.");
+      learnedProposal={source:data.source,recommendations,pending:learningPending};
+      $("learning-review-body").innerHTML=`<p>Source: <b>${esc(data.source)}</b>. The active policy selected these options, including exploration. Review before adding; no delivery has occurred.</p><p>${esc(learningPending.description)}</p>`+
+        recommendations.map(r=>`<div class="proposal-line"><b>${esc(r.name)} / ${esc(r.option_name)}</b><p>${esc(r.reason)}</p></div>`).join("");
+      $("approve-learned").checked=false;$("apply-learned").disabled=true;$("learning-review").showModal();
+    }
+    internalRankings={rows:data.rankings,source:data.source,stage:data.stage};
+    $("internal-ranking").disabled=false;$("internal-ranking").checked=true;
+    $("ranking-note").textContent=`Internal ${data.source} / ${data.stage} ranking. Experience scores, not AES or ROI. At least 3 independent training projects per score. Different functions are not substitutes. Build and prices unchanged.`;
+    renderCatalog();$("status").textContent=recommendations.length?"Review the proposed matching bricks before adding them.":"Internal feedback rankings loaded. Your build is unchanged.";
+  }catch(error){$("status").textContent=`Learning response not applied: ${error.message}`;}
+});
+function applyLearnedBricks(){
+  try{
+    if(!learnedProposal||!$("approve-learned").checked)throw new Error("Review and approve the proposed bricks first.");
+    const {pending,recommendations,source}=learnedProposal;
+    if($("brief").value.trim()!==pending.description||$("brief-focus").value!==pending.focus||JSON.stringify(selections)!==pending.selection_snapshot)
+      throw new Error("Your brief or build changed. Request fresh recommendations.");
+    const a=assumptions(),replacements=new Set(recommendations.map(r=>key(r.feature_id,r.variant_id)));
+    if(selections.some(s=>!replacements.has(key(s.featureId,s.variantId))&&s.feedbackSource&&s.feedbackSource!==source))
+      throw new Error("Do not mix synthetic and real-policy decision attribution in one delivered build. Use the same learning source for all suggested bricks.");
+    const additions=recommendations.map(r=>({...record(r.feature_id,r.variant_id,r.model_id,a.defaultRuns,"custom",pending.description),
+      feedbackDecisionId:r.decision_id,feedbackSource:source}));
+    selections=[...selections.filter(s=>!replacements.has(key(s.featureId,s.variantId))),...additions];
+    learnedProposal=null;$("learning-review").close();refresh("Approved matching bricks added with their original learning decisions. Other selected scope is unchanged.");
+  }catch(error){$("status").textContent=error.message;}
+}
+window.addEventListener("message",event=>{
+  if(event.origin!==feedbackOrigin||event.source!==feedbackPopup||!feedbackPending)return;
+  const data=event.data;
+  if(data?.type!=="token-yield-feedback-suggestion")return;
+  const valid=data.featureId===feedbackPending.feature_id&&data.source===feedbackPending.source&&
+    feedbackPending.options.some(o=>o.variant_id===data.variantId&&o.model_id===data.modelId)&&typeof data.decisionId==="string";
+  if(!valid||editingFeature?.id!==data.featureId||!$("configure").open){
+    $("feedback-suggestion-status").textContent="Suggestion did not match the open configuration. Request a new suggestion.";return;
+  }
+  const form=$("variant-form");
+  for(const variant of editingFeature.variants)form.elements[`pick-${variant.id}`].checked=variant.id===data.variantId;
+  form.elements[`model-${data.variantId}`].value=data.modelId;feedbackSuggestion=data;feedbackPending=null;
+  $("feedback-suggestion-status").textContent="Suggested option selected. Review it and save, or change it. Only an unchanged suggestion retains its learning attribution.";
+});
 async function backendJson(path,options={}) {
   let response;
   try {response=await fetch(path,{...options,signal:AbortSignal.timeout(15000)});}
@@ -854,6 +1091,7 @@ $("variant-form").addEventListener("submit",saveVariants);
 document.querySelectorAll("[data-close]").forEach(button=>button.addEventListener("click",()=>$(button.dataset.close).close()));
 $("manual-tab").addEventListener("click",()=>setMode("manual"));
 $("custom-tab").addEventListener("click",()=>setMode("custom"));
+$("saved-tab").addEventListener("click",()=>setMode("saved"));
 $("starter").addEventListener("click",loadStarter);
 $("clear").addEventListener("click",()=>{selections=[];proposal=null;$("proposal").hidden=true;refresh("Build cleared. No selected capabilities and no assumed benefits.");});
 $("example").addEventListener("click",()=>{
@@ -899,14 +1137,27 @@ $("proposal").addEventListener("click",event=>{
   if(event.target.id==="discard-proposal"){proposal=null;$("proposal").hidden=true;$("status").textContent="Proposal discarded. Your build is unchanged.";}
 });
 $("review").addEventListener("click",openReview);
+$("delivery-feedback").addEventListener("click",openDeliveryFeedback);
+$("save-build").addEventListener("click",saveCurrentBuild);
+$("load-build").addEventListener("click",loadSavedBuild);
+$("reestimate-saved").addEventListener("click",()=>{if(loadSavedBuild())$("status").textContent="Saved project re-estimated instantly from frozen forecasts; no provider call.";});
+$("send-saved-custom").addEventListener("click",sendSavedToCustom);
+$("feedback-suggest").addEventListener("click",requestFeedbackSuggestion);
+$("open-brick-learning").addEventListener("click",()=>openBrickLearning());
+$("recommend-learned").addEventListener("click",()=>openBrickLearning(true));
+$("internal-ranking").addEventListener("change",renderCatalog);
+$("approve-learned").addEventListener("change",()=>{$("apply-learned").disabled=!$("approve-learned").checked;});
+$("apply-learned").addEventListener("click",applyLearnedBricks);
 $("download").addEventListener("click",()=>{
   const data=exportData(),blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="token-yield-sales-scenario.json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   $("download-status").textContent="Download requested. If your browser blocks it, expand the copyable JSON below.";
 });
 window.addEventListener("pagehide",()=>{pipelineGeneration++;catalogGeneration++;clearTimeout(pipelineTimer);});
-renderFilters();refresh();updateRuntimeChoice();
-if(new URLSearchParams(location.search).get("mode")==="custom"||new URLSearchParams(location.search).has("run")){
+renderFilters();setMode("manual");refresh();updateRuntimeChoice();
+if(new URLSearchParams(location.search).get("mode")==="saved"){
+  setMode("saved");refresh("Saved project tab opened. Loading/re-estimating uses local forecast data only.");
+}else if(new URLSearchParams(location.search).get("mode")==="custom"||new URLSearchParams(location.search).has("run")){
   selections=[];setMode("custom");refresh("Start with a project description. The estimate updates after you approve its complete pipeline.");
 }
 connectBackend();
