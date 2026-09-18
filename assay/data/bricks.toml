@@ -1,0 +1,123 @@
+# The task vocabulary. TOML, not YAML, so the core package can parse it with stdlib
+# `tomllib` and stay dependency-free (Python >= 3.11).
+#
+# `nearest_neighbour` is mandatory. It is the field that makes inter-rater agreement
+# achievable -- it names the brick this one is most often confused with, and says which
+# way to resolve it. The reference vocabulary has no equivalent and its encoder was
+# never scored.
+
+version = 1
+allow_extension = false
+
+# These four carry the gates. They are the bricks the reference measured above its noise
+# floor; the other five are still measured, fitted and reported (hypothesis H4 predicts
+# they stay below noise, and refuting that would be a real finding).
+primary = ["Retrieve", "Reconcile", "Validate", "Extract"]
+
+[[bricks]]
+name = "Review"
+category = "cross-cutting"
+bought_as = "Contract and compliance review"
+definition = "Read one or more documents and answer a judgement question about them."
+unit = "One judgement question answered over the supplied documents."
+nearest_neighbour = "Answering a question about a *named value* is Extract, not Review. Review produces an assessment, not a field."
+examples = [
+    "Read the filing and state whether revenue guidance was raised, held or cut.",
+    "Review this SOW and say whether the acceptance criteria are testable.",
+]
+
+[[bricks]]
+name = "Extract"
+category = "cross-cutting"
+bought_as = "Invoice and claims intake, KYC"
+definition = "Pull named fields or values out of a specified document."
+unit = "One field or value extracted."
+nearest_neighbour = "If the source document is not specified, locating it is Retrieve. Extract assumes you already know where to look."
+examples = [
+    "Pull total revenue, operating margin and headcount from the attached 10-K.",
+    "Get the invoice number and due date from this PDF text.",
+]
+
+[[bricks]]
+name = "Classify"
+category = "cross-cutting"
+bought_as = "Ticket and email triage, routing"
+definition = "Assign a supplied item to one of a fixed, named set of categories."
+unit = "One item assigned to one category."
+nearest_neighbour = "If the categories are not supplied and must be judged, that is Review. Classify needs a closed label set."
+examples = [
+    "Label each of these tickets as billing, technical or account.",
+    "Mark this filing as 10-K, 10-Q or 8-K.",
+]
+
+[[bricks]]
+name = "Retrieve"
+category = "cross-cutting"
+bought_as = "Knowledge discovery, e-discovery"
+definition = "Locate a fact when the source document is not specified."
+unit = "One search target located."
+nearest_neighbour = "Parsing the section once it is found is Extract, and is only added if the request asks for the value as well as the location."
+examples = [
+    "Find which of the attached filings reports a 26% decline in segment revenue.",
+    "Which document mentions the restructuring charge?",
+]
+
+[[bricks]]
+name = "Reconcile"
+category = "corrective"
+bought_as = "Financial close, audit, dispute resolution"
+definition = "Compare the same named item across two specified sources or periods and report the difference."
+unit = "One comparison between two sources."
+nearest_neighbour = "Fetching the two numbers is Extract x2. Reconcile is the act of setting them against each other."
+examples = [
+    "Compare segment revenue between the 10-K and the following 10-Q.",
+    "Do the headcount figures in these two reports agree?",
+]
+
+[[bricks]]
+name = "Draft"
+category = "adaptive"
+bought_as = "Proposals, memos, marketing copy"
+definition = "Produce new prose to a stated brief."
+unit = "One drafted artefact."
+nearest_neighbour = "Summarising findings for a named audience is Report. Draft creates new material rather than presenting existing findings."
+examples = [
+    "Write a short risk note on the decline you found.",
+    "Draft a customer-facing explanation of this policy change.",
+]
+
+[[bricks]]
+name = "Remediate"
+category = "corrective"
+bought_as = "Exception handling, error correction"
+definition = "Correct a supplied artefact that is known to be wrong."
+unit = "One correction applied."
+nearest_neighbour = "Deciding *whether* it is wrong is Validate. Remediate starts from a known defect."
+examples = [
+    "Fix the mislabelled segment rows in this table.",
+    "Correct the two citation errors flagged in the draft.",
+]
+
+[[bricks]]
+name = "Validate"
+category = "preventive"
+bought_as = "Control testing, quality assurance"
+definition = "Run one independently scorable check against a specified source."
+unit = "One assertion checked."
+nearest_neighbour = "Checking one value against a rule is Validate. Making two sourced values agree is Reconcile."
+examples = [
+    "Check that the reported total equals the sum of the segments.",
+    "Verify every figure in the summary appears in the filing.",
+]
+
+[[bricks]]
+name = "Report"
+category = "perfective"
+bought_as = "Management and board reporting"
+definition = "Present existing findings in a stated format for a stated audience."
+unit = "One report produced."
+nearest_neighbour = "If the material is new rather than a presentation of findings already made, that is Draft."
+examples = [
+    "Write the board summary of the comparison above.",
+    "Turn these checks into a one-page control report.",
+]

@@ -1,0 +1,122 @@
+{
+  "gates": [
+    {
+      "caps_only": false,
+      "direction": "lower_is_better",
+      "id": "M1_noise_floor_pct",
+      "label": "replicate CV; above this, cheap bricks are unmeasurable",
+      "narrow_bar": 3.0,
+      "on_missing": "narrow",
+      "pass_bar": 1.0
+    },
+    {
+      "caps_only": false,
+      "direction": "lower_is_better",
+      "id": "M2_drift_pct",
+      "label": "null-probe movement between opening and closing brackets",
+      "narrow_bar": 5.0,
+      "on_missing": "narrow",
+      "pass_bar": 2.0
+    },
+    {
+      "caps_only": true,
+      "direction": "higher_is_better",
+      "id": "M5b_cv_lift_pct",
+      "label": "variable-portion lift of the chosen form over the best baseline (CV)",
+      "narrow_bar": 0.0,
+      "on_missing": "narrow",
+      "pass_bar": 20.0
+    },
+    {
+      "caps_only": false,
+      "direction": "lower_is_better",
+      "id": "M6_blind_mape_pct",
+      "label": "total error on the sealed blind set",
+      "narrow_bar": 30.0,
+      "on_missing": "narrow",
+      "pass_bar": 15.0
+    },
+    {
+      "caps_only": true,
+      "direction": "higher_is_better",
+      "id": "M6b_blind_lift_pct",
+      "label": "variable-portion lift over the best baseline, on blind",
+      "narrow_bar": 0.0,
+      "on_missing": "narrow",
+      "pass_bar": 15.0
+    },
+    {
+      "caps_only": true,
+      "direction": "higher_is_better",
+      "id": "M7_encoder_exact_pct",
+      "label": "encoder exact-vector match",
+      "narrow_bar": 70.0,
+      "on_missing": "narrow",
+      "pass_bar": 85.0
+    },
+    {
+      "caps_only": true,
+      "direction": "lower_is_better",
+      "id": "M9_e2e_mape_pct",
+      "label": "end-to-end quote error, encoder vector through the model",
+      "narrow_bar": 35.0,
+      "on_missing": "narrow",
+      "pass_bar": 20.0
+    },
+    {
+      "caps_only": true,
+      "direction": "higher_is_better",
+      "id": "M9b_coverage_hits",
+      "label": "90% interval hits out of 24 (a screen, reported with a Wilson CI)",
+      "narrow_bar": 17.0,
+      "on_missing": "narrow",
+      "pass_bar": 20.0
+    },
+    {
+      "caps_only": true,
+      "direction": "higher_is_better",
+      "id": "M11_batching_saving_pct",
+      "label": "measured cost saving, batched versus separate",
+      "narrow_bar": 0.0,
+      "on_missing": "narrow",
+      "pass_bar": 40.0
+    },
+    {
+      "caps_only": true,
+      "direction": "higher_is_better",
+      "id": "M12_batching_quality_lb",
+      "label": "lower 90% bound on quality change; a cheaper worse answer is not a saving",
+      "narrow_bar": null,
+      "on_missing": "narrow",
+      "pass_bar": -5.0
+    },
+    {
+      "caps_only": false,
+      "direction": "higher_is_better",
+      "id": "M13_alpha_macro",
+      "label": "inter-rater agreement on brick vectors",
+      "narrow_bar": null,
+      "on_missing": "narrow",
+      "pass_bar": 0.8
+    },
+    {
+      "caps_only": false,
+      "direction": "lower_is_better",
+      "id": "M14_exclusion_pct",
+      "label": "non-transport exclusions",
+      "narrow_bar": null,
+      "on_missing": "narrow",
+      "pass_bar": 10.0
+    },
+    {
+      "caps_only": true,
+      "direction": "higher_is_better",
+      "id": "M15_identifiable",
+      "label": "design supports a coefficient per brick (1 = yes)",
+      "narrow_bar": null,
+      "on_missing": "narrow",
+      "pass_bar": 1.0
+    }
+  ],
+  "policy_sha256": "7bd9ac7d6b9cfd33b3c84a6d805911faa3757c34cfc143cb3728b8db303597a9"
+}

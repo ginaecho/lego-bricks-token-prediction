@@ -1,4 +1,4 @@
-.PHONY: help test demo prove l1 l2 l5 hook dashboard clean
+.PHONY: help test demo prove l1 l2 l5 hook dashboard studio assay-audit assay-corpus clean
 
 help:
 	@echo "OpenHarness — targets:"
@@ -10,6 +10,12 @@ help:
 	@echo "  make l5         L5 precedence & conflict ablation"
 	@echo "  make hook       L3 live-hook self-test"
 	@echo "  make dashboard  build the harness-cards dashboard"
+	@echo ""
+	@echo "Token-yield assay (needs Python >= 3.11):"
+	@echo "  make studio       run the visual demo in a browser"
+	@echo "  make assay-audit  replay the reference table beside its variable-portion rescore"
+	@echo "  make assay-corpus regenerate the demo corpus"
+	@echo ""
 	@echo "  make clean      remove generated artifacts"
 
 test:
@@ -42,6 +48,15 @@ prove: l1 l2 l5 hook
 dashboard:
 	python -m openharness.cli dashboard -o dashboard.html
 
+studio:
+	python -m assay studio
+
+assay-audit:
+	python -m assay audit
+
+assay-corpus:
+	python -m demo.generate_corpus
+
 clean:
 	rm -f dashboard.html session_dashboard.html
-	rm -rf .openharness __pycache__ */__pycache__ */*/__pycache__ .pytest_cache *.egg-info
+	rm -rf .openharness __pycache__ */__pycache__ */*/__pycache__ .pytest_cache *.egg-info work

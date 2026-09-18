@@ -35,9 +35,13 @@ Repository = "https://github.com/ginaecho/lego-bricks-token-prediction"
 
 [project.scripts]
 openharness = "openharness.cli:main"
+ty = "assay.cli:main"
 
 [tool.setuptools]
-packages = ["openharness", "modules", "token_yield"]
+packages = ["openharness", "modules", "token_yield", "assay", "assay.harness", "assay.decompose", "assay.studio"]
+
+[tool.setuptools.package-data]
+assay = ["data/*.toml", "studio/*.html", "studio/*.css", "studio/*.js"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
