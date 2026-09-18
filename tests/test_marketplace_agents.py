@@ -82,7 +82,7 @@ class MockProvider:
         text = json.dumps(answer)
         # These counts exist solely to test provider handling, not to train a live model.
         inputs = len(prompt.encode("utf-8")) // 4 + 20
-        outputs = 120 if task == "workload" else 300
+        outputs = len(prompt.encode("utf-8")) // 6 + 30 if task == "workload" else 300
         usage = TokenUsage(inputs, outputs, 0, 0, inputs + outputs)
         call = ResponseCall(target, f"mock-{len(self.calls)}", "completed", engine.MODEL_ID,
                             1, usage, "request", "response")
@@ -1476,6 +1476,75 @@ def test_schema_helper_bounds_and_empty_text_arrays():
         nested = {"x": nested}
     with pytest.raises(ValueError, match="complexity"):
         schema_from_example(nested)
+
+
+def _metric_row(input_tokens, output_tokens):
+    return {"input_tokens": input_tokens, "output_tokens": output_tokens}
+
+
+def test_baseline_gate_accepts_material_both_target_improvement():
+    train = [_metric_row(1000, 1000), _metric_row(1000, 1000)]
+    holdout = [_metric_row(800, 700), _metric_row(1200, 1300)]
+    gate = engine.baseline_acceptance_gate(
+        train, holdout, {"input_mae": 150.0, "output_mae": 200.0})
+    assert gate["accepted"] is True
+    assert gate["baseline"] == {"input_mae": 200.0, "output_mae": 300.0}
+    assert gate["thresholds"] == {"input_mae": 180.0, "output_mae": 270.0}
+
+
+@pytest.mark.parametrize("metrics", [
+    {"input_mae": 181.0, "output_mae": 200.0},   # below margin on input
+    {"input_mae": 150.0, "output_mae": 271.0},   # below margin on output
+    {"input_mae": 200.0, "output_mae": 300.0},   # no baseline improvement
+])
+def test_baseline_gate_rejects_missing_or_insufficient_margin(metrics):
+    train = [_metric_row(1000, 1000), _metric_row(1000, 1000)]
+    holdout = [_metric_row(800, 700), _metric_row(1200, 1300)]
+    gate = engine.baseline_acceptance_gate(train, holdout, metrics)
+    assert gate["accepted"] is False
+    guarded = engine.apply_baseline_acceptance_guard(
+        {"accepted": True, "summary": "LLM would accept.", "limitations": []}, gate)
+    assert guarded["accepted"] is False
+    assert "baseline-relative acceptance guard" in guarded["summary"]
+
+
+@pytest.mark.parametrize("metrics", [
+    {"input_mae": float("nan"), "output_mae": 1.0},
+    {"input_mae": 1.0, "output_mae": float("inf")},
+    {"input_mae": -1.0, "output_mae": 1.0},
+])
+def test_baseline_gate_rejects_degenerate_nonfinite_metrics(metrics):
+    train = [_metric_row(1000, 1000), _metric_row(1000, 1000)]
+    holdout = [_metric_row(800, 700), _metric_row(1200, 1300)]
+    assert engine.baseline_acceptance_gate(train, holdout, metrics)["accepted"] is False
+
+
+def test_output_mae_greater_than_input_mae_can_accept_when_both_beat_baselines():
+    train = [_metric_row(1000, 1000), _metric_row(1000, 1000)]
+    holdout = [_metric_row(800, 700), _metric_row(1200, 1300)]
+    gate = engine.baseline_acceptance_gate(
+        train, holdout, {"input_mae": 120.0, "output_mae": 180.0})
+    assert gate["accepted"] is True
+    review = engine.apply_baseline_acceptance_guard(
+        {"accepted": True, "summary": "Output MAE is higher but beats its baseline.",
+         "limitations": ["Uncertified pilot."]},
+        gate)
+    assert review["accepted"] is True
+
+
+def test_a54d_metric_sanity_beats_training_mean_baseline_without_tuning_margin():
+    train = [_metric_row(1000, 1000), _metric_row(1000, 1000)]
+    holdout = [
+        _metric_row(840.25, 807.8624567474049),
+        _metric_row(1159.75, 1192.1375432525952),
+    ]
+    gate = engine.baseline_acceptance_gate(train, holdout, {
+        "input_mae": 103.22712398574846,
+        "output_mae": 120.50421091496312,
+    })
+    assert gate["accepted"] is True
+    assert gate["baseline"]["input_mae"] == pytest.approx(159.75)
+    assert gate["baseline"]["output_mae"] == pytest.approx(192.13754325259515)
 
 
 @pytest.mark.parametrize("mode", ["oversize_schema", "changed_after_reservation", "cancel_after_auth"])

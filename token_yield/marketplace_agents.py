@@ -56,6 +56,7 @@ CONTENT_CONTRACT_ATTEMPTS = 3
 DESIGN_CONTENT_CONTRACT_ATTEMPTS = 8
 DESIGN_RETRY_STAGES = frozenset({"propose", "discuss", "adjudicate"})
 WORKLOAD_ATTEMPTS = CONTENT_CONTRACT_ATTEMPTS
+BASELINE_IMPROVEMENT_MARGIN = 0.10
 CONTENT_RETRY_POLICY = {
     "policy": "bounded-per-stage-content-contract",
     "max_attempts": CONTENT_CONTRACT_ATTEMPTS,
@@ -69,6 +70,72 @@ WORKLOAD_RETRY_POLICY = CONTENT_RETRY_POLICY
 MAX_INPUT_BOUND = 32768
 _LOCKS: dict[str, threading.Lock] = {}
 _LOCKS_LOCK = threading.Lock()
+
+
+def _mean(values: list[int]) -> float:
+    if not values:
+        raise ValueError("nonempty baseline sample required")
+    return sum(values) / len(values)
+
+
+def baseline_acceptance_gate(
+    train_rows: list[dict], holdout_rows: list[dict], metrics: dict,
+    *, margin: float = BASELINE_IMPROVEMENT_MARGIN,
+) -> dict:
+    """Compare the frozen model against same-holdout training-mean baselines.
+
+    A reference-context pilot must improve over a naive per-target training-mean
+    predictor on both token targets. The 10% margin is predeclared as a material
+    improvement threshold so noise or rounding-level wins do not publish a model.
+    """
+    if (not math.isfinite(margin)) or not 0 < margin < 1:
+        raise ValueError("baseline margin must be finite in (0, 1)")
+    baseline, thresholds, improvements, accepted = {}, {}, {}, True
+    for target in ("input", "output"):
+        actual = metrics.get(target + "_mae")
+        if type(actual) not in (int, float) or not math.isfinite(actual) or actual < 0:
+            accepted = False
+            baseline[target + "_mae"] = None
+            thresholds[target + "_mae"] = None
+            improvements[target] = None
+            continue
+        mean = _mean([row[target + "_tokens"] for row in train_rows])
+        base_mae = sum(abs(row[target + "_tokens"] - mean) for row in holdout_rows) / len(holdout_rows)
+        threshold = base_mae * (1 - margin)
+        baseline[target + "_mae"] = base_mae
+        thresholds[target + "_mae"] = threshold
+        improvements[target] = ((base_mae - actual) / base_mae) if base_mae > 0 else None
+        if not (base_mae > 0 and math.isfinite(base_mae) and actual <= threshold):
+            accepted = False
+    return {
+        "baseline": baseline,
+        "thresholds": thresholds,
+        "relative_improvement": improvements,
+        "margin": margin,
+        "accepted": accepted,
+        "rule": "model_mae <= training_mean_baseline_mae * (1 - margin) on both targets",
+        "baseline_predictor": "per-target mean of frozen training labels evaluated on the same holdout",
+        "justification": (
+            "A 10% improvement margin is a general materiality threshold for this small "
+            "reference-context pilot: it rejects degenerate, nonfinite and barely-better "
+            "models while accepting clear target-relative improvements. Targets are "
+            "judged against their own baseline, not against each other."
+        ),
+    }
+
+
+def apply_baseline_acceptance_guard(review: dict, baseline_gate: dict) -> dict:
+    if baseline_gate["accepted"]:
+        return review
+    return {
+        **review,
+        "accepted": False,
+        "summary": "Rejected by deterministic baseline-relative acceptance guard. " +
+        review["summary"],
+        "limitations": list(review["limitations"]) + [
+            "Model must beat the same-holdout training-mean baseline by the predeclared margin on both token targets."
+        ],
+    }
 
 
 class AgentCancelled(RuntimeError):
@@ -1394,16 +1461,25 @@ class AgentRuntime:
         metrics = {target + "_mae": sum(abs(pred[target] - row[target + "_tokens"])
                                        for pred, row in zip(holdout_predictions, holdout_rows))
                    / len(holdout_rows) for target in ("input", "output")}
+        baseline_gate = baseline_acceptance_gate(train_rows, holdout_rows, metrics)
         review = retry_call("metrics", "training_agent", {
             "task": "metrics", "tool": "frozen model fresh outcome-holdout evaluation",
-            "metrics": metrics, "train_count": len(train_rows), "test_count": len(holdout_rows),
+            "metrics": metrics,
+            "baseline_acceptance_gate": baseline_gate,
+            "train_count": len(train_rows), "test_count": len(holdout_rows),
             "model_frozen": True, "no_refitting": True,
             "instruction": "Review actual metrics for a LIMITED empirical pilot. You may reject the "
             "candidate, but cannot change its features/alpha or use this holdout for fitting. "
-            "Acceptance never certifies delivery quality or production readiness.",
+            "The deterministic baseline_acceptance_gate is a hard minimum: reject if it is "
+            "not accepted. If it is accepted, judge caveats honestly but do not reject solely "
+            "because output MAE is numerically greater than input MAE; targets have different "
+            "scales and are compared to their own baselines. Acceptance never certifies "
+            "delivery quality or production readiness.",
             "output_contract": {"accepted": True, "summary": "public metric review", "limitations": []},
         }, docs, catalog)["public_output"]
+        review = apply_baseline_acceptance_guard(review, baseline_gate)
         candidate["metrics"] = metrics
+        candidate["baseline_acceptance_gate"] = baseline_gate
         candidate["review"] = review
         _write(artifact_dir / "candidate-model.json", candidate)
         if not review["accepted"]:
