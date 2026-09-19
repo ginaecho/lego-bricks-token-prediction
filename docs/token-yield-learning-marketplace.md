@@ -1,93 +1,71 @@
-# Token Yield Marketplace Studio: Predictable AI Delivery
+# 🧱 Token Yield: Win with AI Value, Not Just AI Cost
 
-**Build AI projects like LEGO. Price them before they start. Learn from every
-outcome.**
+**Scope faster. Build with bricks. Sell outcomes.**
 
-## The big idea
+Clients do not buy tokens. They buy time back, better decisions, and business
+growth. Token Yield connects **what AI costs** with **what AI could achieve**,
+helping teams turn a client brief into a scoped project and a credible
+investment case.
 
-AI projects are difficult to price because every request looks different.
-Budgets are often based on assumptions, while the real cost appears only after
-the agents have done the work.
+## 🎯 Turn client ambition into a winning proposal
 
-Token Yield Marketplace Studio changes that.
+Instead of rebuilding every proposal from scratch:
 
-It turns an AI project into small, reusable units of work called **bricks**.
-A brick might Extract, Classify, Plan, Retrieve, Validate, or Report. Each brick
-has a clear purpose, expected result, quality check, and cost profile.
+1. Describe the client's goal.
+2. Assemble reusable bricks: Retrieve, Extract, Write, Verify.
+3. Predict token use and compare cost, staffing, and value scenarios.
+4. Agree the scope, success measures, and path from pilot to scale.
 
-Teams can combine these bricks into a complete solution, much like building
-with LEGO. The result is an AI marketplace where work can be discovered,
-assembled, priced, delivered, and improved.
+**The sales advantage: make the project easier to understand, justify, and
+approve. Compete on client value, not just a cheaper AI bill.**
 
-## From a client request to a confident proposal
+## 🤖 Built for Microsoft Foundry on Azure
 
-A client, ISD lead, pursuit lead, or project manager describes the outcome they
-need. Token Yield then:
+![Proposed Foundry marketplace architecture with brick agents, prediction, Fabric, business outputs, and feedback](https://raw.githubusercontent.com/ginaecho/lego-bricks-token-prediction/main/docs/media/token-yield-foundry-marketplace-architecture.png)
 
-1. Understands the request.
-2. Finds the best bricks in the marketplace.
-3. Combines them into a proposed agent workflow.
-4. Predicts token use, delivery cost, and risk.
-5. Produces a clear, itemised proposal before work begins.
+The proposed architecture brings two agent layers into Foundry:
 
-If the marketplace does not yet have the right capability, an agent proposes a
-new brick. A human reviews and approves it before it is tested and added to the
-catalog.
+* Brick agents execute capabilities through category-level hosted teams and
+  function tools.
+* Marketplace agents understand requests, compose projects, govern execution,
+  and send reviewed improvement signals back to the brick teams.
+* A callable predictive model estimates token use and AI cost to support the
+  investment case.
 
-No more mystery AI bill. No more one-off solution that disappears after the
-project. Every delivery becomes reusable knowledge.
+People approve scope, spending, and releases. Code enforces access and budgets.
 
-## Agents move fast, humans stay in control
+## 📊 Put project value where clients already work
 
-Agents do the repeatable work and train the predictive model:
+The vision is **one-click connection after tenant setup**, with Fabric bringing
+project evidence together:
 
-* Discover and combine capabilities
-* Prepare project plans and quotes
-* Run approved experiments
-* Measure tokens, time, quality, and cost
-* Compare forecasts with actual results
-* Recommend improvements to the model
+| Product | Client value |
+| --- | --- |
+| Power BI | Progress, expected outcomes, AI impact, and ROI dashboards |
+| Excel | Staffing, costs, and investment scenarios |
+| Word | Draft proposals, statements of work, and value summaries |
+| Teams and email | Updates, approvals, and feedback |
 
-People make the decisions that matter:
+Show forecast versus actual results. Keep expected, client-reported, and
+verified benefits separate. ROI includes delivery and operating costs,
+not just tokens.
 
-* Clients confirm whether the result created value.
-* ISD and solution leads confirm industry fit.
-* Pursuit leads validate the commercial story.
-* Project managers confirm effort, risk, and acceptance.
-* Release owners approve new bricks and model versions.
+## 🔁 Learn what earns the next investment
 
-This creates speed without losing trust, governance, or accountability.
+Actual usage improves cost prediction. Reviewed client feedback helps
+recommend better-fit bricks and identifies prompts, tools, and workflows
+to improve.
 
-## Why this can change enterprise AI
+The local prototype uses a contextual bandit for bounded recommendations,
+not automatic LLM retraining. Evaluation and human approval gate changes.
 
-Token Yield gives every stakeholder something they need:
+> [!NOTE]
+> Local prototypes and measured Foundry experiments exist; the complete cloud
+> integration is proposed. Connections require permissions, setup, and suitable
+> licensing. Faster scoping, bigger sales wins, and client ROI remain goals to
+> validate. See the [evidence](https://github.com/ginaecho/lego-bricks-token-prediction/blob/main/docs/how-it-was-tested.md) and
+> [architecture](https://github.com/ginaecho/lego-bricks-token-prediction/blob/main/docs/architecture.md).
 
-* Clients see what they are buying and how success will be measured.
-* Pursuit teams turn ideas into evidence-backed proposals.
-* Project managers plan delivery with visible cost and risk.
-* Finance gets forecasts, approvals, and chargeback-ready cost lines.
-* Leaders see which AI capabilities produce the strongest return.
+## 🚀 Bring one client brief. Build the case for the next win
 
-The marketplace becomes more valuable with every project. New bricks expand
-what teams can deliver. Real usage improves cost prediction. Human feedback and
-client outcomes build ROI intelligence.
-
-Over time, Token Yield becomes an organisational memory for AI delivery:
-what works, what it costs, where it creates value, and how to do it better next
-time.
-
-## What our experiments show
-
-We tested the idea with measured agent runs, held-back brick combinations, and
-plain-English project requests.
-
-| Test | Result | What it means |
-| --- | ---: | --- |
-| Cross-validation on 35 measured agent runs | 2.55% average total-token error | The model predicted total token use within about 2.6% on average. |
-| Four brick combinations not used for training | 2.2% average error | The model successfully priced new combinations of known bricks. |
-| Three requests written in plain English | 0% to 3.5% error | The agent translated everyday requests into bricks and produced close token estimates. |
-| New marketplace model on 20 calls from two held-back projects | 32.5 input tokens and 35.2 output tokens average error per call | The newer model separately predicts how much text the AI reads and writes. |
-
-These results turn the LEGO idea into something measurable: describe the work,
-assemble the bricks, predict the cost, run the agents, and compare the forecast
-with reality.
+**Clear scope. Visible investment. Measurable impact. A stronger reason to buy.**

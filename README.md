@@ -1,15 +1,25 @@
 ---
 title: Token Yield Marketplace Studio
-description: Predict the cost and value of AI agent work by composing measured, LEGO-like task bricks.
-ms.date: 2026-09-17
+description: Scope AI projects with reusable task bricks, predict consumption, and build evidence-backed business-value cases.
+ms.date: 2026-09-19
 ms.topic: overview
 ---
 
-# Token Yield Marketplace Studio
+# 🧱 Token Yield Marketplace Studio
 
 [![CI](https://github.com/ginaecho/lego-bricks-token-prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/ginaecho/lego-bricks-token-prediction/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/1314056228.svg)](https://zenodo.org/badge/latestdoi/1314056228)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+**Scope faster. Build with bricks. Win with AI value, not just AI cost.**
+
+Clients buy better outcomes, not tokens. Token Yield turns a client brief into
+reusable capabilities, a transparent scope, and an investment case with visible
+assumptions. Predict AI consumption, compare cost and staffing scenarios, and
+agree how business impact will be measured.
+
+**The sales ambition: make the project easier to understand, justify, and
+approve. Give clients a stronger reason to buy.**
 
 <p align="center">
   <a href="docs/media/Token_Yield_Studio_hack_video.mp4">
@@ -17,6 +27,34 @@ ms.topic: overview
          alt="Token Yield functionality marketplace: shop measured AI task bricks, forecast cost, staffing, and ROI, then build the project">
   </a>
 </p>
+
+## 🤖 The Foundry vision
+
+[![Proposed Foundry architecture: marketplace agents govern brick agents, a predictive model supports scoping, and Fabric connects insights and feedback](https://raw.githubusercontent.com/ginaecho/lego-bricks-token-prediction/main/docs/media/token-yield-foundry-marketplace-architecture.png)](https://github.com/ginaecho/lego-bricks-token-prediction/blob/main/docs/media/token-yield-foundry-marketplace-architecture.png)
+
+The proposed architecture brings two hosted-agent layers into **Microsoft
+Foundry on Azure**, supported by the Token Yield predictor:
+
+* Brick agents deliver reusable work: Retrieve, Extract, Write, and Verify.
+* Marketplace agents compose projects, govern execution, and propose
+  improvements from reviewed feedback.
+* The predictive model estimates token use and AI cost. Business benefits and
+  wider delivery costs remain explicit assumptions.
+
+**Fabric would connect the evidence to Power BI, Excel, Word, Teams, and
+email:** project progress, expected outcomes, AI impact, and ROI. The goal is
+one-click connection after permissions, connectors, and licensing are in place.
+People approve scope, spending, and releases; code enforces access and budgets.
+
+> [!NOTE]
+> This is a target architecture, not a deployed cloud integration. Keep forecast,
+> client-reported, and verified benefits separate. Bigger sales wins and client
+> ROI remain goals to validate, not results established by token experiments.
+
+Read the [short marketplace overview](https://github.com/ginaecho/lego-bricks-token-prediction/blob/main/docs/token-yield-learning-marketplace.md)
+or explore the [current implementation](https://github.com/ginaecho/lego-bricks-token-prediction/blob/main/docs/architecture.md).
+
+## 🎬 See it in action
 
 <p align="center">
   <a href="docs/media/Token_Yield_Studio_hack_video.mp4">
@@ -37,16 +75,7 @@ ms.topic: overview
   Select either animation to open its full MP4 with playback controls.
 </p>
 
-**Predict the cost. Prove the value. Win client approval faster.**
-
-AI projects are often sold before anyone can clearly explain what they will
-cost or what value they will deliver. Token Yield turns a plain-English request
-into a transparent, evidence-based proposal. Agents decompose the work into
-reusable task bricks, combine the right capabilities, and predict token use,
-cost, and risk. People approve the scope and commercial assumptions. Actual
-delivery results feed the learning loop for the next project.
-
-## Live Foundry demo
+### Live Foundry demo
 
 <video controls preload="metadata" width="100%"
        poster="docs/media/marketplace-cover.jpg">
@@ -190,9 +219,10 @@ new workload.
 Client request
     -> agents find and compose task bricks
     -> humans approve scope and assumptions
-    -> the model predicts tokens, cost, and risk
+    -> the model predicts tokens; rates and assumptions give cost scenarios
     -> agents deliver the work
-    -> actual usage, quality, and client feedback improve future predictions
+    -> actual usage recalibrates token forecasts
+    -> reviewed quality and feedback inform candidate improvements
 ```
 
 ## What is a basic block?
@@ -317,7 +347,8 @@ measurements and evaluation context.
 
 ## Explore the project
 
-* [Marketplace vision and results](docs/token-yield-learning-marketplace.md)
+* [Marketplace vision and AI value](https://github.com/ginaecho/lego-bricks-token-prediction/blob/main/docs/token-yield-learning-marketplace.md)
+* [Proposed Foundry architecture diagram](https://github.com/ginaecho/lego-bricks-token-prediction/blob/main/docs/media/token-yield-foundry-marketplace-architecture.png)
 * [Marketplace prototype guide](docs/marketplace-prototype.md)
 * [Marketplace model and quoting roadmap](docs/marketplace-models/plan.md)
 * [Service selection and quoting guide](docs/marketplace-models/quoting.md)
