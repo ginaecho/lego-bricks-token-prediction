@@ -75,7 +75,7 @@ or explore the [current implementation](https://github.com/ginaecho/lego-bricks-
   Select either animation to open its full MP4 with playback controls.
 </p>
 
-### Live Foundry demo
+### Live Demo
 
 <video controls preload="metadata" width="100%"
        poster="docs/media/marketplace-cover.jpg">
