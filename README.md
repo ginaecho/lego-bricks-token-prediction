@@ -1,15 +1,4 @@
----
-title: Token Yield Marketplace Studio
-description: Scope AI projects with reusable task bricks, predict consumption, and build evidence-backed business-value cases.
-ms.date: 2026-09-21
-ms.topic: overview
----
-
 # 🧱 Token Yield Marketplace Studio
-
-[![CI](https://github.com/ginaecho/lego-bricks-token-prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/ginaecho/lego-bricks-token-prediction/actions/workflows/ci.yml)
-[![DOI](https://zenodo.org/badge/1314056228.svg)](https://zenodo.org/badge/latestdoi/1314056228)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **Scope faster. Build with bricks. Win with AI value, not just AI cost.**
 
