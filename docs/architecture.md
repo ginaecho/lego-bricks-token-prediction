@@ -181,30 +181,130 @@ success-shaped estimate.
 
 ### 8. Learn from delivery
 
-After delivery, the feedback agent collects two evidence streams.
+Token counts describe consumption, not whether the work was any good. The
+proposed business-feedback loop follows a funnel: did the agent finish
+independently, how much of that work did reviewers keep, and how much of the
+kept work demonstrably served the customer?
 
-Technical evidence includes:
+The **Agent Efficiency Score (AES)** is our proposed value-aligned outcome
+measure, not an industry-standard or production-validated benchmark. The local
+prototype implements the calculation; verified business-value evidence remains
+to be established. Define comparable
+work units, scope, acceptance criteria, and the outcome observation window
+before execution.
 
-* Actual tokens and cost
-* Runtime and retries
-* Quality and acceptance
-* Human effort
+| Funnel stage | Proposed measure | Evidence owner |
+| --- | --- | --- |
+| Independent completion, A | Units completed without human rescue / assigned units | Runtime evidence, confirmed by the project manager |
+| Retention, K | Units kept from independently completed work / independently completed units | Reviewer acceptance, edits, and rejection records |
+| Customer usefulness, U | Kept units with verified customer usefulness / kept units | Client confirmation and agreed outcome evidence |
 
-Business evidence includes:
+```text
+Agent Efficiency Score = 100 * A * K * U
+Value-aligned token yield = verified-useful autonomous units / all consumed tokens
+```
 
-* Adoption
-* Time saved
-* Cost avoided
-* Revenue supported
-* Implementation and operating cost
-* Client-confirmed outcomes
+AES ranges from 0 to 100 and summarizes useful autonomous delivery, not resource
+efficiency by itself. Report it with token yield, total cost, and human effort.
+For illustration only, 80% completion, 75% retention, and 50% verified
+usefulness produce AES = 30: 30 of 100 assigned units survived the full funnel.
+This is not a measured result from the recorded campaign.
 
-The standing model is scored before new evidence is absorbed. This preserves
-the surprise signal needed to detect underprediction, overprediction, and new
-work outside the fitted range.
+Required approval gates do not count as human rescue. Substantive correction
+does; record the correction effort rather than making a rescued output look
+autonomous. Human-assisted useful delivery remains visible alongside AES.
+Freeze work-unit definitions to prevent gaming by splitting easy tasks or
+dropping difficult ones. Use the same cohort through all three stages.
 
-Retraining is scheduled when evidence and coverage justify it. It is not an
-automatic reaction to every event.
+Missing customer feedback is unknown, not zero and not success. Publish a
+provisional funnel with evidence coverage until the observation window closes.
+If evidence establishes that no units completed or none were kept, useful
+autonomous yield is zero; downstream conditional rates are not applicable,
+not fabricated zero-denominator ratios. An empty assigned scope is unscorable.
+
+#### Score impact and ROI separately
+
+The client confirms usefulness and attributable benefits. The ISD pursuit lead
+records the agreed scope, commercial assumptions, and adoption expectations.
+The project manager records delivery effort, review, rework, and operating
+cost. Their evidence is complementary; three positive ratings are not three
+independent proofs of value.
+
+```text
+net benefit = verified attributable benefit - total delivery and operating cost
+realized ROI = net benefit / total delivery and operating cost
+```
+
+Use a common currency, baseline, attribution method, and observation window.
+Cost includes tokens, tools, integration, human review, correction, and
+operations. Time saved is not automatically cash saved; monetization requires
+an agreed method. Keep forecast, self-reported, and verified benefits separate,
+avoid counting the same saving twice, and retain negative ROI. Zero or unknown
+cost makes ROI unavailable, not infinite. AES is not a proxy for financial ROI.
+
+#### Turn reviewed evidence into learning signals
+
+The proposed loop is:
+
+```text
+Delivery evidence -> AES + impact assessment -> human-reviewed reward
+        -> bounded policy update -> approved next workload -> new evidence
+```
+
+A candidate reward specification, to validate before deployment, is:
+
+```text
+reward = w_A * (AES / 100)
+       + w_B * clip(net_benefit / reference_benefit, -1, 1)
+```
+
+Weights are nonnegative and sum to one. The positive reference benefit, work
+scope, time horizon, evidence threshold, and scoring version are fixed before
+a trial. Net benefit already subtracts delivery costs; do not subtract those
+costs again. Missing benefit evidence leaves the final reward pending. Early
+completion and retention signals may support a separately labeled provisional
+assessment, never a fabricated realized-ROI reward.
+
+Safety, acceptance, and budget constraints are hard gates, not tradeable
+penalties. A high financial reward cannot authorize an unsafe action. Link
+each reward to the original workflow decision, reviewer, evidence, and policy
+version. Evaluate candidate policies on separate cohorts before human-approved
+promotion; do not tune on final holdouts or automatically reward every event.
+
+Keep two learning paths distinct:
+
+* Actual token observations recalibrate the cost predictor. Score new records
+  against the standing model before refitting so drift remains visible.
+* Reviewed outcome rewards would improve bounded workflow or measurement
+  choices. This is a policy-learning objective, not a token-regression target.
+
+Rejected work, retries, and human correction costs remain in the accounting.
+Filtering them out would teach the system to underprice accepted outcomes.
+
+#### What exists today
+
+[`learn.py`](../token_yield/learn.py) implements score-before-refit cost-model
+learning and drift reporting. [`measurement_policy.py`](../token_yield/measurement_policy.py)
+implements an audited epsilon-greedy measurement policy whose reward is
+calibration-error improvement per reference dollar, not customer impact.
+Its marketplace integration is gated to offline mocks pending review.
+The recorded Foundry campaign did not run live ROI reinforcement learning.
+The [delivered-project feedback prototype](customer-outcomes-prototype.md)
+carries existing marketplace selections into a short client form.
+[`delivery_feedback.py`](../token_yield/delivery_feedback.py) extracts
+customer-reported experience rewards and automatically fits candidate action
+values and outcome regressions. Unknown outcomes remain pending; estimates
+never become actual token usage or verified finances. Prospective marketplace
+suggestions record action probabilities. Protected validation and a named human
+approval are required before the learned policy changes future suggestions.
+This is a one-step contextual bandit, not foundation-model fine-tuning.
+
+The prior internal studio at `/admin` retains its separate reviewed-evidence
+AES/SOW/staffing package policy in
+[`customer_outcomes.py`](../token_yield/customer_outcomes.py).
+Both use local SQLite storage with separate real/synthetic namespaces.
+Synthetic tests demonstrate training and changed recommendations, not live
+customer ROI or production deployment.
 
 ## Agent roles
 
@@ -260,7 +360,7 @@ prototype, not a multi-user hosted service.
 
 ## State and evidence
 
-Token Yield uses durable files rather than a database:
+The marketplace runtime uses durable files for execution and model evidence:
 
 ```text
 .demo-runs/
@@ -281,6 +381,11 @@ unknown outcome cannot be replayed as free work.
 
 There is no message broker, external database, cache, container platform, or
 production cloud deployment in the prototype.
+
+The separate customer-feedback prototype uses local SQLite storage in
+`.outcomes-prototype/PROTOTYPE-customer-outcomes.sqlite3`. Receipts, feedback,
+candidate models, policy decisions, and promotion audit events persist across
+restarts. This scratch database is excluded from version control.
 
 ## Cost and budget boundaries
 

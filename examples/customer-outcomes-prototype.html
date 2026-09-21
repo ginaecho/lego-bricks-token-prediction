@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Customer Outcomes Studio | Local prototype</title>
+  <style>
+    :root { --ink:#172c30; --muted:#55696d; --accent:#14675e; --paper:#f4f6f3; --line:#d7e1da; --white:#fff; --soft:#eaf2ec; --amber:#7e5413; --red:#a02d34; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    button,input,select,textarea { font:inherit; }
+    button { border:1px solid var(--line); border-radius:8px; padding:10px 16px; background:var(--white); color:var(--ink); cursor:pointer; font-weight:600; }
+    button:hover:not(:disabled) { border-color:var(--accent); background:var(--soft); }
+    button.primary { color:white; background:var(--accent); border-color:var(--accent); }
+    button.primary:hover:not(:disabled) { background:#0d5048; }
+    button:disabled { cursor:not-allowed; opacity:.48; }
+    :focus-visible { outline:3px solid #b07629; outline-offset:3px; }
+    input,select,textarea { width:100%; padding:10px 12px; border:1px solid #b9c9be; border-radius:7px; background:white; color:var(--ink); min-width:0; }
+    textarea { resize:vertical; min-height:92px; }
+    input[type=checkbox] { width:18px; height:18px; flex-shrink:0; accent-color:var(--accent); }
+    label { display:block; font-size:.88rem; font-weight:600; }
+    label input,label select,label textarea { display:block; margin-top:6px; font-weight:400; }
+    .check { display:flex; align-items:flex-start; gap:9px; font-weight:400; margin:12px 0; }
+    .check input { margin-top:3px; }
+    .skip { position:absolute; left:16px; top:-60px; background:white; padding:8px; z-index:5; }
+    .skip:focus { top:8px; }
+    .shell { max-width:1440px; margin:auto; padding:0 36px 48px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:24px 0; border-bottom:1px solid var(--line); }
+    .brand { font-weight:750; letter-spacing:-.4px; font-size:1.05rem; display:flex; align-items:center; gap:12px; }
+    .mark { background:var(--accent); color:white; width:35px; height:35px; display:grid; place-items:center; border-radius:10px; font-size:13px; letter-spacing:1px; }
+    .badge { display:inline-block; padding:4px 9px; border-radius:5px; background:var(--soft); color:var(--accent); font-size:.72rem; font-weight:750; letter-spacing:.8px; }
+    .hero { display:grid; grid-template-columns:1fr auto; gap:28px; align-items:center; padding:35px 0 24px; }
+    h1 { font-size:clamp(1.8rem,3.3vw,2.8rem); letter-spacing:-1.3px; line-height:1.14; margin:8px 0 14px; }
+    h2 { font-size:1.18rem; margin:0 0 8px; letter-spacing:-.35px; }
+    h3 { font-size:1rem; margin:0 0 12px; }
+    p { margin:0 0 15px; }
+    .muted,small { color:var(--muted); }
+    small { display:block; font-size:.8rem; }
+    .eyebrow { text-transform:uppercase; font-size:.7rem; font-weight:750; letter-spacing:1.7px; color:var(--accent); }
+    .hero p { max-width:740px; }
+    .source-tools { min-width:240px; display:grid; gap:10px; }
+    .banner { padding:13px 17px; border:1px solid var(--line); background:var(--soft); border-radius:8px; margin-bottom:16px; }
+    .banner.synthetic { background:#fff5e5; border-color:#e6cd9d; color:var(--amber); }
+    #error:not([hidden]) { color:var(--red); background:#fff1f0; border:1px solid #e3a9ac; padding:14px 18px; margin-bottom:14px; border-radius:8px; overflow-wrap:anywhere; }
+    #status { color:var(--accent); min-height:28px; font-size:.9rem; margin:4px 0 15px; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:8px 0 26px; }
+    .stat { background:white; border:1px solid var(--line); border-radius:10px; padding:18px 20px; }
+    .stat strong { display:block; font-size:1.85rem; font-weight:650; letter-spacing:-1px; margin-bottom:4px; }
+    .stat span { font-size:.82rem; color:var(--muted); }
+    .tabs { display:flex; gap:6px; border-bottom:1px solid var(--line); margin-bottom:24px; overflow:auto; }
+    .tabs button { white-space:nowrap; border:0; border-bottom:3px solid transparent; border-radius:0; background:transparent; padding:14px 19px; color:var(--muted); }
+    .tabs button[aria-selected=true] { border-bottom-color:var(--accent); color:var(--accent); background:#eaf2ec; }
+    .grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(300px,.72fr); gap:22px; align-items:start; }
+    .card { background:white; border:1px solid var(--line); padding:25px; border-radius:12px; margin-bottom:20px; min-width:0; }
+    .card-head { display:flex; justify-content:space-between; align-items:start; gap:15px; margin-bottom:18px; }
+    .fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-bottom:18px; }
+    .full { grid-column:1/-1; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:18px; }
+    fieldset { border:1px solid var(--line); border-radius:8px; margin:20px 0; padding:18px; min-width:0; }
+    legend { padding:0 7px; font-weight:650; }
+    .empty { padding:26px; background:var(--paper); border:1px dashed #b9c9be; border-radius:8px; color:var(--muted); }
+    .project { border-top:1px solid var(--line); padding:20px 0; }
+    .project:first-child { border-top:0; padding-top:0; }
+    .project p { overflow-wrap:anywhere; white-space:pre-wrap; }
+    .function-row { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:12px 0; border-top:1px solid #edf0eb; }
+    .function-row > div { min-width:0; overflow-wrap:anywhere; }
+    .function-row button { flex-shrink:0; }
+    .note { background:var(--paper); border-left:3px solid #93b8a2; padding:14px 16px; margin:16px 0; font-size:.87rem; }
+    .steps { margin:12px 0 0; padding-left:22px; }
+    .steps li { padding:5px 0 7px 5px; }
+    .table-wrap { overflow:auto; max-width:100%; }
+    table { width:100%; border-collapse:collapse; font-size:.85rem; }
+    caption { text-align:left; color:var(--muted); padding:0 0 12px; font-size:.84rem; }
+    th,td { text-align:left; padding:12px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { background:var(--paper); font-weight:650; white-space:nowrap; }
+    td { overflow-wrap:anywhere; }
+    .wide-table { min-width:1080px; }
+    .summary { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:16px 0; }
+    .summary div { padding:12px; background:var(--paper); border-radius:6px; }
+    .summary strong { display:block; font-size:.95rem; overflow-wrap:anywhere; }
+    details { border-top:1px solid var(--line); padding:15px 0; }
+    summary { cursor:pointer; font-weight:600; }
+    pre { max-height:450px; overflow:auto; background:#142b2d; color:#dbeae0; padding:20px; border-radius:8px; font:12px/1.6 ui-monospace,Consolas,monospace; }
+    .prose { white-space:pre-wrap; overflow-wrap:anywhere; }
+    footer { margin-top:24px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:20px; color:var(--muted); font-size:.8rem; }
+    [hidden] { display:none !important; }
+    @media(max-width:960px) { .grid { grid-template-columns:1fr; } .hero { grid-template-columns:1fr; } .source-tools { display:flex; align-items:end; flex-wrap:wrap; } .source-tools label { flex:1; min-width:200px; } }
+    @media(max-width:600px) { .shell { padding:0 16px 28px; } .stats { grid-template-columns:repeat(2,1fr); } .fields { grid-template-columns:1fr; } .card { padding:18px; } .topbar { align-items:start; } .brand { font-size:.9rem; } .tabs button { padding:12px; } .function-row { align-items:start; } footer { flex-direction:column; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to workspace</a>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="mark" aria-hidden="true">CO</span> Customer Outcomes Studio</div>
+      <span class="badge">LOCAL PROTOTYPE</span>
+    </header>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Evidence before optimization</div>
+        <h1>Better outcomes.<br>Accountable decisions.</h1>
+        <p class="muted">Explore whether explicit functionality, reviewed customer outcomes, and human-approved recommendations can support better delivery choices. Local learning only: no paid dispatch or autonomous execution.</p>
+      </div>
+      <div class="source-tools">
+        <label for="source">Isolated data workspace
+          <select id="source"><option value="real">Real observations</option><option value="synthetic">Synthetic demonstration</option></select>
+        </label>
+        <button id="seed-demo" type="button">Seed synthetic demo</button>
+        <button id="refresh" type="button">Refresh state</button>
+      </div>
+    </div>
+    <div id="source-notice" class="banner">REAL WORKSPACE &middot; No synthetic observations are included. Missing evidence is unknown, not zero.</div>
+    <p class="muted"><strong>Evidence boundary:</strong> No live dispatch, delivery-runtime execution or verification, or independent real-client verification occurs here. Human identities, measurements, and evidence provenance are attestations, not authenticated or automatically verified facts.</p>
+    <div id="error" role="alert" tabindex="-1" hidden></div>
+    <div id="status" role="status" aria-live="polite">Connecting to the local backend...</div>
+    <div class="stats" aria-label="Workspace summary">
+      <div class="stat"><strong id="stat-projects">Unknown</strong><span>Explicit projects</span></div>
+      <div class="stat"><strong id="stat-reviewed">Unknown</strong><span>Approved, reviewed outcomes</span></div>
+      <div class="stat"><strong id="stat-aes">Unknown</strong><span>Mean observed AES</span></div>
+      <div class="stat"><strong id="stat-policy">Unknown</strong><span>Active policy version</span></div>
+    </div>
+    <main id="main">
+      <nav class="tabs" role="tablist" aria-label="Studio workflow">
+        <button id="tab-projects" role="tab" aria-selected="true" aria-controls="panel-projects" tabindex="0">01 Projects</button>
+        <button id="tab-inspector" role="tab" aria-selected="false" aria-controls="panel-inspector" tabindex="-1">02 Recommend &amp; approve</button>
+        <button id="tab-feedback" role="tab" aria-selected="false" aria-controls="panel-feedback" tabindex="-1">03 Feedback &amp; review</button>
+        <button id="tab-learning" role="tab" aria-selected="false" aria-controls="panel-learning" tabindex="-1">04 Learn &amp; evaluate</button>
+      </nav>
+      <section id="panel-projects" role="tabpanel" aria-labelledby="tab-projects">
+        <div class="grid">
+          <article class="card">
+            <div class="card-head"><div><h2>Your project portfolio</h2><p class="muted">Start with the work the customer actually requested.</p></div><span class="badge" id="portfolio-source">REAL</span></div>
+            <label for="project-search">Filter projects and functionality<input id="project-search" type="search" placeholder="Search title, description, functionality, kind or complexity"></label>
+            <div class="actions" aria-label="Project pagination">
+              <button id="project-prev" type="button" disabled>Previous</button>
+              <span id="project-page-status" role="status" aria-live="polite">No projects loaded</span>
+              <button id="project-next" type="button" disabled>Next</button>
+            </div>
+            <p class="muted"><small>Up to 8 project cards per page. The observed-performance table below follows the same filter and page; summary totals cover the whole workspace.</small></p>
+            <div id="project-list" class="empty">Loading projects...</div>
+          </article>
+          <aside class="card">
+            <h2>The decision loop</h2>
+            <ol class="steps">
+              <li>Describe a project and explicitly list its functionality.</li>
+              <li>Inspect forecasts, request one recommendation, and approve or reject it by name.</li>
+              <li>Record the same autonomous cohort's outcomes, including unsuccessful work.</li>
+              <li>Have a human review the evidence before learning.</li>
+              <li>Train a candidate, evaluate protected validation outcomes, then explicitly promote only if permitted.</li>
+            </ol>
+            <div class="note">Synthetic performance is not business proof. Demo seeding creates reviewed example outcomes only; it never trains or promotes a model.</div>
+          </aside>
+        </div>
+        <article class="card">
+          <h2>Create a project</h2>
+          <p class="muted">No invented decomposition. Add each functionality yourself. Financial inputs are in USD, the only supported currency.</p>
+          <form id="project-form">
+            <div class="fields">
+              <label>Project title<input name="title" required maxlength="240" placeholder="Name the customer project"></label>
+              <label>Project / custom description<textarea name="description" required placeholder="Describe the customer need and success criteria"></textarea></label>
+            </div>
+            <div id="function-editors"></div>
+            <div class="actions">
+              <button id="add-function" type="button">+ Add explicit functionality</button>
+              <button id="create-project" class="primary" type="submit">Create project</button>
+            </div>
+            <small id="create-source">This project will be saved in the real workspace.</small>
+          </form>
+        </article>
+        <article class="card">
+          <h2>Actual functionality performance</h2>
+          <p class="muted">For the visible project page: means of observed signals from human-approved reviews, grouped by project and functionality. Unknown values are excluded per metric; n is the number of known observations. These are not forecasts or causal comparisons.</p>
+          <div id="performance" class="table-wrap"></div>
+        </article>
+      </section>
+      <section id="panel-inspector" role="tabpanel" aria-labelledby="tab-inspector" hidden>
+        <article class="card">
+          <h2>Inspect one explicit functionality</h2>
+          <div class="fields">
+            <label>Project<select id="project-select"></select></label>
+            <label>Functionality<select id="function-select"></select></label>
+          </div>
+          <div id="function-context" class="note">Choose a project and functionality first.</div>
+          <div class="fields">
+            <label>Protected cohort assignment<select id="split"><option value="train">Training cohort</option><option value="validation">Protected validation cohort (never trains)</option></select></label>
+            <div><small>Choose before recommending. Future validation cohorts must remain protected from training and tuning. A split label alone is not independent business evidence.</small></div>
+          </div>
+          <div class="actions">
+            <button id="predict" type="button">Load action forecasts</button>
+            <button id="recommend" type="button" class="primary">Recommend an action</button>
+          </div>
+        </article>
+        <article class="card">
+          <h2>Per-action forecasts</h2>
+          <p class="muted">Regression estimates outcome values from reviewed examples. A contextual bandit uses context and reward to assign action-selection probabilities. Selection probability is not confidence or probability of correctness. Neither establishes causality.</p>
+          <div id="forecast" class="empty">No forecasts requested. Unknown estimates stay unknown, including financial returns.</div>
+        </article>
+        <div class="grid">
+          <article class="card">
+            <h2>Human decision gate</h2>
+            <label>Recommendation<select id="decision-select"></select></label>
+            <div id="decision-detail" class="note">No recommendation selected.</div>
+            <form id="approval-form">
+              <label>Human approver identity<input id="approver" required autocomplete="name" placeholder="Name or accountable identifier"></label>
+              <label class="check"><input id="approval-confirm" type="checkbox" required>I attest that I inspected this proposal and its available evidence. This records a delivery choice, not live dispatch, runtime verification, or independent client verification.</label>
+              <small>Outcome evidence and its provenance are recorded in the next step, then independently reviewed.</small>
+              <div class="actions">
+                <button id="approve" class="primary" type="submit" value="true">Approve proposed action</button>
+                <button id="reject" type="submit" value="false">Reject proposed action</button>
+                <button id="go-feedback" type="button">Continue to feedback</button>
+              </div>
+            </form>
+          </article>
+          <aside class="card">
+            <h2>Available delivery actions</h2>
+            <div id="action-list"></div>
+            <div class="note">The policy proposes one action. A human can approve that exact action or reject it. There is no hidden override and no paid inference dispatch.</div>
+          </aside>
+        </div>
+      </section>
+      <section id="panel-feedback" role="tabpanel" aria-labelledby="tab-feedback" hidden>
+        <article class="card">
+          <h2>Record an observed outcome</h2>
+          <label>Decision to record or review<select id="feedback-decision"></select></label>
+          <p id="feedback-context" class="note">Choose an approved decision. Incomplete-reward feedback can be revised after regression training; reward-trained or evaluated evidence is immutable.</p>
+          <form id="feedback-form">
+            <label>Respondent identity<input name="respondent" required autocomplete="name"></label>
+            <fieldset>
+              <legend>Autonomous cohort &amp; efficiency</legend>
+              <p class="muted">Completed &le; assigned; kept &le; completed; useful &le; kept. Rescue-assisted units do not count as autonomous completions. Actual tokens include failures and retries. Blank means unknown; zero is valid.</p>
+              <div class="fields" id="cohort-fields"></div>
+            </fieldset>
+            <fieldset><legend>Customer experience &amp; delivery quality</legend><p class="muted">Observed ratings from 1 (lowest) to 5 (highest). Leave blank if not measured.</p><div class="fields" id="rating-fields"></div></fieldset>
+            <fieldset>
+              <legend>Realized financial outcomes (USD)</legend>
+              <p class="muted">Report measured amounts, not forecast values or sample ROI. Realized financial outcomes require evidence; unverified or incomplete inputs may leave rewards pending.</p>
+              <div class="fields" id="financial-fields"></div>
+              <label>Financial evidence provenance<select name="financial_evidence"><option value="unknown">Unknown / no financial evidence</option><option value="reported">Reported by respondent</option><option value="verified">Verified by respondent against evidence (not by Studio)</option></select></label>
+            </fieldset>
+            <div class="fields">
+              <label>Evidence / reference<textarea name="evidence" required placeholder="Measurement source, dates, cohort and supporting reference"></textarea></label>
+              <label>Functionality feedback / comments<textarea name="comments" placeholder="What worked, what failed, SOW or staffing improvements"></textarea></label>
+            </div>
+            <label class="check"><input name="window_closed" type="checkbox">The observation window is closed.</label>
+            <label class="check"><input name="safety_ok" type="checkbox">Safety requirements were met.</label>
+            <label class="check"><input name="budget_ok" type="checkbox">Budget requirements were met.</label>
+            <label class="check"><input id="evidence-attestation" type="checkbox" required>I attest that these observations and references match this workspace's source and that provenance is accurately described. The Studio has not executed delivery work or independently verified runtime results or real-client evidence.</label>
+            <button id="save-feedback" class="primary" type="submit">Save observed feedback</button>
+          </form>
+        </article>
+        <div class="grid">
+          <article class="card">
+            <h2>Review the evidence</h2>
+            <p class="muted">Reviewing feedback is separate from approving delivery. A rejected review must not become training evidence. The backend protects reward-trained and evaluated evidence across all model versions; regression-only use does not itself lock incomplete rewards.</p>
+            <div id="review-context" class="note">Save feedback before reviewing.</div>
+            <form id="review-form">
+              <div class="fields">
+                <label>Reviewer identity<input id="reviewer" required autocomplete="name"></label>
+                <label>Evidence review<select id="review-approved"><option value="true">Approve evidence for eligibility checks</option><option value="false">Reject evidence</option></select></label>
+                <label class="full">Review notes<textarea id="review-notes" required placeholder="Describe evidence checked and limitations"></textarea></label>
+              </div>
+              <label class="check"><input id="review-attestation" type="checkbox" required>I attest to the evidence checks described in my notes. This is a human review, not automated runtime or independent real-client verification.</label>
+              <button id="review" class="primary" type="submit">Record human review</button>
+            </form>
+          </article>
+          <article class="card">
+            <h2>Observed signals</h2>
+            <p class="muted">AES is the backend's autonomous effectiveness signal, not a satisfaction rating. Token yield measures useful units per 1,000 actual tokens. Ratios and rewards remain unknown when required evidence is missing.</p>
+            <div id="observed-signals" class="empty">No feedback yet.</div>
+          </article>
+        </div>
+      </section>
+      <section id="panel-learning" role="tabpanel" aria-labelledby="tab-learning" hidden>
+        <div class="grid">
+          <article class="card">
+            <div class="card-head"><div><h2>A candidate is not a deployment</h2><p class="muted">Training and evaluation do not change the active policy.</p></div><span id="model-status" class="badge">NO MODEL</span></div>
+            <div id="model-summary"></div>
+            <div class="actions">
+              <button id="train" class="primary" type="button">Train candidate</button>
+              <button id="evaluate" type="button">Evaluate candidate</button>
+            </div>
+            <div class="note">Only eligible, reviewed training observations may train. Validation decisions never train. Evaluation consumes only reward-complete, reviewed validation projects; incomplete outcomes remain pending. Reviewed counts are not eligibility counts. The backend controls readiness and may refuse an operation when evidence is insufficient.</div>
+            <h3>Evaluation &amp; promotion gate</h3>
+            <div id="evaluation"></div>
+            <form id="promotion-form">
+              <label>Promotion approver identity<input id="promotion-approver" required autocomplete="name"></label>
+              <label class="check"><input id="promotion-confirm" type="checkbox" required>I reviewed the evaluation, evidence limitations, and source. I explicitly approve this candidate's promotion.</label>
+              <button id="promote" type="submit" class="primary" disabled>Promote eligible candidate</button>
+            </form>
+          </article>
+          <aside class="card">
+            <h2>Two learning mechanisms</h2>
+            <h3>Outcome regression</h3>
+            <p class="muted">Predicts satisfaction, SOW quality, staffing fit, impact, AES, ROI, profit, and net benefit. Per-target sample counts and mean absolute error (MAE) describe fit; compare with baseline MAE. These metrics alone are not future accuracy guarantees.</p>
+            <h3>Contextual bandit</h3>
+            <p class="muted">Learns which delivery action to recommend using context, logged selection probabilities, and reviewed reward. Evaluation reports support, effective sample size, estimated reward gain, and a lower bound. This is not proof of a causal business benefit.</p>
+            <div class="note">Keep future validation cohorts untouched by training or iterative tuning. Promotion requires the backend's eligibility gate and a named human. Synthetic evidence demonstrates mechanics only.</div>
+          </aside>
+        </div>
+        <article class="card"><h2>Outcome predictor metrics</h2><div id="predictor-metrics" class="table-wrap"></div></article>
+      </section>
+      <details id="audit"><summary>Audit: source-isolated backend state snapshot</summary><p class="muted">Includes learned policy q/n, human identities, and evidence. The backend omits predictor internals and training rows from this compact snapshot. Treat real observations as sensitive. No external telemetry, libraries, fonts, or services are loaded.</p><pre id="raw-state">State not loaded.</pre></details>
+    </main>
+    <footer><span>LOCAL PROTOTYPE / persistent local backend / USD only</span><span>Human accountability, from recommendation to promotion.</span></footer>
+  </div>
+  <script>
+    "use strict";
+    const $ = id => document.getElementById(id);
+    let state = null;
+    let source = "real";
+    let projectId = "";
+    let functionId = "";
+    let decisionId = "";
+    let feedbackId = "";
+    let busy = false;
+    let functionSequence = 0;
+    let projectPage = 0;
+    const projectPageSize = 8;
+    const metricLabels = {
+      satisfaction:"Satisfaction (1-5)", sow_quality:"SOW quality (1-5)", staffing_fit:"Staffing fit (1-5)",
+      impact:"Impact (1-5)", aes:"AES", customer_roi:"Customer ROI", provider_profit_usd:"Provider profit (USD)",
+      net_benefit_usd:"Net benefit (USD)", completion_rate:"Completion rate", retention_rate:"Retention rate",
+      usefulness_rate:"Usefulness rate", token_yield_per_1000:"Useful units / 1,000 tokens", reward:"Reward"
+    };
+    const forecastKeys = ["satisfaction","sow_quality","staffing_fit","impact","aes","customer_roi","provider_profit_usd","net_benefit_usd"];
+    const cohortFields = [
+      ["completed_units","Autonomously completed units"],["kept_units","Kept units"],
+      ["useful_units","Useful units"],["actual_tokens","Actual tokens, including failures / retries"]
+    ];
+    const financialFields = [
+      ["customer_benefit_usd","Realized customer benefit (USD)"],["customer_cost_usd","Actual customer cost (USD)"],
+      ["provider_revenue_usd","Actual provider revenue (USD)"],["provider_cost_usd","Actual provider cost (USD)"]
+    ];
+    const numericFeedback = [...cohortFields.map(x=>x[0]),...forecastKeys.slice(0,4),...financialFields.map(x=>x[0])];
+    function node(tag, text, className) {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
+    }
+    function known(value) { return typeof value === "number" && Number.isFinite(value); }
+    function format(value, key = "") {
+      if (!known(value)) return "Unknown";
+      if (key === "customer_roi" || key.endsWith("_rate") || key === "probability") {
+        return (value * 100).toLocaleString(undefined,{maximumFractionDigits:1}) + "%";
+      }
+      if (key.endsWith("_usd")) return value.toLocaleString(undefined,{style:"currency",currency:"USD"});
+      return value.toLocaleString(undefined,{maximumFractionDigits:3});
+    }
+    function mean(rows,key) {
+      const values = rows.map(row => row.feedback?.signals?.[key]).filter(known);
+      return {value:values.length ? values.reduce((a,b)=>a+b,0)/values.length : null, count:values.length};
+    }
+    function reviewed() { return (state?.decisions || []).filter(d=>d.status==="approved" && d.feedback?.review?.approved===true); }
+    function currentProject() { return state?.projects.find(p=>p.id===projectId); }
+    function currentFunction() { return currentProject()?.functions.find(f=>f.id===functionId); }
+    function decision(id) { return state?.decisions.find(d=>d.id===id); }
+    function frozen(id) {
+      return Boolean(state?.model?.reward_ids?.includes(id) || state?.model?.evaluation_ids?.includes(id));
+    }
+    function filteredProjects() {
+      const query=$("project-search").value.trim().toLocaleLowerCase();
+      return (state?.projects || []).filter(project=>[
+        project.title,project.description,...project.functions.flatMap(fn=>[fn.name,fn.kind,fn.complexity])
+      ].join(" ").toLocaleLowerCase().includes(query));
+    }
+    function projectWindow() {
+      const projects=filteredProjects();
+      const pages=Math.max(1,Math.ceil(projects.length/projectPageSize));
+      projectPage=Math.max(0,Math.min(projectPage,pages-1));
+      return {projects,pages,visible:projects.slice(projectPage*projectPageSize,(projectPage+1)*projectPageSize)};
+    }
+    function renderAudit() {
+      $("raw-state").textContent=state
+        ? ($("audit").open ? JSON.stringify(state,null,2) : "Open this disclosure to render the current backend snapshot.")
+        : "State not loaded.";
+    }
+    function actionName(id) { return state?.actions.find(a=>a.id===id)?.name || id || "Unknown"; }
+    function showError(error) {
+      $("error").textContent = error instanceof Error ? error.message : String(error);
+      $("error").hidden = false;
+      $("error").focus();
+    }
+    async function api(route,payload) {
+      const response = await fetch("/api/" + route,{
+        method:payload === undefined ? "GET" : "POST",
+        headers:payload === undefined ? {} : {"Content-Type":"application/json"},
+        body:payload === undefined ? undefined : JSON.stringify(payload),
+        cache:"no-store", signal:AbortSignal.timeout(120000)
+      });
+      let data;
+      try { data = await response.json(); }
+      catch (error) { throw new Error("The local backend returned invalid JSON (" + response.status + "). " + error.message); }
+      if (!response.ok) throw new Error(data.error || "Request failed: HTTP " + response.status);
+      return data;
+    }
+    async function reload() {
+      const next = await api("state?source=" + encodeURIComponent(source));
+      if (next.source !== source) throw new Error("Backend source mismatch. Refusing to show mixed-source evidence.");
+      state = next;
+      render();
+    }
+    async function perform(button,label,work,completion) {
+      if (busy) return;
+      busy = true;
+      $("error").hidden = true;
+      $("status").textContent = label + "... Local demo seeding, training, or evaluation may take several seconds. Please wait; do not repeat the request.";
+      const original = button?.textContent;
+      const controls = [...document.querySelectorAll("button,input,select,textarea")].map(el=>[el,el.disabled]);
+      controls.forEach(([el])=>{el.disabled=true;});
+      if (button) button.textContent=label + "...";
+      document.querySelector("main").setAttribute("aria-busy","true");
+      try {
+        await work();
+        $("status").textContent = completion;
+      } catch (error) {
+        $("status").textContent = "Operation not completed. Check the error, then refresh state before retrying a write.";
+        showError(error.name==="TimeoutError" ? new Error("The backend timed out. A write may have completed; refresh state before retrying.") : error);
+      } finally {
+        controls.forEach(([el,disabled])=>{if(el.isConnected) el.disabled=disabled;});
+        if (button) button.textContent=original;
+        busy=false;
+        document.querySelector("main").setAttribute("aria-busy","false");
+        gates();
+      }
+    }
+    async function mutate(route,payload) {
+      const result = await api(route,payload);
+      try { await reload(); }
+      catch (error) { throw new Error("The " + route + " write succeeded, but state refresh failed: " + error.message + " Refresh before repeating the write."); }
+      return result;
+    }
+    function activateTab(name,focus=false) {
+      document.querySelectorAll('[role="tab"]').forEach(tab=>{
+        const selected=tab.id==="tab-"+name;
+        tab.setAttribute("aria-selected",String(selected));
+        tab.tabIndex=selected?0:-1;
+        $(tab.getAttribute("aria-controls")).hidden=!selected;
+        if(selected && focus) tab.focus();
+      });
+    }
+    document.querySelectorAll('[role="tab"]').forEach(tab=>{
+      tab.addEventListener("click",()=>activateTab(tab.id.slice(4)));
+      tab.addEventListener("keydown",event=>{
+        const tabs=[...document.querySelectorAll('[role="tab"]')];
+        let index=tabs.indexOf(tab);
+        if(event.key==="ArrowRight") index=(index+1)%tabs.length;
+        else if(event.key==="ArrowLeft") index=(index+tabs.length-1)%tabs.length;
+        else if(event.key==="Home") index=0;
+        else if(event.key==="End") index=tabs.length-1;
+        else return;
+        event.preventDefault();
+        activateTab(tabs[index].id.slice(4),true);
+      });
+    });
+    function options(select,items,selected,emptyText) {
+      select.replaceChildren();
+      if(!items.length) select.append(new Option(emptyText,""));
+      items.forEach(([value,label])=>select.append(new Option(label,value)));
+      if(items.some(([value])=>value===selected)) select.value=selected;
+      return select.value;
+    }
+    function table(container,headers,rows,caption,wide=false) {
+      container.replaceChildren();
+      if(!rows.length) { container.append(node("p","No reviewed observations yet. Unknown is not zero.","empty")); return; }
+      const t=node("table",undefined,wide?"wide-table":"");
+      if(caption) t.append(node("caption",caption));
+      const head=node("thead"), hr=node("tr");
+      headers.forEach(label=>{const th=node("th",label); th.scope="col"; hr.append(th);});
+      head.append(hr); t.append(head);
+      const body=node("tbody");
+      rows.forEach(row=>{const tr=node("tr"); row.forEach(value=>tr.append(node("td",value))); body.append(tr);});
+      t.append(body); container.append(t);
+    }
+    function pairs(container,entries) {
+      const group=node("div",undefined,"summary");
+      entries.forEach(([label,value])=>{
+        const item=node("div"); item.append(node("small",label),node("strong",value)); group.append(item);
+      });
+      container.append(group);
+    }
+    function labeledInput(container,name,label,{required=false,min="0",max,step="1",type="number",placeholder}={}) {
+      const wrap=node("label",label), input=node("input");
+      input.name=name; input.type=type; input.required=required;
+      if(type==="number") {input.min=min; input.step=step; if(max!==undefined) input.max=max;}
+      if(placeholder) input.placeholder=placeholder;
+      wrap.append(input); container.append(wrap);
+      return input;
+    }
+    function addFunction() {
+      const card=node("fieldset"); card.dataset.functionEditor="true";
+      card.append(node("legend","Explicit functionality " + (++functionSequence)));
+      const fields=node("div",undefined,"fields");
+      labeledInput(fields,"name","Functionality name / custom scope",{type:"text",required:true,placeholder:"Enter exactly what should be delivered"});
+      const kindLabel=node("label","Kind"), kind=node("select"); kind.name="kind";
+      (state?.kinds || ["extract","classify","plan","report","sow","staffing","custom"]).forEach(k=>kind.append(new Option(k,k)));
+      kind.value="custom"; kindLabel.append(kind); fields.append(kindLabel);
+      const complexityLabel=node("label","Complexity"), complexity=node("select"); complexity.name="complexity";
+      ["low","medium","high"].forEach(k=>complexity.append(new Option(k,k)));
+      complexity.value="medium"; complexityLabel.append(complexity); fields.append(complexityLabel);
+      labeledInput(fields,"assigned_units","Assigned autonomous units",{required:true,min:"1"});
+      labeledInput(fields,"estimated_tokens","Estimated tokens",{required:true});
+      labeledInput(fields,"customer_budget_usd","Customer budget (USD)",{required:true,step:"any"});
+      labeledInput(fields,"provider_budget_usd","Provider budget (USD)",{required:true,step:"any"});
+      labeledInput(fields,"reference_benefit_usd","Reference benefit (USD, planning assumption)",{required:true,step:"any"});
+      labeledInput(fields,"observation_days","Observation window (days)",{required:true,min:"1"});
+      const remove=node("button","Remove this functionality"); remove.type="button";
+      remove.addEventListener("click",()=>{card.remove(); gates();});
+      card.append(fields,remove); $("function-editors").append(card); gates();
+    }
+    function renderPortfolio() {
+      const {projects,pages,visible}=projectWindow();
+      const first=projects.length ? projectPage*projectPageSize+1 : 0;
+      $("project-page-status").textContent=projects.length
+        ? first+"-"+(first+visible.length-1)+" of "+projects.length+" matching projects / page "+(projectPage+1)+" of "+pages
+        : "0 matching projects";
+      const list=$("project-list"); list.replaceChildren(); list.className="";
+      if(!state.projects.length) list.append(node("div","No projects in this workspace. Describe a real project below, or explicitly seed and switch to the synthetic demo.","empty"));
+      else if(!projects.length) list.append(node("div","No matching projects. Clear or change the project filter.","empty"));
+      visible.forEach(project=>{
+        const article=node("div",undefined,"project");
+        article.append(node("h3",project.title),node("p",project.description,"muted"));
+        project.functions.forEach(fn=>{
+          const row=node("div",undefined,"function-row"), info=node("div");
+          info.append(node("strong",fn.name),node("small",fn.kind+" / "+fn.complexity+" / "+format(fn.assigned_units)+" assigned units"));
+          const open=node("button","Inspect"); open.type="button"; open.setAttribute("aria-label","Inspect "+fn.name);
+          open.addEventListener("click",()=>{
+            projectId=project.id; functionId=fn.id; decisionId=""; renderSelection(); activateTab("inspector",true);
+          });
+          row.append(info,open); article.append(row);
+        });
+        list.append(article);
+      });
+      const rows=[];
+      const keys=["aes","completion_rate","retention_rate","usefulness_rate","token_yield_per_1000","satisfaction","impact","sow_quality","staffing_fit","customer_roi","provider_profit_usd","net_benefit_usd"];
+      const observations=reviewed();
+      visible.forEach(p=>p.functions.forEach(f=>{
+        const outcomes=observations.filter(d=>d.project_id===p.id && d.function_id===f.id);
+        if(!outcomes.length) return;
+        rows.push([p.title+" / "+f.name,String(outcomes.length),...keys.map(key=>{
+          const values=outcomes.map(d=>["satisfaction","impact","sow_quality","staffing_fit"].includes(key)
+            ? d.feedback?.[key] : d.feedback?.signals?.[key]);
+          const valid=values.filter(known);
+          return format(valid.length?valid.reduce((a,b)=>a+b,0)/valid.length:null,key)+" (n="+valid.length+")";
+        })]);
+      }));
+      table($("performance"),["Project / functionality","Reviewed outcomes",...keys.map(k=>metricLabels[k])],rows,
+        (source==="synthetic"?"SYNTHETIC OBSERVATIONS - not business proof":"Reviewed real observations")+" / project page "+(projectPage+1)+" of "+pages,true);
+      gates();
+    }
+    function renderSelection() {
+      projectId=options($("project-select"),state.projects.map(p=>[p.id,p.title]),projectId,"Create a project first");
+      functionId=options($("function-select"),(currentProject()?.functions || []).map(f=>[f.id,f.name]),functionId,"No functionality");
+      const fn=currentFunction();
+      $("function-context").textContent=fn
+        ? fn.name+" / "+fn.kind+" / "+fn.complexity+" complexity. Assigned: "+format(fn.assigned_units)+" units. Estimated tokens: "+format(fn.estimated_tokens)+". Customer budget: "+format(fn.customer_budget_usd,"customer_budget_usd")+". Provider budget: "+format(fn.provider_budget_usd,"provider_budget_usd")+". Reference benefit (assumption, not realized): "+format(fn.reference_benefit_usd,"reference_benefit_usd")+". Observation: "+format(fn.observation_days)+" days."
+        : "Choose a project and functionality first.";
+      $("forecast").className="empty";
+      $("forecast").textContent="No forecasts requested for this selection. Missing estimates remain unknown.";
+      const matching=state.decisions.filter(d=>d.project_id===projectId && d.function_id===functionId);
+      decisionId=options($("decision-select"),matching.map(d=>[d.id,actionName(d.action)+" / "+d.status+" / "+d.split+" / "+d.id]),decisionId,"No recommendation for this functionality");
+      renderDecision();
+    }
+    function renderDecision() {
+      const d=decision(decisionId), box=$("decision-detail"); box.replaceChildren();
+      $("approval-confirm").checked=false;
+      if(d) {
+        pairs(box,[["Proposed action",actionName(d.action)],["Status",d.status],["Cohort",d.split],
+          ["Logged policy version",String(d.policy_version)],["Human approver",d.approver || "Not approved"],
+          ["Selection probability",format(d.probabilities?.[d.action],"probability")]]);
+        box.append(node("small","Decision ID: "+d.id+". Selection probability describes the policy's choice, not forecast accuracy."));
+      } else box.textContent="No recommendation selected.";
+      gates();
+    }
+    function renderFeedback() {
+      feedbackId=options($("feedback-decision"),state.decisions.filter(d=>d.status==="approved").map(d=>{
+        const p=state.projects.find(p=>p.id===d.project_id), fn=p?.functions.find(f=>f.id===d.function_id);
+        return [d.id,(p?.title || d.project_id)+" / "+(fn?.name || d.function_id)+" / "+actionName(d.action)+" / "+d.id];
+      }),feedbackId,"Approve a recommendation first");
+      const d=decision(feedbackId), fb=d?.feedback, form=$("feedback-form");
+      form.reset();
+      numericFeedback.forEach(key=>{form.elements.namedItem(key).value=fb?.[key] ?? "";});
+      ["respondent","evidence","comments"].forEach(key=>{form.elements.namedItem(key).value=fb?.[key] ?? "";});
+      form.elements.namedItem("financial_evidence").value=fb?.financial_evidence || "unknown";
+      ["window_closed","safety_ok","budget_ok"].forEach(key=>{form.elements.namedItem(key).checked=fb?.[key]===true;});
+      const p=state.projects.find(p=>p.id===d?.project_id), fn=p?.functions.find(f=>f.id===d?.function_id);
+      $("feedback-context").textContent=d
+        ? "Assigned cohort: "+format(fn?.assigned_units)+" units. Action: "+actionName(d.action)+". Split: "+d.split+". "+(frozen(d.id)?"Locked: used as reward-training or evaluation evidence. Record a new work cohort.":"Incomplete-reward feedback may be revised even after regression training; revisions need review. The backend also checks locks from all historical models.")
+        : "Choose an approved decision first.";
+      $("reviewer").value=fb?.review?.reviewer ?? "";
+      $("review-notes").value=fb?.review?.notes ?? "";
+      $("review-approved").value=fb?.review?.approved===false?"false":"true";
+      $("review-attestation").checked=false;
+      $("review-context").textContent=fb
+        ? "Evidence: "+(fb.evidence || "Unknown")+"\nComments: "+(fb.comments || "None recorded")+"\nReview: "+(fb.review?(fb.review.approved?"Approved":"Rejected")+" by "+fb.review.reviewer:"Pending")
+        : "Save feedback before reviewing.";
+      $("review-context").classList.add("prose");
+      const box=$("observed-signals"); box.replaceChildren(); box.className="";
+      if(!fb) box.append(node("p","No feedback yet.","empty"));
+      else {
+        pairs(box,Object.keys(metricLabels).map(key=>[metricLabels[key],format(fb.signals?.[key] ?? fb[key],key)]));
+        box.append(node("p","Reward pending: "+(fb.signals?.reward_pending?.join(", ") || "None reported")));
+        box.append(node("p","Feedback themes: "+(fb.signals?.themes?.join(", ") || "None reported")));
+      }
+      gates();
+    }
+    function renderLearning() {
+      const model=state.model, box=$("model-summary"); box.replaceChildren();
+      $("model-status").textContent=model?model.status.toUpperCase():"NO MODEL";
+      const eligible=reviewed();
+      pairs(box,[["Reviewed training outcomes",String(eligible.filter(d=>d.split==="train").length)],
+        ["Reviewed protected outcomes",String(eligible.filter(d=>d.split==="validation").length)],
+        ["Model version",model?String(model.version):"Unknown"],
+        ["Training count",format(model?.training_count)],["Model policy updates",format(model?.policy_updates)],
+        ["Active policy updates",format(state.policy_updates)]]);
+      const evaluation=model?.evaluation, result=$("evaluation"); result.replaceChildren();
+      if(!evaluation) result.append(node("p","Not evaluated. Promotion is unavailable.","empty"));
+      else {
+        result.append(node("p",(evaluation.eligible?"ELIGIBLE":"NOT ELIGIBLE")+" - "+evaluation.reason,"note"));
+        pairs(result,[["Protected validation count",format(evaluation.validation_count)],["Effective sample size",format(evaluation.effective_sample_size)],
+          ["Estimated reward gain",format(evaluation.estimated_reward_gain)],["Lower bound",format(evaluation.lower_bound)]]);
+      }
+      $("promotion-confirm").checked=false;
+      table($("predictor-metrics"),["Regression target","Examples","MAE","Baseline MAE"],
+        Object.entries(model?.predictor_metrics || {}).map(([key,value])=>[metricLabels[key] || key,format(value.count),format(value.mae),format(value.baseline_mae)]),
+        source==="synthetic"?"SYNTHETIC model diagnostics - not proof of business value":"Per-target model diagnostics");
+    }
+    function render() {
+      $("source").value=source;
+      $("source-notice").className="banner"+(source==="synthetic"?" synthetic":"");
+      $("source-notice").textContent=source==="synthetic"
+        ? "SYNTHETIC DATA ONLY - Projects, outcomes, forecasts, and financial values in this workspace are demonstrations. Not real customer results or business proof."
+        : "REAL WORKSPACE - No synthetic observations are included. Missing evidence is unknown, not zero.";
+      $("portfolio-source").textContent=source.toUpperCase();
+      $("create-source").textContent="This project will be saved in the "+source+" workspace.";
+      $("stat-projects").textContent=String(state.projects.length);
+      $("stat-reviewed").textContent=String(reviewed().length);
+      $("stat-aes").textContent=format(mean(reviewed(),"aes").value);
+      $("stat-policy").textContent=format(state.active_policy_version);
+      renderAudit();
+      renderPortfolio(); renderSelection(); renderFeedback(); renderLearning();
+      $("action-list").replaceChildren();
+      state.actions.forEach(a=>{const item=node("div",undefined,"project"); item.append(node("h3",a.name),node("p",a.description,"muted")); $("action-list").append(item);});
+      gates();
+    }
+    function gates() {
+      const selected=Boolean(currentFunction()), d=decision(decisionId), fb=decision(feedbackId);
+      $("create-project").disabled=busy || !state || !$("function-editors").children.length;
+      $("predict").disabled=busy || !selected;
+      $("recommend").disabled=busy || !selected;
+      $("approve").disabled=busy || d?.status!=="proposed";
+      $("reject").disabled=busy || d?.status!=="proposed";
+      $("go-feedback").disabled=busy || d?.status!=="approved";
+      $("save-feedback").disabled=busy || !fb || frozen(fb.id);
+      $("review").disabled=busy || !fb?.feedback || frozen(fb.id);
+      $("train").disabled=busy || !state;
+      $("evaluate").disabled=busy || state?.model?.status!=="candidate";
+      $("promote").disabled=busy || state?.model?.status!=="candidate" || state?.model?.evaluation?.eligible!==true;
+      $("project-prev").disabled=busy || !state || projectPage===0;
+      $("project-next").disabled=busy || !state || (projectPage+1)*projectPageSize>=filteredProjects().length;
+      $("project-search").disabled=busy || !state;
+    }
+    $("project-search").addEventListener("input",()=>{projectPage=0; renderPortfolio();});
+    $("project-prev").addEventListener("click",()=>{projectPage--; renderPortfolio();});
+    $("project-next").addEventListener("click",()=>{projectPage++; renderPortfolio();});
+    $("audit").addEventListener("toggle",renderAudit);
+    $("add-function").addEventListener("click",addFunction);
+    $("project-select").addEventListener("change",()=>{projectId=$("project-select").value; functionId=""; decisionId=""; renderSelection();});
+    $("function-select").addEventListener("change",()=>{functionId=$("function-select").value; decisionId=""; renderSelection();});
+    $("decision-select").addEventListener("change",()=>{decisionId=$("decision-select").value; renderDecision();});
+    $("feedback-decision").addEventListener("change",()=>{feedbackId=$("feedback-decision").value; renderFeedback();});
+    $("refresh").addEventListener("click",()=>perform($("refresh"),"Refreshing",reload,"State refreshed from the persistent local backend."));
+    $("source").addEventListener("change",()=>{
+      const requested=$("source").value;
+      perform(null,"Switching workspace",async()=>{
+        const previous=source; source=requested;
+        const previousPage=projectPage, previousQuery=$("project-search").value;
+        projectPage=0; $("project-search").value="";
+        try { await reload(); } catch(error) {
+          source=previous; $("source").value=previous; projectPage=previousPage; $("project-search").value=previousQuery; throw error;
+        }
+      },"Workspace loaded. Real and synthetic observations remain isolated.");
+    });
+    $("seed-demo").addEventListener("click",()=>perform($("seed-demo"),"Seeding synthetic data",async()=>{
+      await api("demo",{});
+      source="synthetic"; state=null; projectId=""; functionId=""; decisionId=""; feedbackId="";
+      projectPage=0; $("project-search").value=""; $("project-page-status").textContent="Synthetic projects not loaded";
+      // Do not leave real observations visible under a synthetic source label if refresh fails.
+      $("source").value=source;
+      $("source-notice").className="banner synthetic";
+      $("source-notice").textContent="SYNTHETIC DATA - demo seeding completed. Loading synthetic workspace; no training or promotion performed.";
+      ["project-list","performance","forecast","function-context","decision-detail","feedback-context","review-context",
+        "observed-signals","model-summary","evaluation","predictor-metrics","action-list"].forEach(id=>{
+        $(id).textContent="Synthetic workspace is not loaded yet. Refresh state to continue.";
+      });
+      ["project-select","function-select","decision-select","feedback-decision"].forEach(id=>$(id).replaceChildren(new Option("Refresh synthetic state","")));
+      ["stat-projects","stat-reviewed","stat-aes","stat-policy"].forEach(id=>{$(id).textContent="Unknown";});
+      $("portfolio-source").textContent="SYNTHETIC";
+      $("model-status").textContent="NOT LOADED";
+      $("create-source").textContent="This project will be saved in the synthetic workspace.";
+      $("feedback-form").reset(); $("review-form").reset(); $("approval-confirm").checked=false; $("promotion-confirm").checked=false;
+      $("raw-state").textContent="Refreshing synthetic state...";
+      await reload();
+      activateTab("projects");
+    },"Synthetic demo seeded and loaded. No candidate was trained or promoted."));
+    $("project-form").addEventListener("submit",event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      const payload={title:form.elements.namedItem("title").value.trim(),description:form.elements.namedItem("description").value.trim(),source,
+        functions:[...$("function-editors").children].map(card=>{
+          const value=name=>card.querySelector('[name="'+name+'"]').value;
+          return {id:crypto.randomUUID(),name:value("name").trim(),kind:value("kind"),complexity:value("complexity"),
+            ...Object.fromEntries(["assigned_units","estimated_tokens","customer_budget_usd","provider_budget_usd","reference_benefit_usd","observation_days"].map(key=>[key,Number(value(key))]))};
+        })};
+      perform($("create-project"),"Creating project",async()=>{
+        const created=await mutate("projects",payload);
+        projectId=created.id; functionId=created.functions?.[0]?.id || ""; renderSelection();
+        $("project-search").value="";
+        projectPage=Math.floor(Math.max(0,state.projects.findIndex(project=>project.id===created.id))/projectPageSize);
+        renderPortfolio();
+        form.reset(); $("function-editors").replaceChildren(); addFunction();
+      },"Project and its explicit functionality saved. Inspect a functionality to continue.");
+    });
+    $("predict").addEventListener("click",()=>perform($("predict"),"Estimating outcomes",async()=>{
+      const result=await api("predict",{project_id:projectId,function_id:functionId});
+      if(result.source!==source) throw new Error("Prediction source mismatch. Forecasts were not displayed.");
+      $("forecast").className="table-wrap";
+      table($("forecast"),["Action","Selection probability",...forecastKeys.map(key=>metricLabels[key]),"Support","Abstention / range check","Uncertainty"],
+        result.options.map(option=>[actionName(option.action),format(option.probability,"probability"),
+          ...forecastKeys.map(key=>format(option.estimates?.[key],key)),
+          option.support.status+" / "+format(option.support.training_examples)+" examples / "+format(option.support.independent_projects)+" independent projects",
+          option.support.outside_observed_ranges?.length
+            ? "ABSTAINED: outside observed training ranges for "+option.support.outside_observed_ranges.join(", ")+". Outcome estimates are unknown; do not extrapolate."
+            : (option.support.outside_observed_ranges ? "No out-of-range inputs reported. Unknown estimates can still reflect insufficient matching training support." : "Range check unknown."),
+          option.uncertainty]),
+        (source==="synthetic"?"SYNTHETIC forecasts - not business proof. ":"Real workspace forecasts. ")+"Model version: "+(result.model_version ?? "Unknown")+". USD only. Unknown estimates are not zero.",true);
+    },"Forecasts loaded. Inspect support and uncertainty before requesting a recommendation."));
+    $("recommend").addEventListener("click",()=>perform($("recommend"),"Recommending",async()=>{
+      const result=await mutate("recommend",{project_id:projectId,function_id:functionId,split:$("split").value});
+      decisionId=result.id; renderSelection();
+    },"Recommendation recorded as proposed. A named human must approve or reject it."));
+    $("approval-form").addEventListener("submit",event=>{
+      event.preventDefault();
+      const approved=event.submitter?.value==="true", selectedId=decisionId;
+      const payload={decision_id:selectedId,approver:$("approver").value.trim(),approved};
+      perform(event.submitter,approved?"Approving choice":"Rejecting choice",async()=>{
+        await mutate("approve",payload);
+        if(approved) {feedbackId=selectedId; renderFeedback();}
+      },approved?"Human approval saved. No work was dispatched. Record observations when available.":"Human rejection saved. No work was dispatched.");
+    });
+    $("go-feedback").addEventListener("click",()=>{feedbackId=decisionId; renderFeedback(); activateTab("feedback",true);});
+    $("feedback-form").addEventListener("submit",event=>{
+      event.preventDefault();
+      const form=event.currentTarget, payload={decision_id:feedbackId};
+      numericFeedback.forEach(key=>{const value=form.elements.namedItem(key).value; payload[key]=value===""?null:Number(value);});
+      ["respondent","financial_evidence","evidence","comments"].forEach(key=>{payload[key]=form.elements.namedItem(key).value.trim();});
+      ["window_closed","safety_ok","budget_ok"].forEach(key=>{payload[key]=form.elements.namedItem(key).checked;});
+      perform($("save-feedback"),"Saving observations",async()=>{
+        const d=decision(feedbackId), fn=state.projects.find(p=>p.id===d.project_id)?.functions.find(f=>f.id===d.function_id);
+        const {completed_units:c,kept_units:k,useful_units:u}=payload;
+        if((c!==null && c>fn.assigned_units) || (c!==null && k!==null && k>c) || (k!==null && u!==null && u>k)) {
+          throw new Error("Cohort counts must satisfy useful <= kept <= completed <= assigned. Rescue-assisted units are excluded from completed.");
+        }
+        await mutate("feedback",payload);
+      },"Observed feedback saved. Review the evidence before it can become eligible for learning.");
+    });
+    $("review-form").addEventListener("submit",event=>{
+      event.preventDefault();
+      const payload={decision_id:feedbackId,reviewer:$("reviewer").value.trim(),approved:$("review-approved").value==="true",notes:$("review-notes").value.trim()};
+      perform($("review"),"Recording review",()=>mutate("review",payload),"Human evidence review saved. Backend eligibility checks still apply.");
+    });
+    $("train").addEventListener("click",()=>perform($("train"),"Training candidate",()=>mutate("train",{source}),"Candidate trained. The active policy is unchanged; evaluation and human promotion are still required."));
+    $("evaluate").addEventListener("click",()=>perform($("evaluate"),"Evaluating candidate",()=>mutate("evaluate",{source}),"Candidate evaluated. Review the eligibility result; evaluation does not promote."));
+    $("promotion-form").addEventListener("submit",event=>{
+      event.preventDefault();
+      const payload={source,approver:$("promotion-approver").value.trim()};
+      perform($("promote"),"Promoting candidate",()=>mutate("promote",payload),"Explicit human promotion completed. The active policy shown above is refreshed from the backend.");
+    });
+    cohortFields.forEach(([key,label])=>labeledInput($("cohort-fields"),key,label));
+    forecastKeys.slice(0,4).forEach(key=>labeledInput($("rating-fields"),key,metricLabels[key],{min:"1",max:"5"}));
+    financialFields.forEach(([key,label])=>labeledInput($("financial-fields"),key,label,{step:"any"}));
+    addFunction();
+    perform(null,"Loading real workspace",reload,"Real workspace ready. Create an explicit project, or choose Seed synthetic demo.");
+  </script>
+</body>
+</html>

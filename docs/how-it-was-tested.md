@@ -151,6 +151,26 @@ state.
 
 Reinforcement requires an explicit reward, not vague positive feedback.
 
+The [local delivered-project feedback prototype](customer-outcomes-prototype.md)
+has executable coverage in `tests/test_customer_outcomes.py`,
+`tests/test_delivery_feedback.py`, and `tests/test_brick_learning.py`. These
+tests exercise reward extraction, outcome regression, pending evidence,
+real/synthetic separation, duplicate-credit prevention, protected holdouts,
+human-gated promotion, persistence, HTTP boundaries, and changed recommendations.
+They demonstrate local learning with synthetic evidence, not production
+customer-value improvements.
+
+Run these alongside the existing model and measurement-policy tests:
+
+```powershell
+python -m pytest -q tests/test_customer_outcomes.py tests/test_delivery_feedback.py tests/test_brick_learning.py tests/test_customer_models.py tests/test_marketplace_models.py tests/test_measurement_policy.py
+```
+
+The existing measurement policy rewards calibration improvement per reference
+dollar and is gated to offline mocks. The verified business-impact reward
+described below remains a proposed validation plan, not live ROI-learning
+results already demonstrated by the recorded campaign.
+
 Token Yield separates several signals:
 
 | Signal | Example metric | Why it matters |
@@ -163,19 +183,39 @@ Token Yield separates several signals:
 | Human effort | Review and correction time | Captures work shifted from agents to people |
 | Client value | Adoption, time saved, cost avoided, revenue supported | Builds the future outcome and ROI model |
 
-A candidate reward can be expressed as a governed score:
+The proposed outcome funnel and reward are defined in the
+[learning architecture](architecture.md#8-learn-from-delivery):
 
 ```text
-reward =
-    accepted_outcome_value
-    - token_and_tool_cost
-    - human_review_cost
-    - quality_and_risk_penalties
+AES = 100 * independent_completion * retention * verified_customer_usefulness
+net_benefit = verified_attributable_benefit - total_delivery_and_operating_cost
+reward = w_A * (AES / 100)
+       + w_B * clip(net_benefit / reference_benefit, -1, 1)
 ```
 
-The metric definition, weights, time horizon, and evidence confidence must be
-versioned. Missing client feedback stays unknown rather than becoming zero.
-Client-reported value remains distinct from independently measured value.
+The weights sum to one; the reference benefit is positive. Freeze the cohort,
+work-unit definitions, weights, evidence threshold, and observation window
+before a trial. Safety, acceptance, and budget gates cannot be overridden by
+reward. Financial costs already included in net benefit are not subtracted
+twice. Client-reported value remains distinct from verified value.
+
+Before enabling a production business-impact extension, validate these cases
+against delivery evidence; local synthetic tests are not sufficient:
+
+| Proposed test | Required outcome |
+| --- | --- |
+| 100 assigned units, 80 independently completed, 60 kept, 30 verified useful | A = 0.8, K = 0.75, U = 0.5, AES = 30 |
+| Required human approval with no corrective intervention | Approval does not reduce independent completion |
+| Substantive human correction or agent retries | Rescue is recorded; all resource and review costs remain charged |
+| No assigned units or invalid funnel counts | No score; report the invalid scope or inconsistent evidence |
+| Proven zero completions or zero retained units | Zero useful autonomous yield; downstream rates are not applicable |
+| Missing customer outcome evidence | Provisional funnel only; final reward remains pending |
+| Duplicate or delayed feedback | Credit the original work once; retain timestamp and evidence revisions |
+| Claimed time savings without a monetization baseline | Do not turn hours into verified financial benefit |
+| Verified benefit below full delivery cost | Preserve negative net benefit and ROI |
+| Zero or unknown total cost | ROI remains unavailable |
+| High reward with failed safety or budget checks | Block policy promotion and execution |
+| Policy learned on calibration feedback | Final holdouts remain untouched by reward tuning |
 
 New records are scored against the model that existed before they arrived.
 Only then are they eligible for the training store. This preserves drift and

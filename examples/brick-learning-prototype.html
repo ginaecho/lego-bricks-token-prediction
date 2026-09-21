@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brick learning | Token Yield Studio</title>
+<style>
+:root{--ink:#17362f;--green:#266754;--paper:#f5f4ef;--line:#dce2d9;--muted:#62716a}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:auto;padding:24px}header,.actions,.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header{justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:16px}nav{display:flex;gap:18px;flex-wrap:wrap}
+a{color:var(--green)}h1{font-size:clamp(28px,4vw,42px);letter-spacing:-1.3px;line-height:1.15;margin:10px 0}h2{font-size:21px;margin:0 0 8px}h3{font-size:16px;margin:0 0 8px}
+p{margin:8px 0 16px}.eyebrow{font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--green)}.intro{padding:24px 0 4px}.muted,small{color:var(--muted)}small{font-size:12px}
+.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;margin:16px 0}
+.flow{display:flex;gap:10px;flex-wrap:wrap;font-weight:650}.flow span,.badge{background:#eaf0e9;border-radius:6px;padding:6px 10px}.badge{display:inline-block;font-size:12px}
+.controls{align-items:flex-end}.controls label{min-width:150px}label{font-weight:600;font-size:13px;display:block}
+input,select,button{font:inherit;border:1px solid #b9c6bc;border-radius:7px;padding:9px 12px}input,select{display:block;margin-top:5px;color:var(--ink);background:white}
+button{cursor:pointer;background:var(--green);border-color:var(--green);color:white;font-weight:600}button.secondary{background:white;color:var(--green)}button:disabled{opacity:.5;cursor:not-allowed}
+.notice{padding:12px 14px;background:#fff5dd;border:1px solid #e9d8ab;border-radius:8px;margin:12px 0}
+#error{background:#fff0ed;color:#8c2721;border:1px solid #e3b8ad;padding:15px;border-radius:8px;margin-top:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.table-scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:12px;color:var(--muted)}
+details{margin-top:8px}summary{cursor:pointer;color:var(--green)}ul,ol{padding-left:22px}li{margin:7px 0}.description{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--paper);padding:14px;border-radius:7px}
+#recommendations li{padding:12px;border:1px solid var(--line);border-radius:8px}#recommendations small{display:block;margin-top:6px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}.approval{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}
+footer{font-size:13px;color:var(--muted);padding:12px 0 24px}:focus-visible{outline:3px solid #cc8f48;outline-offset:3px}[hidden]{display:none!important}
+@media(max-width:680px){main{padding:16px}.card{padding:16px}.split{grid-template-columns:1fr;gap:4px}.controls>*{flex:1 1 100%}input,select{width:100%}header{align-items:flex-start}}
+</style>
+</head>
+<body><main>
+<header><strong>Token Yield / Internal learning</strong><nav aria-label="Studio links">
+<a id="marketplace-link" href="http://127.0.0.1:8784/marketplace-sales-demo.html">Marketplace Studio</a>
+<a id="custom-link" href="http://127.0.0.1:8784/marketplace-sales-demo.html?mode=custom">Custom-project Studio</a>
+<a href="http://127.0.0.1:8793/">Customer feedback</a>
+</nav></header>
+<section class="intro">
+<span class="eyebrow">Internal operator prototype · /learning</span>
+<h1>Make delivery experience useful.</h1>
+<p>Can feedback improve both internal marketplace rankings and the choices recommended for an existing project? Preview the evidence, evaluate a candidate, then let a named human approve it.</p>
+<div class="flow" aria-label="Learning loop"><span>Customer feedback</span><span>→ Experience rewards</span><span>→ Internal brick rankings + better-matched recommendations</span></div>
+</section>
+<div id="error" role="alert" hidden></div>
+<section class="card" aria-label="Learning controls">
+<div class="controls">
+<label>Evidence source<select id="source"><option value="real" selected>Real delivered projects</option><option value="synthetic">Synthetic demonstration</option></select></label>
+<label>Ranking view<select id="stage"><option value="candidate" selected>Candidate preview</option><option value="active">Active approved policy</option></select></label>
+<button id="refresh" class="secondary" type="button">Refresh evidence</button>
+<button id="seed-demo" class="secondary" type="button">Load synthetic example</button>
+</div>
+<p id="source-note" class="muted">Real evidence is the default. No synthetic examples are loaded automatically.</p>
+<p id="operation-status" role="status" aria-live="polite"></p>
+<div class="approval">
+<div class="controls"><label>Named human approver<input id="approver" autocomplete="name" maxlength="200" placeholder="Your full name"></label>
+<button id="promote" type="button">Evaluate &amp; approve candidate</button></div>
+<p class="muted">Activation is never automatic. This action evaluates the selected source's candidate against logged held-out evidence; approval only activates an eligible candidate. Synthetic evidence stays separate from real learning.</p>
+<p id="evaluation" role="status"></p>
+</div>
+</section>
+<section class="card" aria-labelledby="ranking-title">
+<span class="eyebrow">Use 1 / Marketplace</span><h2 id="ranking-title">Internal brick rankings</h2>
+<p id="ranking-state" class="badge">Loading evidence…</p>
+<p class="muted">Experience score /100 is a descriptive feedback summary, not AES, ROI, or proof of causal impact. Different functions are not interchangeable. At least three independent delivered projects are needed; cold bricks are unranked, not failed.</p>
+<div class="table-scroll"><table id="rankings"><caption class="muted">Delivered-project experience by functionality</caption>
+<thead><tr><th scope="col">Rank</th><th scope="col">Feature</th><th scope="col">Experience score /100</th><th scope="col">Independent delivered projects</th><th scope="col">Best-supported option</th></tr></thead>
+<tbody id="ranking-rows"><tr><td colspan="5">Loading…</td></tr></tbody>
+</table></div>
+<p id="ranking-empty" class="muted"></p>
+<button id="send-rankings" class="secondary" type="button" disabled>Show internal rankings in Studio</button>
+</section>
+<section class="card" aria-labelledby="custom-title">
+<span class="eyebrow">Use 2 / Existing custom project</span><h2 id="custom-title">Recommendations for the handed-off needs</h2>
+<div class="split"><div><h3>Read-only Studio handoff</h3><p id="brief-label" class="muted"></p><p id="description" class="description">No Studio project has been handed off.</p></div>
+<div><h3>Matching needs from Studio</h3><ul id="matches"></ul><p id="no-matches">Open your existing project in <a id="handoff-link" href="http://127.0.0.1:8784/marketplace-sales-demo.html?mode=custom">Custom-project Studio</a> and hand its matched needs to learning. No new project is created here.</p></div></div>
+<p class="notice">Needs and exclusions require human review. Keyword matches are supplied by Studio, never inferred here from prose. All matched functions remain included; only option/model choice and recommendation priority can change.</p>
+<button id="recommend" type="button" disabled>Generate recommendations</button>
+<p class="muted">Uses the selected source's <strong>active bandit</strong>, even while rankings show a candidate preview. Each generation logs decisions; it does not change or purchase your build. Outcomes and ROI remain unknown.</p>
+<p id="recommendation-state" role="status"></p><ol id="recommendations"></ol>
+<button id="send-recommendations" class="secondary" type="button" disabled>Review and use these recommendations in Studio</button>
+</section>
+<p id="bridge-status" role="status" class="notice">Nothing changes in Studio automatically. Results are sent only when you explicitly choose a return button.</p>
+<footer>This is a one-step contextual bandit learning from delivered-project feedback, not LLM fine-tuning. Rankings summarize experience; recommendations select among matching options. Neither promises a business outcome.</footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const allowedOrigin = /^http:\/\/(127\.0\.0\.1|localhost):(8784|8791)$/;
+if (new URLSearchParams(location.search).get('source') === 'synthetic') $('source').value = 'synthetic';
+let bridge = null, catalog = [], latestRank = null, generated = null, busy = false, ready = false;
+const text = (id, value) => { $(id).textContent = value; };
+const el = (tag, value) => { const node = document.createElement(tag); node.textContent = value; return node; };
+const string = value => typeof value === 'string' && value.trim().length > 0;
+const score = value => typeof value === 'number' && Number.isFinite(value) ? value.toFixed(1) + ' /100' : 'Unranked';
+const count = value => Number.isInteger(value) && value >= 0 ? String(value) : 'Unknown';
+const displayRank = value => Number.isInteger(value) && value > 0 ? String(value) : 'Unranked';
+function fail(error) {
+  text('error', error instanceof Error ? error.message : String(error));
+  $('error').hidden = false;
+}
+function validateCatalog(value) {
+  if (!Array.isArray(value) || value.some(brick => !brick || !string(brick.feature_id) || !string(brick.name) ||
+      !Array.isArray(brick.options) || brick.options.some(option => !option || !string(option.variant_id) ||
+      !string(option.model_id) || !string(option.name))) ||
+      new Set(value.map(brick => brick.feature_id)).size !== value.length) {
+    throw new Error('The Studio catalog is invalid. Reopen learning from Studio with a valid catalog.');
+  }
+  return value.map(brick => ({feature_id: brick.feature_id, name: brick.name,
+    options: brick.options.map(option => ({variant_id: option.variant_id, model_id: option.model_id, name: option.name}))}));
+}
+function readBridge() {
+  const raw = new URLSearchParams(location.hash.slice(1)).get('studio');
+  if (raw === null) return null;
+  let value;
+  try { value = JSON.parse(raw); } catch (_) { throw new Error('The Studio handoff could not be decoded. Reopen learning from Studio.'); }
+  if (!value || !string(value.request_id) || !allowedOrigin.test(value.return_origin) ||
+      !['manual', 'custom'].includes(value.mode) || typeof value.description !== 'string' ||
+      !Array.isArray(value.matches) || value.matches.some(match => !match || !string(match.feature_id) ||
+      !Array.isArray(match.variant_ids) || !match.variant_ids.length || match.variant_ids.some(id => !string(id)) ||
+      typeof match.reason !== 'string') || new Set(value.matches.map(match => match.feature_id)).size !== value.matches.length) {
+    throw new Error('Invalid or untrusted Studio handoff. No results will be sent. Reopen this page from Studio.');
+  }
+  if (value.catalog !== undefined) value.catalog = validateCatalog(value.catalog);
+  return value;
+}
+function currentMatches() {
+  if (bridge) return bridge.matches;
+  if ($('source').value !== 'synthetic') return [];
+  return [['research', 'web'], ['documents', 'extract']].flatMap(([feature, variant]) => {
+    const brick = catalog.find(item => item.feature_id === feature);
+    return brick && brick.options.some(option => option.variant_id === variant)
+      ? [{feature_id: feature, variant_ids: [variant], reason: 'Illustrative synthetic need, not a client requirement.'}] : [];
+  });
+}
+function renderBrief() {
+  const matches = currentMatches();
+  text('brief-label', bridge ? 'Existing Studio request · ' + bridge.request_id + ' · ' + bridge.mode :
+    $('source').value === 'synthetic' ? 'Synthetic demonstration only — not an actual client brief' : 'No handoff');
+  text('description', bridge ? bridge.description || 'No description supplied by Studio.' :
+    $('source').value === 'synthetic' ? 'Illustrative example: web research and document extraction, where these options exist in the catalog.' :
+    'No Studio project has been handed off.');
+  $('matches').replaceChildren();
+  for (const match of matches) {
+    const brick = catalog.find(item => item.feature_id === match.feature_id);
+    $('matches').append(el('li', (brick ? brick.name : match.feature_id) + ' — ' + match.reason +
+      ' · Allowed variants: ' + match.variant_ids.join(', ')));
+  }
+  $('no-matches').hidden = matches.length > 0;
+}
+function updateButtons() {
+  for (const id of ['source', 'stage', 'seed-demo', 'refresh', 'approver']) $(id).disabled = busy || !ready;
+  $('promote').disabled = busy || !ready || !catalog.length || !$('approver').value.trim();
+  $('recommend').disabled = busy || !ready || !currentMatches().length;
+  const canReturn = !busy && ready && bridge && window.opener && !window.opener.closed && latestRank;
+  $('send-rankings').disabled = !canReturn;
+  $('send-recommendations').disabled = !canReturn || !generated || !generated.recommendations.length;
+}
+function invalidateRecommendations() {
+  generated = null;
+  $('recommendations').replaceChildren();
+  text('recommendation-state', 'No current recommendations. Generate using the active policy when ready.');
+  updateButtons();
+}
+async function api(path, body) {
+  const response = await fetch(path, body === undefined ? {headers: {'Accept': 'application/json'}} :
+    {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, body: JSON.stringify(body)});
+  let value;
+  try { value = await response.json(); } catch (_) { throw new Error('The server returned a non-JSON response for ' + path + ' (HTTP ' + response.status + ').'); }
+  if (!response.ok) throw new Error(path + ' (HTTP ' + response.status + '): ' +
+    (typeof value.error === 'string' ? value.error : JSON.stringify(value)));
+  return value;
+}
+async function action(work) {
+  if (busy) return;
+  busy = true;
+  $('error').hidden = true;
+  text('operation-status', 'Working…');
+  updateButtons();
+  try { await work(); text('operation-status', 'Ready.'); }
+  catch (error) { fail(error); text('operation-status', 'Action not completed. See the error above.'); }
+  finally { busy = false; updateButtons(); }
+}
+async function loadRankings() {
+  latestRank = null;
+  $('ranking-rows').replaceChildren();
+  text('ranking-state', 'Loading ' + $('stage').selectedOptions[0].textContent + '…');
+  text('ranking-empty', '');
+  text('source-note', $('source').value === 'real' ?
+    'Real delivered-project evidence only. An empty or cold-start view is honest: no synthetic data is substituted.' :
+    'Synthetic demonstration only. These scores and decisions are not real customer evidence; loading an example does not promote it.');
+  const result = await api('/api/brick-rankings', {source: $('source').value, stage: $('stage').value, catalog});
+  if (!result || result.source !== $('source').value || result.stage !== $('stage').value ||
+      !Array.isArray(result.rows) || result.rows.some(row => !row || !string(row.feature_id) ||
+      !Array.isArray(row.options) || row.options.some(option => !option))) {
+    throw new Error('Invalid rankings response. No rankings can be returned to Studio.');
+  }
+  latestRank = result;
+  text('ranking-state', (result.stage === 'candidate' ? 'Candidate preview — not activated' : 'Active approved policy') +
+    ' · ' + result.source + ' · View version: ' + (result.model_version ?? 'none') +
+    ' · Active version: ' + (result.active_version ?? 'none') +
+    ' · Validation projects: ' + count(result.validation_projects));
+  for (const row of result.rows) {
+    const tr = document.createElement('tr');
+    tr.append(el('td', displayRank(row.rank)));
+    const feature = el('td', row.name || row.feature_id);
+    feature.append(el('small', row.status === 'learned' ? ' · Supported experience' : ' · Insufficient evidence, not failure'));
+    tr.append(feature, el('td', score(row.score)), el('td', count(row.project_count)));
+    const supported = row.options.filter(option => typeof option.score === 'number' && Number.isFinite(option.score) &&
+      option.project_count >= (result.minimum_projects ?? 3)).sort((a, b) => b.score - a.score);
+    const optionCell = el('td', supported.length ? supported[0].name : 'No supported preference yet');
+    const details = document.createElement('details');
+    details.append(el('summary', 'Compare all ' + row.options.length + ' options'));
+    const list = document.createElement('ul');
+    for (const option of row.options) list.append(el('li', (option.name || option.variant_id) +
+      ' · Model: ' + option.model_id + ' · Rank: ' + displayRank(option.rank) +
+      ' · ' + score(option.score) + ' · ' + count(option.project_count) + ' independent projects'));
+    details.append(list);
+    optionCell.append(details);
+    tr.append(optionCell);
+    $('ranking-rows').append(tr);
+  }
+  text('ranking-empty', !result.rows.length ? 'No bricks or delivery evidence to display. Open Studio to supply its catalog.' :
+    result.rows.every(row => row.rank === null) ? 'No bricks are ranked yet. Each needs at least ' +
+    (result.minimum_projects ?? 3) + ' independent delivered projects. No negative judgment is implied.' : '');
+  updateButtons();
+}
+async function recommendations() {
+  invalidateRecommendations();
+  const matches = currentMatches();
+  const result = await api('/api/brick-recommendations', {source: $('source').value, catalog, matches});
+  if (!result || result.source !== $('source').value || !Array.isArray(result.recommendations) ||
+      result.recommendations.length !== matches.length ||
+      new Set(result.recommendations.map(item => item && item.feature_id)).size !== matches.length ||
+      result.recommendations.some(item => {
+        if (!item) return true;
+        const match = matches.find(value => value.feature_id === item.feature_id);
+        const brick = catalog.find(value => value.feature_id === item.feature_id);
+        return !match || !match.variant_ids.includes(item.variant_id) || !brick ||
+          !brick.options.some(option => option.variant_id === item.variant_id && option.model_id === item.model_id) ||
+          !string(item.decision_id);
+      })) throw new Error('Recommendations did not preserve all matched functions and allowed options, or lacked logged decisions. Nothing will be returned to Studio.');
+  generated = result;
+  text('recommendation-state', 'Active policy: ' + (result.policy_version ?? 'initial policy') +
+    ' · ' + result.source + ' · ' + result.recommendations.length + ' logged decisions. Review before returning to Studio.');
+  for (const item of result.recommendations) {
+    const li = document.createElement('li');
+    li.append(el('strong', item.name + ' — ' + item.option_name), el('p', item.reason));
+    li.append(el('small', 'Variant: ' + item.variant_id + ' · Model: ' + item.model_id +
+      ' · Experience: ' + score(item.score) + ' · Independent projects: ' + count(item.project_count)));
+    li.append(el('small', 'Logged decision: ' + item.decision_id + ' · Selection probability: ' +
+      (typeof item.probability === 'number' && Number.isFinite(item.probability) ? (item.probability * 100).toFixed(1) + '%' : 'Unknown') +
+      ' · Outcome / ROI: unknown'));
+    $('recommendations').append(li);
+  }
+}
+function sendResults(includeRecommendations) {
+  $('error').hidden = true;
+  try {
+    if (!bridge || !allowedOrigin.test(bridge.return_origin)) throw new Error('No trusted Studio handoff. Use the Studio link to open your existing project.');
+    if (!window.opener || window.opener.closed) throw new Error('The original Studio window is unavailable. Use the Studio link and reopen learning; no results were sent.');
+    if (!latestRank || busy || (includeRecommendations && !generated)) throw new Error('Load current results before returning to Studio.');
+    window.opener.postMessage({type: 'token-yield-learning-results', request_id: bridge.request_id,
+      source: $('source').value, stage: $('stage').value, rankings: latestRank.rows,
+      recommendations: includeRecommendations ? generated.recommendations : []}, bridge.return_origin);
+    text('bridge-status', 'Results sent to the original Studio window for review. This is not confirmation of application; no automatic build changes were made here.');
+  } catch (error) { fail(error); }
+}
+$('source').addEventListener('change', () => {
+  invalidateRecommendations(); renderBrief(); text('evaluation', '');
+  action(loadRankings);
+});
+$('stage').addEventListener('change', () => { invalidateRecommendations(); action(loadRankings); });
+$('approver').addEventListener('input', updateButtons);
+$('refresh').addEventListener('click', () => action(async () => { invalidateRecommendations(); await loadRankings(); }));
+$('seed-demo').addEventListener('click', () => action(async () => {
+  invalidateRecommendations();
+  const result = await api('/api/brick-learning/demo', {catalog});
+  if (!result || result.source !== 'synthetic' || !Number.isInteger(result.seeded)) throw new Error('Invalid synthetic example response.');
+  $('source').value = 'synthetic';
+  text('evaluation', 'Loaded ' + result.seeded + ' synthetic examples with held-out evidence. Not promoted.');
+  renderBrief();
+  await loadRankings();
+}));
+$('promote').addEventListener('click', () => action(async () => {
+  const approver = $('approver').value.trim();
+  if (!approver) throw new Error('A named human approver is required.');
+  invalidateRecommendations();
+  text('evaluation', 'Evaluating candidate for ' + approver + '…');
+  const model = await api('/api/delivery-policy/promote', {source: $('source').value, approver});
+  if (!model || !model.evaluation) throw new Error('Promotion returned no evaluation. Refresh to inspect the active policy.');
+  const evaluation = model.evaluation;
+  const metric = value => typeof value === 'number' && Number.isFinite(value) ? value.toFixed(3) : 'Unknown';
+  text('evaluation', (evaluation.eligible ? 'Evaluation eligible' : 'Evaluation not eligible — candidate not activated') +
+    ' · Version: ' + (model.version ?? 'unknown') + ' · Gain: ' + metric(evaluation.gain) +
+    ' · Lower bound: ' + metric(evaluation.lower_bound) + ' · Projects: ' + count(evaluation.projects) +
+    ' · Effective sample size: ' + metric(evaluation.effective_sample_size) +
+    (model.promoted_by ? ' · Approved by: ' + model.promoted_by : ' · No activation confirmation returned.'));
+  await loadRankings();
+}));
+$('recommend').addEventListener('click', () => action(recommendations));
+$('send-rankings').addEventListener('click', () => sendResults(false));
+$('send-recommendations').addEventListener('click', () => sendResults(true));
+action(async () => {
+  bridge = readBridge();
+  catalog = bridge && bridge.catalog !== undefined ? bridge.catalog : validateCatalog((await api('/api/brick-catalog')).catalog);
+  if (bridge) {
+    for (const match of bridge.matches) {
+      const brick = catalog.find(item => item.feature_id === match.feature_id);
+      if (!brick || match.variant_ids.some(id => !brick.options.some(option => option.variant_id === id))) {
+        throw new Error('The Studio matches reference options outside the catalog. Review the needs in Studio and hand them off again.');
+      }
+    }
+    const studio = bridge.return_origin + '/marketplace-sales-demo.html';
+    $('marketplace-link').href = studio;
+    $('custom-link').href = studio + '?mode=custom';
+    $('handoff-link').href = studio + '?mode=custom';
+  }
+  if (!bridge || !window.opener || window.opener.closed) text('bridge-status',
+    'No connected Studio window. Use the Studio links to open your existing project and hand it off here. Return buttons are unavailable; no changes are applied automatically.');
+  ready = true;
+  renderBrief();
+  invalidateRecommendations();
+  await loadRankings();
+});
+</script>
+</body>
+</html>

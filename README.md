@@ -116,6 +116,31 @@ the measured bricks, but the system did not publish a complete project quote
 because the requested scope exceeded the supplied evidence and agent
 disagreement remained. That abstention is part of the governance design.
 
+## Learning from delivered projects
+
+The [delivered-project feedback prototype](docs/customer-outcomes-prototype.md)
+carries selected marketplace functionalities into a short client feedback form.
+Submission updates candidate outcome predictors and an epsilon-greedy contextual
+bandit. Protected evaluation and named human approval are required before a
+learned policy changes future recommendations. The internal learning view shows
+evidence-qualified brick rankings and requirement-constrained suggestions.
+
+Actual token observations separately recalibrate the cost predictor. Experience
+ratings, customer-reported finances, and verified business value are distinct:
+synthetic demonstrations do not establish production ROI improvements, and this
+is one-step policy learning, not foundation-model fine-tuning.
+
+Run the local feedback service alongside the marketplace, without paid API calls:
+
+```powershell
+python -m examples.customer_outcomes_server --port 8793
+```
+
+Choose **Delivered project: give feedback** in the marketplace, or open
+<http://127.0.0.1:8793>. The internal learning view is at
+<http://127.0.0.1:8793/learning>; the reviewed-evidence studio is at `/admin`.
+SQLite data persists locally in the git-ignored `.outcomes-prototype` directory.
+
 ## Quick start
 
 The default demo runs entirely on your computer. It uses the offline simulation

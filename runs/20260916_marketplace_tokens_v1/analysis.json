@@ -1,0 +1,114 @@
+{
+  "status": "trained_exploratory",
+  "source_run": "20260914_customer_scoping_v2",
+  "training_calls": 40,
+  "holdout_calls": 20,
+  "training_projects": 4,
+  "holdout_projects": 2,
+  "selected_forms": {
+    "input_tokens": "lego",
+    "output_tokens": "lego"
+  },
+  "holdout": {
+    "method": "historical_holdout_retrospective_not_new_sealed_test",
+    "metric": "equal_project_weight_mae_tokens",
+    "n_calls": 20,
+    "n_projects": 2,
+    "selected_forms": {
+      "input_tokens": "lego",
+      "output_tokens": "lego"
+    },
+    "scores": {
+      "input_tokens": {
+        "constant": {
+          "mae": 60.48999999999998,
+          "per_project_mae": {
+            "a4l-security-assessment": 68.74999999999997,
+            "handmade-arcade-strategic-plan": 52.22999999999999
+          },
+          "call_weighted_mae": 60.48999999999999
+        },
+        "size": {
+          "mae": 23.246307536139852,
+          "per_project_mae": {
+            "a4l-security-assessment": 27.368323815762707,
+            "handmade-arcade-strategic-plan": 19.124291256516994
+          },
+          "call_weighted_mae": 23.246307536139852
+        },
+        "size+units": {
+          "mae": 29.657812752502117,
+          "per_project_mae": {
+            "a4l-security-assessment": 36.60709896885849,
+            "handmade-arcade-strategic-plan": 22.708526536145747
+          },
+          "call_weighted_mae": 29.657812752502114
+        },
+        "lego": {
+          "mae": 32.502438486551874,
+          "per_project_mae": {
+            "a4l-security-assessment": 40.80693914490905,
+            "handmade-arcade-strategic-plan": 24.1979378281947
+          },
+          "call_weighted_mae": 32.502438486551874
+        }
+      },
+      "output_tokens": {
+        "constant": {
+          "mae": 228.15,
+          "per_project_mae": {
+            "a4l-security-assessment": 222.5,
+            "handmade-arcade-strategic-plan": 233.8
+          },
+          "call_weighted_mae": 228.15
+        },
+        "size": {
+          "mae": 123.27759852191275,
+          "per_project_mae": {
+            "a4l-security-assessment": 122.99497885303893,
+            "handmade-arcade-strategic-plan": 123.56021819078656
+          },
+          "call_weighted_mae": 123.27759852191275
+        },
+        "size+units": {
+          "mae": 88.26993165679622,
+          "per_project_mae": {
+            "a4l-security-assessment": 85.35461989100192,
+            "handmade-arcade-strategic-plan": 91.1852434225905
+          },
+          "call_weighted_mae": 88.2699316567962
+        },
+        "lego": {
+          "mae": 35.24027388337181,
+          "per_project_mae": {
+            "a4l-security-assessment": 29.780245765188216,
+            "handmade-arcade-strategic-plan": 40.700302001555414
+          },
+          "call_weighted_mae": 35.24027388337181
+        }
+      }
+    },
+    "calibrated_interval": null,
+    "upper_budget_bound": null
+  },
+  "spent_usd": 0,
+  "scope": "public_request_scoping_calls_not_full_customer_delivery",
+  "calibrated_interval": null,
+  "upper_budget_bound": null,
+  "calibration_status": "insufficient_independent_groups_shared_template",
+  "limitations": [
+    "Scoping drafts only, not execution of customer engagements.",
+    "Hand-annotated deliverable units are not known full-project workloads.",
+    "Shared template prevents a source/template-independent confirmatory claim.",
+    "Four train and two outcome-holdout projects cannot calibrate useful tails.",
+    "Automatic contract checks do not establish semantic quality of free text.",
+    "Rated costs use published prices; invoice reconciliation is outstanding.",
+    "Research-only estimates for the original four-operation scoping template.",
+    "No causal per-brick prices or independent coefficient identification is established.",
+    "Metered quality-rejected completions retain their incurred token consumption.",
+    "No sequential handoffs, tools, retries, or new execution versions were measured.",
+    "Winning training-CV error is not an unbiased new-test estimate.",
+    "API rating and marketplace selling prices are not token prediction targets.",
+    "Historical holdout results were previously examined; this is retrospective evaluation."
+  ]
+}
