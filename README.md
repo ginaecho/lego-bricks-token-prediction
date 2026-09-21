@@ -69,7 +69,7 @@ or explore the [current implementation](https://github.com/ginaecho/lego-bricks-
   <strong><a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">Watch the Foundry Studio walkthrough (1:48)</a></strong>
 </p>
 
-Recorded September 21, 2026: real UI clicks select **Behavioral personalization**
+Demo UI clicks select **Behavioral personalization**
 and **Product comparison**, then change the first type to **Journey recommendations**.
 Both builds immediately display trained composition token usage, cost and
 assumption-based ROI. The walkthrough continues through
