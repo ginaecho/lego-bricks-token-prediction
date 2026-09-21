@@ -81,6 +81,8 @@
   const liveRun = () => state.snapshot?.request?.runtime === 'foundry';
   function runStages() {
     const fallback=liveRun()?liveStages:stages;
+    if(state.snapshot?.request?.training_scope==="marketplace-generalization")
+      return liveStages.filter(([id])=>["features","measure","train","evaluate","predict_after","complete"].includes(id));
     return Array.isArray(state.snapshot?.stages)&&state.snapshot.stages.length ? state.snapshot.stages.map(stage=>{
       const id=typeof stage==='string'?stage:Array.isArray(stage)?stage[0]:stage.id;
       return [id,(fallback.find(item=>item[0]===id)||[id,String(id).replaceAll('_',' ')])[1]];
@@ -427,12 +429,18 @@
     $('artifact-count').textContent=result?'Measured-data pilot / stored result':'Live artifacts / '+events.length+' events';
     const overview=$('view-overview');
     const mocked=result?.source==='mocked-test-provider'||events.some(e=>e.data?.source==='mocked-test-provider');
-    overview.replaceChildren(node('div',(mocked?'MOCK provider: public outputs and usage are synthetic fixtures. No paid calls. Local regression computation is real. ':'GPT-5.4 / source-bound pilot: provider calls and separate orchestration accounting. ')+'Forecast sums are not measured combinations. No production accuracy, interaction-cost, web research or compliance guarantee.','note'));
+    overview.replaceChildren(node('div',(mocked?'MOCK provider: public outputs and usage are synthetic fixtures. No paid calls. Local regression computation is real. ':'GPT-5.4 / source-bound pilot: provider calls and separate orchestration accounting. ')+'Combined workflows are predicted directly, not by summing standalone forecasts. No production accuracy, web research or compliance guarantee.','note'));
     if(result){
       const before=result.before||{},after=result.after||{};
       const supported=after.supported===true&&Number.isFinite(after.input_tokens)&&Number.isFinite(after.output_tokens);
       const stats=node('div',undefined,'stats');
-      stats.append(stat('Before training',before.supported?number(before.total_tokens)+' predicted tokens':'Abstained',before.reason),
+      if(result.generalization){
+        const g=result.generalization;
+        stats.append(stat('Composition model',g.accepted?'Accepted':'Rejected','Frozen held-out acceptance gates',true),
+          stat('Marketplace types tested',number(g.subtypes_tested),'All 16 types represented'),
+          stat('Unseen combinations',number(g.unseen_combinations),'Memberships excluded from training and tuning'),
+          stat('Published for Sales',result.training?.pilot_published?'Yes':'No','Local inference; no provider calls on selection'));
+      }else stats.append(stat('Before training',before.supported?number(before.total_tokens)+' predicted tokens':'Abstained',before.reason),
         stat('After training / forecast',supported?number(after.input_tokens+after.output_tokens)+' tokens':'Unsupported / abstained',supported?'Fixed reference / GPT-5.4':after.reason,true),
         stat('Forecast USD / run',supported?money(after.usd_per_run):'Not available','Not actual pilot spend'),
         stat('Forecast USD / month',supported?money(after.usd_per_month):'Not available','At requested volume / pinned rates'));
@@ -444,16 +452,27 @@
     }
     const discussion=events.filter(event=>['novelty','propose','discuss','adjudicate'].includes(event.stage));
     overview.append(node('h3','New-brick review + three-agent discussion + orchestrator decisions'));
-    if(!discussion.length)overview.append(node('p','No role outputs yet. Start/advance the corresponding stage explicitly.','empty'));
+    if(!discussion.length)overview.append(node('p',state.snapshot?.request?.training_scope==='marketplace-generalization'?
+      'This run executes a frozen marketplace training design, not a customer-project agent discussion.':'No role outputs yet. Start/advance the corresponding stage explicitly.','empty'));
     discussion.forEach(event=>overview.append(payload('#'+text(event.seq)+' · '+stageName(event.stage)+' · '+text(event.message),event.data,true)));
     const training=$('view-training');
     training.replaceChildren(node('div','Measured call rows are numeric provider usage. Trained predictions and held-out MAE are separate pilot artifacts, not production calibration. Unexecuted stages have no output.','note'));
-    if(result?.features)training.append(node('h3','Engineered request features'),table(['Feature','Value'],Object.entries(result.features).map(([name,value])=>[name,typeof value==='object'?JSON.stringify(value):text(value)])));
     if(result?.training){
       const t=result.training,stats=node('div',undefined,'stats');
       stats.append(stat('Measured training rows',number(t.train_count)),stat('Held-out pilot rows',number(t.test_count)),stat('Input MAE',number(t.input_mae),'held-out pilot tokens'),stat('Output MAE',number(t.output_mae),'held-out pilot tokens'));
-      training.append(stats,payload('Training version / coefficients / all measured rows',t,true));
+      training.append(stats);
+      if(t.generalization){
+        const g=t.generalization,m=g.metrics;
+        training.append(node('h3','Train-only selection and untouched-combination acceptance'),
+          node('p',`Ridge alpha ${t.alpha}; four-fold grouped training-only selection. ${g.unseen_combinations} unseen combinations exercise ${g.subtypes_tested} types. Holdouts are never used for tuning or refitting.`),
+          table(['Target','Training MAPE','Unseen MAPE','Mean baseline MAE','Generalization gap'],['input','output'].map(target=>[
+            target,number(m[target+'_training_mape']*100)+'%',number(m[target+'_mape']*100)+'%',
+            number(m[target+'_baseline_mae']),number(m[target+'_generalization_gap']*100)+' percentage points'])),
+          payload('Frozen acceptance thresholds and per-type errors',g));
+      }
+      training.append(payload('Training version / coefficients / all measured rows',t,!t.generalization));
     }
+    if(result?.features)training.append(node('h3','Engineered features / example measured row'),table(['Feature','Value'],Object.entries(result.features).map(([name,value])=>[name,typeof value==='object'?JSON.stringify(value):text(value)])));
     events.filter(event=>['features','predict_before','measure','train','evaluate','predict_after'].includes(event.stage)).forEach(event=>training.append(payload('#'+text(event.seq)+' · '+text(event.message),event.data,event.stage==='measure')));
     ['wiki','requirements'].forEach(tab=>{
       const panel=$('view-'+tab);

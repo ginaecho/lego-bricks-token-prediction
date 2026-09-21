@@ -22,6 +22,7 @@ from token_yield.marketplace_demo import STAGES, PipelineCancelled, run_pipeline
 
 if TYPE_CHECKING:
     from token_yield.marketplace_agents import AgentRuntime
+    from token_yield.marketplace_generalization import PublishedMarketplace
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC_ROUTES = frozenset({
@@ -54,6 +55,8 @@ def validate_run_request(value: Any) -> dict[str, Any]:
         raise ValueError("body must be a JSON object")
     original = dict(value)
     runtime = original.pop("runtime", "offline")
+    training_scope = original.pop("training_scope", None)
+    training_parent = original.pop("training_parent_run", None)
     if not isinstance(runtime, str) or runtime not in ("offline", "foundry"):
         raise ValueError("runtime must be offline or foundry")
     result = validate_request(original)
@@ -61,6 +64,15 @@ def validate_run_request(value: Any) -> dict[str, Any]:
         raise ValueError("Foundry runs require model_id gpt, the pinned deployment alias")
     if "runtime" in value:
         result["runtime"] = runtime
+    if training_scope is not None:
+        if runtime != "foundry" or training_scope != "marketplace-generalization":
+            raise ValueError("marketplace generalization requires the approved Foundry runtime")
+        result["training_scope"] = training_scope
+    if training_parent is not None:
+        if (training_scope != "marketplace-generalization" or not isinstance(training_parent, str)
+                or not re.fullmatch(r"[0-9a-f]{32}", training_parent)):
+            raise ValueError("training_parent_run requires a generalization run ID")
+        result["training_parent_run"] = training_parent
     return result
 
 
@@ -68,8 +80,10 @@ class RunStore:
     """Lock-protected snapshots with append-only worker events."""
 
     def __init__(self, run_dir: Path, *, max_running: int = 2, max_runs: int = 32,
-                 stage_timeout: float = 1800, agent_runtime: AgentRuntime | None = None):
+                 stage_timeout: float = 1800, agent_runtime: AgentRuntime | None = None,
+                 prediction_runtime: PublishedMarketplace | None = None):
         self.run_dir = Path(run_dir)
+        self.prediction_runtime = prediction_runtime
         self.max_running = max_running
         self.max_runs = max_runs
         self.lock = threading.RLock()
@@ -101,6 +115,8 @@ class RunStore:
                 from token_yield.marketplace_agents import AGENT_STAGES
 
                 stages = AGENT_STAGES
+                if request.get("training_scope") == "marketplace-generalization":
+                    stages = ("features", "measure", "train", "evaluate", "predict_after", "complete")
             else:
                 stages = STAGES
             run_id = uuid.uuid4().hex
@@ -283,21 +299,33 @@ class RunStore:
 
     def runtime_status(self) -> dict[str, Any]:
         if self.agent_runtime is None:
+            if self.prediction_runtime is not None:
+                return {"enabled": False, "source": "measured-foundry", "inference_ready": True,
+                        "message": "Shipped measured model: local inference only. Paid training is disabled."}
             return {"enabled": False, "source": "synthetic",
                     "message": "Offline only. No paid calls are enabled."}
         return self.agent_runtime.public_status()
 
     def catalog(self) -> dict[str, Any]:
         if self.agent_runtime is None:
+            if self.prediction_runtime is not None:
+                return self.prediction_runtime.catalog()
             return {"items": [], "enabled": False,
                     "message": "No Foundry measurement campaign is enabled."}
         return self.agent_runtime.catalog()
 
     def listing(self) -> dict[str, Any]:
         with self.lock:
+            saved = [
+                self.get(path.parent.name)
+                for path in sorted(self.run_dir.glob("*/run.json"), reverse=True)
+                if re.fullmatch(r"[0-9a-f]{32}", path.parent.name)
+                and path.parent.name not in self.runs
+            ]
+            runs = list(reversed(self.runs.values())) + [run for run in saved if run]
             return {"runs": [{"id": run["id"], "status": run["status"],
                               "description": run["request"]["description"]}
-                             for run in reversed(self.runs.values())]}
+                             for run in runs]}
 
 
 def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -395,7 +423,8 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
             if not self._trusted():
                 return
             control = re.fullmatch(r"/api/runs/([0-9a-f]{32})/(next|cancel|establishment)", self.path)
-            if self.path != "/api/runs" and not control:
+            forecast = self.path == "/api/forecast"
+            if self.path != "/api/runs" and not control and not forecast:
                 self._reply(404, {"error": "route not found"})
                 return
             lengths = self.headers.get_all("Content-Length", [])
@@ -418,7 +447,11 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
                     raise ValueError("incomplete request body")
                 request = json.loads(body.decode("utf-8"), object_pairs_hook=_unique_object,
                                      parse_constant=_invalid_constant)
-                if control:
+                if forecast:
+                    if (not isinstance(request, dict) or set(request) != {"selections"}
+                            or not isinstance(request["selections"], list)):
+                        raise ValueError("forecast requires a list of subtype IDs")
+                elif control:
                     if not isinstance(request, dict):
                         raise ValueError("control body must be an object")
                     if control[2] == "next":
@@ -443,7 +476,13 @@ def make_server(port: int = 8765, *, run_dir: Path | None = None,
                 self._reply(408, {"error": "request body timed out"})
                 return
             try:
-                if control:
+                if forecast:
+                    predictor = store.agent_runtime or store.prediction_runtime
+                    if predictor is None:
+                        raise RuntimeUnavailableError("No measured model registry is loaded")
+                    self._reply(200, predictor.forecast_selection(request["selections"]))
+                    return
+                elif control:
                     run_id = control[1]
                     if control[2] == "next":
                         store.approve(run_id, request["stage"])
@@ -561,7 +600,10 @@ def main() -> int:
                                    source_fixture=args.source_fixture,
                                    measurement_policy=args.measurement_policy,
                                    token_provider=lambda: (_ for _ in ()).throw(AssertionError("No mock authentication")))
-        store = RunStore(args.run_dir, agent_runtime=runtime)
+        from token_yield.marketplace_generalization import PublishedMarketplace
+
+        predictor = PublishedMarketplace(ROOT / "examples" / "data" / "marketplace-trained") if runtime is None else None
+        store = RunStore(args.run_dir, agent_runtime=runtime, prediction_runtime=predictor)
         with make_server(args.port, store=store) as server:
             print(json.dumps({"stage": "server", "url": f"http://127.0.0.1:{args.port}/marketplace-sales-demo.html",
                               "foundry_enabled": runtime is not None,

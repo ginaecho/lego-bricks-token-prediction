@@ -66,8 +66,8 @@ LIMITATIONS = [
     "charges reasoning details and ignores cache discounts.",
     "Discussion, feature engineering and training-agent LLM usage is separate overhead.",
     "Successful models are uncertified pilot versions, never automatic production promotion.",
-    "Compositions are sums of independently measured brick forecasts, NOT measured combinations. "
-    "Cross-brick interaction costs and end-to-end workflow execution are unavailable.",
+    "Compositions use exact workflow evidence or an accepted generalizing workflow model, "
+    "never summed standalone forecasts. Source-only scope and protocol limits apply.",
 ]
 
 _CATALOG = (
@@ -488,13 +488,19 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
         if "atom_results" in expected:
             steps = catalog[0]["steps"]
             results = value["atom_results"]
-            if not isinstance(results, list) or len(results) != len(steps):
-                raise ValueError("every ordered atom step requires one result")
-            for step, result in zip(steps, results):
-                _keys(result, {"step_id", "result"})
-                if result["step_id"] != step["id"]:
-                    raise ValueError("atom results must follow the exact ordered contract")
-                _text(result["result"], 600)
+            if catalog[0].get("result_format") == "keyed-steps-v1":
+                if not isinstance(results, dict) or set(results) != {step["id"] for step in steps}:
+                    raise ValueError("every ordered atom step requires its named result")
+                for result in results.values():
+                    _text(result, 600)
+            else:
+                if not isinstance(results, list) or len(results) != len(steps):
+                    raise ValueError("every ordered atom step requires one result")
+                for step, result in zip(steps, results):
+                    _keys(result, {"step_id", "result"})
+                    if result["step_id"] != step["id"]:
+                        raise ValueError("atom results must follow the exact ordered contract")
+                    _text(result["result"], 600)
         _text(value["answer"], 2400)
         _texts(value["limitations"])
         _validate_evidence_count(value["evidence"])
@@ -617,7 +623,8 @@ def validate_message(kind: str, value: dict, docs: list[dict], catalog: list[dic
 def validate_request(value: dict) -> dict:
     """Validate the live interface independently of the offline request validator."""
     if not isinstance(value, dict) or set(value) - {
-        "description", "model_id", "runs_per_month", "new_function", "execution_mode", "runtime"
+        "description", "model_id", "runs_per_month", "new_function", "execution_mode", "runtime",
+        "training_scope", "training_parent_run"
     }:
         raise ValueError("unknown request fields")
     _text(value.get("description"), 6000)
@@ -633,6 +640,13 @@ def validate_request(value: dict) -> dict:
         raise ValueError("new_function must be bounded text")
     if value.get("execution_mode", "automatic") not in ("automatic", "step"):
         raise ValueError("invalid execution mode")
+    if "training_scope" in value and value["training_scope"] != "marketplace-generalization":
+        raise ValueError("unknown training scope")
+    if "training_parent_run" in value and (
+            value.get("training_scope") != "marketplace-generalization"
+            or not isinstance(value["training_parent_run"], str)
+            or not re.fullmatch(r"[0-9a-f]{32}", value["training_parent_run"])):
+        raise ValueError("invalid generalization parent run")
     (value["description"] + novel).encode("utf-8")
     return {**value, "description": value["description"].strip(), "new_function": novel.strip()}
 

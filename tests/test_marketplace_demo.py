@@ -382,6 +382,45 @@ def test_explicit_offline_runtime_preserves_pipeline(http_server):
     assert run["result"]["training"]["source"] == "synthetic"
 
 
+def test_forecast_endpoint_is_read_only(http_server):
+    server, store = http_server
+    calls = []
+
+    def predict(selections):
+        calls.append(selections)
+        return {"supported": True, "source": "mocked-test-provider",
+                "input_tokens": 100, "output_tokens": 50}
+
+    store.agent_runtime = SimpleNamespace(forecast_selection=predict)
+    status, _, body = _http(server, "POST", "/api/forecast",
+                           json.dumps({"selections": ["journey", "compare"]}),
+                           {"Content-Type": "application/json"})
+    assert status == 200
+    assert json.loads(body)["source"] == "mocked-test-provider"
+    assert calls == [["journey", "compare"]]
+    assert not store.runs
+    assert _http(server, "POST", "/api/forecast", '{"selections":"journey"}',
+                 {"Content-Type": "application/json"})[0] == 400
+    assert len(calls) == 1
+    assert not store.runs
+
+
+def test_shipped_inference_does_not_enable_paid_runs(http_server):
+    from token_yield.marketplace_generalization import PublishedMarketplace
+
+    server, store = http_server
+    store.prediction_runtime = PublishedMarketplace(server_module.ROOT / "examples" / "data" / "marketplace-trained")
+    assert store.runtime_status()["enabled"] is False
+    assert store.runtime_status()["inference_ready"] is True
+    assert store.catalog()["composition_model"]["accepted"] is True
+    status, _, body = _http(server, "POST", "/api/forecast",
+                            '{"selections":["journey","compare"]}', {"Content-Type": "application/json"})
+    assert status == 200 and json.loads(body)["supported"]
+    with pytest.raises(server_module.RuntimeUnavailableError):
+        store.submit({**REQUEST, "runtime": "foundry", "model_id": "gpt"})
+    assert not store.runs
+
+
 def test_live_worker_routes_to_injected_runtime_and_checks_cancel(artifact_dir, monkeypatch):
     monkeypatch.setitem(sys.modules, "token_yield.marketplace_agents",
                         SimpleNamespace(AGENT_STAGES=("propose", "complete")))
@@ -440,7 +479,9 @@ def test_saved_run_is_read_only_after_restart(artifact_dir):
     assert restarted.get(run_id) == {**original, "replay": True}
     assert original["replay"] is False
     assert restarted.get("../request") is None
-    assert restarted.listing() == {"runs": []}
+    assert restarted.listing() == {"runs": [{
+        "id": run_id, "status": original["status"], "description": REQUEST["description"],
+    }]}
     with pytest.raises(KeyError):
         restarted.approve(run_id, "complete")
     stale = {**original, "status": "running", "result": None}
@@ -448,6 +489,7 @@ def test_saved_run_is_read_only_after_restart(artifact_dir):
     recovered = restarted.get(run_id)
     assert recovered["status"] == "failed"
     assert "cannot resume" in recovered["error"]
+    assert restarted.listing()["runs"][0]["status"] == "failed"
     assert restarted._active == set()
 
 

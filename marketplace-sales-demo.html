@@ -88,6 +88,13 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Execution controls<select id="execution-mode"><option value="step">Step-by-step / pause before each stage</option><option value="automatic">Automatic / run all approved stages</option></select></label>
         </div>
         <p id="runtime-status" class="help" role="status">Checking server runtime approval. No model calls occur on page load.</p>
+        <div id="completed-training" class="notice" hidden>
+          <b>Inspect completed training / no new provider calls</b>
+          <p class="help">Open the original submitted brief, measurements, train/test split and retained agent review. This is saved evidence, not a newly executing run.</p>
+          <label>Completed run<select id="completed-run"></select></label>
+          <a id="open-completed-run">Open completed project and training evidence &rarr;</a>
+          <p id="completed-training-status" class="help" role="status"></p>
+        </div>
         <div id="azure-notice" class="notice" hidden><b>Before you start:</b> Paid mode sends the submitted brief and optional function to the configured Azure GPT-5.4 deployment under the campaign limits shown above. On a MOCKED server no network calls occur and all provider labels are synthetic. Use fictional information only. Workloads use bundled reference documents, not repository code or customer documents. Automatic mode proceeds without further stage approval; step mode waits for Next. Cancellation cannot undo an in-flight call.</div>
         <details open><summary id="scenario-heading">🧱 Three little project stories / new-function workshop</summary>
           <p id="scenario-context" class="help">Original invented briefs inspired only by public repository metadata, not customer results or copied code. Load in order to explore creation, similar reuse and description-only detection across persistent runs. Loading never starts a provider call.</p>
@@ -103,7 +110,7 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
           <label>Execution model<select id="brief-model" class="model-options"></select><small id="brief-model-help">Offline scenario rate card only; no model is called.</small></label>
         </div>
         <div class="form-grid two">
-          <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>Planning volume. Agent-mode totals sum independent brick forecasts, not measured workflow combinations.</small></label>
+          <label>Whole project executions / month<input id="project-runs" type="number" min="0" max="1000000" step="1" value="1000" required><small>Planning volume. A supported composition is predicted once as a complete workflow, never by summing standalone forecasts.</small></label>
           <label>New function to explore (optional)<input id="new-function" class="search" maxlength="120" placeholder="For example: Policy-as-code validation"><small>Requests feature expansion and retraining. Unsupported tasks must abstain, not become zero-cost predictions.</small></label>
         </div>
         <div class="custom-actions"><button class="primary" id="run-pipeline">Start step-by-step + open operations</button><button class="secondary" id="security-example">Load security project</button><button class="secondary" id="novel-example">Try a new function</button></div>
@@ -127,13 +134,13 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
       </section>
       <section id="saved-panel" class="panel" hidden aria-labelledby="saved-heading">
         <div class="section-head"><div><div class="eyebrow">Demo 03 / saved project</div><h2 id="saved-heading">Saved shopped functionalities</h2><p>Edit saved functionalities, re-estimate instantly from frozen forecasts, or send the saved build to Demo 02 as a custom request.</p></div><span class="pill amber">No provider calls</span></div>
-        <div class="notice"><b>Agent trigger:</b> loading, editing, saving and re-estimating this saved build compose pre-predicted forecasts only. No paid GPT call occurs. Sending to Tab 02 copies a description; the agent starts only if you submit there.</div>
+        <div class="notice"><b>Agent trigger:</b> loading, editing and saving preserve your selected variations and assumptions. Estimates use supported stored forecasts only; drafts without a workflow forecast retain no financial estimate. No paid GPT call occurs. Sending to Tab 02 copies a description; the agent starts only if you submit there.</div>
         <div class="custom-actions"><button class="primary" id="save-build" type="button">Save current build</button><button class="secondary" id="load-build" type="button">Load saved build</button><button class="secondary" id="reestimate-saved" type="button">Re-estimate saved build</button><button class="secondary" id="send-saved-custom" type="button">Send saved build to Tab 02</button></div>
         <div id="saved-state" class="proposal"></div>
       </section>
       <section id="measured-marketplace" class="section-space" aria-labelledby="measured-heading">
-        <div class="section-head"><div><div class="eyebrow">Stored pilot predictor / inspect provider provenance</div><h2 id="measured-heading">Pre-predicted GPT-5.4 bricks</h2></div><button id="refresh-catalog" class="secondary">Refresh catalog (no model calls)</button></div>
-        <p class="help">Demo 01 marketplace bricks. Little bricks. A bigger possibility. Explore a capability, then mix the variations you need. Selecting here composes frozen pre-predicted forecasts instantly; it never starts a paid agent run.</p>
+        <div class="section-head"><div><div class="eyebrow">Sales Studio / trained inference</div><h2 id="measured-heading">Choose your functionality bricks</h2></div><button id="refresh-catalog" class="secondary">Refresh trained models</button></div>
+        <p class="help">Explore a capability, select its types, and set staffing and monthly usage. Trained models predict token usage locally; rates and your business assumptions produce cost and ROI. Combined builds use a workflow model, not a sum of standalone forecasts. Selecting bricks never starts training or a paid agent run.</p>
         <details class="catalog-settings"><summary>Forecast assumptions &amp; commercial rates</summary>
         <p class="help">Stored forecasts at a fixed reference context and pinned GPT-5.4 model. Each forecast retains its measured, MOCK/synthetic or unknown evidence source; the model name is not proof of live calls. Selecting them replaces manual or whole-project selections; each selected variant is counted once, with no invented integration tokens. Shared context and scenario model factors do not change these frozen tokens. Monthly volume and the separate commercial rate below remain explicit.</p>
         <div class="form-grid two"><label>Commercial input USD / 1M tokens<input id="measured-input-rate" type="number" min="0" max="10000" step="0.01" value="2.5" required></label><label>Commercial output USD / 1M tokens<input id="measured-output-rate" type="number" min="0" max="10000" step="0.01" value="15" required></label></div>
@@ -214,18 +221,18 @@ footer{margin-top:30px;font-size:11px;color:var(--muted);display:flex;justify-co
       <p class="fine">Uncalibrated planning pilot, not an invoice, staffing commitment or guaranteed return. Measured-data forecasts are source-bound and do not validate the proposed production service. Staffing and ROI are assumptions. Export includes provenance and calculation details.</p>
     </aside>
   </div>
-  <footer><span>Token Yield &middot; Marketplace sales-flow prototype</span><span>Manual and MOCK modes are local. Explicit live Foundry runs send the brief to Azure; run artifacts are saved locally.</span></footer>
+  <footer><span>Token Yield &middot; Trained marketplace studio</span><span>Shopping inference is local. Explicit live Foundry runs send the brief to Azure; run artifacts are saved locally.</span></footer>
 </main>
 <dialog id="configure" aria-labelledby="configure-title">
   <div class="dialog-head"><div><div class="eyebrow">Zoom into your brick</div><h2 id="configure-title"></h2></div><button class="close" data-close="configure" aria-label="Close configuration">&times;</button></div>
   <p id="configure-description" class="help"></p>
-  <p class="help">Select one or more variations. Each executes and is charged separately. Set its LLM, volume and human-effort assumptions.</p>
+  <p class="help">Compare each variation's job, evidence, expected impact, AI value and delivery staffing in one view. Select the variations to add, adjust assumptions, then save once.</p>
   <details id="feedback-suggestion-controls"><summary>Optional: suggest from past delivery feedback</summary>
     <label>Learning source<select id="feedback-policy-source"><option value="synthetic">Prototype / demo feedback</option><option value="real">Actual client feedback</option></select></label>
     <button type="button" class="secondary" id="feedback-suggest">Suggest an option</button>
     <p class="help" id="feedback-suggestion-status" role="status">You review the suggestion before saving. No approved policy means baseline exploration.</p>
   </details>
-  <form id="variant-form"><div id="variant-options"></div><div class="dialog-footer"><small>Changes apply only when saved.</small><button class="primary" type="submit">Save selections</button></div></form>
+  <form id="variant-form"><div id="variant-options"></div><p id="configure-error" role="alert"></p><div class="dialog-footer"><small>One save applies selections, volume and staffing.</small><button class="secondary" type="button" id="configure-learning">Open learning &amp; rankings</button><button class="primary" type="submit">Save selections</button></div></form>
 </dialog>
 <dialog id="learning-review" aria-labelledby="learning-review-title">
   <div class="dialog-head"><h2 id="learning-review-title">Review feedback-informed bricks</h2><button class="close" data-close="learning-review" aria-label="Close learned recommendation review">&times;</button></div>
@@ -272,6 +279,26 @@ const CATALOG = [
     {id:"guided",name:"Guided setup",description:"Plan onboarding steps, draft guidance and send notifications.",atoms:["Plan","Draft","Notify"],hours:[20,16,24],review:0.5,tool:0},
     {id:"adaptive",name:"Adaptive onboarding",description:"Adapt the path to customer needs and validate readiness.",atoms:["Classify","Plan","Draft","Validate","Notify"],hours:[32,20,32],review:1,tool:0}]}
 ];
+// Fictitious delivered-project examples exercise the governed feedback loop. They are demo
+// evidence, never substituted for real customer outcomes or measured token forecasts.
+const DEMO_IMPACTS = {
+  "recommend:interests":{projects:8,score:4.5,outcome:"More relevant first-page suggestions",metric:"Recommendation acceptance +12%",value:18500},
+  "recommend:behavior":{projects:7,score:4.3,outcome:"Better ranking from behavioral signals",metric:"Conversion +7%",value:27000},
+  "recommend:journey":{projects:6,score:4.2,outcome:"Clearer next-best actions across the journey",metric:"Journey completion +10%",value:22000},
+  "research:normal":{projects:9,score:4.1,outcome:"Faster decision-ready research notes",metric:"Analyst time -38%",value:14200},
+  "research:web":{projects:8,score:4.4,outcome:"Cited external evidence gathered faster",metric:"Research cycle -52%",value:24600},
+  "research:deep":{projects:5,score:4.6,outcome:"Higher-confidence multi-pass synthesis",metric:"Accepted briefs +16%",value:31500},
+  "support:faq":{projects:10,score:4.4,outcome:"More questions resolved from approved content",metric:"Self-service resolution +21%",value:19800},
+  "support:triage":{projects:8,score:4.2,outcome:"Faster routing to the correct support queue",metric:"Time to assignment -44%",value:16300},
+  "search:semantic":{projects:7,score:4.3,outcome:"Customers find relevant products with natural language",metric:"Search success +15%",value:23400},
+  "search:compare":{projects:6,score:4.1,outcome:"Clearer product trade-off explanations",metric:"Decision time -29%",value:17600},
+  "insights:feedback":{projects:9,score:4.5,outcome:"Recurring customer themes surfaced earlier",metric:"Analysis effort -47%",value:20800},
+  "insights:sentiment":{projects:7,score:4.0,outcome:"Priority issues identified from sentiment and frequency",metric:"Triage backlog -24%",value:15100},
+  "documents:extract":{projects:11,score:4.6,outcome:"Structured fields captured with less re-keying",metric:"Processing time -61%",value:28900},
+  "documents:review":{projects:8,score:4.4,outcome:"Reviewer-ready evidence packs produced faster",metric:"Review cycle -46%",value:26400},
+  "onboard:guided":{projects:7,score:4.3,outcome:"New users receive consistent next-step guidance",metric:"Setup completion +14%",value:17200},
+  "onboard:adaptive":{projects:6,score:4.5,outcome:"Onboarding adapts to customer readiness",metric:"Time to activation -19%",value:21900}
+};
 const MODELS = [
   {id:"gpt-mini",name:"GPT-5 mini",input:0.25,output:2,inputFactor:1,outputFactor:1},
   {id:"gpt",name:"GPT-5",input:1.25,output:10,inputFactor:1,outputFactor:1.2},
@@ -299,6 +326,7 @@ const fields = ["defaultRuns","context","complexity","reserve","operating","week
 class InputError extends Error {}
 class PipelineError extends Error {}
 let selections = [], category = "All", editingFeature = null, proposal = null, latestEstimate = null, mode = "manual";
+let editingMeasured = false;
 let pipelineRun=null, pipelineBusy=false, pipelineTimer=null, pipelineGeneration=0, projectScenario=null;
 let feedbackPopup=null, feedbackPending=null, feedbackSuggestion=null;
 let learningPopup=null, learningPending=null, learnedProposal=null, internalRankings=null;
@@ -306,6 +334,8 @@ const feedbackOrigin="http://127.0.0.1:8793";
 const savedBuildKey="token-yield-saved-build-v1";
 const measuredRateFields=["measured-input-rate","measured-output-rate"];
 let runtimeStatus={enabled:false}, measuredCatalog=[], catalogMetadata={}, catalogGeneration=0;
+const compositionCache=new Map();
+const compositionKey=items=>JSON.stringify([catalogMetadata.version,catalogMetadata.composition_model?.version,items.map(item=>item.backendPrediction?.contract_id)]);
 const finiteTokens = prediction => prediction?.supported!==false && Number.isFinite(prediction?.input_tokens) && prediction.input_tokens>=0 && Number.isFinite(prediction?.output_tokens) && prediction.output_tokens>=0;
 // A runtime route/model name chooses arithmetic, never the evidence label.
 const isReferenceForecast = item => ["reference-context","measured-workflow"].includes(item.forecastMode);
@@ -318,6 +348,17 @@ const projectSource = result => evidenceSource(result.after?.source,result.train
 const measuredRates = () => ({id:"gpt-5.4",name:"GPT-5.4 · reference-context scenario rates",input:Number($("measured-input-rate").value),output:Number($("measured-output-rate").value),inputFactor:1,outputFactor:1});
 const itemModel = item => isReferenceForecast(item) ? measuredRates() : MODELS.find(model=>model.id===item.modelId);
 const modelOptions = selected => MODELS.map(model => `<option value="${model.id}" ${model.id===selected?"selected":""}>${model.name}</option>`).join("");
+function measuredComposition(items) {
+  if(items.length<2||!items.every(item=>item.source==="measured-catalog"&&item.modelId==="gpt-5.4")||
+    new Set(items.map(item=>item.runs)).size!==1)return null;
+  const selected=items.map(item=>`${item.backendPrediction.contract_id}x1`);
+  const cached=compositionCache.get(compositionKey(items));
+  if(cached?.status==="complete"&&finiteTokens(cached.prediction))return cached.prediction;
+  return measuredCatalog.find(item=>item.feature_id==="workflow"&&item.forecast_mode==="measured-workflow"&&
+    item.source==="measured-foundry"&&item.pilot_version===catalogMetadata.version&&item.supported===true&&finiteTokens(item)&&
+    Array.isArray(item.component_contracts)&&item.component_contracts.length===selected.length&&
+    item.component_contracts.every((contract,index)=>contract===selected[index]))||null;
+}
 function assumptions() {
   for (const id of fields) if (!$(id).checkValidity()) throw new InputError(`Check "${$(id).closest("label").childNodes[0].textContent.trim()}": enter a value within the displayed limits.`);
   return Object.fromEntries(fields.map(id => [id,Number($(id).value)]));
@@ -327,22 +368,63 @@ function record(featureId,variantId,modelId="gpt-mini",runs=1000,source="catalog
   return {featureId,variantId,modelId:feature.backendRequest?.model_id||modelId,runs,hours:[...variant.hours],review:variant.review,tool:variant.tool,source,description,
     ...(feature.backendPrediction?{backendPrediction:feature.backendPrediction,backendFeatures:feature.backendFeatures,backendRunId:feature.backendRunId,predictionSource:feature.predictionSource,forecastMode:feature.forecastMode}:{})};
 }
+function measuredRecord(prediction,runs) {
+  const [featureId,variantId]=prediction.id.split(":");
+  return {...record(featureId,variantId,"gpt-5.4",runs,"measured-catalog"),
+    backendPrediction:{...prediction},predictionSource:evidenceSource(prediction.source,catalogMetadata.source),
+    forecastMode:"reference-context",backendFeatures:prediction.features||{},backendRunId:prediction.run_id||catalogMetadata.run_id};
+}
+function forecastUnavailableReason(items) {
+  if(measuredComposition(items))return null;
+  const cached=compositionCache.get(compositionKey(items));
+  if(cached?.status==="loading")return "Calculating from the trained model locally. No training or provider call is running.";
+  if(cached?.status==="failed")return cached.error;
+  if(items.some(item=>item.backendPrediction&&!finiteTokens(item.backendPrediction)))
+    return "A supported token forecast is not yet available. Impact hypotheses and staffing are shown; token spend and calculated ROI are withheld until the workflow is measured.";
+  if(items.filter(item=>item.source==="measured-catalog").length>1)
+    return "No trained forecast matches this ordered workflow and volume. Use the same monthly runs for its components. Otherwise measure the complete workflow in Tab 02; standalone token forecasts are never summed.";
+  return null;
+}
+function requestComposition(items) {
+  if(!catalogMetadata.composition_model?.accepted||items.length<2||
+    !items.every(item=>item.source==="measured-catalog")||
+    new Set(items.map(item=>item.runs)).size!==1||measuredComposition(items))return;
+  const key=compositionKey(items);
+  if(compositionCache.has(key))return;
+  const generation=catalogGeneration;
+  compositionCache.set(key,{status:"loading"});
+  backendJson("/api/forecast",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({selections:items.map(item=>item.backendPrediction.contract_id)})})
+    .then(prediction=>{
+      if(generation!==catalogGeneration)return;
+      compositionCache.set(key,finiteTokens(prediction)?{status:"complete",prediction}:
+        {status:"failed",error:prediction.reason||"The trained predictor could not support this workflow."});
+      if(compositionKey(selections)===key)renderQuote();
+    }).catch(error=>{
+      if(generation!==catalogGeneration)return;
+      compositionCache.set(key,{status:"failed",error:`Local prediction failed: ${error.message}`});
+      if(compositionKey(selections)===key)renderQuote();
+    });
+}
 // One pure calculation feeds the sidebar, review, business case and exported estimate.
 function calculate(items,a,models,coordinatorId) {
-  const reference=items.some(isReferenceForecast);
+  const unavailable=forecastUnavailableReason(items);
+  if(unavailable)throw new InputError(unavailable);
+  const composition=measuredComposition(items);
+  const reference=Boolean(composition)||items.some(isReferenceForecast);
   if(reference && (!items.every(isReferenceForecast)||new Set(items.map(item=>item.predictionSource)).size>1))throw new InputError("Reference forecasts cannot be mixed with other evidence sources or illustrative selections. Choose one estimation basis.");
   const rows = items.map(item => {
     const feature = CATALOG.find(entry => entry.id===item.featureId);
     const variant = feature.variants.find(entry => entry.id===item.variantId);
     const model = isReferenceForecast(item) ? measuredRates() : models.find(entry => entry.id===item.modelId);
-    if(item.backendPrediction && !finiteTokens(item.backendPrediction))throw new InputError("Unsupported prediction: no financial estimate is available.");
     const atomCounts = variant.atoms.reduce((counts,atom) => ({...counts,[atom]:(counts[atom]||0)+1}),{});
     const raw = item.backendPrediction ? [0,0] : variant.atoms.reduce((sum,atom) => [sum[0]+ATOMS[atom][0],sum[1]+ATOMS[atom][1]],[0,0]);
     const briefInput = Math.ceil(item.description.length/4);
-    const perRun = item.backendPrediction ? {input:item.backendPrediction.input_tokens,output:item.backendPrediction.output_tokens} :
+    const perRun = composition ? {input:null,output:null} :
+      item.backendPrediction ? {input:item.backendPrediction.input_tokens,output:item.backendPrediction.output_tokens} :
       {input:Math.ceil((raw[0]+a.context+briefInput)*model.inputFactor),output:Math.ceil(raw[1]*model.outputFactor)};
-    const tokens = {input:perRun.input*item.runs,output:perRun.output*item.runs};
-    const api = (tokens.input*model.input+tokens.output*model.output)/1e6;
+    const tokens = composition ? {input:null,output:null} : {input:perRun.input*item.runs,output:perRun.output*item.runs};
+    const api = composition ? null : (tokens.input*model.input+tokens.output*model.output)/1e6;
     return {...item,feature:feature.name,variant:variant.name,model:model.name,atomCounts,briefInput,perRun,tokens,api,
       toolCost:item.tool*item.runs,reviewHours:item.review*item.runs/60,
       featureVector:item.backendPrediction ? {...item.backendFeatures,source:item.predictionSource||"unknown",runId:item.backendRunId,scope:item.backendPrediction.scope,version:item.backendPrediction.version} :
@@ -356,9 +438,9 @@ function calculate(items,a,models,coordinatorId) {
   const routing = {input:Math.ceil(120*routingRuns*a.complexity*coordinator.inputFactor),output:Math.ceil(30*routingRuns*a.complexity*coordinator.outputFactor)};
   const setupTokens = {input:Math.ceil(18000*pairs.length*a.complexity*coordinator.inputFactor),output:Math.ceil(6000*pairs.length*a.complexity*coordinator.outputFactor)};
   const rate = tokens => (tokens.input*coordinator.input+tokens.output*coordinator.output)/1e6;
-  const input = rows.reduce((sum,row)=>sum+row.tokens.input,0)+routing.input;
-  const output = rows.reduce((sum,row)=>sum+row.tokens.output,0)+routing.output;
-  const monthlyApi = rows.reduce((sum,row)=>sum+row.api,0)+rate(routing);
+  const input = composition ? composition.input_tokens*items[0].runs : rows.reduce((sum,row)=>sum+row.tokens.input,0)+routing.input;
+  const output = composition ? composition.output_tokens*items[0].runs : rows.reduce((sum,row)=>sum+row.tokens.output,0)+routing.output;
+  const monthlyApi = composition ? (input*measuredRates().input+output*measuredRates().output)/1e6 : rows.reduce((sum,row)=>sum+row.api,0)+rate(routing);
   const tools = rows.reduce((sum,row)=>sum+row.toolCost,0);
   const reviewHours = rows.reduce((sum,row)=>sum+row.reviewHours,0);
   const reviewCost = reviewHours*a.reviewRate;
@@ -375,7 +457,7 @@ function calculate(items,a,models,coordinatorId) {
   const setupAI = rate(setupTokens)*(1+a.reserve/100);
   const setupLabor = team.reduce((sum,role)=>sum+role.cost,0);
   const setupCost = setupLabor+setupAI;
-  const runs = rows.reduce((sum,row)=>sum+row.runs,0);
+  const runs = composition ? items[0].runs : rows.reduce((sum,row)=>sum+row.runs,0);
   const benefitCases = runs>0 ? a.cases : 0;
   const hoursSaved = benefitCases*(a.before-a.after)/60;
   const timeValue = hoursSaved*a.laborValue*a.realization/100;
@@ -386,10 +468,11 @@ function calculate(items,a,models,coordinatorId) {
   const roi = yearCost>0 ? (yearBenefit-yearCost)/yearCost*100 : null;
   const payback = net>0 ? setupCost/net : null;
   const warnings=[];
+  if(composition?.output_ceiling_applied)warnings.push("Output usage is bounded at the configured 1,536-token provider ceiling. This is a conservative usage estimate, not a guarantee that every step will finish; reduce scope before deployment.");
   if (benefitCases>runs) warnings.push("Unique client cases exceed total selected variant runs. Reconcile coverage before relying on benefits.");
   if (rows.length && runs===0) warnings.push("No recurring workloads: benefits are zero. Setup labor and the operating allowance remain.");
   if (a.after>a.before) warnings.push("The proposed workflow takes longer than the manual baseline; negative time value is included.");
-  return {rows,groups,pairs,routing,routingRuns,setupTokens,coordinator:coordinator.name,input,output,totalTokens:input+output,
+  return {rows,composition,standaloneForecastsSummed:false,groups,pairs,routing,routingRuns,setupTokens,coordinator:coordinator.name,input,output,totalTokens:input+output,
     monthlyApi,tools,reserveCost,reviewHours,reviewCost,operating,monthlyCost,team,setupAI,setupLabor,setupCost,runs,
     benefitCases,hoursSaved,timeValue,contribution,benefit,net,yearCost,yearBenefit,roi,payback,
     benefitPerMillionTokens:input+output>0 ? benefit/(input+output)*1e6 : null,warnings};
@@ -411,11 +494,39 @@ function renderCatalog() {
   }).join("")||'<p class="empty">No matching functionalities. Try another search or category.</p>';
 }
 function row(label,value) {return `<div class="row"><span>${label}</span><b>${value}</b></div>`;}
+function renderPlanningOnly(a,reason) {
+  const roles=["Data scientist","Architect","Consultant"].map((role,index)=>{
+    const hours=selections.reduce((sum,item)=>sum+item.hours[index],0);
+    return {role,hours,fte:hours/(a.weeks*a.weekHours),people:Math.ceil(hours/(a.weeks*a.weekHours))};
+  });
+  const impacts=selections.map(item=>{
+    const feature=CATALOG.find(entry=>entry.id===item.featureId);
+    const variant=feature.variants.find(entry=>entry.id===item.variantId);
+    return {feature:feature.name,variant:variant.name,...impactEvidence(item.featureId,item.variantId)};
+  });
+  const reviewHours=selections.reduce((sum,item)=>sum+item.review*item.runs/60,0);
+  const toolCost=selections.reduce((sum,item)=>sum+item.tool*item.runs,0);
+  $("quote-error").hidden=true;
+  $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">Impact and staffing plan</div><div class="amount">${compositionCache.get(compositionKey(selections))?.status==="loading"?"Predicting":"Not supported"}<small> for this workflow</small></div>
+    <p class="fine">${esc(reason)}</p></div>
+    ${row("Selected impact hypotheses",number(impacts.length))}
+    ${row("Recurring human review",`${number(reviewHours)} h / month`)}
+    ${row("Tool fees",`${money(toolCost)} / month`)}
+    <div class="divider"></div><div class="eyebrow">Delivery staffing</div>${roles.map(role=>row(role.role,`${role.people} people <small>(${role.fte.toFixed(2)} FTE / ${number(role.hours)} h)</small>`)).join("")}
+    <p class="fine">Staffing remains editable. No token spend, recurring total, ROI or payback is invented while model support is unavailable.</p>`;
+  $("team-summary").innerHTML=`<div class="table-scroll"><table><thead><tr><th>Setup role</th><th class="num">Hours</th><th class="num">FTE</th><th class="num">People</th></tr></thead><tbody>${roles.map(role=>`<tr><td>${role.role}</td><td class="num">${number(role.hours)}</td><td class="num">${role.fte.toFixed(2)}</td><td class="num">${role.people}</td></tr>`).join("")}</tbody></table></div>
+    <p class="help">This staffing plan is independent of the withheld token forecast.</p>`;
+  $("yield-summary").innerHTML=`<div class="yield-head"><div><div class="eyebrow">Client impact hypotheses</div><h2>Value evidence without a fabricated ROI.</h2></div><span class="pill">Fictitious delivered-project seeds</span></div>
+    <div class="impact-grid">${impacts.map(impact=>`<div class="impact"><h3>${esc(impact.feature)} / ${esc(impact.variant)}</h3><p><b>${esc(impact.metric)}</b></p><p>${esc(impact.outcome)}</p><p>${number(impact.score)} / 5 across ${number(impact.projects)} demo projects · ${money(impact.value)} monthly value hypothesis</p></div>`).join("")}</div>
+    <p class="fine">These impact and value labels exercise the feedback-learning workflow. They are not measured customer outcomes and are not summed across overlapping functions.</p>`;
+  $("review").disabled=true;
+}
 function renderQuote() {
+  requestComposition(selections);
   $("delivery-feedback").disabled=!selections.length;
   $("cart-items").innerHTML=selections.map(item=>{
     const feature=CATALOG.find(f=>f.id===item.featureId),variant=feature.variants.find(v=>v.id===item.variantId),model=itemModel(item);
-    return `<div class="cart-item"><span class="dot" style="background:${feature.color}"></span><div class="item"><b>${esc(feature.name)}</b><small>${esc(variant.name)} &middot; ${esc(model.name)}</small>${item.backendPrediction?`<small>${esc(evidenceLabel(item.predictionSource))}</small>`:""}<small>${number(item.runs)} runs/month${item.source==="custom"?" &middot; approved brief mapping":""}</small></div><button class="remove" data-remove="${esc(key(item.featureId,item.variantId))}" aria-label="Remove ${esc(variant.name)}">&times;</button></div>`;
+    return `<div class="cart-item"><span class="dot" style="background:${feature.color}"></span><div class="item"><b>${esc(feature.name)}</b><small>${esc(variant.name)} &middot; ${esc(model.name)}</small>${item.backendPrediction?`<small>${finiteTokens(item.backendPrediction)?esc(evidenceLabel(item.predictionSource)):"Token forecast not yet supported"}</small>`:""}<small>${number(item.runs)} runs/month${item.source==="custom"?" &middot; approved brief mapping":""}</small></div><button class="remove" data-remove="${esc(key(item.featureId,item.variantId))}" aria-label="Remove ${esc(variant.name)}">&times;</button></div>`;
   }).join("")||'<p class="empty">Start with one capability.<br>Your build and value case will appear here.</p>';
   $("build-count").textContent=`${new Set(selections.map(item=>item.featureId)).size} bricks / ${selections.length} variants`;
   if(!selections.length){
@@ -424,6 +535,18 @@ function renderQuote() {
     $("quote-summary").innerHTML="";$("team-summary").innerHTML="";
     $("yield-summary").innerHTML='<div class="eyebrow">The return on your build</div><h2>From token spend to client impact.</h2><p class="fine">Choose your first brick to see estimated tokens, costs, staffing, and ROI. No estimate yet.</p>';
     $("review").disabled=true;
+    return;
+  }
+  const unavailable=forecastUnavailableReason(selections);
+  if(unavailable){
+    let a;
+    try{a=assumptions();}catch(error){
+      if(!(error instanceof InputError))throw error;
+      latestEstimate=null;$("quote-error").textContent=error.message;$("quote-error").hidden=false;
+      $("quote-summary").innerHTML="";$("team-summary").innerHTML="";$("review").disabled=true;return;
+    }
+    latestEstimate=null;
+    renderPlanningOnly(a,unavailable);
     return;
   }
   try {
@@ -437,12 +560,13 @@ function renderQuote() {
     if(!(error instanceof InputError))throw error;
     latestEstimate=null;
     $("quote-error").textContent=error.message;$("quote-error").hidden=false;
-    $("quote-summary").innerHTML="";$("team-summary").innerHTML="";$("yield-summary").innerHTML='<p>Resolve invalid assumptions to calculate a value case.</p>';
+    $("quote-summary").innerHTML="";$("team-summary").innerHTML="";$("yield-summary").innerHTML='<p>No financial estimate is available. Review the message in your build. Variations and staffing remain editable.</p>';
     $("review").disabled=true;return;
   }
   $("quote-error").hidden=true;
   const e=latestEstimate;
   $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">${selections.some(item=>item.backendPrediction)?esc(evidenceLabel(evidenceSource(...selections.filter(item=>item.backendPrediction).map(item=>item.predictionSource)))):"Planning assumptions only / no model prediction"}</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
+    ${e.composition?`<p><b>${e.composition.forecast_mode==="measured-composition-model"?"Generalizing composition model":"One trained workflow"} / ${number(e.composition.total_tokens)} tokens per run.</b> Shared context and handoffs included; standalone forecasts are not summed.</p>`:""}
     ${row("Input tokens",compact(e.input))}${row("Output tokens",compact(e.output))}${row("Total tokens / month",compact(e.totalTokens))}
     <small>${selections.some(isReferenceForecast)?"Fixed reference context / GPT-5.4. No synthetic routing or setup tokens added; pilot accounting is separate and retains its provider source.":number(e.pairs.length)+" assumed connections · routing included"}</small></div>
     ${row("Tools + AI/tool reserve",money(e.tools+e.reserveCost))}${row("Human review",money(e.reviewCost))}${row("Other operating allowance",money(e.operating))}
@@ -465,32 +589,51 @@ function renderQuote() {
 }
 function refresh(message) {renderCatalog();renderQuote();renderMeasuredCatalog();renderSavedProject();if(message)$("status").textContent=message;}
 function field(label,name,value,step="0.1",max="100000") {return `<label>${label}<input name="${name}" type="number" min="0" max="${max}" step="${step}" value="${value}" required></label>`;}
-function configure(id) {
+function impactEvidence(featureId,variantId) {
+  const demo=DEMO_IMPACTS[key(featureId,variantId)];
+  const learned=internalRankings?.rows?.find(row=>row.feature_id===featureId)?.options?.find(option=>option.variant_id===variantId);
+  return {
+    ...demo,
+    score:Number.isFinite(learned?.score)?learned.score/20:demo.score,
+    projects:Number.isFinite(learned?.project_count)&&learned.project_count>0?learned.project_count:demo.projects,
+    source:Number.isFinite(learned?.score)?"feedback-learning evidence":"fictitious delivered-project seed"
+  };
+}
+function configure(id,measured=false) {
   feedbackSuggestion=null;
   let a;try{a=assumptions();}catch(error){if(!(error instanceof InputError))throw error;$("status").textContent=error.message;return;}
   editingFeature=CATALOG.find(feature=>feature.id===id);
-  $("feedback-suggestion-controls").hidden=Boolean(editingFeature.backendPrediction)||selections.some(s=>s.featureId===id&&s.backendPrediction);
+  editingMeasured=measured;
+  $("configure-error").textContent="";
+  $("feedback-suggestion-controls").hidden=measured||Boolean(editingFeature.backendPrediction)||selections.some(s=>s.featureId===id&&s.backendPrediction);
   $("feedback-suggestion-status").textContent="You review the suggestion before saving. No approved policy means baseline exploration.";
   $("configure-title").textContent=editingFeature.name;$("configure-description").textContent=editingFeature.description;
-  $("variant-options").innerHTML=editingFeature.variants.map(variant=>{
+  $("variant-options").innerHTML=editingFeature.variants.filter(variant=>!measured||measuredCatalog.some(item=>item.id===key(id,variant.id)&&item.model_id==="gpt-5.4")).map(variant=>{
     const item=selections.find(item=>item.featureId===id&&item.variantId===variant.id);
-    const draft=item||record(id,variant.id,"gpt-mini",a.defaultRuns);
+    const prediction=measuredCatalog.find(entry=>entry.id===key(id,variant.id));
+    const draft=(measured&&!isReferenceForecast(item||{})?null:item)||(measured?measuredRecord(prediction,selections.find(item=>item.source==="measured-catalog")?.runs??a.defaultRuns):record(id,variant.id,"gpt-mini",a.defaultRuns));
+    const impact=impactEvidence(id,variant.id);
+    const predicted=finiteTokens(draft.backendPrediction);
     return `<section class="variant-row"><input type="checkbox" name="pick-${variant.id}" id="pick-${variant.id}" ${item?"checked":""} aria-label="Select ${variant.name}">
-      <div><label for="pick-${variant.id}">${esc(variant.name)}</label><p>${esc(variant.description)}</p><div class="tags">${variant.atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div>
-      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}" ${draft.backendPrediction?"disabled":""}>${isReferenceForecast(draft)?'<option value="gpt-5.4">GPT-5.4 / fixed reference context</option>':modelOptions(draft.modelId)}</select></label>${field("Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
-      ${draft.backendPrediction?`<p>Frozen ${esc(evidenceLabel(draft.predictionSource))}. Context and token factors do not change this snapshot. Volume and commercial rates change planning USD only; use the pipeline to measure and retrain.</p>`:""}
-      <details><summary>Edit effort &amp; tool assumptions</summary><div class="form-grid two">
+      <div><label for="pick-${variant.id}">${esc(variant.name)}</label><p><b>What it means:</b> ${esc(variant.description)}</p><div class="tags">${variant.atoms.map(atom=>`<span>${esc(atom)}</span>`).join("")}</div>
+      <div class="review-metrics"><div><small>Delivered-client score</small><b>${number(impact.score)} / 5</b><small>${number(impact.projects)} projects · ${esc(impact.source)}</small></div><div><small>Observed demo impact</small><b>${esc(impact.metric)}</b><small>${esc(impact.outcome)}</small></div><div><small>Predicted AI value</small><b>${money(impact.value)} / month</b><small>Fictitious planning label; replace with verified attributable benefit</small></div></div>
+      <div class="form-grid two"><label>Execution LLM<select name="model-${variant.id}" ${draft.backendPrediction?"disabled":""}>${isReferenceForecast(draft)?'<option value="gpt-5.4">GPT-5.4 / fixed reference context</option>':modelOptions(draft.modelId)}</select></label>${field(measured?"Workflow runs / month (shared)":"Runs / month",`runs-${variant.id}`,draft.runs,"1","1000000")}</div>
+      ${measured?'<p class="help">Selected types form one integrated workflow. Changing this volume updates every selected type; the workflow is priced once.</p>':""}
+      ${draft.backendPrediction?predicted?`<p><b>Token prediction:</b> ${number(draft.backendPrediction.input_tokens)} input + ${number(draft.backendPrediction.output_tokens)} output tokens/run from a frozen ${esc(evidenceLabel(draft.predictionSource))}. Volume changes planning USD only.</p>`:'<p class="help"><b>Token prediction withheld.</b> This variant can still carry staffing and fictitious impact assumptions, but token cost and calculated ROI remain unavailable until the complete workflow is measured.</p>':""}
+      <h3>Delivery staffing and operating assumptions</h3><div class="form-grid two">
       ${field("Data scientist setup hours",`ds-${variant.id}`,draft.hours[0])}${field("Architect setup hours",`arch-${variant.id}`,draft.hours[1])}${field("Consultant setup hours",`consult-${variant.id}`,draft.hours[2])}
       ${field("Review minutes / run",`review-${variant.id}`,draft.review,"0.1","10000")}${field("Tool fee USD / run",`tool-${variant.id}`,draft.tool,"0.01","10000")}
-      </div></details>${item?.description?`<p>Approved brief: ${esc(item.description)}</p>`:""}</div></section>`;
+      </div><p class="help"><b>Learning ready:</b> after delivery, submit satisfaction, usefulness, retained output, actual effort and attributable benefit through “Delivered project: give feedback.” The candidate contextual-bandit policy is evaluated on held-out projects and requires named human promotion before recommendations change.</p>${item?.description?`<p>Approved brief: ${esc(item.description)}</p>`:""}</div></section>`;
   }).join("");
   $("configure").showModal();
 }
 function saveVariants(event) {
   event.preventDefault();
   const form=event.currentTarget,featureId=editingFeature.id;
-  const updated=editingFeature.variants.filter(variant=>form.elements[`pick-${variant.id}`].checked).map(variant=>{
-    const previous=selections.find(item=>item.featureId===featureId&&item.variantId===variant.id);
+  const updated=editingFeature.variants.filter(variant=>form.elements[`pick-${variant.id}`]?.checked).map(variant=>{
+    const selected=selections.find(item=>item.featureId===featureId&&item.variantId===variant.id);
+    const previous=editingMeasured&&!isReferenceForecast(selected||{})?
+      measuredRecord(measuredCatalog.find(item=>item.id===key(featureId,variant.id)),Number(form.elements[`runs-${variant.id}`].value)):selected;
     const val=name=>Number(form.elements[`${name}-${variant.id}`].value);
     return {...record(featureId,variant.id,form.elements[`model-${variant.id}`].value,val("runs"),previous?.source||"catalog",previous?.description||""),
       ...((feedbackSuggestion?.featureId===featureId&&feedbackSuggestion.variantId===variant.id&&feedbackSuggestion.modelId===form.elements[`model-${variant.id}`].value)?
@@ -501,7 +644,17 @@ function saveVariants(event) {
       hours:[val("ds"),val("arch"),val("consult")],review:val("review"),tool:val("tool")};
   });
   if(updated.some(isReferenceForecast) && !updated.every(isReferenceForecast)){$("status").textContent="Do not mix reference forecasts and manual variants. Select stored forecasts in the pre-predicted catalog.";return;}
-  selections=[...selections.filter(item=>item.featureId!==featureId && (!updated.length || isReferenceForecast(item)===updated.some(isReferenceForecast))),...updated];
+  const remaining=selections.filter(item=>item.featureId!==featureId && (!updated.length || isReferenceForecast(item)===updated.some(isReferenceForecast)));
+  const next=[...remaining,...updated];
+  const stepCount=next.reduce((sum,item)=>sum+CATALOG.find(feature=>feature.id===item.featureId).variants.find(variant=>variant.id===item.variantId).atoms.length,0);
+  if(editingMeasured&&stepCount>(catalogMetadata.composition_model?.max_steps??40)){
+    $("configure-error").textContent=`This workflow has ${stepCount} execution steps; the supported limit is ${catalogMetadata.composition_model?.max_steps??40}. Remove a type or scope a separate build. Your current quote is unchanged.`;
+    return;
+  }
+  const previousIndex=selections.findIndex(item=>item.featureId===featureId);
+  selections=remaining;
+  selections.splice(previousIndex<0?selections.length:Math.min(previousIndex,selections.length),0,...updated);
+  if(editingMeasured&&updated.length)selections=selections.map(item=>({...item,runs:updated[0].runs}));
   $("configure").close();refresh(`${editingFeature.name}: saved ${updated.length} variation${updated.length===1?"":"s"}.`);
 }
 // Deliberately local and narrow: preserve matched evidence and require human approval, never impersonate an LLM.
@@ -579,7 +732,8 @@ function setMode(next) {
   renderSavedProject();
   $("status").textContent=custom?"Demo 02: submit a description to start the backend agent pipeline. Paid Foundry mode spends only after explicit submit.":
     saved?"Demo 03: edit a saved shopped build and re-estimate instantly from frozen forecasts. No model calls.":
-    "Demo 01: shop pre-predicted GPT-5.4 bricks. Selecting composes instant forecasts and never starts a paid agent run.";
+    "Sales Studio: select functionalities and types, then see trained token inference, cost and assumption-based ROI. No training or provider calls on selection.";
+  updateRuntimeChoice();
 }
 function savedSnapshot() {
   try {
@@ -638,13 +792,19 @@ function syncVisibleSelectionInputs() {
   });
 }
 function saveCurrentBuild() {
-  if(!selections.length){$("status").textContent="Select at least one pre-predicted brick before saving.";return;}
-  syncVisibleSelectionInputs();
-  const snapshot={schema:savedBuildKey,savedAt:new Date().toISOString(),selections:JSON.parse(JSON.stringify(selections)),
-    estimateInputs:snapshotEstimateInputs(),catalogMetadata,
-    savedEstimate:selections.length?calculate(selections,assumptions(),MODELS,$("coordinator").value):null};
-  localStorage.setItem(savedBuildKey,JSON.stringify(snapshot));
-  renderSavedProject();$("status").textContent="Saved project updated locally. Loading and re-estimating it does not call a model.";
+  if(!selections.length){$("status").textContent="Select at least one brick before saving.";return;}
+  try {
+    syncVisibleSelectionInputs();
+    const a=assumptions(),unavailable=forecastUnavailableReason(selections);
+    const snapshot={schema:savedBuildKey,savedAt:new Date().toISOString(),selections:JSON.parse(JSON.stringify(selections)),
+      estimateInputs:snapshotEstimateInputs(),catalogMetadata,estimateUnavailableReason:unavailable,
+      savedEstimate:unavailable?null:calculate(selections,a,MODELS,$("coordinator").value)};
+    localStorage.setItem(savedBuildKey,JSON.stringify(snapshot));
+    renderSavedProject();$("status").textContent=unavailable?"Draft build saved locally, including staffing. Financial estimate remains unavailable; no model calls.":"Saved project updated locally. Loading and re-estimating it does not call a model.";
+  } catch(error) {
+    if(!(error instanceof InputError))throw error;
+    $("status").textContent=error.message;
+  }
 }
 function restoreAssumptions(snapshot) {
   validateSavedSnapshot(snapshot);
@@ -670,7 +830,7 @@ function loadSavedBuild() {
     const candidate=validateSavedSnapshot(snapshot);
     restoreAssumptions(candidate);
     selections=JSON.parse(JSON.stringify(candidate.selections));projectScenario=null;
-    refresh("Saved project loaded. Re-estimated instantly from stored forecast provenance; no agent run started.");
+    refresh(forecastUnavailableReason(selections)?"Draft build loaded with its staffing assumptions. Financial estimate remains unavailable; no agent run started.":"Saved project loaded. Re-estimated instantly from stored forecast provenance; no agent run started.");
     return true;
   }catch(error){
     if(!(error instanceof InputError))throw error;
@@ -693,6 +853,7 @@ function renderSavedProject() {
   let validText="All quote-affecting inputs are present.";
   try{validateSavedSnapshot(snapshot);}catch(error){if(error instanceof InputError)validText=error.message;else throw error;}
   panel.innerHTML=`<p class="help">Saved ${snapshot.selections.length} variation${snapshot.selections.length===1?"":"s"} at ${esc(snapshot.savedAt||"unknown time")}. Editing happens by loading the build, changing the cart, then saving again.</p>
+    ${snapshot.estimateUnavailableReason?`<p class="help">${esc(snapshot.estimateUnavailableReason)}</p>`:""}
     <p class="help">Saved commercial rates: input ${esc(inputs?.measuredRates?.["measured-input-rate"]??"missing")} / output ${esc(inputs?.measuredRates?.["measured-output-rate"]??"missing")} USD per 1M tokens. ${esc(validText)}</p>
     <div class="table-scroll"><table><thead><tr><th>Functionality</th><th>Source</th><th class="num">Runs/mo</th><th>Provenance</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="help">Re-estimate uses the same frozen forecast arithmetic shown in the cart. Sending to Tab 02 copies a narrative request only; it does not submit an agent run.</p>`;
@@ -719,11 +880,12 @@ function renderFilters() {
 function exportData() {
   const a=assumptions();
   const forecasts=selections.filter(item=>item.backendPrediction),source=evidenceSource(...forecasts.map(item=>item.predictionSource));
-  return {schema:"token-yield-marketplace-sales-demo-v1",createdAt:new Date().toISOString(),basis:!forecasts.length?"illustrative-simulation":({"measured-foundry":"measured-data-pilot-forecast","mocked-test-provider":"mocked-provider-pilot-forecast","synthetic":"synthetic-data-forecast"})[source]||"unknown-provenance-forecast",
-    trainedPredictorConnected:forecasts.length>0,trainingDataSource:forecasts.length?source:null,
+  const unavailable=forecastUnavailableReason(selections);
+  return {schema:"token-yield-marketplace-sales-demo-v1",createdAt:new Date().toISOString(),basis:unavailable?"unavailable-forecast":!forecasts.length?"illustrative-simulation":({"measured-foundry":"measured-data-pilot-forecast","mocked-test-provider":"mocked-provider-pilot-forecast","synthetic":"synthetic-data-forecast"})[source]||"unknown-provenance-forecast",
+    trainedPredictorConnected:forecasts.some(item=>finiteTokens(item.backendPrediction)),trainingDataSource:forecasts.length?source:null,
     projectScenario:selections.some(item=>item.featureId==="project-pipeline")?projectScenario:null,catalogMetadata,commercialMeasuredRates:measuredRates(),liveLLMConnected:runtimeStatus.enabled===true&&runtimeStatus.source==="measured-foundry",runtimeSource:runtimeStatus.source||"unknown",sourceBranch:"feat/marketplace",flow:mode,
     assumptions:{...a,coordinatorId:$("coordinator").value},modelScenarioRates:MODELS,atomicScenarioTokens:ATOMS,
-    selections,estimate:selections.length?calculate(selections,a,MODELS,$("coordinator").value):null,limitations:LIMITATIONS};
+    selections,estimate:selections.length&&!unavailable?calculate(selections,a,MODELS,$("coordinator").value):null,estimateUnavailableReason:unavailable,limitations:LIMITATIONS};
 }
 function openReview() {
   renderQuote();if(!latestEstimate||!selections.length)return;
@@ -732,8 +894,9 @@ function openReview() {
   $("review-body").innerHTML=`<div class="notice">${!e.rows.some(item=>item.backendPrediction)?"Illustrative scenario only; catalog tokens use fixed coefficients.":source==="measured-foundry"?"Measured-data regression forecasts at a fixed GPT-5.4 reference context. These predictions are not actual billed calls. Orchestration/training spend is reported separately in operations. No invented integration tokens are included.":source==="mocked-test-provider"?"MOCK synthetic-provider regression forecasts. Outputs and token labels are local test fixtures, not paid LLM evidence.":source==="synthetic"?"Real regression predictions trained on synthetic samples, not measured LLM usage.":"Unknown-provenance forecasts: provider evidence was absent or inconsistent. No measured or live evidence claim is available."} No production accuracy or ROI is established. Staffing and benefits remain assumptions.</div>
     <div class="review-metrics"><div><small>Total tokens / month</small><b>${compact(e.totalTokens)}</b></div><div><small>Recurring cost / month</small><b>${money(e.monthlyCost)}</b></div><div><small>12-month ROI</small><b>${e.roi===null?"Not defined":number(e.roi)+"%"}</b></div></div>
     <h3>Final selected functionalities</h3><div class="table-scroll"><table><thead><tr><th>Capability / variant / LLM</th><th class="num">Runs/mo</th><th class="num">Tokens/run</th><th class="num">AI USD/mo</th></tr></thead><tbody>
-    ${e.rows.map(item=>`<tr><td><b>${esc(item.feature)}</b><small>${esc(item.variant)}</small><small>${esc(item.model)} &middot; ${item.backendPrediction?esc(evidenceLabel(item.predictionSource)):item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${number(item.perRun.input+item.perRun.output)}</td><td class="num">${money(item.api)}</td></tr>`).join("")}
-    <tr><td>Integration routing<small>${e.coordinator}; ${number(e.pairs.length)} assumed pairs</small></td><td class="num">${number(e.routingRuns)}</td><td class="num">&mdash;</td><td class="num">${money(e.monthlyApi-e.rows.reduce((sum,item)=>sum+item.api,0))}</td></tr></tbody></table></div>
+    ${e.rows.map(item=>`<tr><td><b>${esc(item.feature)}</b><small>${esc(item.variant)}</small><small>${esc(item.model)} &middot; ${item.backendPrediction?esc(evidenceLabel(item.predictionSource)):item.source==="custom"?"approved simulated mapping":"catalog selection"}</small></td><td class="num">${number(item.runs)}</td><td class="num">${e.composition?"Included in workflow":number(item.perRun.input+item.perRun.output)}</td><td class="num">${e.composition?"Not allocated":money(item.api)}</td></tr>`).join("")}
+    ${e.composition?`<tr><td>Complete measured workflow<small>Shared context and handoffs included; no component cost allocation</small></td><td class="num">${number(e.runs)}</td><td class="num">${number(e.composition.total_tokens)}</td><td class="num">${money(e.monthlyApi)}</td></tr>`:
+      `<tr><td>Integration routing<small>${e.coordinator}; ${number(e.pairs.length)} assumed pairs</small></td><td class="num">${number(e.routingRuns)}</td><td class="num">&mdash;</td><td class="num">${money(e.monthlyApi-e.rows.reduce((sum,item)=>sum+item.api,0))}</td></tr>`}</tbody></table></div>
     ${row("Total monthly tokens (exact)",number(e.totalTokens))}${row("Input / output",`${number(e.input)} / ${number(e.output)}`)}${row("Monthly AI API",money(e.monthlyApi))}${row("Monthly tools",money(e.tools))}${row("Monthly AI/tool reserve",money(e.reserveCost))}${row("Monthly human review",money(e.reviewCost))}${row("Other monthly operating cost",money(e.operating))}
     <div class="divider"></div><h3>Delivery team</h3>${e.team.map(role=>row(role.role,`${role.people} people / ${role.fte.toFixed(2)} FTE / ${number(role.hours)} h`)).join("")}
     ${row("One-time setup labor",money(e.setupLabor))}${row("One-time setup AI + reserve",money(e.setupAI))}${row("One-time setup tokens",number(e.setupTokens.input+e.setupTokens.output))}
@@ -747,8 +910,14 @@ function openReview() {
 function openDeliveryFeedback() {
   try {
     const data=exportData();
-    if(!data.estimate?.rows.length)throw new Error("Select the delivered project's functionalities first.");
-    const functions=data.estimate.rows.flatMap(row=>{
+    if(!selections.length)throw new Error("Select the delivered project's functionalities first.");
+    const estimateRows=data.estimate?.rows||selections.map(item=>{
+      const feature=CATALOG.find(entry=>entry.id===item.featureId);
+      const variant=feature?.variants.find(entry=>entry.id===item.variantId);
+      return {...item,feature:feature?.name||item.featureId,variant:variant?.name||item.variantId,
+        model:itemModel(item).name,perRun:null};
+    });
+    const functions=estimateRows.flatMap(row=>{
       const selected=selections.find(s=>s.featureId===row.featureId&&s.variantId===row.variantId);
       if(row.featureId==="project-pipeline"){
         if(!data.projectScenario?.result?.bricks?.length)throw new Error("The selected custom workflow has no original functionality breakdown. Restore its pipeline result before giving feedback.");
@@ -759,14 +928,17 @@ function openDeliveryFeedback() {
       }
       return [{id:key(row.featureId,row.variantId),feature_id:row.featureId,variant_id:row.variantId,
         name:`${row.feature} / ${row.variant}`,model_id:row.modelId,model_name:row.model,
-        estimated_tokens:row.perRun.input+row.perRun.output,runs:row.runs,decision_id:selected?.feedbackDecisionId||null}];
+        estimated_tokens:Number.isFinite(row.perRun?.input)&&Number.isFinite(row.perRun?.output)?row.perRun.input+row.perRun.output:null,runs:row.runs,decision_id:selected?.feedbackDecisionId||null}];
     });
+    const staffing=data.estimate?.team||["Data scientist","Architect","Consultant"].map((role,index)=>({
+      role,hours:selections.reduce((sum,item)=>sum+item.hours[index],0)
+    }));
     const scope={schema:"token-yield-delivery-handoff-v1",
-      title:data.projectScenario?.request?.description?.slice(0,100)||data.estimate.rows.map(r=>r.feature).join(" + "),
-      description:[...new Set(data.estimate.rows.map(r=>r.description).filter(Boolean))].join("\n"),
+      title:data.projectScenario?.request?.description?.slice(0,100)||estimateRows.map(r=>r.feature).join(" + "),
+      description:[...new Set(estimateRows.map(r=>r.description).filter(Boolean))].join("\n"),
       flow:mode,quote_basis:data.basis,functions,
-      staffing:data.estimate.team.map(role=>({role:role.role,hours:role.hours})),
-      estimated_project_tokens:data.estimate.totalTokens};
+      staffing:staffing.map(role=>({role:role.role,hours:role.hours})),
+      estimated_project_tokens:data.estimate?.totalTokens??null};
     const frozen=JSON.stringify(scope);
     const receipts=JSON.parse(localStorage.getItem("token-yield-delivery-receipts")||"[]");
     let prior=receipts.find(r=>r.scope===frozen);
@@ -894,7 +1066,9 @@ function updateRuntimeChoice() {
   const live=$("pipeline-runtime").value==="foundry";
   const mocked=runtimeStatus.source==="mocked-test-provider",measured=runtimeStatus.source==="measured-foundry";
   $("azure-notice").hidden=!live;
-  $("runtime-badge").textContent=live?(mocked?"MOCK agents / no paid calls":measured?"Foundry selected / explicit paid run":"Agent route selected / provider source unknown"):"Offline selected / no provider calls";
+  $("runtime-badge").textContent=mode!=="custom"&&catalogMetadata.source==="measured-foundry"?
+    "Sales / trained GPT-5.4 inference":
+    live?(mocked?"MOCK agents / no paid calls":measured?"Foundry selected / explicit paid run":"Agent route selected / provider source unknown"):"Offline selected / no provider calls";
   $("pipeline-basis").textContent=live?(mocked?"MOCK provider / real local fitting":measured?"GPT-5.4 / measured-data pilot":"Unknown provider provenance"):"Offline / synthetic";
   $("brief-model-help").textContent=live?"Pinned Azure GPT-5.4 deployment; no browser model override.":"Offline scenario rate card only; no model is called.";
   if(live){$("brief-model").innerHTML='<option value="gpt">GPT-5.4 / configured Azure deployment</option>';}
@@ -934,9 +1108,9 @@ function rawDetails(title,value,open=false) {
   return `<details ${open?"open":""}><summary>${esc(title)}</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto">${esc(JSON.stringify(value??{},null,2))}</pre></details>`;
 }
 function renderMeasuredCatalog() {
-  const openBricks=new Set([...$("measured-catalog").querySelectorAll("details[data-measured-feature][open]")].map(element=>element.dataset.measuredFeature));
   const groups=new Map();
   measuredCatalog.forEach((item,index)=>{
+    if(item.feature_id==="workflow")return;
     const [featureId,variantId]=String(item.id).split(":");
     const feature=CATALOG.find(feature=>feature.id===featureId);
     const known=feature?.variants.some(variant=>variant.id===variantId);
@@ -955,14 +1129,8 @@ function renderMeasuredCatalog() {
     return `<article class="card ${chosen?"selected":""}"><div class="card-top"><span class="brick" style="--brick:${feature?.color||"#96b6a3"}" aria-hidden="true"></span><small>${esc(feature?.category||"Custom capability")}</small></div>
       <div><h3>${esc(feature?.name||entries[0].item.name||featureId)}</h3><p>${esc(feature?.description||"A custom source-bound function. Inspect its scope before quoting.")}</p></div>
       <div class="tags"><span>GPT-5.4</span><span>${available?`${available} trained forecast${available===1?"":"s"}`:"Awaiting supported forecasts"}</span></div>
-      <div class="picked">${chosen?`${chosen} selected`:entries.length+" variations to explore"}</div>
-      <details class="brick-options" data-measured-feature="${esc(featureId)}" ${openBricks.has(featureId)||chosen?"open":""}><summary>${chosen?"Edit brick":"Explore brick"} &rarr; <small>Choose multiple variations</small></summary>
-      ${entries.map(({item,index,supported,selected,known})=>`<div class="measured-variant"><label><input type="checkbox" data-measured="${index}" ${supported?"":"disabled"} ${selected?"checked":""}> ${esc(item.name||item.id)}</label>
-        <p class="help">${esc(evidenceLabel(evidenceSource(item.source,catalogMetadata.source)))}</p>
-        <p class="help">${supported?`${number(item.input_tokens)} input + ${number(item.output_tokens)} output predicted tokens/run`:item.supported===true&&!known?"Use the complete project workflow for this custom contract":"Not yet supported / no financial prediction"}</p>
-        <p class="help">Scope: ${esc(typeof item.scope==="object"?JSON.stringify(item.scope):item.scope||"fixed backend reference context")}</p>
-        ${selected?`<label>Runs / month<input data-measured-volume="${index}" type="number" min="0" max="1000000" step="1" value="${selected.runs}" required></label>`:""}
-        ${rawDetails("Prediction and provenance",item)}</div>`).join("")}</details></article>`;
+      <div class="picked">${chosen?`${chosen} selected`:entries.length+" variations to compare"}</div>
+      ${entries.some(entry=>entry.known&&entry.item.model_id==="gpt-5.4")?`<div class="card-bottom"><div><b>${available?`${available} token forecast${available===1?"":"s"}`:"Impact + staffing available"}</b><small>One view · outcomes · value · learning</small></div><button type="button" class="secondary" data-measured-configure="${esc(featureId)}">${chosen?"Edit brick":"Explore brick"} &rarr;</button></div>`:""}</article>`;
   }).join("")||'<p class="help">No stored pilot catalog is available yet. A run must finish data collection and training first. Provider provenance is reported per forecast; no fallback predictions are substituted.</p>';
 }
 async function refreshMeasuredCatalog() {
@@ -976,9 +1144,24 @@ async function refreshMeasuredCatalog() {
     const items=Array.isArray(data.catalog)?data.catalog:data.items;
     if(items.some(item=>!item||typeof item.id!=="string"))throw new PipelineError("Invalid catalog response: every contract needs an ID.");
     catalogMetadata=data;
+    compositionCache.clear();
     measuredCatalog=items.map(item=>({...item,contract_id:item.id,id:item.id.includes(":")?item.id:item.feature_id?key(item.feature_id,item.id):item.id}));
-    $("catalog-status").textContent=`Stored catalog: ${measuredCatalog.length} entries · ${data.source||"source not reported"} · ${data.version||"no trained version"}. Reading it does not consume provider credits.`;
-    renderMeasuredCatalog();
+    const variants=CATALOG.filter(feature=>!feature.backendPrediction).flatMap(feature=>feature.variants.map(variant=>key(feature.id,variant.id)));
+    const trained=variants.filter(id=>measuredCatalog.some(item=>item.id===id&&item.supported===true&&finiteTokens(item)));
+    const workflows=measuredCatalog.filter(item=>item.feature_id==="workflow"&&item.supported===true&&finiteTokens(item));
+    const singleIds=new Set(measuredCatalog.filter(item=>variants.includes(item.id)).map(item=>`${item.contract_id}x1`));
+    const pairs=new Set(workflows.filter(item=>item.component_contracts?.length===2&&
+      item.component_contracts.every(id=>singleIds.has(id))&&item.component_contracts[0]!==item.component_contracts[1])
+      .map(item=>JSON.stringify(item.component_contracts)));
+    const general=data.composition_model;
+    $("catalog-status").textContent=`Stored catalog: ${trained.length}/${variants.length} individual subtypes trained. ${general?.accepted?`Generalizing composition pilot accepted: ${general.subtypes_tested}/16 subtypes tested across ${general.unseen_combinations} unseen combinations; compact source-only workflows up to ${general.max_steps} ordered steps. Not production certification.`:`${pairs.size}/${variants.length*(variants.length-1)} exact ordered pairs covered; marketplace-wide training is incomplete.`} ${data.source||"source not reported"} · ${data.version||"no trained version"}. Reading it does not consume provider credits.`;
+    selections=selections.map(item=>{
+      if(item.source!=="measured-catalog")return item;
+      const prediction=measuredCatalog.find(entry=>entry.id===key(item.featureId,item.variantId));
+      return prediction?{...item,backendPrediction:{...prediction},predictionSource:evidenceSource(prediction.source,data.source)}:
+        {...item,backendPrediction:{supported:false},predictionSource:"unknown"};
+    });
+    renderMeasuredCatalog();renderQuote();updateRuntimeChoice();
   }catch(error){
     if(!(error instanceof PipelineError))throw error;
     if(generation!==catalogGeneration)return;
@@ -988,22 +1171,17 @@ async function refreshMeasuredCatalog() {
 }
 function selectMeasured(index,checked) {
   const prediction=measuredCatalog[index];
-  if(!prediction||prediction.supported!==true||!finiteTokens(prediction)||prediction.model_id!=="gpt-5.4"){$("status").textContent="This contract has no supported GPT-5.4 forecast. Nothing was added.";return;}
+  if(!prediction||prediction.model_id!=="gpt-5.4"){$("status").textContent="This contract is not a GPT-5.4 catalog entry. Nothing was added.";renderMeasuredCatalog();return;}
   const [featureId,variantId]=String(prediction.id).split(":");
   if(!CATALOG.find(feature=>feature.id===featureId)?.variants.some(variant=>variant.id===variantId)){$("status").textContent="Use the complete project workflow for this custom contract. Nothing was added.";return;}
   if(!checked){selections=selections.filter(item=>key(item.featureId,item.variantId)!==prediction.id);}
   else{
-    if(selections.some(item=>item.source==="measured-catalog"&&key(item.featureId,item.variantId)!==prediction.id)){
-      $("status").textContent="Prediction withheld: standalone measured contracts cannot be added into a composition. Use the custom project pipeline to measure the complete workflow.";
-      renderMeasuredCatalog();return;
-    }
     if(!$("defaultRuns").checkValidity()){$("status").textContent="Set valid starting monthly usage first.";renderMeasuredCatalog();return;}
     selections=selections.filter(item=>item.source==="measured-catalog"&&key(item.featureId,item.variantId)!==prediction.id);
-    const item=record(featureId,variantId,"gpt-5.4",Number($("defaultRuns").value),"measured-catalog");
-    selections.push({...item,backendPrediction:{...prediction},predictionSource:evidenceSource(prediction.source,catalogMetadata.source),forecastMode:"reference-context",backendFeatures:prediction.features||{},backendRunId:prediction.run_id||catalogMetadata.run_id});
+    selections.push(measuredRecord(prediction,Number($("defaultRuns").value)));
     projectScenario=null;
   }
-  refresh("Stored catalog build updated. Evidence source is retained for each forecast. Manual/whole-project choices are separate; each checked forecast counts once.");
+  refresh(forecastUnavailableReason(selections)||"Stored catalog build updated. Evidence source is retained for each forecast. No model calls.");
 }
 function renderPipelineResult(run) {
   const r=run.result;
@@ -1131,6 +1309,12 @@ async function connectBackend() {
       $("runtime-status").textContent="Runtime approval unavailable: "+error.message+" Paid start is disabled; offline remains available.";
     }
     updateRuntimeChoice();refreshMeasuredCatalog();loadScenarios();
+    const history=await backendJson("/api/runs");
+    const completed=history.runs.filter(run=>run.status==="completed");
+    $("completed-training").hidden=!completed.length;
+    $("completed-run").innerHTML=completed.map(run=>`<option value="${esc(run.id)}">${esc(run.description.slice(0,100))} / ${esc(run.id.slice(0,8))}</option>`).join("");
+    const updateCompletedLink=()=>{$("open-completed-run").href=`?mode=custom&run=${encodeURIComponent($("completed-run").value)}`;};
+    $("completed-run").onchange=updateCompletedLink;updateCompletedLink();
     $("backend-status").textContent="Backend connected. Select the runtime and execution mode before starting. Loading or refreshing saved runs does not call a model.";
     const id=new URLSearchParams(location.search).get("run");
     if(id){
@@ -1171,9 +1355,47 @@ $("cart-items").addEventListener("click",event=>{
 $("filters").addEventListener("click",event=>{const button=event.target.closest("[data-category]");if(button){category=button.dataset.category;renderFilters();renderCatalog();}});
 $("search").addEventListener("input",renderCatalog);
 $("variant-form").addEventListener("submit",saveVariants);
+$("variant-form").addEventListener("input",event=>{
+  if(!editingMeasured||!event.target.name.startsWith("runs-"))return;
+  $("variant-form").querySelectorAll('[name^="runs-"]').forEach(input=>input.value=event.target.value);
+});
 document.querySelectorAll("[data-close]").forEach(button=>button.addEventListener("click",()=>$(button.dataset.close).close()));
 $("manual-tab").addEventListener("click",()=>setMode("manual"));
 $("custom-tab").addEventListener("click",()=>setMode("custom"));
+$("open-completed-run").addEventListener("click",async event=>{
+  event.preventDefault();
+  if(pipelineBusy)return;
+  const id=$("completed-run").value;
+  if(!id)return;
+  const generation=++pipelineGeneration;
+  $("completed-training-status").textContent="Loading saved project and training evidence...";
+  $("open-completed-run").setAttribute("aria-busy","true");
+  try{
+    const run=await backendJson(`/api/runs/${encodeURIComponent(id)}`);
+    if(generation!==pipelineGeneration)return;
+    $("brief").value=run.request.description;
+    $("pipeline-runtime").value=run.request.runtime||"offline";
+    $("execution-mode").value=run.request.execution_mode||"automatic";
+    $("project-runs").value=run.request.runs_per_month;
+    $("new-function").value=run.request.new_function||"";
+    updateRuntimeChoice();
+    $("pipeline-progress").hidden=false;
+    $("operations-link").href=`/marketplace-operations-demo.html?run=${encodeURIComponent(id)}`;
+    $("refresh-pipeline").disabled=false;
+    history.replaceState(null,"",`?mode=custom&run=${encodeURIComponent(id)}`);
+    await pollPipeline(id,generation);
+    if(generation!==pipelineGeneration)return;
+    $("completed-training-status").textContent=`Opened saved evidence for ${id}. No new execution started.`;
+    $("pipeline-progress").scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(error){
+    if(!(error instanceof PipelineError))throw error;
+    if(generation!==pipelineGeneration)return;
+    $("backend-status").textContent=error.message;
+    $("completed-training-status").textContent=`Cannot open saved evidence: ${error.message}. Keep the Studio backend running, then click this link again.`;
+  }finally{
+    if(generation===pipelineGeneration)$("open-completed-run").removeAttribute("aria-busy");
+  }
+});
 $("saved-tab").addEventListener("click",()=>setMode("saved"));
 $("starter").addEventListener("click",loadStarter);
 $("clear").addEventListener("click",()=>{selections=[];proposal=null;$("proposal").hidden=true;refresh("Build cleared. No selected capabilities and no assumed benefits.");});
@@ -1196,6 +1418,10 @@ $("measured-catalog").addEventListener("change",event=>{
     const selected=selections.find(item=>key(item.featureId,item.variantId)===entry?.id);
     if(selected){selected.runs=Number(event.target.value);renderQuote();}
   }
+});
+$("measured-catalog").addEventListener("click",event=>{
+  const button=event.target.closest("[data-measured-configure]");
+  if(button)configure(button.dataset.measuredConfigure,true);
 });
 $("refresh-pipeline").addEventListener("click",()=>{
   clearTimeout(pipelineTimer);pipelineGeneration++;connectBackend();
@@ -1223,9 +1449,10 @@ $("review").addEventListener("click",openReview);
 $("delivery-feedback").addEventListener("click",openDeliveryFeedback);
 $("save-build").addEventListener("click",saveCurrentBuild);
 $("load-build").addEventListener("click",loadSavedBuild);
-$("reestimate-saved").addEventListener("click",()=>{if(loadSavedBuild())$("status").textContent="Saved project re-estimated instantly from frozen forecasts; no provider call.";});
+$("reestimate-saved").addEventListener("click",()=>{if(loadSavedBuild())$("status").textContent=forecastUnavailableReason(selections)||"Saved project re-estimated instantly from frozen forecasts; no provider call.";});
 $("send-saved-custom").addEventListener("click",sendSavedToCustom);
 $("feedback-suggest").addEventListener("click",requestFeedbackSuggestion);
+$("configure-learning").addEventListener("click",()=>openBrickLearning());
 $("open-brick-learning").addEventListener("click",()=>openBrickLearning());
 $("recommend-learned").addEventListener("click",()=>openBrickLearning(true));
 $("internal-ranking").addEventListener("change",renderCatalog);

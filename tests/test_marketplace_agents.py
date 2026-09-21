@@ -178,6 +178,8 @@ def test_independent_proposals_actual_peer_discussion_and_separate_usage(tmp_pat
     assert forecast["total"] == pytest.approx(forecast["input"] + forecast["output"])
     assert forecast["usd_per_month"] == pytest.approx(forecast["usd_per_run"] * 10)
     assert forecast["forecast_mode"] == "measured-workflow"
+    assert forecast["per_brick"][0]["component_contracts"] == ["extractx2", "reviewx1"]
+    assert forecast["per_brick"][0]["forecast_mode"] == "measured-workflow"
     assert forecast["standalone_forecasts_summed"] is False
     assert len(forecast["per_brick"]) == 1
     assert result["composition"]["kind"] == "single-measured-workflow-contract"

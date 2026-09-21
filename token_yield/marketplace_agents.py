@@ -609,16 +609,36 @@ class AgentRuntime:
                     "original_run_retry_permitted": False}
 
     def catalog(self) -> dict:
+        from .marketplace_generalization import load_published
+
         model = self._latest()
+        composition_model = load_published(self)
         items = contracts()
         if model:
             known = {item["id"] for item in items}
             items.extend(b for b in model.get("contracts", []) if b["id"] not in known)
         return {"items": [self._forecast_brick(b, model) for b in items],
                 "model_id": MODEL_ID, "version": model["version"] if model else None,
+                "composition_model": {
+                    "version": composition_model["version"],
+                    "accepted": True, "protocol": composition_model["protocol"],
+                    "evaluation": composition_model["evaluation"]["metrics"],
+                    "subtypes_tested": composition_model["evaluation"]["subtypes_tested"],
+                    "unseen_combinations": composition_model["evaluation"]["unseen_combinations"],
+                    "max_steps": 40,
+                } if composition_model else None,
                 "source": model.get("source") or "unknown" if model else "unknown",
                 "forecast_mode": "reference-context",
                 "scope": "Reference-context-only prompt-contract proxies", "limitations": LIMITATIONS}
+
+    def forecast_selection(self, selections: list[str]) -> dict:
+        from .marketplace_generalization import forecast, selected_contract
+
+        composite = selected_contract(selections)
+        exact = self._forecast_brick(composite, self._latest())
+        if exact["supported"]:
+            return exact
+        return forecast(self, selections)
 
     def _cost(self, inputs: float, outputs: float) -> float:
         pricing = self.config["pricing"]
@@ -629,10 +649,16 @@ class AgentRuntime:
         result = {key: brick[key] for key in (
             "id", "feature_id", "name", "scope", "atoms", "version", "novel", "contract_hash"
         )}
+        if brick.get("feature_id") == "workflow":
+            result["component_contracts"] = list(brick.get("component_contracts", []))
         result.update(model_id=MODEL_ID, supported=False, input_tokens=None, output_tokens=None,
                       total_tokens=None, usd_per_run=None, pilot_version=None,
                       source=model.get("source") or "unknown" if model else "unknown",
-                      forecast_mode="reference-context",
+                      forecast_mode=(
+                          "measured-workflow"
+                          if brick.get("feature_id") == "workflow"
+                          else "reference-context"
+                      ),
                       reason="No compatible pilot evidence for this contract.")
         if not model or not permitted or model.get("compatibility") != self._compatibility:
             return result
@@ -988,6 +1014,12 @@ class AgentRuntime:
                            "max_attempts": max_attempts,
                            "retry_policy": retry_policy["policy"]})
             raise RuntimeError("unreachable retry loop state")
+
+        if request.get("training_scope") == "marketplace-generalization":
+            from .marketplace_generalization import train_marketplace
+            return train_marketplace(
+                self, request, run_dir, run_id, retry_call, enter, event, _write, cancel,
+            )
 
         catalog = contracts()
         previous = self._latest()
