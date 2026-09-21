@@ -203,6 +203,12 @@ In the studio:
 3. Use **Next step** to approve and run each stage.
 4. Review the brick composition, token forecast, cost, staffing, and ROI view.
 
+For two or more selected functions, the runtime creates one bounded ordered
+workflow contract, measures that complete contract on grouped train and
+holdout source sets, and predicts it directly. It never presents a sum of
+standalone brick forecasts as the composition prediction. Unsupported or
+oversized workflows abstain instead of falling back to illustrative totals.
+
 If port `8765` is busy, start the server with `--port 8766` and use the same
 port in the browser URL. Press `Ctrl+C` in the terminal to stop the server.
 Local run artifacts are written to `.demo-runs/`.

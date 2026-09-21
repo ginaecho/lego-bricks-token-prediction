@@ -284,7 +284,7 @@ const LIMITATIONS = [
   "Variant tasks, context conversion, LLM factors, rates, staffing and tool fees are editable scenario assumptions.",
   "No calibrated ranges or demonstrated coverage for these capabilities, variants or model runtimes.",
   "Custom decomposition is keyword-based, requires approval, and may miss intent or constraints.",
-  "Selected variants execute separately; no free sharing, batching discount or downstream handoff is inferred.",
+  "Manual shopping arithmetic is planning-only. A real multi-brick prediction is shown only after the backend measures and fits the complete selected workflow as one contract.",
   "Benefits are client assumptions, not causal evidence, cash savings, outcome guarantees or carbon claims.",
   "Costs exclude undeclared taxes, vendor discounts, financing and failures/retries. No cache discount.",
   "Staff headcount assumes evenly distributable work; scheduling, skills and parallel delivery are unverified."
@@ -308,7 +308,7 @@ const measuredRateFields=["measured-input-rate","measured-output-rate"];
 let runtimeStatus={enabled:false}, measuredCatalog=[], catalogMetadata={}, catalogGeneration=0;
 const finiteTokens = prediction => prediction?.supported!==false && Number.isFinite(prediction?.input_tokens) && prediction.input_tokens>=0 && Number.isFinite(prediction?.output_tokens) && prediction.output_tokens>=0;
 // A runtime route/model name chooses arithmetic, never the evidence label.
-const isReferenceForecast = item => item.forecastMode==="reference-context";
+const isReferenceForecast = item => ["reference-context","measured-workflow"].includes(item.forecastMode);
 function evidenceSource(...sources) {
   const reported=[...new Set(sources.filter(source=>source!==undefined&&source!==null&&source!==""))];
   return reported.length===1&&["measured-foundry","mocked-test-provider","synthetic"].includes(reported[0])?reported[0]:"unknown";
@@ -442,7 +442,7 @@ function renderQuote() {
   }
   $("quote-error").hidden=true;
   const e=latestEstimate;
-  $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">${selections.some(item=>item.backendPrediction)?esc(evidenceLabel(evidenceSource(...selections.filter(item=>item.backendPrediction).map(item=>item.predictionSource)))):"Estimated AI usage / illustrative"}</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
+  $("quote-summary").innerHTML=`<div class="estimate"><div class="eyebrow">${selections.some(item=>item.backendPrediction)?esc(evidenceLabel(evidenceSource(...selections.filter(item=>item.backendPrediction).map(item=>item.predictionSource)))):"Planning assumptions only / no model prediction"}</div><div class="amount">${money(e.monthlyApi)}<small> / month</small></div>
     ${row("Input tokens",compact(e.input))}${row("Output tokens",compact(e.output))}${row("Total tokens / month",compact(e.totalTokens))}
     <small>${selections.some(isReferenceForecast)?"Fixed reference context / GPT-5.4. No synthetic routing or setup tokens added; pilot accounting is separate and retains its provider source.":number(e.pairs.length)+" assumed connections · routing included"}</small></div>
     ${row("Tools + AI/tool reserve",money(e.tools+e.reserveCost))}${row("Human review",money(e.reviewCost))}${row("Other operating allowance",money(e.operating))}
@@ -993,6 +993,10 @@ function selectMeasured(index,checked) {
   if(!CATALOG.find(feature=>feature.id===featureId)?.variants.some(variant=>variant.id===variantId)){$("status").textContent="Use the complete project workflow for this custom contract. Nothing was added.";return;}
   if(!checked){selections=selections.filter(item=>key(item.featureId,item.variantId)!==prediction.id);}
   else{
+    if(selections.some(item=>item.source==="measured-catalog"&&key(item.featureId,item.variantId)!==prediction.id)){
+      $("status").textContent="Prediction withheld: standalone measured contracts cannot be added into a composition. Use the custom project pipeline to measure the complete workflow.";
+      renderMeasuredCatalog();return;
+    }
     if(!$("defaultRuns").checkValidity()){$("status").textContent="Set valid starting monthly usage first.";renderMeasuredCatalog();return;}
     selections=selections.filter(item=>item.source==="measured-catalog"&&key(item.featureId,item.variantId)!==prediction.id);
     const item=record(featureId,variantId,"gpt-5.4",Number($("defaultRuns").value),"measured-catalog");
@@ -1005,11 +1009,12 @@ function renderPipelineResult(run) {
   const r=run.result;
   if(!r||!Array.isArray(r.bricks)||!r.after||!r.training)throw new PipelineError("Completed run is missing prediction or training artifacts. Nothing was added.");
   const source=projectSource(r),live=source==="measured-foundry",mocked=source==="mocked-test-provider";
-  const reference=r.after.forecast_mode==="reference-context"||r.after.model_id==="gpt-5.4";
+  const reference=["reference-context","measured-workflow"].includes(r.after.forecast_mode)||r.after.model_id==="gpt-5.4";
   const supported=finiteTokens(r.after)&&r.after.supported!==false&&r.bricks.length>0;
+  const measuredComposition=r.composition?.kind==="single-measured-workflow-contract"&&r.after.forecast_mode==="measured-workflow"&&r.after.standalone_forecasts_summed===false;
   const before=r.before||{}, requirements=Array.isArray(r.requirements)?r.requirements:[];
   const missing=requirements.filter(item=>item.status==="missing").length,partial=requirements.filter(item=>item.status==="partial").length;
-  $("pipeline-result").innerHTML=`<div class="notice"><b>${mocked?"MOCK provider fixtures / real local model fitting.":live?"Measured source-bound calls, fitted pilot predictions.":source==="synthetic"?"Real model fitting, synthetic measurements.":"Unknown-provenance forecasts."}</b> ${mocked?"No paid calls. Outputs and token labels are synthetic protocol fixtures, not LLM performance evidence.":live?"GPT-5.4 discussion and workload measurements are provider calls. Forecasts are regression outputs, not measured customer executions; small held-out pilot MAE is not production accuracy.":source==="synthetic"?"Test error measures agreement with the simulator only.":"Evidence source is absent or inconsistent; no measured or live evidence claim is available."} Composition uses independent brick forecasts, not a measured combination; interaction costs are unavailable.</div>
+  $("pipeline-result").innerHTML=`<div class="notice"><b>${mocked?"MOCK provider fixtures / real local model fitting.":live?"Measured source-bound calls, fitted pilot predictions.":source==="synthetic"?"Real model fitting, synthetic measurements.":"Unknown-provenance forecasts."}</b> ${mocked?"No paid calls. Outputs and token labels are synthetic protocol fixtures, not LLM performance evidence.":live?"GPT-5.4 discussion and workload measurements are provider calls. Forecasts are regression outputs, not measured customer executions; small held-out pilot MAE is not production accuracy.":source==="synthetic"?"Test error measures agreement with the simulator only.":"Evidence source is absent or inconsistent; no measured or live evidence claim is available."} ${measuredComposition?"The selected functions were executed and labeled as one ordered workflow; no standalone token forecasts were summed.":"No measured composition is available, so the system abstains from a real multi-brick prediction."}</div>
     <h3>Your proposed project functions</h3><div class="impact-grid">${r.bricks.map(brick=>`<div class="impact"><h3>${esc(brick.name||brick.id)}</h3><p>${brick.novel?"New function / inspect training coverage.":"Proposed source-bound function."}</p><div class="tags">${(Array.isArray(brick.atoms)?brick.atoms:Object.entries(brick.atoms||{}).filter(([,count])=>count>0).map(([atom,count])=>`${atom} × ${count}`)).map(atom=>`<span>${esc(atom)}</span>`).join("")}</div></div>`).join("")}</div>
     <div class="review-metrics"><div><small>Before new training</small><b>${before.supported&&Number.isFinite(before.total_tokens)?compact(before.total_tokens):"Not covered"}</b><small>${esc(before.reason||"")}</small></div><div><small>After training / whole project forecast</small><b>${supported?compact(r.after.input_tokens+r.after.output_tokens):"Unsupported / abstained"}</b><small>${supported?number(r.after.input_tokens)+" input + "+number(r.after.output_tokens)+" output":esc(r.after.reason||"No supported estimate. Tokens are not zero.")}</small></div><div><small>AI estimate / month (backend pinned rates)</small><b>${supported&&Number.isFinite(r.after.usd_per_month)?money(r.after.usd_per_month):"Not available"}</b><small>${number(run.request.runs_per_month)} complete executions; separate from pilot spend</small></div></div>
     <p class="help">${number(r.training.train_count)} ${esc(source)} training rows; ${number(r.training.test_count)} held-out rows. Reused training: ${number(r.training.reused_train_count||0)}; fresh holdouts: ${number(r.training.new_holdout_count||r.training.test_count)}. ${Array.isArray(r.feature_names)?r.feature_names.length:"Unreported"} features. Model version: ${esc(r.training.version||"not reported")}.</p>
@@ -1093,10 +1098,10 @@ async function runPipeline() {
 function usePipeline() {
   if(!pipelineRun||!$("approve-pipeline")?.checked||!finiteTokens(pipelineRun.result?.after))return;
   const r=pipelineRun.result,atoms=r.bricks.flatMap(brick=>Array.isArray(brick.atoms)?brick.atoms:[]);
-  const source=projectSource(r),reference=r.after.forecast_mode==="reference-context"||r.after.model_id==="gpt-5.4";
+  const source=projectSource(r),reference=["reference-context","measured-workflow"].includes(r.after.forecast_mode)||r.after.model_id==="gpt-5.4";
   const prior=CATALOG.findIndex(feature=>feature.id==="project-pipeline");if(prior>=0)CATALOG.splice(prior,1);
   CATALOG.unshift({id:"project-pipeline",name:source==="measured-foundry"?"Foundry proposed project":source==="mocked-test-provider"?"MOCK proposed project":source==="synthetic"?"Document assurance pipeline":"Unknown-provenance project",category:"Intelligence",color:"#96b6a3",
-    description:r.bricks.map(brick=>brick.name).join(" + "),backendPrediction:r.after,backendFeatures:r.features,backendRequest:{...pipelineRun.request,model_id:reference?"gpt-5.4":pipelineRun.request.model_id},backendRunId:pipelineRun.id,predictionSource:source,forecastMode:reference?"reference-context":"offline-project",
+    description:r.bricks.map(brick=>brick.name).join(" + "),backendPrediction:r.after,backendFeatures:r.features,backendRequest:{...pipelineRun.request,model_id:reference?"gpt-5.4":pipelineRun.request.model_id},backendRunId:pipelineRun.id,predictionSource:source,forecastMode:r.after.forecast_mode||"offline-project",
     variants:[{id:"workflow",name:`${r.bricks.length} linked functions / complete workflow`,description:`Whole-project frozen ${evidenceLabel(source)}; not a live production execution.`,
       atoms,hours:[r.bricks.length*8,r.bricks.length*4,r.bricks.length*6],review:5,tool:0}]});
   projectScenario=pipelineRun;

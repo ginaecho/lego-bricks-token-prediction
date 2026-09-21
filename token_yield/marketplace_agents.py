@@ -28,7 +28,7 @@ from .marketplace_agent_contracts import (
     CitationCountError, CitationValidationError, FEATURE_BUILDERS, LIMITATIONS,
     MAX_ATOM_COUNT, MAX_ATOM_TOTAL, ROLES,
     SCHEMA_VERSION, TRANSPORT_PROTOCOL,
-    canonical, contracts, custom_contract, external_scope_reason, fingerprint, numeric_features,
+    canonical, composition_contract, contracts, custom_contract, external_scope_reason, fingerprint, numeric_features,
     schema_from_example, similarity_scores, source_documents, strict_json,
     validate_message, validate_request, workload_prompt,
 )
@@ -679,7 +679,10 @@ class AgentRuntime:
                   "usd_per_run": None, "usd_per_month": None, "per_brick": forecasts,
                   "model_id": MODEL_ID, "version": model["version"] if model else None,
                   "source": model.get("source") or "unknown" if model else "unknown",
-                  "forecast_mode": "reference-context"}
+                  "forecast_mode": "measured-workflow" if any(
+                      brick.get("feature_id") == "workflow" for brick in bricks
+                  ) else "reference-context",
+                  "standalone_forecasts_summed": False}
         if supported:
             inputs = sum(f["input_tokens"] * b["quantity"] for f, b in zip(forecasts, bricks))
             outputs = sum(f["output_tokens"] * b["quantity"] for f, b in zip(forecasts, bricks))
@@ -990,7 +993,10 @@ class AgentRuntime:
         previous = self._latest()
         if previous:
             known = {b["id"] for b in catalog}
-            catalog.extend(b for b in previous.get("contracts", []) if b["id"] not in known)
+            catalog.extend(
+                b for b in previous.get("contracts", [])
+                if b["id"] not in known and b.get("feature_id") != "workflow"
+            )
         docs = self._documents("train-0", 0)
 
         enter("novelty")
@@ -1256,8 +1262,21 @@ class AgentRuntime:
         scope_reason = external_scope_reason(request)
         if scope_reason:
             unsupported.append(scope_reason)
+        prediction_bricks = bricks
+        composite = None
+        if len(bricks) > 1:
+            try:
+                composite = composition_contract(bricks)
+            except ValueError as exc:
+                unsupported.append(str(exc) + "; no complete workflow forecast.")
+                prediction_bricks = []
+            else:
+                catalog.append(composite)
+                by_id[composite["id"]] = composite
+                prediction_bricks = [{**composite, "quantity": 1}]
         event("Orchestrator reconciled public decisions without suppressing dissent.",
-              {"decisions": decision["decisions"], "dissent": dissent, "unsupported": unsupported})
+              {"decisions": decision["decisions"], "dissent": dissent, "unsupported": unsupported,
+               "composition_contract": composite})
 
         enter("wiki")
         _write(artifact_dir / "documents.json", {"documents": docs})
@@ -1283,14 +1302,15 @@ class AgentRuntime:
             "output_contract": {"builder": "atoms_context_v1", "rationale": "public justification"},
         }, docs, catalog)["public_output"]
         names = list(FEATURE_BUILDERS[feature_choice["builder"]])
-        features = {name: sum(numeric_features(b, docs)[name] * b["quantity"] for b in bricks)
+        features = {name: sum(numeric_features(b, docs)[name] * b["quantity"]
+                              for b in prediction_bricks)
                     for name in names}
         event("Actual numeric predictors computed; no target-derived features.",
               {"builder": feature_choice, "features": features,
                "per_brick": [{"id": b["id"], "values": numeric_features(b, docs)} for b in catalog]})
 
         enter("predict_before")
-        before = self._prediction(bricks, previous, request["runs_per_month"], unsupported)
+        before = self._prediction(prediction_bricks, previous, request["runs_per_month"], unsupported)
         _write(artifact_dir / "prediction-before.json", before)
         event("Pre-measurement forecast frozen; missing evidence stays unsupported.", before)
 
@@ -1298,7 +1318,7 @@ class AgentRuntime:
         if self.measurement_policy and unsupported:
             raise ValueError("Measurement policy requires resolved scope and dissent: " + "; ".join(unsupported))
         adaptive = AdaptiveMeasurements(
-            runtime=self, bricks=bricks, names=names, source=source, run_id=run_id,
+            runtime=self, bricks=prediction_bricks, names=names, source=source, run_id=run_id,
             run_dir=run_dir, call=call, event=event, cancel=cancel, write=_write, read=_read,
             requested_id=requested_custom,
         ) if self.measurement_policy else None
@@ -1497,9 +1517,17 @@ class AgentRuntime:
               {**metrics, "test_count": len(holdout_rows), "review": review})
 
         enter("predict_after")
-        after = self._prediction(bricks, candidate, request["runs_per_month"], unsupported)
-        public_catalog = [self._forecast_brick(b, candidate, permitted=review["accepted"]) for b in catalog]
-        event("Reference-context-only forecast; unsupported scope has no numeric project estimate.", after)
+        after = self._prediction(prediction_bricks, candidate, request["runs_per_month"], unsupported)
+        public_catalog = [
+            self._forecast_brick(b, candidate, permitted=review["accepted"])
+            for b in catalog if b.get("feature_id") != "workflow"
+        ]
+        event(
+            "Direct measured-workflow forecast; unsupported scope has no numeric project estimate."
+            if composite else
+            "Reference-context-only forecast; unsupported scope has no numeric project estimate.",
+            after,
+        )
         training = {
             "source": source, "rows": rows, "train_count": len(train_rows),
             "test_count": len(holdout_rows), "reused_train_count": len(reused),
@@ -1533,8 +1561,13 @@ class AgentRuntime:
             "adjudication": decision, "dissent": dissent, "usage_ledger": ledger.snapshot(),
             "requested_custom": requested_custom, "proposed_new_function": proposed_new_function,
             "capability_reviews": capability_reviews,
-            "composition": {"kind": "sum-of-independent-brick-forecasts",
-                            "measured_combinations": False, "interaction_costs_supported": False},
+            "composition": {
+                "kind": "single-measured-workflow-contract" if composite else "single-brick",
+                "contract": composite,
+                "measured_combinations": composite is not None,
+                "interaction_costs_supported": composite is not None,
+                "standalone_forecasts_summed": False,
+            },
             "scenario": self.source_fixture or scenario_for_request(request),
             **({"scope_authorization": {
                 "scope_id": self.scope_authorization["scope_id"],

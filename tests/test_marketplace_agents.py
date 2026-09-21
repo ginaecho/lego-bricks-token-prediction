@@ -17,8 +17,9 @@ import pytest
 from token_yield import marketplace_agents as engine
 from token_yield.foundry_dispatch import DispatchResult, FoundryDispatchError, ResponseCall, TokenUsage
 from token_yield.marketplace_agent_contracts import (
-    CITATION_MAX_COUNT, CitationCountError, FEATURE_BUILDERS, ROLES, contracts, numeric_features,
-    source_documents, schema_from_example, strict_json, validate_message,
+    CITATION_MAX_COUNT, CitationCountError, FEATURE_BUILDERS, ROLES, composition_contract,
+    contracts, numeric_features, source_documents, schema_from_example, strict_json,
+    validate_message,
 )
 from token_yield.marketplace_source_fixtures import fixture_documents
 
@@ -123,6 +124,20 @@ def approve_establishment(pending, *, actor="OFFLINE TEST approver"):
             "reason": "Offline test approval for exact contract hash."}
 
 
+def test_composition_contract_is_one_bounded_ordered_workflow():
+    by_id = {brick["id"]: brick for brick in contracts()}
+    workflow = composition_contract([
+        {**by_id["extract"], "quantity": 2},
+        {**by_id["review"], "quantity": 1},
+    ])
+    assert workflow["feature_id"] == "workflow"
+    assert workflow["component_contracts"] == ["extractx2", "reviewx1"]
+    assert len(workflow["steps"]) == sum(workflow["atoms"].values()) == 21
+    assert len({step["id"] for step in workflow["steps"]}) == 21
+    with pytest.raises(ValueError, match="exceeds measured composition bounds"):
+        composition_contract([{**by_id["extract"], "quantity": 20}, {**by_id["review"], "quantity": 1}])
+
+
 def reject_establishment(pending, *, actor="OFFLINE TEST rejecter"):
     return {"decision": "reject", "contract_hash": pending["contract_hash"],
             "actor": actor, "timestamp": "2026-09-17T00:00:00+00:00",
@@ -147,10 +162,10 @@ def test_independent_proposals_actual_peer_discussion_and_separate_usage(tmp_pat
     assert result["source"] == "mocked-test-provider"
     assert result["model_id"] == "gpt-5.4"
     assert len(result["agents"]) == result["orchestration"]["calls"] == 10
-    assert result["workload"]["calls"] == 96
-    assert len(result["training"]["rows"]) == 96
+    assert result["workload"]["calls"] == 102
+    assert len(result["training"]["rows"]) == 102
     assert all(row["measurement"]["kind"] == "workload" for row in result["training"]["rows"])
-    assert result["usage_ledger"]["response_calls"] == 106
+    assert result["usage_ledger"]["response_calls"] == 112
     assert result["before"]["supported"] is False and result["before"]["total"] is None
     assert result["before"]["input_tokens"] is None
     assert result["before"]["output_tokens"] is None
@@ -162,9 +177,13 @@ def test_independent_proposals_actual_peer_discussion_and_separate_usage(tmp_pat
     assert forecast["total_tokens"] == forecast["total"]
     assert forecast["total"] == pytest.approx(forecast["input"] + forecast["output"])
     assert forecast["usd_per_month"] == pytest.approx(forecast["usd_per_run"] * 10)
-    assert forecast["input"] == pytest.approx(sum(
-        f["input_tokens"] * b["quantity"] for f, b in zip(forecast["per_brick"], result["bricks"])
-    ))
+    assert forecast["forecast_mode"] == "measured-workflow"
+    assert forecast["standalone_forecasts_summed"] is False
+    assert len(forecast["per_brick"]) == 1
+    assert result["composition"]["kind"] == "single-measured-workflow-contract"
+    assert result["composition"]["interaction_costs_supported"] is True
+    assert result["composition"]["standalone_forecasts_summed"] is False
+    assert result["composition"]["contract"]["component_contracts"]
     assert result["training"]["pilot_published"] is True
     assert result["training"]["production_promoted"] is False
     artifact_root = tmp_path / "run" / "test-run"
@@ -415,10 +434,10 @@ def test_bounded_retry_recovers_a_transient_citation_failure(tmp_path, config, r
     result, events, _ = run(runtime, request_data, tmp_path / "run")
     assert result["training"]["pilot_published"] is True
     assert runtime.public_status()["halted"] is None
-    assert result["workload"]["calls"] == 96   # only conforming measurements become rows
+    assert result["workload"]["calls"] == 102   # only conforming measurements become rows
     workload_calls = [c for c in provider.calls if c["payload"]["task"] == "workload"]
-    assert len(workload_calls) == 97           # 96 accepted + 1 rejected retry, each paid
-    assert result["usage_ledger"]["response_calls"] == 107
+    assert len(workload_calls) == 103          # 102 accepted + 1 rejected retry, each paid
+    assert result["usage_ledger"]["response_calls"] == 113
     retry_events = _retry_events(events)
     assert retry_events and retry_events[0]["data"]["retry_policy"] == (
         engine.CONTENT_RETRY_POLICY["policy"])
@@ -429,7 +448,7 @@ def test_bounded_retry_recovers_a_transient_citation_failure(tmp_path, config, r
     ("propose", 4),
     ("discuss", 4),
     ("adjudicate", 2),
-    ("workload", 97),
+    ("workload", 103),
 ])
 def test_bounded_retry_recovers_transient_bad_citation_at_each_cited_stage(
         tmp_path, config, request_data, stage, expected_calls):
@@ -843,8 +862,8 @@ def test_incomplete_response_with_known_usage_settles_then_retries(tmp_path, con
     assert status["halted"] is None            # known usage is settled; never an unknown-telemetry halt
     assert status["reserved_usd"] == 0         # nothing is left reserved
     assert result["training"]["pilot_published"] is True
-    assert result["workload"]["calls"] == 96   # the truncated output never becomes a training row
-    assert result["usage_ledger"]["response_calls"] == 107   # truncated call was paid for, then retried
+    assert result["workload"]["calls"] == 102   # the truncated output never becomes a training row
+    assert result["usage_ledger"]["response_calls"] == 113   # truncated call was paid for, then retried
     assert any(e["data"]["error_category"] == "response_protocol" for e in _retry_events(events))
 
 
@@ -875,7 +894,7 @@ def test_holdout_not_seen_in_selection_and_not_fitted(tmp_path, config, request_
             assert "holdout-" not in json.dumps(call["payload"])
             assert "test_count" not in call["payload"]
     split = json.loads((artifact_root / "frozen-split.json").read_text())
-    assert len([j for j in split["jobs"] if j["split"] == "holdout"]) == 32
+    assert len([j for j in split["jobs"] if j["split"] == "holdout"]) == 34
     freeze = json.loads(freeze_path.read_text())
     candidate = json.loads((artifact_root / "candidate-model.json").read_text())
     assert freeze["holdout_measurement_deferred_until_after_freeze"] is True
@@ -889,8 +908,8 @@ def test_holdout_not_seen_in_selection_and_not_fitted(tmp_path, config, request_
                          and event["data"].get("split") == "holdout")
     assert freeze_event < first_holdout
     assert holdout_dispatch_freeze_state and all(holdout_dispatch_freeze_state)
-    assert result["training"]["train_count"] == 64
-    assert result["training"]["test_count"] == 32
+    assert result["training"]["train_count"] == 68
+    assert result["training"]["test_count"] == 34
 
 
 def test_novel_measurement_reuses_train_only_and_restart_model_persists(tmp_path, config, request_data):
@@ -906,8 +925,8 @@ def test_novel_measurement_reuses_train_only_and_restart_model_persists(tmp_path
     assert newer["before"]["supported"] is False
     assert newer["after"]["supported"] is True
     assert newer["training"]["reused_train_count"] == 64
-    assert newer["workload"]["calls"] == 38
-    assert newer["training"]["new_holdout_count"] == 34
+    assert newer["workload"]["calls"] == 44
+    assert newer["training"]["new_holdout_count"] == 36
     assert newer["training"]["reused_holdout_count"] == 0
     assert len(newer["catalog"]) == 17
     assert newer["training"]["version"] != result["training"]["version"]
@@ -947,6 +966,7 @@ def test_reuse_fingerprint_mismatch_is_skipped_and_measured_fresh(tmp_path, conf
     assert replacements[0]["brick_id"] == stale["brick_id"]
     assert replacements[0]["group"] == stale["group"]
     by_id = {brick["id"]: brick for brick in contracts()}
+    by_id[first_result["composition"]["contract"]["id"]] = first_result["composition"]["contract"]
     for row in newer["training"]["rows"]:
         if row["run_id"] != "second" and row["split"] == "train":
             engine.AgentRuntime._validate_reused_row(row, by_id[row["brick_id"]])
@@ -989,8 +1009,8 @@ def test_novelty_establishes_agent_decomposed_brick_and_persists_for_reuse(tmp_p
     assert any(b["novel"] and b["supported"] for b in second.catalog()["items"])
     newer, _, _ = run(second, request, tmp_path / "second", run_id="second")
     assert len(newer["catalog"]) == 17
-    assert newer["training"]["reused_train_count"] == 68   # 64 standard + 4 established-brick rows
-    assert newer["training"]["new_holdout_count"] == 34
+    assert newer["training"]["reused_train_count"] == 72   # standard, custom and workflow rows
+    assert newer["training"]["new_holdout_count"] == 36
 
 
 def test_human_establishment_gate_requires_callback_before_measurement(tmp_path, config, request_data):
@@ -1474,14 +1494,14 @@ def test_all_actual_transport_calls_use_strict_schemas_and_full_body_reservation
     monkeypatch.setattr(engine, "_default_transport", transport)
     runtime = engine.AgentRuntime(tmp_path / "state", config, token_provider=lambda: "mock-token")
     result, _, _ = run(runtime, request_data, tmp_path / "runs")
-    assert len(seen) == 106 and seen.count("workload") == 96
+    assert len(seen) == 112 and seen.count("workload") == 102
     assert set(seen) == {"propose", "discuss", "adjudicate", "features", "workload", "fit", "metrics"}
     assert result["training"]["source"] == "measured-foundry"
     assert result["after"]["source"] == "measured-foundry"
     assert all(item["source"] == "measured-foundry" for item in result["after"]["per_brick"])
     assert runtime.catalog()["source"] == "measured-foundry"
     assert all(item["source"] == "measured-foundry" for item in runtime.catalog()["items"])
-    assert result["orchestration"]["calls"] == 10 and result["workload"]["calls"] == 96
+    assert result["orchestration"]["calls"] == 10 and result["workload"]["calls"] == 102
 
 
 def test_schema_helper_bounds_and_empty_text_arrays():

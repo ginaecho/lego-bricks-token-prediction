@@ -32,6 +32,7 @@ FEATURE_BUILDERS = {
 # A new brick keeps the fixed atom vocabulary; only its (bounded) counts are agent-chosen.
 MAX_ATOM_COUNT = 4
 MAX_ATOM_TOTAL = 14
+MAX_COMPOSITION_STEPS = 40
 CITATION_MIN_COUNT = 1
 # Archive v2 uses three linked source documents with multiple records and exception
 # passages. A bounded 24-citation cap permits thorough evidence while preventing
@@ -253,6 +254,69 @@ def custom_contract(name: str, atoms: dict) -> dict:
                   for atom in ATOMS for index in range(vector[atom])],
         "scope": "Custom source-only ordered atom contract; "
         "not arbitrary function execution, external research, code, or certification.",
+    }
+    item["contract_hash"] = fingerprint(item)
+    return item
+
+
+def composition_contract(bricks: list[dict]) -> dict:
+    """Build one ordered workflow contract from selected brick contracts.
+
+    The composite is measured and predicted as one invocation. It intentionally
+    does not reuse or sum standalone token forecasts.
+    """
+    if not isinstance(bricks, list) or len(bricks) < 2:
+        raise ValueError("a composition requires at least two selected bricks")
+    atoms = dict.fromkeys(ATOMS, 0)
+    steps = []
+    labels = []
+    for position, brick in enumerate(bricks, 1):
+        if not isinstance(brick, dict) or set(ATOMS) - set(brick.get("atoms", {})):
+            raise ValueError("composition bricks must use the fixed atom vocabulary")
+        quantity = brick.get("quantity")
+        if type(quantity) is not int or not 1 <= quantity <= 20:
+            raise ValueError("composition quantities must be bounded positive integers")
+        labels.append(f"{brick['id']}x{quantity}")
+        source_steps = brick.get("steps") or [
+            {"operation": atom, "instruction": ATOM_DESCRIPTIONS[atom]}
+            for atom in ATOMS for _ in range(brick["atoms"][atom])
+        ]
+        for repeat in range(quantity):
+            for step_index, step in enumerate(source_steps, 1):
+                operation = step.get("operation")
+                if operation not in ATOMS:
+                    raise ValueError("composition step uses an unknown atom")
+                atoms[operation] += 1
+                steps.append({
+                    "id": f"capability-{position}-run-{repeat + 1}-step-{step_index}",
+                    "operation": operation,
+                    "instruction": step.get("instruction") or ATOM_DESCRIPTIONS[operation],
+                })
+    if not 1 <= len(steps) <= MAX_COMPOSITION_STEPS:
+        raise ValueError(
+            f"selected workflow exceeds measured composition bounds "
+            f"({MAX_COMPOSITION_STEPS} total ordered steps)"
+        )
+    identity = {"contracts": labels, "atoms": atoms, "steps": steps}
+    item = {
+        "id": "workflow_" + fingerprint(identity)[:12],
+        "feature_id": "workflow",
+        "name": "Integrated selected workflow",
+        "novel": False,
+        "instruction": (
+            "Execute the selected capabilities as one ordered source-only workflow. "
+            "Later capability steps may use earlier results; preserve overlaps instead "
+            "of repeating shared evidence. Return every step result and expose missing "
+            "handoff evidence. Do not execute external tools or invent source facts."
+        ),
+        "atoms": atoms,
+        "steps": steps,
+        "version": CONTRACT_VERSION,
+        "scope": (
+            "Measured complete selected source-only workflow; interaction and handoff "
+            "tokens belong to this composition and are not sums of standalone forecasts."
+        ),
+        "component_contracts": labels,
     }
     item["contract_hash"] = fingerprint(item)
     return item

@@ -92,6 +92,14 @@ Each trained model stores its exact vocabulary and version. A decomposition
 records which blocks are required, how many units are expected, and how much
 source context they consume.
 
+When multiple marketplace bricks are selected, the Foundry runtime builds one
+ordered workflow contract and collects labels for that contract as a whole.
+Its direct forecast therefore includes the observed overlaps and handoffs in
+the workflow invocation; it is not `forecast(A) + forecast(B)`. The composite
+contract participates in the same grouped training-only cross-validation and
+fresh holdout evaluation as other contracts. If the workflow exceeds bounded
+measurement support, the runtime returns no numeric project forecast.
+
 When the agent proposes a new capability, it must express the function using
 the approved feature vocabulary or explicitly report that the vocabulary is
 insufficient.
