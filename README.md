@@ -100,7 +100,7 @@ disagreement and missing-source limitations. This small accepted pilot
 does not establish production accuracy, delivered customer value, or freedom
 from overfitting.
 
-### WHy and How
+### Why and How
 
 <p align="center">
   <a href="docs/media/Token_Yield_Studio_hack_video.mp4">
