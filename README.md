@@ -18,9 +18,6 @@ reusable capabilities, a transparent scope, and an investment case with visible
 assumptions. Predict AI consumption, compare cost and staffing scenarios, and
 agree how business impact will be measured.
 
-**The sales ambition: make the project easier to understand, justify, and
-approve. Give clients a stronger reason to buy.**
-
 <p align="center">
   <a href="docs/media/Token_Yield_Studio_hack_video.mp4">
     <img src="docs/media/marketplace-cover.jpg" width="900"
@@ -114,7 +111,7 @@ disagreement and missing-source limitations. This small accepted pilot
 does not establish production accuracy, delivered customer value, or freedom
 from overfitting.
 
-### Hackathon animations
+### WHy and How
 
 <p align="center">
   <a href="docs/media/Token_Yield_Studio_hack_video.mp4">
