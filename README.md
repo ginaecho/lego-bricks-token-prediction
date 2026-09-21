@@ -56,42 +56,17 @@ or explore the [current implementation](https://github.com/ginaecho/lego-bricks-
 
 ## 🎬 See it in action
 
-<p align="center">
-  <a href="docs/media/Token_Yield_Studio_hack_video.mp4">
-    <img src="docs/media/Token_Yield_Studio_hack_video.gif" width="440"
-         alt="Animated preview of the Token Yield Marketplace Studio hackathon story">
-  </a>
-  <a href="docs/media/Token_Yield_Explainer.mp4">
-    <img src="docs/media/Token_Yield_Explainer_preview.gif" width="440"
-         alt="Animated preview explaining the LEGO-like token prediction model">
-  </a>
-</p>
-
-<p align="center">
-  <strong><a href="docs/media/Token_Yield_Studio_hack_video.mp4">Hackathon demo</a></strong>
-  &nbsp;|&nbsp;
-  <strong><a href="docs/media/Token_Yield_Explainer.mp4">Model explainer</a></strong>
-  <br>
-  Select either animation to open its full MP4 with playback controls.
-</p>
-
 ### Foundry Studio walkthrough
-
-<video controls preload="metadata" width="100%"
-       poster="docs/media/Token_Yield_Live_Foundry_Demo.png">
-  <source src="docs/media/Token_Yield_Live_Foundry_Demo.mp4"
-          type="video/mp4">
-</video>
 
 <p align="center">
   <a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">
-    <img src="docs/media/Token_Yield_Live_Foundry_Demo.png" width="800"
-         alt="Static preview: two selected Studio bricks with a measured workflow token forecast, monthly cost and assumption-based ROI">
+    <img src="docs/media/Token_Yield_Live_Foundry_Demo.gif" width="800"
+         alt="Animated preview of the live Token Yield Foundry Studio walkthrough">
   </a>
 </p>
 
 <p align="center">
-  <strong><a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">Watch the Foundry Studio walkthrough (3:33)</a></strong>
+  <strong><a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">Watch the Foundry Studio walkthrough (1:48)</a></strong>
 </p>
 
 Recorded September 21, 2026: real UI clicks select **Behavioral personalization**
@@ -100,7 +75,8 @@ Both builds immediately display trained composition token usage, cost and
 assumption-based ROI. The walkthrough continues through
 custom project input, the completed training stages, feature and holdout metrics,
 the backend event console, and an actual PowerShell audit terminal. It uses
-steady captures and one-second crossfades; the preview above is static.
+steady captures and one-second crossfades; the animation above previews the
+opening Studio interaction.
 
 The recording inspects **completed real Foundry evidence**, not a simulated
 training animation or a new paid execution. Shopping and evidence inspection
@@ -137,6 +113,27 @@ memberships. The broader custom-project quote retains its original agent
 disagreement and missing-source limitations. This small accepted pilot
 does not establish production accuracy, delivered customer value, or freedom
 from overfitting.
+
+### Hackathon animations
+
+<p align="center">
+  <a href="docs/media/Token_Yield_Studio_hack_video.mp4">
+    <img src="docs/media/Token_Yield_Studio_hack_video.gif" width="440"
+         alt="Animated preview of the Token Yield Marketplace Studio hackathon story">
+  </a>
+  <a href="docs/media/Token_Yield_Explainer.mp4">
+    <img src="docs/media/Token_Yield_Explainer_preview.gif" width="440"
+         alt="Animated preview explaining the LEGO-like token prediction model">
+  </a>
+</p>
+
+<p align="center">
+  <strong><a href="docs/media/Token_Yield_Studio_hack_video.mp4">Hackathon demo</a></strong>
+  &nbsp;|&nbsp;
+  <strong><a href="docs/media/Token_Yield_Explainer.mp4">Model explainer</a></strong>
+  <br>
+  Select either animation to open its full MP4 with playback controls.
+</p>
 
 ## Learning from delivered projects
 
