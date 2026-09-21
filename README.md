@@ -56,7 +56,7 @@ or explore the [current implementation](https://github.com/ginaecho/lego-bricks-
 
 ## 🎬 See it in action
 
-### Foundry Studio walkthrough
+### Token Yield Studio Live Demo
 
 <p align="center">
   <a href="docs/media/Token_Yield_Live_Foundry_Demo.mp4">
