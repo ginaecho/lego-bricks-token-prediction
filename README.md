@@ -388,5 +388,3 @@ instead of enabling paid execution from the quick start.
 Docs: [calibration](docs/calibration-findings.md) ·
 [architecture](docs/architecture.md) · [precedence](docs/precedence.md) ·
 [AGT](docs/agt-integration.md) · [Zenodo/citing](docs/zenodo.md).*
-
-Token Yield is released under the [MIT License](LICENSE).
