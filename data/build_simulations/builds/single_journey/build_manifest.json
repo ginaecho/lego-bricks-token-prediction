@@ -1,0 +1,68 @@
+{
+  "build": "single_journey",
+  "scope": "Working local customer journey recommendation engine, not a production deployment.",
+  "runtime": "Python 3.10+ standard library; verified with Python 3.13.15.",
+  "files": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "interfaces": {
+    "cli": "python -B implementation.py example_input.json",
+    "cli_success": "JSON recommendation object to stdout, exit code 0.",
+    "cli_invalid_input": "JSON error object to stderr, exit code 2. Argument usage errors use argparse's stderr format.",
+    "python": "recommend(payload, explanation_callback=None) -> JSON-compatible dict; invalid input raises ValidationError.",
+    "callback": "Optional injected callable receives a deep copy of the recommendation result and returns {explanations: [{action_id: string, text: string}]}. Only unique action IDs appearing in next_actions or two_step_plan are accepted. Any invalid entry or callback exception rejects the whole supplement, preserving deterministic recommendations. No callback is configured or invoked by the CLI."
+  },
+  "input_schema": {
+    "root_required": ["journey", "user"],
+    "journey": {
+      "stages": "Nonempty list of {id: nonempty string, name: nonempty string, prerequisites?: stage ID list}. Every stage must have at least one action.",
+      "actions": "Nonempty list of {id: nonempty string, name: nonempty string, stage_id: stage ID, prerequisites?: action ID list, tags?: string list, priority?: finite number in [-1000000, 1000000]}."
+    },
+    "user": {
+      "completed_stages": "Required list of known stage IDs.",
+      "completed_actions": "Optional list of known action IDs; defaults to empty.",
+      "preferences": "Optional list of preferred tags; defaults to empty.",
+      "excluded_actions": "Optional list of known action IDs; defaults to empty.",
+      "excluded_tags": "Optional list of disallowed tags; defaults to empty."
+    },
+    "validation": "Unknown fields, duplicate IDs/list values/JSON keys, invalid types, invalid references, stage cycles, action cycles and mixed stage/action cycles are rejected. Tags are free-form case-sensitive strings; unfamiliar preference tags are allowed."
+  },
+  "semantics": {
+    "eligibility": "An incomplete action must not be excluded by ID or tag; all its prerequisite actions and its stage's prerequisite stages must be completed.",
+    "completion": "Completed stage snapshots are authoritative and imply completion of all their actions. Otherwise a stage completes once all its actions and all prerequisite stages complete. All configured actions are required, not alternative branches.",
+    "ranking": "score = priority (default 0) + 10 * count(matching preference tags); descending score, then ascending case-sensitive action ID. This is an explicit policy score, not a probability, rating or learned prediction.",
+    "plan": "Greedy up to two actions. Simulate completion of the first action, recompute stage completion and eligibility, then select the next highest-ranked action. Step two is conditional on successful completion of prior plan actions; it is not asserted to be currently eligible.",
+    "explanations": "Each recommended action includes satisfied prerequisite stage/action IDs and a deterministic explanation; plan entries identify assumed completed prior plan actions.",
+    "impossible_progression": "Fixed-point reachability with current exclusions determines whether every stage can eventually complete. A ready journey may still have progression_possible=false when a later required action is excluded.",
+    "status": "completed if all stages are complete; ready if any next action is eligible; blocked otherwise."
+  },
+  "output_fields": [
+    "status", "next_actions", "two_step_plan", "completed_stages",
+    "progression_possible", "unreachable_stages", "blocked_actions",
+    "explanation_status", "supplemental_explanations"
+  ],
+  "limitations": [
+    "Local JSON-file input and JSON stdout only; no database, web UI, authentication, event tracking or action execution.",
+    "No network, provider calls, dependencies, training, financial estimates or token estimates.",
+    "No global plan optimization, optional action branches, durations, budgets or competing resource constraints.",
+    "User completion snapshots are trusted historical facts; contradictory historical completion order is not rejected.",
+    "Callback structured action IDs are validated; arbitrary explanatory prose is not fact-checked and must be treated as untrusted text. Callback availability, latency and side effects are the caller's responsibility.",
+    "Fixed-point simulation is intended for modest local journey configurations, with no large-scale performance claim.",
+    "Tests use labeled synthetic fixtures, not measured customer conversion outcomes."
+  ],
+  "tests": {
+    "command": "python -B -m unittest discover -s . -p test_implementation.py -v",
+    "cli_command": "python -B implementation.py example_input.json",
+    "labeled_fixtures": ["new_customer", "returning_customer", "completed_journey", "excluded_checkout", "future_exclusion", "preference_ranking", "action_dependency"],
+    "coverage": [
+      "eligible actions, weighted preferences, exclusions, completed journeys",
+      "two-step conditional planning and prerequisite explanations",
+      "deterministic ties independent of declaration order",
+      "stage and action completion normalization",
+      "impossible future progression and excluded descendants",
+      "invalid references, schema, numeric priorities and cycles",
+      "callback acceptance, invented IDs, nonrecommended IDs, malformed output, exceptions and mutation isolation",
+      "duplicate JSON keys and subprocess CLI success/error"
+    ],
+    "result": "PASS: 27 unittest test methods, including labeled subtests; 0 failures/errors; reported runtime 0.578 seconds; command exit code 0.",
+    "cli_result": "PASS: exit code 0; status ready; eligible next action checkout; conditional plan checkout then setup; progression_possible true; no callback requested."
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "name": "single_review",
+  "description": "Declared-requirement document-evidence triage with exact citations and an optional injected validation reviewer.",
+  "implementation": "implementation.py",
+  "tests": "test_implementation.py",
+  "example": "example_input.json",
+  "runtime": "Python 3.9+ standard library",
+  "dependencies": [],
+  "commands": {
+    "tests": "python -B -m unittest discover -v",
+    "example": "python -B implementation.py example_input.json"
+  },
+  "input_contract": {
+    "root": "Object with requirements and documents lists; optional nonblank label.",
+    "requirement": "Unique nonblank id, description, integer priority 1..5 (1 highest), evidence_rules.",
+    "document": "Unique nonblank id, string text, optional nonblank title. Empty text is allowed.",
+    "evidence_rules": "all_of, any_of, contradicts are optional lists of nonblank case-sensitive literal strings. At least one positive term is required. Duplicate terms across or within positive groups, and identical positive/contradictory terms, are rejected.",
+    "unknown_fields": "Rejected.",
+    "duplicate_json_keys": "Rejected by CLI."
+  },
+  "status_rules": {
+    "supported": "All all_of terms and at least one any_of term (if supplied) occur anywhere across supplied documents, with no contradictory term.",
+    "partial": "Some positive terms occur but the complete positive rule is not met, with no contradictory term.",
+    "missing": "No positive or contradictory term occurs. Absence is not proof of failure.",
+    "conflicting": "At least one declared contradicts term occurs, even if positive evidence is absent. Requires human resolution, not a failure verdict."
+  },
+  "citations": "All literal occurrences, including overlaps, with document_id, exact quote, rule, term, zero-based Unicode character start and exclusive end.",
+  "gap_order": "Declared priority ascending, then conflicting/missing/partial, then requirement ID. Each gap links to a requirement ID, finding status, and exact citations.",
+  "reviewer": "Python API analyze(data, reviewer=None). Callback receives a deep-copied bundle with requirements, documents, findings; returns all findings. IDs, statuses, exact spans, rules, and evidence completeness are checked. Reordering permitted; changing deterministic evidence outcomes rejected. Callback exceptions reject the report.",
+  "fictional_notice": "All examples and test fixtures are fictional; they do not encode legal standards.",
+  "limitations": [
+    "Literal matching only; cannot understand paraphrase, negation, applicability, chronology, or document authenticity.",
+    "Terms can match substrings; authors must select sufficiently specific literals and explicit contradiction rules.",
+    "Evidence may be combined across documents; no same-document co-occurrence requirement is inferred.",
+    "Conflicts are surfaced, not automatically resolved; no document is assumed more authoritative or current.",
+    "Supplied input is local JSON only; no extraction, network, paid providers, or persistence service.",
+    "No legal or compliance certification, and no conclusion that missing evidence proves failure.",
+    "Injected callbacks are trusted local Python code, not sandboxed; validation constrains returned findings, not callback side effects.",
+    "No resource limits for very large documents or highly repetitive terms."
+  ],
+  "measurement": "Token usage is measured externally by the parent; no usage, cost, finance, or rating estimates are asserted.",
+  "validation": {
+    "status": "passed",
+    "unittest_discover": {
+      "command": "python -B -m unittest discover -v",
+      "exit_code": 0,
+      "tests_run": 21,
+      "failures": 0,
+      "errors": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "json_output": true,
+      "requirements_reviewed": 4,
+      "documents_supplied": 2,
+      "counts": {
+        "supported": 1,
+        "partial": 1,
+        "missing": 1,
+        "conflicting": 1
+      },
+      "prioritized_gaps": 3
+    }
+  }
+}

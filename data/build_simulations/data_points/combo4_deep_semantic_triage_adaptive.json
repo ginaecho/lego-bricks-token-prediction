@@ -1,0 +1,424 @@
+{
+  "id": "combo4_deep_semantic_triage_adaptive",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "research",
+      "search",
+      "support",
+      "onboard"
+    ],
+    "basic_functionalities": [
+      "Research",
+      "Smart product search",
+      "AI customer support",
+      "Guided onboarding"
+    ],
+    "types": [
+      "deep",
+      "semantic",
+      "triage",
+      "adaptive"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 5,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 3,
+    "planned_operation_retrieve": 6,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Multi-document evidence synthesis, disagreement and unresolved questions.",
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Experience/preference-aware onboarding with prerequisites and explanations."
+  ],
+  "integration": {
+    "ordered_types": [
+      "deep",
+      "semantic",
+      "triage",
+      "adaptive"
+    ],
+    "edges": [
+      {
+        "from": "deep",
+        "to": "semantic",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "semantic",
+        "to": "triage",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "triage",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration"
+  },
+  "split": "test",
+  "split_group": "3c9e94a36a39856eb80e64f11dbc1f24a8e47d71a8e293fc132ae923c93fede3",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "7dcc86a90962bcb34a741e0590ab00e53774dc07396bb21e657b8a152a94fa96",
+  "status": "measured_build_passed",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b22911e3-ec12-4b06-9ac3-38dfd00339d8",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 152607,
+    "output_tokens": 16332,
+    "cache_read_tokens": 133577,
+    "cache_write_tokens": 19012,
+    "total_tokens": 168939,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 31883,
+        "agent_id": "b22911e3-ec12-4b06-9ac3-38dfd00339d8",
+        "model": "gpt-6-astra",
+        "input_tokens": 14399,
+        "output_tokens": 659,
+        "cache_read_tokens": 13866,
+        "cache_write_tokens": 530,
+        "reasoning_tokens": 516,
+        "duration_ms": 21812,
+        "created_at": "2026-09-21T19:43:05.014Z"
+      },
+      {
+        "id": 31901,
+        "agent_id": "b22911e3-ec12-4b06-9ac3-38dfd00339d8",
+        "model": "gpt-6-astra",
+        "input_tokens": 15084,
+        "output_tokens": 11405,
+        "cache_read_tokens": 14396,
+        "cache_write_tokens": 685,
+        "reasoning_tokens": 516,
+        "duration_ms": 177213,
+        "created_at": "2026-09-21T19:47:26.692Z"
+      },
+      {
+        "id": 31902,
+        "agent_id": "b22911e3-ec12-4b06-9ac3-38dfd00339d8",
+        "model": "gpt-6-astra",
+        "input_tokens": 26721,
+        "output_tokens": 146,
+        "cache_read_tokens": 15081,
+        "cache_write_tokens": 11637,
+        "reasoning_tokens": 7,
+        "duration_ms": 11277,
+        "created_at": "2026-09-21T19:47:27.899Z"
+      },
+      {
+        "id": 31903,
+        "agent_id": "b22911e3-ec12-4b06-9ac3-38dfd00339d8",
+        "model": "gpt-6-astra",
+        "input_tokens": 28756,
+        "output_tokens": 3737,
+        "cache_read_tokens": 28753,
+        "cache_write_tokens": 0,
+        "reasoning_tokens": 381,
+        "duration_ms": 94330,
+        "created_at": "2026-09-21T19:47:47.135Z"
+      },
+      {
+        "id": 31905,
+        "agent_id": "b22911e3-ec12-4b06-9ac3-38dfd00339d8",
+        "model": "gpt-6-astra",
+        "input_tokens": 32731,
+        "output_tokens": 255,
+        "cache_read_tokens": 28753,
+        "cache_write_tokens": 3975,
+        "reasoning_tokens": 11,
+        "duration_ms": 15362,
+        "created_at": "2026-09-21T19:48:04.322Z"
+      },
+      {
+        "id": 31906,
+        "agent_id": "b22911e3-ec12-4b06-9ac3-38dfd00339d8",
+        "model": "gpt-6-astra",
+        "input_tokens": 34916,
+        "output_tokens": 130,
+        "cache_read_tokens": 32728,
+        "cache_write_tokens": 2185,
+        "reasoning_tokens": 0,
+        "duration_ms": 6469,
+        "created_at": "2026-09-21T19:48:15.544Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6264975,
+      "observed_cache_profile_estimate_usd": 0.32594925,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.51797,
+      "observed_cache_profile_estimate_usd": 7.51797,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 3,
+      "roi_satisfaction": 3,
+      "future_impact_potential": 2,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.49,
+    "pseudo_annual_cost_usd": 15000,
+    "pseudo_annual_ai_value_usd": 40000,
+    "pseudo_net_impact_usd": 25000,
+    "pseudo_roi_pct": 166.66666666666666,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................................\n----------------------------------------------------------------------\nRan 36 tests in 2.108s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "ticket_id": "FICTIONAL-TICKET-001",
+      "research": {
+        "method": "explicit_claim_consolidation",
+        "findings": [
+          {
+            "id": "finding-1",
+            "subject": "invoice export",
+            "predicate": "responsible team",
+            "disagreement": false,
+            "alternatives": [
+              {
+                "id": "finding-1:alternative-1",
+                "value": "accounts support",
+                "category_id": "accounts",
+                "provenance": [
+                  {
+                    "claim_id": "claim-billing",
+                    "source_id": "fictional-runbook",
+                    "source_title": "FICTIONAL Nimbus Otter support runbook",
+                    "statement_id": "statement-billing",
+                    "text": "FICTIONAL: invoice export receipt requests belong to accounts support."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "finding-2",
+            "subject": "portal access",
+            "predicate": "responsible team",
+            "disagreement": false,
+            "alternatives": [
+              {
+                "id": "finding-2:alternative-1",
+                "value": "identity support",
+                "category_id": "identity",
+                "provenance": [
+                  {
+                    "claim_id": "claim-access",
+                    "source_id": "fictional-runbook",
+                    "source_title": "FICTIONAL Nimbus Otter support runbook",
+                    "statement_id": "statement-access",
+                    "text": "FICTIONAL: portal login password reset access requests belong to identity support."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "search": {
+        "method": "lexical_tfidf_cosine",
+        "query": "How do I reset my portal login password?",
+        "requested_top_k": 3,
+        "status": "evidence_found",
+        "hits": [
+          {
+            "id": "finding-2:alternative-1",
+            "finding_id": "finding-2",
+            "category_id": "identity",
+            "disagreement": false,
+            "text": "FICTIONAL: portal login password reset access requests belong to identity support.",
+            "provenance": [
+              {
+                "claim_id": "claim-access",
+                "source_id": "fictional-runbook",
+                "source_title": "FICTIONAL Nimbus Otter support runbook",
+                "statement_id": "statement-access",
+                "text": "FICTIONAL: portal login password reset access requests belong to identity support."
+              }
+            ],
+            "score": 0.5850189434403964
+          }
+        ]
+      },
+      "triage": {
+        "status": "routed",
+        "category_id": "identity",
+        "owner": "FICTIONAL Identity Desk",
+        "priority": "high",
+        "candidate_category_ids": [
+          "identity"
+        ],
+        "category_scores": {
+          "identity": 0.5850189434403964
+        },
+        "evidence_ids": [
+          "finding-2:alternative-1"
+        ],
+        "conflicting_finding_ids": [],
+        "reason": "Highest retrieved category evidence, configured owner and priority."
+      },
+      "onboarding": {
+        "profile_id": "fictional-learner",
+        "routing_status": "routed",
+        "priority": "high",
+        "preferred_format": "exercise",
+        "experience": "beginner",
+        "steps": [
+          {
+            "task_id": "setup",
+            "title": "Configure the FICTIONAL training workspace",
+            "prerequisites": [],
+            "status": "ready",
+            "blocked_by": [],
+            "format": "exercise",
+            "detail": "guided_steps"
+          },
+          {
+            "task_id": "identity-guide",
+            "title": "Read the FICTIONAL access recovery guide",
+            "prerequisites": [
+              "setup"
+            ],
+            "status": "waiting",
+            "blocked_by": [],
+            "format": "exercise",
+            "detail": "guided_steps"
+          },
+          {
+            "task_id": "login-practice",
+            "title": "Practice a FICTIONAL portal login recovery",
+            "prerequisites": [
+              "identity-guide"
+            ],
+            "status": "waiting",
+            "blocked_by": [],
+            "format": "exercise",
+            "detail": "guided_steps"
+          }
+        ],
+        "completed_task_ids": [],
+        "pace": "expedited",
+        "status": "planned"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\combo4_deep_semantic_triage_adaptive",
+    "artifact_sha256": {
+      "implementation.py": "8bf99faf3054f685856c10d93f85c45be35039da06f934c8692eee3f14617151",
+      "test_implementation.py": "31d88d04ec5aa435f19dc576a0cf634528462a262a2dfd38425dc13ace1b4632",
+      "example_input.json": "b37ce7eec92336fb55ff0ccab99267809e3e32216bb2cf1c6979fc1e06d7861c",
+      "build_manifest.json": "e9ebaf522d35cdc747d2af8eb30ba1b225f79f167a67a3588133f8a25296358b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

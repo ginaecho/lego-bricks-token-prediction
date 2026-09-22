@@ -1,0 +1,129 @@
+{
+  "name": "single_feedback",
+  "schema_version": 1,
+  "implementation": "Python standard library only; offline JSON CLI and importable analyze(payload, callback=None)",
+  "files": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "fixture_provenance": "All example and test feedback is synthetic, not client data or measured client outcomes.",
+  "scope": [
+    "Strict closed-schema records with unique IDs and string feedback.",
+    "NFKC Unicode normalization, casefolding and whitespace collapse for deduplication and matching.",
+    "Configurable literal keyword/phrase themes; omitted themes use performance, support and usability defaults.",
+    "Unicode word-boundary matching against normalized feedback; regex metacharacters in keywords are escaped.",
+    "Distinct normalized-feedback counts and separate supporting original-record counts per theme.",
+    "All original record IDs and verbatim excerpts retained for automatic matches, including duplicates and contradictory feedback.",
+    "Unmatched nonempty feedback retains complete source evidence; empty feedback IDs are listed separately.",
+    "Explicit empty_feedback, no_themes and no_match statuses, including no_match for individually unmatched themes.",
+    "Optional in-process callback for additive span-backed theme assignments and strictly extractive synthesis.",
+    "Deterministic sorted output with no timestamps, random values or external calls."
+  ],
+  "input_contract": {
+    "root": "Object with required records array and optional themes array; unknown fields rejected.",
+    "record": "Exactly {id: string, text: string}. IDs match [A-Za-z0-9][A-Za-z0-9_.:-]{0,127}. IDs are unique and case-sensitive.",
+    "theme": "Exactly {id: string, keywords: nonempty array of nonblank strings}. Theme IDs obey the record ID grammar and are unique.",
+    "empty_themes": "An explicitly empty themes array disables automatic categories; nonempty feedback is returned unmatched.",
+    "blank_records": "Allowed but excluded from deduplication and matching; counted and returned by ID.",
+    "json": "Duplicate object keys, NaN, Infinity, unpaired Unicode surrogates, malformed JSON and invalid field types are rejected.",
+    "cli": "python -B implementation.py [UTF-8 input file or -] [--pretty]; omitted input reads stdin. Successful result is JSON on stdout, exit 0. Data/read errors are JSON on stderr, exit 2. argparse usage errors use its standard stderr format."
+  },
+  "evidence_contract": {
+    "offsets": "Zero-based Unicode code-point offsets into the ORIGINAL record text; end is exclusive, exactly as Python text[start:end].",
+    "automatic_excerpts": "Entire original records are deliberate context-preserving excerpts, not just matched keywords.",
+    "feedback_id": "Lexicographically smallest original ID in a normalized duplicate group.",
+    "counts": "Theme counts count distinct normalized feedback groups, not customers. Themes can overlap, so theme counts must not be summed as an exclusive total.",
+    "duplicates": "Duplicate original IDs remain visible; automatic matches include every original in a duplicate group. Callback-only evidence includes only explicitly supplied spans.",
+    "conflicts": "Opposing and negated statements are retained independently, never averaged, discarded or rewritten."
+  },
+  "callback_contract": {
+    "availability": "Python API only; no CLI module loading or provider integration.",
+    "input": "Detached, sorted copy of {records: [{id,text}], themes: [{id,keywords}]}, including empty records and normalized keywords.",
+    "output": "Exactly {assignments: [{record_id,theme_id,start,end}], syntheses: [{theme_id,text,supports:[{record_id,start,end}]}]}. Both lists are required.",
+    "assignments": "Additive to keyword matches. IDs must reference supplied records and configured themes; offsets must be actual integers, not booleans, with 0 <= start < end <= source length. Excerpts must be nonblank.",
+    "synthesis": "Every support must be contained in evidence assigned to the same theme and have a unique source span. Text must exactly equal the ordered supporting excerpts joined with newline characters; unsupported generated prose is rejected.",
+    "failure": "Invalid callback output, unknown theme or record IDs, missing spans and callback exceptions raise ValidationError. No partial result is returned.",
+    "determinism": "Guaranteed for fixed input and fixed callback output. Callback execution itself is caller-controlled."
+  },
+  "limits": {
+    "records": 10000,
+    "characters_per_record": 100000,
+    "total_feedback_characters": 1000000,
+    "themes": 100,
+    "keywords_per_theme": 100,
+    "characters_per_keyword": 200,
+    "cli_json_characters": 8000000,
+    "callback_assignments": 10000,
+    "callback_syntheses": 1000,
+    "supports_per_synthesis": 1000,
+    "characters_per_synthesis": 1000000,
+    "semantic_limits": [
+      "Keyword matching is not semantic clustering, sentiment analysis, contradiction detection or paraphrase deduplication.",
+      "Negation does not cancel a keyword match; full original evidence preserves the opposing view.",
+      "Normalization may intentionally merge case, whitespace and compatibility-character variants; punctuation differences remain distinct.",
+      "Source validation proves provenance, not semantic appropriateness of a caller-supplied theme assignment.",
+      "Extractive synthesis cannot guarantee that selection or ordering is unbiased.",
+      "Injected callbacks are trusted local code, not sandboxed, time-limited or inspected for side effects.",
+      "No performance benchmark, load/concurrency test, persistent datastore or production-readiness claim is supplied.",
+      "Input limits bound data size but do not promise bounded response size, runtime or latency for worst-case theme overlap.",
+      "No provider calls, network, installs, agents, repository operations or other-build reuse were used."
+    ]
+  },
+  "verification": {
+    "working_directory": "C:\\Users\\tzuchunchen\\.copilot\\session-state\\2a19c1c6-7d0e-4fb8-87e0-3035680cfe71\\files\\marketplace-sales\\data\\build_simulations\\builds\\single_feedback",
+    "tests_command": "python -B -m unittest discover -s . -p 'test_implementation.py' -v",
+    "tests_result": {
+      "executed": true,
+      "passed": 24,
+      "failed": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "coverage_scope": [
+      "Unicode normalization and original-preserving deduplication",
+      "Conflicting feedback preservation",
+      "Empty input and whitespace-only records",
+      "Unmatched input and explicitly empty themes",
+      "Whole-phrase boundaries and normalized whitespace",
+      "Overlapping theme counts",
+      "Input-order independence",
+      "Strict record and theme schemas",
+      "Duplicate record ID rejection",
+      "Record-length and total-text limits",
+      "Valid injected assignment and extractive synthesis",
+      "Unknown callback record/theme IDs",
+      "Invalid callback offsets and blank spans",
+      "Callback mutation isolation and exception handling",
+      "Fabricated synthesis and unassigned support rejection",
+      "Duplicate assignment handling",
+      "Exact evidence span reconstruction",
+      "CLI repeated deterministic output",
+      "Malformed and nonstandard JSON rejection",
+      "CLI file input and missing-file failure"
+    ],
+    "cli_command": "python -B implementation.py example_input.json --pretty",
+    "cli_result": {
+      "executed": true,
+      "exit_code": 0,
+      "status": "ok",
+      "input_records": 7,
+      "empty_records": 1,
+      "distinct_feedback": 5,
+      "duplicate_records": 1,
+      "matched_feedback": 4,
+      "unmatched_feedback": 1,
+      "theme_distinct_counts": {
+        "performance": 2,
+        "pricing": 0,
+        "support": 2,
+        "usability": 2
+      }
+    }
+  },
+  "measurement": {
+    "software_build_token_counters": "Not collected or inferred here; the parent captures this agent's actual counters.",
+    "client_outcomes": "No client outcomes were measured or claimed."
+  }
+}

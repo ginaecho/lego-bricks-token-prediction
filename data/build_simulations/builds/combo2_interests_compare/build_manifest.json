@@ -1,0 +1,115 @@
+{
+  "build_id": "combo2_interests_compare",
+  "composition_label": "Interest-based recommendations -> Product comparison",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written within this build; no standalone or other builds inspected or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -v"
+  },
+  "shared_schema": {
+    "products": "Unique case-sensitive trimmed IDs; nonempty name and casefolded brand; unique casefolded tags; nonnegative finite price or null; uppercase three-letter currency; scalar attributes with optional units; optional source.",
+    "preferences": "Positive finite interest weights; ID/brand/tag exclusions; currency, budget and required-tag constraints; optional higher/lower attribute directions.",
+    "attributes": "Normalized attribute names; values are finite numbers, strings, booleans or null. Units are casefolded strings or null. Price is a reserved comparison attribute using the common product price/currency.",
+    "provenance": "Each normalized product carries its original input index and supplied source label through selections, rejections, comparison facts and tradeoffs.",
+    "validation": "One normalization boundary rejects unknown fields, malformed structures, duplicates after normalization, invalid values and overflowing weight totals. JSON loading rejects duplicate object keys and nonstandard constants."
+  },
+  "reused_internal_logic": [
+    "normalize and its scalar/object/list/map validators define one product/preference contract for both stages.",
+    "The same normalized preferences supply stage-one eligibility and stage-two attribute directions.",
+    "fact, value_kind and describe provide shared typed, provenance-bearing facts and deterministic explanations.",
+    "Comparison facts are reused as the strict allowlist for optional callback claims and as evidence for pairwise tradeoffs."
+  ],
+  "cross_stage_handoffs": [
+    {
+      "from": "recommend",
+      "to": "compare",
+      "payload": "Only selected ranked records containing normalized products, scores and matched interests.",
+      "invariant": "compare receives no full-catalog argument; rejected and lower-ranked products cannot become comparison candidates."
+    },
+    {
+      "from": "compare",
+      "to": "optional explanation callback",
+      "payload": "Deep copies of selected candidate IDs and supplied comparison facts.",
+      "invariant": "Returned claims must exactly match supplied facts, including ID, attribute, typed value, unit and provenance. Duplicates and additional prose are rejected."
+    }
+  ],
+  "behavior": {
+    "ranking": "Eligible products need at least one matching interest. Score is the sum of matched interest weights. Sort descending score, then ascending case-sensitive product ID; take candidate_limit (default 3).",
+    "constraints": "Exclusions, currency (default USD), optional max_price and required_tags are applied before ranking. Unknown prices are excluded when a budget is present. All comparisons inherit that constrained selection.",
+    "comparison": "Compare requested attributes only among selected products. Numeric preferences apply only to same-type, same-unit known values; text and boolean values are presented without inferred utility. Pairwise opposing numeric advantages generate grounded tradeoffs.",
+    "missing_values": "Absent and explicit-null attributes are unknown. Fewer than two known values is insufficient_data. Mixed types/units are noncomparable. Partial conclusions explicitly cover only known values.",
+    "no_match": "Returns status no_match, empty selection and comparison facts, and diagnostic per-attribute results.",
+    "errors": "CLI validation/file/JSON errors produce JSON status error and exit code 2. Successful execution, including no_match, exits 0.",
+    "callback": "Python-only injected callable; no provider integration. It selects structured supplied claims, which are rendered locally. Free-form generated assertions are deliberately unsupported."
+  },
+  "scope": {
+    "included": [
+      "Actual integrated two-function local build",
+      "Deterministic preference-based eligibility and ranking",
+      "Selection-dependent attribute comparisons and evidence-bearing tradeoffs",
+      "Shared validation, stable ties and provenance",
+      "Optional fail-closed explanation callback",
+      "Labeled synthetic fixture and integration tests"
+    ],
+    "excluded": [
+      "Live product discovery or provider calls",
+      "Currency or unit conversion",
+      "Semantic interest inference",
+      "Overall utility optimization across attributes",
+      "Validation of unrestricted natural-language callback output",
+      "Performance, market or client outcome claims"
+    ]
+  },
+  "test_outcomes": {
+    "fixture": "OUTDOOR / integrated-outdoor-catalog, synthetic labeled facts",
+    "unittest_discover": {
+      "tests_run": 15,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "cli": {
+      "exit_code": 0,
+      "json_status": "ok",
+      "selected_ids": ["trail-light", "trail-long"],
+      "comparison_candidate_ids": ["trail-light", "trail-long"],
+      "battery_preferred_ids": ["trail-long"],
+      "weight_preferred_ids": ["trail-light"],
+      "excluded_product_absent_from_comparison": "blocked-pro"
+    },
+    "coverage": [
+      "Exclusion propagation for product IDs, brands and tags, including tradeoff IDs",
+      "Interest changes change downstream candidates and attribute winners",
+      "Product fact changes change downstream explanations",
+      "Budget, missing price, currency and required-tag propagation",
+      "Stable ties across input reordering",
+      "Missing, partial and noncomparable attributes",
+      "No matches, empty catalogs and single candidates",
+      "Shared normalization and input immutability",
+      "Invalid/duplicate schema inputs and duplicate JSON keys",
+      "Callback isolation and rejection of fabricated IDs, facts, provenance and prose",
+      "JSON CLI success, usage errors and missing input files"
+    ]
+  },
+  "measurement": {
+    "unit": "One complete integrated composition build session",
+    "authoritative_usage": "Captured by parent for this entire session as one composition label.",
+    "estimated_or_summed_usage_provided": false,
+    "money_staffing_or_client_scores_provided": false
+  }
+}

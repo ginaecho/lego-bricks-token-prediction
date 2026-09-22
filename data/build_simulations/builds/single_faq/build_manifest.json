@@ -1,0 +1,143 @@
+{
+  "build": "single_faq",
+  "scope": {
+    "description": "Offline Python standard-library JSON-file CLI for indexing supplied KB articles, lexical passage retrieval, grounded extractive answers, and explicit abstention.",
+    "started_from_empty_directory": true,
+    "artifacts": [
+      "implementation.py",
+      "test_implementation.py",
+      "example_input.json",
+      "build_manifest.json"
+    ],
+    "example_data": "Synthetic demonstration KB; no external corpus was supplied or fetched.",
+    "dependencies": "Python 3.8 or newer; standard library only.",
+    "execution_constraints": "All writes were confined to this build directory. No other builds, git, agent delegation, package installation, network, or paid APIs were used.",
+    "measurements": "Only observed software validation outcomes are reported. No token estimates or business outcomes."
+  },
+  "interface": {
+    "commands": {
+      "run": "python -B implementation.py run --input example_input.json [--threshold 0.5]",
+      "index": "python -B implementation.py index --input example_input.json --output kb_index.json",
+      "ask": "python -B implementation.py ask --index kb_index.json --question \"What is the return window?\" [--threshold 0.5]",
+      "tests": "python -B -m unittest discover -s . -p test_implementation.py -v"
+    },
+    "request_schema": {
+      "articles": "Required array of objects: nonempty unique string id, nonempty string text, optional string title. Unknown article fields are rejected. IDs are case-sensitive and cannot have surrounding whitespace.",
+      "questions": "Optional array of nonempty question strings; defaults to an empty array.",
+      "threshold": "Optional finite JSON number in [0,1]; defaults to 0.5. Booleans and numeric strings are rejected.",
+      "unknown_fields": "Rejected at request root.",
+      "encoding": "UTF-8 JSON. Duplicate object keys and nonstandard NaN/Infinity constants are rejected."
+    },
+    "persisted_index": {
+      "schema_version": 1,
+      "contents": "Canonical articles, exact source passages with zero-based per-article indices, token sets, and inverted token postings.",
+      "loading": "Rebuilds from source articles and rejects differences in persisted passages, postings, or schema.",
+      "duplicates": "Duplicate article IDs are rejected. Identical content under different IDs remains independently indexed and citable."
+    },
+    "retrieval": {
+      "tokenization": "Unicode alphanumeric tokenization, casefolding, and a fixed English stopword list.",
+      "passages": "Split after sentence-ending punctuation followed by whitespace, and at newlines; long segments split at 1200 characters. Quotes are exact source substrings.",
+      "confidence": "Unique non-stopword query tokens found in a passage divided by all unique non-stopword query tokens. This is lexical coverage, not a calibrated probability.",
+      "ranking": "Descending unrounded coverage, then case-sensitive article ID ascending, then passage index ascending. Independent of input article order.",
+      "selection": "Answer path retrieves at most three positive-overlap passages and retains those meeting the inclusive confidence threshold. Default answer uses the first passage.",
+      "zero_threshold": "Still abstains when there is no positive token overlap."
+    },
+    "response": {
+      "fields": [
+        "question",
+        "status",
+        "answer",
+        "citations",
+        "confidence",
+        "threshold",
+        "reason"
+      ],
+      "status": "answered or abstained",
+      "citations": "Array of article_id, passage_index, and exact quote.",
+      "confidence": "Highest retrieved lexical-coverage score, or zero if no passage matches.",
+      "abstention": "answer is null and citations is empty.",
+      "abstention_reasons": [
+        "empty_corpus",
+        "no_matching_evidence",
+        "insufficient_evidence",
+        "invalid_callback_output"
+      ],
+      "exit_codes": "0 for successful processing, including abstention; 2 for invalid input or file errors. Application errors are JSON on stderr; argparse usage errors are ordinary usage text."
+    },
+    "python_api": {
+      "build_index": "build_index(articles) -> Index",
+      "retrieve": "retrieve(index, question, limit=3) -> ranked candidate dictionaries",
+      "answer_question": "answer_question(index, question, threshold=0.5, answer_callback=None) -> response dictionary",
+      "persistence": "write_json(path, index_document(index)); load_index(path)",
+      "callback": "callback(question, tuple_of_candidate_dicts) -> {'answer': string, 'citations': list}. Invoked only after sufficient retrieval evidence exists.",
+      "callback_validation": "Each unique citation must exactly match an eligible retrieved article ID, integer passage index, and complete quote. Answer must equal cited quotes joined with newline in citation order. Invented IDs, quotes, uncited claims, fragments, paraphrases, duplicates, malformed output, and ordinary callback exceptions fail closed. Callback inputs are copies to prevent candidate mutation from changing validation evidence.",
+      "callback_transport": "Dependency injection only; no built-in LLM provider, dynamic CLI imports, or network calls."
+    }
+  },
+  "test_outcomes": {
+    "discovery_command": "python -B -m unittest discover -s . -p test_implementation.py -v",
+    "tests_run": 37,
+    "passed": 37,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "observed_runner_seconds": 2.593,
+    "runner_summary": "Ran 37 tests in 2.593s; OK",
+    "exit_code": 0,
+    "labeled_fixture_coverage": [
+      "grounded_returns",
+      "duplicate_ids",
+      "duplicate_content_tie",
+      "empty_corpus",
+      "12 malformed article cases",
+      "5 malformed JSON cases",
+      "5 malformed request field cases",
+      "13 malicious callback output cases",
+      "no match and stopword-only question",
+      "threshold boundaries and invalid thresholds",
+      "stable article and passage ties",
+      "Unicode tokenization",
+      "exact quote preservation and passage size bounds",
+      "callback mutation, exceptions, and no invocation on abstention",
+      "persisted index round trip and tamper rejection",
+      "CLI run, index, ask, threshold override, and error handling"
+    ],
+    "cli_execution": {
+      "command": "python -B implementation.py run --input example_input.json",
+      "exit_code": 0,
+      "questions": 4,
+      "statuses": [
+        "answered",
+        "answered",
+        "answered",
+        "abstained"
+      ],
+      "cited_article_ids": [
+        "KB-RETURNS",
+        "KB-SHIPPING",
+        "KB-SUPPORT"
+      ],
+      "confidence_scores": [
+        1.0,
+        0.5,
+        1.0,
+        0.0
+      ],
+      "last_abstention_reason": "no_matching_evidence",
+      "persisted_index_cli": "The passing test_cli_index_then_ask test separately executed both CLI subcommands.",
+      "cleanup": "Test-created JSON fixtures and persisted indexes were removed by test teardown. Python bytecode writes were disabled."
+    }
+  },
+  "limitations": [
+    "Lexical overlap cannot prove that a passage actually answers a question. It can produce irrelevant high-scoring extracts and miss synonyms or inflections; no embeddings, stemming, semantic entailment, or contradiction resolution are implemented.",
+    "Confidence is a configurable lexical-coverage heuristic, not a correctness probability or an externally calibrated score.",
+    "Extraction guarantees source provenance, not source truth, currency, completeness, or safety. Conflicting KB articles are ranked deterministically rather than reconciled.",
+    "Sentence splitting is heuristic and may mishandle abbreviations or split long statements. CJK segmentation and multilingual stopwords are not implemented.",
+    "Article titles are stored but are not retrieval evidence. The answer path considers only the top three matching passages.",
+    "The optional callback is deliberately extractive-only: no paraphrased or synthesized answer is accepted.",
+    "Callback output validation is not a Python execution sandbox. Injected code must be trusted; there is no execution timeout, process isolation, or handling of BaseException subclasses such as SystemExit.",
+    "JSON input and the complete index are held in memory. Loading revalidates by rebuilding. No corpus-size limits, concurrent writer coordination, transactional writes, incremental updates, or scalability benchmarks are provided.",
+    "Index integrity checks establish internal consistency, not authenticity: there are no signatures or authorization controls.",
+    "Validation used synthetic deterministic fixtures only. No external knowledge-base evaluation or real LLM integration was performed."
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "name": "single_guided",
+  "scope": "Python standard-library JSON CLI for deterministic onboarding eligibility, blockers, topological planning and atomically validated progress updates.",
+  "files": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "runtime": "Python 3.8+; no third-party dependencies",
+  "cli": "python -B implementation.py example_input.json",
+  "input_contract": {
+    "steps": "List of unique nonblank IDs with a nonblank string action; optional prerequisites, required_fields and completion_evidence are unique nonblank string lists. Optional title and description are nonblank strings.",
+    "progress": "Optional object with fields (global literal-key object) and completed (step-ID-keyed records containing an evidence object).",
+    "updates": "Optional fields merge and complete record merge. A batch may complete an entire prerequisite chain. Original and resulting progress must both be valid. No deletion operation.",
+    "presence": "Missing, null, empty strings, whitespace-only strings, empty arrays and empty objects are absent. Boolean false and numeric zero are present.",
+    "strictness": "Unknown structural keys, duplicate JSON keys, duplicate step IDs/list entries, nonfinite JSON constants, unknown prerequisite/completion IDs, cycles and invalid completion claims are rejected."
+  },
+  "output_contract": {
+    "eligible_next_steps": "Uncompleted IDs with all prerequisites completed and required fields present. Evidence is required at completion, not eligibility.",
+    "blocked_reasons": "Uncompleted blocked IDs mapped to structured missing_prerequisites and/or missing_required_fields reasons.",
+    "topological_plan": "All remaining steps, including blocked ones, in lexical-ID-tiebroken Kahn topological order. This is not a guarantee that every step is immediately executable.",
+    "progress": "Merged validated state; caller must persist this returned JSON.",
+    "steps": "Normalized full step definitions in deterministic topological order, with any validated wording overrides.",
+    "errors": "JSON error object on stdout with exit code 2; success JSON on stdout with exit code 0."
+  },
+  "wording_callback": {
+    "entrypoint": "evaluate(payload, wording_callback=None)",
+    "contract": "Receives a deep copy of normalized steps. Returns a mapping of configured step IDs to nonblank title/description overrides only. Unknown IDs and action/dependency/other structural overrides are rejected.",
+    "isolation": "Mutating callback input cannot mutate planner state or caller input. Callback is library-only and not loaded or invoked by the CLI."
+  },
+  "limitations": [
+    "Evidence and field values are checked for presence only, not truth, type-specific business validity, ownership, authenticity or external execution.",
+    "Actions are opaque strings and are never executed.",
+    "No persistent storage, authentication, multiple-user isolation, timestamps, revocation, conditional prerequisites or concurrent update control.",
+    "Callback code is trusted in-process Python, not a sandbox; only its returned structure and mutation isolation are enforced.",
+    "JSON-shaped inputs are expected for direct library use; CLI enforces JSON parsing.",
+    "Cycle errors identify unresolved IDs, which can include downstream steps, not necessarily a minimal cycle.",
+    "No network, provider calls, packages, usage estimates, financial estimates or client scoring."
+  ],
+  "fixtures": "All example and test identities, actions and evidence are clearly fictional.",
+  "validation": {
+    "commands": ["python -B -m unittest discover -v", "python -B implementation.py example_input.json"],
+    "status": "passed",
+    "unittest_result": {"tests_run": 25, "failures": 0, "errors": 0, "exit_code": 0},
+    "cli_result": {
+      "exit_code": 0,
+      "valid_json": true,
+      "eligible_next_steps": ["fictional-orientation"],
+      "topological_plan": ["fictional-orientation", "fictional-launch"],
+      "validated_completed_steps": ["fictional-profile"]
+    },
+    "coverage": [
+      "eligibility and structured blockers", "lexical deterministic ordering", "batch completion and input immutability",
+      "progress round-trip", "empty and fully completed plans", "unknown IDs", "duplicate IDs and list entries",
+      "cycles and self-loops", "missing prerequisites, fields and evidence", "invalid original and updated claims",
+      "false/zero and empty-value semantics", "callback wording, ID validation and structural preservation",
+      "malformed schemas and JSON", "duplicate JSON keys and nonfinite constants", "CLI error handling and example subprocess"
+    ]
+  }
+}

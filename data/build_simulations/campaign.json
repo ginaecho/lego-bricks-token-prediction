@@ -1,0 +1,45 @@
+{
+  "protocol": "agent-software-build-v1",
+  "parent_session_id": "3d3d54b1-50a9-41d4-b54a-e0cfb58f8822",
+  "catalog_origin": "independent_functionality_taxonomy_not_real_use_cases",
+  "measurement_preference": "subscription_subagents_first",
+  "direct_paid_api_calls_authorized_for_this_wave": false,
+  "scope": "16 standalone types and one fresh integrated build at each of sizes 2, 3 and 4. Remaining combinations are explicitly unmeasured design entries.",
+  "builders": {
+    "single_interests": "cea8331f-1d7b-410f-805c-c596aa63922d",
+    "single_behavior": "7cbb8cd6-f2e9-4f37-8e34-d9161fc3b04d",
+    "single_journey": "39e670a4-75de-4502-94f4-ce0278237ac8",
+    "single_normal": "18516281-2777-439e-af58-3e4177c53891",
+    "single_web": "a1859e90-c0ed-47d3-84e6-aeb5e39d49fd",
+    "single_deep": "8ab8922a-a044-4510-a100-30195d1dda1b",
+    "single_faq": "01285ab8-ac5e-4aef-8293-f56329caf4b2",
+    "single_triage": "93c87362-411a-41ab-aa0e-5e6256157a45",
+    "single_semantic": "e2376e43-b285-4afc-aaf6-0288e4295843",
+    "single_compare": "63d346d3-661d-490e-bae9-5d41c8ed59b1",
+    "single_feedback": "1001457e-230b-4863-98dd-8425e62d3720",
+    "single_sentiment": "cbde5f72-0148-49d8-a9bb-fc8ba25c8ccc",
+    "single_extract": "a59f22ee-6e6f-4048-82b2-3016f7feccc5",
+    "single_review": "a572abfb-9ea0-4542-ba7d-88e119a81a19",
+    "single_guided": "a09e6d7f-506a-4e1c-926c-1e6cb7bc1501",
+    "single_adaptive": "e19131c8-7214-4be3-baf5-c5406593d631",
+    "combo2_interests_compare": "14be2542-ce58-4d18-bb13-4851fe05a193",
+    "combo3_extract_feedback_journey": "0115113c-92ba-4058-a920-830661f45a1f",
+    "combo4_deep_semantic_triage_adaptive": "b22911e3-ec12-4b06-9ac3-38dfd00339d8"
+  },
+  "selected_compositions": [
+    ["interests", "compare"],
+    ["extract", "feedback", "journey"],
+    ["deep", "semantic", "triage", "adaptive"]
+  ],
+  "cli_arguments": {
+    "single_faq": ["run", "--input", "example_input.json"]
+  },
+  "measurement_rules": [
+    "One isolated agent session per build; no nested agents or source copying between builds.",
+    "Count all recorded builder input/output tokens, including test/repair iterations and final report.",
+    "Input counters include cache reads and writes; do not add them a second time.",
+    "Reasoning is auxiliary output detail, not an additional chargeable output sum.",
+    "No model-generated estimates, source-code token counts or prior workload-execution labels become build-token labels.",
+    "A completed implementation requires passing independently rerun tests and immutable artifact hashes."
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "build_id": "combo3_extract_feedback_journey",
+  "description": "Isolated executable synthetic composition build: structured extraction -> contextual feedback analysis -> prerequisite-aware next-action planning.",
+  "production_ready": false,
+  "implementation_language": "Python 3",
+  "dependencies": "Python standard library only",
+  "files": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "execution": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -v",
+    "working_directory": "Directory containing these four files",
+    "success": "One JSON document on stdout; exit code 0",
+    "invalid_input": "One JSON error document on stdout; exit code 2",
+    "callback_api": "run_pipeline(data, synthesizer=None)"
+  },
+  "shared_input_schema": {
+    "top_level": "Exactly sources, claims, feedback, actions; each is a list.",
+    "source": {"id": "nonempty unique string within sources", "text": "string"},
+    "evidence": {
+      "source_id": "existing shared source ID",
+      "start": "integer inclusive Python Unicode character offset, not a byte offset",
+      "end": "integer exclusive offset; start < end within source text"
+    },
+    "claim": {
+      "id": "nonempty unique string within claims",
+      "field": "profile.role | profile.goal | requirements.channel | requirements.budget",
+      "value": "nonempty literal string occurring in at least one cited span",
+      "evidence": "list of evidence spans; empty means unsupported"
+    },
+    "feedback": {
+      "id": "nonempty unique string within feedback",
+      "theme": "nonempty caller-supplied theme label",
+      "stance": "support | oppose | neutral",
+      "applies_to": "map of known extracted fields to expected literal values; all conditions must match",
+      "evidence": "list of evidence spans; empty means inactive"
+    },
+    "action": {
+      "id": "nonempty unique string within actions",
+      "title": "nonempty string",
+      "requires_fields": "unique known extracted-field names",
+      "prerequisites": "unique existing action IDs forming a directed acyclic graph",
+      "theme_weights": "map of theme labels to signed integer weights",
+      "priority": "integer base priority",
+      "evidence": "list of catalog/source spans; empty blocks the action"
+    },
+    "validation_policy": [
+      "Unknown keys, missing keys, incorrect types, duplicate record IDs, duplicate JSON keys, invalid spans, unknown references, repeated evidence spans, repeated prerequisites, nonstandard JSON constants and cyclic prerequisites are rejected.",
+      "Boolean values are not accepted as integers.",
+      "IDs are namespaced by collection; all stages share the sources namespace.",
+      "Absent evidence is represented explicitly rather than inferred or fabricated."
+    ]
+  },
+  "shared_internal_logic": [
+    "One schema validator and one source index serve all three stages.",
+    "The shared grounded() helper attaches exact source substrings to spans.",
+    "The shared deduplicate() helper deduplicates identical provenance spans.",
+    "Extraction statuses resolved, missing and contradictory are reused directly for feedback applicability and action eligibility."
+  ],
+  "handoffs": [
+    {
+      "from": "structured extraction",
+      "to": "feedback analysis",
+      "contract": "Literal claims are grouped into field candidates with source spans. Only a single evidenced candidate resolves a field. Feedback applicability compares expected values against resolved extraction; missing, conflicting and mismatched context makes that feedback inactive with explicit reasons."
+    },
+    {
+      "from": "structured extraction",
+      "to": "journey recommendations",
+      "contract": "Every required field must resolve before an action is eligible. Required values and their evidence are carried into selected steps. Blocked prerequisites also prevent downstream actions."
+    },
+    {
+      "from": "feedback analysis",
+      "to": "journey recommendations",
+      "contract": "Action score is base priority plus the sum of theme weight times active support-minus-oppose record count. Both sides of disagreement and their evidence are preserved even when the net contribution is zero. Inactive and neutral feedback do not affect priority."
+    }
+  ],
+  "planning_policy": {
+    "selection": "Greedily choose highest score among eligible actions, using action ID as deterministic tie-break, then repeat once.",
+    "prerequisites": "Step two may depend on step one, explicitly conditional on actual completion; planning does not execute either action.",
+    "short_plans": "Return partial for one possible step and no_eligible_action for zero; never fabricate an action to fill the plan.",
+    "unselected": "Report intrinsic field/evidence blocks, unscheduled prerequisites, or two_step_limit."
+  },
+  "optional_callback": {
+    "network_calls_implemented": false,
+    "input": "Deep copy of the complete deterministic result.",
+    "output": "Exactly {steps: [{action_id, source_ids, explanation}, ...]} matching planned IDs, order, length and source IDs.",
+    "safety_boundary": "Cannot change selected actions, scores, evidence spans or source IDs. Supplemental prose is labeled semantic_verification: not_performed. Invalid callback output raises InputError. Callback exceptions propagate to the API caller.",
+    "verification": "Tests cover valid synthesis, changed IDs, changed sources, reordered or removed steps, empty text and attempted mutation of a copied score."
+  },
+  "synthetic_fixtures": [
+    "baseline: evidenced owner/onboarding/email/low context, opposing setup feedback, three catalog actions",
+    "support-only: active setup concern increases setup-review priority",
+    "missing-channel: extraction absence blocks pilot but leaves unrelated actions eligible",
+    "contradictory-goal: two evidenced goal values block setup review and deactivate context-dependent feedback",
+    "test-local labeled mutations: absent evidence, context mismatch, malformed schema/spans, duplicates, cyclic prerequisites, callback tampering and empty input"
+  ],
+  "verification_results": {
+    "unittest_discover": {
+      "command": "python -B -m unittest discover -v",
+      "status": "passed",
+      "tests_run": 20,
+      "reported_duration_seconds": 0.372,
+      "failures": 0,
+      "errors": 0
+    },
+    "exact_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "status": "passed",
+      "exit_code": 0,
+      "valid_json": true,
+      "plan_status": "ready",
+      "selected_action_ids": ["review-setup", "run-pilot"],
+      "disagreement_preserved": true,
+      "resolved_extracted_fields": 4
+    },
+    "explicit_cross_stage_assertions": [
+      "Deleting channel evidence replaces run-pilot with review-messaging.",
+      "Active setup feedback changes the first action from review-messaging to review-setup and unlocks run-pilot as the second action.",
+      "Deleting extracted goal deactivates matching feedback and changes ranking even when review-setup has no direct required field.",
+      "Contradictory goals deactivate feedback, block review-setup and prevent its dependent pilot.",
+      "Selected step grounding contains extraction, both disagreeing feedback sources and action catalog evidence."
+    ]
+  },
+  "limitations": [
+    "Synthetic local verification only; no production, accuracy, user-study or external benchmark claim.",
+    "Structured extraction consumes caller-provided literal claim candidates and validated source spans. It does not discover arbitrary entities from unannotated prose.",
+    "Theme labels, stances, action titles and weights are supplied by the caller; span validity does not prove semantic correctness.",
+    "Different values for a field are treated as unresolved contradictions without recency, authority or synonym resolution.",
+    "Duplicate IDs and exact repeated spans within a record are rejected, but semantically duplicate records with different IDs are not detected.",
+    "Feedback is equally weighted per active record and is not a statistically representative sample.",
+    "Greedy two-step selection is not a global utility optimizer. All prerequisite work starts uncompleted; no persistent execution state.",
+    "Supplemental callback prose is not semantically checked for unsupported assertions, although action identity and original grounding are immutable.",
+    "No concurrency, durability, adversarial resource-exhaustion hardening or external integrations were evaluated."
+  ],
+  "measurement_scope": {
+    "unit": "One integrated composition build",
+    "token_accounting": "Not estimated or aggregated; parent measures the isolated session.",
+    "external_llm_calls": 0,
+    "network_calls": 0,
+    "package_installs": 0,
+    "other_builds_read": false
+  }
+}

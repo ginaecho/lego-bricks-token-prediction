@@ -1,0 +1,53 @@
+{
+  "build": "single_compare",
+  "scope": "Bounded Python standard-library JSON CLI comparing explicitly labeled synthetic product fixtures; no production or provider integration.",
+  "artifacts": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "dependencies": "Python 3 standard library only",
+  "input_contract": {
+    "fixture": "Must be true; sample product IDs carry fixture- prefixes.",
+    "schema": "Map of attribute name to {type: numeric, unit?: canonical unit} or {type: categorical}.",
+    "products": "Ordered array of unique exact string IDs and attributes. Unknown attributes rejected. Absent/null values are missing.",
+    "numeric_values": "Finite number in canonical units, or {value: finite number, unit: supported unit}. Unit spellings are case-sensitive.",
+    "preferences": "Optional map: numeric {direction: min|max, weight: positive finite number}; categorical {target: string, weight: positive finite number}.",
+    "constraints": "Optional map: numeric inclusive min/max bounds accepting quantities; categorical equals string. Missing constrained attributes exclude a product."
+  },
+  "implemented": [
+    "Normalization across length, mass, volume, power, energy, time, decimal/binary storage, percentages and same-currency quantities",
+    "Side-by-side normalized values keyed by exact product IDs, missing attributes, and insufficient-data noncomparability",
+    "Weighted eligible-set min/max ranking with missing utility zero, equal known values utility one, categorical target utility, stable input-order ties",
+    "Inclusive hard constraints, explicit exclusions, empty and no-compatible statuses",
+    "Grounded selected-product advantages and disadvantages relative to other eligible products on supplied preference attributes",
+    "Optional in-process callback accepting only exact verified structured product/attribute/value claims",
+    "Strict schema, units, finite numbers, unique product IDs and duplicate JSON key validation"
+  ],
+  "limitations": [
+    "Synthetic fixtures only; no live catalog, fetching, installation, network, LLM provider, or business outcome evaluation.",
+    "Unit vocabulary is explicit and case-sensitive; no exchange rates, temperature offsets, compound units, locale parsing or unit aliases.",
+    "Categorical comparisons are exact strings; no semantic equivalence or inferred preferences.",
+    "Ranking scores are deterministic supplied-preference utilities, not measured business scores, probabilities, quality estimates or token measurements.",
+    "Eligible-set scaling changes when candidates change; missing utility zero may tie the known worst value.",
+    "Noncomparable means fewer than two known values in the full input set; dimensional mismatch is an input error, not an inferred conversion.",
+    "Tradeoffs compare only the first-ranked product with eligible alternatives and omit missing values; no causal or subjective claims.",
+    "Callback cannot return free-form prose; grounding validates exact facts, not arbitrary natural language.",
+    "Floating-point conversion and comparison use Python float precision; not suitable for financial settlement.",
+    "No persistence service, concurrency, streaming, large-input resource limits, or production deployment is included."
+  ],
+  "validation": {
+    "commands": ["python -m unittest discover -v", "python implementation.py example_input.json"],
+    "status": "passed",
+    "unittest": {"tests_run": 23, "failures": 0, "errors": 0, "exit_code": 0},
+    "cli": {
+      "exit_code": 0,
+      "status": "ok",
+      "ranked_product_ids": ["fixture-budget", "fixture-light"],
+      "preference_utilities": [0.5, 0.5],
+      "excluded_product_ids": ["fixture-over-budget"],
+      "grounded_tradeoffs": 4
+    }
+  },
+  "measurement": {
+    "build_tokens": null,
+    "business_scores": null,
+    "note": "Parent records measured build tokens. No token counts or business scores guessed."
+  }
+}

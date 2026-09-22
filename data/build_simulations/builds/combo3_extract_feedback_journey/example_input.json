@@ -1,0 +1,23 @@
+{
+  "sources": [
+    {"id": "synthetic-profile", "text": "owner wants onboarding via email with low budget"},
+    {"id": "synthetic-feedback-a", "text": "Setup is confusing; simplify setup."},
+    {"id": "synthetic-feedback-b", "text": "Setup is not confusing for me."},
+    {"id": "synthetic-catalog", "text": "Review setup. Run pilot. Review messaging."}
+  ],
+  "claims": [
+    {"id": "role", "field": "profile.role", "value": "owner", "evidence": [{"source_id": "synthetic-profile", "start": 0, "end": 5}]},
+    {"id": "goal", "field": "profile.goal", "value": "onboarding", "evidence": [{"source_id": "synthetic-profile", "start": 12, "end": 22}]},
+    {"id": "channel", "field": "requirements.channel", "value": "email", "evidence": [{"source_id": "synthetic-profile", "start": 27, "end": 32}]},
+    {"id": "budget", "field": "requirements.budget", "value": "low", "evidence": [{"source_id": "synthetic-profile", "start": 38, "end": 41}]}
+  ],
+  "feedback": [
+    {"id": "confused", "theme": "setup_friction", "stance": "support", "applies_to": {"profile.goal": "onboarding"}, "evidence": [{"source_id": "synthetic-feedback-a", "start": 0, "end": 34}]},
+    {"id": "not-confused", "theme": "setup_friction", "stance": "oppose", "applies_to": {"profile.goal": "onboarding"}, "evidence": [{"source_id": "synthetic-feedback-b", "start": 0, "end": 29}]}
+  ],
+  "actions": [
+    {"id": "review-setup", "title": "Review setup", "requires_fields": ["profile.goal"], "prerequisites": [], "theme_weights": {"setup_friction": 5}, "priority": 3, "evidence": [{"source_id": "synthetic-catalog", "start": 0, "end": 13}]},
+    {"id": "run-pilot", "title": "Run pilot", "requires_fields": ["requirements.channel", "requirements.budget"], "prerequisites": ["review-setup"], "theme_weights": {"setup_friction": 2}, "priority": 8, "evidence": [{"source_id": "synthetic-catalog", "start": 14, "end": 24}]},
+    {"id": "review-messaging", "title": "Review messaging", "requires_fields": ["profile.role"], "prerequisites": [], "theme_weights": {}, "priority": 2, "evidence": [{"source_id": "synthetic-catalog", "start": 25, "end": 42}]}
+  ]
+}

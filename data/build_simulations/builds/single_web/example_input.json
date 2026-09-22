@@ -1,0 +1,24 @@
+{
+  "query": "solar energy storage",
+  "allowed_hosts": ["research.example.org"],
+  "sources": [
+    {"id": "solar-notes", "url": "https://research.example.org/solar"},
+    {"id": "gardening-notes", "url": "https://research.example.org/gardens"}
+  ],
+  "limits": {
+    "timeout_seconds": 10,
+    "max_bytes": 100000,
+    "max_redirects": 2,
+    "top_k": 3
+  },
+  "fixtures": {
+    "https://research.example.org/solar": {
+      "headers": {"Content-Type": "text/html; charset=utf-8"},
+      "body": "<!doctype html><html><head><title>Captured demonstration document</title><script>irrelevant secret</script></head><body><h1>Solar field notes</h1><p>Solar panels convert sunlight into electrical energy.</p><p>Battery storage can retain solar energy for use after sunset.</p><p>Maintenance crews inspect wiring and support frames.</p></body></html>"
+    },
+    "https://research.example.org/gardens": {
+      "headers": {"Content-Type": "text/html; charset=utf-8"},
+      "body": "<html><body><h1>Garden field notes</h1><p>Compost improves soil structure and water retention.</p><p>Shade plants need protection from harsh midday sunlight.</p></body></html>"
+    }
+  }
+}

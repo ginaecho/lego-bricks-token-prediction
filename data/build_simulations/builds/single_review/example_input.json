@@ -1,0 +1,47 @@
+{
+  "label": "FICTIONAL example: invented requirements and documents, not a legal standard",
+  "requirements": [
+    {
+      "id": "FIC-RETENTION",
+      "description": "Fictional policy names an owner and retention period",
+      "priority": 2,
+      "evidence_rules": {
+        "all_of": ["Owner: Records Team", "Retention: 30 days"],
+        "contradicts": ["Retention: indefinite"]
+      }
+    },
+    {
+      "id": "FIC-TRAINING",
+      "description": "Fictional training record contains a roster and completion date",
+      "priority": 3,
+      "evidence_rules": {"all_of": ["Roster: fictional team", "Completed: 2026-01-01"]}
+    },
+    {
+      "id": "FIC-REVIEW",
+      "description": "Fictional review has either an approval record or meeting minutes",
+      "priority": 1,
+      "evidence_rules": {"any_of": ["Approval: fictional reviewer", "Minutes: reviewed"]}
+    },
+    {
+      "id": "FIC-ACCESS",
+      "description": "Fictional access procedure requires a review",
+      "priority": 1,
+      "evidence_rules": {
+        "all_of": ["Access review: required"],
+        "contradicts": ["Access review: waived"]
+      }
+    }
+  ],
+  "documents": [
+    {
+      "id": "FIC-DOC-A",
+      "title": "Fictional policy",
+      "text": "Owner: Records Team\nRetention: 30 days\nAccess review: required"
+    },
+    {
+      "id": "FIC-DOC-B",
+      "title": "Fictional incomplete record and contradictory memo",
+      "text": "Roster: fictional team\nAccess review: waived"
+    }
+  ]
+}

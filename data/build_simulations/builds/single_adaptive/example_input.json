@@ -1,0 +1,69 @@
+{
+  "fixture_label": "FICTIONAL: Northstar onboarding demonstration; no real person or service",
+  "user": {
+    "skill": "advanced",
+    "experience_years": 4,
+    "preferences": {
+      "pace": "short_sessions",
+      "detail": "auto",
+      "preferred_formats": ["video", "text"],
+      "skip_optional": true
+    },
+    "accessibility": {
+      "needs": ["screen_reader"],
+      "forbidden_features": ["flashing"],
+      "avoid_formats": ["video"]
+    }
+  },
+  "progress": {"completed": ["welcome"]},
+  "steps": [
+    {
+      "id": "welcome",
+      "title": "Read the fictional welcome",
+      "accessibility_support": ["screen_reader"]
+    },
+    {
+      "id": "setup",
+      "title": "Configure the fictional workspace",
+      "prerequisites": ["welcome"],
+      "optional": true,
+      "accessibility_support": ["screen_reader"],
+      "wording_options": ["Set up your fictional workspace"]
+    },
+    {
+      "id": "practice",
+      "title": "Complete the fictional practice task",
+      "prerequisites": ["setup"],
+      "min_skill": "intermediate",
+      "min_experience_years": 1,
+      "formats": ["video", "text"],
+      "accessibility_support": ["screen_reader"]
+    },
+    {
+      "id": "basics",
+      "title": "Review fictional basic concepts",
+      "required": false,
+      "redundant_if": {"min_skill": "advanced", "min_experience_years": 3},
+      "accessibility_support": ["screen_reader"]
+    },
+    {
+      "id": "tour",
+      "title": "Take the optional fictional tour",
+      "optional": true,
+      "accessibility_support": ["screen_reader"]
+    },
+    {
+      "id": "visual_lab",
+      "title": "Finish the required fictional visual lab",
+      "prerequisites": ["practice"],
+      "formats": ["video"],
+      "accessibility_support": []
+    },
+    {
+      "id": "finish",
+      "title": "Finalize fictional onboarding",
+      "prerequisites": ["visual_lab"],
+      "accessibility_support": ["screen_reader"]
+    }
+  ]
+}

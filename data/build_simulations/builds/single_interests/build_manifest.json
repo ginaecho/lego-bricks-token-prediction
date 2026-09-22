@@ -1,0 +1,73 @@
+{
+  "name": "single_interests",
+  "kind": "bounded runnable reference implementation",
+  "production_deployment_claim": false,
+  "files": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "dependencies": {"runtime": "Python 3.9 or newer", "packages": [], "standard_library_only": true},
+  "implemented_scope": [
+    "Validated catalog and explicit weighted attribute preferences, deterministic additive scoring, positive-match-only recommendations.",
+    "Attribute exclusions use OR semantics; excluded product IDs and attribute exclusions take precedence over ranking.",
+    "Scores descending, exact case-sensitive product ID ascending for stable ties independent of catalog order; bounded result limit.",
+    "Grounded explanations quote only supplied scalar attribute values. Explicit no_match result distinguishes all-products-excluded from no positive matches.",
+    "Optional synchronous injected LLM explanation callable receives supplied product grounding and matched preferences. Structured returned facts are verified, IDs must exactly cover returned recommendations, and prose is rendered locally.",
+    "CLI reads UTF-8 or UTF-8-BOM JSON and writes JSON to stdout, with exit code 0 for valid results (including no-match) and 2 for input or file errors."
+  ],
+  "interfaces": {
+    "python": "recommend(data, explanation_adapter=None) -> JSON-compatible dict; raises ValidationError or ExplanationAdapterError",
+    "cli": "python implementation.py example_input.json",
+    "input": {
+      "products": "Required nonempty list (maximum 10000). Each object has exactly id, name, attributes. IDs are unique nonblank strings; names are nonblank strings; attributes is a map of 1..100 nonblank keys to finite JSON scalars or nonempty lists of up to 100 scalars. Null and nested structures are rejected.",
+      "preferences": "Required nonempty list (maximum 100) of {attribute, value, weight?}. Value is a scalar. Weight defaults to 1 and must be an integer 1..1000, not a boolean.",
+      "exclusions": "Optional list (maximum 100) of {attribute, value}; defaults to empty.",
+      "excluded_product_ids": "Optional list of nonblank ID strings (maximum 10000). Unknown IDs are harmless; defaults to empty.",
+      "limit": "Optional integer 1..100; defaults to 10.",
+      "validation": "Unknown object fields, duplicate product IDs, duplicate normalized rules, malformed JSON, duplicate JSON object keys, and nonfinite numbers are rejected."
+    },
+    "matching": "Attribute keys and IDs are exact/case-sensitive. String values are stripped and casefolded. Numbers compare numerically; booleans only match booleans. Scalar preference matches any element of a product list, once. Missing attributes do not match.",
+    "output": "status, reason, recommendations, total_matches before limit, excluded_count, explanation_source. Each recommendation includes product_id, name, score, matched_preferences, explanation, and optional adapter_explanation.",
+    "adapter": {
+      "input": "A defensive-copy JSON-compatible dict containing instruction, products (only selected recommendations with their supplied names and attributes), matches, and response_contract.",
+      "output": "{\"explanations\": [{\"product_id\": \"supplied ID\", \"facts\": [{\"attribute\": \"supplied key\", \"value\": \"supplied scalar\"}]}]}",
+      "validation": "Exactly one explanation per returned ID; nonempty facts; supplied attribute values must match by exact type and value. Unknown, excluded, truncated, duplicate or missing IDs, invented facts, extra prose and malformed responses raise explicit ExplanationAdapterError. Callable exceptions are wrapped. No-match skips the callable.",
+      "integration": "Pass a synchronous callable that invokes your chosen provider and parses its JSON response into a dict. This adapter genuinely invokes the injected callable; this build contains no provider dependency, credentials, network call or bundled model. Tests inject explicitly labeled fixtures, not real LLM responses."
+    }
+  },
+  "limitations": [
+    "No semantic inference, embeddings, collaborative filtering, synonym expansion, learned weights, ranges or natural-language preference parsing.",
+    "Exclusions enforce only facts present in supplied product attributes; absence is not evidence of safety or suitability. No external verification of catalog facts.",
+    "Scores are sums of stated preference weights, not probabilities or inferred personal utility.",
+    "Unconstrained LLM prose is not accepted because factual grounding could not be guaranteed. The optional adapter selects supplied facts only and cannot modify ranking or eligibility.",
+    "No built-in provider client, asynchronous adapter, timeout, retry or model invocation was implemented or exercised. The caller owns provider calls and their resource controls.",
+    "Local in-memory reference implementation only; no persistence, service hosting, authentication, production load testing or deployment."
+  ],
+  "acceptance_tests": {
+    "command": "python -m unittest discover -s C:\\Users\\tzuchunchen\\.copilot\\session-state\\2a19c1c6-7d0e-4fb8-87e0-3035680cfe71\\files\\marketplace-sales\\data\\build_simulations\\builds\\single_interests -p test_implementation.py",
+    "status": "passed",
+    "tests_run": 24,
+    "failures": 0,
+    "errors": 0,
+    "observed_duration_seconds": 0.339,
+    "exit_code": 0,
+    "coverage": [
+      "Weighted ranking, stable ties, limits, exclusions and no-match reasons.",
+      "Grounded values, booleans versus numbers, list matching and input immutability.",
+      "Bad, empty, duplicate and bounded product/preference input.",
+      "Injected explanation fixtures, full grounding, rejection of invalid IDs/facts/prose and adapter failures.",
+      "Real subprocess CLI example and missing-file error; parser fixture tests for malformed, duplicate-key and nonfinite JSON."
+    ]
+  },
+  "cli_demonstration": {
+    "command": "python implementation.py example_input.json",
+    "working_directory": "C:\\Users\\tzuchunchen\\.copilot\\session-state\\2a19c1c6-7d0e-4fb8-87e0-3035680cfe71\\files\\marketplace-sales\\data\\build_simulations\\builds\\single_interests",
+    "status": "passed",
+    "exit_code": 0,
+    "observed_result": {
+      "status": "ok",
+      "ordered_product_ids": ["p01", "p02"],
+      "matched_preference_weight_sums": [5, 3],
+      "excluded_count": 1,
+      "total_matches": 2
+    }
+  },
+  "telemetry": "No token estimates included; authoritative usage counters are not exposed to this implementation."
+}

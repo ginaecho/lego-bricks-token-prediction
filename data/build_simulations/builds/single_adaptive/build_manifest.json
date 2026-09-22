@@ -1,0 +1,46 @@
+{
+  "name": "single_adaptive",
+  "kind": "Python standard-library reference implementation",
+  "files": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "runtime": "Python 3.8+; no third-party packages",
+  "cli": "python -B implementation.py example_input.json",
+  "tests": "python -B -m unittest discover -v",
+  "fixtures": "All supplied examples and tests are explicitly fictional.",
+  "interface": {
+    "input": "UTF-8 JSON object with user, steps, optional progress and fixture_label. Unknown fields and duplicate JSON keys are rejected.",
+    "user": "Required skill: novice/intermediate/advanced; required experience_years: finite nonnegative number. Optional preferences and accessibility objects.",
+    "preferences": "pace: self_paced/short_sessions/intensive; detail: auto/guided/standard/concise; preferred_formats: ordered unique strings; skip_optional: boolean. Preferences are soft; accessibility takes priority.",
+    "accessibility": "needs, forbidden_features, avoid_formats: unique string arrays. needs and forbidden_features must not overlap.",
+    "steps": "Unique nonempty id and title; prerequisites: unique known IDs. required defaults to not optional; optional defaults false. Nonrequired steps must be optional or have nonempty redundant_if. formats defaults to text. accessibility_support and accessibility_conflicts are step-level declarations. Optional min_skill, min_experience_years and wording_options.",
+    "redundancy": "redundant_if accepts min_skill and/or min_experience_years, combined with AND. Required steps cannot be skipped. Every retained step protects its full unfinished prerequisite closure.",
+    "progress": "completed: unique known step IDs, closed over prerequisites. Completed steps are trusted and not replanned or reassessed.",
+    "output": "JSON with eligible_step_ids, prerequisite-ordered plan, blocked reasons, skipped reasons, completed_step_ids and required_plan_feasible. Waiting planned steps have waiting_for IDs. Blocked descendants identify immediate blocked prerequisites; their root causes are available in blocked entries.",
+    "errors": "CLI emits a JSON error object and exit code 2 for validation and file errors; success exits 0. No files are changed by the CLI.",
+    "callback": "Python API adapt(data, wording_callback=None). Callback receives isolated planned IDs, source conditions and allowed_wordings. Must return the same IDs in the same order with exactly id, conditions, wording; conditions must be unchanged and wording must be an exact source-approved option. Invalid callback output fails closed. CLI does not load callbacks."
+  },
+  "reference_implementation_limits": [
+    "Deterministic declared-rule planning, not a trained recommender or production onboarding service.",
+    "No account persistence, authentication, concurrent updates, telemetry, network access or built-in LLM provider.",
+    "JSON input supplies all progress and facts. Skill, experience, completion, accessibility support and redundancy are trusted declarations rather than independently assessed.",
+    "Instructional detail and pacing are metadata, not generated lessons, timing guarantees or learning-effectiveness claims.",
+    "Accessibility is checked at step level, not per format; authors must accurately declare support across offered formats. forbidden_features conservatively excludes steps declaring those features.",
+    "Skill and experience thresholds are static; planned steps do not implicitly increase either value. Update input explicitly after assessment.",
+    "Blocked steps remain obligations, not skipped work; required_plan_feasible only reports whether required steps are currently plannable under static constraints.",
+    "Callback wording is constrained to authored alternatives; arbitrary generated language cannot be verified for source support by this reference. Injected callbacks are trusted executable Python and are not sandboxed.",
+    "Stable topological ordering uses input order within ready groups; no optimization of total completion time or learning outcomes. Ordering has quadratic worst-case runtime and no explicit input-size quota.",
+    "The CLI accepts one JSON file, prints a result and exits; no interactive workflow or output-file persistence."
+  ],
+  "validation": {
+    "status": "passed",
+    "commands": ["python -B -m unittest discover -v", "python -B implementation.py example_input.json"],
+    "unittest_result": {"tests_run": 21, "failures": 0, "errors": 0},
+    "cli_result": {
+      "exit_code": 0,
+      "valid_json": true,
+      "eligible_step_ids": ["setup"],
+      "planned_step_ids": ["setup", "practice"],
+      "blocked_required_step_ids": ["visual_lab", "finish"],
+      "skipped_step_ids": ["basics", "tour"]
+    }
+  }
+}

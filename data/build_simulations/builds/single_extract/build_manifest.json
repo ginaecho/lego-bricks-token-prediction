@@ -1,0 +1,95 @@
+{
+  "build_id": "single_extract",
+  "status": "implemented_and_tested",
+  "implementation": "Python standard library only; no external services or packages",
+  "files": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "fixture_provenance": "All example and test fixtures are explicitly labeled SYNTHETIC. They are not customer documents or external benchmark results.",
+  "scope": [
+    "Strict JSON CLI accepting schema.fields and documents arrays",
+    "Configured field IDs, patterns, types and required booleans",
+    "Supported types: exact strings, integers, finite floating-point numbers, true/false booleans, valid ISO YYYY-MM-DD calendar dates",
+    "Exactly one named regex capture, (?P<value>...), per field",
+    "All matches retained; equal typed values grouped with their source evidence",
+    "Multiple distinct typed values reported as conflicts without selecting a winner",
+    "Missing required fields listed explicitly; no defaults or fabricated values",
+    "Invalid typed regex matches preserved as rejected_candidates with evidence and reason",
+    "Character spans use zero-based Python Unicode code-point indices with exclusive end offsets into the original, unmodified document text",
+    "Duplicate field IDs, document IDs and JSON keys rejected",
+    "Invalid schemas, unknown keys, invalid regex capture contracts, invalid types and nonstandard JSON constants rejected",
+    "Optional trusted synchronous extractor callback supplements regex matches and must return known fields, in-bounds integer offsets, and precisely typed values matching conversion of the exact source substring",
+    "Malformed or ungrounded callback output rejects the entire request",
+    "CLI prints one JSON result and exits 0, or a JSON error and exits 2 for handled input and extraction failures"
+  ],
+  "api": {
+    "entry_point": "extract(payload, extractor=None)",
+    "callback_signature": "extractor(document_copy, field_copies) -> list[{field_id, start, end, value}]",
+    "callback_grounding": "value must have exactly the same Python type and value as conversion of document.text[start:end] using the declared field type",
+    "callback_number_type": "float; an integer callback value is rejected for a number field",
+    "callback_date_type": "str containing a valid YYYY-MM-DD date",
+    "multiprocessing": "Regex compilation and matching run in a spawned process. Application entry points invoking extract must use the normal __main__ guard."
+  },
+  "limits": {
+    "cli_input_bytes": 1048576,
+    "documents": 16,
+    "fields": 32,
+    "id_characters": 64,
+    "characters_per_document": 32768,
+    "total_document_characters": 131072,
+    "characters_per_pattern": 512,
+    "characters_per_typed_value": 1024,
+    "combined_regex_and_callback_candidates": 2048,
+    "regex_worker_wait_seconds": 2.0,
+    "regex_worker_behavior": "Compilation and matching share the timeout, including process startup. Timed-out workers are terminated and joined. Limit failures abort the request, rather than returning partial results."
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "python -B implementation.py example_input.json",
+        "exit_code": 0,
+        "observed": "Printed valid JSON with quantity conflict [3, 4], missing purchase_order, one rejected invalid date, typed values and exact source spans."
+      },
+      {
+        "command": "python -B -m unittest discover -v",
+        "exit_code": 0,
+        "tests_run": 15,
+        "failures": 0,
+        "errors": 0,
+        "reported_runtime_seconds": 22.893
+      }
+    ],
+    "test_cases": [
+      "test_example_types_conflicts_missing_and_rejection",
+      "test_unicode_offsets_and_no_input_mutation",
+      "test_missing_optional_and_required",
+      "test_invalid_text_is_not_coerced_or_invented",
+      "test_valid_type_conversions",
+      "test_duplicate_ids_and_bad_schema",
+      "test_invalid_regex_or_capture_contract",
+      "test_input_limits",
+      "test_candidate_limit",
+      "test_regex_timeout",
+      "test_empty_and_oversized_capture",
+      "test_callback_exact_grounding",
+      "test_callback_rejects_unknown_ungrounded_and_bad_types",
+      "test_callback_supplements_without_hiding_conflicts",
+      "test_strict_json_and_cli_errors"
+    ]
+  },
+  "limitations": [
+    "Processes text already supplied as strings; no PDF parsing, OCR, tables, files beyond the JSON CLI input, or semantic document understanding.",
+    "Field correctness depends on configured regex context. Substring grounding establishes textual evidence, not semantic truth.",
+    "Regex finditer returns non-overlapping matches per pattern. A nonparticipating optional value group contributes no candidate.",
+    "No currency, locale, whitespace, fuzzy-name or free-form date normalization. Strings remain exact; numeric and boolean lexical forms are intentionally restricted.",
+    "Numbers use binary floating-point and can round; equal resulting typed values are merged. This is not an exact financial decimal implementation.",
+    "Injected callbacks are trusted local code, not sandboxed or time-limited. No callback is used by the CLI example.",
+    "The process timeout bounds regex work but is not an operating-system memory quota or a strict whole-request wall-clock deadline.",
+    "The CLI byte limit applies before JSON parsing. Direct Python callers are governed by the schema, document, pattern and candidate limits instead.",
+    "The 2-second regex worker budget can reject otherwise valid work on a heavily loaded or slow host.",
+    "Tests cover labeled synthetic cases only; no claim of customer accuracy or production deployment readiness."
+  ]
+}

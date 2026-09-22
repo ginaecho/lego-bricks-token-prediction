@@ -1,0 +1,51 @@
+{
+  "scope": "Standalone, deterministic behavioral personalization reference implementation. Pure Python standard library; no provider integration.",
+  "files": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "interfaces": {
+    "python": "rank_products(data, explanation_callback=None) -> dict; invalid input/output raises ValidationError",
+    "cli": "python implementation.py example_input.json [--output result.json]; success 0, input/I/O error 2",
+    "input": {
+      "required": ["as_of", "products"],
+      "products": "Array of unique {id: nonempty string, category: nonempty string, tags: unique string array, name?: nonempty string}",
+      "events": "Optional array of {id, product_id, type: browse|purchase, count: nonnegative integer, timestamp}; IDs and normalized (product_id,type,timestamp,count) tuples must be unique",
+      "timestamps": "ISO timestamps containing T with explicit UTC offset or Z; future events rejected relative to required as_of",
+      "preferences": "Optional {categories: unique string array, tags: unique string array}; unknown categories/tags simply match nothing",
+      "exclusions": "Optional {product_ids, categories, tags}: unique string arrays; unknown product IDs rejected; excluded products do not contribute history",
+      "half_life_days": "Optional finite positive number; default 30",
+      "validation": "Unknown fields, duplicate JSON keys, duplicate products/events/list values, unknown referenced IDs, malformed timestamps, negative/noninteger counts, and nonfinite/overflowing scores rejected"
+    },
+    "output": "ranked_product_ids, cold_start, history_events_used, excluded_product_ids, ranking rows with score/components/claims/explanations/explanation_source",
+    "callback": "Optional injected callable receives {product_id, score, claims:{claim_id:grounded_text}}; returns exactly {product_id, claim_ids:[unique offered claim IDs]}. Must select at least one claim. Arbitrary prose, foreign IDs, unknown claims and extra fields rejected. Explanations rendered from immutable original facts. Callback exceptions propagate. No callback is loaded by CLI."
+  },
+  "scoring": {
+    "event_weight": "count * (4 for purchase, 1 for browse) * 0.5 ** (age_days / half_life_days)",
+    "score": "direct product weight + 0.25 * category activity weight + 0.25 * sum of shared-tag activity weights + explicit preferences",
+    "tag_weight": "Each source event divides its weight equally across its product tags",
+    "preferences": "2 for a preferred category plus 1 per matched preferred tag",
+    "ties": "Ascending case-sensitive product ID; events accumulated in canonical timestamp/ID order",
+    "cold_start": "True when no positive-count events remain after exclusions. Rank by explicit preferences, then product ID. Empty eligible catalog returns empty ranking. Extremely old positive-count history may decay to zero but is not cold start."
+  },
+  "limitations": [
+    "Hand-set heuristics, not a trained model; no measured commercial effectiveness claim.",
+    "Single-user in-memory input; no persistence, authentication, consent management, inventory or production infrastructure.",
+    "Purchased products remain eligible unless explicitly excluded; shared-category/tag affinities include own history.",
+    "Caller supplies trustworthy as_of; timestamps are parsed with Python datetime, not a full RFC3339 validator.",
+    "Floating-point decay may underflow for old history; overflowing aggregates are rejected.",
+    "Callback can select supported explanations only, not freely generate text; no LLM/provider was called.",
+    "Synthetic labeled fixtures establish deterministic correctness, not external recommendation quality."
+  ],
+  "tests": {
+    "command": "python -B -m unittest discover -s . -p test_implementation.py -v",
+    "cli_command": "python -B implementation.py example_input.json",
+    "fixture_labels": {
+      "fresh_purchase": {"ranked_product_ids": ["a", "b", "c"], "scores": [6, 2, 0]},
+      "cold_start_preferences": {"ranked_product_ids": ["c", "a", "b"], "top_score": 3},
+      "example_input": {"ranked_product_ids": ["book-a", "book-b"], "scores": [8.375, 6.5]},
+      "callback": "Local labeled stub only; no provider call"
+    },
+    "status": "Passed: 26 unittest tests; CLI exited 0 and returned book-a (8.375), book-b (6.5), excluding mug-a",
+    "test_count": 26,
+    "test_result": "OK",
+    "cli_exit_code": 0
+  }
+}

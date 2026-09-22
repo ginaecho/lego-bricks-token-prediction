@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "fictional-runbook",
+      "title": "FICTIONAL Nimbus Otter support runbook",
+      "statements": [
+        {
+          "id": "statement-access",
+          "subject": "portal access",
+          "predicate": "responsible team",
+          "value": "identity support",
+          "category_id": "identity",
+          "text": "FICTIONAL: portal login password reset access requests belong to identity support."
+        },
+        {
+          "id": "statement-billing",
+          "subject": "invoice export",
+          "predicate": "responsible team",
+          "value": "accounts support",
+          "category_id": "accounts",
+          "text": "FICTIONAL: invoice export receipt requests belong to accounts support."
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-access",
+      "source_id": "fictional-runbook",
+      "statement_id": "statement-access",
+      "subject": "portal access",
+      "predicate": "responsible team",
+      "value": "identity support",
+      "category_id": "identity"
+    },
+    {
+      "id": "claim-billing",
+      "source_id": "fictional-runbook",
+      "statement_id": "statement-billing",
+      "subject": "invoice export",
+      "predicate": "responsible team",
+      "value": "accounts support",
+      "category_id": "accounts"
+    }
+  ],
+  "categories": [
+    {
+      "id": "identity",
+      "owner": "FICTIONAL Identity Desk",
+      "priority": "high",
+      "task_ids": ["login-practice"]
+    },
+    {
+      "id": "accounts",
+      "owner": "FICTIONAL Accounts Desk",
+      "priority": "normal",
+      "task_ids": ["invoice-practice"]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "setup",
+      "title": "Configure the FICTIONAL training workspace",
+      "prerequisites": [],
+      "required_resources": ["training-workspace"]
+    },
+    {
+      "id": "identity-guide",
+      "title": "Read the FICTIONAL access recovery guide",
+      "prerequisites": ["setup"],
+      "required_resources": []
+    },
+    {
+      "id": "login-practice",
+      "title": "Practice a FICTIONAL portal login recovery",
+      "prerequisites": ["identity-guide"],
+      "required_resources": []
+    },
+    {
+      "id": "invoice-practice",
+      "title": "Practice a FICTIONAL invoice export",
+      "prerequisites": ["setup"],
+      "required_resources": []
+    }
+  ],
+  "profile": {
+    "id": "fictional-learner",
+    "experience": "beginner",
+    "preferred_format": "exercise",
+    "completed_task_ids": [],
+    "blocked_task_ids": [],
+    "available_resources": ["training-workspace"]
+  },
+  "ticket": {
+    "id": "FICTIONAL-TICKET-001",
+    "question": "How do I reset my portal login password?",
+    "urgency": "normal"
+  },
+  "search": {
+    "top_k": 3,
+    "ambiguity_margin": 0.1
+  }
+}

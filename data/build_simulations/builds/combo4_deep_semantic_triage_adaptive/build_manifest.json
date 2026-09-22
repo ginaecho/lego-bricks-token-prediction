@@ -1,0 +1,162 @@
+{
+  "build_id": "combo4_deep_semantic_triage_adaptive",
+  "schema_version": 1,
+  "classification": "Integrated executable Python standard-library reference implementation; all supplied examples are fictional.",
+  "files": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "runtime": {
+    "minimum_python": "3.10",
+    "dependencies": "Python standard library only",
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -v",
+    "working_directory": "The directory containing these four files",
+    "success": "Exit 0, one JSON object on stdout",
+    "invalid_input": "Exit 2, one JSON error object on stdout for malformed input, invalid schema or unreadable input file",
+    "network_or_provider_requests": "None",
+    "persistent_state": "None; index and derived plans are rebuilt in memory for each request"
+  },
+  "shared_internals": {
+    "single_validation_entry": "validate(raw) creates the shared Request, Source, Statement, Claim, Category, Task, Profile and Ticket dataclasses before any stage runs.",
+    "schema": {
+      "root_required": ["schema_version", "sources", "claims", "categories", "tasks", "profile", "ticket"],
+      "root_optional": ["search"],
+      "sources": "Objects with id, title and statements; each statement has globally unique id, text, subject, predicate, value and category_id.",
+      "claims": "Objects with id, source_id, statement_id, subject, predicate, value and category_id. Every field must match the referenced source statement exactly; the source must own the statement.",
+      "categories": "Objects with id, owner, priority and task_ids. Priorities: low, normal, high, critical. Category task IDs select terminal onboarding goals.",
+      "tasks": "Objects with id, title, prerequisites and required_resources. All prerequisite IDs must exist, and the entire graph must be acyclic.",
+      "profile": "One object shared throughout the run: id, experience (beginner/intermediate/expert), preferred_format (text/video/exercise), completed_task_ids, blocked_task_ids and available_resources.",
+      "ticket": "One object with id, question and urgency using the same priority vocabulary.",
+      "search": "Optional top_k positive integer (default 5), ambiguity_margin finite number in [0,1] (default 0.1). Unknown fields are rejected throughout."
+    },
+    "reference_integrity": "Duplicate entity IDs, duplicate reference-list entries and unknown references are rejected. Entity ID namespaces are separate; statement IDs are globally unique. Completed tasks must contain their completed prerequisites and cannot also be blocked. Resource labels form an open vocabulary, not an entity registry.",
+    "json_integrity": "Duplicate JSON object keys and nonfinite constants are rejected by load_json. Empty strings, wrong container/scalar types and boolean-as-integer values are rejected by validation.",
+    "orchestration": "run_pipeline(raw, embed=None, wording=None) validates once and runs consolidate -> retrieve -> route -> onboard. Each downstream stage consumes the preceding derived artifacts rather than producing independent mock outputs."
+  },
+  "integrated_functions": [
+    {
+      "function": "Deep research",
+      "implementation": "Explicit supplied-claim consolidation, not autonomous browsing.",
+      "handoff": "Findings group exact subject/predicate pairs. Alternative value/category pairs remain separate, including disagreements. Every alternative retains claim ID, statement ID, source ID, source title and source text. These alternatives become search documents."
+    },
+    {
+      "function": "Semantic search seam",
+      "implementation": "Default is honestly labeled lexical_tfidf_cosine, not semantic embeddings.",
+      "formula": "Unicode alphanumeric casefolded tokens; document TF = 1 + ln(count), IDF = ln((1+document_count)/(1+document_frequency)) + 1; L2-normalized query/document cosine. Query-only terms are ignored. Subject, predicate, value and distinct provenance texts form each document.",
+      "handoff": "Only positive-score hits carry finding/alternative IDs, categories, provenance and disagreement flags into routing. Duplicate copies of the same text cannot inflate term frequency. top_k is a soft limit: cutoff ties and all evidence within the configured relative margin of the best score are retained to avoid hiding ambiguity."
+    },
+    {
+      "function": "Ticket triage",
+      "implementation": "Category score is maximum retrieved evidence score, not a vote count. Near-best categories within ambiguity_margin are candidates. Relevant consolidated disagreements add all their alternative categories even if alternatives fell outside retrieval.",
+      "handoff": "A unique nonconflicting candidate selects its configured owner. Competing candidates or an explicit disagreement yield needs_review with no guessed owner. No evidence yields needs_evidence. Priority is the highest of supplied ticket urgency and candidate category priorities. Routing candidates and priority control onboarding."
+    },
+    {
+      "function": "Adaptive onboarding",
+      "implementation": "Selected categories determine goal tasks; the transitive prerequisite closure is topologically ordered with deterministic ID ordering among ready tasks. Completed tasks are omitted but reported. Experience controls detail and the preferred format is carried into each step. High/critical priority uses expedited pacing.",
+      "handoff": "Prerequisites are never waived by expert experience or urgency. Missing resources and explicit user blocks propagate through dependent tasks. Ready means prerequisites were already completed; waiting means earlier planned steps remain incomplete. Ambiguous routing blocks all proposed steps pending confirmation; no evidence produces no guessed category plan."
+    }
+  ],
+  "injection_interfaces": {
+    "embedding": {
+      "signature": "embed(list[str]) -> list[list[float]]",
+      "input_order": "Query first, then consolidated document index texts in deterministic finding/alternative order.",
+      "validation": "Exactly one nonempty vector per input; same dimension; finite numeric non-boolean coordinates. Stable normalization supports very small and large finite coordinates. Zero vectors produce zero relevance, not NaN; negative similarities are not evidence.",
+      "usage": "Python API only. Tests inject explicitly fictional deterministic vectors; CLI has no provider configuration or dynamic plugin loading."
+    },
+    "wording": {
+      "signature": "wording({'evidence': {retrieved_alternative_id: exact_text}}) -> {'text': str, 'evidence_ids': list[str]}",
+      "grounding": "Only selecting/reordering exact retrieved extracts is accepted. Output text must equal the newline join of its unique cited evidence texts. Unknown citations, duplicate citations, invented text and unsupported paraphrases are rejected. Empty evidence supports only empty text and no citations.",
+      "usage": "Optional LLM wording seam, exercised with fixture callbacks only. It cannot change routing or onboarding. Callback exceptions propagate to the Python caller; arbitrary callback code is trusted local code, not sandboxed."
+    }
+  },
+  "cross_stage_integration_tests": [
+    {
+      "test": "test_complete_data_handoff",
+      "checks": "Claim and statement provenance survives consolidation and retrieval, retrieved IDs feed triage, configured owner is selected and resulting priority/prerequisites feed onboarding."
+    },
+    {
+      "test": "test_evidence_change_changes_route_and_plan",
+      "checks": "Keeping the same ticket and user while changing the supported source/claim category changes identity routing to accounts routing, selected task chain and pacing."
+    },
+    {
+      "test": "test_question_change_changes_route",
+      "checks": "Changing the ticket question changes retrieved evidence, selected category and onboarding terminal task."
+    },
+    {
+      "test": "test_profile_change_changes_plan_not_route",
+      "checks": "Completed setup, expert experience and text preference alter onboarding without changing evidence-based routing."
+    },
+    {
+      "test": "test_priority_and_configured_task_change_reach_onboarding",
+      "checks": "Configured owner, category priority, task goals and ticket urgency affect the actual routing and plan."
+    },
+    {
+      "test": "test_disagreement_preserved_beyond_search_cutoff",
+      "checks": "Conflicting source claims remain visible and force human-review routing and blocked onboarding, even when one alternative is absent from top search hits."
+    },
+    {
+      "test": "test_injected_embedding_actually_changes_route",
+      "checks": "Injected fixture embedding scores select different evidence and change the category and onboarding goal."
+    },
+    {
+      "test": "test_blocked_setup_propagates",
+      "checks": "Removing a user's required setup resource blocks setup and every dependent task while preserving prerequisite order."
+    },
+    {
+      "test": "test_ambiguity_margin_not_hidden_by_top_k",
+      "checks": "Near-tied evidence survives top_k=1, forces review, and becomes an unambiguous route only when the configured margin is narrowed."
+    }
+  ],
+  "verification": {
+    "unittest_discover": {
+      "command": "python -B -m unittest discover -v",
+      "outcome": "passed",
+      "tests_passed": 36,
+      "failures": 0,
+      "errors": 0
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "outcome": "passed; valid JSON, exit 0",
+      "fictional_ticket": "FICTIONAL-TICKET-001",
+      "category": "identity",
+      "owner": "FICTIONAL Identity Desk",
+      "priority": "high",
+      "plan": ["setup", "identity-guide", "login-practice"],
+      "plan_states": ["ready", "waiting", "waiting"]
+    },
+    "additional_test_coverage": [
+      "Duplicate and unknown entity IDs and list references",
+      "Unsupported claim values and source/statement pairing",
+      "Malformed schema and JSON including duplicate keys and nonfinite constants",
+      "Zero, negative, mismatched, malformed and extreme finite embedding vectors",
+      "No evidence and sources excluded unless supported claims are supplied",
+      "Same-category and cross-category explicit disagreements",
+      "Entire-graph cycles including unused tasks",
+      "Completed-profile integrity, all-completed plans and shared prerequisites",
+      "User-reported blocks and missing setup resources",
+      "Grounded extract callbacks, unsupported wording and no-evidence wording",
+      "Deterministic output, input immutability and CLI JSON error behavior"
+    ]
+  },
+  "bounded_limitations": [
+    "This is supplied-claim consolidation, not internet research, truth verification, source credibility assessment, recency analysis or general natural-language contradiction detection.",
+    "Structured statement fields are the explicit supplied authority. Free-text source statements are retained verbatim, but their semantic entailment of those fields is not independently verified.",
+    "Exact subject/predicate matching does not merge synonyms or resolve entity aliases. Distinct values are conservatively treated as disagreement even when a domain expert might reconcile them.",
+    "Default search is lexical TF-IDF, not a learned semantic model. It has no stopword removal, stemming, calibrated confidence, minimum relevance threshold beyond positive cosine, or benchmarked accuracy.",
+    "Injected embeddings are an interface demonstrated with fictional vectors, not a downloaded or trained model. Similarity scores are not probabilities.",
+    "Routing is deterministic configured policy, not learned classification or operational ticket dispatch. Same-category disagreement still requires human review.",
+    "Onboarding is a dependency-preserving plan, not a content generator or learning-management system. Format/detail fields are presentation preferences, not generated videos or exercises. No duration estimates, resource provisioning, task execution or automatic completion are claimed.",
+    "A missing resource is a block requiring external resolution. The planner does not silently invent setup actions, credentials, permissions or access.",
+    "The wording seam allows extractive wording only, deliberately rejecting otherwise plausible paraphrases because this reference implementation has no trustworthy semantic entailment verifier.",
+    "Findings use deterministic positional IDs within a request; they are not stable persistent database identifiers across edits.",
+    "Whole-corpus in-memory indexing and simple graph traversal target small trusted fixtures, not production-scale data, hostile workload limits or concurrent persistent services."
+  ],
+  "construction_measurement": {
+    "unit": "One integrated four-function construction session",
+    "authority": "The parent records authoritative construction-token usage for the entire session as one data point. This build does not estimate usage or combine standalone usage."
+  }
+}

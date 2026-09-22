@@ -1,0 +1,64 @@
+{
+  "name": "single_triage",
+  "scope": "Python standard-library JSON CLI and injectable in-process classifier API for deterministic ticket triage.",
+  "files": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "runtime": "Python 3.8+; no third-party packages or network services",
+  "usage": {
+    "file": "python -B implementation.py example_input.json",
+    "stdin": "Get-Content -Raw example_input.json | python -B implementation.py -",
+    "tests": "python -B -m unittest discover -v",
+    "api": "implementation.triage(document, classifier=None)",
+    "success": "JSON results on stdout; exit 0",
+    "failure": "Input, file, and JSON errors produce JSON error on stderr; exit 2. Argument syntax uses argparse errors."
+  },
+  "contract": {
+    "input": "Exactly config and tickets. Config requires categories, owners, rules. Unknown fields are rejected.",
+    "categories": "Nonempty object mapping category names to a configured owner or null. Owners is a nonempty unique list of names.",
+    "rules": "Array, possibly empty. Unique nonempty id and configured category required. Optional owner overrides category routing. At least one of keywords, severity, urgency is required. Each condition is a nonempty unique array.",
+    "matching": "Case-insensitive Unicode casefolded substring keyword matching across subject and body; any keyword matches. Conditions of different kinds are ANDed. Severity and urgency values match exactly.",
+    "tickets": "Array, possibly empty. Unique nonempty string id and string subject required; body defaults to empty, severity and urgency to medium. Blank subjects are allowed. IDs are case-sensitive and not normalized.",
+    "severity": ["low", "medium", "high", "critical"],
+    "urgency": ["low", "medium", "high"],
+    "priority": "P0 highest through P3 lowest. Baseline: critical severity or high/high -> P0; otherwise high severity or high urgency -> P1; otherwise any medium -> P2; else P3. Matching rule priority can escalate, never lower, baseline priority.",
+    "ambiguity": "Multiple matched categories means ambiguous with null category and owner. One category with conflicting owners, including null versus a configured owner, means ambiguous with category retained and null owner. No implicit tie-break.",
+    "unassigned": "No rule without a classifier means no_matching_rule; a selected category with null routing means category_has_no_owner. Both have status unassigned and null owner.",
+    "explanations": "Each matched rule includes rule_id, category, effective owner, matched keyword/severity/urgency conditions, and optional priority. Baseline and final priority are recorded separately.",
+    "ordering": "Ticket input order, rule input order, matching keyword input order, category configuration order, and owner configuration order are preserved. Input documents are not mutated.",
+    "classifier": "Called only for zero rule matches, with a shallow copy of a normalized scalar-only ticket. Returns exactly category, confidence, and optionally owner. Category and explicit owner must be configured strings. Confidence must be finite numeric 0..1, excluding bool. Omitted owner uses category routing, which may be null. Exceptions and invalid results fail the batch. Rule ambiguity is never silently resolved by the callback.",
+    "json": "CLI rejects duplicate object keys and nonstandard non-finite number constants; UTF-8 file input."
+  },
+  "limits": [
+    "Synthetic fixtures only; no claims about production classification accuracy.",
+    "Keyword matching is literal substring matching, not linguistic analysis, regex, or token boundaries.",
+    "Classifier is a caller-supplied Python callback, not a CLI-loaded plugin or remote model.",
+    "Confidence is validated and reported, not calibrated or thresholded.",
+    "Entire batch is in memory; no streaming, persistent queue, authentication, or external ticket integration.",
+    "No arbitrary input size/depth limits or callback timeout; this is not a hardened multi-tenant service.",
+    "Configuration permits owners shared across categories and explicit owner overrides; there are no per-category owner allowlists.",
+    "Routing configuration and tickets are validated before callbacks. A later callback failure cannot undo external side effects of an earlier caller-provided callback."
+  ],
+  "fixtures": "All test builders are explicitly synthetic fixtures; example ticket IDs use SYNTHETIC-FIXTURE labels.",
+  "verification": {
+    "status": "passed",
+    "commands": ["python -B -m unittest discover -v", "python -B implementation.py example_input.json"],
+    "unittest": {"tests_run": 20, "failures": 0, "errors": 0, "exit_code": 0},
+    "cli": {
+      "exit_code": 0,
+      "result_count": 4,
+      "observed_statuses_in_order": ["assigned", "assigned", "ambiguous", "unassigned"],
+      "observed_priorities_in_order": ["P3", "P0", "P0", "P2"]
+    },
+    "coverage": [
+      "Keyword, severity, urgency and combined conditions",
+      "Routing defaults, owner overrides, ownerless categories and conflicting owners",
+      "Cross-category ambiguity and unmatched tickets",
+      "All severity/urgency baseline priority combinations and rule escalation",
+      "Stable output order and input non-mutation",
+      "Duplicate ticket/rule IDs and malformed rules/configuration/tickets",
+      "Valid classifier fallback, default routing, input isolation and rule-match exclusion",
+      "Invalid classifier categories, owners, confidence values, extra fields and exceptions",
+      "Batch validation before classifier callbacks and empty batches",
+      "CLI file/stdin success, missing files, malformed JSON, duplicate keys and non-finite constants"
+    ]
+  }
+}

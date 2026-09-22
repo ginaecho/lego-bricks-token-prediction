@@ -1,0 +1,21 @@
+{
+  "journey": {
+    "stages": [
+      {"id": "discover", "name": "Find the right product"},
+      {"id": "purchase", "name": "Complete purchase", "prerequisites": ["discover"]},
+      {"id": "onboard", "name": "Get started", "prerequisites": ["purchase"]}
+    ],
+    "actions": [
+      {"id": "compare", "name": "Compare suitable products", "stage_id": "discover", "tags": ["research"], "priority": 2},
+      {"id": "checkout", "name": "Check out selected product", "stage_id": "purchase", "tags": ["self_service"], "priority": 1},
+      {"id": "setup", "name": "Follow the setup guide", "stage_id": "onboard", "tags": ["self_service"], "prerequisites": ["checkout"]}
+    ]
+  },
+  "user": {
+    "completed_stages": ["discover"],
+    "completed_actions": [],
+    "preferences": ["self_service"],
+    "excluded_actions": [],
+    "excluded_tags": []
+  }
+}

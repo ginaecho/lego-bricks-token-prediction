@@ -1,0 +1,37 @@
+{
+  "steps": [
+    {
+      "id": "fictional-profile",
+      "title": "Create a fictional moon-cheese club profile",
+      "action": "save_fictional_profile",
+      "prerequisites": [],
+      "required_fields": ["fictional_display_name"],
+      "completion_evidence": ["fictional_profile_receipt"]
+    },
+    {
+      "id": "fictional-orientation",
+      "action": "view_fictional_orientation",
+      "prerequisites": ["fictional-profile"],
+      "required_fields": [],
+      "completion_evidence": ["fictional_orientation_receipt"]
+    },
+    {
+      "id": "fictional-launch",
+      "action": "launch_fictional_club",
+      "prerequisites": ["fictional-orientation"],
+      "required_fields": ["fictional_club_name"],
+      "completion_evidence": ["fictional_launch_receipt"]
+    }
+  ],
+  "progress": {
+    "fields": {"fictional_display_name": "Imaginary Astronaut Quokka"},
+    "completed": {}
+  },
+  "updates": {
+    "complete": {
+      "fictional-profile": {
+        "evidence": {"fictional_profile_receipt": "FICTIONAL-RECEIPT-NOT-REAL-001"}
+      }
+    }
+  }
+}

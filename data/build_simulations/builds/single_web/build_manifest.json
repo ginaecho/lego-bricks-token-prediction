@@ -1,0 +1,48 @@
+{
+  "name": "single_web",
+  "runtime": "Python 3.10+ standard library only",
+  "entrypoint": "implementation.py",
+  "commands": {
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py -v",
+    "offline_example": "python -B implementation.py example_input.json",
+    "live_opt_in": "python -B implementation.py your_request.json --live"
+  },
+  "input": {
+    "required": ["query", "allowed_hosts", "sources"],
+    "source_schema": {"id": "unique nonempty string", "url": "HTTPS URL"},
+    "offline_required": "fixtures object keyed by canonical HTTPS URL, each containing body string and optional status and headers",
+    "fixture_encoding": "Fixture body strings are encoded as UTF-8; fixture Content-Type should declare UTF-8.",
+    "limits": "timeout_seconds (0.01-60 total cooperative deadline), max_bytes (1-5000000 per response), max_redirects (0-10 per source), top_k (1-50)"
+  },
+  "tested_scope": [
+    "Offline captured HTML ingestion and query-dependent lexical passage ranking",
+    "HTML entities, inline text, ignored head/script/style/template text and bounded passage chunks",
+    "Explicit exact hostname allowlist; HTTPS-only URLs; no credentials, IP literals, fragments, alternate ports, controls or ambiguous authorities",
+    "Relative redirects, final URL citations, denied redirect destinations, loop and hop limits",
+    "Duplicate source IDs and unsafe source URLs rejected before any fetch",
+    "Explicit content-type, encoding, byte limit, timeout, HTTP error, missing fixture and no-match failures",
+    "Optional injected synthesis checks citation URLs and verbatim quotes against selected passages",
+    "Public-address DNS filtering, pinned address connection and original-host TLS SNI using mocks",
+    "urllib response reading, redirect suppression, size limits and timeout translation using mocks; real HTTPResponse parsing against an in-memory HTTP wire fixture",
+    "Offline JSON CLI success and structured error output"
+  ],
+  "retrieval": {
+    "algorithm": "Unicode word tokenization, case-folded OR query matching, TF/IDF-style lexical scoring with a small length penalty; deterministic top-k passages",
+    "citation_contract": "Each extracted quote has a source ID and final validated URL. Synthesis citations must use those exact URLs and nonempty verbatim substrings of selected evidence.",
+    "adapter": "urllib HTTPS with default verified TLS, environment proxies disabled, automatic redirects disabled, public DNS addresses pinned to sockets; engine validates every manual redirect"
+  },
+  "limitations": [
+    "No live web retrieval was performed; supplied demonstration fixtures are authored offline examples, not claimed live captures.",
+    "Live HTTPS behavior is exercised with mocked transport/DNS only; live interoperability is not verified.",
+    "Injected fetchers and synthesizers are trusted in-process code and must cooperate with deadlines; synchronous callbacks cannot be forcibly interrupted.",
+    "DNS waiting is bounded, but an operating-system resolver worker cannot be killed and may delay interpreter shutdown after timeout.",
+    "Socket timeouts and deadline checks bound network waits and body reads; extraction/ranking checks the deadline after bounded parsing rather than preempting CPU work. HTTP header parsing is not a hard process-level wall-clock deadline.",
+    "The urllib body socket access uses CPython response internals and may need adjustment on alternate Python runtimes.",
+    "Only uncompressed HTML/XHTML is supported. No JavaScript execution, cookies, authentication, robots.txt policy enforcement, PDF parsing, crawling or search-engine discovery.",
+    "Extraction is lightweight HTML parsing, not browser rendering; CSS-hidden content and navigation may remain, and malformed markup may lose text.",
+    "Ranking is lexical rather than semantic and can return a passage matching only one query term.",
+    "Source citations prove quoted text was present in retrieved evidence, not that evidence is true or that all synthesized claims are supported. No LLM provider calls are included.",
+    "Requests fail as a whole on any source failure; duplicate IDs are forbidden but distinct IDs may reference the same URL."
+  ],
+  "measurement": "No token counts, costs, provider usage or client outcomes are estimated by this build."
+}

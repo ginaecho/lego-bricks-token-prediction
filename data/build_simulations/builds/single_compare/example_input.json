@@ -1,0 +1,31 @@
+{
+  "fixture": true,
+  "schema": {
+    "price": {"type": "numeric", "unit": "USD"},
+    "mass": {"type": "numeric", "unit": "kg"},
+    "battery": {"type": "numeric", "unit": "Wh"},
+    "finish": {"type": "categorical"},
+    "warranty": {"type": "numeric", "unit": "h"}
+  },
+  "products": [
+    {"id": "fixture-budget", "attributes": {
+      "price": 80, "mass": {"value": 1500, "unit": "g"},
+      "battery": 40, "finish": "black"
+    }},
+    {"id": "fixture-light", "attributes": {
+      "price": 100, "mass": {"value": 2, "unit": "lb"},
+      "battery": {"value": 0.06, "unit": "kWh"}, "finish": "silver",
+      "warranty": 8760
+    }},
+    {"id": "fixture-over-budget", "attributes": {
+      "price": 160, "mass": 0.8, "battery": 90, "finish": "black"
+    }}
+  ],
+  "preferences": {
+    "price": {"direction": "min", "weight": 3},
+    "mass": {"direction": "min", "weight": 2},
+    "battery": {"direction": "max", "weight": 2},
+    "finish": {"target": "black", "weight": 1}
+  },
+  "constraints": {"price": {"max": 120}}
+}

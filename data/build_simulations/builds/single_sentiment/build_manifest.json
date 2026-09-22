@@ -1,0 +1,51 @@
+{
+  "name": "single_sentiment",
+  "scope": "Python standard-library offline JSON-file CLI and importable analyze(payload, classifier=None) function",
+  "files": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "tests": "python -B -m unittest discover -v",
+    "cli": "python -B implementation.py example_input.json"
+  },
+  "input_contract": {
+    "feedback": "Required array of objects with unique nonblank string id, string text, optional severity and urgency finite numbers in [0,5], default 1 each. Blank text allowed and reported explicitly.",
+    "config": "Optional object. lexicon maps single words to scores in [-1,1]; issues maps names to nonempty keyword arrays; negations is an array of single words; negation_window is integer [0,100], default 3. Supplied maps replace defaults; empty maps are allowed.",
+    "matching": "Unicode word tokens, casefolded with curly apostrophes normalized. Exact words only. Issue keyword phrases require whitespace between words.",
+    "malformed": "Unknown fields, duplicate JSON keys, invalid types/ranges, missing required values and nonstandard JSON constants are rejected. CLI errors write JSON to stderr and exit 2. Successful CLI exits 0.",
+    "empty": "Empty feedback array returns status empty with empty lists. Blank text returns empty_text and neutral sentiment."
+  },
+  "scoring": {
+    "sentiment": "Mean of matched term scores after negation, or zero with no matches; sign determines label. Each occurrence contributes. Evidence includes base/effective score, negators and exact source offsets/excerpts.",
+    "negation": "Odd count of configured negators among preceding N tokens flips a score; even count does not. Period, exclamation, question mark, semicolon and newline end scope.",
+    "priority": "frequency * (mean_severity + mean_urgency) * (1 + mean_negative_intensity); negative intensity is max(0,-feedback sentiment). Frequency counts distinct matching feedback IDs, not repeated keyword occurrences.",
+    "ties": "Descending priority, then case-sensitive issue-name ascending. Feedback and issue sources retain input order."
+  },
+  "classifier_callback": {
+    "input": "Copied list of original id/text pairs; no provider integration or CLI callback loading.",
+    "output": "List containing every original ID exactly once, label positive/neutral/negative and finite numeric confidence [0,1]. Extra fields and fabricated/duplicate/missing IDs rejected.",
+    "effect": "Validated annotations only; does not override lexical sentiment or issue ranking.",
+    "tests": "Deterministic labeled fixtures only, no live model or external services."
+  },
+  "limitations": [
+    "Rule-based heuristics, not a trained sentiment model; no accuracy claim or confidence calibration.",
+    "No sarcasm, contextual disambiguation, morphology, language detection, contrast handling or sophisticated negation parsing.",
+    "Issue keywords match even in negated statements; an issue mention is not proof of a defect.",
+    "Priority uses whole-feedback sentiment rather than issue-local sentiment, with user-supplied severity/urgency.",
+    "Sentence-like excerpts use simple punctuation boundaries; source offsets are Python Unicode character indices.",
+    "Entire input is processed in memory. No streaming, concurrency, persistence database or atomic output replacement.",
+    "Injected callbacks are trusted local code; result validation is not a security sandbox."
+  ],
+  "validation": {
+    "status": "passed",
+    "unittest": {"tests_run": 24, "failures": 0, "errors": 0, "reported_seconds": 0.056, "exit_code": 0},
+    "cli": {
+      "exit_code": 0,
+      "status": "ok",
+      "feedback_count": 4,
+      "ranked_issues": [
+        {"issue": "reliability", "frequency": 1, "priority_score": 20.0},
+        {"issue": "support", "frequency": 2, "priority_score": 11.924999999999999},
+        {"issue": "performance", "frequency": 1, "priority_score": 11.549999999999999}
+      ]
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "experiment": "single_normal",
+  "scope": "Offline bounded research and extractive summarization from user-supplied documents; built from an empty directory.",
+  "files": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "dependencies": "Python standard library only",
+  "interface": {
+    "cli": "python implementation.py example_input.json",
+    "stdin": "python implementation.py",
+    "optional_cli_argument": "--max-findings 1..12",
+    "python_api": "research(request, max_findings=6, synthesis_callback=None)",
+    "request_schema": {
+      "question": "nonempty string",
+      "documents": "list of objects containing exactly id and text; both nonempty strings; IDs unique"
+    },
+    "citation_offsets": "Zero-based, half-open Python Unicode character offsets in original document text, not UTF-8 bytes.",
+    "callback_contract": "Receives a deep copy of retrieval output. Returns exactly {findings: [{text, citations}]}. Citations must name known source IDs, contain exact source spans, and lie within selected evidence. Text must equal citation quotes joined with single spaces. Unsupported paraphrases are rejected.",
+    "cli_errors": "Malformed input emits a JSON error to stderr and exits 2; successful output is JSON on stdout and exit 0."
+  },
+  "implementation": [
+    "Unicode case-folded word tokenization with a fixed English stopword set.",
+    "Sentence-like source segmentation and 600-character chunks with 100-character overlap for long spans.",
+    "BM25 term-frequency, inverse-document-frequency and length-normalized ranking, multiplied by query-term coverage.",
+    "Stable source-order tie breaking; exact extractive findings with independently verifiable citation spans.",
+    "Case-folded whitespace-normalized duplicate merging retains all exact source citations.",
+    "Any same-source overlap with selected evidence is suppressed.",
+    "Separately reports terms absent from all passages and terms excluded by selection.",
+    "Reports potential numeric or polarity conflicts among lexically similar selected findings without deciding which source is correct.",
+    "Optional callback output is strictly validated without using any external model or provider."
+  ],
+  "bounds": {
+    "cli_input_bytes": 2000000,
+    "documents": 64,
+    "total_document_characters": 200000,
+    "question_characters": 2000,
+    "distinct_query_content_terms": 64,
+    "document_id_characters": 128,
+    "passage_characters": 600,
+    "selected_findings": 12,
+    "default_selected_findings": 6,
+    "callback_findings": 12,
+    "citations_per_callback_finding": 12
+  },
+  "limitations": [
+    "Lexical retrieval has no embeddings, stemming, synonym expansion, source credibility evaluation, external search or factual verification.",
+    "A lexical match can be tangential; complete term coverage is not evidence that a question has been answered.",
+    "Missing evidence describes lexical gaps in the supplied sources only, not absence of real-world evidence.",
+    "Sentence splitting is heuristic and can split decimals or abbreviations; long chunks can split words. Citation offsets nevertheless remain exact.",
+    "Overlap suppression may omit distinct nearby content. The finite finding limit can exclude relevant evidence.",
+    "Conflict detection is a heuristic warning over selected findings only; it can miss semantic conflicts or flag differences explained by context, dates or entities.",
+    "Duplicate normalization can merge differently capitalized or spaced text; each retained citation preserves its own original exact quotation.",
+    "Duplicate citation counts are bounded indirectly by source character limits, not by a separate per-finding provenance cap.",
+    "The optional callback supports grounded quote selection and concatenation, not free-form paraphrasing or semantic entailment verification.",
+    "The module cannot sandbox or time-limit arbitrary caller-provided callback code. No callback contacting a provider was used.",
+    "Measurements are local functional test outcomes, not benchmark quality, usage, cost or client-score estimates."
+  ],
+  "validation": {
+    "unittest": {
+      "command": "python -m unittest discover -s . -p test_implementation.py -v",
+      "tests_run": 17,
+      "failures": 0,
+      "errors": 0,
+      "reported_elapsed_seconds": 0.243,
+      "exit_code": 0,
+      "result": "OK",
+      "coverage": [
+        "Labeled relevance, Unicode span and query-coverage fixtures",
+        "Malformed documents and requests, duplicate IDs and resource bounds",
+        "No match, empty source collection, stopword-only question and partial evidence",
+        "Duplicate provenance and overlapping long-passage suppression",
+        "Labeled numeric and polarity conflicts; nonconflicting documents",
+        "Finding cap, uncovered query terms, deterministic output and input immutability",
+        "Valid injected callback and rejection of unknown IDs, false quotes, invalid offsets, unsupported text and unretrieved evidence",
+        "CLI example success and malformed-JSON error exit"
+      ]
+    },
+    "cli": {
+      "command": "python implementation.py example_input.json",
+      "exit_code": 0,
+      "status": "evidence_found",
+      "findings": 3,
+      "potential_conflicts": 1,
+      "terms_absent_from_documents": ["recycling", "policy"],
+      "candidate_passages": 5,
+      "matching_passages": 3
+    }
+  },
+  "execution_constraints": {
+    "other_builds_read": false,
+    "networks_or_providers_called": false,
+    "dependencies_installed": false,
+    "agents_spawned": false,
+    "git_used": false,
+    "usage_accounting": "Actual agent build-token collection is owned by the parent; this manifest does not estimate usage, costs or client scores."
+  }
+}

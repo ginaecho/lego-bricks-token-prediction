@@ -1,0 +1,40 @@
+{
+  "scope": "Offline Python-standard-library JSON-file CLI and reusable in-memory text index, built from an empty directory.",
+  "files": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "interfaces": {
+    "cli": "python -B implementation.py example_input.json; JSON result on stdout, JSON error on stderr and exit 2 for invalid requests.",
+    "api": "TextIndex(documents, embedding_callback=None).search(query, top_k=5, min_score=0.0, mode='auto')",
+    "documents": "Nonempty list/tuple of objects containing exactly nonblank string id and text. IDs are unique and case-sensitive; text must contain a Unicode word token.",
+    "request": "JSON object with required documents/query, optional top_k/min_score/mode/embeddings; unknown fields and duplicate JSON keys rejected.",
+    "modes": "auto uses embeddings when supplied, otherwise explicitly labeled lexical_tfidf. lexical forces lexical matching; embedding requires a callback.",
+    "callback": "Receives list of {id,text}, returns mapping of exactly those IDs to nonempty numeric list/tuple vectors. Called at construction and per embedding query. Query batch ID is __query__. Finite int/float coordinates only, no booleans; dimensions must match across documents and queries.",
+    "json_embeddings": "Optional embeddings object contains documents (ID-to-vector object) and query (vector); uses the same validated callback path without a provider.",
+    "ranking": "L2-normalized raw-count TF multiplied by log((1+N)/(1+df))+1; cosine similarity. Embedding vectors are robustly normalized before cosine. Scores strictly greater than zero and at least min_score qualify; threshold in [0,1], top_k a positive integer. Ties use ascending case-sensitive document ID.",
+    "evidence": "Exact source substrings with zero-based Python Unicode-character start/end offsets; highlighted_text is HTML escaped with mark elements on whole-token Unicode-casefold matches.",
+    "empty_results": "Whitespace-empty queries are invalid. Nonblank punctuation-only or out-of-vocabulary lexical queries return zero_query_vector. Zero embedding queries also return zero_query_vector. Otherwise no qualifying results return no_match_above_threshold."
+  },
+  "limitations": [
+    "Lexical fallback is lexical matching, not neural semantic understanding; no stemming, synonyms, stopword removal, or language-specific segmentation.",
+    "No embedding model or provider is included. Supplied embeddings are validated structurally, not for semantic quality. Synthetic labeled vectors test plumbing, not model accuracy.",
+    "Evidence highlights only lexical query-token matches, not causal embedding explanations; embedding matches may have no highlighted evidence.",
+    "Full-text evidence output can be large. All documents and vectors remain in memory; exhaustive scoring is linear in stored vector data.",
+    "No persistence, incremental update, approximate-nearest-neighbor index, authentication, or resource quotas. JSON files are trusted local workload inputs.",
+    "Negative and zero cosine scores are excluded even at threshold zero. Numerical near-ties are ordered by actual float score, not rounded score.",
+    "Injected callbacks execute caller code; callback exceptions propagate in the Python API."
+  ],
+  "test_results": {
+    "status": "passed",
+    "commands": ["python -B -m unittest discover -s . -p test_implementation.py -v", "python -B implementation.py example_input.json"],
+    "unittest": {"tests_run": 22, "failures": 0, "errors": 0},
+    "cli": {"exit_code": 0, "mode": "lexical_tfidf", "top_result_id": "billing", "highlighted_evidence": ["invoice", "payment"]},
+    "coverage": [
+      "Three labeled lexical queries and three labeled injected-embedding queries",
+      "Hand-computed TF-IDF cosine, nonunit embedding cosine, deterministic ties, thresholds and top-k",
+      "Exact source offsets, safe HTML highlighting, Unicode and token boundaries",
+      "Duplicate and malformed document validation; malformed JSON, duplicate JSON keys and nonfinite constants",
+      "Embedding ID, dimensionality and finite-coordinate validation at construction and query time",
+      "Zero, negative, orthogonal and extreme-magnitude vectors; missing callback and no-match behavior",
+      "Real CLI subprocess, injected-vector CLI input, error exit status and missing-file handling"
+    ]
+  }
+}

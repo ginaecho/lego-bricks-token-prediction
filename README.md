@@ -78,6 +78,22 @@ small-pilot evidence, not proof of production accuracy or client ROI.
   <strong><a href="docs/media/Token_Yield_Explainer.mp4">Model explainer</a></strong>
 </p>
 
+## Software-construction measurements
+
+The separate [build-simulation corpus](data/build_simulations/README.md) saves
+19 actual agent-built reference implementations, per-request usage traces and
+2,921,703 measured construction tokens. It includes
+[data points](data/build_simulations/data_points.csv),
+[38 input features](data/build_simulations/feature_dictionary.json),
+staffing assumptions, reference-price scenarios and explicitly pseudo outcomes.
+Fourteen real-use-case references remain separate from simulation design.
+
+This is **construction effort**, not the workload-execution target of the
+current Studio model. Only 19 of 1,455 designed memberships are measured; no
+construction predictor is trained yet. The
+[TODO plan](data/build_simulations/TODO.md) covers additional measurements,
+held-out evaluation, training and Studio integration.
+
 ## How it works
 
 ```text

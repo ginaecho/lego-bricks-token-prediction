@@ -1,0 +1,17 @@
+{
+  "fixture_label": "SYNTHETIC: invented invoice documents for extraction testing only",
+  "schema": {
+    "fields": [
+      {"id": "invoice", "type": "string", "required": true, "pattern": "Invoice: (?P<value>INV-[0-9]+)"},
+      {"id": "quantity", "type": "integer", "required": true, "pattern": "Quantity: (?P<value>[0-9]+)"},
+      {"id": "amount", "type": "number", "required": true, "pattern": "Amount: (?P<value>[0-9]+\\.[0-9]+)"},
+      {"id": "paid", "type": "boolean", "required": false, "pattern": "Paid: (?P<value>true|false)"},
+      {"id": "date", "type": "date", "required": true, "pattern": "Date: (?P<value>[0-9-]+)"},
+      {"id": "purchase_order", "type": "string", "required": true, "pattern": "PO: (?P<value>PO-[0-9]+)"}
+    ]
+  },
+  "documents": [
+    {"id": "synthetic_invoice", "text": "Invoice: INV-100\nQuantity: 3\nAmount: 12.50\nPaid: false\nDate: 2026-09-21"},
+    {"id": "synthetic_revision", "text": "Invoice: INV-100\nQuantity: 4\nDate: 2026-02-30"}
+  ]
+}

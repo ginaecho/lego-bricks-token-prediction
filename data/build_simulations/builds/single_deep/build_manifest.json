@@ -1,0 +1,120 @@
+{
+  "build": "single_deep",
+  "description": "Working local evidence-analysis JSON CLI with optional injected structured synthesis callback, constructed from an empty directory.",
+  "files": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "runtime": {
+    "language": "Python",
+    "tested_version": "3.13.15",
+    "dependencies": "Python standard library only",
+    "network_access": "None used or implemented",
+    "installation_required": false
+  },
+  "interfaces": {
+    "file_cli": "python -B implementation.py example_input.json",
+    "stdin_cli": "python -B implementation.py -",
+    "python_api": "analyze(data, synthesis_callback=None)",
+    "success": "JSON result on stdout; exit code 0",
+    "data_or_io_failure": "JSON error on stderr, no result on stdout; exit code 2",
+    "input": {
+      "root_fields": ["question", "documents"],
+      "document_fields": ["id", "title", "text", "claims"],
+      "claim_fields": ["id", "subject", "value", "evidence"],
+      "rules": [
+        "Unknown or missing fields are rejected.",
+        "Question, titles, subjects, values and excerpts are nonempty strings.",
+        "Document text may be empty only if there are no claims needing anchoring.",
+        "Documents and claims are lists; empty lists are valid.",
+        "Document IDs and claim IDs are globally unique within their separate namespaces.",
+        "IDs match [A-Za-z0-9][A-Za-z0-9_.-]*.",
+        "Evidence is a literal source excerpt containing normalized subject and value as bounded phrases.",
+        "Duplicate normalized subject/value/excerpt assertions within one document are rejected.",
+        "Duplicate JSON object keys, malformed types, nonstandard JSON numeric constants and invalid Unicode are rejected."
+      ]
+    },
+    "callback": {
+      "request_fields": ["question", "evidence", "grouped_claims", "synthesis_plan"],
+      "response_root_fields": ["statements"],
+      "statement_fields": ["subject", "value", "claim_ids", "citations"],
+      "citation_fields": ["document_id", "claim_id"],
+      "contract": [
+        "Callback receives a deep copy, not mutable references to analysis state.",
+        "Every statement must match a retrieved normalized subject/value pair.",
+        "Every retrieved claim must be covered exactly once, with one statement per subject/value pair.",
+        "Every claim must carry its exact document/claim citation; missing, duplicate, unknown and mismatched citations fail.",
+        "Unretrieved input claims, invented assertions and omitted conflicting evidence fail.",
+        "Arbitrary prose and unknown fields are forbidden; synthesis prose is rendered locally from validated statements.",
+        "The callback may wrap an LLM supplied by the caller; no LLM integration, provider or model call is included.",
+        "Callback failures raise ValidationError; no fabricated fallback is returned.",
+        "Empty retrieval skips the callback."
+      ]
+    }
+  },
+  "implemented_algorithms": [
+    "NFKC normalization, case folding and whitespace collapse for subject/value identity.",
+    "Question token overlap with an explicit English stopword set; score = 4 times subject overlap + 2 times value overlap + excerpt overlap.",
+    "Retrieve positive-scoring claims, then include every claim sharing a normalized subject, even zero-score conflicting alternatives.",
+    "Group by normalized subject and value; multiple values flag disagreement, one value across multiple document IDs flags agreement, otherwise single-source.",
+    "Preserve every alternative and its source citations; do not resolve by majority vote.",
+    "Retain original subject, value, document title, exact excerpt and first-occurrence half-open character offsets.",
+    "Generate evidence-linked conflict questions, single-source corroboration questions, answer-coverage caveats and synthesis actions.",
+    "Stable sorting of evidence, groups, alternatives, claims and citations gives deterministic output independent of input document/claim order.",
+    "Strict optional callback validation followed by local evidence-bound synthesis rendering."
+  ],
+  "measured_validation": {
+    "test_command": "python -B -m unittest -v test_implementation",
+    "unit_test_methods": 51,
+    "unit_test_result": "51 passed, 0 failures, 0 errors",
+    "unit_test_exit_code": 0,
+    "cli_command": "python -B implementation.py example_input.json",
+    "cli_exit_code": 0,
+    "cli_result": {
+      "source_documents": 3,
+      "candidate_claims": 6,
+      "retrieved_claims": 5,
+      "excluded_unrelated_claims": 1,
+      "group_statuses": {
+        "battery life": "disagreement",
+        "water resistance": "agreement"
+      },
+      "unresolved_questions": 2,
+      "conflicting_values_preserved": ["10 hours", "8 hours"]
+    },
+    "fixture_status": "ALL example and test evidence is explicitly synthetic. These are software execution results, not real-world product measurements.",
+    "verified_cases": [
+      "Agreement, disagreement, minority evidence and within-document conflicts",
+      "Same-subject retrieval expansion retaining zero-score contradictory evidence",
+      "Exact source provenance and character spans",
+      "Unicode/case/whitespace normalization and preservation of signs, decimals and negation in grouping",
+      "Single-source versus multi-document assertions",
+      "Duplicate identifiers, duplicate assertions and duplicate JSON keys",
+      "Malformed schemas, unsupported lexical claims, invented excerpts and nonstandard JSON",
+      "Empty documents, empty claims, stopword-only questions and unrelated questions",
+      "Deterministic repeated output, reordered input and byte-identical CLI output",
+      "Successful local injected callback and validation rejection cases",
+      "Callback mutation isolation and exception handling",
+      "File CLI, stdin CLI, missing-file errors and invalid-input errors"
+    ]
+  },
+  "bounded_working_scope": {
+    "scope": "Local, in-memory analysis of supplied explicit string-valued assertions with literal source excerpts.",
+    "limitations": [
+      "No automatic extraction of claims from raw prose.",
+      "Lexical excerpt checks do not establish semantic entailment, truth, negation scope or source authenticity.",
+      "Lexical retrieval can miss paraphrases or retrieve irrelevant term matches; it does not verify full question coverage.",
+      "No semantic synonym, entity, unit, timestamp or context resolution.",
+      "Differing values can represent different circumstances rather than true contradictions.",
+      "Different document IDs do not establish independent authorship or independent evidence.",
+      "No confidence calibration, external fact-checking, browsing, persistence, concurrency or access-control implementation.",
+      "No resource quotas, large-corpus benchmark, adversarial fuzzing or production hardening is claimed.",
+      "Arbitrary free-form LLM prose is intentionally not accepted because structural citation validation cannot prove it supported.",
+      "Callback validation is tested using local deterministic fakes, not a real LLM."
+    ],
+    "production_guarantee": false,
+    "statement": "This build demonstrates only the implemented and locally tested working scope. It is not production-certified and carries no production guarantee."
+  }
+}
