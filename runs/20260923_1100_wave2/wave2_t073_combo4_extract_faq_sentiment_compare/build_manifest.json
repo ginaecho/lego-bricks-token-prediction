@@ -1,0 +1,129 @@
+{
+  "build_id": "wave2_t073_combo4_extract_faq_sentiment_compare",
+  "composition_label": "Structured extraction -> Knowledge-base answers -> Sentiment & prioritization -> Product comparison",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory using synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "request": {
+      "schema_version": "Literal 1.0",
+      "fixture_label": "Nonempty fixture identification; example explicitly labeled SYNTHETIC",
+      "document": "String; empty document is accepted and produces missing-field reports",
+      "fields": "Nonempty array of unique {name, pattern, type, required}; type is string, integer or number; required is boolean",
+      "question_field": "Name of a declared string field",
+      "knowledge_base": "Array of unique {id, question, answer} with nonempty strings",
+      "retrieval_threshold": "Finite number in (0, 1]",
+      "products": "Array of unique {id, name, attributes}; attributes optionally include price, battery, warranty, each as {value, unit}",
+      "preferences": "Nonempty array of unique {attribute, direction, weight}; direction min/max, finite weight in (0, 100]"
+    },
+    "envelope": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "stage": "input, extract, faq, sentiment or compare",
+      "request": "Validated immutable-by-copy request",
+      "data": "Cumulative stage objects in execution order; no unrelated keys"
+    },
+    "errors": "{schema_version: 1.0, status: error, error: message}; stdout JSON and exit 2",
+    "validation_layer": "validate() checks the common envelope and validate_request() checks the common request. Each stage validates its predecessor and its own result. Extraction source spans/value conversions, missing reports, FAQ answer/citation grounding, exact sentiment derivation and exact comparison derivation are validated.",
+    "source_spans": "Zero-based, half-open Python Unicode character offsets into the original document, adjusted to exclude surrounding whitespace",
+    "numeric_policy": "Reject boolean-as-number, NaN, infinity, negative attributes, unsupported units, duplicate identifiers and duplicate JSON object keys"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "extract",
+      "to": "faq",
+      "consumed": "Validated question_field value with retained source span and document provenance",
+      "missing_behavior": "A missing or non-informative question explicitly abstains; optional and required missing fields remain visible"
+    },
+    {
+      "from": "faq",
+      "to": "sentiment",
+      "consumed": "Validated FAQ query and answered/abstained status",
+      "effect": "Score only customer query, never the KB response; abstention adds 10 priority points"
+    },
+    {
+      "from": "sentiment",
+      "to": "compare",
+      "consumed": "Validated issue priority, severity and propagated FAQ status",
+      "effect": "Priority >=70 adds a max-warranty preference with weight 2 or boosts an existing max-warranty weight by 2. Explicit minimize-warranty preference is preserved."
+    }
+  ],
+  "behavior": {
+    "extraction": "First regex match per schema field; named group value if available, otherwise full match. Trim matched text while preserving exact offsets. Failed type conversions are reported as invalid and missing, not silently fabricated.",
+    "retrieval": "Case-folded ASCII alphanumeric token sets with explicit stopwords; score is query-token coverage by article question. Highest score meeting threshold wins; equal scores resolve by article id. Answer is the complete verbatim KB answer and its article id, otherwise answer/citation are null with an abstention reason.",
+    "sentiment": "Transparent fixed lexicon with per-occurrence token index, score and immediate preceding not/never/no negation. Sum determines positive/neutral/negative. Critical severity terms outrank high terms independently of sentiment.",
+    "priority": "Base critical=100, high=70, normal=30; negative sentiment adds 10; unanswered adds 10; cap at 100. Reasons are explicit.",
+    "normalization": "Price USD/cents -> USD; battery hours/minutes -> hours; warranty months/years -> months; units are case insensitive and normalized values must remain finite.",
+    "comparison": "Side-by-side rows include null for missing attributes. Per-attribute min-max utility honors preference direction; equal observed values receive utility 1 and missing values receive 0. Weighted mean scores are rounded to six decimals; ties resolve by product id. All contributions, effective weights and severity-related adjustments are returned.",
+    "empty_catalog": "Empty ranking and null recommendation",
+    "determinism": "No randomness, clocks, networks, providers or external state in the implementation; caller input is deep-copied"
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI and one validated pipeline",
+      "Schema-driven extraction with missing and invalid field reports",
+      "Grounded verbatim FAQ answers and explicit abstention",
+      "Explainable sentiment and severity-aware prioritization",
+      "Three normalized numeric product attributes and preference ranking",
+      "Synthetic fixture, unit tests, cross-stage integrity tests and subprocess CLI tests",
+      "JSON file, syntax, encoding and validation error handling"
+    ],
+    "excluded": [
+      "Live or injected LLM calls; none are needed for the deterministic reference",
+      "Network services, enterprise deployment, authentication and persistence",
+      "Semantic retrieval, embeddings and probabilistic confidence calibration",
+      "General natural-language extraction or multilingual sentiment; lexicon tokenization is ASCII English",
+      "Currency conversion beyond USD/cents",
+      "Safety certification or assurance from product rankings; warranty is only a demonstration preference",
+      "Regex execution sandboxing or timeout protection; schema patterns are trusted configuration",
+      "Advanced negation, sarcasm, coreference and contextual severity interpretation; severity triggers conservatively remain active even when negated"
+    ]
+  },
+  "test_outcomes": {
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 33,
+    "passed": 33,
+    "failed": 0,
+    "errors": 0,
+    "result": "OK",
+    "coverage": [
+      "All four stages and their ordered handoffs",
+      "Exact and Unicode source spans, trimming, named and full-match captures",
+      "Integer conversion, missing required/optional fields and conversion failures",
+      "Grounding, relevance threshold, abstention, empty KB and deterministic retrieval ties",
+      "Sentiment contributions, negation, positive sentiment with critical severity, answer-text isolation",
+      "Unanswered priority propagation and severity-dependent ranking changes",
+      "Unit conversion, missing attributes, equal products and empty catalog",
+      "Determinism and input immutability",
+      "Invalid schemas, regexes, units, values, identities and preferences",
+      "Rejected wrong-stage, tampered-span, unsupported-answer and tampered-sentiment handoffs",
+      "CLI success, usage error, missing file, malformed JSON, non-finite JSON and duplicate JSON keys"
+    ],
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One valid JSON object",
+      "status": "ok",
+      "final_stage": "compare",
+      "faq_status": "answered",
+      "recommended_product_id": "care"
+    }
+  }
+}

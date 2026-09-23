@@ -1,0 +1,679 @@
+{
+  "id": "wave2_t085_combo4_journey_adaptive_triage_sentiment",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "onboard",
+      "support",
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Guided onboarding",
+      "AI customer support",
+      "Customer insights"
+    ],
+    "types": [
+      "journey",
+      "adaptive",
+      "triage",
+      "sentiment"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 1,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 6,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 4,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Prerequisite-aware next actions and a validated two-step journey.",
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Transparent sentiment scoring and severity-aware issue prioritization."
+  ],
+  "integration": {
+    "ordered_types": [
+      "journey",
+      "adaptive",
+      "triage",
+      "sentiment"
+    ],
+    "edges": [
+      {
+        "from": "journey",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "adaptive",
+        "to": "triage",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "triage",
+        "to": "sentiment",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "2a213e41d10661901d324389f2844411027ec049eb4c509680fdec4d056e391e",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "0bcca7e8a0f3e2c805533bf4ee0a916237869cb056b97045e5d86c60c4619ca1",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t085_combo4_journey_adaptive_triage_sentiment",
+  "membership_point_id": "combo4_journey_adaptive_triage_sentiment",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "29f5f450ca930a1b66dfa6548720455b5f667071ca7bb2b66b09bd0cd91caaa4",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 8,
+    "input_tokens": 189956,
+    "output_tokens": 16624,
+    "cache_read_tokens": 171895,
+    "cache_write_tokens": 18037,
+    "total_tokens": 206580,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34610,
+        "agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+        "model": "gpt-6-astra",
+        "input_tokens": 14875,
+        "output_tokens": 417,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 838,
+        "reasoning_tokens": 243,
+        "duration_ms": 9062,
+        "created_at": "2026-09-23T10:40:25.378Z"
+      },
+      {
+        "id": 34611,
+        "agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+        "model": "gpt-6-astra",
+        "input_tokens": 15318,
+        "output_tokens": 1071,
+        "cache_read_tokens": 14872,
+        "cache_write_tokens": 443,
+        "reasoning_tokens": 53,
+        "duration_ms": 10426,
+        "created_at": "2026-09-23T10:40:36.982Z"
+      },
+      {
+        "id": 34627,
+        "agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+        "model": "gpt-6-astra",
+        "input_tokens": 16486,
+        "output_tokens": 6259,
+        "cache_read_tokens": 15315,
+        "cache_write_tokens": 1168,
+        "reasoning_tokens": 1235,
+        "duration_ms": 74802,
+        "created_at": "2026-09-23T10:41:46.293Z"
+      },
+      {
+        "id": 34634,
+        "agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+        "model": "gpt-6-astra",
+        "input_tokens": 22918,
+        "output_tokens": 5065,
+        "cache_read_tokens": 16483,
+        "cache_write_tokens": 6432,
+        "reasoning_tokens": 398,
+        "duration_ms": 54759,
+        "created_at": "2026-09-23T10:42:37.934Z"
+      },
+      {
+        "id": 34636,
+        "agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+        "model": "gpt-6-astra",
+        "input_tokens": 28079,
+        "output_tokens": 518,
+        "cache_read_tokens": 22915,
+        "cache_write_tokens": 5161,
+        "reasoning_tokens": 134,
+        "duration_ms": 7316,
+        "created_at": "2026-09-23T10:42:45.368Z"
+      },
+      {
+        "id": 34639,
+        "agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+        "model": "gpt-6-astra",
+        "input_tokens": 28698,
+        "output_tokens": 2715,
+        "cache_read_tokens": 28076,
+        "cache_write_tokens": 619,
+        "reasoning_tokens": 382,
+        "duration_ms": 40075,
+        "created_at": "2026-09-23T10:43:28.949Z"
+      },
+      {
+        "id": 34640,
+        "agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+        "model": "gpt-6-astra",
+        "input_tokens": 31508,
+        "output_tokens": 501,
+        "cache_read_tokens": 28695,
+        "cache_write_tokens": 2810,
+        "reasoning_tokens": 211,
+        "duration_ms": 15367,
+        "created_at": "2026-09-23T10:43:46.954Z"
+      },
+      {
+        "id": 34643,
+        "agent_id": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+        "model": "gpt-6-astra",
+        "input_tokens": 32074,
+        "output_tokens": 78,
+        "cache_read_tokens": 31505,
+        "cache_write_tokens": 566,
+        "reasoning_tokens": 0,
+        "duration_ms": 2512,
+        "created_at": "2026-09-23T10:43:53.538Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.72425,
+      "observed_cache_profile_estimate_usd": 0.33748625000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 8.691,
+      "observed_cache_profile_estimate_usd": 8.691,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 5,
+      "roi_satisfaction": 5,
+      "future_impact_potential": 5,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.61,
+    "pseudo_annual_cost_usd": 40000,
+    "pseudo_annual_ai_value_usd": 10000,
+    "pseudo_net_impact_usd": -30000,
+    "pseudo_roi_pct": -75.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............................................\n----------------------------------------------------------------------\nRan 45 tests in 1.515s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "actions": [
+        {
+          "id": "account",
+          "prerequisites": [],
+          "support_category": "general",
+          "tags": [
+            "basics"
+          ],
+          "title": "Create your synthetic account"
+        },
+        {
+          "id": "payout",
+          "prerequisites": [
+            "account"
+          ],
+          "support_category": "billing",
+          "tags": [
+            "payments",
+            "selling"
+          ],
+          "title": "Configure synthetic payouts"
+        },
+        {
+          "id": "listing",
+          "prerequisites": [
+            "payout"
+          ],
+          "support_category": "technical",
+          "tags": [
+            "selling"
+          ],
+          "title": "Publish a synthetic listing"
+        },
+        {
+          "id": "tour",
+          "prerequisites": [
+            "account"
+          ],
+          "support_category": "general",
+          "tags": [
+            "discovery"
+          ],
+          "title": "Explore the synthetic marketplace"
+        }
+      ],
+      "config": {
+        "default_category": "general",
+        "routes": {
+          "billing": {
+            "base_priority": 3,
+            "owner": "synthetic-billing-lead",
+            "queue": "synthetic-billing"
+          },
+          "general": {
+            "base_priority": 4,
+            "owner": "synthetic-support-lead",
+            "queue": "synthetic-general"
+          },
+          "technical": {
+            "base_priority": 3,
+            "owner": "synthetic-engineering-lead",
+            "queue": "synthetic-technical"
+          }
+        },
+        "rules": [
+          {
+            "category": "technical",
+            "keywords": [
+              "service outage",
+              "crash",
+              "broken"
+            ]
+          },
+          {
+            "category": "billing",
+            "keywords": [
+              "refund",
+              "invoice"
+            ]
+          }
+        ],
+        "sentiment_lexicon": {
+          "bad": -2,
+          "broken": -2,
+          "frustrated": -3,
+          "good": 2,
+          "great": 3,
+          "hate": -4,
+          "love": 3,
+          "stuck": -2
+        }
+      },
+      "fixture": "synthetic",
+      "profile": {
+        "completed": [
+          "account"
+        ],
+        "experience": "beginner",
+        "id": "synthetic-seller-001",
+        "interests": [
+          "selling",
+          "payments"
+        ],
+        "preference": "hands_on"
+      },
+      "schema_version": 1,
+      "stages": {
+        "adaptive": {
+          "experience": "beginner",
+          "planning_only": true,
+          "profile_id": "synthetic-seller-001",
+          "steps": [
+            {
+              "action_id": "payout",
+              "assumed_completed_before": [
+                "account"
+              ],
+              "explanation": "beginner experience determines detail; hands_on preference determines format. Later steps require completing earlier planned prerequisites.",
+              "format": "hands_on",
+              "guidance": "Configure synthetic payouts: Follow the detailed walkthrough and verify each checkpoint. Practice the task in a synthetic exercise.",
+              "position": 1,
+              "prerequisites": [
+                "account"
+              ],
+              "prerequisites_met": true,
+              "support_category": "billing"
+            },
+            {
+              "action_id": "listing",
+              "assumed_completed_before": [
+                "account",
+                "payout"
+              ],
+              "explanation": "beginner experience determines detail; hands_on preference determines format. Later steps require completing earlier planned prerequisites.",
+              "format": "hands_on",
+              "guidance": "Publish a synthetic listing: Follow the detailed walkthrough and verify each checkpoint. Practice the task in a synthetic exercise.",
+              "position": 2,
+              "prerequisites": [
+                "payout"
+              ],
+              "prerequisites_met": true,
+              "support_category": "technical"
+            }
+          ]
+        },
+        "journey": {
+          "next_actions": [
+            {
+              "action_id": "payout",
+              "interest_matches": [
+                "payments",
+                "selling"
+              ]
+            },
+            {
+              "action_id": "tour",
+              "interest_matches": []
+            }
+          ],
+          "planning_only": true,
+          "profile_id": "synthetic-seller-001",
+          "steps": [
+            {
+              "action_id": "payout",
+              "assumed_completed_before": [
+                "account"
+              ],
+              "position": 1,
+              "prerequisites": [
+                "account"
+              ],
+              "reason": "Prerequisites satisfied; interest matches: payments, selling; ties use action id."
+            },
+            {
+              "action_id": "listing",
+              "assumed_completed_before": [
+                "account",
+                "payout"
+              ],
+              "position": 2,
+              "prerequisites": [
+                "payout"
+              ],
+              "reason": "Prerequisites satisfied; interest matches: selling; ties use action id."
+            }
+          ]
+        },
+        "sentiment": {
+          "issues": [
+            {
+              "action_id": "listing",
+              "category": "technical",
+              "negative_escalation": false,
+              "onboarding_step": 2,
+              "owner": "synthetic-engineering-lead",
+              "priority": 1,
+              "queue": "synthetic-technical",
+              "rank": 1,
+              "reason": "Score <= -3 sets priority to at least P2; positive sentiment never lowers urgency.",
+              "sentiment": {
+                "contributions": [
+                  {
+                    "base_weight": 3,
+                    "contribution": 3,
+                    "index": 0,
+                    "negated": false,
+                    "token": "great"
+                  }
+                ],
+                "label": "positive",
+                "score": 3
+              },
+              "severity": "critical",
+              "ticket_id": "synthetic-ticket-002",
+              "triage_priority": 1,
+              "urgency": 440
+            },
+            {
+              "action_id": "payout",
+              "category": "billing",
+              "negative_escalation": false,
+              "onboarding_step": 1,
+              "owner": "synthetic-billing-lead",
+              "priority": 2,
+              "queue": "synthetic-billing",
+              "rank": 2,
+              "reason": "Score <= -3 sets priority to at least P2; positive sentiment never lowers urgency.",
+              "sentiment": {
+                "contributions": [
+                  {
+                    "base_weight": -3,
+                    "contribution": -3,
+                    "index": 2,
+                    "negated": false,
+                    "token": "frustrated"
+                  },
+                  {
+                    "base_weight": -2,
+                    "contribution": -2,
+                    "index": 4,
+                    "negated": false,
+                    "token": "stuck"
+                  }
+                ],
+                "label": "negative",
+                "score": -5
+              },
+              "severity": "medium",
+              "ticket_id": "synthetic-ticket-001",
+              "triage_priority": 2,
+              "urgency": 325
+            },
+            {
+              "action_id": null,
+              "category": "general",
+              "negative_escalation": false,
+              "onboarding_step": null,
+              "owner": "synthetic-support-lead",
+              "priority": 4,
+              "queue": "synthetic-general",
+              "rank": 3,
+              "reason": "Score <= -3 sets priority to at least P2; positive sentiment never lowers urgency.",
+              "sentiment": {
+                "contributions": [],
+                "label": "neutral",
+                "score": 0
+              },
+              "severity": "low",
+              "ticket_id": "synthetic-ticket-003",
+              "triage_priority": 4,
+              "urgency": 110
+            }
+          ],
+          "ordering": "(5-priority)*100 + (5-severity_priority)*10 + min(5,max(0,-sentiment_score)); descending, then ticket id.",
+          "scoring": "Sum configured token weights; immediately preceding not/never/no inverts a weight."
+        },
+        "triage": {
+          "profile_id": "synthetic-seller-001",
+          "tickets": [
+            {
+              "action_id": "payout",
+              "blocked_onboarding_boost": true,
+              "category": "billing",
+              "category_source": "onboarding",
+              "matched_keywords": [],
+              "onboarding_format": "hands_on",
+              "onboarding_guidance": "Configure synthetic payouts: Follow the detailed walkthrough and verify each checkpoint. Practice the task in a synthetic exercise.",
+              "onboarding_step": 1,
+              "owner": "synthetic-billing-lead",
+              "priority": 2,
+              "queue": "synthetic-billing",
+              "reason": "Minimum of route/severity priority; blocked planned step raises urgency one level.",
+              "severity": "medium",
+              "text": "I am frustrated and stuck while completing this step.",
+              "ticket_id": "synthetic-ticket-001"
+            },
+            {
+              "action_id": "listing",
+              "blocked_onboarding_boost": false,
+              "category": "technical",
+              "category_source": "keyword",
+              "matched_keywords": [
+                "service outage"
+              ],
+              "onboarding_format": "hands_on",
+              "onboarding_guidance": "Publish a synthetic listing: Follow the detailed walkthrough and verify each checkpoint. Practice the task in a synthetic exercise.",
+              "onboarding_step": 2,
+              "owner": "synthetic-engineering-lead",
+              "priority": 1,
+              "queue": "synthetic-technical",
+              "reason": "Minimum of route/severity priority; blocked planned step raises urgency one level.",
+              "severity": "critical",
+              "text": "Great help, but the service outage is critical.",
+              "ticket_id": "synthetic-ticket-002"
+            },
+            {
+              "action_id": null,
+              "blocked_onboarding_boost": false,
+              "category": "general",
+              "category_source": "default",
+              "matched_keywords": [],
+              "onboarding_format": null,
+              "onboarding_guidance": null,
+              "onboarding_step": null,
+              "owner": "synthetic-support-lead",
+              "priority": 4,
+              "queue": "synthetic-general",
+              "reason": "Minimum of route/severity priority; blocked planned step raises urgency one level.",
+              "severity": "low",
+              "text": "Please explain the dashboard.",
+              "ticket_id": "synthetic-ticket-003"
+            }
+          ]
+        }
+      },
+      "status": "ok",
+      "tickets": [
+        {
+          "action_id": "payout",
+          "blocked": true,
+          "id": "synthetic-ticket-001",
+          "severity": "medium",
+          "text": "I am frustrated and stuck while completing this step."
+        },
+        {
+          "action_id": "listing",
+          "blocked": false,
+          "id": "synthetic-ticket-002",
+          "severity": "critical",
+          "text": "Great help, but the service outage is critical."
+        },
+        {
+          "action_id": null,
+          "blocked": false,
+          "id": "synthetic-ticket-003",
+          "severity": "low",
+          "text": "Please explain the dashboard."
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t085_combo4_journey_adaptive_triage_sentiment",
+    "artifact_sha256": {
+      "implementation.py": "464c44227b5cc1b58ecc44d1f88d6f3074cb3e1e5dddbb04121565bf2b842c36",
+      "test_implementation.py": "e2162e1e94d7ab45ac19d13e0c2afd7b89cbee92b26750f9830c1639d17ecbbb",
+      "example_input.json": "dadb17a2f827cdd92a1edec3bb0747d7827e8237f590d1d6fa939f7fa353de08",
+      "build_manifest.json": "efe27f78cbd5f56a9cfc9c31c93a6844caa6aa4fcd580172bc732ce69bc4b716"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

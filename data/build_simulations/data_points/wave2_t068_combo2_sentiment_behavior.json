@@ -1,0 +1,483 @@
+{
+  "id": "wave2_t068_combo2_sentiment_behavior",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "Customer insights",
+      "Personalized discovery"
+    ],
+    "types": [
+      "sentiment",
+      "behavior"
+    ],
+    "functionality_count": 2,
+    "integration_edge_count": 1,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 9,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.75,
+    "staff_data_scientist": 0.25,
+    "staff_architect": 0.125,
+    "staff_consultant": 0.125,
+    "staff_software_engineer": 0.625,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 2,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 0,
+    "planned_operation_verify": 2,
+    "planned_operation_write": 2
+  },
+  "requirements": [
+    "Transparent sentiment scoring and severity-aware issue prioritization.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling."
+  ],
+  "integration": {
+    "ordered_types": [
+      "sentiment",
+      "behavior"
+    ],
+    "edges": [
+      {
+        "from": "sentiment",
+        "to": "behavior",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "6614c00c7b3d99da469004f7c056d5cd61c42e4bdb1df081e328c33c1ee5d1f7",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "8b91e59d9743648795c065362c0b35032443423b4d0c06eb418b1f4faa3084e4",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t068_combo2_sentiment_behavior",
+  "membership_point_id": "combo2_sentiment_behavior",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "e5d80a1a8d11f6ca2392e9b4a8daccba23daedf28f8f0151a8be40ec80225060",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "23824611-88e3-4a74-b0d0-7a09b678ae29",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 131688,
+    "output_tokens": 9829,
+    "cache_read_tokens": 119525,
+    "cache_write_tokens": 12145,
+    "total_tokens": 141517,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34444,
+        "agent_id": "23824611-88e3-4a74-b0d0-7a09b678ae29",
+        "model": "gpt-6-astra",
+        "input_tokens": 14809,
+        "output_tokens": 331,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 772,
+        "reasoning_tokens": 162,
+        "duration_ms": 8837,
+        "created_at": "2026-09-23T10:20:49.943Z"
+      },
+      {
+        "id": 34456,
+        "agent_id": "23824611-88e3-4a74-b0d0-7a09b678ae29",
+        "model": "gpt-6-astra",
+        "input_tokens": 15166,
+        "output_tokens": 8643,
+        "cache_read_tokens": 14806,
+        "cache_write_tokens": 357,
+        "reasoning_tokens": 516,
+        "duration_ms": 136979,
+        "created_at": "2026-09-23T10:23:07.989Z"
+      },
+      {
+        "id": 34457,
+        "agent_id": "23824611-88e3-4a74-b0d0-7a09b678ae29",
+        "model": "gpt-6-astra",
+        "input_tokens": 24121,
+        "output_tokens": 153,
+        "cache_read_tokens": 15163,
+        "cache_write_tokens": 8955,
+        "reasoning_tokens": 0,
+        "duration_ms": 4625,
+        "created_at": "2026-09-23T10:23:12.799Z"
+      },
+      {
+        "id": 34460,
+        "agent_id": "23824611-88e3-4a74-b0d0-7a09b678ae29",
+        "model": "gpt-6-astra",
+        "input_tokens": 25469,
+        "output_tokens": 382,
+        "cache_read_tokens": 24118,
+        "cache_write_tokens": 1348,
+        "reasoning_tokens": 31,
+        "duration_ms": 11609,
+        "created_at": "2026-09-23T10:23:33.070Z"
+      },
+      {
+        "id": 34462,
+        "agent_id": "23824611-88e3-4a74-b0d0-7a09b678ae29",
+        "model": "gpt-6-astra",
+        "input_tokens": 25941,
+        "output_tokens": 205,
+        "cache_read_tokens": 25466,
+        "cache_write_tokens": 472,
+        "reasoning_tokens": 0,
+        "duration_ms": 4240,
+        "created_at": "2026-09-23T10:23:36.977Z"
+      },
+      {
+        "id": 34463,
+        "agent_id": "23824611-88e3-4a74-b0d0-7a09b678ae29",
+        "model": "gpt-6-astra",
+        "input_tokens": 26182,
+        "output_tokens": 115,
+        "cache_read_tokens": 25938,
+        "cache_write_tokens": 241,
+        "reasoning_tokens": 0,
+        "duration_ms": 3713,
+        "created_at": "2026-09-23T10:23:44.165Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.47665500000000005,
+      "observed_cache_profile_estimate_usd": 0.20772375,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.719860000000001,
+      "observed_cache_profile_estimate_usd": 5.719860000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 0,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 0,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.1,
+    "pseudo_annual_cost_usd": 65000,
+    "pseudo_annual_ai_value_usd": 70000,
+    "pseudo_net_impact_usd": 5000,
+    "pseudo_roi_pct": 7.6923076923076925,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 0.507s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "input": {
+        "as_of": "2026-09-23T12:00:00+00:00",
+        "customers": [
+          {
+            "id": "synthetic-alex"
+          },
+          {
+            "id": "synthetic-sam"
+          }
+        ],
+        "events": [
+          {
+            "customer_id": "synthetic-alex",
+            "id": "synthetic-e1",
+            "kind": "view",
+            "product_id": "synthetic-camera",
+            "timestamp": "2026-09-23T12:00:00+00:00"
+          },
+          {
+            "customer_id": "synthetic-alex",
+            "id": "synthetic-e2",
+            "kind": "purchase",
+            "product_id": "synthetic-book",
+            "timestamp": "2026-08-24T12:00:00+00:00"
+          }
+        ],
+        "feedback": [
+          {
+            "customer_id": "synthetic-alex",
+            "id": "synthetic-f1",
+            "product_id": "synthetic-camera",
+            "severity": "critical",
+            "text": "Broken and terrible, not good."
+          },
+          {
+            "customer_id": "synthetic-sam",
+            "id": "synthetic-f2",
+            "product_id": "synthetic-book",
+            "severity": "low",
+            "text": "A great book. Love it."
+          }
+        ],
+        "products": [
+          {
+            "category": "electronics",
+            "id": "synthetic-camera",
+            "popularity": 0.9
+          },
+          {
+            "category": "electronics",
+            "id": "synthetic-headphones",
+            "popularity": 0.7
+          },
+          {
+            "category": "books",
+            "id": "synthetic-book",
+            "popularity": 0.8
+          }
+        ],
+        "schema_version": "1.0",
+        "synthetic": true,
+        "top_k": 3
+      },
+      "personalization": [
+        {
+          "cold_start": false,
+          "id": "synthetic-alex",
+          "recommendations": [
+            {
+              "base_score": 1.0,
+              "category": "books",
+              "category_affinity": 1.0,
+              "id": "synthetic-book",
+              "issue_ids": [],
+              "issue_penalty": 0.0,
+              "item_affinity": 1.0,
+              "popularity": 0.8,
+              "score": 1.0
+            },
+            {
+              "base_score": 0.666667,
+              "category": "electronics",
+              "category_affinity": 0.666667,
+              "id": "synthetic-camera",
+              "issue_ids": [
+                "synthetic-f1"
+              ],
+              "issue_penalty": 0.5,
+              "item_affinity": 0.666667,
+              "popularity": 0.9,
+              "score": 0.166667
+            },
+            {
+              "base_score": 0.2,
+              "category": "electronics",
+              "category_affinity": 0.666667,
+              "id": "synthetic-headphones",
+              "issue_ids": [
+                "synthetic-f1"
+              ],
+              "issue_penalty": 0.5,
+              "item_affinity": 0.0,
+              "popularity": 0.7,
+              "score": 0.0
+            }
+          ]
+        },
+        {
+          "cold_start": true,
+          "id": "synthetic-sam",
+          "recommendations": [
+            {
+              "base_score": 0.9,
+              "category": "electronics",
+              "category_affinity": 0.0,
+              "id": "synthetic-camera",
+              "issue_ids": [],
+              "issue_penalty": 0.0,
+              "item_affinity": 0.0,
+              "popularity": 0.9,
+              "score": 0.9
+            },
+            {
+              "base_score": 0.8,
+              "category": "books",
+              "category_affinity": 0.0,
+              "id": "synthetic-book",
+              "issue_ids": [],
+              "issue_penalty": 0.0,
+              "item_affinity": 0.0,
+              "popularity": 0.8,
+              "score": 0.8
+            },
+            {
+              "base_score": 0.7,
+              "category": "electronics",
+              "category_affinity": 0.0,
+              "id": "synthetic-headphones",
+              "issue_ids": [],
+              "issue_penalty": 0.0,
+              "item_affinity": 0.0,
+              "popularity": 0.7,
+              "score": 0.7
+            }
+          ]
+        }
+      ],
+      "schema_version": "1.0",
+      "sentiment": [
+        {
+          "category": "electronics",
+          "customer_id": "synthetic-alex",
+          "id": "synthetic-f1",
+          "is_issue": true,
+          "label": "negative",
+          "matches": [
+            {
+              "contribution": -1,
+              "index": 0,
+              "negated": false,
+              "token": "broken"
+            },
+            {
+              "contribution": -1,
+              "index": 2,
+              "negated": false,
+              "token": "terrible"
+            },
+            {
+              "contribution": -1,
+              "index": 4,
+              "negated": true,
+              "token": "good"
+            }
+          ],
+          "priority": 100.0,
+          "product_id": "synthetic-camera",
+          "score": -1.0,
+          "severity": "critical"
+        },
+        {
+          "category": "books",
+          "customer_id": "synthetic-sam",
+          "id": "synthetic-f2",
+          "is_issue": false,
+          "label": "positive",
+          "matches": [
+            {
+              "contribution": 1,
+              "index": 1,
+              "negated": false,
+              "token": "great"
+            },
+            {
+              "contribution": 1,
+              "index": 3,
+              "negated": false,
+              "token": "love"
+            }
+          ],
+          "priority": 0.0,
+          "product_id": "synthetic-book",
+          "score": 1.0,
+          "severity": "low"
+        }
+      ],
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t068_combo2_sentiment_behavior",
+    "artifact_sha256": {
+      "implementation.py": "86cf0e65e5427a62326cf1014ea8b88f1cc31d249dcb04293412a62f47b9cb19",
+      "test_implementation.py": "f6b5ff4df8ba8785dbac066757bf9ddea48b47fa4fd9ffaab01d4823d2f452b9",
+      "example_input.json": "8afc9ff855f5f0f068b746c1a05c22d9229a42ba7e3cb2d61b0f8c6b025e9d5a",
+      "build_manifest.json": "318ad26d148eeab2be732a8ff8a1613040a97f81aefc91e7b0be939904010d62"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

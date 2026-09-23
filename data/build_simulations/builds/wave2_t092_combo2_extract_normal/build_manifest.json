@@ -1,0 +1,64 @@
+{
+  "build_id": "wave2_t092_combo2_extract_normal",
+  "composition_label": "Structured extraction -> Normal research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Strict version=1 envelope: fixture_label string, documents[{id,text}], fields[{name,label,required}], queries[{id,text,fields}], top_k integer 1..20",
+    "output": "Input envelope plus extraction and findings arrays and status=ok",
+    "source": "{document_id,start,end,quote}; half-open Unicode character offsets into original text",
+    "extraction": "Per-document fields map to arrays of {value,source}; missing_fields includes name and required; complete reflects required fields only",
+    "findings": "Per-query query_id, expanded_from [{field,value,source}], status found/no_evidence, passages [{text,score,query_terms,field_terms,source}]",
+    "validation": "One validate function enforces each phase and verifies intermediate and final results against deterministic canonical source-grounded calculations"
+  },
+  "cross_stage_handoffs": [
+    "extract validates the input, preserves documents/schema/queries, adds extracted matches and missing reports, then validates the handoff",
+    "research accepts only validated extraction envelopes; selected extracted field values supply lexical expansion terms across the corpus",
+    "research preserves extraction provenance, cites every returned passage exactly, and validates the final envelope"
+  ],
+  "behavior": {
+    "extraction": "Case-insensitive exact label before first colon on a line; trimmed nonempty string values; all repeated matches retained",
+    "retrieval": "Nonempty trimmed lines; Unicode casefolded word tokens; score=2*distinct query overlap + distinct extracted-value overlap; positive scores only",
+    "ordering": "Descending score, then input document order, then source start offset",
+    "missing_fields": "Missing required fields mark that document incomplete but do not stop research; optional missing fields also reported",
+    "errors": "Invalid schema, malformed/duplicate-key/nonfinite JSON, read and decode failures return one status=error JSON object and exit 2",
+    "limits": "100 documents, 100000 characters per document, 1000000 total characters, 50 fields, 30 queries, top_k up to 20",
+    "ancillary_file": "docs\\My_prompt.txt is the mandatory prompt audit log, separate from the four deliverables"
+  },
+  "scope": {
+    "included": [
+      "Synthetic offline fixtures",
+      "Integrated deterministic extraction and cited lexical retrieval",
+      "Exact source spans, required/optional missing-field reporting",
+      "Shared validation, CLI JSON errors and unittest coverage"
+    ],
+    "excluded": [
+      "Live models, injected model hooks, networks and third-party packages",
+      "OCR, PDF parsing, typed value coercion and semantic extraction",
+      "Generated summaries, truth verification, enterprise indexing and deployment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 17,
+    "cli_example": "passed: one JSON object with status=ok, exit 0",
+    "error_cli": "passed: missing file and usage errors return status=error, exit 2"
+  }
+}

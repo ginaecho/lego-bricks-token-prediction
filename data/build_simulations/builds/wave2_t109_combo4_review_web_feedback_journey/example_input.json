@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "requirements": [
+    {"id": "r-access", "description": "Synthetic access guidance", "terms": ["access guide"]},
+    {"id": "r-export", "description": "Synthetic export instructions", "terms": ["export"]},
+    {"id": "r-retention", "description": "Synthetic retention guidance", "terms": ["retention"]}
+  ],
+  "documents": [
+    {"id": "doc-1", "text": "SYNTHETIC handbook: the access guide describes signing in."}
+  ],
+  "allowlisted_hosts": ["guides.example.org"],
+  "sources": [
+    {
+      "id": "source-export",
+      "url": "https://guides.example.org/export",
+      "title": "Synthetic export snapshot",
+      "retrieved_at": "2026-09-23T10:00:00Z",
+      "body": "SYNTHETIC reference: export requires a configured workspace, then an export request.",
+      "requirement_ids": ["r-export"]
+    },
+    {
+      "id": "source-retention",
+      "url": "https://guides.example.org/retention",
+      "title": "Synthetic retention snapshot",
+      "retrieved_at": "2026-09-23T10:01:00Z",
+      "body": "SYNTHETIC reference: retention settings should be documented and reviewed.",
+      "requirement_ids": ["r-retention"]
+    }
+  ],
+  "feedback": [
+    {"id": "fb-1", "text": "SYNTHETIC: I need export instructions.", "requirement_ids": ["r-export"]},
+    {"id": "fb-2", "text": "  synthetic: I NEED export instructions. ", "requirement_ids": ["r-export"]},
+    {"id": "fb-3", "text": "SYNTHETIC: Export setup is unclear.", "requirement_ids": ["r-export"]},
+    {"id": "fb-4", "text": "SYNTHETIC: Please explain retention.", "requirement_ids": ["r-retention"]}
+  ],
+  "actions": [
+    {"id": "a-setup", "title": "Prepare synthetic export workspace", "requirement_ids": ["r-export"], "prerequisites": []},
+    {"id": "b-export", "title": "Draft and test synthetic export instructions", "requirement_ids": ["r-export"], "prerequisites": ["a-setup"]},
+    {"id": "c-retention", "title": "Draft synthetic retention guidance", "requirement_ids": ["r-retention"], "prerequisites": []}
+  ],
+  "completed_actions": []
+}

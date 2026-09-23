@@ -1,0 +1,678 @@
+{
+  "id": "wave2_t056_combo4_triage_web_feedback_behavior",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "support",
+      "research",
+      "insights",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "AI customer support",
+      "Research",
+      "Customer insights",
+      "Personalized discovery"
+    ],
+    "types": [
+      "triage",
+      "web",
+      "feedback",
+      "behavior"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 1,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 5,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Allowlisted URL ingestion, retrieval and provenance-preserving findings.",
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling."
+  ],
+  "integration": {
+    "ordered_types": [
+      "triage",
+      "web",
+      "feedback",
+      "behavior"
+    ],
+    "edges": [
+      {
+        "from": "triage",
+        "to": "web",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "web",
+        "to": "feedback",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "feedback",
+        "to": "behavior",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "347ae9e80f4266830221dd3ba1f1996c86236066c6e314320d1eb60e67d1ae3b",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "5e058cde249e3cd26a3cd726ea8a556df8a36764952c1ffaa739d9dd109f289b",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t056_combo4_triage_web_feedback_behavior",
+  "membership_point_id": "combo4_triage_web_feedback_behavior",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "f3feed207d9235982e13b85a1ca0818c38fd44476a94a6135e785b552c707bee",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "93b51152-5558-4534-b391-6725f7727951",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 137493,
+    "output_tokens": 11773,
+    "cache_read_tokens": 108735,
+    "cache_write_tokens": 28740,
+    "total_tokens": 149266,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34344,
+        "agent_id": "93b51152-5558-4534-b391-6725f7727951",
+        "model": "gpt-6-astra",
+        "input_tokens": 14867,
+        "output_tokens": 152,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 14864,
+        "reasoning_tokens": 0,
+        "duration_ms": 3041,
+        "created_at": "2026-09-23T10:11:10.238Z"
+      },
+      {
+        "id": 34358,
+        "agent_id": "93b51152-5558-4534-b391-6725f7727951",
+        "model": "gpt-6-astra",
+        "input_tokens": 15045,
+        "output_tokens": 8960,
+        "cache_read_tokens": 14864,
+        "cache_write_tokens": 178,
+        "reasoning_tokens": 223,
+        "duration_ms": 88434,
+        "created_at": "2026-09-23T10:12:39.791Z"
+      },
+      {
+        "id": 34361,
+        "agent_id": "93b51152-5558-4534-b391-6725f7727951",
+        "model": "gpt-6-astra",
+        "input_tokens": 24249,
+        "output_tokens": 161,
+        "cache_read_tokens": 15042,
+        "cache_write_tokens": 9204,
+        "reasoning_tokens": 8,
+        "duration_ms": 2818,
+        "created_at": "2026-09-23T10:12:42.667Z"
+      },
+      {
+        "id": 34365,
+        "agent_id": "93b51152-5558-4534-b391-6725f7727951",
+        "model": "gpt-6-astra",
+        "input_tokens": 26224,
+        "output_tokens": 2049,
+        "cache_read_tokens": 24246,
+        "cache_write_tokens": 1975,
+        "reasoning_tokens": 93,
+        "duration_ms": 26184,
+        "created_at": "2026-09-23T10:13:11.308Z"
+      },
+      {
+        "id": 34366,
+        "agent_id": "93b51152-5558-4534-b391-6725f7727951",
+        "model": "gpt-6-astra",
+        "input_tokens": 28365,
+        "output_tokens": 336,
+        "cache_read_tokens": 26221,
+        "cache_write_tokens": 2141,
+        "reasoning_tokens": 14,
+        "duration_ms": 4292,
+        "created_at": "2026-09-23T10:13:15.657Z"
+      },
+      {
+        "id": 34367,
+        "agent_id": "93b51152-5558-4534-b391-6725f7727951",
+        "model": "gpt-6-astra",
+        "input_tokens": 28743,
+        "output_tokens": 115,
+        "cache_read_tokens": 28362,
+        "cache_write_tokens": 378,
+        "reasoning_tokens": 0,
+        "duration_ms": 2674,
+        "created_at": "2026-09-23T10:13:19.468Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5203275,
+      "observed_cache_profile_estimate_usd": 0.27567375,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.243930000000001,
+      "observed_cache_profile_estimate_usd": 6.243930000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 3,
+      "roi_satisfaction": 3,
+      "future_impact_potential": 4,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.53,
+    "pseudo_annual_cost_usd": 70000,
+    "pseudo_annual_ai_value_usd": 115000,
+    "pseudo_net_impact_usd": 45000,
+    "pseudo_roi_pct": 64.28571428571429,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................................\n----------------------------------------------------------------------\nRan 33 tests in 0.667s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "behavior": {
+          "catalog": [
+            {
+              "id": "billing-guide",
+              "popularity": 10,
+              "themes": [
+                "billing"
+              ],
+              "title": "Synthetic billing guide"
+            },
+            {
+              "id": "delivery-guide",
+              "popularity": 5,
+              "themes": [
+                "shipping"
+              ],
+              "title": "Synthetic parcel guide"
+            },
+            {
+              "id": "welcome-guide",
+              "popularity": 20,
+              "themes": [
+                "general"
+              ],
+              "title": "Synthetic welcome guide"
+            }
+          ],
+          "events": [
+            {
+              "at": "2026-09-16T10:00:00Z",
+              "id": "e1",
+              "item_id": "billing-guide",
+              "kind": "browse",
+              "user_id": "synthetic-user"
+            },
+            {
+              "at": "2026-09-23T10:00:00Z",
+              "id": "e2",
+              "item_id": "delivery-guide",
+              "kind": "purchase",
+              "user_id": "synthetic-user"
+            },
+            {
+              "at": "2026-09-23T10:00:00Z",
+              "id": "e3",
+              "item_id": "welcome-guide",
+              "kind": "purchase",
+              "user_id": "another-synthetic-user"
+            }
+          ],
+          "half_life_days": 7,
+          "limit": 3,
+          "now": "2026-09-23T10:00:00Z",
+          "user_id": "synthetic-user"
+        },
+        "feedback": [
+          {
+            "id": "f1",
+            "text": "Refund updates are unclear.",
+            "ticket_id": "t1"
+          },
+          {
+            "id": "f2",
+            "text": "REFUND updates are unclear!",
+            "ticket_id": "t1"
+          },
+          {
+            "id": "f3",
+            "text": "Please improve these updates.",
+            "ticket_id": "t2"
+          }
+        ],
+        "schema_version": "1.0",
+        "synthetic": true,
+        "tickets": [
+          {
+            "id": "t1",
+            "text": "Urgent refund request for a duplicate invoice",
+            "urls": [
+              "https://help.example.test/refunds#policy"
+            ]
+          },
+          {
+            "id": "t2",
+            "text": "My parcel delivery is late",
+            "urls": [
+              "https://help.example.test/delivery",
+              "https://untrusted.example.test/tracking"
+            ]
+          },
+          {
+            "id": "t3",
+            "text": "A general question",
+            "urls": [
+              "https://help.example.test/missing"
+            ]
+          }
+        ],
+        "triage_config": {
+          "categories": [
+            {
+              "keywords": [
+                "refund",
+                "invoice"
+              ],
+              "name": "billing",
+              "owner": "billing-team",
+              "priority": "normal"
+            },
+            {
+              "keywords": [
+                "parcel",
+                "delivery"
+              ],
+              "name": "shipping",
+              "owner": "delivery-team",
+              "priority": "normal"
+            },
+            {
+              "keywords": [],
+              "name": "general",
+              "owner": "support-team",
+              "priority": "low"
+            }
+          ],
+          "default_category": "general",
+          "urgent_keywords": [
+            "urgent",
+            "fraud"
+          ]
+        },
+        "web_config": {
+          "allowed_hosts": [
+            "help.example.test"
+          ],
+          "max_excerpt_chars": 100,
+          "snapshots": [
+            {
+              "content": "Synthetic policy: a duplicate invoice is reviewed by the billing team. Refund updates arrive by email.",
+              "retrieved_at": "2026-09-20T10:00:00Z",
+              "title": "Synthetic refund guide",
+              "url": "https://help.example.test/refunds"
+            },
+            {
+              "content": "Synthetic policy: parcel delivery updates include tracking and an estimated arrival date.",
+              "retrieved_at": "2026-09-21T10:00:00Z",
+              "title": "Synthetic delivery guide",
+              "url": "https://help.example.test/delivery"
+            }
+          ]
+        }
+      },
+      "results": {
+        "behavior": {
+          "cold_start": false,
+          "rankings": [
+            {
+              "event_ids": [
+                "e2"
+              ],
+              "event_score": 3.0,
+              "feedback_group_ids": [
+                "f3"
+              ],
+              "feedback_score": 1,
+              "finding_ids": [
+                "finding-2"
+              ],
+              "item_id": "delivery-guide",
+              "popularity_score": 0.1791759469228055,
+              "score": 4.179175946922806,
+              "themes": [
+                "shipping"
+              ]
+            },
+            {
+              "event_ids": [
+                "e1"
+              ],
+              "event_score": 0.5,
+              "feedback_group_ids": [
+                "f1"
+              ],
+              "feedback_score": 1,
+              "finding_ids": [
+                "finding-1"
+              ],
+              "item_id": "billing-guide",
+              "popularity_score": 0.23978952727983707,
+              "score": 1.7397895272798372,
+              "themes": [
+                "billing"
+              ]
+            },
+            {
+              "event_ids": [],
+              "event_score": 0,
+              "feedback_group_ids": [],
+              "feedback_score": 0,
+              "finding_ids": [],
+              "item_id": "welcome-guide",
+              "popularity_score": 0.3044522437723423,
+              "score": 0.3044522437723423,
+              "themes": []
+            }
+          ],
+          "strategy": "recency_feedback_popularity",
+          "user_id": "synthetic-user"
+        },
+        "feedback": {
+          "groups": [
+            {
+              "finding_ids": [
+                "finding-1"
+              ],
+              "id": "f1",
+              "record_ids": [
+                "f1",
+                "f2"
+              ],
+              "support": [
+                {
+                  "end": 27,
+                  "excerpt": "Refund updates are unclear.",
+                  "feedback_id": "f1",
+                  "start": 0,
+                  "ticket_id": "t1"
+                },
+                {
+                  "end": 27,
+                  "excerpt": "REFUND updates are unclear!",
+                  "feedback_id": "f2",
+                  "start": 0,
+                  "ticket_id": "t1"
+                }
+              ],
+              "themes": [
+                "billing"
+              ],
+              "ticket_ids": [
+                "t1"
+              ]
+            },
+            {
+              "finding_ids": [
+                "finding-2"
+              ],
+              "id": "f3",
+              "record_ids": [
+                "f3"
+              ],
+              "support": [
+                {
+                  "end": 29,
+                  "excerpt": "Please improve these updates.",
+                  "feedback_id": "f3",
+                  "start": 0,
+                  "ticket_id": "t2"
+                }
+              ],
+              "themes": [
+                "shipping"
+              ],
+              "ticket_ids": [
+                "t2"
+              ]
+            }
+          ],
+          "themes": [
+            {
+              "count": 1,
+              "feedback_group_ids": [
+                "f1"
+              ],
+              "finding_ids": [
+                "finding-1"
+              ],
+              "name": "billing"
+            },
+            {
+              "count": 1,
+              "feedback_group_ids": [
+                "f3"
+              ],
+              "finding_ids": [
+                "finding-2"
+              ],
+              "name": "shipping"
+            }
+          ]
+        },
+        "triage": {
+          "tickets": [
+            {
+              "category": "billing",
+              "matched_keywords": [
+                "refund",
+                "invoice"
+              ],
+              "owner": "billing-team",
+              "priority": "high",
+              "ticket_id": "t1",
+              "urgent": true,
+              "urls": [
+                "https://help.example.test/refunds"
+              ]
+            },
+            {
+              "category": "shipping",
+              "matched_keywords": [
+                "parcel",
+                "delivery"
+              ],
+              "owner": "delivery-team",
+              "priority": "normal",
+              "ticket_id": "t2",
+              "urgent": false,
+              "urls": [
+                "https://help.example.test/delivery",
+                "https://untrusted.example.test/tracking"
+              ]
+            },
+            {
+              "category": "general",
+              "matched_keywords": [],
+              "owner": "support-team",
+              "priority": "low",
+              "ticket_id": "t3",
+              "urgent": false,
+              "urls": [
+                "https://help.example.test/missing"
+              ]
+            }
+          ]
+        },
+        "web": {
+          "findings": [
+            {
+              "category": "billing",
+              "end": 100,
+              "excerpt": "Synthetic policy: a duplicate invoice is reviewed by the billing team. Refund updates arrive by emai",
+              "id": "finding-1",
+              "owner": "billing-team",
+              "priority": "high",
+              "retrieved_at": "2026-09-20T10:00:00Z",
+              "start": 0,
+              "ticket_id": "t1",
+              "title": "Synthetic refund guide",
+              "url": "https://help.example.test/refunds"
+            },
+            {
+              "category": "shipping",
+              "end": 89,
+              "excerpt": "Synthetic policy: parcel delivery updates include tracking and an estimated arrival date.",
+              "id": "finding-2",
+              "owner": "delivery-team",
+              "priority": "normal",
+              "retrieved_at": "2026-09-21T10:00:00Z",
+              "start": 0,
+              "ticket_id": "t2",
+              "title": "Synthetic delivery guide",
+              "url": "https://help.example.test/delivery"
+            }
+          ],
+          "unresolved": [
+            {
+              "reason": "host_not_allowlisted",
+              "ticket_id": "t2",
+              "url": "https://untrusted.example.test/tracking"
+            },
+            {
+              "reason": "snapshot_not_found",
+              "ticket_id": "t3",
+              "url": "https://help.example.test/missing"
+            }
+          ]
+        }
+      },
+      "schema_version": "1.0",
+      "stage": "behavior",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t056_combo4_triage_web_feedback_behavior",
+    "artifact_sha256": {
+      "implementation.py": "13573d2553750d33d373f7450ef47d26ebf3d3754380f18924c470e06ce0d11a",
+      "test_implementation.py": "6a0cbff215f97442e5a314fbadd4be46202731bd8c05edcead4c9a02237e008f",
+      "example_input.json": "043261b9b1e05a75c5107618728553c5209fed5883480d66a429431d459d3dee",
+      "build_manifest.json": "b729db3fdde33200b54404c90f4bdfd367509df5ea5a8ae643373a0bec489e32"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

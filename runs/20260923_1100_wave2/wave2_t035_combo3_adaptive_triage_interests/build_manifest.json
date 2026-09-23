@@ -1,0 +1,62 @@
+{
+  "build_id": "wave2_t035_combo3_adaptive_triage_interests",
+  "composition_label": "Adaptive onboarding -> Ticket triage & routing -> Interest-based recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New reference implementation authored directly in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope": "schema_version=1, synthetic=true, status=ok, stage, request; stages successively add onboarding, triage, recommendations",
+    "request": "profile, tickets, routing, catalog, limit; all fields required and unknown fields rejected",
+    "profile": "experience: beginner|intermediate|expert; presentation: guided|concise; interests: tag -> integer 1..5; excluded_tags: unique text list; completed_steps: prerequisite-closed step ID list",
+    "tickets": "Unique id, nonblank text, status open|resolved",
+    "routing": "default_category, default_owner, default_priority, onboarding_owner, ordered rules",
+    "rule": "Unique id, nonempty unique keywords, category, priority low|normal|high|urgent, owner, prerequisites, avoid_tags",
+    "catalog": "Unique id, title, nonempty unique tags",
+    "limit": "Integer 0..100; booleans not accepted as integers",
+    "validation": "validate_state is the common boundary; request schema plus deterministic semantic equality validates every existing stage; malformed JSON, duplicate JSON keys and non-finite constants rejected",
+    "errors": "CLI prints one JSON object with status error and exits 2 on validation, decoding, usage or file errors"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "adaptive",
+      "to": "triage",
+      "fields": ["completed_steps", "interests", "excluded_tags"],
+      "effect": "Verified completion, never planned completion, determines missing routing prerequisites and accountable onboarding owner"
+    },
+    {
+      "from": "triage",
+      "to": "interests",
+      "fields": ["interests", "excluded_tags", "suppressed_tags"],
+      "effect": "Preferences drive scores; union of user exclusions and all matched open-ticket rule restrictions filters catalog items, retaining ticket provenance"
+    }
+  ],
+  "behavior": {
+    "onboarding": "Beginner targets basics, privacy, workspace; intermediate/expert also target automation. Completed prerequisite-closed steps are skipped. Presentation selects concise or guided explanations. Available-now differs from merely ordered prerequisites.",
+    "triage": "Case-insensitive literal substring matching. Highest priority wins; configuration order breaks ties. Missing prerequisites on open tickets assign onboarding_owner, preserving category_owner. Resolved tickets neither reroute to onboarding nor suppress recommendations.",
+    "recommendations": "Tags are exact case-sensitive identifiers. Sum matching user weights, enforce exclusions before ranking, omit zero-match items, sort descending score then ascending ID, apply limit. Explanations expose exact score contributions and excluded-tag/ticket provenance.",
+    "determinism": "No randomness, clock-based behavior, live providers, mutable input updates or external state"
+  },
+  "scope": {
+    "included": ["Synthetic fixtures", "Integrated sequential pipeline", "Shared strict schema and validation", "Configurable routing and priorities", "Prerequisite-aware onboarding", "Grounded ranking explanations", "CLI and unittest coverage"],
+    "excluded": ["Live AI/LLM calls", "External integrations", "Persistence", "Authentication", "Enterprise delivery", "Automatic ticket resolution", "Implicit completion from experience", "Fuzzy or semantic classification"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 21,
+    "unittest_result": "21 tests passed; exit 0",
+    "cli_example": "Passed: one JSON object, status ok, final stage interests, exit 0",
+    "coverage": ["All three stages", "Both cross-stage handoffs", "Prerequisite closure", "Experience and presentation adaptation", "Configurable priority tie-breaking", "Accountable routing", "Exclusion provenance", "Resolved ticket behavior", "Determinism", "Input immutability", "Empty and zero-limit cases", "Invalid inputs", "Tampered handoffs", "CLI success, usage, file and malformed JSON errors"]
+  }
+}

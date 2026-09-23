@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "feedback": [
+    {"id": "f1", "text": "I need help with account verification."},
+    {"id": "f2", "text": "  i need help with ACCOUNT verification!  "},
+    {"id": "f3", "text": "How can I enable inventory synchronization?"},
+    {"id": "f4", "text": "Please add teleportation."},
+    {"id": "f5", "text": "Lovely colors!"}
+  ],
+  "themes": [
+    {"id": "account", "keywords": ["verification"], "question": "How do I complete account verification?"},
+    {"id": "inventory", "keywords": ["inventory", "synchronization"], "question": "How do I enable inventory synchronization?"},
+    {"id": "future", "keywords": ["teleportation"], "question": "How do I enable teleportation?"}
+  ],
+  "knowledge": [
+    {"id": "kb-account", "title": "Synthetic account FAQ", "text": "Complete account verification using the confirmation link."},
+    {"id": "kb-inventory", "title": "Synthetic inventory FAQ", "text": "Enable inventory synchronization in the connector settings."}
+  ],
+  "steps": [
+    {"id": "verify", "title": "Account verification", "topic": "account", "requires": [], "instructions": "Open the confirmation link."},
+    {"id": "sync", "title": "Inventory synchronization", "topic": "inventory", "requires": ["verify"], "instructions": "Review connector settings."},
+    {"id": "future-step", "title": "Teleportation", "topic": "future", "requires": [], "instructions": "Wait for documented support."}
+  ],
+  "completed_steps": ["verify"],
+  "research_sources": [
+    {"id": "research-account", "title": "Synthetic account study", "text": "Account verification confirms ownership. Confirmation links expire after one hour."},
+    {"id": "research-inventory", "title": "Synthetic connector study", "text": "Inventory synchronization updates stock through connector settings. Review changes before enabling scheduled updates."}
+  ]
+}

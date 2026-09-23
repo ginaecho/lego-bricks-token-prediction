@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "query": "recycled trail backpack",
+  "now": "2026-09-23T10:00:00Z",
+  "limit": 5,
+  "half_life_days": 30,
+  "allowlisted_hosts": ["research.example"],
+  "products": [
+    {
+      "id": "pack-a",
+      "title": "Synthetic Recycled Trail Backpack",
+      "description": "A lightweight trail backpack for short walks.",
+      "tags": ["recycled", "outdoors"],
+      "source_urls": ["https://research.example/pack-a"]
+    },
+    {
+      "id": "pack-b",
+      "title": "Synthetic Trail Backpack",
+      "description": "A durable backpack for trails.",
+      "tags": ["outdoors"],
+      "source_urls": ["https://research.example/pack-b", "https://research.example/missing"]
+    },
+    {
+      "id": "mug-c",
+      "title": "Synthetic Ceramic Mug",
+      "description": "A kitchen cup.",
+      "tags": ["kitchen"],
+      "source_urls": []
+    }
+  ],
+  "documents": [
+    {"url": "https://research.example/pack-a", "text": "Synthetic fixture only. This backpack uses recycled fabric. A repair guide is included."},
+    {"url": "https://research.example/pack-b", "text": "Synthetic fixture only. This backpack uses durable fabric."}
+  ],
+  "requirements": [
+    {"id": "material", "text": "Find evidence of recycled fabric.", "keywords": ["recycled", "fabric"], "min_sources": 1},
+    {"id": "repair", "text": "Find evidence of a repair guide.", "keywords": ["repair", "guide"], "min_sources": 1}
+  ],
+  "events": [
+    {"product_id": "pack-b", "kind": "purchase", "timestamp": "2026-09-22T10:00:00Z"},
+    {"product_id": "pack-a", "kind": "browse", "timestamp": "2026-08-01T10:00:00Z"}
+  ]
+}

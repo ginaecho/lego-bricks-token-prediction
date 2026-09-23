@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "profile": {
+    "experience": "novice",
+    "focus_terms": ["battery", "portable"],
+    "completed_prerequisites": ["search_basics", "source_verification"],
+    "explanation_detail": "detailed"
+  },
+  "query": "solar lantern",
+  "documents": [
+    {
+      "id": "catalog",
+      "title": "SYNTHETIC solar lantern catalog",
+      "text": "Synthetic fixture, not real product claims.\nPortable solar lantern with battery.\nProduct: Luma Sample\nBattery hours: 12\nPrice USD: 29.5\nWaterproof: yes\nReviewed: 2026-09-01\n"
+    },
+    {
+      "id": "lab",
+      "title": "SYNTHETIC solar lantern lab note",
+      "text": "Synthetic fixture, not real lab results.\nPortable solar lantern battery test.\nProduct: Luma Sample\nBattery hours: 9\nWaterproof: no\nReviewed: 2026-09-03\n"
+    },
+    {
+      "id": "unrelated",
+      "title": "SYNTHETIC ceramic bowl",
+      "text": "Synthetic fixture.\nProduct: Ceramic Sample\nPrice USD: 8\n"
+    }
+  ],
+  "fields": [
+    {"name": "product", "aliases": ["Product"], "type": "string", "required": true},
+    {"name": "battery_hours", "aliases": ["Battery hours", "Runtime hours"], "type": "number", "required": true},
+    {"name": "price_usd", "aliases": ["Price USD"], "type": "number", "required": true},
+    {"name": "waterproof", "aliases": ["Waterproof"], "type": "boolean", "required": false},
+    {"name": "reviewed", "aliases": ["Reviewed"], "type": "date", "required": false}
+  ],
+  "options": {"top_k": 3, "min_score": 0.05}
+}

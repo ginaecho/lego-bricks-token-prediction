@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "prerequisites": {"account_verified": true, "billing_enabled": false},
+  "steps": [
+    {"id": "account", "title": "Synthetic account setup", "prerequisites": ["account_verified"], "depends_on": [], "completed": true},
+    {"id": "catalog", "title": "Synthetic catalog import", "prerequisites": [], "depends_on": ["account"], "completed": true},
+    {"id": "checkout", "title": "Synthetic checkout activation", "prerequisites": ["billing_enabled"], "depends_on": ["catalog"], "completed": false},
+    {"id": "tutorial", "title": "Synthetic optional tutorial", "prerequisites": [], "depends_on": ["account"], "completed": false}
+  ],
+  "feedback": [
+    {"id": "f1", "step_id": "catalog", "topic": "import reliability", "text": "The synthetic import is broken and slow, not good.", "severity": "high"},
+    {"id": "f2", "step_id": "account", "topic": "account guidance", "text": "The synthetic account guide is easy and helpful.", "severity": "low"},
+    {"id": "f3", "step_id": "catalog", "topic": "import reliability", "text": "The synthetic recovery is good.", "severity": "critical"}
+  ],
+  "documents": [
+    {"id": "doc1", "title": "Synthetic lab report A", "claims": [
+      {"topic": "import reliability", "position": "support", "evidence": "Synthetic trial A observed successful recovery in all three attempts."},
+      {"topic": "account guidance", "position": "support", "evidence": "Synthetic participants completed account setup using the guide."}
+    ]},
+    {"id": "doc2", "title": "Synthetic lab report B", "claims": [
+      {"topic": "import reliability", "position": "oppose", "evidence": "Synthetic trial B observed failed recovery after interrupted uploads."}
+    ]},
+    {"id": "doc3", "title": "Synthetic unrelated report", "claims": [
+      {"topic": "warehouse routing", "position": "neutral", "evidence": "Synthetic routing scenarios were not evaluated."}
+    ]}
+  ],
+  "research_questions": [
+    {"id": "q1", "topic": "import reliability", "question": "Which synthetic interruption conditions explain the conflicting recovery results?"}
+  ]
+}

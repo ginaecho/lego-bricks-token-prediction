@@ -1,0 +1,505 @@
+{
+  "id": "wave2_t039_combo3_normal_compare_feedback",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "research",
+      "search",
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Research",
+      "Smart product search",
+      "Customer insights"
+    ],
+    "types": [
+      "normal",
+      "compare",
+      "feedback"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 5,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Passage retrieval and extractive findings with exact source citations.",
+    "Attribute normalization, side-by-side comparison and preference ranking.",
+    "Feedback deduplication, themes and traceable supporting excerpts."
+  ],
+  "integration": {
+    "ordered_types": [
+      "normal",
+      "compare",
+      "feedback"
+    ],
+    "edges": [
+      {
+        "from": "normal",
+        "to": "compare",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "compare",
+        "to": "feedback",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "962d1d92edf900a58f36ce1d4c71bb335aa1756bbc5cb7a805fca7519b4a25f5",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "752f426f84835d4ac75fe64f2260fced7f4a7774a022dc34b8f516a92969bd84",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t039_combo3_normal_compare_feedback",
+  "membership_point_id": "combo3_normal_compare_feedback",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "be356855b4b071214fb9a88317b6dda9d39586c248acefc1a87a18066445bd09",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 8,
+    "input_tokens": 201182,
+    "output_tokens": 13602,
+    "cache_read_tokens": 184944,
+    "cache_write_tokens": 16214,
+    "total_tokens": 214784,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34188,
+        "agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+        "model": "gpt-6-astra",
+        "input_tokens": 14830,
+        "output_tokens": 154,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 793,
+        "reasoning_tokens": 0,
+        "duration_ms": 4961,
+        "created_at": "2026-09-23T09:56:43.949Z"
+      },
+      {
+        "id": 34218,
+        "agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+        "model": "gpt-6-astra",
+        "input_tokens": 15010,
+        "output_tokens": 10893,
+        "cache_read_tokens": 14827,
+        "cache_write_tokens": 180,
+        "reasoning_tokens": 996,
+        "duration_ms": 179105,
+        "created_at": "2026-09-23T09:59:43.977Z"
+      },
+      {
+        "id": 34222,
+        "agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+        "model": "gpt-6-astra",
+        "input_tokens": 26291,
+        "output_tokens": 462,
+        "cache_read_tokens": 15007,
+        "cache_write_tokens": 11281,
+        "reasoning_tokens": 308,
+        "duration_ms": 13205,
+        "created_at": "2026-09-23T09:59:57.308Z"
+      },
+      {
+        "id": 34228,
+        "agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+        "model": "gpt-6-astra",
+        "input_tokens": 26958,
+        "output_tokens": 1169,
+        "cache_read_tokens": 26288,
+        "cache_write_tokens": 667,
+        "reasoning_tokens": 283,
+        "duration_ms": 21728,
+        "created_at": "2026-09-23T10:00:22.246Z"
+      },
+      {
+        "id": 34229,
+        "agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+        "model": "gpt-6-astra",
+        "input_tokens": 28365,
+        "output_tokens": 152,
+        "cache_read_tokens": 26955,
+        "cache_write_tokens": 1407,
+        "reasoning_tokens": 0,
+        "duration_ms": 3596,
+        "created_at": "2026-09-23T10:00:24.605Z"
+      },
+      {
+        "id": 34230,
+        "agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+        "model": "gpt-6-astra",
+        "input_tokens": 29442,
+        "output_tokens": 503,
+        "cache_read_tokens": 28362,
+        "cache_write_tokens": 1077,
+        "reasoning_tokens": 105,
+        "duration_ms": 11514,
+        "created_at": "2026-09-23T10:00:38.102Z"
+      },
+      {
+        "id": 34231,
+        "agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+        "model": "gpt-6-astra",
+        "input_tokens": 30035,
+        "output_tokens": 182,
+        "cache_read_tokens": 29439,
+        "cache_write_tokens": 593,
+        "reasoning_tokens": 0,
+        "duration_ms": 4799,
+        "created_at": "2026-09-23T10:00:42.973Z"
+      },
+      {
+        "id": 34234,
+        "agent_id": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+        "model": "gpt-6-astra",
+        "input_tokens": 30251,
+        "output_tokens": 87,
+        "cache_read_tokens": 30032,
+        "cache_write_tokens": 216,
+        "reasoning_tokens": 0,
+        "duration_ms": 3447,
+        "created_at": "2026-09-23T10:00:50.231Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.706985,
+      "observed_cache_profile_estimate_usd": 0.290861,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 8.48382,
+      "observed_cache_profile_estimate_usd": 8.48382,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 5,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 0,
+      "delivery_quality": 3
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.74,
+    "pseudo_annual_cost_usd": 85000,
+    "pseudo_annual_ai_value_usd": 45000,
+    "pseudo_net_impact_usd": -40000,
+    "pseudo_roi_pct": -47.05882352941177,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................................\n----------------------------------------------------------------------\nRan 34 tests in 0.599s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "comparison": {
+        "columns": [
+          "price_usd",
+          "weight_g",
+          "battery_hours"
+        ],
+        "ranking": [
+          {
+            "product_id": "aero",
+            "rank": 1,
+            "score": 0.66666667,
+            "utilities": {
+              "battery_hours": 1.0,
+              "price_usd": 0.0,
+              "weight_g": 1.0
+            }
+          },
+          {
+            "product_id": "breeze",
+            "rank": 2,
+            "score": 0.33333333,
+            "utilities": {
+              "battery_hours": 0.0,
+              "price_usd": 1.0,
+              "weight_g": 0.0
+            }
+          }
+        ],
+        "rows": [
+          {
+            "attributes": {
+              "battery_hours": 10.0,
+              "price_usd": 120.0,
+              "weight_g": 800.0
+            },
+            "finding_ids": [
+              "source-a:0"
+            ],
+            "id": "aero",
+            "name": "SYNTHETIC Aero"
+          },
+          {
+            "attributes": {
+              "battery_hours": 8.0,
+              "price_usd": 100.0,
+              "weight_g": 1000.0
+            },
+            "finding_ids": [
+              "source-b:0"
+            ],
+            "id": "breeze",
+            "name": "SYNTHETIC Breeze"
+          }
+        ]
+      },
+      "feedback": {
+        "duplicate_count": 1,
+        "selected_product_ids": [
+          "aero",
+          "breeze"
+        ],
+        "themes": [
+          {
+            "count": 2,
+            "supporting_excerpts": [
+              {
+                "comparison_rank": 1,
+                "duplicate_ids": [
+                  "f2"
+                ],
+                "feedback_id": "f1",
+                "product_id": "aero",
+                "text": "Great battery, easy setup!"
+              },
+              {
+                "comparison_rank": 2,
+                "duplicate_ids": [],
+                "feedback_id": "f4",
+                "product_id": "breeze",
+                "text": "Battery charge is reliable."
+              }
+            ],
+            "theme": "battery"
+          },
+          {
+            "count": 1,
+            "supporting_excerpts": [
+              {
+                "comparison_rank": 1,
+                "duplicate_ids": [],
+                "feedback_id": "f6",
+                "product_id": "aero",
+                "text": "Lovely color."
+              }
+            ],
+            "theme": "other"
+          },
+          {
+            "count": 1,
+            "supporting_excerpts": [
+              {
+                "comparison_rank": 2,
+                "duplicate_ids": [],
+                "feedback_id": "f3",
+                "product_id": "breeze",
+                "text": "Affordable price but heavy."
+              }
+            ],
+            "theme": "price"
+          },
+          {
+            "count": 1,
+            "supporting_excerpts": [
+              {
+                "comparison_rank": 2,
+                "duplicate_ids": [],
+                "feedback_id": "f4",
+                "product_id": "breeze",
+                "text": "Battery charge is reliable."
+              }
+            ],
+            "theme": "reliability"
+          },
+          {
+            "count": 1,
+            "supporting_excerpts": [
+              {
+                "comparison_rank": 1,
+                "duplicate_ids": [
+                  "f2"
+                ],
+                "feedback_id": "f1",
+                "product_id": "aero",
+                "text": "Great battery, easy setup!"
+              }
+            ],
+            "theme": "usability"
+          },
+          {
+            "count": 1,
+            "supporting_excerpts": [
+              {
+                "comparison_rank": 2,
+                "duplicate_ids": [],
+                "feedback_id": "f3",
+                "product_id": "breeze",
+                "text": "Affordable price but heavy."
+              }
+            ],
+            "theme": "weight"
+          }
+        ],
+        "unique_feedback_count": 4
+      },
+      "research": {
+        "findings": [
+          {
+            "citation": {
+              "end": 49,
+              "quote": "The Aero is portable with a long battery runtime.",
+              "source_id": "source-a",
+              "start": 0,
+              "title": "SYNTHETIC: Aero product sheet"
+            },
+            "id": "source-a:0",
+            "matched_terms": [
+              "battery",
+              "portable"
+            ],
+            "text": "The Aero is portable with a long battery runtime."
+          },
+          {
+            "citation": {
+              "end": 57,
+              "quote": "Breeze offers a portable design and rechargeable battery.",
+              "source_id": "source-b",
+              "start": 0,
+              "title": "SYNTHETIC: Breeze product sheet"
+            },
+            "id": "source-b:0",
+            "matched_terms": [
+              "battery",
+              "portable"
+            ],
+            "text": "Breeze offers a portable design and rechargeable battery."
+          }
+        ],
+        "product_ids": [
+          "aero",
+          "breeze"
+        ]
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t039_combo3_normal_compare_feedback",
+    "artifact_sha256": {
+      "implementation.py": "f2f46263f2d2ce2b4bc1b23c448007df946dfe458c35e3e6310239b39002e49a",
+      "test_implementation.py": "4c1afee9e6a1aee6698826b18fc7d0afb69d3f3d8a8937cf67531b79518945d7",
+      "example_input.json": "b0bfd8044bd29b88a5ee7ef35a21953b3ca2e241d4f0048c9b19f51b3186e377",
+      "build_manifest.json": "01b09f2151227fbed28e03c61bac371d4621114b52cc1a5ad7e8e64246a83af9"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

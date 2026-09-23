@@ -1,0 +1,52 @@
+{
+  "build_id": "wave2_t006_combo2_web_sentiment",
+  "composition_label": "Web research (Research) -> Sentiment & prioritization (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored for this isolated build; synthetic fixtures only.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "validation": "Schema is the shared validator for input, retrieval responses, research handoff and final output. Unknown fields and incomplete provenance are rejected.",
+    "input": "schema_version, synthetic=true, allowlisted_hosts, urls, retrieval_fixtures. Exactly one fixture per URL; 1..20 URLs; content <=20000 characters and <=200 lines.",
+    "source": "source_id, requested_url, final_url, retrieved_at with timezone, verbatim content, content_sha256",
+    "finding": "finding_id, source_id, source_url, retrieved_at, content_sha256, one-based line_number, verbatim text",
+    "insight": "All finding fields plus sentiment, sentiment_score, sentiment_evidence, severity, severity_evidence, priority_score, requires_attention.",
+    "output": "status=ok, research envelope, insights, priority_order, method; failures: status=error and error message, exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Validated URL requests -> fixture retrieval -> validated final URL and timestamp -> content-hashed sources and verbatim line findings.",
+    "The sentiment stage validates the entire research envelope and checks every finding against original source lines and hashes before scoring.",
+    "Insight records retain every provenance field; final output is validated against deterministic recomputation."
+  ],
+  "behavior": {
+    "retrieval": "Offline supplied response fixtures; optional injected retrieval callable is validated identically. No network client exists. Exact HTTPS host allowlist applies to both requested and final URLs; no credentials, fragments or non-443 ports.",
+    "extraction": "Every nonblank line is one finding in source/input order. Source text is retained, not summarized.",
+    "sentiment": "Transparent English lexicon sums; immediate not/never/no flips weight; punctuation interrupts negation. Token offsets and adjusted weights are exposed.",
+    "severity": "Highest matching explicit severity term; independent of sentiment. Severity remains conservative even for negated severity terms.",
+    "prioritization": "Severity base 300/200/100/0 plus capped negative magnitude 0..99. Severity always dominates negativity. Stable input-order ties. Only negative or non-low-severity findings enter priority_order.",
+    "determinism": "No randomness or wall-clock data; supplied timestamps preserved. Repeated input gives identical output.",
+    "cli": "One JSON object on stdout. Exit 0 on success and 2 on validation/file errors. Duplicate JSON keys, invalid encodings and non-finite JSON constants are rejected."
+  },
+  "scope": {
+    "included": ["Integrated offline research-to-insight CLI", "Synthetic retrieval fixtures", "Shared validation and provenance", "Explainable scoring", "Severity-aware stable ranking", "Bounded inputs", "Standard-library unittest coverage"],
+    "excluded": ["Live HTTP or crawling", "HTML parsing", "LLM providers", "Truth verification", "Sarcasm and broad-language interpretation", "Contextual severity or negation disambiguation", "DNS or SSRF protections for arbitrary injected callables", "Production persistence and deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 25,
+    "suite": "test_implementation.py",
+    "cli_example": "Passed: exit 0; one valid JSON object with status ok, 6 insights and 4 prioritized findings.",
+    "coverage": ["Both stages", "Cross-stage provenance", "Allowlist and redirect validation", "Injected retrieval fixtures and failures", "Sentiment and negation", "Severity dominance and ties", "Invalid inputs", "CLI success and errors", "JSON roundtrip", "Unicode offsets", "Determinism"]
+  }
+}

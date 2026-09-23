@@ -1,0 +1,53 @@
+{
+  "build_id": "wave2_t074_combo2_review_triage",
+  "composition_label": "Document review -> Ticket triage & routing",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope": ["schema_version", "synthetic", "status", "input", "review", "triage"],
+    "input": "A document, uniquely identified requirements with nonempty terms and severity, uniquely identified evidence quotes referencing requirements, and routing configuration.",
+    "states": "input (null review/triage) -> review (validated checks and gaps, null triage) -> complete (validated checks, gaps and tickets).",
+    "validation": "One validate function at every stage boundary checks exact fields, scalar types, unique identifiers, evidence references, configured routes and priorities. Derived outputs are checked against their deterministic contract.",
+    "errors": "CLI validation, JSON, encoding, argument and file errors produce one JSON object with status error and exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Review consumes the validated input envelope and emits evidence checks plus gaps.",
+    "Triage consumes only a validated review envelope, generating exactly one ticket per gap and preserving document, requirement, evidence, reason and missing-term references.",
+    "Complete output is validated again before printing."
+  ],
+  "behavior": {
+    "evidence": "Quote must occur verbatim in document text. All requirement terms must match case-insensitive substrings within one or more accepted quotes. Rejected evidence IDs remain visible. No semantic truth or certification is inferred.",
+    "outcomes": ["satisfied", "missing_evidence", "invalid_evidence", "insufficient_evidence"],
+    "classification": "First configured keyword rule matching the gap description or missing terms wins; otherwise use the configured default category.",
+    "priority": "Integers 1 (most urgent) through 4. Minimum of configured severity priority and category priority floor prevents category routing from reducing urgency.",
+    "accountability": "Every category requires an owner and team, copied onto every routed ticket.",
+    "determinism": "Input order preserved; identifiers derived from requirement positions; no clocks, randomness or external calls. Inputs are not mutated.",
+    "empty_requirements": "Valid empty review and ticket lists.",
+    "fixture_label": "All inputs must explicitly set synthetic to true."
+  },
+  "scope": {
+    "included": ["Single-document local CLI", "Deterministic evidence screening", "Traceable gaps", "Configurable categorization, priority and ownership", "Shared input/output validation", "Synthetic fixtures and unittest coverage"],
+    "excluded": ["Certification claims", "Semantic verification", "Live LLMs or model providers", "Network access", "External ticket submission", "Persistent ticket lifecycle", "Enterprise production hardening", "Multi-document ingestion"],
+    "required_prompt_log": "docs/My_prompt.txt is retained separately under mandatory repository prompt-logging instructions."
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 18,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_status": "passed: exit 0, one JSON object, status complete; 3 checks, 2 gaps, 2 accountable tickets",
+    "error_paths": "Covered argument errors, missing file, malformed JSON, duplicate JSON keys, nonstandard constants, invalid schema, invalid encoding and tampered stage handoffs."
+  }
+}

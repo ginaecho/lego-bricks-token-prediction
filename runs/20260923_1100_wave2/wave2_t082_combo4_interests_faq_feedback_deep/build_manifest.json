@@ -1,0 +1,90 @@
+{
+  "build_id": "wave2_t082_combo4_interests_faq_feedback_deep",
+  "composition_label": "Interest-based recommendations -> Knowledge-base answers -> Feedback analysis -> Deep research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored inside the isolated build directory; no other builds or repository files read or copied.",
+    "runtime": "Python 3.10+ standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "definition": "INPUT_SCHEMA and OUTPUT_SCHEMAS in implementation.py are the authoritative exact-field contracts; validate() and validate_stage() provide the shared validation layer.",
+    "input": {
+      "schema_version": "Exact string 1.0.",
+      "fixture_label": "Nonblank string explicitly containing synthetic.",
+      "synthetic": "Boolean true; numeric 1 is not accepted.",
+      "interests": "Weighted topic preferences, excluded product IDs, excluded topics, limit 1..20.",
+      "catalog": "Unique product IDs with names, topics and source descriptions.",
+      "faq": "Unique product-linked questions and product-scoped knowledge documents.",
+      "feedback": "Unique feedback IDs with question references and verbatim text.",
+      "research": "Unique product-scoped documents with annotated theme, claim_key, statement, position and verbatim excerpt."
+    },
+    "output": "One JSON object: schema_version, status=ok, fixture_label, and ordered stages interests, faq, feedback, deep. Each stage records its input_ids and grounded evidence.",
+    "errors": "Validation, JSON and file errors produce one JSON object with status=error and error message on stdout, exit 2; successful CLI exits 0.",
+    "bounds": "CLI input at most 1000000 bytes; arrays at most 500 entries; text fields at most 20000 characters; weights finite in (0,100]; recommendation limit in [1,20]. Unknown fields, duplicate IDs, invalid references, duplicate JSON keys, nonfinite JSON constants and inconsistent research propositions are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "interests",
+      "to": "faq",
+      "contract": "Only product IDs in validated recommendations admit FAQ questions. Excluded and unranked product questions are audited as skipped."
+    },
+    {
+      "from": "faq",
+      "to": "feedback",
+      "contract": "Only question IDs in validated FAQ answers admit feedback. Both answered and abstained questions are eligible; abstentions remain explicit."
+    },
+    {
+      "from": "feedback",
+      "to": "deep",
+      "contract": "Validated deduplicated feedback, themes, product scopes, original excerpts, duplicate lineage and unanswered question IDs determine research scope. Deep findings cannot widen the product/theme scope."
+    }
+  ],
+  "behavior": {
+    "interests": "Casefolded, punctuation/whitespace-normalized topic equality; sum positive preference weights; hard product/topic exclusions; omit zero-match products; sort descending score then product ID. Explanations name matched topics, weights and catalog evidence.",
+    "faq": "Conservative product-scoped lexical retrieval: all non-stopword query tokens must occur in an individual source. Rank by fewest extra source tokens then source ID, retain at most two, and answer with verbatim complete source excerpts. Empty queries or missing coverage explicitly abstain. This is lexical evidence retrieval, not semantic question answering.",
+    "feedback": "Normalize case, punctuation and whitespace; deduplicate only within the same question context, retaining first source text and all duplicate IDs. Fixed keyword dictionaries permit multiple themes; unmatched feedback is other. Counts use unique items, never duplicate votes. Themes are descriptive, not sentiment or causal claims.",
+    "deep": "Group annotated source propositions by product, feedback theme and stable claim key; synthesize all relevant documents with verbatim evidence. Supporting and opposing positions yield mixed assessments and explicit disagreements, including differing test conditions preserved in excerpts. Uncertain, missing, conflicting and single-document evidence creates unresolved items. FAQ abstentions are carried forward even with no feedback and never silently overwritten.",
+    "determinism": "No randomness, current-time dependency, network, LLM, provider or injected callable. Identical input yields identical output and caller input is not mutated.",
+    "source_trust": "All fixture content is synthetic. Claim positions are supplied annotations; source counts do not establish independence, truth or causal validity. Summaries explicitly distinguish supplied evidence from verified facts."
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI and Python run_pipeline entry point",
+      "Shared structural and provenance validation before each downstream stage",
+      "Synthetic fixtures exercising exclusions, explicit abstention, duplicate feedback, multiple themes and multi-document disagreement",
+      "Traceable source, question, product and duplicate feedback lineage",
+      "Standard-library unit and CLI tests"
+    ],
+    "excluded": [
+      "Live model calls or optional model adapter",
+      "Network access, web search, external dependencies and persistence services",
+      "Semantic embeddings, fuzzy deduplication and sentiment inference",
+      "Automatic extraction of research positions from unstructured documents",
+      "Automatic resolution of research disagreements or FAQ abstentions",
+      "Enterprise production features, user interfaces and authentication"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 40,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_stdout": "Exactly one JSON object with status ok and all four validated stages.",
+    "validation_coverage": "Ranking, exclusions, normalized matching, ties, limits, empty inputs, verbatim FAQ citations, abstention, retrieval scope, feedback deduplication and themes, duplicate provenance, multi-document disagreement, uncertain and missing evidence, every cross-stage handoff, determinism, input immutability, stage-output tampering, malformed schemas, duplicate IDs, unknown references, invalid numeric values including oversized JSON integers, malformed UTF-8 and JSON, file errors, and CLI argument errors."
+  }
+}

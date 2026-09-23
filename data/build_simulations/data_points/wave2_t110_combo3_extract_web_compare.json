@@ -1,0 +1,840 @@
+{
+  "id": "wave2_t110_combo3_extract_web_compare",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "research",
+      "search"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "Research",
+      "Smart product search"
+    ],
+    "types": [
+      "extract",
+      "web",
+      "compare"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 1,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 6,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Allowlisted URL ingestion, retrieval and provenance-preserving findings.",
+    "Attribute normalization, side-by-side comparison and preference ranking."
+  ],
+  "integration": {
+    "ordered_types": [
+      "extract",
+      "web",
+      "compare"
+    ],
+    "edges": [
+      {
+        "from": "extract",
+        "to": "web",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "web",
+        "to": "compare",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "7dc2d9c04cf884080ba81c0422ca31622e3a813c409c169d4a27f2ccd3631a8f",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "ccc7095a055e618dd420a5d8978f5c1a3570de754ac796ee3d39266dfa6cc0e4",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t110_combo3_extract_web_compare",
+  "membership_point_id": "combo3_extract_web_compare",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "f2a83abe38acef0e7f86d432dbdd2e6f13c7343619c6f7aa6ba056a1f2055aac",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "d0b39fbf-c41e-457d-8e35-031cd93c6ca9",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 141567,
+    "output_tokens": 11561,
+    "cache_read_tokens": 126423,
+    "cache_write_tokens": 15126,
+    "total_tokens": 153128,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34864,
+        "agent_id": "d0b39fbf-c41e-457d-8e35-031cd93c6ca9",
+        "model": "gpt-6-astra",
+        "input_tokens": 14852,
+        "output_tokens": 687,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 794,
+        "reasoning_tokens": 516,
+        "duration_ms": 21440,
+        "created_at": "2026-09-23T11:10:54.348Z"
+      },
+      {
+        "id": 34886,
+        "agent_id": "d0b39fbf-c41e-457d-8e35-031cd93c6ca9",
+        "model": "gpt-6-astra",
+        "input_tokens": 15565,
+        "output_tokens": 9509,
+        "cache_read_tokens": 14849,
+        "cache_write_tokens": 713,
+        "reasoning_tokens": 336,
+        "duration_ms": 143539,
+        "created_at": "2026-09-23T11:13:19.451Z"
+      },
+      {
+        "id": 34887,
+        "agent_id": "d0b39fbf-c41e-457d-8e35-031cd93c6ca9",
+        "model": "gpt-6-astra",
+        "input_tokens": 25386,
+        "output_tokens": 161,
+        "cache_read_tokens": 15562,
+        "cache_write_tokens": 9821,
+        "reasoning_tokens": 7,
+        "duration_ms": 3209,
+        "created_at": "2026-09-23T11:13:25.073Z"
+      },
+      {
+        "id": 34888,
+        "agent_id": "d0b39fbf-c41e-457d-8e35-031cd93c6ca9",
+        "model": "gpt-6-astra",
+        "input_tokens": 27765,
+        "output_tokens": 812,
+        "cache_read_tokens": 25383,
+        "cache_write_tokens": 2379,
+        "reasoning_tokens": 298,
+        "duration_ms": 17777,
+        "created_at": "2026-09-23T11:13:42.984Z"
+      },
+      {
+        "id": 34889,
+        "agent_id": "d0b39fbf-c41e-457d-8e35-031cd93c6ca9",
+        "model": "gpt-6-astra",
+        "input_tokens": 28815,
+        "output_tokens": 299,
+        "cache_read_tokens": 27762,
+        "cache_write_tokens": 1050,
+        "reasoning_tokens": 0,
+        "duration_ms": 4874,
+        "created_at": "2026-09-23T11:13:47.960Z"
+      },
+      {
+        "id": 34890,
+        "agent_id": "d0b39fbf-c41e-457d-8e35-031cd93c6ca9",
+        "model": "gpt-6-astra",
+        "input_tokens": 29184,
+        "output_tokens": 93,
+        "cache_read_tokens": 28812,
+        "cache_write_tokens": 369,
+        "reasoning_tokens": 0,
+        "duration_ms": 2509,
+        "created_at": "2026-09-23T11:13:57.937Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5273325,
+      "observed_cache_profile_estimate_usd": 0.24288074999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.327990000000001,
+      "observed_cache_profile_estimate_usd": 6.327990000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 1,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 5,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.19,
+    "pseudo_annual_cost_usd": 85000,
+    "pseudo_annual_ai_value_usd": 150000,
+    "pseudo_net_impact_usd": 65000,
+    "pseudo_roi_pct": 76.47058823529412,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.645s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "synthetic": true,
+      "extraction": {
+        "schema_version": 1,
+        "products": [
+          {
+            "product_id": "alpha",
+            "fields": {
+              "name": {
+                "value": "Alpha Pack",
+                "unit": null,
+                "raw": "Alpha Pack",
+                "span": [
+                  30,
+                  40
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "alpha"
+                }
+              },
+              "price": {
+                "value": 80.0,
+                "unit": "usd",
+                "raw": "80 USD",
+                "span": [
+                  48,
+                  54
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "alpha"
+                }
+              },
+              "color": {
+                "value": "Blue",
+                "unit": null,
+                "raw": "Blue",
+                "span": [
+                  62,
+                  66
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "alpha"
+                }
+              }
+            },
+            "research_urls": [
+              "https://catalog.example/alpha"
+            ],
+            "missing_fields": [
+              "mass"
+            ],
+            "missing_required": [
+              "mass"
+            ]
+          },
+          {
+            "product_id": "beta",
+            "fields": {
+              "name": {
+                "value": "Beta Pack",
+                "unit": null,
+                "raw": "Beta Pack",
+                "span": [
+                  30,
+                  39
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "beta"
+                }
+              },
+              "price": {
+                "value": 100.0,
+                "unit": "usd",
+                "raw": "100 usd",
+                "span": [
+                  47,
+                  54
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "beta"
+                }
+              },
+              "mass": {
+                "value": 0.8,
+                "unit": "kg",
+                "raw": "0.8 kg",
+                "span": [
+                  61,
+                  67
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "beta"
+                }
+              }
+            },
+            "research_urls": [
+              "https://catalog.example/beta"
+            ],
+            "missing_fields": [
+              "color"
+            ],
+            "missing_required": []
+          }
+        ]
+      },
+      "research": {
+        "schema_version": 1,
+        "products": [
+          {
+            "product_id": "alpha",
+            "document_fields": {
+              "name": {
+                "value": "Alpha Pack",
+                "unit": null,
+                "raw": "Alpha Pack",
+                "span": [
+                  30,
+                  40
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "alpha"
+                }
+              },
+              "price": {
+                "value": 80.0,
+                "unit": "usd",
+                "raw": "80 USD",
+                "span": [
+                  48,
+                  54
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "alpha"
+                }
+              },
+              "color": {
+                "value": "Blue",
+                "unit": null,
+                "raw": "Blue",
+                "span": [
+                  62,
+                  66
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "alpha"
+                }
+              }
+            },
+            "findings": {
+              "name": [],
+              "price": [
+                {
+                  "value": 85.0,
+                  "unit": "usd",
+                  "raw": "85 usd",
+                  "span": [
+                    51,
+                    57
+                  ],
+                  "source": {
+                    "kind": "page",
+                    "id": "https://catalog.example/alpha",
+                    "url": "https://catalog.example/alpha",
+                    "title": "Synthetic Alpha specification"
+                  }
+                }
+              ],
+              "mass": [
+                {
+                  "value": 1200.0,
+                  "unit": "g",
+                  "raw": "1200 g",
+                  "span": [
+                    37,
+                    43
+                  ],
+                  "source": {
+                    "kind": "page",
+                    "id": "https://catalog.example/alpha",
+                    "url": "https://catalog.example/alpha",
+                    "title": "Synthetic Alpha specification"
+                  }
+                }
+              ],
+              "color": [
+                {
+                  "value": "blue",
+                  "unit": null,
+                  "raw": "blue",
+                  "span": [
+                    65,
+                    69
+                  ],
+                  "source": {
+                    "kind": "page",
+                    "id": "https://catalog.example/alpha",
+                    "url": "https://catalog.example/alpha",
+                    "title": "Synthetic Alpha specification"
+                  }
+                }
+              ]
+            },
+            "retrievals": [
+              {
+                "url": "https://catalog.example/alpha",
+                "status": "retrieved"
+              }
+            ]
+          },
+          {
+            "product_id": "beta",
+            "document_fields": {
+              "name": {
+                "value": "Beta Pack",
+                "unit": null,
+                "raw": "Beta Pack",
+                "span": [
+                  30,
+                  39
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "beta"
+                }
+              },
+              "price": {
+                "value": 100.0,
+                "unit": "usd",
+                "raw": "100 usd",
+                "span": [
+                  47,
+                  54
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "beta"
+                }
+              },
+              "mass": {
+                "value": 0.8,
+                "unit": "kg",
+                "raw": "0.8 kg",
+                "span": [
+                  61,
+                  67
+                ],
+                "source": {
+                  "kind": "document",
+                  "id": "beta"
+                }
+              }
+            },
+            "findings": {
+              "name": [],
+              "price": [],
+              "mass": [
+                {
+                  "value": 800.0,
+                  "unit": "g",
+                  "raw": "800 g",
+                  "span": [
+                    37,
+                    42
+                  ],
+                  "source": {
+                    "kind": "page",
+                    "id": "https://catalog.example/beta",
+                    "url": "https://catalog.example/beta",
+                    "title": "Synthetic Beta specification"
+                  }
+                }
+              ],
+              "color": [
+                {
+                  "value": "Red",
+                  "unit": null,
+                  "raw": "Red",
+                  "span": [
+                    50,
+                    53
+                  ],
+                  "source": {
+                    "kind": "page",
+                    "id": "https://catalog.example/beta",
+                    "url": "https://catalog.example/beta",
+                    "title": "Synthetic Beta specification"
+                  }
+                }
+              ]
+            },
+            "retrievals": [
+              {
+                "url": "https://catalog.example/beta",
+                "status": "retrieved"
+              }
+            ]
+          }
+        ]
+      },
+      "comparison": {
+        "schema_version": 1,
+        "products": [
+          {
+            "product_id": "alpha",
+            "attributes": {
+              "name": {
+                "value": "alpha pack",
+                "unit": null,
+                "evidence": {
+                  "value": "Alpha Pack",
+                  "unit": null,
+                  "raw": "Alpha Pack",
+                  "span": [
+                    30,
+                    40
+                  ],
+                  "source": {
+                    "kind": "document",
+                    "id": "alpha"
+                  }
+                },
+                "alternatives": [],
+                "conflict": false
+              },
+              "price": {
+                "value": 80.0,
+                "unit": "usd",
+                "evidence": {
+                  "value": 80.0,
+                  "unit": "usd",
+                  "raw": "80 USD",
+                  "span": [
+                    48,
+                    54
+                  ],
+                  "source": {
+                    "kind": "document",
+                    "id": "alpha"
+                  }
+                },
+                "alternatives": [
+                  {
+                    "value": 85.0,
+                    "unit": "usd",
+                    "raw": "85 usd",
+                    "span": [
+                      51,
+                      57
+                    ],
+                    "source": {
+                      "kind": "page",
+                      "id": "https://catalog.example/alpha",
+                      "url": "https://catalog.example/alpha",
+                      "title": "Synthetic Alpha specification"
+                    }
+                  }
+                ],
+                "conflict": true
+              },
+              "mass": {
+                "value": 1.2,
+                "unit": "kg",
+                "evidence": {
+                  "value": 1200.0,
+                  "unit": "g",
+                  "raw": "1200 g",
+                  "span": [
+                    37,
+                    43
+                  ],
+                  "source": {
+                    "kind": "page",
+                    "id": "https://catalog.example/alpha",
+                    "url": "https://catalog.example/alpha",
+                    "title": "Synthetic Alpha specification"
+                  }
+                },
+                "alternatives": [],
+                "conflict": false
+              },
+              "color": {
+                "value": "blue",
+                "unit": null,
+                "evidence": {
+                  "value": "Blue",
+                  "unit": null,
+                  "raw": "Blue",
+                  "span": [
+                    62,
+                    66
+                  ],
+                  "source": {
+                    "kind": "document",
+                    "id": "alpha"
+                  }
+                },
+                "alternatives": [
+                  {
+                    "value": "blue",
+                    "unit": null,
+                    "raw": "blue",
+                    "span": [
+                      65,
+                      69
+                    ],
+                    "source": {
+                      "kind": "page",
+                      "id": "https://catalog.example/alpha",
+                      "url": "https://catalog.example/alpha",
+                      "title": "Synthetic Alpha specification"
+                    }
+                  }
+                ],
+                "conflict": false
+              }
+            },
+            "missing_required": [],
+            "score": 0.666666666667,
+            "score_components": {
+              "price": 1.0,
+              "mass": 0.0,
+              "color": 1.0
+            }
+          },
+          {
+            "product_id": "beta",
+            "attributes": {
+              "name": {
+                "value": "beta pack",
+                "unit": null,
+                "evidence": {
+                  "value": "Beta Pack",
+                  "unit": null,
+                  "raw": "Beta Pack",
+                  "span": [
+                    30,
+                    39
+                  ],
+                  "source": {
+                    "kind": "document",
+                    "id": "beta"
+                  }
+                },
+                "alternatives": [],
+                "conflict": false
+              },
+              "price": {
+                "value": 100.0,
+                "unit": "usd",
+                "evidence": {
+                  "value": 100.0,
+                  "unit": "usd",
+                  "raw": "100 usd",
+                  "span": [
+                    47,
+                    54
+                  ],
+                  "source": {
+                    "kind": "document",
+                    "id": "beta"
+                  }
+                },
+                "alternatives": [],
+                "conflict": false
+              },
+              "mass": {
+                "value": 0.8,
+                "unit": "kg",
+                "evidence": {
+                  "value": 0.8,
+                  "unit": "kg",
+                  "raw": "0.8 kg",
+                  "span": [
+                    61,
+                    67
+                  ],
+                  "source": {
+                    "kind": "document",
+                    "id": "beta"
+                  }
+                },
+                "alternatives": [
+                  {
+                    "value": 800.0,
+                    "unit": "g",
+                    "raw": "800 g",
+                    "span": [
+                      37,
+                      42
+                    ],
+                    "source": {
+                      "kind": "page",
+                      "id": "https://catalog.example/beta",
+                      "url": "https://catalog.example/beta",
+                      "title": "Synthetic Beta specification"
+                    }
+                  }
+                ],
+                "conflict": false
+              },
+              "color": {
+                "value": "red",
+                "unit": null,
+                "evidence": {
+                  "value": "Red",
+                  "unit": null,
+                  "raw": "Red",
+                  "span": [
+                    50,
+                    53
+                  ],
+                  "source": {
+                    "kind": "page",
+                    "id": "https://catalog.example/beta",
+                    "url": "https://catalog.example/beta",
+                    "title": "Synthetic Beta specification"
+                  }
+                },
+                "alternatives": [],
+                "conflict": false
+              }
+            },
+            "missing_required": [],
+            "score": 0.333333333333,
+            "score_components": {
+              "price": 0.0,
+              "mass": 1.0,
+              "color": 0.0
+            }
+          }
+        ],
+        "ranking": [
+          {
+            "rank": 1,
+            "product_id": "alpha",
+            "score": 0.666666666667
+          },
+          {
+            "rank": 2,
+            "product_id": "beta",
+            "score": 0.333333333333
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t110_combo3_extract_web_compare",
+    "artifact_sha256": {
+      "implementation.py": "683e666c018773c67f022b36dfd38e11a45a0eb21795b4ad2afa29a291e8032a",
+      "test_implementation.py": "f0af70cff706fd15d03cc2b605ce3217a44f7086e728e52a389ed1467c2fd948",
+      "example_input.json": "71c720f5f46d57dff8c98b7be00f73bd760541865c4dbdc6d73df6ec9f74d800",
+      "build_manifest.json": "5dcecf25f07aee01d1bf6d7933f79d358364eaadddd6d2a601305a91c869ab54"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

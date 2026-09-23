@@ -1,0 +1,429 @@
+{
+  "id": "wave2_t062_combo2_faq_deep",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "support",
+      "research"
+    ],
+    "basic_functionalities": [
+      "AI customer support",
+      "Research"
+    ],
+    "types": [
+      "faq",
+      "deep"
+    ],
+    "functionality_count": 2,
+    "integration_edge_count": 1,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 9,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.75,
+    "staff_data_scientist": 0.25,
+    "staff_architect": 0.125,
+    "staff_consultant": 0.125,
+    "staff_software_engineer": 0.625,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 2,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 0,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 2
+  },
+  "requirements": [
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions."
+  ],
+  "integration": {
+    "ordered_types": [
+      "faq",
+      "deep"
+    ],
+    "edges": [
+      {
+        "from": "faq",
+        "to": "deep",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "9846aefaee31950a52173e78fdd81faa845916204c53dff7068f5465e2d7f1a9",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "47b123d4339e21bacd44d925203dc799f450e5b8c9b9e5224e82972f4d976392",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t062_combo2_faq_deep",
+  "membership_point_id": "combo2_faq_deep",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "4cc558d6c64099f6f452f44a97435cd1fbf40ca7ce49b40eda2ba7a642403dce",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "880d37f5-94ca-41b9-a0c2-4c6941454098",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 118339,
+    "output_tokens": 7519,
+    "cache_read_tokens": 108980,
+    "cache_write_tokens": 9341,
+    "total_tokens": 125858,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34406,
+        "agent_id": "880d37f5-94ca-41b9-a0c2-4c6941454098",
+        "model": "gpt-6-astra",
+        "input_tokens": 14806,
+        "output_tokens": 371,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 769,
+        "reasoning_tokens": 199,
+        "duration_ms": 8464,
+        "created_at": "2026-09-23T10:16:50.691Z"
+      },
+      {
+        "id": 34411,
+        "agent_id": "880d37f5-94ca-41b9-a0c2-4c6941454098",
+        "model": "gpt-6-astra",
+        "input_tokens": 15203,
+        "output_tokens": 5000,
+        "cache_read_tokens": 14803,
+        "cache_write_tokens": 397,
+        "reasoning_tokens": 0,
+        "duration_ms": 47823,
+        "created_at": "2026-09-23T10:17:40.188Z"
+      },
+      {
+        "id": 34413,
+        "agent_id": "880d37f5-94ca-41b9-a0c2-4c6941454098",
+        "model": "gpt-6-astra",
+        "input_tokens": 20444,
+        "output_tokens": 150,
+        "cache_read_tokens": 15200,
+        "cache_write_tokens": 5241,
+        "reasoning_tokens": 12,
+        "duration_ms": 3115,
+        "created_at": "2026-09-23T10:17:45.435Z"
+      },
+      {
+        "id": 34417,
+        "agent_id": "880d37f5-94ca-41b9-a0c2-4c6941454098",
+        "model": "gpt-6-astra",
+        "input_tokens": 21345,
+        "output_tokens": 1727,
+        "cache_read_tokens": 20441,
+        "cache_write_tokens": 901,
+        "reasoning_tokens": 41,
+        "duration_ms": 26128,
+        "created_at": "2026-09-23T10:18:12.803Z"
+      },
+      {
+        "id": 34421,
+        "agent_id": "880d37f5-94ca-41b9-a0c2-4c6941454098",
+        "model": "gpt-6-astra",
+        "input_tokens": 23163,
+        "output_tokens": 182,
+        "cache_read_tokens": 21342,
+        "cache_write_tokens": 1818,
+        "reasoning_tokens": 0,
+        "duration_ms": 5148,
+        "created_at": "2026-09-23T10:18:18.025Z"
+      },
+      {
+        "id": 34422,
+        "agent_id": "880d37f5-94ca-41b9-a0c2-4c6941454098",
+        "model": "gpt-6-astra",
+        "input_tokens": 23378,
+        "output_tokens": 89,
+        "cache_read_tokens": 23160,
+        "cache_write_tokens": 215,
+        "reasoning_tokens": 0,
+        "duration_ms": 2314,
+        "created_at": "2026-09-23T10:18:24.185Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4086325,
+      "observed_cache_profile_estimate_usd": 0.1634275,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.90359,
+      "observed_cache_profile_estimate_usd": 4.90359,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 4,
+      "roi_satisfaction": 5,
+      "future_impact_potential": 5,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.62,
+    "pseudo_annual_cost_usd": 75000,
+    "pseudo_annual_ai_value_usd": 150000,
+    "pseudo_net_impact_usd": 75000,
+    "pseudo_roi_pct": 100.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................\n----------------------------------------------------------------------\nRan 19 tests in 0.325s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "status": "ok",
+      "faq": {
+        "question": "What is the return window and when is a refund issued?",
+        "topics": [
+          "return_window",
+          "refund_timing"
+        ],
+        "min_sources": 2,
+        "evidence": [
+          {
+            "document_id": "synthetic-policy",
+            "claim_id": "refunds",
+            "topic": "refund_timing",
+            "position": "5_days",
+            "statement": "Synthetic policy says refunds are issued within 5 days of inspection.",
+            "score": 2
+          },
+          {
+            "document_id": "synthetic-help",
+            "claim_id": "refunds",
+            "topic": "refund_timing",
+            "position": "5_days",
+            "statement": "Synthetic help says refunds are issued within 5 days of inspection.",
+            "score": 1
+          },
+          {
+            "document_id": "synthetic-policy",
+            "claim_id": "returns",
+            "topic": "return_window",
+            "position": "14_days",
+            "statement": "Synthetic policy allows returns within 14 days.",
+            "score": 1
+          },
+          {
+            "document_id": "synthetic-help",
+            "claim_id": "returns",
+            "topic": "return_window",
+            "position": "30_days",
+            "statement": "Synthetic help allows returns within 30 days.",
+            "score": 0
+          }
+        ],
+        "blocking_reasons": [
+          "Conflicting positions for topic: return_window"
+        ],
+        "response": {
+          "status": "abstained",
+          "reason": "Conflicting positions for topic: return_window",
+          "answer": "",
+          "citations": []
+        }
+      },
+      "deep": {
+        "faq_status": "abstained",
+        "faq_citations": [],
+        "findings": [
+          {
+            "topic": "return_window",
+            "positions": [
+              {
+                "position": "14_days",
+                "statements": [
+                  "Synthetic policy allows returns within 14 days."
+                ],
+                "citations": [
+                  {
+                    "document_id": "synthetic-policy",
+                    "claim_id": "returns"
+                  }
+                ],
+                "source_count": 1
+              },
+              {
+                "position": "30_days",
+                "statements": [
+                  "Synthetic help allows returns within 30 days."
+                ],
+                "citations": [
+                  {
+                    "document_id": "synthetic-help",
+                    "claim_id": "returns"
+                  }
+                ],
+                "source_count": 1
+              }
+            ],
+            "source_count": 2
+          },
+          {
+            "topic": "refund_timing",
+            "positions": [
+              {
+                "position": "5_days",
+                "statements": [
+                  "Synthetic help says refunds are issued within 5 days of inspection.",
+                  "Synthetic policy says refunds are issued within 5 days of inspection."
+                ],
+                "citations": [
+                  {
+                    "document_id": "synthetic-policy",
+                    "claim_id": "refunds"
+                  },
+                  {
+                    "document_id": "synthetic-help",
+                    "claim_id": "refunds"
+                  }
+                ],
+                "source_count": 2
+              }
+            ],
+            "source_count": 2
+          }
+        ],
+        "disagreements": [
+          {
+            "topic": "return_window",
+            "positions": [
+              {
+                "position": "14_days",
+                "statements": [
+                  "Synthetic policy allows returns within 14 days."
+                ],
+                "citations": [
+                  {
+                    "document_id": "synthetic-policy",
+                    "claim_id": "returns"
+                  }
+                ],
+                "source_count": 1
+              },
+              {
+                "position": "30_days",
+                "statements": [
+                  "Synthetic help allows returns within 30 days."
+                ],
+                "citations": [
+                  {
+                    "document_id": "synthetic-help",
+                    "claim_id": "returns"
+                  }
+                ],
+                "source_count": 1
+              }
+            ]
+          }
+        ],
+        "unresolved_questions": [
+          "Which position is authoritative for topic: return_window?",
+          "FAQ abstained: Conflicting positions for topic: return_window"
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t062_combo2_faq_deep",
+    "artifact_sha256": {
+      "implementation.py": "042518d54a8da1a7e5749f4f64da7a072d857c04bd21e9dde180f03c1e5a3882",
+      "test_implementation.py": "53fe40ab7bf365bb8646faaa928055ceaf1bc1c0570dc22541856907340e72c2",
+      "example_input.json": "9510131db56be5ffd72949ead86b0202951b55727187337171a6599b306a8d82",
+      "build_manifest.json": "375ecfa97bdbf6c2c4c1ab2515747ebd5dab27a65eb2710cc41d2e880156bb3d"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

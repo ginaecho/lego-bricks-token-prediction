@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "profile": {
+    "completed": ["account-created"],
+    "interests": ["shipping", "refunds", "tax"]
+  },
+  "actions": [
+    {"id": "shipping-setup", "title": "Synthetic shipping setup", "requires": ["account-created"], "topics": ["shipping"]},
+    {"id": "launch-review", "title": "Synthetic launch readiness review", "requires": ["shipping-setup"], "topics": ["refunds", "tax"]},
+    {"id": "theme", "title": "Synthetic storefront theme", "requires": [], "topics": ["design"]}
+  ],
+  "documents": [
+    {
+      "id": "synthetic-guide-a",
+      "title": "Synthetic merchant guide A",
+      "text": "Shipping takes two days. Refunds are accepted within thirty days.",
+      "claims": [
+        {"topic": "shipping", "position": "two days", "quote": "Shipping takes two days."},
+        {"topic": "refunds", "position": "thirty days", "quote": "Refunds are accepted within thirty days."}
+      ]
+    },
+    {
+      "id": "synthetic-guide-b",
+      "title": "Synthetic merchant guide B",
+      "text": "Shipping takes five days. Refunds are accepted within thirty days.",
+      "claims": [
+        {"topic": "shipping", "position": "five days", "quote": "Shipping takes five days."},
+        {"topic": "refunds", "position": "thirty days", "quote": "Refunds are accepted within thirty days."}
+      ]
+    }
+  ],
+  "routing": {
+    "rules": [
+      {"kind": "conflict", "topics": ["shipping"], "route": {"category": "policy-conflict", "priority": "high", "owner": "synthetic-logistics-team"}},
+      {"kind": "evidence_gap", "topics": ["tax"], "route": {"category": "missing-guidance", "priority": "urgent", "owner": "synthetic-tax-team"}}
+    ],
+    "default": {"category": "research-followup", "priority": "normal", "owner": "synthetic-support-team"}
+  }
+}

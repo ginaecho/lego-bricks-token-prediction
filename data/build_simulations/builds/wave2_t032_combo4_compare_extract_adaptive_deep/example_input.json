@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "products": [
+    {
+      "id": "atlas",
+      "name": "SYNTHETIC Atlas Travel Scanner",
+      "attributes": {
+        "Price": {"value": 120, "unit": "USD"},
+        "mass": {"value": 0.7, "unit": "kg"},
+        "battery": {"value": 480, "unit": "min"}
+      }
+    },
+    {
+      "id": "boreal",
+      "name": "SYNTHETIC Boreal Desk Scanner",
+      "attributes": {
+        "cost": {"value": 160, "unit": "USD"},
+        "weight": {"value": 950, "unit": "g"},
+        "battery_life": {"value": 6, "unit": "h"}
+      }
+    },
+    {
+      "id": "cedar",
+      "name": "SYNTHETIC Cedar Compact Scanner",
+      "attributes": {
+        "price_usd": {"value": 90, "unit": "USD"},
+        "weight_g": {"value": 500, "unit": "g"}
+      }
+    }
+  ],
+  "comparison": {
+    "criteria": [
+      {"attribute": "price_usd", "direction": "min", "weight": 2},
+      {"attribute": "weight_g", "direction": "min", "weight": 1},
+      {"attribute": "battery_hours", "direction": "max", "weight": 5}
+    ]
+  },
+  "documents": [
+    {
+      "id": "atlas-guide",
+      "product_ids": ["atlas"],
+      "text": "SYNTHETIC product guide — not a real product.\nSetup mode: USB\nWarranty months: 24\nOffline capable: yes\n"
+    },
+    {
+      "id": "atlas-listing",
+      "product_ids": ["atlas"],
+      "text": "SYNTHETIC marketplace listing.\nConnection: USB\nWarranty months: 12\nOffline capable: true\n"
+    },
+    {
+      "id": "boreal-guide",
+      "product_ids": ["boreal"],
+      "text": "SYNTHETIC competing product guide.\nSetup mode: Wi-Fi\nWarranty months: 36\nOffline capable: no\n"
+    }
+  ],
+  "extraction_schema": {
+    "fields": [
+      {"name": "setup_mode", "type": "string", "labels": ["Setup mode", "Connection"], "required": true},
+      {"name": "warranty_months", "type": "number", "labels": ["Warranty months"], "required": true},
+      {"name": "offline", "type": "boolean", "labels": ["Offline capable"], "required": false},
+      {"name": "activation_code", "type": "string", "labels": ["Activation code"], "required": true}
+    ]
+  },
+  "onboarding": {
+    "experience": "beginner",
+    "preferences": ["visual", "hands_on"],
+    "completed": [],
+    "tasks": [
+      {
+        "id": "connect",
+        "title": "Connect the scanner",
+        "min_experience": "beginner",
+        "modes": ["hands_on", "visual"],
+        "prerequisites": [],
+        "requires_fields": ["setup_mode"],
+        "explanation": "Use the documented connection method before configuring a scan."
+      },
+      {
+        "id": "scan",
+        "title": "Perform a first scan",
+        "min_experience": "beginner",
+        "modes": ["hands_on"],
+        "prerequisites": ["connect"],
+        "requires_fields": ["offline"],
+        "explanation": "A successful connection must precede the first scan."
+      },
+      {
+        "id": "register",
+        "title": "Register the warranty",
+        "min_experience": "beginner",
+        "modes": ["visual"],
+        "prerequisites": ["connect"],
+        "requires_fields": ["warranty_months", "activation_code"],
+        "explanation": "Resolve warranty terms and obtain the required activation code."
+      },
+      {
+        "id": "automate",
+        "title": "Configure advanced batch scanning",
+        "min_experience": "expert",
+        "modes": ["concise"],
+        "prerequisites": ["scan"],
+        "requires_fields": ["setup_mode"],
+        "explanation": "Advanced automation assumes familiarity with scanner configuration."
+      }
+    ]
+  },
+  "research": {
+    "questions": [
+      {"id": "connection", "field": "setup_mode", "text": "Which connection method is supported?"},
+      {"id": "warranty", "field": "warranty_months", "text": "How long is the warranty?"},
+      {"id": "activation", "field": "activation_code", "text": "What activation code is documented?"},
+      {"id": "offline", "field": "offline", "text": "Can the selected product operate offline?"}
+    ]
+  }
+}

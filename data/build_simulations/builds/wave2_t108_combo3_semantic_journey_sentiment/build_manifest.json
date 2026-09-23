@@ -1,0 +1,103 @@
+{
+  "build_id": "wave2_t108_combo3_semantic_journey_sentiment",
+  "composition_label": "Semantic search -> Journey recommendations -> Sentiment & prioritization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory, using explicitly synthetic fixtures.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1; booleans rejected.",
+      "fixture_label": "Nonblank string; example explicitly labeled SYNTHETIC.",
+      "query": "Nonblank text.",
+      "limit": "Integer 1..100.",
+      "products": "Array of {id, name, description, tags: unique nonblank string array}.",
+      "actions": "Array of {id, product_id, title, requires: unique action ID array, interest}.",
+      "profile": "{completed_actions: unique action ID array, interests: unique string array}. Completed history must include prerequisites.",
+      "feedback": "Array of {id, product_id, action_id: nullable action ID, text, severity: low|medium|high|critical}."
+    },
+    "output": {
+      "success": "{status: ok, schema_version: 1, fixture_label, semantic, journey, sentiment}",
+      "semantic": "{query, hits: [{product_id, score, lexical_score, embedding_score}]}",
+      "journey": "{source_product_ids, next_actions, status: ready|unavailable, steps, reason}. Steps contain action_id, product_id, requires, interest_match.",
+      "sentiment": "{source_action_ids, issues, excluded_feedback_count}. Issues contain feedback_id, product_id, action_id, severity, priority and sentiment {score, label, evidence}.",
+      "error": "{status: error, error: message}; CLI exit code 2."
+    },
+    "validation": "One validate boundary checks strict input shapes, types, uniqueness, references, DAG acyclicity and completed history; validates ranked search output and provenance; recomputes canonical journey and sentiment results to reject tampered handoffs. Unknown input fields and duplicate JSON object keys are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "semantic",
+      "to": "journey",
+      "contract": "Validated ranked hit product IDs restrict candidate actions and provide primary recommendation order; profile interests break within-product ties. Existing completed prerequisites may be outside retrieved products."
+    },
+    {
+      "from": "journey",
+      "to": "sentiment",
+      "contract": "Only feedback for products on the validated two-step journey is scored. Action-specific feedback must match a selected step; product-wide feedback is included once. No feasible journey means no included issues."
+    }
+  ],
+  "behavior": {
+    "search": "In-memory inverted index with lowercase ASCII tokenization, explicit synonym canonicalization and normalized TF-IDF cosine relevance. Default search is deterministic and local; it is not a learned semantic model. Zero-score hits omitted; descending score then ascending product ID; scores rounded to eight decimal places.",
+    "embedding": "Optional run(payload, embedding=callable) API; callable maps a query or product name plus description to a list/tuple of 1..4096 finite numbers, with finite nonzero norm and consistent dimensions. Blend 50% lexical cosine and 50% nonnegative embedding cosine. Callable failures become ValidationError; fixtures only, no provider.",
+    "journey": "Prerequisite-ready uncompleted next actions ordered by search rank, interest match and action ID. Look ahead across ready first actions for a feasible distinct second action. Exactly two validated steps or explicit unavailable state; no fabricated steps or prerequisites.",
+    "sentiment": "Explicit lexicon weights: love/great +2, good/helpful +1, bad/confusing/slow -1, broken/hate -2. Immediately preceding not/never/no flips a matched token. Score is signed weight sum divided by absolute weight sum; no matches are neutral. Evidence exposes token, position, negation and applied weight.",
+    "priority": "100 * severity ordinal (low=1, medium=2, high=3, critical=4) + 10 * max(0, -sentiment score). Severity always dominates sentiment, including critical issues with positive text. Descending priority then feedback ID.",
+    "cli": "One JSON object on stdout, exit 0 on success. Usage, input validation, encoding, JSON and file errors produce one JSON error object, exit 2. No network configuration, logging to stdout or file writes by the implementation.",
+    "determinism": "Built-in pipeline is deterministic and does not mutate input. An injected callable must itself be deterministic."
+  },
+  "scope": {
+    "included": [
+      "Integrated three-stage pipeline with shared schema and validated provenance",
+      "Local relevance index and optional validated embedding callable",
+      "Prerequisite-aware two-step journey with explicit unavailability",
+      "Transparent sentiment evidence and severity-first issue ordering",
+      "Synthetic fixture data, CLI, unit and subprocess tests"
+    ],
+    "excluded": [
+      "Live providers, networks, training, learned embeddings or persistent indexes",
+      "Enterprise authentication, databases, service deployment and production scale",
+      "General natural-language understanding, sarcasm and multilingual sentiment",
+      "Automatically executing recommended actions or modifying completed history"
+    ],
+    "auxiliary_artifacts": "docs\\My_prompt.txt is the required prompt audit log, separate from the four implementation deliverables."
+  },
+  "test_outcomes": {
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 26,
+    "failures": 0,
+    "errors": 0,
+    "result": "PASS",
+    "cli_command": "python -B implementation.py example_input.json",
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "verified_handoff": "camera -> setup, shoot -> feedback f2, f1, f3 ordered by priority",
+    "coverage": [
+      "Synonyms, inverted index, ranking and stable ties",
+      "Injected deterministic embeddings, invalid vectors, dimensions and callable failures",
+      "Personalization, prerequisites, completed history and cross-product dependencies",
+      "No match, empty catalog and insufficient journey steps",
+      "Sentiment negation, neutral evidence and severity dominance",
+      "Cross-stage propagation, feedback filtering and tampered handoff rejection",
+      "Invalid input, duplicate IDs, cycles, missing references and action/product mismatches",
+      "Input immutability; subprocess CLI success, missing-file and usage errors",
+      "CLI malformed JSON, invalid schema, duplicate keys and nonfinite constants"
+    ]
+  }
+}

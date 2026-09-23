@@ -1,0 +1,125 @@
+{
+  "build_id": "wave2_t062_combo2_faq_deep",
+  "composition_label": "Knowledge-base answers (AI customer support) -> Deep research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "validation_entrypoint": "validate(kind, value, context=None)",
+    "input": {
+      "schema_version": "Integer 1, excluding booleans",
+      "synthetic": "Must be true; all supplied fixture documents are synthetic",
+      "question": "Nonempty string",
+      "topics": "Nonempty unique list of nonempty canonical topic strings",
+      "min_sources": "Integer 1..100; required distinct document IDs per requested topic",
+      "documents": "List of objects with unique id, title, and claims",
+      "claim": "Object with id, topic, position, statement; nonempty strings; claim id unique within document"
+    },
+    "output": {
+      "metadata": "schema_version=1, synthetic=true, status=ok",
+      "faq": "Question, topics, min_sources, ranked evidence, blocking_reasons, response",
+      "response": "status answered|abstained, reason, answer, citations",
+      "evidence": "document_id, claim_id, topic, position, verbatim statement, lexical score",
+      "citation": "document_id and claim_id identify an exact source claim",
+      "deep": "faq_status, faq_citations, findings, disagreements, unresolved_questions",
+      "error": "One JSON object with status=error and error message; process exit code 2"
+    },
+    "boundaries": [
+      "Strict exact input fields, types, nonempty strings, unique identifiers",
+      "FAQ validates retained input fields and all evidence against original input",
+      "Answer citations must reference retrieved claims; answers must exactly quote all cited evidence",
+      "Deep stage accepts only a validated FAQ handoff and synthesizes solely its evidence",
+      "Final envelope revalidates FAQ and deep synthesis",
+      "CLI rejects duplicate JSON keys, nonstandard JSON constants, invalid encoding, malformed input and file errors"
+    ]
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq",
+      "to": "deep",
+      "payload": "Validated question, requested topics, minimum source threshold, full retrieved evidence, blocking reasons and answer/abstention",
+      "use": "Group retained evidence by topic and canonical position; preserve citations and FAQ status; expose competing positions, missing evidence and inadequate corroboration",
+      "abstention_behavior": "Research continues over retained evidence even when FAQ abstains; it does not invent a replacement answer",
+      "source_access": "Original input is used only to verify handoff integrity; synthesis itself reads only the validated FAQ output"
+    }
+  ],
+  "behavior": {
+    "retrieval": "Exact requested-topic filtering, descending question/title/statement lexical token overlap, deterministic document and claim ID tie breaks. Zero-overlap claims remain eligible when their canonical topic matches.",
+    "grounding": "Extractive answers quote all relevant source statements and cite exact source claim IDs.",
+    "abstention": "Any requested topic with no evidence, insufficient distinct document IDs, or multiple canonical positions blocks the complete FAQ answer.",
+    "synthesis": "For each topic, group positions, deduplicate statement text, count distinct documents, retain claim-level citations; report every competing position without majority voting.",
+    "unresolved": "Identify missing evidence, insufficient corroboration, conflicting authority, and the upstream abstention reason.",
+    "injection": "Optional run_pipeline(data, answerer=callable) or faq_stage(data, answerer=callable). Callable receives a deep copy of retrieval context and returns an answer object subject to identical grounding validation. Fixture callables test valid, invented, invalid-citation and blocked-answer behavior.",
+    "determinism": "No timestamps, randomness, network access, hidden state or live providers in pipeline output.",
+    "example": "Synthetic return-window conflict produces FAQ abstention, two competing return positions and corroborated refund timing."
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI and importable Python pipeline",
+      "Structured synthetic multi-document knowledge base",
+      "Shared validation and stable citation lineage",
+      "Grounded extractive answers and explicit abstention",
+      "Evidence synthesis, disagreement and unresolved questions",
+      "Offline optional callable injection with fixture validation"
+    ],
+    "excluded": [
+      "Live providers, web research, network calls and external packages",
+      "Embeddings, semantic interpretation or natural-language contradiction detection",
+      "Automatic extraction of claims from unstructured documents",
+      "Source truth verification, source independence checks or authority ranking",
+      "Authentication, persistence services and enterprise production hardening"
+    ],
+    "limitations": [
+      "Caller-supplied canonical topics and positions define relevance and disagreement; text is not semantically verified against those labels.",
+      "Distinct document IDs are counted as sources, not proof of independent provenance.",
+      "Extractive grounding proves source attribution, not factual truth.",
+      "An injected callable is trusted executable Python, not a sandboxed plugin; only its output is validated."
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "executed": true,
+      "tests_run": 19,
+      "failures": 0,
+      "errors": 0,
+      "result": "passed"
+    },
+    "example_cli": {
+      "executed": true,
+      "exit_code": 0,
+      "stdout": "One JSON object with status=ok",
+      "faq_status": "abstained",
+      "disagreement_topics": ["return_window"]
+    },
+    "coverage": [
+      "Grounded FAQ answers",
+      "Conflict abstention and multi-document synthesis",
+      "Cross-stage citation and abstention propagation",
+      "Empty evidence and missing requested topics",
+      "Distinct-source thresholds and irrelevant-claim filtering",
+      "Invalid input types, bounds and duplicate IDs",
+      "Handoff and final synthesis tampering",
+      "Valid and invalid injected callable fixtures",
+      "Determinism and input immutability",
+      "CLI success, usage errors and missing files",
+      "Malformed JSON, invalid schema, duplicate keys and nonstandard constants"
+    ]
+  }
+}

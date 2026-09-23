@@ -1,0 +1,56 @@
+{
+  "build_id": "wave2_t119_combo4_feedback_faq_guided_normal",
+  "composition_label": "feedback -> faq -> guided -> normal",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict object containing schema_version=1, synthetic=true, feedback, themes, knowledge, steps, completed_steps, research_sources. Collections are arrays; ids are nonempty and unique within their collection.",
+    "feedback": "{id, text}",
+    "theme": "{id, keywords:[text], question}",
+    "source": "{id, title, text}; used for knowledge and research_sources",
+    "step": "{id, title, topic:theme_id, requires:[step_id], instructions}",
+    "output": "{schema_version, synthetic, status, build_id, stages:[feedback,faq,guided,normal]}",
+    "stage_envelope": "{schema_version, stage, status, input_stage, data}",
+    "citation": "{source_id, start, end, excerpt}; zero-based, end-exclusive Python Unicode code-point offsets, resolved against the applicable input source collection",
+    "validation": "One shared ValidationError/require layer checks strict input fields, collection ids, prerequisite DAG, evidence offsets, extractive answer identity, lineage and stage-specific output contracts. Each downstream stage validates its predecessor before consuming it.",
+    "errors": "CLI file, JSON and validation failures produce one JSON object with status=error and exit 2."
+  },
+  "cross_stage_handoffs": [
+    "feedback -> faq: detected theme definitions, deduplicated supporting excerpts and original feedback ids drive FAQ queries",
+    "faq -> guided: answered versus abstained FAQ status gates onboarding; citations and feedback ids propagate",
+    "guided -> normal: only ready/completed steps supply research queries including FAQ extracts; step ids, feedback ids and FAQ citations propagate"
+  ],
+  "behavior": {
+    "feedback": "Casefolded word-sequence deduplication ignores punctuation and whitespace; retains every original id and a full canonical excerpt. Configured keyword token sets determine possibly overlapping themes; unmatched feedback is explicit.",
+    "faq": "Require a configured theme keyword token set in each eligible passage, then retrieve one sentence by maximum non-stopword query-token overlap. Ties sort by source id then offset. Exact sentence answer or explicit abstained/null/empty citations.",
+    "guided": "Select detected-topic steps plus transitive prerequisites. Validate supplied completion claims against prerequisites and grounded FAQs. Report completed, ready, blocked, needs_answer and completed/total progress. Rerun with updated completed_steps to track progress.",
+    "normal": "Extract a single matching research passage for each actionable onboarding step, with exact source offsets. No matching passage means explicit abstention.",
+    "determinism": "No random choices, timestamps, network access or model calls in the implementation.",
+    "fixtures": "All example customer records, knowledge and research documents are synthetic."
+  },
+  "scope": {
+    "included": ["Integrated deterministic pipeline", "Traceable feedback deduplication", "Lexical KB retrieval", "Explicit abstention", "Prerequisite-driven setup", "Caller-supplied progress snapshots", "Extractive research", "Shared validation", "CLI and unittest fixtures"],
+    "excluded": ["Live models or providers", "Semantic entailment guarantees", "Fuzzy or multilingual deduplication", "External persistence", "Execution of onboarding actions", "Enterprise delivery", "Automatic factual verification beyond exact source grounding"],
+    "limitations": "Lexical overlap is not semantic understanding: irrelevant passages sharing query words can match. Sentence splitting is intentionally simple and may split abbreviations. No LLM callable is needed or included."
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 33, "passed": 33, "failed": 0},
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object, status=ok, four ordered validated stages",
+    "coverage": ["All four stages", "Deduplication", "Grounding and abstention", "Prerequisite closure and cycles", "Progress", "Cross-stage lineage and tampering", "Unicode offsets", "Determinism", "Empty inputs", "Invalid schemas", "CLI success, file errors, usage errors and malformed JSON"]
+  }
+}

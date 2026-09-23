@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC marketplace products, customer feedback and offline research snapshots",
+  "catalog": [
+    {
+      "id": "pack-a",
+      "title": "Synthetic Summit Backpack",
+      "description": "Durable waterproof backpack for hiking with padded straps.",
+      "tags": ["hiking", "durable"],
+      "price": 75
+    },
+    {
+      "id": "pack-b",
+      "title": "Synthetic Day Rucksack",
+      "description": "Comfortable lightweight backpack for hiking.",
+      "tags": ["hiking"],
+      "price": 40
+    },
+    {
+      "id": "pack-c",
+      "title": "Synthetic Leather Trail Pack",
+      "description": "Waterproof durable backpack.",
+      "tags": ["hiking", "durable", "leather"],
+      "price": 60
+    },
+    {
+      "id": "mug-a",
+      "title": "Synthetic Office Mug",
+      "description": "Ceramic mug for coffee.",
+      "tags": ["office"],
+      "price": 12
+    }
+  ],
+  "preferences": {
+    "interests": ["hiking", "durable"],
+    "excluded_tags": ["leather"],
+    "excluded_ids": [],
+    "max_price": 90,
+    "max_results": 3
+  },
+  "search": {
+    "query": "sturdy rainproof rucksack",
+    "top_k": 2,
+    "min_score": 0.2
+  },
+  "feedback": [
+    {"id": "f1", "product_id": "pack-a", "text": "The seam broke in rain.", "rating": 1},
+    {"id": "f2", "product_id": "pack-a", "text": "  The seam BROKE in rain! ", "rating": 2},
+    {"id": "f3", "product_id": "pack-a", "text": "Comfortable straps and good value.", "rating": 5},
+    {"id": "f4", "product_id": "pack-b", "text": "The padding is comfortable.", "rating": 4},
+    {"id": "f5", "product_id": "pack-c", "text": "The seam broke.", "rating": 1},
+    {"id": "f6", "product_id": "mug-a", "text": "Expensive mug.", "rating": 2}
+  ],
+  "research": {
+    "allowed_hosts": ["research.example"],
+    "max_findings_per_theme": 2,
+    "pages": [
+      {
+        "id": "source-a",
+        "url": "https://research.example/backpack-guide#seams",
+        "title": "SYNTHETIC backpack construction guide",
+        "text": "A durable seam can resist a tear. Waterproof fabric does not prevent every rain leak. Comfortable straps and padding can reduce pain."
+      },
+      {
+        "id": "source-b",
+        "url": "https://research.example/value",
+        "title": "SYNTHETIC value guide",
+        "text": "Price and long-term value should be considered together. This is synthetic educational content."
+      },
+      {
+        "id": "source-blocked",
+        "url": "https://untrusted.example/review",
+        "title": "SYNTHETIC disallowed page",
+        "text": "A durable waterproof backpack has comfortable straps."
+      }
+    ]
+  }
+}

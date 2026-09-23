@@ -1,0 +1,57 @@
+{
+  "build_id": "wave2_t091_combo4_guided_normal_sentiment_behavior",
+  "composition_label": "Guided setup -> Normal research -> Sentiment & prioritization -> Behavioral personalization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exactly schema_version=1, synthetic=true, guided, normal, sentiment, behavior. See example_input.json for the executable synthetic fixture.",
+    "validation": "Validator handles input and stage contracts. Unknown/missing fields, invalid types, bool-as-int, duplicate identifiers, invalid timestamps and broken prerequisites are rejected. CLI rejects duplicate JSON keys and non-finite JSON constants.",
+    "output": "schema_version, synthetic, status, stages. Each populated stage uses {schema_version, stage, data}. Incomplete onboarding yields status=blocked and null later stages. Errors yield {status:error,error:message}, exit 2.",
+    "citations": "{source_id,start,end,quote}; Unicode character offsets, exclusive end, exactly sliced from original document",
+    "timestamps": "ISO 8601 with timezone; events must be no later than explicit as_of"
+  },
+  "cross_stage_handoffs": [
+    "guided -> normal: validated ready flag and query; research cannot run without all prerequisite steps",
+    "normal -> sentiment: ranked passages, exact citations, source severity and lexical relevance",
+    "sentiment -> behavior: validated scores, severity-aware priorities and citation text drive matching catalog tags"
+  ],
+  "behavior": {
+    "guided": "Prefix-ordered profile, consent, research steps; email/name, accepted consent and nonempty tokenized query validation; completed steps, next step and fractional progress.",
+    "normal": "Sentence-like passages split at ASCII .!? and newlines. Relevance is unique query-token coverage. Positive-overlap passages only, top_k, ties by source ID and start offset. Extractive findings are exact quotes, not generated summaries.",
+    "sentiment": "Fixed English lexicon; immediately preceding not/never/no flips a contribution. Score=sum(values)/sum(abs(values)), or zero with no matches. All contributions exposed. Priority=severity base (10/20/30/40)+5*max(0,-score)+relevance. All retrieved findings are retained as scored issues, including neutral/positive observations, subject to max_issues.",
+    "behavior": "History sums browse=1 or purchase=3 times 2^(-age_days/30). Each negative issue adds matched-tag-token fraction * priority/10. Positive/neutral observations do not boost issue scores. Total=history+issues. Scores rounded to six decimals, ties by item ID. Duplicate events count as separate observations.",
+    "cold_start": "No events means cold_start=true; negative-issue matches rank first, otherwise deterministic ID ordering. No popularity or invented user history.",
+    "determinism": "Explicit as_of clock, no randomness, stable tie breakers, input not mutated."
+  },
+  "scope": {
+    "included": ["Integrated CLI", "Shared validation", "Exact local citations", "Transparent sentiment", "Severity ordering", "Recency personalization", "Synthetic fixtures", "Unit and CLI tests"],
+    "excluded": ["Live providers", "Network retrieval", "LLM calls", "Learned models", "Semantic search", "Production authentication", "Persistent user accounts", "Multilingual sentiment", "Sarcasm handling", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 32,
+    "failures": 0,
+    "errors": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_status": "passed: one JSON object, status=ok, exit=0",
+    "cli_error_behavior": "Verified missing file, missing argument, malformed JSON, duplicate keys, non-finite constant, invalid schema: JSON status=error and exit=2"
+  }
+}

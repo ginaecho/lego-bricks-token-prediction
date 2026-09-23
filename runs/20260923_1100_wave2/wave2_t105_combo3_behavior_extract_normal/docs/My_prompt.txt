@@ -1,0 +1,54 @@
+2026-09-23T13:05:01.930+02:00
+<current_datetime>2026-09-23T13:05:01.930+02:00</current_datetime>
+
+You are an isolated software builder for a token-measurement experiment.
+Your entire session is measured as ONE construction label, so work normally and completely,
+but do not do unrelated exploration.
+
+Build ID: wave2_t105_combo3_behavior_extract_normal
+Working directory (create it if missing; write ONLY here): C:\Users\tzuchunchen\.copilot\session-state\2a19c1c6-7d0e-4fb8-87e0-3035680cfe71\files\marketplace-sales\runs\20260923_1100_wave2\wave2_t105_combo3_behavior_extract_normal
+
+Isolation rules (mandatory):
+- Start from an empty directory. Do not read, list, search or copy any other file or folder
+  in the repository or on this machine. Do not look at other builds.
+- Do not spawn sub-agents, do not use git, do not call networks, web tools or model providers.
+- Use Python 3 standard library only.
+
+Build ONE integrated, runnable Python CLI reference implementation of this composition
+(3 basic functionalities, executed in this order):
+  1. Behavioral personalization (Personalized discovery): Recency-weighted browsing/purchase ranking with cold-start handling.
+  2. Structured extraction (Document automation): Schema-driven field extraction, source spans and missing-field reporting.
+  3. Normal research (Research): Passage retrieval and extractive findings with exact source citations.
+Integration: data handoffs behavior -> extract, extract -> normal. Build one integrated pipeline where each stage consumes the previous stage's validated output; share schemas and validation. Do not build separate standalone programs and concatenate them.
+
+Scope: bounded reference implementation with one shared input/output schema and one shared
+validation layer; deterministic logic; any LLM step is an optional injected Python callable
+validated with test fixtures (never a live provider). Not enterprise production delivery.
+Use clearly labeled synthetic fixture data.
+
+Deliverables, exactly these four files in the working directory:
+1. implementation.py - `python -B implementation.py example_input.json` must print one JSON
+   object to stdout and exit 0. Validation/file errors print JSON with status "error", exit 2.
+2. test_implementation.py - unittest suite with at least 12 test cases covering
+   each stage, cross-stage propagation, edge, invalid-input and CLI behavior; `python -B -m unittest discover -s . -p test_implementation.py` must pass.
+3. example_input.json - synthetic example input accepted by the CLI.
+4. build_manifest.json - JSON with keys: build_id, composition_label, construction
+   (started_with_empty_directory, implementation_origin, runtime, external_dependencies,
+   networks_or_providers_called, agents_spawned, git_used), deliverables, commands,
+   shared_schema, cross_stage_handoffs, behavior, scope (included/excluded), test_outcomes.
+   Do not include token counts, cost, staffing or client scores.
+
+Run the tests and the CLI yourself and repair until both pass. Finish with a short report
+(under 120 words) stating the file list and test result.
+
+2026-09-23T13:05:01.930+02:00
+<system_reminder>
+IMPORTANT: The tools listed below are deferred — their full definitions are NOT loaded, so you cannot call them directly yet. Whenever a task could be served by any of these tools, you MUST FIRST call the tool search tool. Do not guess a deferred tool's arguments, or signature, and never invoke one before searching for it.
+
+github-mcp-server MCP server. Tools prefixed with `github-mcp-server-`:
+- get_copilot_space
+- get_file_contents
+- list_copilot_spaces
+- search_code
+- search_users
+</system_reminder>

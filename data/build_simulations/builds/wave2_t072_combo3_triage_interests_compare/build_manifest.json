@@ -1,0 +1,76 @@
+{
+  "build_id": "wave2_t072_combo3_triage_interests_compare",
+  "composition_label": "Ticket triage & routing -> Interest-based recommendations -> Product comparison",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written directly in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "data_label": "synthetic",
+    "input": {
+      "required_fields": ["schema_version", "data_label", "ticket", "triage_policy", "preferences", "catalog"],
+      "ticket": "id, subject, body: nonempty trimmed strings",
+      "triage_policy": "ordered categories (unique id, keywords, route with team and accountable owner), existing fallback_category, priority_rules, default_priority",
+      "preferences": "unique case-insensitive weighted interest tags; product ID and case-insensitive tag exclusions; unique weighted attribute preferences with min/max direction; integer shortlist limit 1..50",
+      "catalog": "unique product id, name, tags, nonempty support_categories (configured categories or wildcard '*'), optional price/weight/battery_life measurements",
+      "measurements": "nonnegative finite value and supported unit; USD only, kg/g, h/min",
+      "weights": "strictly positive finite numbers; booleans rejected"
+    },
+    "output": {
+      "success": "schema_version, data_label, status='ok', ticket_id, triage, interests, comparison",
+      "failure": "schema_version, status='error', error with type and message; CLI exits 2",
+      "intermediate_handoffs": "same success envelope with only the completed stage fields"
+    },
+    "validation": "One shared validation layer checks strict field sets, types, uniqueness, references, numeric bounds and finite normalized values. Before and after every stage, deterministic facts are recomputed from validated source input to reject tampered or stale handoffs. Unknown fields, duplicate JSON keys and nonfinite JSON constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "triage",
+      "to": "interests",
+      "consumed": "Validated category filters product eligibility; priority and accountable route propagate unchanged. Catalog, preferences and exclusions share the validated input schema."
+    },
+    {
+      "from": "interests",
+      "to": "comparison",
+      "consumed": "Only validated shortlisted product IDs are resolved against the validated catalog. Interest scores drive secondary ordering; exclusions cannot be bypassed. Category, priority and accountable route propagate unchanged."
+    }
+  ],
+  "behavior": {
+    "triage": "Case-insensitive literal keyword matching at word boundaries. Most distinct matched keywords wins; ties use configured category order; no matches uses configured fallback. Priority is highest severity among the default and matching rules, so rules never downgrade the default.",
+    "interests": "Hard exclusions apply before category eligibility and shortlist truncation. Weighted matching-tag fraction ranks products, with product ID as tie-breaker. Zero-match eligible products remain as explicit fallback choices. Exclusion reasons and category-ineligible IDs are reported.",
+    "comparison": "All shortlisted products appear as side-by-side rows with price USD, weight g, battery_life h and null for missing values. For each preferred attribute, min/max utility is normalized across observed shortlisted values; equal observed values score 1 and missing values score 0. Weighted mean utility ranks products, then interest score, then product ID. No attribute preferences falls back to interest score.",
+    "explanations": "Evidence references only matched configured keywords, catalog tags, configured preference weights, normalized catalog values and missing-value policy. No generated factual claims or live model calls.",
+    "numeric_stability": "Weights are scaled before summation to avoid overflow; source and normalized measurements must be finite.",
+    "empty_results": "Empty catalog, all excluded, or no category-eligible products yield successful empty recommendation and comparison arrays.",
+    "determinism": "No randomization, clocks, network, or mutable global state; public functions copy input and handoffs. Catalog ordering does not affect the output."
+  },
+  "scope": {
+    "included": ["Integrated deterministic pipeline", "Configurable accountable routing", "Hard exclusions", "Grounded evidence", "Unit normalization", "Preference ranking", "Shared strict validation", "Synthetic fixtures", "JSON CLI and error contract", "Standard-library unittest suite"],
+    "excluded": ["Live providers or LLM integration", "Real customer data", "Persistence", "Currency conversion", "Arbitrary attributes", "Enterprise infrastructure", "Natural-language semantic interpretation", "Authentication", "Web services"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 29,
+    "tests_failed": 0,
+    "test_command_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One valid JSON object with status ok; audio category, urgent priority, accountable audio owner, exclusions enforced, comparison order SYN-P2 then SYN-P1.",
+    "coverage": ["Each stage", "Category and priority policy", "Accountable route propagation", "Grounded explanations", "Exclusions", "Shortlist propagation", "Unit normalization", "Missing values", "Empty results", "Deterministic ties", "No input mutation", "Tampered and stale handoffs", "Strict schema and numerical validation", "Large valid weights", "CLI success, usage, missing file, malformed JSON and encoding errors"]
+  }
+}

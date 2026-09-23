@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "allowed_hosts": ["support.example.test"],
+  "pages": {
+    "https://support.example.test/status": "SYNTHETIC FIXTURE: Checkout outage is currently affecting purchases.",
+    "https://support.example.test/refunds": "SYNTHETIC FIXTURE: Refund requests are handled by the billing team."
+  },
+  "sources": [
+    {"id": "status", "url": "https://support.example.test/status"},
+    {"id": "refund-policy", "url": "https://support.example.test/refunds"}
+  ],
+  "tickets": [
+    {"id": "SYN-001", "subject": "Cannot finish order", "body": "Please help.", "source_ids": ["status"]},
+    {"id": "SYN-002", "subject": "Question about my payment", "body": "", "source_ids": ["refund-policy"]},
+    {"id": "SYN-003", "subject": "General question", "body": "Hello!", "source_ids": []}
+  ],
+  "routing": {
+    "rules": [
+      {"category": "incident", "keywords": ["outage", "unavailable"], "priority": 1, "team": "operations", "owner": "synthetic-oncall"},
+      {"category": "billing", "keywords": ["refund"], "priority": 3, "team": "billing-support", "owner": "synthetic-billing-lead"}
+    ],
+    "fallback": {"category": "general", "priority": 4, "team": "customer-support", "owner": "synthetic-support-lead"}
+  }
+}

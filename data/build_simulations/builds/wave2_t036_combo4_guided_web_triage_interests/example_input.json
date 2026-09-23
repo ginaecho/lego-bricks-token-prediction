@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC marketplace support and discovery demonstration",
+  "guided": {
+    "steps": [
+      {"id": "research_consent", "requires": []},
+      {"id": "support_consent", "requires": ["research_consent"]},
+      {"id": "personalization_consent", "requires": ["support_consent"]}
+    ],
+    "responses": {
+      "research_consent": true,
+      "support_consent": true,
+      "personalization_consent": true
+    }
+  },
+  "web": {
+    "allowlisted_hosts": ["help.example.test"],
+    "urls": [
+      "https://help.example.test/delivery",
+      "https://help.example.test/returns"
+    ],
+    "documents": {
+      "https://help.example.test/delivery": {
+        "title": "Synthetic delivery guide",
+        "text": "SYNTHETIC: Track delivery of garden kits. Sustainable packaging reduces waste."
+      },
+      "https://help.example.test/returns": {
+        "title": "Synthetic returns guide",
+        "text": "SYNTHETIC: Request a refund for electronics returns within the fictional return window."
+      }
+    },
+    "topics": {
+      "gardening": ["garden"],
+      "sustainability": ["sustainable"],
+      "electronics": ["electronics"]
+    }
+  },
+  "triage": {
+    "tickets": [
+      {
+        "id": "T1",
+        "subject": "Missing delivery",
+        "body": "My garden kit is missing; this is urgent.",
+        "source_urls": ["https://help.example.test/delivery"]
+      },
+      {
+        "id": "T2",
+        "subject": "Refund question",
+        "body": "How do I return my electronics?",
+        "source_urls": ["https://help.example.test/returns"]
+      }
+    ],
+    "rules": [
+      {"id": "delivery_rule", "category": "shipping", "keywords": ["delivery", "missing"], "priority": "high"},
+      {"id": "refund_rule", "category": "billing", "keywords": ["refund", "returns"], "priority": "normal"}
+    ],
+    "routes": {
+      "shipping": {"queue": "synthetic-logistics", "owner": "Synthetic Logistics Lead"},
+      "billing": {"queue": "synthetic-billing", "owner": "Synthetic Billing Lead"},
+      "general": {"queue": "synthetic-help", "owner": "Synthetic Help Lead"}
+    },
+    "fallback": {"category": "general", "priority": "low"},
+    "urgent_keywords": ["urgent", "unsafe"]
+  },
+  "interests": {
+    "preferences": {"gardening": 5, "sustainability": 3, "electronics": 2},
+    "excluded_topics": ["electronics"],
+    "excluded_item_ids": [],
+    "limit": 3,
+    "items": [
+      {"id": "garden_help", "title": "Synthetic garden delivery assistance", "topics": ["gardening", "sustainability"], "category": "shipping", "source_urls": ["https://help.example.test/delivery"]},
+      {"id": "garden_tracking", "title": "Synthetic garden tracking tips", "topics": ["gardening"], "category": "shipping", "source_urls": ["https://help.example.test/delivery"]},
+      {"id": "electronics_help", "title": "Synthetic electronics returns assistance", "topics": ["electronics"], "category": "billing", "source_urls": ["https://help.example.test/returns"]}
+    ]
+  }
+}

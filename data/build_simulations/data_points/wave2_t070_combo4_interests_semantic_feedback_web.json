@@ -1,0 +1,684 @@
+{
+  "id": "wave2_t070_combo4_interests_semantic_feedback_web",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "search",
+      "insights",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Smart product search",
+      "Customer insights",
+      "Research"
+    ],
+    "types": [
+      "interests",
+      "semantic",
+      "feedback",
+      "web"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 1,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 4,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Preference ranking, exclusion enforcement and grounded explanations.",
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Allowlisted URL ingestion, retrieval and provenance-preserving findings."
+  ],
+  "integration": {
+    "ordered_types": [
+      "interests",
+      "semantic",
+      "feedback",
+      "web"
+    ],
+    "edges": [
+      {
+        "from": "interests",
+        "to": "semantic",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "semantic",
+        "to": "feedback",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "feedback",
+        "to": "web",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "33d06f0d333799d1a1447947f3084197df87f155dadc8b36029b1196b7ee8164",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "4016adbd6fdae9b65a2151ff1491c3c63a2e197439ad460a63478a7d2dc625e5",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t070_combo4_interests_semantic_feedback_web",
+  "membership_point_id": "combo4_interests_semantic_feedback_web",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "cef8567fed316b58dcfda9b21b25d0fe83dce2c83f295a05f69cee478131957e",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "49011740-eaa1-416f-a548-56bdafc29915",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 156417,
+    "output_tokens": 16122,
+    "cache_read_tokens": 137108,
+    "cache_write_tokens": 19291,
+    "total_tokens": 172539,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34445,
+        "agent_id": "49011740-eaa1-416f-a548-56bdafc29915",
+        "model": "gpt-6-astra",
+        "input_tokens": 14862,
+        "output_tokens": 382,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 825,
+        "reasoning_tokens": 192,
+        "duration_ms": 10207,
+        "created_at": "2026-09-23T10:20:51.796Z"
+      },
+      {
+        "id": 34475,
+        "agent_id": "49011740-eaa1-416f-a548-56bdafc29915",
+        "model": "gpt-6-astra",
+        "input_tokens": 15274,
+        "output_tokens": 13473,
+        "cache_read_tokens": 14859,
+        "cache_write_tokens": 412,
+        "reasoning_tokens": 1268,
+        "duration_ms": 220173,
+        "created_at": "2026-09-23T10:24:32.837Z"
+      },
+      {
+        "id": 34476,
+        "agent_id": "49011740-eaa1-416f-a548-56bdafc29915",
+        "model": "gpt-6-astra",
+        "input_tokens": 29071,
+        "output_tokens": 149,
+        "cache_read_tokens": 15271,
+        "cache_write_tokens": 13797,
+        "reasoning_tokens": 9,
+        "duration_ms": 3584,
+        "created_at": "2026-09-23T10:24:36.504Z"
+      },
+      {
+        "id": 34480,
+        "agent_id": "49011740-eaa1-416f-a548-56bdafc29915",
+        "model": "gpt-6-astra",
+        "input_tokens": 30977,
+        "output_tokens": 1681,
+        "cache_read_tokens": 29068,
+        "cache_write_tokens": 1906,
+        "reasoning_tokens": 457,
+        "duration_ms": 30865,
+        "created_at": "2026-09-23T10:25:09.316Z"
+      },
+      {
+        "id": 34481,
+        "agent_id": "49011740-eaa1-416f-a548-56bdafc29915",
+        "model": "gpt-6-astra",
+        "input_tokens": 32905,
+        "output_tokens": 342,
+        "cache_read_tokens": 30974,
+        "cache_write_tokens": 1928,
+        "reasoning_tokens": 0,
+        "duration_ms": 6622,
+        "created_at": "2026-09-23T10:25:16.001Z"
+      },
+      {
+        "id": 34483,
+        "agent_id": "49011740-eaa1-416f-a548-56bdafc29915",
+        "model": "gpt-6-astra",
+        "input_tokens": 33328,
+        "output_tokens": 95,
+        "cache_read_tokens": 32902,
+        "cache_write_tokens": 423,
+        "reasoning_tokens": 0,
+        "duration_ms": 3238,
+        "created_at": "2026-09-23T10:25:21.695Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6328725,
+      "observed_cache_profile_estimate_usd": 0.32437950000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.594469999999999,
+      "observed_cache_profile_estimate_usd": 7.594469999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 1,
+      "roi_satisfaction": 3,
+      "future_impact_potential": 4,
+      "delivery_quality": 5
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.64,
+    "pseudo_annual_cost_usd": 60000,
+    "pseudo_annual_ai_value_usd": 25000,
+    "pseudo_net_impact_usd": -35000,
+    "pseudo_roi_pct": -58.333333333333336,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".....................................\n----------------------------------------------------------------------\nRan 37 tests in 0.864s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "fixture_label": "SYNTHETIC marketplace products, customer feedback and offline research snapshots",
+      "status": "ok",
+      "stages": {
+        "interests": {
+          "stage": "interests",
+          "recommendations": [
+            {
+              "product_id": "pack-a",
+              "score": 1.0,
+              "evidence": [
+                {
+                  "interest": "hiking",
+                  "matched_tag": "hiking"
+                },
+                {
+                  "interest": "durable",
+                  "matched_tag": "durable"
+                }
+              ],
+              "explanation": "Matches catalog tags: hiking, durable"
+            },
+            {
+              "product_id": "pack-b",
+              "score": 0.5,
+              "evidence": [
+                {
+                  "interest": "hiking",
+                  "matched_tag": "hiking"
+                }
+              ],
+              "explanation": "Matches catalog tags: hiking"
+            }
+          ]
+        },
+        "semantic": {
+          "stage": "semantic",
+          "query": "sturdy rainproof rucksack",
+          "index": {
+            "backpack": [
+              "pack-a",
+              "pack-b"
+            ],
+            "comfort": [
+              "pack-b"
+            ],
+            "day": [
+              "pack-b"
+            ],
+            "durable": [
+              "pack-a"
+            ],
+            "for": [
+              "pack-a",
+              "pack-b"
+            ],
+            "lightweight": [
+              "pack-b"
+            ],
+            "outdoor": [
+              "pack-a",
+              "pack-b"
+            ],
+            "padded": [
+              "pack-a"
+            ],
+            "straps": [
+              "pack-a"
+            ],
+            "summit": [
+              "pack-a"
+            ],
+            "synthetic": [
+              "pack-a",
+              "pack-b"
+            ],
+            "waterproof": [
+              "pack-a"
+            ],
+            "with": [
+              "pack-a"
+            ]
+          },
+          "embedding_used": false,
+          "matches": [
+            {
+              "product_id": "pack-a",
+              "score": 1.0,
+              "lexical_score": 1.0,
+              "embedding_score": null,
+              "matched_terms": [
+                "backpack",
+                "durable",
+                "waterproof"
+              ],
+              "preference_evidence": [
+                {
+                  "interest": "hiking",
+                  "matched_tag": "hiking"
+                },
+                {
+                  "interest": "durable",
+                  "matched_tag": "durable"
+                }
+              ]
+            },
+            {
+              "product_id": "pack-b",
+              "score": 0.33333333,
+              "lexical_score": 0.33333333,
+              "embedding_score": null,
+              "matched_terms": [
+                "backpack"
+              ],
+              "preference_evidence": [
+                {
+                  "interest": "hiking",
+                  "matched_tag": "hiking"
+                }
+              ]
+            }
+          ]
+        },
+        "feedback": {
+          "stage": "feedback",
+          "selected_product_ids": [
+            "pack-a",
+            "pack-b"
+          ],
+          "items": [
+            {
+              "feedback_id": "f1",
+              "product_id": "pack-a",
+              "text": "The seam broke in rain.",
+              "rating": 1,
+              "source_feedback_ids": [
+                "f1",
+                "f2"
+              ]
+            },
+            {
+              "feedback_id": "f3",
+              "product_id": "pack-a",
+              "text": "Comfortable straps and good value.",
+              "rating": 5,
+              "source_feedback_ids": [
+                "f3"
+              ]
+            },
+            {
+              "feedback_id": "f4",
+              "product_id": "pack-b",
+              "text": "The padding is comfortable.",
+              "rating": 4,
+              "source_feedback_ids": [
+                "f4"
+              ]
+            }
+          ],
+          "duplicate_count": 1,
+          "themes": [
+            {
+              "theme": "comfort",
+              "count": 2,
+              "sentiment": {
+                "positive": 2,
+                "neutral": 0,
+                "negative": 0
+              },
+              "support": [
+                {
+                  "feedback_id": "f3",
+                  "product_id": "pack-a",
+                  "quote": "Comfortable straps and good value.",
+                  "source_feedback_ids": [
+                    "f3"
+                  ]
+                },
+                {
+                  "feedback_id": "f4",
+                  "product_id": "pack-b",
+                  "quote": "The padding is comfortable.",
+                  "source_feedback_ids": [
+                    "f4"
+                  ]
+                }
+              ]
+            },
+            {
+              "theme": "durability",
+              "count": 1,
+              "sentiment": {
+                "positive": 0,
+                "neutral": 0,
+                "negative": 1
+              },
+              "support": [
+                {
+                  "feedback_id": "f1",
+                  "product_id": "pack-a",
+                  "quote": "The seam broke in rain.",
+                  "source_feedback_ids": [
+                    "f1",
+                    "f2"
+                  ]
+                }
+              ]
+            },
+            {
+              "theme": "price",
+              "count": 1,
+              "sentiment": {
+                "positive": 1,
+                "neutral": 0,
+                "negative": 0
+              },
+              "support": [
+                {
+                  "feedback_id": "f3",
+                  "product_id": "pack-a",
+                  "quote": "Comfortable straps and good value.",
+                  "source_feedback_ids": [
+                    "f3"
+                  ]
+                }
+              ]
+            },
+            {
+              "theme": "weather",
+              "count": 1,
+              "sentiment": {
+                "positive": 0,
+                "neutral": 0,
+                "negative": 1
+              },
+              "support": [
+                {
+                  "feedback_id": "f1",
+                  "product_id": "pack-a",
+                  "quote": "The seam broke in rain.",
+                  "source_feedback_ids": [
+                    "f1",
+                    "f2"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "web": {
+          "stage": "web",
+          "queries": [
+            {
+              "theme": "comfort",
+              "query": "comfort Synthetic Summit Backpack Synthetic Day Rucksack",
+              "product_ids": [
+                "pack-a",
+                "pack-b"
+              ],
+              "feedback_ids": [
+                "f3",
+                "f4"
+              ]
+            },
+            {
+              "theme": "durability",
+              "query": "durability Synthetic Summit Backpack",
+              "product_ids": [
+                "pack-a"
+              ],
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ]
+            },
+            {
+              "theme": "price",
+              "query": "price Synthetic Summit Backpack",
+              "product_ids": [
+                "pack-a"
+              ],
+              "feedback_ids": [
+                "f3"
+              ]
+            },
+            {
+              "theme": "weather",
+              "query": "weather Synthetic Summit Backpack",
+              "product_ids": [
+                "pack-a"
+              ],
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ]
+            }
+          ],
+          "sources": [
+            {
+              "source_id": "source-a",
+              "url": "https://research.example/backpack-guide",
+              "title": "SYNTHETIC backpack construction guide",
+              "content_sha256": "5519a9459a9f31ce109d2c131756e34606af98ece8b4c82ce56da6b6c0470615",
+              "ingestion": "supplied_offline_snapshot"
+            },
+            {
+              "source_id": "source-b",
+              "url": "https://research.example/value",
+              "title": "SYNTHETIC value guide",
+              "content_sha256": "90c309ae0baf50d1738fd414f3f7752aa3f64dcc7f4fba641cd71b4c5f5bd79d",
+              "ingestion": "supplied_offline_snapshot"
+            }
+          ],
+          "rejected_sources": [
+            {
+              "source_id": "source-blocked",
+              "url": "https://untrusted.example/review",
+              "reason": "host_not_allowlisted"
+            }
+          ],
+          "findings": [
+            {
+              "theme": "comfort",
+              "source_id": "source-a",
+              "url": "https://research.example/backpack-guide",
+              "title": "SYNTHETIC backpack construction guide",
+              "quote": "Comfortable straps and padding can reduce pain.",
+              "score": 0.8,
+              "product_ids": [
+                "pack-a",
+                "pack-b"
+              ],
+              "feedback_ids": [
+                "f3",
+                "f4"
+              ],
+              "relationship": "theme_context_not_product_verification"
+            },
+            {
+              "theme": "durability",
+              "source_id": "source-a",
+              "url": "https://research.example/backpack-guide",
+              "title": "SYNTHETIC backpack construction guide",
+              "quote": "A durable seam can resist a tear.",
+              "score": 0.6,
+              "product_ids": [
+                "pack-a"
+              ],
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ],
+              "relationship": "theme_context_not_product_verification"
+            },
+            {
+              "theme": "price",
+              "source_id": "source-b",
+              "url": "https://research.example/value",
+              "title": "SYNTHETIC value guide",
+              "quote": "Price and long-term value should be considered together.",
+              "score": 0.66666667,
+              "product_ids": [
+                "pack-a"
+              ],
+              "feedback_ids": [
+                "f3"
+              ],
+              "relationship": "theme_context_not_product_verification"
+            },
+            {
+              "theme": "weather",
+              "source_id": "source-a",
+              "url": "https://research.example/backpack-guide",
+              "title": "SYNTHETIC backpack construction guide",
+              "quote": "Waterproof fabric does not prevent every rain leak.",
+              "score": 0.75,
+              "product_ids": [
+                "pack-a"
+              ],
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ],
+              "relationship": "theme_context_not_product_verification"
+            }
+          ]
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t070_combo4_interests_semantic_feedback_web",
+    "artifact_sha256": {
+      "implementation.py": "f49b44971a50faab1864a4af8b767f0cd642cd0e1570b0227af2fd4ae01957e9",
+      "test_implementation.py": "a2402570ae20ef5e22cdb4a265c40494ec4f001915bf4c8cc1a8741d9dc8347b",
+      "example_input.json": "a427a4c4106967c171a1d3c7921ea8213c39d00380c968f128127b5fdd1f8f1f",
+      "build_manifest.json": "49dfc1ae0704e11ff943e35eb2988f2402b6d7019988e4bde229fe56eee5701c"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

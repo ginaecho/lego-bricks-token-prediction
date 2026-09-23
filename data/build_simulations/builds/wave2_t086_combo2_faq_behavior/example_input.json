@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "fixture_label": "synthetic marketplace support and discovery example",
+  "query": "Can I wash the trail jacket?",
+  "as_of": "2026-09-23T12:00:00Z",
+  "knowledge_base": [
+    {
+      "id": "care-jacket",
+      "title": "Wash trail jacket",
+      "text": "Wash the trail jacket in cold water and air dry. Do not use bleach.",
+      "product_ids": ["trail-jacket"]
+    },
+    {
+      "id": "mug-care",
+      "title": "Ceramic mug care",
+      "text": "The ceramic mug is dishwasher safe.",
+      "product_ids": ["ceramic-mug"]
+    }
+  ],
+  "products": [
+    {"id": "trail-jacket", "name": "Synthetic Trail Jacket", "popularity": 0.5},
+    {"id": "ceramic-mug", "name": "Synthetic Ceramic Mug", "popularity": 0.9},
+    {"id": "day-pack", "name": "Synthetic Day Pack", "popularity": 0.7}
+  ],
+  "events": [
+    {"id": "event-1", "product_id": "day-pack", "type": "view", "timestamp": "2026-09-22T12:00:00Z"},
+    {"id": "event-2", "product_id": "trail-jacket", "type": "purchase", "timestamp": "2026-08-24T12:00:00Z"}
+  ],
+  "settings": {"half_life_days": 30, "top_k": 3, "min_match": 0.5, "faq_boost": 2}
+}

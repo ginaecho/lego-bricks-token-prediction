@@ -1,0 +1,56 @@
+{
+  "build_id": "wave2_t109_combo4_review_web_feedback_journey",
+  "composition_label": "Document review -> Web research -> Feedback analysis -> Journey recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict object: schema_version=1, synthetic=true, requirements, documents, allowlisted_hosts, sources, feedback, actions, completed_actions. Arrays are bounded to 200 entries; text to 20000 characters; CLI input to 1000000 bytes.",
+    "records": {
+      "requirements": "Unique id, description, nonempty terms; any literal case-insensitive term is an evidence candidate, not semantic verification.",
+      "documents": "Unique id and text.",
+      "sources": "Unique id, HTTPS URL, title, timezone-aware retrieved_at, body, nonempty requirement_ids. Bodies are explicitly synthetic offline URL snapshots, not live downloads.",
+      "feedback": "Unique id, text, nonempty requirement_ids.",
+      "actions": "Unique id, title, nonempty requirement_ids, prerequisites referencing other action IDs; acyclic.",
+      "completed_actions": "Unique known action IDs, including all their prerequisite ancestors."
+    },
+    "output": "One envelope with schema_version, synthetic, stage, status, and cumulative data keyed by review/web/feedback/journey.",
+    "validation": "One shared validation layer checks inputs and every stage handoff. Exact deterministic recomputation validates all output fields, provenance, offsets, IDs, counts and ordered journey prerequisites. Unknown fields and duplicate JSON keys are rejected.",
+    "errors": "CLI file/decoding/validation errors emit one JSON object with status=error and exit 2; success exits 0."
+  },
+  "cross_stage_handoffs": [
+    {"from": "review", "to": "web", "data": "Validated gap IDs limit offline snapshot retrieval and findings."},
+    {"from": "web", "to": "feedback", "data": "Validated requested requirement IDs scope themes; findings provide research references; unresolved gaps remain explicit."},
+    {"from": "feedback", "to": "journey", "data": "Validated deduplicated support counts rank feasible action pairs; theme/group/finding IDs trace recommendations to exact input excerpts."}
+  ],
+  "behavior": {
+    "document_review": "Case-insensitive literal keyword evidence candidates with exact document offsets. Missing evidence is a traceable gap. No certification claims.",
+    "web_research": "Exact DNS host allowlist; HTTPS only; no credentials, fragments, IP hosts, alternate ports or suffix/subdomain matching. Canonical URLs must be unique. Retrieves matching excerpts from supplied offline URL snapshots, preserving source ID/title/URL/timestamp. Findings never close document gaps.",
+    "feedback": "Whitespace/case normalization deduplicates text; requirement tags are unioned, all original IDs and exact texts retained. Requirement-linked themes count unique groups, never duplicate submissions. Unmatched feedback remains visible.",
+    "journey": "Enumerates all feasible distinct two-action sequences. Maximizes summed theme support, then first-step support, then lexicographic action IDs. Prerequisites must be completed initially or in step one. Unsupported actions are explicitly fallback recommendations. Fails rather than inventing a journey if fewer than two feasible actions remain.",
+    "determinism": "No randomness, clock reads, network I/O, model calls, or input mutation."
+  },
+  "scope": {
+    "included": ["Integrated CLI", "Shared schemas and validators", "Synthetic offline URL ingestion and retrieval", "Traceable review evidence and gaps", "Deduplicated feedback themes", "Validated two-step prerequisite-aware journey", "Unit and subprocess CLI tests"],
+    "excluded": ["Live web requests or crawling", "Provider integrations", "LLM steps", "Semantic compliance decisions", "Certification", "Enterprise production hardening", "Persisted databases", "User identity profiling", "Longer journeys"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 34, "passed": 34, "failures": 0, "errors": 0},
+    "cli_exit_code": 0,
+    "cli_result": "Exactly one JSON object with status=ok, four cumulative stage payloads and a validated two-step journey.",
+    "coverage": ["Every stage", "All three cross-stage handoffs", "Evidence and excerpt provenance", "Unresolved research gaps", "Feedback deduplication", "Prerequisite cycles and completed actions", "Infeasible journeys", "Handoff tampering", "URL allowlist bypass attempts", "Invalid schemas and files", "Duplicate JSON keys", "Malformed JSON and encoding", "CLI success and error exit codes", "Determinism and input immutability"]
+  }
+}

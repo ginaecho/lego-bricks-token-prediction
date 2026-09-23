@@ -1,0 +1,647 @@
+{
+  "id": "wave2_t084_combo3_sentiment_faq_normal",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights",
+      "support",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Customer insights",
+      "AI customer support",
+      "Research"
+    ],
+    "types": [
+      "sentiment",
+      "faq",
+      "normal"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 2,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Transparent sentiment scoring and severity-aware issue prioritization.",
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Passage retrieval and extractive findings with exact source citations."
+  ],
+  "integration": {
+    "ordered_types": [
+      "sentiment",
+      "faq",
+      "normal"
+    ],
+    "edges": [
+      {
+        "from": "sentiment",
+        "to": "faq",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "faq",
+        "to": "normal",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "bd69774ce32cd66fdfabadfa079a9e669391ee067a5d84ac5fbfd0a6586024e9",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "a122dfc0d1036af145e75566846caa0fd123137f128bc9845b29acc6ae2d3d84",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t084_combo3_sentiment_faq_normal",
+  "membership_point_id": "combo3_sentiment_faq_normal",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "330e0ff9be6a0a066922d7d9b6125bad5b6928f5a36b672759c009075398bcf0",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 9,
+    "input_tokens": 206464,
+    "output_tokens": 9270,
+    "cache_read_tokens": 193726,
+    "cache_write_tokens": 12711,
+    "total_tokens": 215734,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34597,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 14836,
+        "output_tokens": 283,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 799,
+        "reasoning_tokens": 99,
+        "duration_ms": 7709,
+        "created_at": "2026-09-23T10:38:04.910Z"
+      },
+      {
+        "id": 34622,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 15157,
+        "output_tokens": 7345,
+        "cache_read_tokens": 14833,
+        "cache_write_tokens": 321,
+        "reasoning_tokens": 516,
+        "duration_ms": 119328,
+        "created_at": "2026-09-23T10:41:24.757Z"
+      },
+      {
+        "id": 34623,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 22822,
+        "output_tokens": 212,
+        "cache_read_tokens": 15154,
+        "cache_write_tokens": 7665,
+        "reasoning_tokens": 11,
+        "duration_ms": 4077,
+        "created_at": "2026-09-23T10:41:27.681Z"
+      },
+      {
+        "id": 34626,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 23127,
+        "output_tokens": 155,
+        "cache_read_tokens": 22819,
+        "cache_write_tokens": 305,
+        "reasoning_tokens": 0,
+        "duration_ms": 3224,
+        "created_at": "2026-09-23T10:41:40.281Z"
+      },
+      {
+        "id": 34630,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 25207,
+        "output_tokens": 499,
+        "cache_read_tokens": 23124,
+        "cache_write_tokens": 2080,
+        "reasoning_tokens": 116,
+        "duration_ms": 9967,
+        "created_at": "2026-09-23T10:42:18.527Z"
+      },
+      {
+        "id": 34632,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 25874,
+        "output_tokens": 237,
+        "cache_read_tokens": 25204,
+        "cache_write_tokens": 667,
+        "reasoning_tokens": 0,
+        "duration_ms": 6482,
+        "created_at": "2026-09-23T10:42:32.400Z"
+      },
+      {
+        "id": 34633,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 26170,
+        "output_tokens": 261,
+        "cache_read_tokens": 25871,
+        "cache_write_tokens": 296,
+        "reasoning_tokens": 0,
+        "duration_ms": 5352,
+        "created_at": "2026-09-23T10:42:36.995Z"
+      },
+      {
+        "id": 34635,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 26523,
+        "output_tokens": 191,
+        "cache_read_tokens": 26167,
+        "cache_write_tokens": 353,
+        "reasoning_tokens": 0,
+        "duration_ms": 8585,
+        "created_at": "2026-09-23T10:42:40.603Z"
+      },
+      {
+        "id": 34637,
+        "agent_id": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+        "model": "gpt-6-astra",
+        "input_tokens": 26748,
+        "output_tokens": 87,
+        "cache_read_tokens": 26520,
+        "cache_write_tokens": 225,
+        "reasoning_tokens": 0,
+        "duration_ms": 7760,
+        "created_at": "2026-09-23T10:42:46.892Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6552099999999998,
+      "observed_cache_profile_estimate_usd": 0.21932650000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.862520000000001,
+      "observed_cache_profile_estimate_usd": 7.862520000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 0,
+      "roi_satisfaction": 2,
+      "future_impact_potential": 4,
+      "delivery_quality": 3
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.25,
+    "pseudo_annual_cost_usd": 15000,
+    "pseudo_annual_ai_value_usd": 120000,
+    "pseudo_net_impact_usd": 105000,
+    "pseudo_roi_pct": 700.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..........................\n----------------------------------------------------------------------\nRan 26 tests in 0.759s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "status": "ok",
+      "stage": "normal",
+      "feedback": [
+        {
+          "id": "synthetic-f1",
+          "text": "My parcel delivery is late and the tracking failed. Terrible service.",
+          "severity": "high"
+        },
+        {
+          "id": "synthetic-f2",
+          "text": "The battery is unsafe and broken.",
+          "severity": "critical"
+        },
+        {
+          "id": "synthetic-f3",
+          "text": "Great helpful support, thanks!",
+          "severity": "low"
+        },
+        {
+          "id": "synthetic-f4",
+          "text": "Quantum penguin account migration",
+          "severity": "medium"
+        }
+      ],
+      "knowledge_base": [
+        {
+          "id": "synthetic-kb-delivery",
+          "title": "Synthetic delivery FAQ",
+          "text": "For late parcel delivery, check tracking and contact the carrier. Keep your order identifier."
+        },
+        {
+          "id": "synthetic-kb-battery",
+          "title": "Synthetic battery FAQ",
+          "text": "For an unsafe or broken battery, stop using the item and contact support."
+        }
+      ],
+      "research_sources": [
+        {
+          "id": "synthetic-r-delivery",
+          "title": "Synthetic delivery observations",
+          "text": "Synthetic study: late parcel delivery often involved stale tracking. Carrier contact helped locate delayed parcels in this fictional sample."
+        },
+        {
+          "id": "synthetic-r-battery",
+          "title": "Synthetic battery observations",
+          "text": "Synthetic observation: an unsafe broken battery was isolated by support. No real product safety conclusions are implied."
+        }
+      ],
+      "results": {
+        "sentiment": [
+          {
+            "feedback_id": "synthetic-f2",
+            "text": "The battery is unsafe and broken.",
+            "severity": "critical",
+            "score": -5,
+            "sentiment": "negative",
+            "evidence": [
+              {
+                "token": "unsafe",
+                "token_index": 3,
+                "base": -3,
+                "negated": false,
+                "contribution": -3
+              },
+              {
+                "token": "broken",
+                "token_index": 5,
+                "base": -2,
+                "negated": false,
+                "contribution": -2
+              }
+            ],
+            "priority": "P0",
+            "priority_rank": 0
+          },
+          {
+            "feedback_id": "synthetic-f1",
+            "text": "My parcel delivery is late and the tracking failed. Terrible service.",
+            "severity": "high",
+            "score": -5,
+            "sentiment": "negative",
+            "evidence": [
+              {
+                "token": "late",
+                "token_index": 4,
+                "base": -1,
+                "negated": false,
+                "contribution": -1
+              },
+              {
+                "token": "failed",
+                "token_index": 8,
+                "base": -2,
+                "negated": false,
+                "contribution": -2
+              },
+              {
+                "token": "terrible",
+                "token_index": 9,
+                "base": -2,
+                "negated": false,
+                "contribution": -2
+              }
+            ],
+            "priority": "P1",
+            "priority_rank": 1
+          },
+          {
+            "feedback_id": "synthetic-f4",
+            "text": "Quantum penguin account migration",
+            "severity": "medium",
+            "score": 0,
+            "sentiment": "neutral",
+            "evidence": [],
+            "priority": "P2",
+            "priority_rank": 2
+          },
+          {
+            "feedback_id": "synthetic-f3",
+            "text": "Great helpful support, thanks!",
+            "severity": "low",
+            "score": 4,
+            "sentiment": "positive",
+            "evidence": [
+              {
+                "token": "great",
+                "token_index": 0,
+                "base": 2,
+                "negated": false,
+                "contribution": 2
+              },
+              {
+                "token": "helpful",
+                "token_index": 1,
+                "base": 1,
+                "negated": false,
+                "contribution": 1
+              },
+              {
+                "token": "thanks",
+                "token_index": 3,
+                "base": 1,
+                "negated": false,
+                "contribution": 1
+              }
+            ],
+            "priority": "P3",
+            "priority_rank": 3
+          }
+        ],
+        "faq": [
+          {
+            "feedback_id": "synthetic-f2",
+            "priority": "P0",
+            "severity": "critical",
+            "sentiment": "negative",
+            "query": "The battery is unsafe and broken.",
+            "status": "answered",
+            "answer": "For an unsafe or broken battery, stop using the item and contact support.",
+            "evidence": [
+              {
+                "citation": {
+                  "source_id": "synthetic-kb-battery",
+                  "title": "Synthetic battery FAQ",
+                  "start": 0,
+                  "end": 73,
+                  "quote": "For an unsafe or broken battery, stop using the item and contact support."
+                },
+                "matched_terms": [
+                  "battery",
+                  "broken",
+                  "unsafe"
+                ],
+                "coverage": 1.0
+              }
+            ],
+            "reason": null,
+            "research_query": "The battery is unsafe and broken.\nFor an unsafe or broken battery, stop using the item and contact support."
+          },
+          {
+            "feedback_id": "synthetic-f1",
+            "priority": "P1",
+            "severity": "high",
+            "sentiment": "negative",
+            "query": "My parcel delivery is late and the tracking failed. Terrible service.",
+            "status": "answered",
+            "answer": "For late parcel delivery, check tracking and contact the carrier.",
+            "evidence": [
+              {
+                "citation": {
+                  "source_id": "synthetic-kb-delivery",
+                  "title": "Synthetic delivery FAQ",
+                  "start": 0,
+                  "end": 65,
+                  "quote": "For late parcel delivery, check tracking and contact the carrier."
+                },
+                "matched_terms": [
+                  "delivery",
+                  "late",
+                  "parcel",
+                  "tracking"
+                ],
+                "coverage": 0.571429
+              }
+            ],
+            "reason": null,
+            "research_query": "My parcel delivery is late and the tracking failed. Terrible service.\nFor late parcel delivery, check tracking and contact the carrier."
+          },
+          {
+            "feedback_id": "synthetic-f4",
+            "priority": "P2",
+            "severity": "medium",
+            "sentiment": "neutral",
+            "query": "Quantum penguin account migration",
+            "status": "abstained",
+            "answer": null,
+            "evidence": [],
+            "reason": "No KB passage meets the lexical evidence threshold.",
+            "research_query": "Quantum penguin account migration"
+          },
+          {
+            "feedback_id": "synthetic-f3",
+            "priority": "P3",
+            "severity": "low",
+            "sentiment": "positive",
+            "query": "Great helpful support, thanks!",
+            "status": "abstained",
+            "answer": null,
+            "evidence": [],
+            "reason": "No KB passage meets the lexical evidence threshold.",
+            "research_query": "Great helpful support, thanks!"
+          }
+        ],
+        "normal": [
+          {
+            "feedback_id": "synthetic-f2",
+            "priority": "P0",
+            "faq_status": "answered",
+            "query": "The battery is unsafe and broken.\nFor an unsafe or broken battery, stop using the item and contact support.",
+            "status": "found",
+            "findings": [
+              {
+                "text": "Synthetic observation: an unsafe broken battery was isolated by support.",
+                "citation": {
+                  "source_id": "synthetic-r-battery",
+                  "title": "Synthetic battery observations",
+                  "start": 0,
+                  "end": 72,
+                  "quote": "Synthetic observation: an unsafe broken battery was isolated by support."
+                },
+                "matched_terms": [
+                  "battery",
+                  "broken",
+                  "support",
+                  "unsafe"
+                ],
+                "coverage": 0.5
+              }
+            ],
+            "reason": null
+          },
+          {
+            "feedback_id": "synthetic-f1",
+            "priority": "P1",
+            "faq_status": "answered",
+            "query": "My parcel delivery is late and the tracking failed. Terrible service.\nFor late parcel delivery, check tracking and contact the carrier.",
+            "status": "found",
+            "findings": [
+              {
+                "text": "Synthetic study: late parcel delivery often involved stale tracking.",
+                "citation": {
+                  "source_id": "synthetic-r-delivery",
+                  "title": "Synthetic delivery observations",
+                  "start": 0,
+                  "end": 68,
+                  "quote": "Synthetic study: late parcel delivery often involved stale tracking."
+                },
+                "matched_terms": [
+                  "delivery",
+                  "late",
+                  "parcel",
+                  "tracking"
+                ],
+                "coverage": 0.4
+              },
+              {
+                "text": "Carrier contact helped locate delayed parcels in this fictional sample.",
+                "citation": {
+                  "source_id": "synthetic-r-delivery",
+                  "title": "Synthetic delivery observations",
+                  "start": 69,
+                  "end": 140,
+                  "quote": "Carrier contact helped locate delayed parcels in this fictional sample."
+                },
+                "matched_terms": [
+                  "carrier",
+                  "contact"
+                ],
+                "coverage": 0.2
+              }
+            ],
+            "reason": null
+          },
+          {
+            "feedback_id": "synthetic-f4",
+            "priority": "P2",
+            "faq_status": "abstained",
+            "query": "Quantum penguin account migration",
+            "status": "abstained",
+            "findings": [],
+            "reason": "No research passage meets the lexical evidence threshold."
+          },
+          {
+            "feedback_id": "synthetic-f3",
+            "priority": "P3",
+            "faq_status": "abstained",
+            "query": "Great helpful support, thanks!",
+            "status": "abstained",
+            "findings": [],
+            "reason": "No research passage meets the lexical evidence threshold."
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t084_combo3_sentiment_faq_normal",
+    "artifact_sha256": {
+      "implementation.py": "5a85f228623ecc72a0900e1b3edca2c1bb63897d237c3828d325766ca7f226d6",
+      "test_implementation.py": "665a57f9625e46c5e945fbba5be36b8f4ca5bc04073e00b215d13b6ef324d298",
+      "example_input.json": "0d24df457da562134bd7bcb0c4449eac40679a50a8e7bd388ed877846ef5e3f9",
+      "build_manifest.json": "00ab1c3e9704e105d54579332d073d2b0fbda19f4403b482af6f4ee609f5c241"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

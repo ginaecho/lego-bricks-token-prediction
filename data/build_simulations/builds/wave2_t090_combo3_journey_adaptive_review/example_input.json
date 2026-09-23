@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional marketplace seller onboarding",
+  "profile": {
+    "experience": "beginner",
+    "interests": ["selling"],
+    "preferred_formats": ["exercise", "text"],
+    "completed_actions": ["orientation"]
+  },
+  "actions": [
+    {
+      "id": "orientation",
+      "title": "Explore the fictional marketplace",
+      "topic": "basics",
+      "prerequisites": [],
+      "requirement_ids": []
+    },
+    {
+      "id": "seller-profile",
+      "title": "Prepare a synthetic seller profile",
+      "topic": "selling",
+      "prerequisites": ["orientation"],
+      "requirement_ids": ["seller-identity"]
+    },
+    {
+      "id": "publish-listing",
+      "title": "Prepare a fictional product listing",
+      "topic": "selling",
+      "prerequisites": ["seller-profile"],
+      "requirement_ids": ["seller-identity", "returns-policy"]
+    },
+    {
+      "id": "buyer-tour",
+      "title": "Explore buyer discovery",
+      "topic": "buying",
+      "prerequisites": [],
+      "requirement_ids": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "seller-identity",
+      "description": "Fictional profile evidence names a seller and address.",
+      "required_terms": ["seller", "address"]
+    },
+    {
+      "id": "returns-policy",
+      "description": "Fictional policy evidence mentions returns and refund.",
+      "required_terms": ["returns", "refund"]
+    }
+  ],
+  "documents": [
+    {
+      "id": "synthetic-profile",
+      "locator": "fixture:profile#paragraph-1",
+      "requirement_ids": ["seller-identity"],
+      "text": "SYNTHETIC: Seller Example Bricks. Address: 123 Imaginary Lane."
+    },
+    {
+      "id": "synthetic-policy",
+      "locator": "fixture:policy#paragraph-2",
+      "requirement_ids": ["returns-policy"],
+      "text": "SYNTHETIC: Returns are discussed, but this policy is incomplete."
+    }
+  ]
+}

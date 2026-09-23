@@ -1,0 +1,99 @@
+{
+  "build_id": "wave2_t018_combo2_normal_guided",
+  "composition_label": "Normal research (Research) -> Guided setup (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory; clearly labeled synthetic source fixtures.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1; booleans are not accepted as integers.",
+      "fixture_label": "Nonblank string beginning SYNTHETIC:.",
+      "research": "keywords: unique literal phrases; max_findings: integer 1..100; sources: source id/title with passage id/text arrays.",
+      "guided": "steps: unique id/title, prerequisite step ids, evidence_keywords, required_fields; progress: completed_step_ids and responses keyed by step id and field."
+    },
+    "output": {
+      "envelope": "schema_version, fixture_label, status=ok, research, guided",
+      "research": "findings with stable id, verbatim quote, matched_keywords, score, exact citation; retrieved_count is the post-limit count.",
+      "citation": "source_id, source_title, passage_id, start, end; offsets are zero-based, end-exclusive Python Unicode character offsets.",
+      "guided": "steps with status, evidence_finding_ids, missing_evidence_keywords, unmet_prerequisites, missing_fields and responses; aggregate progress and next_step_ids.",
+      "error": "schema_version=1, status=error, error message; exit code 2."
+    },
+    "validation": "One shared Schema validator is used throughout. Strict object keys, types, uniqueness, bounds, references, acyclic prerequisites, nonblank responses, exact source slices, deterministic retrieval and completion invariants are checked. Duplicate JSON keys and non-finite numbers are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "guided",
+      "payload": "Validated research result with exact cited findings.",
+      "contract": "Guided setup validates the complete research result against deterministic retrieval before consuming it. Every evidence reference targets a retrieved finding. All step evidence keywords must be supported across retrieved findings; unreturned sources cannot unblock steps."
+    }
+  ],
+  "behavior": {
+    "retrieval": "Literal case-insensitive phrase matching at Unicode word boundaries; score counts distinct matched query phrases; sort by descending score then source id then passage id; truncate to max_findings.",
+    "extraction": "The full matched passage is the extractive finding. No summaries, unsupported claims, or fabricated citations are generated.",
+    "onboarding": "Completed steps must have all prerequisites completed, all evidence supported, and all required responses supplied. Invalid completion claims cause an error. Otherwise missing prerequisites/evidence means blocked; missing responses means awaiting_input; fully satisfied uncompleted steps are ready.",
+    "progress": "Progress is persisted in the caller-owned input JSON and replayed deterministically. Update responses and completed_step_ids and rerun. Output returns validated completion totals and next actionable ids. Nothing is auto-completed or written by the CLI.",
+    "no_matches": "Research returns an empty findings array; incomplete steps remain blocked. Claims of completed unsupported steps are rejected.",
+    "cli": "Exactly one JSON object on stdout, exit 0 on successful processing even when steps are blocked, exit 2 for input/file/validation errors. UTF-8 input; ASCII-escaped JSON output."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic research-to-onboarding pipeline",
+      "Shared versioned schema and validation primitives",
+      "Bounded local passage retrieval and exact citations",
+      "Prerequisite-driven steps, evidence gating and replayable progress",
+      "Synthetic fixtures and standard-library unit/subprocess tests"
+    ],
+    "excluded": [
+      "Live web retrieval, model calls, networks, external dependencies",
+      "LLM summarization or injected callable (no LLM step is needed)",
+      "Real account creation, credential handling, or external verification",
+      "Automatic state-file writes, databases, interactive UI, enterprise deployment",
+      "Semantic inference beyond literal evidence phrase matching"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 22,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "retrieved_findings": 3,
+      "completed_steps": 1,
+      "total_steps": 3,
+      "next_step_ids": ["create-catalog"]
+    },
+    "coverage": [
+      "Exact citations, stable rankings, limits, Unicode and literal matching",
+      "Cross-stage propagation, tampered findings, retrieval-only evidence",
+      "Prerequisites, cycles, response validation, completion replay and totals",
+      "No matches, empty sources, duplicate identifiers and invalid schema types",
+      "CLI success, missing files and arguments, malformed JSON and decoding errors"
+    ]
+  }
+}

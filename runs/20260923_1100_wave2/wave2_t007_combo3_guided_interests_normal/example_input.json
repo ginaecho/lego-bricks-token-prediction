@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC FIXTURE",
+  "guided": {
+    "completed_steps": ["consent", "profile", "preferences"],
+    "responses": {
+      "consent": true,
+      "profile": {"display_name": "Synthetic Avery", "region": "Example Region"},
+      "preferences": {
+        "interests": [
+          {"topic": "gardening", "weight": 3},
+          {"topic": "water", "weight": 2}
+        ],
+        "exclude_topics": ["advertising"],
+        "exclude_ids": ["blocked-guide"],
+        "max_recommendations": 3
+      }
+    }
+  },
+  "catalog": [
+    {
+      "id": "garden-water",
+      "title": "Synthetic garden water notes",
+      "topics": ["gardening", "water"],
+      "passages": [
+        {"id": "p1", "source": "synthetic://garden-water#p1", "text": "Mulch helps retain soil moisture in this synthetic garden."},
+        {"id": "p2", "source": "synthetic://garden-water#p2", "text": "A rain barrel stores water for garden irrigation."}
+      ]
+    },
+    {
+      "id": "garden-basics",
+      "title": "Synthetic gardening basics",
+      "topics": ["gardening"],
+      "passages": [
+        {"id": "p1", "source": "synthetic://garden-basics#p1", "text": "Compost improves soil structure in this illustrative garden."}
+      ]
+    },
+    {
+      "id": "sponsored",
+      "title": "Synthetic excluded advertisement",
+      "topics": ["gardening", "advertising"],
+      "passages": [
+        {"id": "p1", "source": "synthetic://sponsored#p1", "text": "Buy water and soil products for garden irrigation."}
+      ]
+    },
+    {
+      "id": "blocked-guide",
+      "title": "Synthetic explicitly blocked guide",
+      "topics": ["water"],
+      "passages": [
+        {"id": "p1", "source": "synthetic://blocked-guide#p1", "text": "Water irrigation notes intentionally excluded by the user."}
+      ]
+    },
+    {
+      "id": "unrelated",
+      "title": "Synthetic unrelated music note",
+      "topics": ["music"],
+      "passages": [
+        {"id": "p1", "source": "synthetic://unrelated#p1", "text": "A song about water, soil and garden irrigation."}
+      ]
+    }
+  ],
+  "research": {"query": "garden water irrigation soil", "max_findings": 3}
+}

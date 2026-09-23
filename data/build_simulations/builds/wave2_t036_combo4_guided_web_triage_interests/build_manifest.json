@@ -1,0 +1,94 @@
+{
+  "build_id": "wave2_t036_combo4_guided_web_triage_interests",
+  "composition_label": "Guided setup -> Web research -> Ticket triage & routing -> Interest-based recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored within this isolated build directory; no other builds or repository files consulted.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "schema_version": "1.0",
+    "input": {
+      "required_fields": ["schema_version", "fixture_label", "guided", "web", "triage", "interests"],
+      "guided": "steps[{id,requires:[step_id]}], responses{step_id:boolean}; research_consent, support_consent, personalization_consent required",
+      "web": "allowlisted_hosts[string], urls[string], documents{url:{title,text}}, topics{topic_id:[keyword]}",
+      "triage": "tickets[{id,subject,body,source_urls}], rules[{id,category,keywords,priority}], routes{category:{queue,owner}}, fallback{category,priority}, urgent_keywords[string]",
+      "interests": "preferences{topic_id:integer 1..5}, excluded_topics[string], excluded_item_ids[string], limit integer 0..100, items[{id,title,topics,category,source_urls}]"
+    },
+    "output": "One envelope: schema_version, fixture_label, status=ok, stages{guided,web,triage,interests}. Stage outputs include status=complete. Errors: schema_version, status=error, error, optional onboarding progress details.",
+    "validation": "Shared object, sequence, string, identifier, integer, record uniqueness, URL and predecessor validators. Reject unknown fields, duplicate JSON keys, nonfinite JSON numbers, unsupported versions, incomplete onboarding and broken references. Arrays limited to 1000 entries; document bodies limited to 20000 characters."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "guided",
+      "to": "web",
+      "validated_payload": "Completed prerequisite-respecting onboarding, research consent and completion percent gate URL retrieval."
+    },
+    {
+      "from": "web",
+      "to": "triage",
+      "validated_payload": "Tickets must reference retrieved URLs. Research evidence contributes categorization keywords; finding IDs, URLs and topics propagate to routed tickets."
+    },
+    {
+      "from": "triage",
+      "to": "interests",
+      "validated_payload": "An item needs an overlapping research URL and topic plus a matching routed category. Ticket priorities influence scores; ticket IDs, owners and research provenance ground explanations."
+    }
+  ],
+  "behavior": {
+    "guided": "Stable topological ordering; detect cycles, unknown/self prerequisites, pending and blocked steps. Incomplete progress is returned in error details and no downstream stage runs.",
+    "retrieval": "Offline fixture-backed URL retrieval only. Exact allowlisted lowercase domain matching with HTTPS; reject credentials, non-443 ports, fragments, whitespace, control characters and backslashes. Fixture document keys must exactly match URL ingestion.",
+    "provenance": "Each finding preserves full bounded source text, title, original URL, deterministic finding ID, synthetic retrieval label and SHA-256 of UTF-8 evidence. Topic tags use case-insensitive whole-keyword matches in source text.",
+    "triage": "Category rule with most distinct configured keyword hits across ticket and referenced research wins; configuration order resolves ties. No matches uses configured fallback. Ticket-only urgent keywords override priority. Every configured category has a queue and accountable owner.",
+    "recommendations": "Validate source URLs and item topics against retrieved findings. Explicit topic or item exclusions win. Require positive preference matches and related routed tickets. Score=10*sum(matched preference weights)+max related priority weight (low=1, normal=2, high=3, urgent=4). Descending score then item ID; truncate to limit. Return structured grounded explanations and exclusions.",
+    "cli": "Exactly one JSON object on stdout; success exit 0; validation, JSON, encoding and file errors exit 2. No runtime files written."
+  },
+  "scope": {
+    "included": [
+      "One deterministic integrated four-stage pipeline",
+      "Clearly labeled synthetic fixture inputs and offline retrieval",
+      "Strict shared schema and explicit provenance",
+      "Configurable categorization, priorities, accountable routing and preferences",
+      "Unit and subprocess CLI tests"
+    ],
+    "excluded": [
+      "Live HTTP requests, redirects, DNS resolution and real web scraping",
+      "LLM calls or live model providers",
+      "Persistent databases, authentication, real consent collection or production ticket delivery",
+      "Semantic truth verification beyond configured keyword provenance",
+      "Enterprise operations, learning-to-rank and production deployment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 39,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "completed_stages": 4,
+      "recommendation_ids": ["garden_help", "garden_tracking"],
+      "recommendation_scores": [84, 54]
+    },
+    "error_contract": "Subprocess tests verify missing files, malformed JSON and incorrect arguments produce JSON status=error and exit 2. Mocked CLI tests cover duplicate keys, nonfinite numbers, encoding errors, invalid paths and schema errors."
+  }
+}

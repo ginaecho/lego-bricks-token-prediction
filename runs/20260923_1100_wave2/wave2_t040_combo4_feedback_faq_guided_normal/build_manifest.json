@@ -1,0 +1,58 @@
+{
+  "build_id": "wave2_t040_combo4_feedback_faq_guided_normal",
+  "composition_label": "Feedback analysis -> Knowledge-base answers -> Guided setup -> Normal research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3.13.15; standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "One object with schema_version, fixture_label, feedback, themes, knowledge_base, setup_steps, completed_step_ids and research_sources. Unknown fields and duplicate identifiers are rejected. IDs are scoped to their collections; passage IDs to each source.",
+    "stage_envelope": ["schema_version", "stage", "status", "records"],
+    "record": ["id", "state", "text", "citations", "upstream_ids", "details"],
+    "citation": "collection, source_id, passage_id, start, end, quote; offsets are zero-based Python Unicode character indexes, end exclusive",
+    "output": "schema_version, status, fixture_label, ordered stages, progress; errors have schema_version, status=error and error",
+    "validation": "Shared object, collection, type, identifier, dependency, citation, extractive-text and stage validation. Every stage validates its predecessor before consumption and its own output before return."
+  },
+  "cross_stage_handoffs": [
+    "feedback -> faq: deduplicated feedback records supply classified themes, query evidence and traceable upstream IDs",
+    "faq -> guided: answered theme records unlock steps; absent evidence and abstention block steps; FAQ citations propagate",
+    "guided -> normal: validated ready/completed steps supply research queries; blocked steps explicitly abstain without retrieval"
+  ],
+  "behavior": {
+    "fixtures": "All example entities, support passages and research findings are explicitly synthetic.",
+    "feedback": "Casefold and whitespace-normalized exact deduplication; first original excerpt retained with every duplicate feedback ID. Keyword token-set matching permits multiple themes and preserves unclassified records.",
+    "retrieval": "Casefolded Unicode alphanumeric token overlap excluding fixed stopwords; a positive overlap is required; highest score wins, then source ID and passage ID lexicographically. Titles are not retrieval evidence.",
+    "faq": "One verbatim best passage per observed theme, or explicit abstention. Lexical relevance does not guarantee that a passage semantically answers every aspect of a question.",
+    "guided": "Acyclic prerequisites, deterministic topological order, explicit user-declared completion and progress counts. Ready is not completed. Unsupported or prerequisite-inconsistent completion is rejected. Empty workflow is fully complete.",
+    "normal": "One exact source passage per eligible step or explicit abstention with reason; full provenance follows upstream IDs back to original feedback.",
+    "cli": "Exactly one JSON object on stdout; success exits 0; validation, JSON decoding, text decoding and file errors exit 2. No network, provider or callable model is used.",
+    "progress_persistence": "Completion is round-tripped explicitly through completed_step_ids; no hidden state or automatic completion."
+  },
+  "scope": {
+    "included": ["Integrated deterministic four-stage pipeline", "Shared validation and record schema", "Exact source citations", "Synthetic fixture", "Unit and subprocess CLI tests"],
+    "excluded": ["Live LLMs or providers", "Network access", "Semantic inference", "Enterprise deployment", "Persistent database", "Fuzzy deduplication", "Automatic task execution", "External dependencies"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": 38,
+    "cli_example": "passed: one JSON object with status ok, four ordered stages, exit 0 and empty stderr",
+    "validation_errors": "Verified malformed JSON, invalid schema, missing file and missing argument produce JSON status error and exit 2",
+    "command_exit_codes": {"unittest": 0, "example_cli": 0}
+  }
+}

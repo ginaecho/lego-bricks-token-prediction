@@ -1,0 +1,58 @@
+{
+  "build_id": "wave2_t050_combo2_deep_journey",
+  "composition_label": "Deep research (Research) -> Journey recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written from scratch in the isolated build directory",
+    "runtime": "Python 3.13.15; standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "true; fixtures are explicitly synthetic",
+      "questions": "nonempty array of unique {id, text}",
+      "documents": "array of unique {id, title, claims:[{question_id, stance:support|oppose|uncertain, quote}]}",
+      "actions": "array of unique {id, title, kind:research|apply, question_ids, prerequisites:action IDs}",
+      "user": "{completed_actions:action IDs, interests:question IDs}"
+    },
+    "output": "{schema_version:1, status:ok, synthetic:true, research, journey}",
+    "error": "{status:error, error:message}; exit 2",
+    "validation": "Shared validate function checks exact fields, types, uniqueness, references, acyclic prerequisites, completed-action closure, and canonical stage output semantics. Duplicate JSON keys and nonfinite constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validated input feeds deterministic research synthesis.",
+    "Research output is validated against source claims before journey consumes findings, exact attributed evidence, disagreements through contested assessments, and unresolved questions.",
+    "Journey uses only research findings for evidence decisions; original actions and user preferences remain shared context.",
+    "Final output validation revalidates the handoff, two-step ordering, prerequisites, personalization, and evidence provenance."
+  ],
+  "behavior": {
+    "research": "Aggregate every attributed claim by question; report distinct supporting/opposing documents without majority voting. Any support plus opposition is contested; uncertainty or no evidence is unresolved; otherwise supported or opposed. Unresolved questions include disagreements.",
+    "journey": "Completed actions are excluded. Apply actions require supported findings for all addressed questions. Research actions may address any finding without pretending to resolve it. Rank valid distinct action pairs by combined score, dependency transition, first-step score, then IDs.",
+    "score": "10 per matching user interest + 3 per unresolved/contested addressed finding + distinct evidence document counts per question.",
+    "prerequisites": "Step one prerequisites must already be completed. Step two prerequisites must be completed or equal step one. Never assume research work automatically changes evidence.",
+    "blocked": "If no complete valid pair exists, return status ok with journey status blocked and empty steps; list independently available next actions and currently blocked actions. Blocked-actions diagnostics describe the initial state, even when step one will unlock step two.",
+    "determinism": "Canonical ID ordering and explicit tie breaks; no randomness, clocks, LLM calls, or source mutation."
+  },
+  "scope": {
+    "included": ["Synthetic multi-document synthesis", "Attribution", "Disagreements", "Unresolved questions", "Personalization", "Prerequisite-aware next actions", "Validated two-step journey", "JSON CLI", "Unittest fixtures"],
+    "excluded": ["Live research retrieval", "Providers or networks", "LLM integration", "Scientific truth or confidence estimation", "Source independence verification", "Action execution", "Persistent user state", "Enterprise scale optimization"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 20,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status ok and a ready two-step journey: intro -> compare-formats",
+    "coverage": ["Research aggregation", "Disagreements", "Unresolved questions", "Evidence propagation", "Prerequisite order", "Personalization", "Completed actions", "Empty data", "Invalid schemas", "Tampered handoffs", "Determinism", "CLI success and errors"]
+  }
+}

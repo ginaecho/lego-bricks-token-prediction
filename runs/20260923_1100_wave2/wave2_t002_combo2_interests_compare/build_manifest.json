@@ -1,0 +1,84 @@
+{
+  "build_id": "wave2_t002_combo2_interests_compare",
+  "composition_label": "Interest-based recommendations -> Product comparison",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in this isolated build directory",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Object containing schema_version=1, fixture={synthetic:true,label}, products, preferences and limit (1..50). Up to 200 products.",
+    "product": "Unique trimmed id, nonempty name, category, unique tags, price={amount,currency:USD}; optional weight={value,unit:g|kg} and battery={value,unit:h|min}. Missing or null measurements are unknown.",
+    "preferences": "interests maps category/tag tokens to positive weights; exclude_ids and exclude_tags are arrays; optional max_price_usd is inclusive; comparison_weights maps interest|price_usd|weight_g|battery_hours to nonnegative weights with positive total.",
+    "normalization": "Category, tags, interest keys, exclusion tags and units are trimmed and casefolded. IDs are trimmed and case-sensitive. Canonical products use price_usd, weight_g, battery_hours; unknown measurements are null.",
+    "validation": "One Validation layer handles required/unknown fields, types, booleans, finite/nonnegative numbers, units, duplicate identities/tokens, USD precision, canonical products and grounded interest handoffs. Numeric fields are bounded to 1e9 including canonical measurements. Duplicate JSON keys and nonfinite literals are rejected.",
+    "output": "One JSON object: schema_version, status=ok, fixture, interests, comparison. Errors: schema_version, status=error, error; process exit 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "interests",
+      "to": "compare",
+      "payload": "Validated recommendation entries contain canonical product, interest_score, matched_interests and grounded explanations. Excluded products and eligible_count are also retained.",
+      "invariant": "Comparison consumes only the top-limit recommendations. The handoff is revalidated against the canonical context, including scores, source attributes, explanations, ordering and exclusions; tampered handoffs are rejected."
+    }
+  ],
+  "behavior": {
+    "interest_ranking": "Sum weights for distinct category/tag interest matches; a token matching both counts once. Rank descending score, then ascending product id. Nonmatching products remain eligible.",
+    "exclusions": "Exact product ids, matching excluded tags and prices strictly above optional budget are excluded before ranking, with all applicable reasons.",
+    "comparison": "Side-by-side rows expose canonical attributes for all selected candidates. Lower price/weight and higher battery/interest are preferred. Present values use candidate-local min-max utility. Equal present values receive utility 1; missing values receive utility 0. Final score is weighted mean rounded to six decimals.",
+    "ties": "Comparison ties use descending interest_score then ascending product id. Ranks are sequential.",
+    "empty_results": "Empty catalog or no eligible products succeeds with empty candidate/ranking arrays and empty side-by-side value maps.",
+    "grounding": "Interest explanations cite matching source category/tag and preference weight. Comparison explanations cite source values, candidate ranges, utility and weight. No generated marketing claims.",
+    "determinism": "No random, clock, network, provider or external state influences results."
+  },
+  "scope": {
+    "included": [
+      "Integrated validated interests-to-comparison pipeline",
+      "Synthetic portable-audio fixtures",
+      "Deterministic preference ranking and grounded explanations",
+      "Unit normalization, exclusion enforcement, missing-data policy",
+      "JSON CLI, file and validation error handling, unittest coverage"
+    ],
+    "excluded": [
+      "Live catalogs, networks, model providers and LLM calls",
+      "Currency exchange, arbitrary units and semantic interest inference",
+      "Persistence, authentication, UI and enterprise production operations",
+      "Global optimization across products outside the interest shortlist"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 17,
+    "unittest_exit_code": 0,
+    "cli": "Passed: one JSON object, status ok, exit 0",
+    "cli_exit_code": 0,
+    "example_candidate_ids": ["audio-a", "audio-b", "audio-c"],
+    "example_winner": "audio-a",
+    "coverage": [
+      "Interest scores and source-grounded explanations",
+      "ID, tag and budget exclusions propagated into comparison",
+      "Canonical units and side-by-side attributes",
+      "Weighted comparison scores and preference-driven winner changes",
+      "Top-limit handoff and tampering rejection",
+      "Missing measurements, ties, empty catalog and all-excluded results",
+      "Case normalization, distinct matches and inclusive budget",
+      "Invalid input subcases, duplicate JSON keys and malformed JSON",
+      "Deterministic ordering, input immutability and CLI success/error exits"
+    ]
+  }
+}

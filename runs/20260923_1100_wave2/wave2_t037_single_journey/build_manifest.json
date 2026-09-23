@@ -1,0 +1,63 @@
+{
+  "build_id": "wave2_t037_single_journey",
+  "composition_label": "Journey recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "schema_version": "Integer 1",
+      "synthetic": "Must be true; all example content is synthetic",
+      "actions": "Up to 100 objects with exactly id, title, prerequisites, tags, minutes. Unique nonblank ids; title nonblank; prerequisites and tags lists of unique nonblank strings; minutes integer 1..1440",
+      "profile": "Exactly completed (unique known action ids), goals (unique nonblank strings), available_minutes (integer 0..2880)",
+      "limit": "Integer 1..10; limits recommendations, not journey candidate search",
+      "validation": "Exact object fields; bool not accepted as integer; known acyclic prerequisites; completed history prerequisite-closed; duplicate JSON keys and nonstandard numeric constants rejected"
+    },
+    "output": {
+      "success": "schema_version, status=ok, synthetic=true, recommendations, journey, blocked",
+      "recommendation": "id, title, minutes, matched_goals, reason",
+      "journey": "status ready or unavailable; exactly two steps when ready, otherwise empty; total_minutes, validated, reason",
+      "step": "Recommendation fields plus step, completed_before, prerequisites",
+      "blocked": "Incomplete actions currently blocked by missing_prerequisites or exceeds_budget; excludes merely rank-truncated actions",
+      "error": "schema_version=1, status=error, error message; exit 2"
+    }
+  },
+  "cross_stage_handoffs": [
+    "Shared input validation establishes a consistent catalog and completed-action set",
+    "Eligible current actions produce personalized next-action recommendations",
+    "Pair search passes completed plus first action into second-action eligibility",
+    "Selected pair is independently replayed by shared journey validation before serialization"
+  ],
+  "behavior": {
+    "recommendation_ranking": "Descending count of matched goals, ascending minutes, ascending id",
+    "journey_ranking": "Exhaustively consider feasible ordered pairs; descending distinct goal coverage, descending summed per-step matches, ascending total minutes, lexicographic ordered ids",
+    "budget": "Recommendations individually fit; the two-step journey must cumulatively fit",
+    "completion": "Prerequisites must be completed before a step; independent steps are allowed; no repeated or already completed actions",
+    "unavailable": "Valid input with no feasible pair returns status ok and journey unavailable, never an invalid or partial journey",
+    "determinism": "Catalog order does not affect results; no randomness, time dependence, network access, provider calls or input mutation",
+    "errors": "File, encoding, JSON and semantic validation errors produce one JSON object on stdout and exit 2"
+  },
+  "scope": {
+    "included": ["Synthetic discovery catalog", "Prerequisite-aware recommendations", "Personalized deterministic ranking", "Validated two-step journey", "CLI JSON interface", "Shared validation", "Unittest fixtures"],
+    "excluded": ["Live data", "LLM integration", "Persistent user state", "Authentication", "Enterprise service deployment", "More than two journey steps", "Real marketplace transactions"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 16,
+    "tests_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_result": "One JSON object; status ok; validated seller-profile -> first-listing journey totaling 25 minutes",
+    "coverage": ["Normal chain", "Determinism and immutability", "Zero budget", "Empty catalog", "All completed", "Insufficient pair budget", "No goals and recommendation limit", "Invalid schemas", "Invalid actions", "Cycles and duplicate ids", "Invalid completion history", "Invalid handoffs", "CLI success", "CLI usage and file errors", "Malformed JSON", "Encoding errors"]
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "build_id": "wave2_t016_combo4_guided_triage_compare_feedback",
+  "composition_label": "Guided setup -> Ticket triage & routing -> Product comparison -> Feedback analysis",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory using synthetic fixtures only.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1; unknown keys are rejected throughout the schema.",
+      "synthetic": "Boolean true; all supplied fixture data is explicitly synthetic.",
+      "guided": "customer_id, nonempty steps [{id, requires: [step_id], required: bool}], ordered completed_steps, preferences",
+      "triage": "rules [{category, keywords, priority, owner, preferences}], default {category, priority, owner, preferences}, tickets [{id, customer_id, text}]",
+      "products": "Nonempty list [{id, name, attributes}]. Exactly price, memory, weight, brand after alias normalization.",
+      "feedback": "List [{id, ticket_id, product_id, text}]. References must resolve.",
+      "feedback_themes": "Object mapping theme names to nonempty keyword lists.",
+      "preferences": "Optional max_price_usd, min_memory_gb, max_weight_kg, preferred_brand, weights. If weights supplied, all price_usd/memory_gb/weight_kg/brand keys are required, finite nonnegative, and at least one positive.",
+      "product_units": "Numeric attributes are {value: finite positive number, unit: string}. USD; GB/TB/MB (1024-based); kg/g/lb. Brand is normalized text."
+    },
+    "output_envelope": {
+      "schema_version": 1,
+      "status": "ok",
+      "stage": "input | guided | triage | compare | feedback",
+      "request": "Deep-copied validated shared input",
+      "results": "Accumulated validated stage outputs, in execution order"
+    },
+    "errors": "{schema_version: 1, status: error, error: string}; CLI exits 2 for validation, decoding or file errors; success prints one JSON object and exits 0.",
+    "validation": "Shared primitive/schema validators validate the request. validate_state enforces exact envelope, stage order and deterministic recomputation of all accumulated results before and after every handoff. Stages do not mutate their input."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "guided",
+      "to": "triage",
+      "data": "Validated customer identity, readiness and preferences; required incomplete steps prevent routing."
+    },
+    {
+      "from": "triage",
+      "to": "compare",
+      "data": "Validated routed tickets with category, accountable owner, priority and effective preferences; route preferences override onboarding preferences by key."
+    },
+    {
+      "from": "compare",
+      "to": "feedback",
+      "data": "Validated per-ticket normalized product rows, rank, score and recommendation; groups retain routing owner/category and comparison context."
+    }
+  ],
+  "behavior": {
+    "guided": "Rejects unknown prerequisites, cycles, repeated completions and out-of-order completion. Tracks ready/blocked/completed, counts, total progress and required remaining. Optional unfinished steps do not prevent triage. Partial progress is available through guided_setup; full CLI pipeline reports error when required steps remain.",
+    "triage": "Canonical Unicode word/phrase matches. Most distinct keyword hits wins; ties prefer higher configured priority then earlier rule. Default fallback always has an owner. All tickets belong to the one onboarded customer.",
+    "compare": "Normalizes aliases and units; rejects ambiguous duplicate aliases. Side-by-side table includes every catalog product, hard-constraint eligibility and rejection reasons. Eligible products ranked by weighted min-max utilities; lower price/weight and higher memory are preferred. Constant attributes have utility 1. Brand scores 1 for preferred brand (or all when absent). Scores rounded to six decimals; ties by product ID. Weights scaled before summing. No-match results have empty ranking and null recommendation.",
+    "feedback": "NFKC/casefold/punctuation/whitespace deduplication within ticket and product, preserving every source ID and exact original bounded excerpt. Theme matching uses canonical word/phrase boundaries; a group can support multiple themes. Theme counts are unique groups, not raw duplicates. Unmatched groups tracked. Feedback for compared but ineligible products is allowed and has null rank/score.",
+    "determinism": "No randomness, timestamps, network calls or LLM use. Same request gives identical output. Rule order is a documented final triage tiebreaker; product ID is ranking tiebreaker.",
+    "empty_batches": "Empty ticket and feedback batches allowed; catalog and onboarding steps must remain nonempty."
+  },
+  "scope": {
+    "included": [
+      "One integrated pipeline and common envelope/validation layer",
+      "Prerequisite graph validation and onboarding progress",
+      "Configurable deterministic categorization, priority and accountable routing",
+      "Normalized side-by-side comparison and explainable preference ranking",
+      "Scoped deduplication, configurable themes and traceable verbatim excerpts",
+      "CLI and unittest fixtures with no external dependencies"
+    ],
+    "excluded": [
+      "Live providers, LLM callbacks, web/network access and external services",
+      "Authentication, persistence services, concurrent processing and production deployment",
+      "Currency conversion and arbitrary product attribute ontologies",
+      "Semantic similarity deduplication, sentiment inference or learned ranking",
+      "Interactive prompts or UI; onboarding input is a validated completion event sequence"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 34,
+    "failures": 0,
+    "errors": 0,
+    "test_exit_code": 0,
+    "cli": {
+      "status": "passed",
+      "exit_code": 0,
+      "stdout": "Exactly one valid JSON object",
+      "output_status": "ok",
+      "final_stage": "feedback",
+      "routed_tickets": 2,
+      "comparisons": 2,
+      "raw_feedback": 4,
+      "unique_feedback": 3
+    },
+    "coverage": [
+      "Every stage and all three handoffs",
+      "Prerequisites, cycles, progress, optional steps and incomplete onboarding",
+      "Configured categorization, routing fallback, priority and rule tiebreakers",
+      "Units, exact converted constraint boundary, preference weights and deterministic ranking",
+      "No eligible products and empty batches",
+      "Scoped deduplication, multiple themes and exact source evidence",
+      "Schema, numeric, unit, alias, reference and duplicate-ID errors",
+      "Nonmutation, wrong-stage and tampered-output rejection",
+      "CLI subprocess success, usage and missing-file errors",
+      "Malformed/duplicate-key/nonfinite JSON, schema, permission and decoding errors"
+    ],
+    "repair_verified": "Initial unit test exposed binary rounding in g-to-kg conversion. Decimal-based conversion and an exact-boundary regression test were added; all 34 tests and the CLI then passed."
+  }
+}

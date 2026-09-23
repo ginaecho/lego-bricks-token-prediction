@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional laptop comparison and support tickets",
+  "products": [
+    {
+      "id": "atlas", "name": "Synthetic Atlas",
+      "attributes": {"price_usd": "800 USD", "ram_gb": "16384 MB", "storage_gb": "1 TB", "battery_hours": "600 min", "weight_kg": "1500 g"},
+      "features": ["USB-C", "Wi-Fi"]
+    },
+    {
+      "id": "beacon", "name": "Synthetic Beacon",
+      "attributes": {"price_usd": 1200, "ram_gb": "32 GB", "storage_gb": "512 GB", "battery_hours": "8 h", "weight_kg": "2 kg"},
+      "features": ["Wi-Fi"]
+    }
+  ],
+  "preferences": {"weights": {"price_usd": 3, "ram_gb": 2, "battery_hours": 1}, "max_price_usd": 1000, "required_features": ["USB-C"]},
+  "tickets": [
+    {"id": "T-1", "text": "Please explain this product fit.", "product_id": "beacon"},
+    {"id": "T-2", "text": "My payment failed, urgent help please!", "product_id": "atlas"},
+    {"id": "T-3", "text": "Can you tell me more about the recommended choice?"}
+  ],
+  "routing": {
+    "rules": [
+      {"category": "billing", "keywords": ["payment", "refund"], "signals": [], "priority": "high", "team": "billing-support", "owner": "synthetic-billing-lead"},
+      {"category": "product-fit", "keywords": ["compatibility"], "signals": ["over_budget", "missing_required_features", "missing_attributes"], "priority": "normal", "team": "product-advice", "owner": "synthetic-product-lead"}
+    ],
+    "fallback": {"category": "general", "priority": "normal", "team": "customer-care", "owner": "synthetic-care-lead"},
+    "priority_keywords": {"high": ["blocked"], "urgent": ["urgent", "unsafe"]}
+  }
+}

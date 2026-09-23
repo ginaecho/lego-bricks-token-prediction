@@ -1,0 +1,594 @@
+{
+  "id": "wave2_t003_combo3_extract_feedback_journey",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "insights",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "Customer insights",
+      "Personalized discovery"
+    ],
+    "types": [
+      "extract",
+      "feedback",
+      "journey"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 1,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 6,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 0,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 0,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Prerequisite-aware next actions and a validated two-step journey."
+  ],
+  "integration": {
+    "ordered_types": [
+      "extract",
+      "feedback",
+      "journey"
+    ],
+    "edges": [
+      {
+        "from": "extract",
+        "to": "feedback",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "feedback",
+        "to": "journey",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "f3b27a08270b28ee7e9c82a154574af5708b308db050e8d66b42a4f10a23c59f",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "030cebf10ee2c167e32c056b584a0489cabf16113e0cd835427c8b5adb4be93a",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t003_combo3_extract_feedback_journey",
+  "membership_point_id": "combo3_extract_feedback_journey",
+  "trial_kind": "repeat_of_wave1",
+  "repeat_of": "combo3_extract_feedback_journey",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "3bb9c99ebfba96b6c9895413942cc7054193b3e44fe0d36f59009eab5908bbc3",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "99798c58-6907-44ff-9915-aec31597824d",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 142033,
+    "output_tokens": 12503,
+    "cache_read_tokens": 126684,
+    "cache_write_tokens": 15331,
+    "total_tokens": 154536,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33759,
+        "agent_id": "99798c58-6907-44ff-9915-aec31597824d",
+        "model": "gpt-6-astra",
+        "input_tokens": 14760,
+        "output_tokens": 468,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 799,
+        "reasoning_tokens": 276,
+        "duration_ms": 15050,
+        "created_at": "2026-09-23T09:20:07.439Z"
+      },
+      {
+        "id": 33786,
+        "agent_id": "99798c58-6907-44ff-9915-aec31597824d",
+        "model": "gpt-6-astra",
+        "input_tokens": 15258,
+        "output_tokens": 10481,
+        "cache_read_tokens": 14757,
+        "cache_write_tokens": 498,
+        "reasoning_tokens": 1034,
+        "duration_ms": 185597,
+        "created_at": "2026-09-23T09:23:13.616Z"
+      },
+      {
+        "id": 33790,
+        "agent_id": "99798c58-6907-44ff-9915-aec31597824d",
+        "model": "gpt-6-astra",
+        "input_tokens": 26055,
+        "output_tokens": 163,
+        "cache_read_tokens": 15255,
+        "cache_write_tokens": 10797,
+        "reasoning_tokens": 28,
+        "duration_ms": 5391,
+        "created_at": "2026-09-23T09:23:21.985Z"
+      },
+      {
+        "id": 33797,
+        "agent_id": "99798c58-6907-44ff-9915-aec31597824d",
+        "model": "gpt-6-astra",
+        "input_tokens": 27774,
+        "output_tokens": 953,
+        "cache_read_tokens": 26052,
+        "cache_write_tokens": 1719,
+        "reasoning_tokens": 319,
+        "duration_ms": 23701,
+        "created_at": "2026-09-23T09:23:45.502Z"
+      },
+      {
+        "id": 33799,
+        "agent_id": "99798c58-6907-44ff-9915-aec31597824d",
+        "model": "gpt-6-astra",
+        "input_tokens": 28894,
+        "output_tokens": 332,
+        "cache_read_tokens": 27771,
+        "cache_write_tokens": 1120,
+        "reasoning_tokens": 0,
+        "duration_ms": 8677,
+        "created_at": "2026-09-23T09:23:54.249Z"
+      },
+      {
+        "id": 33801,
+        "agent_id": "99798c58-6907-44ff-9915-aec31597824d",
+        "model": "gpt-6-astra",
+        "input_tokens": 29292,
+        "output_tokens": 106,
+        "cache_read_tokens": 28891,
+        "cache_write_tokens": 398,
+        "reasoning_tokens": 0,
+        "duration_ms": 4046,
+        "created_at": "2026-09-23T09:24:01.966Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5426275,
+      "observed_cache_profile_estimate_usd": 0.2575885,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.5115300000000005,
+      "observed_cache_profile_estimate_usd": 6.5115300000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 2,
+      "roi_satisfaction": 0,
+      "future_impact_potential": 2,
+      "delivery_quality": 5
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.35,
+    "pseudo_annual_cost_usd": 40000,
+    "pseudo_annual_ai_value_usd": 40000,
+    "pseudo_net_impact_usd": 0,
+    "pseudo_roi_pct": 0.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................................\n----------------------------------------------------------------------\nRan 32 tests in 1.335s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "fixture_label": "SYNTHETIC: fictional marketplace onboarding feedback",
+      "extraction": {
+        "schema_version": "1.0",
+        "stage": "extraction",
+        "documents": [
+          {
+            "document_id": "synthetic-001",
+            "fields": {
+              "customer": {
+                "value": "Synthetic Ada",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 10,
+                  "end": 23,
+                  "text": "Synthetic Ada"
+                }
+              },
+              "feedback": {
+                "value": "Setup is confusing; I need an onboarding guide.",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 64,
+                  "end": 111,
+                  "text": "Setup is confusing; I need an onboarding guide."
+                }
+              },
+              "goal": {
+                "value": "Publish a first listing",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 30,
+                  "end": 53,
+                  "text": "Publish a first listing"
+                }
+              },
+              "rating": {
+                "value": 2,
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 120,
+                  "end": 121,
+                  "text": "2"
+                }
+              }
+            },
+            "missing_fields": [],
+            "missing_required_fields": []
+          },
+          {
+            "document_id": "synthetic-002",
+            "fields": {
+              "customer": {
+                "value": "Synthetic Ben",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 10,
+                  "end": 23,
+                  "text": "Synthetic Ben"
+                }
+              },
+              "feedback": {
+                "value": "SETUP is confusing, I need an onboarding guide!",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 64,
+                  "end": 111,
+                  "text": "SETUP is confusing, I need an onboarding guide!"
+                }
+              },
+              "goal": {
+                "value": "Publish a first listing",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 30,
+                  "end": 53,
+                  "text": "Publish a first listing"
+                }
+              },
+              "rating": {
+                "value": 2,
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 120,
+                  "end": 121,
+                  "text": "2"
+                }
+              }
+            },
+            "missing_fields": [],
+            "missing_required_fields": []
+          },
+          {
+            "document_id": "synthetic-003",
+            "fields": {
+              "customer": {
+                "value": "Synthetic Cy",
+                "source": {
+                  "document_id": "synthetic-003",
+                  "start": 10,
+                  "end": 22,
+                  "text": "Synthetic Cy"
+                }
+              },
+              "feedback": {
+                "value": "The sales report is difficult to find.",
+                "source": {
+                  "document_id": "synthetic-003",
+                  "start": 58,
+                  "end": 96,
+                  "text": "The sales report is difficult to find."
+                }
+              },
+              "goal": {
+                "value": "Track weekly sales",
+                "source": {
+                  "document_id": "synthetic-003",
+                  "start": 29,
+                  "end": 47,
+                  "text": "Track weekly sales"
+                }
+              },
+              "rating": {
+                "value": 3,
+                "source": {
+                  "document_id": "synthetic-003",
+                  "start": 105,
+                  "end": 106,
+                  "text": "3"
+                }
+              }
+            },
+            "missing_fields": [],
+            "missing_required_fields": []
+          },
+          {
+            "document_id": "synthetic-004",
+            "fields": {
+              "customer": {
+                "value": "Synthetic Dee",
+                "source": {
+                  "document_id": "synthetic-004",
+                  "start": 10,
+                  "end": 23,
+                  "text": "Synthetic Dee"
+                }
+              },
+              "goal": {
+                "value": "Explore the marketplace",
+                "source": {
+                  "document_id": "synthetic-004",
+                  "start": 30,
+                  "end": 53,
+                  "text": "Explore the marketplace"
+                }
+              }
+            },
+            "missing_fields": [
+              "feedback",
+              "rating"
+            ],
+            "missing_required_fields": [
+              "feedback"
+            ]
+          }
+        ]
+      },
+      "feedback": {
+        "schema_version": "1.0",
+        "stage": "feedback",
+        "items": [
+          {
+            "id": "F0001",
+            "text": "Setup is confusing; I need an onboarding guide.",
+            "normalized": "setup is confusing i need an onboarding guide",
+            "occurrences": [
+              {
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 64,
+                  "end": 111,
+                  "text": "Setup is confusing; I need an onboarding guide."
+                },
+                "customer": "Synthetic Ada",
+                "goal": "Publish a first listing"
+              },
+              {
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 64,
+                  "end": 111,
+                  "text": "SETUP is confusing, I need an onboarding guide!"
+                },
+                "customer": "Synthetic Ben",
+                "goal": "Publish a first listing"
+              }
+            ]
+          },
+          {
+            "id": "F0002",
+            "text": "The sales report is difficult to find.",
+            "normalized": "the sales report is difficult to find",
+            "occurrences": [
+              {
+                "source": {
+                  "document_id": "synthetic-003",
+                  "start": 58,
+                  "end": 96,
+                  "text": "The sales report is difficult to find."
+                },
+                "customer": "Synthetic Cy",
+                "goal": "Track weekly sales"
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "id": "onboarding",
+            "feedback_ids": [
+              "F0001"
+            ],
+            "supporting_excerpts": [
+              {
+                "feedback_id": "F0001",
+                "document_id": "synthetic-001",
+                "start": 64,
+                "end": 111,
+                "text": "Setup is confusing; I need an onboarding guide."
+              },
+              {
+                "feedback_id": "F0001",
+                "document_id": "synthetic-002",
+                "start": 64,
+                "end": 111,
+                "text": "SETUP is confusing, I need an onboarding guide!"
+              }
+            ]
+          },
+          {
+            "id": "reporting",
+            "feedback_ids": [
+              "F0002"
+            ],
+            "supporting_excerpts": [
+              {
+                "feedback_id": "F0002",
+                "document_id": "synthetic-003",
+                "start": 58,
+                "end": 96,
+                "text": "The sales report is difficult to find."
+              }
+            ]
+          }
+        ],
+        "unmatched_feedback_ids": [],
+        "skipped_documents": [
+          {
+            "document_id": "synthetic-004",
+            "reason": "missing_feedback"
+          }
+        ],
+        "duplicate_count": 1
+      },
+      "journey": {
+        "schema_version": "1.0",
+        "stage": "journey",
+        "status": "ready",
+        "next_actions": [
+          {
+            "action_id": "01-profile",
+            "title": "Complete the seller profile",
+            "prerequisites": [],
+            "theme_ids": [],
+            "supporting_feedback_ids": [],
+            "score": 0
+          }
+        ],
+        "steps": [
+          {
+            "step": 1,
+            "action_id": "01-profile",
+            "title": "Complete the seller profile",
+            "prerequisites": [],
+            "theme_ids": [],
+            "supporting_feedback_ids": [],
+            "score": 0
+          },
+          {
+            "step": 2,
+            "action_id": "02-guide",
+            "title": "Follow the first-listing guide",
+            "prerequisites": [
+              "01-profile"
+            ],
+            "theme_ids": [
+              "onboarding"
+            ],
+            "supporting_feedback_ids": [
+              "F0001"
+            ],
+            "score": 1
+          }
+        ],
+        "reason": null,
+        "ranking_policy": "Sum of per-step distinct supporting feedback counts; ties by first-step score then action IDs. Zero-score fallback allowed."
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t003_combo3_extract_feedback_journey",
+    "artifact_sha256": {
+      "implementation.py": "d1e67b2b1f194d4cddab4453058098b5ce8430ffc303695fd0b9ffa0e62a8f19",
+      "test_implementation.py": "07b727e07339340a12a0edcc8e9e523a81711bf41ee91cfcfa22917ee58e50c6",
+      "example_input.json": "d157d09b9b2ecd8085c86a38ef6f40680eeb9c2ab047ba002c53b038e705256e",
+      "build_manifest.json": "68145878861cbc0c7ebdeba641494d965550dea8ef0060dbeb0cf613c7951499"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

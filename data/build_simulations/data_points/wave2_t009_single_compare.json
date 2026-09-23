@@ -1,0 +1,507 @@
+{
+  "id": "wave2_t009_single_compare",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "search"
+    ],
+    "basic_functionalities": [
+      "Smart product search"
+    ],
+    "types": [
+      "compare"
+    ],
+    "functionality_count": 1,
+    "integration_edge_count": 0,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 6,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.5,
+    "staff_data_scientist": 0.2,
+    "staff_architect": 0.1,
+    "staff_consultant": 0.1,
+    "staff_software_engineer": 0.5,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 2,
+    "planned_operation_classify": 1,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 1,
+    "planned_operation_verify": 1,
+    "planned_operation_write": 1
+  },
+  "requirements": [
+    "Attribute normalization, side-by-side comparison and preference ranking."
+  ],
+  "integration": {
+    "ordered_types": [
+      "compare"
+    ],
+    "edges": [],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "f9f25d7a558b5d49660cb080b8ea9f890d2fafe283e087f38483616355ee19b8",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "1c07efd8ca370be51e5d03f6dc663205f14fadc8a76223293ff0d07d6c3c8248",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t009_single_compare",
+  "membership_point_id": "single_compare",
+  "trial_kind": "repeat_of_wave1",
+  "repeat_of": "single_compare",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "4f52ef9a3bb55d8e2bee9f52684e556da8872da8fd2c835494d9620bb66b005f",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "92e7a6ff-a307-485e-8787-12965b04a000",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 146100,
+    "output_tokens": 8667,
+    "cache_read_tokens": 135191,
+    "cache_write_tokens": 10888,
+    "total_tokens": 154767,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33812,
+        "agent_id": "92e7a6ff-a307-485e-8787-12965b04a000",
+        "model": "gpt-6-astra",
+        "input_tokens": 14658,
+        "output_tokens": 630,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 697,
+        "reasoning_tokens": 471,
+        "duration_ms": 23341,
+        "created_at": "2026-09-23T09:24:45.405Z"
+      },
+      {
+        "id": 33827,
+        "agent_id": "92e7a6ff-a307-485e-8787-12965b04a000",
+        "model": "gpt-6-astra",
+        "input_tokens": 15318,
+        "output_tokens": 5093,
+        "cache_read_tokens": 14655,
+        "cache_write_tokens": 660,
+        "reasoning_tokens": 0,
+        "duration_ms": 87521,
+        "created_at": "2026-09-23T09:26:16.774Z"
+      },
+      {
+        "id": 33829,
+        "agent_id": "92e7a6ff-a307-485e-8787-12965b04a000",
+        "model": "gpt-6-astra",
+        "input_tokens": 20640,
+        "output_tokens": 397,
+        "cache_read_tokens": 15315,
+        "cache_write_tokens": 5322,
+        "reasoning_tokens": 142,
+        "duration_ms": 11676,
+        "created_at": "2026-09-23T09:26:25.984Z"
+      },
+      {
+        "id": 33841,
+        "agent_id": "92e7a6ff-a307-485e-8787-12965b04a000",
+        "model": "gpt-6-astra",
+        "input_tokens": 22165,
+        "output_tokens": 1783,
+        "cache_read_tokens": 20637,
+        "cache_write_tokens": 1525,
+        "reasoning_tokens": 60,
+        "duration_ms": 40027,
+        "created_at": "2026-09-23T09:27:09.784Z"
+      },
+      {
+        "id": 33844,
+        "agent_id": "92e7a6ff-a307-485e-8787-12965b04a000",
+        "model": "gpt-6-astra",
+        "input_tokens": 24035,
+        "output_tokens": 314,
+        "cache_read_tokens": 22162,
+        "cache_write_tokens": 1870,
+        "reasoning_tokens": 46,
+        "duration_ms": 6723,
+        "created_at": "2026-09-23T09:27:17.964Z"
+      },
+      {
+        "id": 33850,
+        "agent_id": "92e7a6ff-a307-485e-8787-12965b04a000",
+        "model": "gpt-6-astra",
+        "input_tokens": 24435,
+        "output_tokens": 352,
+        "cache_read_tokens": 24032,
+        "cache_write_tokens": 400,
+        "reasoning_tokens": 0,
+        "duration_ms": 8398,
+        "created_at": "2026-09-23T09:27:25.067Z"
+      },
+      {
+        "id": 33856,
+        "agent_id": "92e7a6ff-a307-485e-8787-12965b04a000",
+        "model": "gpt-6-astra",
+        "input_tokens": 24849,
+        "output_tokens": 98,
+        "cache_read_tokens": 24432,
+        "cache_write_tokens": 414,
+        "reasoning_tokens": 0,
+        "duration_ms": 6288,
+        "created_at": "2026-09-23T09:27:36.134Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.49525499999999995,
+      "observed_cache_profile_estimate_usd": 0.19107525,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.94306,
+      "observed_cache_profile_estimate_usd": 5.94306,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 2,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 2,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.6,
+    "pseudo_annual_cost_usd": 65000,
+    "pseudo_annual_ai_value_usd": 150000,
+    "pseudo_net_impact_usd": 85000,
+    "pseudo_roi_pct": 130.76923076923077,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.700s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "fixture_label": "SYNTHETIC: imaginary portable computers; not real offers",
+      "normalized_products": [
+        {
+          "id": "alpha",
+          "name": "Synthetic Alpha",
+          "attributes": {
+            "price": 800.0,
+            "mass": 1.5,
+            "storage": 500.0,
+            "color": "silver",
+            "touch": true
+          }
+        },
+        {
+          "id": "beta",
+          "name": "Synthetic Beta",
+          "attributes": {
+            "price": 1000.0,
+            "mass": 1.0,
+            "storage": 1000.0,
+            "color": "black",
+            "touch": false
+          }
+        },
+        {
+          "id": "gamma",
+          "name": "Synthetic Gamma",
+          "attributes": {
+            "price": 600.0,
+            "mass": 2.0,
+            "storage": 250.0,
+            "color": "silver",
+            "touch": null
+          }
+        }
+      ],
+      "comparison": {
+        "product_order": [
+          "alpha",
+          "beta",
+          "gamma"
+        ],
+        "rows": [
+          {
+            "attribute": "price",
+            "label": "Price",
+            "type": "number",
+            "unit": "usd",
+            "values": {
+              "alpha": 800.0,
+              "beta": 1000.0,
+              "gamma": 600.0
+            }
+          },
+          {
+            "attribute": "mass",
+            "label": "Weight",
+            "type": "number",
+            "unit": "kg",
+            "values": {
+              "alpha": 1.5,
+              "beta": 1.0,
+              "gamma": 2.0
+            }
+          },
+          {
+            "attribute": "storage",
+            "label": "Storage",
+            "type": "number",
+            "unit": "gb",
+            "values": {
+              "alpha": 500.0,
+              "beta": 1000.0,
+              "gamma": 250.0
+            }
+          },
+          {
+            "attribute": "color",
+            "label": "Color",
+            "type": "text",
+            "unit": null,
+            "values": {
+              "alpha": "silver",
+              "beta": "black",
+              "gamma": "silver"
+            }
+          },
+          {
+            "attribute": "touch",
+            "label": "Touchscreen",
+            "type": "boolean",
+            "unit": null,
+            "values": {
+              "alpha": true,
+              "beta": false,
+              "gamma": null
+            }
+          }
+        ]
+      },
+      "ranking": [
+        {
+          "product_id": "alpha",
+          "score": 0.566667,
+          "contributions": [
+            {
+              "attribute": "price",
+              "mode": "lower",
+              "missing": false,
+              "score": 0.5,
+              "weighted_score": 0.2
+            },
+            {
+              "attribute": "mass",
+              "mode": "lower",
+              "missing": false,
+              "score": 0.5,
+              "weighted_score": 0.1
+            },
+            {
+              "attribute": "storage",
+              "mode": "higher",
+              "missing": false,
+              "score": 0.333333,
+              "weighted_score": 0.066667
+            },
+            {
+              "attribute": "color",
+              "mode": "equals",
+              "missing": false,
+              "score": 1.0,
+              "weighted_score": 0.1
+            },
+            {
+              "attribute": "touch",
+              "mode": "equals",
+              "missing": false,
+              "score": 1.0,
+              "weighted_score": 0.1
+            }
+          ],
+          "rank": 1
+        },
+        {
+          "product_id": "gamma",
+          "score": 0.5,
+          "contributions": [
+            {
+              "attribute": "price",
+              "mode": "lower",
+              "missing": false,
+              "score": 1.0,
+              "weighted_score": 0.4
+            },
+            {
+              "attribute": "mass",
+              "mode": "lower",
+              "missing": false,
+              "score": 0.0,
+              "weighted_score": 0.0
+            },
+            {
+              "attribute": "storage",
+              "mode": "higher",
+              "missing": false,
+              "score": 0.0,
+              "weighted_score": 0.0
+            },
+            {
+              "attribute": "color",
+              "mode": "equals",
+              "missing": false,
+              "score": 1.0,
+              "weighted_score": 0.1
+            },
+            {
+              "attribute": "touch",
+              "mode": "equals",
+              "missing": true,
+              "score": 0.0,
+              "weighted_score": 0.0
+            }
+          ],
+          "rank": 2
+        },
+        {
+          "product_id": "beta",
+          "score": 0.4,
+          "contributions": [
+            {
+              "attribute": "price",
+              "mode": "lower",
+              "missing": false,
+              "score": 0.0,
+              "weighted_score": 0.0
+            },
+            {
+              "attribute": "mass",
+              "mode": "lower",
+              "missing": false,
+              "score": 1.0,
+              "weighted_score": 0.2
+            },
+            {
+              "attribute": "storage",
+              "mode": "higher",
+              "missing": false,
+              "score": 1.0,
+              "weighted_score": 0.2
+            },
+            {
+              "attribute": "color",
+              "mode": "equals",
+              "missing": false,
+              "score": 0.0,
+              "weighted_score": 0.0
+            },
+            {
+              "attribute": "touch",
+              "mode": "equals",
+              "missing": false,
+              "score": 0.0,
+              "weighted_score": 0.0
+            }
+          ],
+          "rank": 3
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t009_single_compare",
+    "artifact_sha256": {
+      "implementation.py": "70071072b01f24648f96bbdf890da80491abb9d37412c32775fd357a9f1dcd1f",
+      "test_implementation.py": "6815d0a3d03e6788c31435b0742808d181c9bab45bae736681f248a1c798a775",
+      "example_input.json": "e4e7a9e8f6c88d0623d6b879657ef8b2ea9906b87b17b7606baf7cbff13e947b",
+      "build_manifest.json": "c6af18c7c741687ae9d38ead41a1b822b870d2990e832f10bffd47d94bb9da6a"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

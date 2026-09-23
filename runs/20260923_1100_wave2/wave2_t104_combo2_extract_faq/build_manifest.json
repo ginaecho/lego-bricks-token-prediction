@@ -1,0 +1,51 @@
+{
+  "build_id": "wave2_t104_combo2_extract_faq",
+  "composition_label": "Structured extraction -> Knowledge-base answers",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "document string; schema.fields list of {name,label,type,required}; schema.question_field references a text field; knowledge_base list of {id,question,answer,required_fields}; optional positive integer min_overlap",
+    "field_types": ["text", "integer"],
+    "output": "version, status, extraction {fields,missing_fields,errors,complete}, faq {status,answer,reason,citations,retrieval}",
+    "field_output": "value, source {start,end,text} or null, state present/missing/invalid",
+    "validation": "Shared field declarations enforce schema, extracted types, source span consistency, completeness and FAQ template grounding. Unknown keys, duplicate field/knowledge identifiers, duplicate JSON keys and unsafe placeholders are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validated extraction is the only source of FAQ question and template values. FAQ validates the extraction again before retrieval.",
+    "Missing or invalid required extraction values cause abstention; optional values only block answers that depend on them.",
+    "Answers are rendered verbatim from one cited knowledge entry with validated extracted substitutions."
+  ],
+  "behavior": {
+    "synthetic_data": "All example customer, order and shop policy data are explicitly synthetic.",
+    "extraction": "Literal case-sensitive labels anchored to lines; trimmed values; Python Unicode character offsets, start inclusive/end exclusive. Repeated labels are invalid, blanks are missing, signed decimal integers are supported.",
+    "retrieval": "Casefolded unique Unicode alphanumeric token overlap between extracted question and KB questions, minus fixed English stopwords; descending score and id ordering; default minimum overlap 2; top-score ties abstain.",
+    "abstention_reasons": ["required_extraction_unavailable", "question_unavailable", "insufficient_evidence", "ambiguous_evidence", "answer_fields_unavailable"],
+    "cli": "Exactly one JSON object on stdout; successful processing including abstention exits 0; input validation, decoding and file errors return status error and exit 2."
+  },
+  "scope": {
+    "included": ["Integrated deterministic extraction and FAQ pipeline", "Source spans and missing/invalid reporting", "Shared validation", "Grounded templated answers and explicit abstention", "CLI and synthetic unittest fixtures"],
+    "excluded": ["Live providers or LLM calls", "Semantic reasoning or embeddings", "OCR/PDF parsing", "Multiline field values", "Enterprise persistence, authentication and deployment", "Real customer data"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 19,
+    "unittest_exit_code": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "example_faq_status": "answered",
+    "coverage": ["Extraction values and spans", "Cross-stage propagation", "Missing and invalid fields", "Duplicate labels", "Unicode and CRLF", "Empty input and KB", "Retrieval ties", "Optional answer dependencies", "Invalid schema and templates", "Corrupted handoff and invented answer rejection", "Determinism", "CLI success, usage, invalid JSON, schema and file failures"]
+  }
+}

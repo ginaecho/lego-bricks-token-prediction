@@ -1,0 +1,925 @@
+{
+  "id": "wave2_t032_combo4_compare_extract_adaptive_deep",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "search",
+      "documents",
+      "onboard",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Smart product search",
+      "Document automation",
+      "Guided onboarding",
+      "Research"
+    ],
+    "types": [
+      "compare",
+      "extract",
+      "adaptive",
+      "deep"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 8,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 3,
+    "planned_operation_retrieve": 4,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Attribute normalization, side-by-side comparison and preference ranking.",
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions."
+  ],
+  "integration": {
+    "ordered_types": [
+      "compare",
+      "extract",
+      "adaptive",
+      "deep"
+    ],
+    "edges": [
+      {
+        "from": "compare",
+        "to": "extract",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "extract",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "adaptive",
+        "to": "deep",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "3c06b0a9dacc542f62ad159aa7d106c334cda54f3e2e25325815e782080d8124",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "5d527db2e6992adb1a36866d0c65019edeccab2887eb8f7d47e8fc34fdc9f252",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t032_combo4_compare_extract_adaptive_deep",
+  "membership_point_id": "combo4_compare_extract_adaptive_deep",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "8241a9305f8717e35feb8d798edebced8c1b7b7a5453db88b5b577b34be3a50e",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "32d17d57-9043-4950-b7ee-46c3f7e66561",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 154622,
+    "output_tokens": 17707,
+    "cache_read_tokens": 135679,
+    "cache_write_tokens": 18925,
+    "total_tokens": 172329,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34094,
+        "agent_id": "32d17d57-9043-4950-b7ee-46c3f7e66561",
+        "model": "gpt-6-astra",
+        "input_tokens": 14784,
+        "output_tokens": 351,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 823,
+        "reasoning_tokens": 183,
+        "duration_ms": 10508,
+        "created_at": "2026-09-23T09:46:57.848Z"
+      },
+      {
+        "id": 34133,
+        "agent_id": "32d17d57-9043-4950-b7ee-46c3f7e66561",
+        "model": "gpt-6-astra",
+        "input_tokens": 15167,
+        "output_tokens": 14186,
+        "cache_read_tokens": 14781,
+        "cache_write_tokens": 383,
+        "reasoning_tokens": 1034,
+        "duration_ms": 247156,
+        "created_at": "2026-09-23T09:51:05.319Z"
+      },
+      {
+        "id": 34134,
+        "agent_id": "32d17d57-9043-4950-b7ee-46c3f7e66561",
+        "model": "gpt-6-astra",
+        "input_tokens": 29600,
+        "output_tokens": 147,
+        "cache_read_tokens": 15164,
+        "cache_write_tokens": 14433,
+        "reasoning_tokens": 18,
+        "duration_ms": 4450,
+        "created_at": "2026-09-23T09:51:09.904Z"
+      },
+      {
+        "id": 34144,
+        "agent_id": "32d17d57-9043-4950-b7ee-46c3f7e66561",
+        "model": "gpt-6-astra",
+        "input_tokens": 29789,
+        "output_tokens": 2514,
+        "cache_read_tokens": 29597,
+        "cache_write_tokens": 189,
+        "reasoning_tokens": 516,
+        "duration_ms": 56165,
+        "created_at": "2026-09-23T09:52:08.548Z"
+      },
+      {
+        "id": 34148,
+        "agent_id": "32d17d57-9043-4950-b7ee-46c3f7e66561",
+        "model": "gpt-6-astra",
+        "input_tokens": 32396,
+        "output_tokens": 407,
+        "cache_read_tokens": 29786,
+        "cache_write_tokens": 2607,
+        "reasoning_tokens": 0,
+        "duration_ms": 7914,
+        "created_at": "2026-09-23T09:52:35.408Z"
+      },
+      {
+        "id": 34149,
+        "agent_id": "32d17d57-9043-4950-b7ee-46c3f7e66561",
+        "model": "gpt-6-astra",
+        "input_tokens": 32886,
+        "output_tokens": 102,
+        "cache_read_tokens": 32393,
+        "cache_write_tokens": 490,
+        "reasoning_tokens": 0,
+        "duration_ms": 4649,
+        "created_at": "2026-09-23T09:52:42.903Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.65216,
+      "observed_cache_profile_estimate_usd": 0.34688225,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.82592,
+      "observed_cache_profile_estimate_usd": 7.82592,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 5,
+      "roi_satisfaction": 5,
+      "future_impact_potential": 0,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.87,
+    "pseudo_annual_cost_usd": 30000,
+    "pseudo_annual_ai_value_usd": 145000,
+    "pseudo_net_impact_usd": 115000,
+    "pseudo_roi_pct": 383.3333333333333,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................................\n----------------------------------------------------------------------\nRan 33 tests in 0.679s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "stage": "deep",
+      "synthetic": true,
+      "request": {
+        "schema_version": 1,
+        "synthetic": true,
+        "products": [
+          {
+            "id": "atlas",
+            "name": "SYNTHETIC Atlas Travel Scanner",
+            "attributes": {
+              "Price": {
+                "value": 120,
+                "unit": "USD"
+              },
+              "mass": {
+                "value": 0.7,
+                "unit": "kg"
+              },
+              "battery": {
+                "value": 480,
+                "unit": "min"
+              }
+            }
+          },
+          {
+            "id": "boreal",
+            "name": "SYNTHETIC Boreal Desk Scanner",
+            "attributes": {
+              "cost": {
+                "value": 160,
+                "unit": "USD"
+              },
+              "weight": {
+                "value": 950,
+                "unit": "g"
+              },
+              "battery_life": {
+                "value": 6,
+                "unit": "h"
+              }
+            }
+          },
+          {
+            "id": "cedar",
+            "name": "SYNTHETIC Cedar Compact Scanner",
+            "attributes": {
+              "price_usd": {
+                "value": 90,
+                "unit": "USD"
+              },
+              "weight_g": {
+                "value": 500,
+                "unit": "g"
+              }
+            }
+          }
+        ],
+        "comparison": {
+          "criteria": [
+            {
+              "attribute": "price_usd",
+              "direction": "min",
+              "weight": 2
+            },
+            {
+              "attribute": "weight_g",
+              "direction": "min",
+              "weight": 1
+            },
+            {
+              "attribute": "battery_hours",
+              "direction": "max",
+              "weight": 5
+            }
+          ]
+        },
+        "documents": [
+          {
+            "id": "atlas-guide",
+            "product_ids": [
+              "atlas"
+            ],
+            "text": "SYNTHETIC product guide — not a real product.\nSetup mode: USB\nWarranty months: 24\nOffline capable: yes\n"
+          },
+          {
+            "id": "atlas-listing",
+            "product_ids": [
+              "atlas"
+            ],
+            "text": "SYNTHETIC marketplace listing.\nConnection: USB\nWarranty months: 12\nOffline capable: true\n"
+          },
+          {
+            "id": "boreal-guide",
+            "product_ids": [
+              "boreal"
+            ],
+            "text": "SYNTHETIC competing product guide.\nSetup mode: Wi-Fi\nWarranty months: 36\nOffline capable: no\n"
+          }
+        ],
+        "extraction_schema": {
+          "fields": [
+            {
+              "name": "setup_mode",
+              "type": "string",
+              "labels": [
+                "Setup mode",
+                "Connection"
+              ],
+              "required": true
+            },
+            {
+              "name": "warranty_months",
+              "type": "number",
+              "labels": [
+                "Warranty months"
+              ],
+              "required": true
+            },
+            {
+              "name": "offline",
+              "type": "boolean",
+              "labels": [
+                "Offline capable"
+              ],
+              "required": false
+            },
+            {
+              "name": "activation_code",
+              "type": "string",
+              "labels": [
+                "Activation code"
+              ],
+              "required": true
+            }
+          ]
+        },
+        "onboarding": {
+          "experience": "beginner",
+          "preferences": [
+            "visual",
+            "hands_on"
+          ],
+          "completed": [],
+          "tasks": [
+            {
+              "id": "connect",
+              "title": "Connect the scanner",
+              "min_experience": "beginner",
+              "modes": [
+                "hands_on",
+                "visual"
+              ],
+              "prerequisites": [],
+              "requires_fields": [
+                "setup_mode"
+              ],
+              "explanation": "Use the documented connection method before configuring a scan."
+            },
+            {
+              "id": "scan",
+              "title": "Perform a first scan",
+              "min_experience": "beginner",
+              "modes": [
+                "hands_on"
+              ],
+              "prerequisites": [
+                "connect"
+              ],
+              "requires_fields": [
+                "offline"
+              ],
+              "explanation": "A successful connection must precede the first scan."
+            },
+            {
+              "id": "register",
+              "title": "Register the warranty",
+              "min_experience": "beginner",
+              "modes": [
+                "visual"
+              ],
+              "prerequisites": [
+                "connect"
+              ],
+              "requires_fields": [
+                "warranty_months",
+                "activation_code"
+              ],
+              "explanation": "Resolve warranty terms and obtain the required activation code."
+            },
+            {
+              "id": "automate",
+              "title": "Configure advanced batch scanning",
+              "min_experience": "expert",
+              "modes": [
+                "concise"
+              ],
+              "prerequisites": [
+                "scan"
+              ],
+              "requires_fields": [
+                "setup_mode"
+              ],
+              "explanation": "Advanced automation assumes familiarity with scanner configuration."
+            }
+          ]
+        },
+        "research": {
+          "questions": [
+            {
+              "id": "connection",
+              "field": "setup_mode",
+              "text": "Which connection method is supported?"
+            },
+            {
+              "id": "warranty",
+              "field": "warranty_months",
+              "text": "How long is the warranty?"
+            },
+            {
+              "id": "activation",
+              "field": "activation_code",
+              "text": "What activation code is documented?"
+            },
+            {
+              "id": "offline",
+              "field": "offline",
+              "text": "Can the selected product operate offline?"
+            }
+          ]
+        }
+      },
+      "results": {
+        "comparison": {
+          "columns": [
+            "price_usd",
+            "weight_g",
+            "battery_hours"
+          ],
+          "rows": [
+            {
+              "product_id": "atlas",
+              "name": "SYNTHETIC Atlas Travel Scanner",
+              "attributes": {
+                "price_usd": 120,
+                "weight_g": 700.0,
+                "battery_hours": 8.0
+              },
+              "missing_attributes": []
+            },
+            {
+              "product_id": "boreal",
+              "name": "SYNTHETIC Boreal Desk Scanner",
+              "attributes": {
+                "price_usd": 160,
+                "weight_g": 950,
+                "battery_hours": 6
+              },
+              "missing_attributes": []
+            },
+            {
+              "product_id": "cedar",
+              "name": "SYNTHETIC Cedar Compact Scanner",
+              "attributes": {
+                "price_usd": 90,
+                "weight_g": 500,
+                "battery_hours": null
+              },
+              "missing_attributes": [
+                "battery_hours"
+              ]
+            }
+          ],
+          "ranking": [
+            {
+              "product_id": "atlas",
+              "score": 0.8373015873015873,
+              "contributions": {
+                "price_usd": 0.14285714285714285,
+                "weight_g": 0.06944444444444445,
+                "battery_hours": 0.625
+              }
+            },
+            {
+              "product_id": "cedar",
+              "score": 0.375,
+              "contributions": {
+                "price_usd": 0.25,
+                "weight_g": 0.125,
+                "battery_hours": 0.0
+              }
+            },
+            {
+              "product_id": "boreal",
+              "score": 0.0,
+              "contributions": {
+                "price_usd": 0.0,
+                "weight_g": 0.0,
+                "battery_hours": 0.0
+              }
+            }
+          ],
+          "selected_product_id": "atlas",
+          "selected_document_ids": [
+            "atlas-guide",
+            "atlas-listing"
+          ],
+          "rationale": "Weighted min-max utility; missing attributes score zero. Equal observed values score one. Ties break by product id."
+        },
+        "extraction": {
+          "product_id": "atlas",
+          "document_ids": [
+            "atlas-guide",
+            "atlas-listing"
+          ],
+          "fields": [
+            {
+              "name": "setup_mode",
+              "type": "string",
+              "required": true,
+              "value": "USB",
+              "sources": [
+                {
+                  "document_id": "atlas-guide",
+                  "span": {
+                    "start": 58,
+                    "end": 61
+                  },
+                  "raw": "USB",
+                  "value": "USB"
+                },
+                {
+                  "document_id": "atlas-listing",
+                  "span": {
+                    "start": 43,
+                    "end": 46
+                  },
+                  "raw": "USB",
+                  "value": "USB"
+                }
+              ],
+              "conflict": false
+            },
+            {
+              "name": "warranty_months",
+              "type": "number",
+              "required": true,
+              "value": 24.0,
+              "sources": [
+                {
+                  "document_id": "atlas-guide",
+                  "span": {
+                    "start": 79,
+                    "end": 81
+                  },
+                  "raw": "24",
+                  "value": 24.0
+                },
+                {
+                  "document_id": "atlas-listing",
+                  "span": {
+                    "start": 64,
+                    "end": 66
+                  },
+                  "raw": "12",
+                  "value": 12.0
+                }
+              ],
+              "conflict": true
+            },
+            {
+              "name": "offline",
+              "type": "boolean",
+              "required": false,
+              "value": true,
+              "sources": [
+                {
+                  "document_id": "atlas-guide",
+                  "span": {
+                    "start": 99,
+                    "end": 102
+                  },
+                  "raw": "yes",
+                  "value": true
+                },
+                {
+                  "document_id": "atlas-listing",
+                  "span": {
+                    "start": 84,
+                    "end": 88
+                  },
+                  "raw": "true",
+                  "value": true
+                }
+              ],
+              "conflict": false
+            },
+            {
+              "name": "activation_code",
+              "type": "string",
+              "required": true,
+              "value": null,
+              "sources": [],
+              "conflict": false
+            }
+          ],
+          "missing_fields": [
+            "activation_code"
+          ],
+          "missing_required_fields": [
+            "activation_code"
+          ],
+          "conflicting_fields": [
+            "warranty_months"
+          ],
+          "issues": []
+        },
+        "onboarding": {
+          "product_id": "atlas",
+          "experience": "beginner",
+          "preferences": [
+            "visual",
+            "hands_on"
+          ],
+          "tasks": [
+            {
+              "id": "connect",
+              "title": "Connect the scanner",
+              "state": "ready",
+              "mode": "visual",
+              "explanation": "Use the documented connection method before configuring a scan. Follow one step at a time and verify the result. Delivery mode: visual.",
+              "reasons": []
+            },
+            {
+              "id": "register",
+              "title": "Register the warranty",
+              "state": "blocked",
+              "mode": "visual",
+              "explanation": "Resolve warranty terms and obtain the required activation code. Follow one step at a time and verify the result. Delivery mode: visual.",
+              "reasons": [
+                "Missing or disputed fields: activation_code, warranty_months",
+                "Complete prerequisites: connect"
+              ]
+            },
+            {
+              "id": "scan",
+              "title": "Perform a first scan",
+              "state": "waiting",
+              "mode": "hands_on",
+              "explanation": "A successful connection must precede the first scan. Follow one step at a time and verify the result. Delivery mode: hands_on.",
+              "reasons": [
+                "Complete prerequisites: connect"
+              ]
+            },
+            {
+              "id": "automate",
+              "title": "Configure advanced batch scanning",
+              "state": "blocked",
+              "mode": "concise",
+              "explanation": "Advanced automation assumes familiarity with scanner configuration. Follow one step at a time and verify the result. Delivery mode: concise.",
+              "reasons": [
+                "Requires experience: expert",
+                "Complete prerequisites: scan"
+              ]
+            }
+          ],
+          "ready_task_ids": [
+            "connect"
+          ],
+          "completed_task_ids": [],
+          "unresolved_fields": [
+            "activation_code",
+            "warranty_months"
+          ],
+          "research_focus_fields": [
+            "activation_code",
+            "warranty_months"
+          ]
+        },
+        "research": {
+          "product_id": "atlas",
+          "focus_fields": [
+            "activation_code",
+            "warranty_months"
+          ],
+          "answers": [
+            {
+              "question_id": "activation",
+              "field": "activation_code",
+              "question": "What activation code is documented?",
+              "status": "unresolved",
+              "groups": [],
+              "distinct_document_count": 0,
+              "summary": "No valid extracted evidence; obtain a source."
+            },
+            {
+              "question_id": "warranty",
+              "field": "warranty_months",
+              "question": "How long is the warranty?",
+              "status": "disputed",
+              "groups": [
+                {
+                  "value": 24.0,
+                  "document_ids": [
+                    "atlas-guide"
+                  ],
+                  "citations": [
+                    {
+                      "document_id": "atlas-guide",
+                      "span": {
+                        "start": 79,
+                        "end": 81
+                      },
+                      "raw": "24",
+                      "value": 24.0
+                    }
+                  ]
+                },
+                {
+                  "value": 12.0,
+                  "document_ids": [
+                    "atlas-listing"
+                  ],
+                  "citations": [
+                    {
+                      "document_id": "atlas-listing",
+                      "span": {
+                        "start": 64,
+                        "end": 66
+                      },
+                      "raw": "12",
+                      "value": 12.0
+                    }
+                  ]
+                }
+              ],
+              "distinct_document_count": 2,
+              "summary": "2 incompatible values across 2 document(s); do not choose a value without resolving the disagreement."
+            },
+            {
+              "question_id": "connection",
+              "field": "setup_mode",
+              "question": "Which connection method is supported?",
+              "status": "supported",
+              "groups": [
+                {
+                  "value": "USB",
+                  "document_ids": [
+                    "atlas-guide",
+                    "atlas-listing"
+                  ],
+                  "citations": [
+                    {
+                      "document_id": "atlas-guide",
+                      "span": {
+                        "start": 58,
+                        "end": 61
+                      },
+                      "raw": "USB",
+                      "value": "USB"
+                    },
+                    {
+                      "document_id": "atlas-listing",
+                      "span": {
+                        "start": 43,
+                        "end": 46
+                      },
+                      "raw": "USB",
+                      "value": "USB"
+                    }
+                  ]
+                }
+              ],
+              "distinct_document_count": 2,
+              "summary": "Evidence supports \"USB\" across 2 document(s). Multiple documents agree; source independence is not established."
+            },
+            {
+              "question_id": "offline",
+              "field": "offline",
+              "question": "Can the selected product operate offline?",
+              "status": "supported",
+              "groups": [
+                {
+                  "value": true,
+                  "document_ids": [
+                    "atlas-guide",
+                    "atlas-listing"
+                  ],
+                  "citations": [
+                    {
+                      "document_id": "atlas-guide",
+                      "span": {
+                        "start": 99,
+                        "end": 102
+                      },
+                      "raw": "yes",
+                      "value": true
+                    },
+                    {
+                      "document_id": "atlas-listing",
+                      "span": {
+                        "start": 84,
+                        "end": 88
+                      },
+                      "raw": "true",
+                      "value": true
+                    }
+                  ]
+                }
+              ],
+              "distinct_document_count": 2,
+              "summary": "Evidence supports true across 2 document(s). Multiple documents agree; source independence is not established."
+            }
+          ],
+          "disagreements": [
+            "warranty"
+          ],
+          "unresolved_questions": [
+            "activation",
+            "warranty"
+          ],
+          "onboarding_blockers": [
+            "register",
+            "automate"
+          ],
+          "synthesis": "Synthetic evidence for atlas: 2 supported question(s), 1 disagreement(s), 2 unresolved question(s), 2 blocked onboarding task(s). No external research or unsupported inference was performed."
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t032_combo4_compare_extract_adaptive_deep",
+    "artifact_sha256": {
+      "implementation.py": "d707152362a54bdd6a479e6a3f382e244dd55de22eb049719846ddc2e5ffb8fc",
+      "test_implementation.py": "6046771b103327dee40e95934576d1afb5a6670e97436bf6af7361b9fd619b4a",
+      "example_input.json": "01a27520134e09e858028e7f940cd3e32d3999259cd091d92b61a7f42b22aaf3",
+      "build_manifest.json": "999ed5e26fc94f1916f2bfdf09e406c8b99d3959986a3ebf64f0415ef6a70c3e"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

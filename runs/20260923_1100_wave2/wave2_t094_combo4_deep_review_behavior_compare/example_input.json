@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "as_of": "2026-09-23T10:00:00Z",
+  "requirements": [
+    {"id": "outdoor", "description": "Supplied documents support outdoor use.", "mandatory": true},
+    {"id": "repair", "description": "Supplied documents support replaceable batteries.", "mandatory": false}
+  ],
+  "products": [
+    {"id": "a", "name": "SYNTHETIC Trail Light", "category": "camping",
+      "attributes": {"price": {"value": 60, "unit": "USD"}, "weight": {"value": 0.3, "unit": "kg"}, "runtime": {"value": 480, "unit": "min"}}},
+    {"id": "b", "name": "SYNTHETIC Pocket Light", "category": "travel",
+      "attributes": {"price": {"value": 40, "unit": "USD"}, "weight": {"value": 200, "unit": "g"}, "runtime": {"value": 5, "unit": "h"}}},
+    {"id": "c", "name": "SYNTHETIC Desk Light", "category": "home",
+      "attributes": {"price": {"value": 20, "unit": "USD"}, "weight": {"value": 100, "unit": "g"}, "runtime": null}}
+  ],
+  "documents": [
+    {"id": "manual", "title": "SYNTHETIC supplier manual", "published_at": "2026-09-01T00:00:00Z",
+      "claims": [
+        {"product_id": "a", "requirement_id": "outdoor", "stance": "supports", "quote": "Synthetic manual: A supports outdoor use."},
+        {"product_id": "a", "requirement_id": "repair", "stance": "supports", "quote": "Synthetic manual: A battery is replaceable."},
+        {"product_id": "b", "requirement_id": "outdoor", "stance": "supports", "quote": "Synthetic manual: B supports outdoor use."},
+        {"product_id": "c", "requirement_id": "outdoor", "stance": "supports", "quote": "Synthetic manual: C supports outdoor use."}
+      ]},
+    {"id": "report", "title": "SYNTHETIC independent observation", "published_at": "2026-09-20T00:00:00Z",
+      "claims": [
+        {"product_id": "a", "requirement_id": "outdoor", "stance": "supports", "quote": "Synthetic observation: A operated outdoors."},
+        {"product_id": "b", "requirement_id": "outdoor", "stance": "supports", "quote": "Synthetic observation: B operated outdoors."},
+        {"product_id": "c", "requirement_id": "outdoor", "stance": "opposes", "quote": "Synthetic observation: C is indoor-only."}
+      ]}
+  ],
+  "events": [
+    {"id": "e1", "product_id": "a", "type": "browse", "at": "2026-09-23T10:00:00Z"},
+    {"id": "e2", "product_id": "b", "type": "purchase", "at": "2026-09-16T10:00:00Z"},
+    {"id": "e3", "product_id": "c", "type": "purchase", "at": "2026-09-23T10:00:00Z"}
+  ],
+  "preferences": {
+    "half_life_days": 7,
+    "preferred_categories": ["camping"],
+    "weights": {"price": 1, "weight": 1, "runtime": 1, "behavior": 2},
+    "max_price_usd": 100
+  }
+}

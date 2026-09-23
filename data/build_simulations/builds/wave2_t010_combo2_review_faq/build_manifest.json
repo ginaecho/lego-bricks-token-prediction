@@ -1,0 +1,64 @@
+{
+  "build_id": "wave2_t010_combo2_review_faq",
+  "composition_label": "Document review -> Knowledge-base answers",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored within this isolated build",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact fields: schema_version integer 1, synthetic true, requirements[], evidence[], questions[]. IDs unique within each collection. All references resolve.",
+    "requirements": "id, description, nonempty required_phrases[], evidence_ids[]",
+    "evidence": "id, source, locator, text; all nonempty strings",
+    "questions": "id, text, nonempty requirement_ids[]; explicit caller-scoped retrieval",
+    "output": "schema_version, synthetic, status, review, faq",
+    "review": "schema_version, notice, findings[] with requirement_id, status supported|gap, missing_phrases[], citations[]",
+    "review_citation": "phrase, evidence_id, source, locator, quote (entire verbatim evidence text)",
+    "faq": "schema_version, answers[] with question_id, requirement_ids, status answered|abstained, reason, gap_requirement_ids, answer, citations[]",
+    "faq_citation": "evidence_id, source, locator, quote",
+    "validation": "Shared strict object, text, collection and reference validators; canonical reconstruction validates intermediate and final outputs, including grounding and propagation. Unknown fields, duplicate JSON keys and non-finite JSON numbers rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "review",
+      "to": "faq",
+      "payload": "Validated findings with requirement IDs, coverage statuses, missing phrases and traceable evidence quotations",
+      "contract": "FAQ revalidates the entire review against original input before retrieving exclusively from supported findings. Any scoped gap forces abstention."
+    }
+  ],
+  "behavior": {
+    "review": "Case-insensitive literal phrase matching with Unicode word boundaries across explicitly linked evidence; each phrase needs at least one hit. Missing evidence creates traceable gaps.",
+    "faq": "Extractive retrieval ranked by count of distinct overlapping casefolded word tokens after a fixed stop-word filter. Ties break by evidence ID. All positively ranked evidence returned once. Answers are verbatim full evidence excerpts.",
+    "abstention": "Any scoped review gap yields review_gap; otherwise no token overlap yields no_relevant_evidence. Abstentions have null answers and no citations.",
+    "cli": "One JSON object on stdout. Success exits 0; usage, file, JSON and validation errors return status error and exit 2.",
+    "synthetic_fixture": "Synthetic shop return policy is supported; refund timing is incomplete; unrelated tracking question abstains.",
+    "limitations": "Coverage is lexical, not semantic entailment. Negation, contradictory policies, truthfulness, question completeness and real-world compliance are not inferred. Retrieval overlap is a relevance heuristic, not confidence. No certification claims."
+  },
+  "scope": {
+    "included": ["Integrated review-to-FAQ execution", "Shared schema and validation", "Traceable gaps", "Grounded extractive retrieval", "Explicit abstention", "Deterministic synthetic fixtures", "CLI and unittest coverage"],
+    "excluded": ["LLM calls or injected generation", "Network access", "External dependencies", "PDF/OCR parsing", "Semantic reasoning", "Certification", "Production deployment", "Persistent indexes"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_cases": 17,
+    "passed": 17,
+    "failed": 0,
+    "cli_status": "passed; emitted one JSON object with status ok and exited 0"
+  }
+}

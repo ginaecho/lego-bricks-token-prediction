@@ -1,0 +1,80 @@
+{
+  "build_id": "wave2_t045_single_review",
+  "composition_label": "Document review (Document automation)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch inside the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Exactly the string 1.0",
+      "dataset_label": "Nonblank provenance label; example is explicitly SYNTHETIC",
+      "document": "Object with nonblank id and title",
+      "requirements": "1-100 objects: unique id, description, 1-50 required_terms, integer min_evidence in 1-1000",
+      "evidence": "0-1000 objects: unique id, requirement_id, source, locator, text"
+    },
+    "output": {
+      "success": "schema_version, status=ok, stage=document_review, dataset_label, document, disclaimer, summary, requirement_results, gaps",
+      "error": "schema_version, status=error, error; CLI exit 2",
+      "trace": "evidence_id, source, locator, qualifies, missing_terms",
+      "gap": "gap_id, requirement_id, reason, additional_qualifying_evidence_needed, reviewed_evidence_ids, action"
+    },
+    "validation": "One validate() function for API and CLI; exact field sets, bounded arrays and strings, unique IDs and normalized terms, valid references. CLI rejects duplicate JSON keys, nonfinite numbers, malformed JSON and invalid UTF-8. Maximum input file size 5,000,000 bytes."
+  },
+  "cross_stage_handoffs": [
+    "Single stage only: validated shared input -> document review -> shared JSON report."
+  ],
+  "behavior": [
+    "Evidence maps explicitly to one requirement within the supplied document context.",
+    "Every trimmed casefolded required term must occur as a substring in an individual evidence text for that entry to qualify; terms cannot be pooled across entries.",
+    "Compare qualifying entry count to min_evidence; identify missing evidence or insufficient qualifying evidence and retain source/locator traces.",
+    "Deterministic input order; no timestamps, random output, input mutation, network calls, or LLM steps.",
+    "status=ok means execution succeeded, not that all requirements have support.",
+    "Lexical support does not establish meaning, truth, authenticity, independence, or compliance. Negations and incidental substrings may still match; human review is required."
+  ],
+  "scope": {
+    "included": [
+      "Synthetic fixture",
+      "CLI and importable review API",
+      "Requirement/evidence screening",
+      "Traceable evidence deficiencies",
+      "Explicit non-certification disclaimer"
+    ],
+    "excluded": [
+      "Certification or legal/compliance approval",
+      "Semantic inference, contradiction or negation detection",
+      "Independent evidence authentication or deduplication by content",
+      "PDF/OCR ingestion or source file fetching",
+      "Enterprise persistence, authentication or live providers"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 12,
+    "tests_passed": 12,
+    "test_command_exit": 0,
+    "cli_exit": 0,
+    "cli_output_status": "ok",
+    "cli_summary": {
+      "requirements": 3,
+      "lexically_supported": 1,
+      "gaps": 2
+    }
+  }
+}

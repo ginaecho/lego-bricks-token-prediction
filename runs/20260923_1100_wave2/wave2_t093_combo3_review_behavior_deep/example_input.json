@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "status": "ok",
+  "stage": "input",
+  "data": {
+    "as_of": "2026-09-23T12:00:00Z",
+    "requirements": [
+      {"id": "r-delivery", "question": "Does the synthetic product arrive within two days?"},
+      {"id": "r-reuse", "question": "Is the synthetic packaging reusable?"},
+      {"id": "r-warranty", "question": "Is a synthetic warranty documented?"}
+    ],
+    "documents": [
+      {
+        "id": "doc-guide",
+        "title": "SYNTHETIC product guide",
+        "text": "Delivery takes two days. Packaging is reusable.",
+        "evidence": [
+          {"id": "e-guide-delivery", "requirement_id": "r-delivery", "stance": "supports", "quote": "Delivery takes two days."},
+          {"id": "e-guide-reuse", "requirement_id": "r-reuse", "stance": "supports", "quote": "Packaging is reusable."}
+        ]
+      },
+      {
+        "id": "doc-report",
+        "title": "SYNTHETIC independent shipping report",
+        "text": "Delivery took five days. Packaging was reused.",
+        "evidence": [
+          {"id": "e-report-delivery", "requirement_id": "r-delivery", "stance": "contradicts", "quote": "Delivery took five days."},
+          {"id": "e-report-reuse", "requirement_id": "r-reuse", "stance": "supports", "quote": "Packaging was reused."}
+        ]
+      },
+      {
+        "id": "doc-notes",
+        "title": "SYNTHETIC catalog notes",
+        "text": "A blue product appears in the catalog.",
+        "evidence": []
+      }
+    ],
+    "events": [
+      {"id": "event-old", "document_id": "doc-guide", "kind": "purchase", "at": "2026-07-25T12:00:00Z"},
+      {"id": "event-recent", "document_id": "doc-report", "kind": "browse", "at": "2026-09-23T12:00:00Z"}
+    ]
+  },
+  "review": null,
+  "behavior": null,
+  "deep": null
+}

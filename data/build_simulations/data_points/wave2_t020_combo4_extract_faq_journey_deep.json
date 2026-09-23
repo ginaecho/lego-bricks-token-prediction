@@ -1,0 +1,531 @@
+{
+  "id": "wave2_t020_combo4_extract_faq_journey_deep",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "support",
+      "recommend",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "AI customer support",
+      "Personalized discovery",
+      "Research"
+    ],
+    "types": [
+      "extract",
+      "faq",
+      "journey",
+      "deep"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 1,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 6,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 0,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Prerequisite-aware next actions and a validated two-step journey.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions."
+  ],
+  "integration": {
+    "ordered_types": [
+      "extract",
+      "faq",
+      "journey",
+      "deep"
+    ],
+    "edges": [
+      {
+        "from": "extract",
+        "to": "faq",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "faq",
+        "to": "journey",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "journey",
+        "to": "deep",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "9d1d7de1190b5df095676358f9b22e31f7ce742c7aa8c9c1b596ded3de02a435",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "2d2a46c4aadc4441ec8d1a33d2609ea0491eba529c6fc2bb68937c53b8163f14",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t020_combo4_extract_faq_journey_deep",
+  "membership_point_id": "combo4_extract_faq_journey_deep",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "3290339329bcecd1809cd8edf3ca68b4a4dd762ba30e3f146fdd399f48778792",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 8,
+    "input_tokens": 204814,
+    "output_tokens": 16956,
+    "cache_read_tokens": 184453,
+    "cache_write_tokens": 20337,
+    "total_tokens": 221770,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33987,
+        "agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+        "model": "gpt-6-astra",
+        "input_tokens": 14790,
+        "output_tokens": 330,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 829,
+        "reasoning_tokens": 179,
+        "duration_ms": 9908,
+        "created_at": "2026-09-23T09:36:05.607Z"
+      },
+      {
+        "id": 34003,
+        "agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+        "model": "gpt-6-astra",
+        "input_tokens": 15150,
+        "output_tokens": 7097,
+        "cache_read_tokens": 14787,
+        "cache_write_tokens": 360,
+        "reasoning_tokens": 1034,
+        "duration_ms": 142622,
+        "created_at": "2026-09-23T09:38:27.819Z"
+      },
+      {
+        "id": 34005,
+        "agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+        "model": "gpt-6-astra",
+        "input_tokens": 22418,
+        "output_tokens": 142,
+        "cache_read_tokens": 15147,
+        "cache_write_tokens": 7268,
+        "reasoning_tokens": 27,
+        "duration_ms": 3977,
+        "created_at": "2026-09-23T09:38:31.881Z"
+      },
+      {
+        "id": 34028,
+        "agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+        "model": "gpt-6-astra",
+        "input_tokens": 23529,
+        "output_tokens": 6016,
+        "cache_read_tokens": 22415,
+        "cache_write_tokens": 1111,
+        "reasoning_tokens": 551,
+        "duration_ms": 110039,
+        "created_at": "2026-09-23T09:40:23.163Z"
+      },
+      {
+        "id": 34030,
+        "agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+        "model": "gpt-6-astra",
+        "input_tokens": 29801,
+        "output_tokens": 159,
+        "cache_read_tokens": 23526,
+        "cache_write_tokens": 6272,
+        "reasoning_tokens": 20,
+        "duration_ms": 4718,
+        "created_at": "2026-09-23T09:40:27.970Z"
+      },
+      {
+        "id": 34042,
+        "agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+        "model": "gpt-6-astra",
+        "input_tokens": 30948,
+        "output_tokens": 2753,
+        "cache_read_tokens": 29798,
+        "cache_write_tokens": 1147,
+        "reasoning_tokens": 234,
+        "duration_ms": 59301,
+        "created_at": "2026-09-23T09:41:29.203Z"
+      },
+      {
+        "id": 34043,
+        "agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+        "model": "gpt-6-astra",
+        "input_tokens": 33880,
+        "output_tokens": 349,
+        "cache_read_tokens": 30945,
+        "cache_write_tokens": 2932,
+        "reasoning_tokens": 10,
+        "duration_ms": 7944,
+        "created_at": "2026-09-23T09:41:37.249Z"
+      },
+      {
+        "id": 34044,
+        "agent_id": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+        "model": "gpt-6-astra",
+        "input_tokens": 34298,
+        "output_tokens": 110,
+        "cache_read_tokens": 33877,
+        "cache_write_tokens": 418,
+        "reasoning_tokens": 0,
+        "duration_ms": 4506,
+        "created_at": "2026-09-23T09:41:46.010Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.766375,
+      "observed_cache_profile_estimate_usd": 0.3513557499999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 9.1965,
+      "observed_cache_profile_estimate_usd": 9.1965,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 5,
+      "roi_satisfaction": 2,
+      "future_impact_potential": 1,
+      "delivery_quality": 3
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.6799999999999999,
+    "pseudo_annual_cost_usd": 30000,
+    "pseudo_annual_ai_value_usd": 100000,
+    "pseudo_net_impact_usd": 70000,
+    "pseudo_roi_pct": 233.33333333333334,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............................................\n----------------------------------------------------------------------\nRan 46 tests in 0.443s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "status": "ok",
+      "extract": {
+        "values": {
+          "name": "Ada Example",
+          "plan": "starter",
+          "seats": 4,
+          "consent": true,
+          "region": null
+        },
+        "spans": {
+          "name": {
+            "document_id": "synthetic-intake",
+            "start": 32,
+            "end": 43,
+            "text": "Ada Example"
+          },
+          "plan": {
+            "document_id": "synthetic-intake",
+            "start": 50,
+            "end": 57,
+            "text": "starter"
+          },
+          "seats": {
+            "document_id": "synthetic-intake",
+            "start": 65,
+            "end": 66,
+            "text": "4"
+          },
+          "consent": {
+            "document_id": "synthetic-intake",
+            "start": 76,
+            "end": 79,
+            "text": "yes"
+          },
+          "region": null
+        },
+        "missing_fields": [
+          "region"
+        ],
+        "required_missing": []
+      },
+      "faq": {
+        "answers": [
+          {
+            "id": "trial",
+            "status": "answered",
+            "answer": "Starter accounts can activate a guided trial.",
+            "source": {
+              "document_id": "synthetic-kb",
+              "start": 0,
+              "end": 45,
+              "text": "Starter accounts can activate a guided trial."
+            },
+            "kb_id": "trial-policy",
+            "score": 1.0,
+            "reason": null,
+            "missing_fields": []
+          },
+          {
+            "id": "export",
+            "status": "answered",
+            "answer": "Starter accounts can export CSV reports.",
+            "source": {
+              "document_id": "synthetic-kb",
+              "start": 46,
+              "end": 86,
+              "text": "Starter accounts can export CSV reports."
+            },
+            "kb_id": "export-policy",
+            "score": 1.0,
+            "reason": null,
+            "missing_fields": []
+          },
+          {
+            "id": "residency",
+            "status": "abstained",
+            "answer": null,
+            "source": null,
+            "kb_id": null,
+            "score": 0.0,
+            "reason": "missing_required_fields",
+            "missing_fields": [
+              "region"
+            ]
+          }
+        ]
+      },
+      "journey": {
+        "status": "ready",
+        "completed_actions": [],
+        "next_actions": [
+          "activate"
+        ],
+        "steps": [
+          {
+            "step": 1,
+            "action_id": "activate",
+            "title": "Activate the guided trial",
+            "prerequisites": [],
+            "research_topics": [
+              "guided-onboarding"
+            ]
+          },
+          {
+            "step": 2,
+            "action_id": "export",
+            "title": "Try the first CSV export",
+            "prerequisites": [
+              "activate"
+            ],
+            "research_topics": [
+              "export-reliability"
+            ]
+          }
+        ],
+        "blocked": [
+          {
+            "action_id": "export",
+            "missing_fields": [],
+            "unanswered_questions": [],
+            "unmet_prerequisites": [
+              "activate"
+            ]
+          },
+          {
+            "action_id": "regional-review",
+            "missing_fields": [
+              "region"
+            ],
+            "unanswered_questions": [
+              "residency"
+            ],
+            "unmet_prerequisites": []
+          }
+        ]
+      },
+      "deep": {
+        "topics": [
+          "guided-onboarding",
+          "export-reliability"
+        ],
+        "synthesis": [
+          {
+            "topic": "guided-onboarding",
+            "question": "Does guided onboarding accelerate activation in these synthetic pilots?",
+            "assessment": "disputed",
+            "document_ids": [
+              "synthetic-study-a",
+              "synthetic-study-b"
+            ],
+            "evidence": [
+              {
+                "claim_id": "pilot-a",
+                "stance": "supports",
+                "source": {
+                  "document_id": "synthetic-study-a",
+                  "start": 0,
+                  "end": 67,
+                  "text": "Synthetic pilot A supports guided onboarding for faster activation."
+                }
+              },
+              {
+                "claim_id": "pilot-b",
+                "stance": "opposes",
+                "source": {
+                  "document_id": "synthetic-study-b",
+                  "start": 0,
+                  "end": 70,
+                  "text": "Synthetic pilot B opposes guided onboarding because setup took longer."
+                }
+              }
+            ]
+          },
+          {
+            "topic": "export-reliability",
+            "question": "Is CSV export reliable across repeated synthetic trials?",
+            "assessment": "insufficient_evidence",
+            "document_ids": [],
+            "evidence": []
+          }
+        ],
+        "disagreements": [
+          {
+            "topic": "guided-onboarding",
+            "supporting_claims": [
+              "pilot-a"
+            ],
+            "opposing_claims": [
+              "pilot-b"
+            ]
+          }
+        ],
+        "unresolved_questions": [
+          {
+            "topic": "guided-onboarding",
+            "question": "Does guided onboarding accelerate activation in these synthetic pilots?",
+            "reasons": [
+              "conflicting_evidence"
+            ]
+          },
+          {
+            "topic": "export-reliability",
+            "question": "Is CSV export reliable across repeated synthetic trials?",
+            "reasons": [
+              "no_evidence"
+            ]
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t020_combo4_extract_faq_journey_deep",
+    "artifact_sha256": {
+      "implementation.py": "7157363fb1b747bf8c5c873d75ac8cd7c7e2b78a83db859db309a98d5c9731cd",
+      "test_implementation.py": "1c5cdccfd8e5362688241187de09bb0308f1cdbc8d913d37e29c6ce3b064af46",
+      "example_input.json": "f239250d28bd53f2e175ec6ad05bd72c4abdbb9b6beeb26145052455e5edee5b",
+      "build_manifest.json": "4a1aee3fc25b3519db2a1dbe069482dfe0595e1c4265e31d693fdf3c4d2cf1ea"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

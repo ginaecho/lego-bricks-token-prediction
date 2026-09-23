@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "status": "input",
+  "review": null,
+  "triage": null,
+  "input": {
+    "document": {
+      "id": "synthetic-policy-001",
+      "text": "SYNTHETIC EXAMPLE. Backups run daily. Security incidents are recorded."
+    },
+    "requirements": [
+      {"id": "R1", "description": "Document daily backups", "terms": ["backups", "daily"], "severity": "medium"},
+      {"id": "R2", "description": "Security incident response owner", "terms": ["incidents", "owner"], "severity": "high"},
+      {"id": "R3", "description": "Document retention period", "terms": ["retention"], "severity": "low"}
+    ],
+    "evidence": [
+      {"id": "E1", "requirement_id": "R1", "quote": "Backups run daily."},
+      {"id": "E2", "requirement_id": "R2", "quote": "Security incidents are recorded."}
+    ],
+    "routing": {
+      "severity_priority": {"low": 4, "medium": 3, "high": 2, "critical": 1},
+      "default_category": "documentation",
+      "categories": {
+        "security": {"owner": "synthetic-security-lead", "team": "synthetic-security", "priority_floor": 2},
+        "documentation": {"owner": "synthetic-document-owner", "team": "synthetic-operations", "priority_floor": 4}
+      },
+      "rules": [
+        {"keywords": ["security", "incident"], "category": "security"}
+      ]
+    }
+  }
+}

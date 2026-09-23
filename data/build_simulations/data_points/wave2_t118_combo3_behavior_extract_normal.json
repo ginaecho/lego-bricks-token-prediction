@@ -1,0 +1,491 @@
+{
+  "id": "wave2_t118_combo3_behavior_extract_normal",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "documents",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Document automation",
+      "Research"
+    ],
+    "types": [
+      "behavior",
+      "extract",
+      "normal"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 5,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 1,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Recency-weighted browsing/purchase ranking with cold-start handling.",
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Passage retrieval and extractive findings with exact source citations."
+  ],
+  "integration": {
+    "ordered_types": [
+      "behavior",
+      "extract",
+      "normal"
+    ],
+    "edges": [
+      {
+        "from": "behavior",
+        "to": "extract",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "extract",
+        "to": "normal",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "17015dc30f7e375ab1133cc9c58f797fbd5e5160934b620d442efabddac12f64",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "ca455198546e783cbf61e081b520f4d3436de18ddbf6650bbd2539ee07a19cb8",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t118_combo3_behavior_extract_normal",
+  "membership_point_id": "combo3_behavior_extract_normal",
+  "trial_kind": "repeat_of_wave2",
+  "repeat_of": "combo3_behavior_extract_normal",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "0a02c64d636e8228112b8791e4622a661eaca098812da7b7430af3538ee345e3",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "06d9912c-4de0-4a3d-a4c4-2cd1fb748b96",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 128419,
+    "output_tokens": 9191,
+    "cache_read_tokens": 116865,
+    "cache_write_tokens": 11536,
+    "total_tokens": 137610,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34917,
+        "agent_id": "06d9912c-4de0-4a3d-a4c4-2cd1fb748b96",
+        "model": "gpt-6-astra",
+        "input_tokens": 14853,
+        "output_tokens": 240,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 795,
+        "reasoning_tokens": 73,
+        "duration_ms": 5075,
+        "created_at": "2026-09-23T11:16:23.117Z"
+      },
+      {
+        "id": 34933,
+        "agent_id": "06d9912c-4de0-4a3d-a4c4-2cd1fb748b96",
+        "model": "gpt-6-astra",
+        "input_tokens": 15119,
+        "output_tokens": 7795,
+        "cache_read_tokens": 14850,
+        "cache_write_tokens": 266,
+        "reasoning_tokens": 181,
+        "duration_ms": 80721,
+        "created_at": "2026-09-23T11:17:44.966Z"
+      },
+      {
+        "id": 34934,
+        "agent_id": "06d9912c-4de0-4a3d-a4c4-2cd1fb748b96",
+        "model": "gpt-6-astra",
+        "input_tokens": 23226,
+        "output_tokens": 135,
+        "cache_read_tokens": 15116,
+        "cache_write_tokens": 8107,
+        "reasoning_tokens": 0,
+        "duration_ms": 2701,
+        "created_at": "2026-09-23T11:17:47.820Z"
+      },
+      {
+        "id": 34936,
+        "agent_id": "06d9912c-4de0-4a3d-a4c4-2cd1fb748b96",
+        "model": "gpt-6-astra",
+        "input_tokens": 24342,
+        "output_tokens": 705,
+        "cache_read_tokens": 23223,
+        "cache_write_tokens": 1116,
+        "reasoning_tokens": 104,
+        "duration_ms": 8969,
+        "created_at": "2026-09-23T11:18:09.505Z"
+      },
+      {
+        "id": 34937,
+        "agent_id": "06d9912c-4de0-4a3d-a4c4-2cd1fb748b96",
+        "model": "gpt-6-astra",
+        "input_tokens": 25285,
+        "output_tokens": 238,
+        "cache_read_tokens": 24339,
+        "cache_write_tokens": 943,
+        "reasoning_tokens": 0,
+        "duration_ms": 4840,
+        "created_at": "2026-09-23T11:18:12.430Z"
+      },
+      {
+        "id": 34938,
+        "agent_id": "06d9912c-4de0-4a3d-a4c4-2cd1fb748b96",
+        "model": "gpt-6-astra",
+        "input_tokens": 25594,
+        "output_tokens": 78,
+        "cache_read_tokens": 25282,
+        "cache_write_tokens": 309,
+        "reasoning_tokens": 0,
+        "duration_ms": 2442,
+        "created_at": "2026-09-23T11:18:19.376Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4589125,
+      "observed_cache_profile_estimate_usd": 0.19596625,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.50695,
+      "observed_cache_profile_estimate_usd": 5.50695,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 3,
+      "roi_satisfaction": 2,
+      "future_impact_potential": 5,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.57,
+    "pseudo_annual_cost_usd": 65000,
+    "pseudo_annual_ai_value_usd": 40000,
+    "pseudo_net_impact_usd": -25000,
+    "pseudo_roi_pct": -38.46153846153846,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 0.881s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "input": {
+        "schema_version": "1.0",
+        "synthetic": true,
+        "items": [
+          {
+            "id": "solar-kit",
+            "categories": [
+              "outdoors"
+            ],
+            "popularity": 0.6,
+            "document_ids": [
+              "solar-guide"
+            ]
+          },
+          {
+            "id": "lamp",
+            "categories": [
+              "home"
+            ],
+            "popularity": 0.9,
+            "document_ids": [
+              "lamp-guide"
+            ]
+          },
+          {
+            "id": "tent",
+            "categories": [
+              "outdoors"
+            ],
+            "popularity": 0.5,
+            "document_ids": [
+              "tent-guide"
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "id": "solar-guide",
+            "title": "Synthetic solar kit description",
+            "text": "Synthetic solar kit. Price: 120 USD. Warranty: 24 months. Solar charging supports outdoor trips."
+          },
+          {
+            "id": "lamp-guide",
+            "title": "Synthetic lamp description",
+            "text": "Synthetic desk lamp. Price: 40 USD. Warranty: 12 months. Indoor reading light."
+          },
+          {
+            "id": "tent-guide",
+            "title": "Synthetic tent description",
+            "text": "Synthetic outdoor tent. Price: 200 USD. Weather-resistant outdoor shelter."
+          }
+        ],
+        "events": [
+          {
+            "item_id": "solar-kit",
+            "kind": "purchase",
+            "age_days": 1
+          },
+          {
+            "item_id": "lamp",
+            "kind": "browse",
+            "age_days": 90
+          }
+        ],
+        "fields": [
+          {
+            "name": "price_usd",
+            "pattern": "Price: ([0-9]+) USD",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "warranty_months",
+            "pattern": "Warranty: ([0-9]+) months",
+            "type": "number",
+            "required": false
+          }
+        ],
+        "query": "solar outdoor warranty",
+        "config": {
+          "half_life_days": 14,
+          "max_items": 2,
+          "max_findings": 4
+        }
+      },
+      "behavior": {
+        "mode": "personalized",
+        "ranked_items": [
+          {
+            "item_id": "solar-kit",
+            "score": 3.5688568237898233
+          },
+          {
+            "item_id": "tent",
+            "score": 2.8550854590318586
+          }
+        ],
+        "document_ids": [
+          "solar-guide",
+          "tent-guide"
+        ]
+      },
+      "extraction": {
+        "records": [
+          {
+            "document_id": "solar-guide",
+            "fields": {
+              "price_usd": {
+                "value": 120.0,
+                "citation": {
+                  "document_id": "solar-guide",
+                  "start": 28,
+                  "end": 31,
+                  "quote": "120"
+                }
+              },
+              "warranty_months": {
+                "value": 24.0,
+                "citation": {
+                  "document_id": "solar-guide",
+                  "start": 47,
+                  "end": 49,
+                  "quote": "24"
+                }
+              }
+            },
+            "missing_fields": [],
+            "missing_required_fields": [],
+            "errors": []
+          },
+          {
+            "document_id": "tent-guide",
+            "fields": {
+              "price_usd": {
+                "value": 200.0,
+                "citation": {
+                  "document_id": "tent-guide",
+                  "start": 31,
+                  "end": 34,
+                  "quote": "200"
+                }
+              }
+            },
+            "missing_fields": [
+              "warranty_months"
+            ],
+            "missing_required_fields": [],
+            "errors": []
+          }
+        ]
+      },
+      "research": {
+        "query": "solar outdoor warranty",
+        "findings": [
+          {
+            "text": "Solar charging supports outdoor trips.",
+            "score": 0.6666666666666666,
+            "citation": {
+              "document_id": "solar-guide",
+              "start": 58,
+              "end": 96,
+              "quote": "Solar charging supports outdoor trips."
+            },
+            "extracted_fields": []
+          },
+          {
+            "text": "Synthetic solar kit.",
+            "score": 0.3333333333333333,
+            "citation": {
+              "document_id": "solar-guide",
+              "start": 0,
+              "end": 20,
+              "quote": "Synthetic solar kit."
+            },
+            "extracted_fields": []
+          },
+          {
+            "text": "Warranty: 24 months.",
+            "score": 0.3333333333333333,
+            "citation": {
+              "document_id": "solar-guide",
+              "start": 37,
+              "end": 57,
+              "quote": "Warranty: 24 months."
+            },
+            "extracted_fields": [
+              "warranty_months"
+            ]
+          },
+          {
+            "text": "Synthetic outdoor tent.",
+            "score": 0.3333333333333333,
+            "citation": {
+              "document_id": "tent-guide",
+              "start": 0,
+              "end": 23,
+              "quote": "Synthetic outdoor tent."
+            },
+            "extracted_fields": []
+          }
+        ],
+        "no_results": false
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t118_combo3_behavior_extract_normal",
+    "artifact_sha256": {
+      "implementation.py": "279c279fc344108dc1d943a8aefc2f581c0e08cd25c38d1d740675b827ef95c3",
+      "test_implementation.py": "4b7545c7df882923e1c3dc46d58911dfd3fb9c980b00bb0c791cc6c2240e1df1",
+      "example_input.json": "08b771eb5807c3b8e8140f472f52ec338e3e32a1e500e20fdf3759f78edd1ab8",
+      "build_manifest.json": "7aab7a6464294fdeb5fbc979f24d56b8d49681df5b5362f3d8811981cacc9d19"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

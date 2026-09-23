@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC outdoor marketplace and offline research snapshots",
+  "profile": {
+    "interests": [{"tag": "camping", "weight": 3}, {"tag": "solar", "weight": 2}],
+    "excluded_tags": ["fuel"],
+    "excluded_product_ids": ["p4"],
+    "question": "How does the camping lantern charge?"
+  },
+  "products": [
+    {"id": "p1", "title": "Solar Camping Lantern", "description": "The camping lantern charges by solar panel or USB. A full USB charge takes four hours.", "tags": ["camping", "solar"]},
+    {"id": "p2", "title": "Camping Blanket", "description": "A washable camping blanket for cool evenings.", "tags": ["camping"]},
+    {"id": "p3", "title": "Fuel Lantern", "description": "A camping lantern powered by liquid fuel.", "tags": ["camping", "fuel"]},
+    {"id": "p4", "title": "Solar Pocket Light", "description": "A compact solar camping light.", "tags": ["camping", "solar"]}
+  ],
+  "faqs": [
+    {"id": "f1", "question": "How does the camping lantern charge?", "answer": "The Solar Camping Lantern charges by solar panel or USB. A full USB charge takes four hours.", "product_ids": ["p1"]},
+    {"id": "f2", "question": "How is the camping blanket washed?", "answer": "The Camping Blanket can be machine washed on a cool cycle.", "product_ids": ["p2"]},
+    {"id": "f3", "question": "How does the fuel lantern operate?", "answer": "The Fuel Lantern requires liquid fuel.", "product_ids": ["p3"]}
+  ],
+  "web": {
+    "allowed_hosts": ["research.example"],
+    "documents": [
+      {"url": "https://research.example/lantern", "title": "Synthetic lantern charging observations", "text": "In this synthetic fixture, the Solar Camping Lantern completed a USB charge in four hours. Solar charging time varied with sunlight.", "product_ids": ["p1"]},
+      {"url": "https://research.example/blanket", "title": "Synthetic camping blanket notes", "text": "The camping blanket remained washable after a weekend trip.", "product_ids": ["p2"]},
+      {"url": "https://research.example/fuel", "title": "Synthetic fuel lantern notes", "text": "The fuel camping lantern uses liquid fuel.", "product_ids": ["p3"]}
+    ]
+  },
+  "settings": {"limit": 3, "faq_threshold": 0.1, "search_threshold": 0.1, "web_threshold": 0.1}
+}

@@ -1,0 +1,107 @@
+{
+  "build_id": "wave2_t004_combo4_deep_semantic_triage_adaptive",
+  "composition_label": "Deep research -> Semantic search -> Ticket triage & routing -> Adaptive onboarding",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation written for this build; no repository or other build files inspected or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "definition": "INPUT_SCHEMA and OUTPUT_SCHEMAS in implementation.py are the executable shared schema. All listed keys are required; unknown keys, wrong types, blank strings, nonfinite numbers, duplicate identifiers, dangling references, and prerequisite cycles are rejected.",
+    "input": {
+      "schema_version": "Literal 1.0",
+      "fixture_label": "Nonblank string; example is explicitly SYNTHETIC",
+      "questions": "Array of {id, question, proposition}",
+      "documents": "Array of {id, title, source, evidence:[{question_id, stance:support|oppose|uncertain, excerpt, product_ids}]}",
+      "products": "Array of {id, name, description, tags}",
+      "search": "{query, top_k:1..100, embedding_weight:0..1, synonyms:[{term, equivalents}]}",
+      "ticket": "{id, subject, body}",
+      "routing": "{rules:[{id, keywords, category, priority, team, owner, onboarding_track}], fallback:{category, priority, team, owner, onboarding_track}, urgent_keywords}",
+      "profile": "{experience:beginner|intermediate|advanced, preferred_formats, completed_step_ids}",
+      "onboarding": "{review_step_id, steps:[{id, title, tracks, levels, formats, prerequisites, product_ids}]}"
+    },
+    "success_output": "{schema_version, status:ok, fixture_label, stages:{research, semantic, triage, adaptive}}",
+    "error_output": "{status:error, error:message}; stdout JSON and exit code 2; success exits 0",
+    "validation": "The same validate/check_shape boundary validates input and each stage before invoking the next. Stage validators enforce provenance, question coverage, score ranges, routing accountability, attention propagation, step selection, formats, and prerequisite ordering. Duplicate JSON object keys and nonstandard constants are rejected by the CLI loader."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "semantic",
+      "data": "Validated findings, question/proposition text, evidence excerpts with stable document:index citations and product IDs, and unresolved question IDs enrich the per-product index.",
+      "effect": "Research-only terminology can retrieve products; supporting and opposing evidence stays explicitly labeled and citable."
+    },
+    {
+      "from": "semantic",
+      "to": "triage",
+      "data": "Validated ranked results, selected product, evidence IDs and product-linked unresolved questions.",
+      "effect": "The highest-ranked positive match is selected; its unresolved evidence elevates normal priority to high without silently resolving disagreements."
+    },
+    {
+      "from": "triage",
+      "to": "adaptive",
+      "data": "Validated accountable owner/team, onboarding track, selected product, and attention question IDs.",
+      "effect": "Routed track and product constrain onboarding, unresolved evidence requires human review, and the accountable owner is retained."
+    }
+  ],
+  "behavior": {
+    "research": "Synthesis uses supplied structured evidence, not invented document interpretation. Support plus opposition is disputed; opposition alone is contested; any remaining uncertain evidence is uncertain; support alone is supported; no evidence is unanswered. All except supported remain unresolved. Source counts deduplicate equal source labels; excerpt counts are not confidence probabilities.",
+    "semantic": "An in-memory product index combines catalog text and linked research evidence. Unicode casefolded word tokens, one-hop configured synonym expansion, log-TF/smoothed-IDF cosine relevance, and optional weighted embedding cosine determine ranking. Nonpositive results are omitted; scores are rounded to six decimals, ties break by product ID, and top_k truncates.",
+    "embedding_interface": "run_pipeline(data, embedder=callable) optionally accepts a local callable receiving [query, product_text, ...]. Positive embedding_weight requires it; zero weight never invokes it. It must return one finite, nonzero, equally dimensional numeric list per text. Negative cosines clamp to zero. CLI has no provider or dynamic code loader; the example uses zero weight. Fixture callables test success, malformed responses, large magnitudes, and exceptions.",
+    "triage": "Case-insensitive whole-token phrases match ticket subject/body. Most matching configured keywords wins, ties preserve configuration order, and unmatched tickets use the explicit fallback. Configured base priority is increased by unresolved selected-product evidence or urgent phrases. Every route has an owner and team; reasons accompany all decisions. Product relevance is not treated as proof of any proposition.",
+    "adaptive": "Selects routed-track steps matching experience and product applicability, then closes prerequisites even across level/track filters. Completed steps satisfy prerequisites and are omitted. Stable topological catalog order prioritizes a ready evidence-review step. User-preferred supported formats win, otherwise the first supported format is used. Explanations describe inclusion, prerequisite overrides, format fallback, and owner. A completed review tutorial does not clear the human-review flag.",
+    "empty_data": "Empty document/question/catalog arrays are supported when references remain valid. No positive search match leaves selected_product_id null; no product-specific steps are inferred. Globally unanswered questions without linked product evidence remain visible in research but do not automatically escalate unrelated products.",
+    "determinism": "No randomness, timestamps, live model calls, or network requests; repeatable for identical input and a deterministic injected callable. Caller input is not mutated."
+  },
+  "scope": {
+    "included": [
+      "One integrated synchronous CLI and Python API with shared schema and validation",
+      "Multi-document evidence aggregation, disagreements, citations, and unresolved questions",
+      "Deterministic local ranking with configurable synonyms and optional fixture-tested embedding injection",
+      "Configurable categorization, priority escalation, explicit ownership and routing",
+      "Experience/preference-aware onboarding with prerequisite closure and explanations",
+      "Clearly labeled synthetic example and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live research, web crawling, actual external sources, LLM providers or live embeddings",
+      "Automatic extraction of unstructured claims or independent fact verification",
+      "Enterprise deployment, authentication, persistent databases, approximate-nearest-neighbor services",
+      "Actual ticket dispatch, notifications, human approval execution or onboarding UI",
+      "Claims of production-quality semantic understanding; lexical/synonym ranking is the default reference baseline",
+      "Network, git, subagent, dependency installation or cross-build access"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "test_count": 43,
+    "test_failures": 0,
+    "test_errors": 0,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "verified_behaviors": [
+      "All four stages execute in order and validate each handoff",
+      "Synthetic multi-source disagreement propagates through ranking to high-priority support and mandatory human review",
+      "Optional local embedding fixtures are validated without provider access",
+      "Experience, format preferences, completed steps and prerequisite ordering are respected",
+      "CLI success emits one JSON object; schema, file, encoding, malformed JSON and usage errors return status error with exit 2",
+      "Repeatability and caller-input immutability"
+    ]
+  }
+}

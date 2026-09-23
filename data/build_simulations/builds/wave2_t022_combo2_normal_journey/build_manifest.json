@@ -1,0 +1,64 @@
+{
+  "build_id": "wave2_t022_combo2_normal_journey",
+  "composition_label": "Normal research (Research) -> Journey recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1; booleans rejected",
+      "synthetic_data": "must be true",
+      "query": "nonblank string containing informative word tokens",
+      "profile": {"skills": "unique strings", "goals": "nonempty unique strings"},
+      "passages": "array of {id, title, source_uri, text}; unique IDs",
+      "actions": "array of {id, label, requires, grants, evidence_passage_ids}; unique IDs; grants and evidence nonempty"
+    },
+    "output": {
+      "schema_version": 1,
+      "synthetic_data": true,
+      "status": "ok | no_evidence | no_journey",
+      "research": "{query, findings: [{id, score, citation: {passage_id, title, source_uri, start, end, quote}}]}",
+      "journey": "{status, reason, recommendations, steps, final_skills, goals_met}"
+    },
+    "validation": "One validate function dispatches input, research, and journey schemas. Exact object fields, source references, evidence links, offsets, skill transitions, prerequisites, and two-step goal completion are checked at stage boundaries.",
+    "citation_offsets": "Zero-based Python Unicode string indices; start inclusive, end exclusive. Source URIs are opaque synthetic identifiers, never fetched.",
+    "errors": "Validation, JSON, encoding, argument, and file errors produce one JSON object with status error and exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Validated input -> research: query, synthetic passage corpus, shared schema.",
+    "Validated research -> journey: ranked extractive findings with exact source citations; action eligibility requires every evidence passage to appear in findings.",
+    "Journey -> integrated output: finding IDs link recommended actions and steps back to research citations; first-step skills feed second-step prerequisite checks."
+  ],
+  "behavior": {
+    "retrieval": "Casefolded word-token overlap after a fixed stopword filter. Select the highest-scoring sentence per passage, breaking sentence ties by earliest offset; discard zero scores. Rank findings by descending overlap and ascending passage ID.",
+    "findings": "Verbatim sentence extraction only; no generated factual claims.",
+    "recommendations": "All supported actions whose prerequisites are initially satisfied and whose grants add skills. Rank by unmet-goal grants then action ID.",
+    "journey": "Exhaustively evaluate pairs of distinct supported actions. Both must add skills, prerequisites must hold at execution, and all profile goals must hold after step two. Prefer more newly gained skills, then lexical action IDs.",
+    "failure_modes": "No matches yields no_evidence. Already met goals, cycles, missing prerequisites, or absence of a complete pair yields no_journey with no partial steps. Supported immediate recommendations may remain.",
+    "semantic_status_exit": "Valid input always exits 0, including no_evidence and no_journey.",
+    "synthetic_fixtures": "The example describes fictional marketplace order preparation and dashboard learning actions. No real-world efficacy is asserted."
+  },
+  "scope": {
+    "included": ["Local passage retrieval", "Extractive findings", "Exact citations", "Evidence-filtered recommendations", "Prerequisite-aware two-step planning", "Shared validation", "JSON CLI", "Standard-library unittest coverage"],
+    "excluded": ["Live retrieval", "Networks and model providers", "LLM injection", "Semantic entailment verification", "Embedding search", "Persistent user profiles", "Enterprise infrastructure", "Plans longer than two steps"],
+    "limitations": "Action prerequisite, grant, and evidence metadata are curated synthetic assertions, not inferred truths. Sentence splitting is intentionally simple punctuation splitting; lexical overlap is not semantic relevance."
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {"tests_run": 20, "failures": 0, "errors": 0, "exit_code": 0},
+    "cli": {"exit_code": 0, "stdout_json_objects": 1, "status": "ok", "validated_steps": 2},
+    "coverage": ["Each stage", "Exact citations and Unicode offsets", "Cross-stage evidence and skill propagation", "Empty corpus", "Missing and cyclic prerequisites", "Unsupported evidence", "Already met goals", "Determinism", "Invalid schema and references", "Tampered handoffs", "CLI success and argument/file/JSON/encoding errors"]
+  }
+}

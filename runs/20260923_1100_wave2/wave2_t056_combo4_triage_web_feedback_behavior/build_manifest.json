@@ -1,0 +1,131 @@
+{
+  "build_id": "wave2_t056_combo4_triage_web_feedback_behavior",
+  "composition_label": "Ticket triage & routing -> Web research -> Feedback analysis -> Behavioral personalization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written directly in the isolated build directory; no existing code inspected or copied.",
+    "runtime": "Python 3 standard library; Python 3.9 or newer",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py",
+    "working_directory": "Run both commands in the directory containing the four deliverables."
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input_fields": {
+      "schema_version": "Exactly 1.0",
+      "synthetic": "Must be true; all example content is synthetic.",
+      "tickets": "Unique id, nonempty text, list of HTTPS URLs.",
+      "triage_config": "Ordered categories with name, keywords, owner and priority; default_category; urgent_keywords.",
+      "web_config": "Exact lowercase allowed_hosts; supplied snapshots with URL, title, content, retrieved_at; max_excerpt_chars from 1 to 2000.",
+      "feedback": "Unique id, valid ticket_id, nonempty word-bearing text.",
+      "behavior": "Timezone-aware now, target user_id, positive half_life_days and integer limit, catalog and events."
+    },
+    "catalog_fields": ["id", "title", "themes", "popularity"],
+    "event_fields": ["id", "user_id", "item_id", "kind", "at"],
+    "success_envelope": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "stage": "input, triage, web, feedback, or behavior",
+      "data": "Immutable-by-copy validated original input",
+      "results": "Exactly the completed stage payloads in pipeline order."
+    },
+    "error_envelope": {
+      "schema_version": "1.0",
+      "status": "error",
+      "error": "Human-readable validation, JSON or file error; CLI exit code 2."
+    },
+    "validation": [
+      "One shared validate function checks the envelope and input at every stage boundary.",
+      "All declared input objects reject missing and unknown fields.",
+      "Unique identifiers, reference integrity, category membership, numeric ranges and timezone-aware timestamps are checked.",
+      "Future events and snapshots are rejected relative to the explicit input now.",
+      "Completed stage payloads are recomputed and compared using type-sensitive JSON to verify exact schemas, routing, scores, excerpts and provenance.",
+      "Stages cannot be skipped or reordered; advance validates its predecessor and its own output.",
+      "CLI rejects malformed JSON, duplicate JSON keys and nonfinite values; success prints exactly one JSON object with exit code 0."
+    ]
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "triage",
+      "to": "web",
+      "consumed": "Validated routed tickets and canonical URLs",
+      "propagated": "ticket_id, category, priority and accountable owner accompany every retrieved finding."
+    },
+    {
+      "from": "web",
+      "to": "feedback",
+      "consumed": "Validated findings joined by ticket_id",
+      "propagated": "Retrieved finding categories augment feedback themes; finding_ids link each deduplicated group and theme to source URL, retrieval timestamp and exact excerpt."
+    },
+    {
+      "from": "feedback",
+      "to": "behavior",
+      "consumed": "Validated unique-group theme counts and evidence references",
+      "propagated": "Theme affinity contributes to ranking; ranked items retain themes, feedback_group_ids and finding_ids."
+    }
+  ],
+  "behavior": {
+    "triage": "Count case-insensitive whole-word or phrase keyword matches per category. Highest count wins; configuration order resolves ties. No match uses the configured default. Urgent keywords override priority to high. Every category has a nonempty accountable owner.",
+    "web": "Offline retrieval only: canonical HTTPS URL lookup in input snapshot fixtures after an exact-host allowlist check. No HTTP requests or redirects. Reject credentials and non-443 ports. Lowercase host, remove default port and fragment, preserve path/query. Deduplicate canonical URLs per ticket. Disallowed hosts and missing snapshots produce explicit unresolved records, not fabricated findings.",
+    "provenance": "Every finding preserves source URL, title, retrieved_at, exact content prefix and zero-based character start/end offsets. The original snapshot stays in the shared envelope for verification.",
+    "feedback": "Globally deduplicate by casefolded Unicode word sequence, ignoring punctuation and whitespace. Preserve all original record IDs, ticket IDs and exact supporting excerpts. Themes combine feedback keyword matches and linked research categories, with a default when neither exists. Count each deduplicated group once per theme, not once per original record.",
+    "ranking_formula": "For each item: sum(event_weight * 2 ** (-age_days / half_life_days)) + sum(unique feedback group counts for matching item themes) + 0.1 * log1p(popularity). Browse weight is 1; purchase weight is 3. Only target-user events contribute.",
+    "ranking_policy": "Sort by descending full-precision score then ascending item ID; return at most limit. Expose score components and supporting event IDs. Keep purchased items eligible in this bounded reference.",
+    "cold_start": "No events for the target user uses feedback affinity plus popularity. If feedback is also absent, popularity alone is used; item ID breaks equal scores. Empty catalogs return an empty ranking.",
+    "determinism": "No wall-clock reads in the pipeline, randomness, external state, providers or model calls. Identical inputs yield identical output.",
+    "llm": "No LLM step is needed or included."
+  },
+  "scope": {
+    "included": [
+      "One integrated runnable CLI and shared validated envelope",
+      "Configurable accountable ticket routing",
+      "Allowlisted offline URL ingestion and snapshot retrieval",
+      "Source-preserving research findings and explicit unresolved lookups",
+      "Feedback deduplication and traceable theme support",
+      "Recency-weighted browsing and purchase ranking",
+      "Cold-start, missing-data and empty-collection handling",
+      "Deterministic synthetic fixtures and CLI tests"
+    ],
+    "excluded": [
+      "Live network fetching, search engines, crawling or redirects",
+      "Model providers or LLM inference",
+      "Semantic or fuzzy deduplication and sentiment analysis",
+      "Training, collaborative filtering or demographic inference",
+      "Production persistence, authentication, ticket system integration and web UI",
+      "Enterprise-scale processing or adversarial resource-exhaustion hardening"
+    ]
+  },
+  "test_outcomes": {
+    "unittest_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 33,
+    "failures": 0,
+    "errors": 0,
+    "result": "passed",
+    "cli_command": "python -B implementation.py example_input.json",
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "cli_final_stage": "behavior",
+    "coverage": [
+      "All four stages and complete pipeline handoffs",
+      "Propagation of routing changes into research, themes and ranking",
+      "Exact source excerpts and cross-ticket duplicate provenance",
+      "Recency half-life, purchase weights, user isolation and deterministic ties",
+      "Cold start, no feedback, missing snapshots and empty collections",
+      "Unsafe URLs, exact allowlists, unknown references and invalid schemas",
+      "Tampered handoffs and skipped stages",
+      "CLI success, usage errors, missing files, malformed JSON and duplicate keys"
+    ]
+  }
+}

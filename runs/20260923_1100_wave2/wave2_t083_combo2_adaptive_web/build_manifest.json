@@ -1,0 +1,50 @@
+{
+  "build_id": "wave2_t083_combo2_adaptive_web",
+  "composition_label": "Adaptive onboarding (Guided onboarding) -> Web research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version=1, synthetic=true, profile{experience,preference,topic,completed}, research{allowlisted_hosts,sources,fixture_documents,max_results}",
+    "profile": "experience: novice|intermediate|expert; preference: brief|detailed; topic: nonempty searchable text; completed: unique known step IDs respecting prerequisites",
+    "fixtures": "Canonical URL keys map to unique fixture_id, title and text. Every requested source must have exactly one synthetic fixture.",
+    "output": "schema_version=1, synthetic=true, status=ok, onboarding plan, research{query,findings,ingested_sources,unmatched_sources}",
+    "findings": "score, exact quote, zero-based start/end Unicode character offsets, canonical url, title, fixture_id, synthetic=true",
+    "validation": "validate(stage,value) handles input, onboarding handoff and final output. Unknown/missing fields are rejected. CLI errors emit one JSON error object with exit code 2."
+  },
+  "cross_stage_handoffs": [
+    "Adaptive onboarding validates input and produces a prerequisite-ordered plan with experience credits and preference-specific explanations.",
+    "Its validated output carries the normalized query, preference and complete canonicalized retrieval configuration including synthetic fixtures.",
+    "Web research accepts only the onboarding output, revalidates it through the shared layer, then ingests and retrieves its exact allowlisted sources.",
+    "Final validation checks query/source lineage and recomputes evidence to verify provenance."
+  ],
+  "behavior": {
+    "onboarding": "Novices receive basics, source_evaluation and research. Intermediate users receive basics credit; experts also receive source_evaluation credit. Explicit completed steps are honored. Ready denotes a complete actionable plan, not proof that a human completed training.",
+    "url_policy": "HTTPS only, exact allowlisted DNS host, no IP literals, credentials, explicit ports, fragments, whitespace or backslashes. Canonicalization lowercases hosts and normalizes an empty path to slash. Queries are preserved; subdomains require separate allowlisting.",
+    "retrieval": "Offline fixture ingestion only; no HTTP requests. ASCII alphanumeric case-insensitive query tokens score exact-token overlap in sentence passages. Ties use source order then character offset. Brief returns at most one passage per source; detailed considers all matching passages, bounded by max_results.",
+    "empty_results": "Successful result with an empty findings list and all nonmatching sources reported.",
+    "determinism": "No randomness, clock inputs, providers or mutable global state. Input is not modified."
+  },
+  "scope": {
+    "included": ["Synthetic experience-aware onboarding", "Explicit prerequisites and explanations", "Allowlisted offline URL ingestion", "Deterministic retrieval", "Verifiable extractive findings", "Shared contracts", "JSON CLI", "Standard-library unittest coverage"],
+    "excluded": ["Live network access", "HTML crawling", "LLM generation", "Persistent learner progress", "Authentication", "Enterprise delivery", "Semantic or multilingual retrieval", "Verification of fixture claims against the real world"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests": 18,
+    "cli": "Passed: example emits one JSON object with status ok and exits 0; missing files, malformed JSON, invalid schemas and usage errors emit status error and exit 2."
+  }
+}

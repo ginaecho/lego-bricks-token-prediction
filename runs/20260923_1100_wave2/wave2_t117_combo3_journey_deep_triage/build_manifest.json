@@ -1,0 +1,101 @@
+{
+  "build_id": "wave2_t117_combo3_journey_deep_triage",
+  "composition_label": "Journey recommendations -> Deep research -> Ticket triage & routing",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory; no source files or other builds consulted.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Exact string 1.0",
+      "synthetic": "Must be true; the example and tests use explicitly synthetic data",
+      "request_id": "Nonblank stable request identity",
+      "user": "id, ordered goals, completed_actions referencing the action catalog",
+      "actions": "Unique id, title, goals, prerequisite action IDs, research_topics",
+      "documents": "Unique id, title, structured claims: topic, stance, text. One claim per topic per document.",
+      "routing": "Ordered categories with id, exact topics, owner and queue; fallback_category; reason-to-priority mapping"
+    },
+    "output": {
+      "envelope": "schema_version, synthetic, request_id, status=ok, journey, research, triage",
+      "journey": "user_id, eligible next_actions, exactly two ordered steps, deduplicated research_topics",
+      "research": "journey_action_ids, cited document_ids, topic reports with evidence, source_count, synthesis, disagreement, reason_codes, unresolved_questions",
+      "triage": "One ticket per selected research topic: stable id, topic, action_ids, document_ids, category, priority, owner, queue, reason_codes, questions, summary",
+      "error": "schema_version, status=error, error; CLI exits 2"
+    },
+    "validation": "One shared validate() layer checks strict input keys, types, unique identities, references and acyclic prerequisites. Each downstream consumer validates its upstream record before use. Canonical deterministic output contracts are checked recursively, including exact quotations, order, source counts, routing, and bool/int distinctions.",
+    "bounds": "Strings have 1..2000 characters and no surrounding whitespace. Lists have at most 100 entries. At least two catalog actions and one user goal are required. Completed actions must include their prerequisites. Unknown fields are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "journey",
+      "to": "deep research",
+      "data": "Validated selected action IDs and their research topics define the entire research scope. Irrelevant document claims are excluded."
+    },
+    {
+      "from": "deep research",
+      "to": "ticket triage",
+      "data": "Validated topic reports propagate exact action/source identities, synthesis, disagreement and missing/uncertain evidence questions into categorized, prioritized, accountable tickets."
+    }
+  ],
+  "behavior": {
+    "journey": "Enumerates feasible ordered two-step plans without repeating completed actions. Maximizes weighted overlap with ordered user goals, then first-step relevance, then lexical action IDs. Prerequisites may be goal-unrelated when they unlock the relevant second step. A goal-irrelevant or impossible plan is an error.",
+    "research": "Deterministically groups structured claims by selected topic across documents. Each topic denotes one shared proposition. Supports and opposes constitute disagreement. Missing evidence, uncertain stances and single-document evidence create explicit unresolved questions. Counts never assert factual truth or source independence.",
+    "routing": "The first category whose exact topic matches wins; otherwise an explicitly owned fallback category is used. Highest configured severity across reason codes wins using low < normal < high < urgent. Reason codes are disagreement, missing_evidence, uncertain, limited_sources, resolved. Resolved means no issue detected in supplied stances, not externally verified truth.",
+    "determinism": "No clock, randomness, provider, network or mutable global state. Catalog and document input ordering do not change output; configured category order intentionally does.",
+    "cli": "One JSON object on stdout. Successful runs exit 0. Invalid JSON, duplicate object keys, non-finite numbers, invalid schema, decoding errors and file errors return status=error and exit 2."
+  },
+  "scope": {
+    "included": [
+      "Prerequisite-aware personalized next actions and an exactly two-step journey",
+      "Multi-document structured evidence synthesis with traceable quotations",
+      "Disagreement, uncertain evidence, evidence gaps and corroboration questions",
+      "Configurable categorization, priority and accountable owner/queue routing",
+      "Shared boundary validation and end-to-end provenance",
+      "Synthetic fixtures, CLI contract tests, tampered and stale handoff tests"
+    ],
+    "excluded": [
+      "Live research, providers, web retrieval and external source verification",
+      "LLM or injected callable; the implementation is fully deterministic",
+      "Natural-language claim extraction, semantic topic matching and adjudication of factual truth",
+      "Real customer data, production support integrations and actual ticket submission",
+      "Persistence, authentication, asynchronous work and enterprise operational infrastructure"
+    ],
+    "ancillary_prompt_log": "docs\\My_prompt.txt records the supplied prompts under the mandatory session logging policy; it is not a runtime deliverable."
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 28,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "selected_actions": ["enable-checkout", "launch-store"],
+      "research_topics": 3,
+      "tickets": 3,
+      "verified_error_exit_code": 2
+    }
+  }
+}

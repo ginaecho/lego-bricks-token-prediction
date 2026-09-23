@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "items": [
+    {"id": "solar-kit", "categories": ["outdoors"], "popularity": 0.6, "document_ids": ["solar-guide"]},
+    {"id": "lamp", "categories": ["home"], "popularity": 0.9, "document_ids": ["lamp-guide"]},
+    {"id": "tent", "categories": ["outdoors"], "popularity": 0.5, "document_ids": ["tent-guide"]}
+  ],
+  "documents": [
+    {"id": "solar-guide", "title": "Synthetic solar kit description", "text": "Synthetic solar kit. Price: 120 USD. Warranty: 24 months. Solar charging supports outdoor trips."},
+    {"id": "lamp-guide", "title": "Synthetic lamp description", "text": "Synthetic desk lamp. Price: 40 USD. Warranty: 12 months. Indoor reading light."},
+    {"id": "tent-guide", "title": "Synthetic tent description", "text": "Synthetic outdoor tent. Price: 200 USD. Weather-resistant outdoor shelter."}
+  ],
+  "events": [
+    {"item_id": "solar-kit", "kind": "purchase", "age_days": 1},
+    {"item_id": "lamp", "kind": "browse", "age_days": 90}
+  ],
+  "fields": [
+    {"name": "price_usd", "pattern": "Price: ([0-9]+) USD", "type": "number", "required": true},
+    {"name": "warranty_months", "pattern": "Warranty: ([0-9]+) months", "type": "number", "required": false}
+  ],
+  "query": "solar outdoor warranty",
+  "config": {"half_life_days": 14, "max_items": 2, "max_findings": 4}
+}

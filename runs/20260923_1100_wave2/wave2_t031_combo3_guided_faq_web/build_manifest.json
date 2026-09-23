@@ -1,0 +1,99 @@
+{
+  "build_id": "wave2_t031_combo3_guided_faq_web",
+  "composition_label": "Guided setup -> Knowledge-base answers -> Web research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in this isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1, not boolean",
+      "fixture_label": "Literal synthetic",
+      "question": "Nonempty text",
+      "setup": "product; steps with unique id, requires IDs, required boolean; completed IDs",
+      "knowledge": "Documents with unique id, product, text",
+      "research": "allowlisted_hosts and pages with unique id, url, title, text"
+    },
+    "output": "schema_version, fixture_label, status (ok or blocked), stages in execution order",
+    "shared_stage_record": [
+      "stage", "status", "context", "evidence", "answer", "reason", "progress", "handoff"
+    ],
+    "context": "Validated product and original question, propagated without alteration",
+    "evidence": "id, kind (knowledge/web), text, url, title; knowledge URL/title are null",
+    "handoff": "ready boolean, query, source_ids, upstream_source_ids",
+    "validation": "Strict fields, bounded strings/lists, unique IDs, acyclic prerequisite graph, completed prerequisite closure; shared validate_stage boundaries; strict exact-excerpt answer grounding",
+    "errors": "One JSON object with schema_version 1, status error and error string; CLI exit 2"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "guided",
+      "to": "faq",
+      "consumed": "Validated context, readiness and product/question query. Product scopes FAQ documents; incomplete required setup blocks retrieval."
+    },
+    {
+      "from": "faq",
+      "to": "web",
+      "consumed": "Validated context, readiness, query and FAQ source IDs. FAQ citations are retained as upstream_source_ids; absence of FAQ evidence permits research fallback."
+    }
+  ],
+  "behavior": {
+    "guided": "Validate prerequisite DAG and completed closure; track completed, remaining, available, total and completed_count. Optional steps do not block ready status.",
+    "faq": "Filter exact product, rank text by distinct non-stopword question-token overlap; ties sort by ID; return at most three exact cited excerpts or explicit no_relevant_evidence abstention.",
+    "web": "Ingest supplied synthetic page snapshots, never fetch. HTTPS, exact allowlisted DNS host, no credentials, no nonstandard port, fragment, whitespace or backslash. Retrieve with FAQ-propagated question and retain original URL, title, source ID and exact excerpt.",
+    "research_policy": "Research runs after every ready FAQ result, including FAQ abstention. It provides independent findings rather than claiming to verify FAQ claims.",
+    "optional_callable": "run_pipeline(request, answerer=None); injected callable(stage, query, evidence) returns answer and source_ids. Only exact concatenated cited excerpts are accepted. No live provider.",
+    "determinism": "Stable ranking and input-order onboarding tracking; no clock, randomness, network or provider calls.",
+    "cli": "Exactly one JSON object on stdout. Valid blocked onboarding is a normal result with exit 0. File, JSON and validation failures exit 2."
+  },
+  "scope": {
+    "included": [
+      "One integrated offline pipeline",
+      "Shared schema and validation boundaries",
+      "Validated prerequisite onboarding and progress",
+      "Grounded extractive FAQ answers and abstention",
+      "Allowlisted snapshot ingestion and provenance-preserving findings",
+      "Fixture-tested optional injected answerer",
+      "Standard-library unittest and subprocess CLI tests"
+    ],
+    "excluded": [
+      "Network fetching, redirects, DNS resolution or live freshness guarantees",
+      "Live LLM/model providers or generative semantic grounding",
+      "Semantic entailment, stemming or confidence calibration",
+      "Persistent database, authentication, UI or enterprise deployment",
+      "Real customer or external web data"
+    ]
+  },
+  "test_outcomes": {
+    "state": "passed",
+    "unit_tests": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 26,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli_example": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "stage_statuses": ["ready", "answered", "answered"]
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "build_id": "wave2_t112_combo3_faq_guided_review",
+  "composition_label": "Knowledge-base answers -> Guided setup -> Document review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in this isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict object: schema_version, synthetic=true, query, knowledge_base[], setup[], requirements[], documents[], evidence[].",
+    "entities": {
+      "knowledge_base": "id, text, match_terms[] (lowercase ASCII tokens), step_ids[]",
+      "setup": "id, title, prerequisites[] (step IDs), completed (boolean), requirement_ids[]",
+      "requirements": "id, description, required_terms[] (lowercase ASCII tokens)",
+      "documents": "id, text",
+      "evidence": "id, requirement_id, document_id, quote, start (zero-based Python character offset)"
+    },
+    "output": "schema_version, synthetic, status (complete or needs_attention), stages {faq, guided, review}; errors have schema_version, status=error and error {type, message}.",
+    "stage_packet": "status (complete, abstained or skipped), article_ids[], step_ids[], requirement_ids[], data{}",
+    "validation": "Shared shape, scalar, list, reference and packet validators. Strict keys; unique IDs/references; acyclic prerequisites; consistent completion; exact evidence quotes at offsets. Consumers validate packet grounding and scope. Duplicate JSON keys and nonfinite numbers are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq",
+      "to": "guided",
+      "data": "Grounding article, exact answer, selected step IDs and directly selected requirement IDs.",
+      "rule": "A unique lexical match produces the exact KB text. Guided validates article scope, then expands prerequisites in dependency-first order. Abstention skips downstream work."
+    },
+    {
+      "from": "guided",
+      "to": "review",
+      "data": "Grounding article, dependency-expanded step IDs, progress, blocked/ready/completed state and deduplicated requirements.",
+      "rule": "Review validates guided state against trusted input and checks only propagated requirements. Incomplete setup becomes traceable review gaps."
+    }
+  ],
+  "behavior": {
+    "faq": "All configured match terms must be present as whole query tokens, case-insensitively. Zero or multiple matching articles cause explicit abstention.",
+    "guided": "Completion is supplied by the fixture, never inferred. A step is ready only when its direct prerequisites are completed. Contradictory completion is an input error.",
+    "review": "All required tokens must appear within one validated exact quote. Missing and insufficient evidence remain separate gaps. Evidence records include document IDs, quote text and character ranges. Gaps link requirements to selected steps and the grounding article.",
+    "exit_codes": "0 for valid execution, including abstention and gaps; 2 for file, decoding, JSON or validation errors. Stdout contains one JSON object.",
+    "limitations": "Literal token matching does not establish semantic truth, detect negation, or certify compliance. Every review includes a non-certification disclaimer.",
+    "example": "Explicitly synthetic seller-payout setup; one of two steps completed, account evidence present, payout evidence absent."
+  },
+  "scope": {
+    "included": [
+      "One deterministic integrated CLI pipeline",
+      "Shared input and output schema and validation layer",
+      "Grounded extractive FAQ with abstention",
+      "Prerequisite-driven onboarding and progress",
+      "Traceable evidence checks and setup/document gaps",
+      "Synthetic fixtures and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live LLM providers or network access",
+      "Semantic inference, embeddings or document parsing",
+      "Certification or legal/compliance determinations",
+      "Persistent databases, interactive setup changes or external side effects",
+      "Enterprise production deployment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 26,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "exit_code": 0,
+      "stdout": "One valid JSON object",
+      "pipeline_status": "needs_attention",
+      "verified_behavior": "Grounded FAQ, expanded setup prerequisites, 50% progress, account evidence match, incomplete setup and missing payout evidence gaps."
+    }
+  }
+}

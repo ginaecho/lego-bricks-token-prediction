@@ -1,0 +1,467 @@
+{
+  "id": "wave2_t048_combo4_interests_compare_adaptive_feedback",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "search",
+      "onboard",
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Smart product search",
+      "Guided onboarding",
+      "Customer insights"
+    ],
+    "types": [
+      "interests",
+      "compare",
+      "adaptive",
+      "feedback"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 5,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Preference ranking, exclusion enforcement and grounded explanations.",
+    "Attribute normalization, side-by-side comparison and preference ranking.",
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Feedback deduplication, themes and traceable supporting excerpts."
+  ],
+  "integration": {
+    "ordered_types": [
+      "interests",
+      "compare",
+      "adaptive",
+      "feedback"
+    ],
+    "edges": [
+      {
+        "from": "interests",
+        "to": "compare",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "compare",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "adaptive",
+        "to": "feedback",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "02d043f19f5e95fe7fce7038e60551a7406ad908130700a197fa3b8ab3f640df",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "87b3d841ab7e7dd085dda5097413d24d5719891c3a2eddd4235b7650d1071033",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t048_combo4_interests_compare_adaptive_feedback",
+  "membership_point_id": "combo4_interests_compare_adaptive_feedback",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "b888a1adf1b322192317e713500bae91644557d7264ae64c80130e18cdfc42ee",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "04184c6a-375e-4293-b228-f5d31078675f",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 164539,
+    "output_tokens": 12725,
+    "cache_read_tokens": 149728,
+    "cache_write_tokens": 14790,
+    "total_tokens": 177264,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34265,
+        "agent_id": "04184c6a-375e-4293-b228-f5d31078675f",
+        "model": "gpt-6-astra",
+        "input_tokens": 14862,
+        "output_tokens": 327,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 825,
+        "reasoning_tokens": 140,
+        "duration_ms": 9383,
+        "created_at": "2026-09-23T10:04:07.549Z"
+      },
+      {
+        "id": 34282,
+        "agent_id": "04184c6a-375e-4293-b228-f5d31078675f",
+        "model": "gpt-6-astra",
+        "input_tokens": 15222,
+        "output_tokens": 6393,
+        "cache_read_tokens": 14859,
+        "cache_write_tokens": 360,
+        "reasoning_tokens": 516,
+        "duration_ms": 106982,
+        "created_at": "2026-09-23T10:05:54.770Z"
+      },
+      {
+        "id": 34297,
+        "agent_id": "04184c6a-375e-4293-b228-f5d31078675f",
+        "model": "gpt-6-astra",
+        "input_tokens": 21784,
+        "output_tokens": 5125,
+        "cache_read_tokens": 15219,
+        "cache_write_tokens": 6562,
+        "reasoning_tokens": 112,
+        "duration_ms": 79889,
+        "created_at": "2026-09-23T10:07:14.750Z"
+      },
+      {
+        "id": 34298,
+        "agent_id": "04184c6a-375e-4293-b228-f5d31078675f",
+        "model": "gpt-6-astra",
+        "input_tokens": 27162,
+        "output_tokens": 155,
+        "cache_read_tokens": 21781,
+        "cache_write_tokens": 5378,
+        "reasoning_tokens": 0,
+        "duration_ms": 4345,
+        "created_at": "2026-09-23T10:07:19.162Z"
+      },
+      {
+        "id": 34302,
+        "agent_id": "04184c6a-375e-4293-b228-f5d31078675f",
+        "model": "gpt-6-astra",
+        "input_tokens": 28083,
+        "output_tokens": 423,
+        "cache_read_tokens": 27159,
+        "cache_write_tokens": 921,
+        "reasoning_tokens": 138,
+        "duration_ms": 12731,
+        "created_at": "2026-09-23T10:07:34.072Z"
+      },
+      {
+        "id": 34303,
+        "agent_id": "04184c6a-375e-4293-b228-f5d31078675f",
+        "model": "gpt-6-astra",
+        "input_tokens": 28599,
+        "output_tokens": 189,
+        "cache_read_tokens": 28080,
+        "cache_write_tokens": 516,
+        "reasoning_tokens": 0,
+        "duration_ms": 4787,
+        "created_at": "2026-09-23T10:07:38.910Z"
+      },
+      {
+        "id": 34305,
+        "agent_id": "04184c6a-375e-4293-b228-f5d31078675f",
+        "model": "gpt-6-astra",
+        "input_tokens": 28827,
+        "output_tokens": 113,
+        "cache_read_tokens": 28596,
+        "cache_write_tokens": 228,
+        "reasoning_tokens": 0,
+        "duration_ms": 2854,
+        "created_at": "2026-09-23T10:07:45.231Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6022225,
+      "observed_cache_profile_estimate_usd": 0.26533450000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.22667,
+      "observed_cache_profile_estimate_usd": 7.22667,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 5,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 2,
+      "delivery_quality": 1
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.66,
+    "pseudo_annual_cost_usd": 25000,
+    "pseudo_annual_ai_value_usd": 95000,
+    "pseudo_net_impact_usd": 70000,
+    "pseudo_roi_pct": 280.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................................\n----------------------------------------------------------------------\nRan 34 tests in 0.334s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "status": "ok",
+      "interests": {
+        "recommendations": [
+          {
+            "id": "camera-a",
+            "score": 5,
+            "matched_interests": [
+              "photography",
+              "travel"
+            ],
+            "explanations": [
+              "Product tag 'photography' matches stated interest (weight 2).",
+              "Product tag 'travel' matches stated interest (weight 3)."
+            ]
+          },
+          {
+            "id": "camera-b",
+            "score": 2,
+            "matched_interests": [
+              "photography"
+            ],
+            "explanations": [
+              "Product tag 'photography' matches stated interest (weight 2)."
+            ]
+          }
+        ],
+        "excluded_ids": [
+          "camera-x"
+        ]
+      },
+      "compare": {
+        "columns": [
+          {
+            "attribute": "price",
+            "unit": "USD",
+            "preferred": "lower"
+          },
+          {
+            "attribute": "weight",
+            "unit": "g",
+            "preferred": "lower"
+          }
+        ],
+        "ranking": [
+          {
+            "id": "camera-a",
+            "name": "Synthetic Trail Camera",
+            "attributes": {
+              "price": 120.0,
+              "weight": 400.0
+            },
+            "interest_score": 5,
+            "attribute_score": 6.0,
+            "score": 11.0,
+            "explanations": [
+              "Interest score carried forward: 5.",
+              "price: normalized value 120.0; lower preferred; contribution 4.0.",
+              "weight: normalized value 400.0; lower preferred; contribution 2.0."
+            ]
+          },
+          {
+            "id": "camera-b",
+            "name": "Synthetic Studio Camera",
+            "attributes": {
+              "price": 240,
+              "weight": 900
+            },
+            "interest_score": 2,
+            "attribute_score": 0.0,
+            "score": 2.0,
+            "explanations": [
+              "Interest score carried forward: 2.",
+              "price: normalized value 240; lower preferred; contribution 0.0.",
+              "weight: normalized value 900; lower preferred; contribution 0.0."
+            ]
+          }
+        ],
+        "selected_product_id": "camera-a"
+      },
+      "adaptive": {
+        "selected_product_id": "camera-a",
+        "experience": "beginner",
+        "steps": [
+          {
+            "id": "safety",
+            "title": "Synthetic safety check",
+            "instructions": "Read the fixture safety card.",
+            "prerequisites": [],
+            "reason": "Required prerequisite retained despite experience/tag filtering."
+          },
+          {
+            "id": "setup",
+            "title": "Synthetic camera setup",
+            "instructions": "Select the fixture travel preset.",
+            "prerequisites": [
+              "safety"
+            ],
+            "reason": "Matches beginner experience and selected product tags; ready steps ordered by stated interests."
+          }
+        ]
+      },
+      "feedback": {
+        "selected_product_id": "camera-a",
+        "onboarding_step_ids": [
+          "safety",
+          "setup"
+        ],
+        "unique_count": 2,
+        "duplicate_count": 1,
+        "ignored_ids": [
+          "f4",
+          "f5"
+        ],
+        "themes": [
+          {
+            "id": "quality",
+            "count": 1,
+            "support": [
+              {
+                "source_ids": [
+                  "f3"
+                ],
+                "text": "A durable camera.",
+                "step_id": null
+              }
+            ]
+          },
+          {
+            "id": "usability",
+            "count": 1,
+            "support": [
+              {
+                "source_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "text": "Setup is easy and the price is good.",
+                "step_id": "setup"
+              }
+            ]
+          },
+          {
+            "id": "value",
+            "count": 1,
+            "support": [
+              {
+                "source_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "text": "Setup is easy and the price is good.",
+                "step_id": "setup"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t048_combo4_interests_compare_adaptive_feedback",
+    "artifact_sha256": {
+      "implementation.py": "197ad6a56ea67dff7fadc4af8ad6af1cec6868bc7d55e270f0e84febfd012ad9",
+      "test_implementation.py": "1a305f374f8febce9306691a2d23ad519c6e4be12ed20aa56c82349a80147f51",
+      "example_input.json": "acc43dbee2b388184ad6f06e205c8c75c1d9b4a23d7efc90615081082053b7f9",
+      "build_manifest.json": "b3da7c81b65f41ddc0d0dd867dfb2704573ea6c834a68b44921e76ec66003ebd"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

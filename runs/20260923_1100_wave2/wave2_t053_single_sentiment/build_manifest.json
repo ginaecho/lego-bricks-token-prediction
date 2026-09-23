@@ -1,0 +1,90 @@
+{
+  "build_id": "wave2_t053_single_sentiment",
+  "composition_label": "Sentiment & prioritization (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1; booleans rejected",
+      "dataset_label": "Required nonblank string, maximum 200 characters",
+      "issues": "Required list of 0 to 1000 issue objects",
+      "issue": {
+        "id": "Required unique nonblank string, maximum 100 characters, no surrounding whitespace",
+        "text": "Required nonblank string, maximum 10000 characters",
+        "severity": "Required low, medium, high, or critical; supplied by caller",
+        "affected_customers": "Required integer 1 to 1000000; booleans rejected"
+      },
+      "additional_fields": "Rejected at input and issue levels"
+    },
+    "output": {
+      "success": "status=ok, schema_version, dataset_label, sorted issues, summary, method",
+      "issue": "Original issue fields plus sentiment evidence and priority score, components, band, rank",
+      "error": "status=error and error object with type and message; CLI exits 2"
+    },
+    "validation": "One validate function serves analyze and CLI; JSON decoder also rejects duplicate keys and nonfinite constants"
+  },
+  "cross_stage_handoffs": [
+    "Single integrated functionality: validated issues -> lexical sentiment with evidence -> severity-aware priority -> ranked shared JSON output"
+  ],
+  "behavior": {
+    "tokenization": "Lowercase English word tokens; normalize curly apostrophes; listed punctuation resets negation",
+    "sentiment": "Explicit emitted weighted lexicon; odd negator count in previous three words flips contribution; normalize weighted sum to [-1,1], rounded to six decimals",
+    "classification": "Score >= 0.2 positive; <= -0.2 negative; otherwise neutral; no recognized terms gives neutral zero with empty evidence",
+    "priority": "severity index (low=0, medium=1, high=2, critical=3)*100 + max(0,-sentiment)*40 + min(affected_customers,20)",
+    "severity_guarantee": "Each severity band outranks every lower band regardless of sentiment or customer count",
+    "ordering": "Descending priority score; case-sensitive ascending unique ID breaks ties; rank begins at 1",
+    "determinism": "No clock, randomness, external state, providers, or mutation of caller input",
+    "fixture_data": "All example and test records are clearly labeled synthetic"
+  },
+  "scope": {
+    "included": [
+      "Bounded CLI and Python API",
+      "Strict shared input validation",
+      "Transparent English lexical sentiment",
+      "Explicit caller-provided severity and capped customer impact",
+      "Deterministic ranking and empty-list handling",
+      "JSON file, decoding, and validation errors"
+    ],
+    "excluded": [
+      "Live LLM or optional LLM callable; no LLM step is needed",
+      "Semantic sentiment, sarcasm detection, multilingual analysis",
+      "Automatic severity inference or real customer data",
+      "Network calls, persistence service, production deployment"
+    ],
+    "administrative_artifacts": "docs/My_prompt.txt records prompts as required by the session's repository logging configuration"
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 13,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "cli_issue_count": 4,
+    "coverage": [
+      "Normal analysis and evidence",
+      "Negation, punctuation, unknown terms, repetition",
+      "Severity dominance and capped impact",
+      "Determinism, ties, nonmutation, empty input",
+      "Invalid schema, types, duplicates, limits",
+      "CLI success, missing files, usage, malformed JSON, schema errors",
+      "Duplicate JSON keys and nonfinite constants"
+    ]
+  }
+}

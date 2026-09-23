@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "guided": {
+    "steps": [
+      {"id": "profile", "data": {"name": "Synthetic Shopper", "email": "shopper@example.invalid"}},
+      {"id": "consent", "data": {"accepted": true}},
+      {"id": "research", "data": {"query": "delivery checkout"}}
+    ]
+  },
+  "normal": {
+    "documents": [
+      {"id": "synthetic-feedback-001", "text": "Delivery is slow and terrible. Packaging is good.", "severity": "high"},
+      {"id": "synthetic-feedback-002", "text": "Checkout is broken and unsafe.", "severity": "critical"},
+      {"id": "synthetic-feedback-003", "text": "Delivery support is excellent and helpful.", "severity": "low"}
+    ],
+    "top_k": 5
+  },
+  "sentiment": {"max_issues": 5},
+  "behavior": {
+    "as_of": "2026-09-23T12:00:00Z",
+    "catalog": [
+      {"id": "checkout-guide", "title": "Synthetic secure checkout guide", "tags": ["checkout"]},
+      {"id": "delivery-guide", "title": "Synthetic delivery tracking guide", "tags": ["delivery"]},
+      {"id": "packaging-guide", "title": "Synthetic packaging guide", "tags": ["packaging"]}
+    ],
+    "events": [
+      {"item_id": "delivery-guide", "kind": "browse", "occurred_at": "2026-09-22T12:00:00Z"},
+      {"item_id": "packaging-guide", "kind": "purchase", "occurred_at": "2026-07-25T12:00:00Z"}
+    ],
+    "limit": 3
+  }
+}

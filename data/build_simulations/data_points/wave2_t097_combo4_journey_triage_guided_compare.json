@@ -1,0 +1,622 @@
+{
+  "id": "wave2_t097_combo4_journey_triage_guided_compare",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "support",
+      "onboard",
+      "search"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "AI customer support",
+      "Guided onboarding",
+      "Smart product search"
+    ],
+    "types": [
+      "journey",
+      "triage",
+      "guided",
+      "compare"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 1,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 1,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 5,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 3,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Prerequisite-aware next actions and a validated two-step journey.",
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Validated prerequisite-driven onboarding steps and progress tracking.",
+    "Attribute normalization, side-by-side comparison and preference ranking."
+  ],
+  "integration": {
+    "ordered_types": [
+      "journey",
+      "triage",
+      "guided",
+      "compare"
+    ],
+    "edges": [
+      {
+        "from": "journey",
+        "to": "triage",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "triage",
+        "to": "guided",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "guided",
+        "to": "compare",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "9a06e91500c0487cd56418aa9555c9f128b2e47f2ba56e13de19bcccd01be410",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "a05eb30adb566564510690934180b7a07091c8026a40e3f4af025bef347ca9cc",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t097_combo4_journey_triage_guided_compare",
+  "membership_point_id": "combo4_journey_triage_guided_compare",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "9c55ff3763c66d23c327a75cc14892fc6a1b068e0a221ec1e86a86531eb21c77",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "ef5c56c8-94b7-4566-a198-35b871116cfb",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 5,
+    "input_tokens": 105731,
+    "output_tokens": 11456,
+    "cache_read_tokens": 92150,
+    "cache_write_tokens": 13566,
+    "total_tokens": 117187,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34745,
+        "agent_id": "ef5c56c8-94b7-4566-a198-35b871116cfb",
+        "model": "gpt-6-astra",
+        "input_tokens": 14893,
+        "output_tokens": 1361,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 835,
+        "reasoning_tokens": 376,
+        "duration_ms": 26610,
+        "created_at": "2026-09-23T10:56:06.373Z"
+      },
+      {
+        "id": 34755,
+        "agent_id": "ef5c56c8-94b7-4566-a198-35b871116cfb",
+        "model": "gpt-6-astra",
+        "input_tokens": 16284,
+        "output_tokens": 4896,
+        "cache_read_tokens": 14890,
+        "cache_write_tokens": 1391,
+        "reasoning_tokens": 516,
+        "duration_ms": 80062,
+        "created_at": "2026-09-23T10:58:32.832Z"
+      },
+      {
+        "id": 34773,
+        "agent_id": "ef5c56c8-94b7-4566-a198-35b871116cfb",
+        "model": "gpt-6-astra",
+        "input_tokens": 21211,
+        "output_tokens": 3274,
+        "cache_read_tokens": 16281,
+        "cache_write_tokens": 4927,
+        "reasoning_tokens": 174,
+        "duration_ms": 49635,
+        "created_at": "2026-09-23T11:00:23.180Z"
+      },
+      {
+        "id": 34776,
+        "agent_id": "ef5c56c8-94b7-4566-a198-35b871116cfb",
+        "model": "gpt-6-astra",
+        "input_tokens": 25719,
+        "output_tokens": 1839,
+        "cache_read_tokens": 21208,
+        "cache_write_tokens": 4508,
+        "reasoning_tokens": 241,
+        "duration_ms": 35367,
+        "created_at": "2026-09-23T11:00:40.435Z"
+      },
+      {
+        "id": 34777,
+        "agent_id": "ef5c56c8-94b7-4566-a198-35b871116cfb",
+        "model": "gpt-6-astra",
+        "input_tokens": 27624,
+        "output_tokens": 86,
+        "cache_read_tokens": 25716,
+        "cache_write_tokens": 1905,
+        "reasoning_tokens": 0,
+        "duration_ms": 3013,
+        "created_at": "2026-09-23T11:00:46.861Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.43616750000000004,
+      "observed_cache_profile_estimate_usd": 0.22883,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.23401,
+      "observed_cache_profile_estimate_usd": 5.23401,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 1,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 5,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.49,
+    "pseudo_annual_cost_usd": 30000,
+    "pseudo_annual_ai_value_usd": 60000,
+    "pseudo_net_impact_usd": 30000,
+    "pseudo_roi_pct": 100.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................................\n----------------------------------------------------------------------\nRan 41 tests in 0.511s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "input": {
+        "actions": [
+          {
+            "id": "discover",
+            "requires": [],
+            "tags": []
+          },
+          {
+            "id": "configure",
+            "requires": [
+              "discover"
+            ],
+            "tags": [
+              "storage"
+            ]
+          },
+          {
+            "id": "evaluate",
+            "requires": [
+              "configure"
+            ],
+            "tags": [
+              "value"
+            ]
+          },
+          {
+            "id": "learn",
+            "requires": [
+              "discover"
+            ],
+            "tags": [
+              "education"
+            ]
+          }
+        ],
+        "preferences": {
+          "capacity": {
+            "direction": "max",
+            "weight": 0.3
+          },
+          "price": {
+            "direction": "min",
+            "weight": 0.6
+          },
+          "warranty": {
+            "direction": "max",
+            "weight": 0.1
+          }
+        },
+        "products": [
+          {
+            "attributes": {
+              "capacity": {
+                "unit": "TB",
+                "value": 0.5
+              },
+              "price": {
+                "unit": "cent",
+                "value": 10000
+              },
+              "warranty": {
+                "unit": "year",
+                "value": 1
+              }
+            },
+            "id": "basic",
+            "name": "Synthetic Basic",
+            "requires_steps": [
+              "account"
+            ]
+          },
+          {
+            "attributes": {
+              "capacity": {
+                "unit": "GB",
+                "value": 1000
+              },
+              "price": {
+                "unit": "USD",
+                "value": 140
+              },
+              "warranty": {
+                "unit": "month",
+                "value": 24
+              }
+            },
+            "id": "plus",
+            "name": "Synthetic Plus",
+            "requires_steps": [
+              "account"
+            ]
+          },
+          {
+            "attributes": {
+              "capacity": {
+                "unit": "TB",
+                "value": 2
+              },
+              "price": {
+                "unit": "USD",
+                "value": 160
+              },
+              "warranty": {
+                "unit": "year",
+                "value": 3
+              }
+            },
+            "id": "pro",
+            "name": "Synthetic Pro",
+            "requires_steps": [
+              "verify"
+            ]
+          }
+        ],
+        "profile": {
+          "completed_actions": [
+            "discover"
+          ],
+          "completed_steps": [
+            "account"
+          ],
+          "interests": [
+            "storage",
+            "value"
+          ]
+        },
+        "schema_version": 1,
+        "steps": [
+          {
+            "action_id": "discover",
+            "categories": [
+              "*"
+            ],
+            "id": "account",
+            "requires": []
+          },
+          {
+            "action_id": "configure",
+            "categories": [
+              "setup"
+            ],
+            "id": "connect",
+            "requires": [
+              "account"
+            ]
+          },
+          {
+            "action_id": "evaluate",
+            "categories": [
+              "setup"
+            ],
+            "id": "verify",
+            "requires": [
+              "connect"
+            ]
+          }
+        ],
+        "synthetic": true,
+        "ticket": {
+          "impact": "high",
+          "text": "Synthetic fixture: cannot configure storage"
+        },
+        "triage": {
+          "default": {
+            "category": "general",
+            "owner": "synthetic-help-team",
+            "priority": "low"
+          },
+          "impact_priorities": {
+            "high": "urgent",
+            "low": "low",
+            "medium": "normal"
+          },
+          "rules": [
+            {
+              "category": "setup",
+              "keywords": [
+                "configure",
+                "setup"
+              ],
+              "owner": "synthetic-onboarding-team",
+              "priority": "normal"
+            },
+            {
+              "category": "billing",
+              "keywords": [
+                "invoice"
+              ],
+              "owner": "synthetic-billing-team",
+              "priority": "high"
+            }
+          ]
+        }
+      },
+      "schema_version": 1,
+      "stages": {
+        "compare": {
+          "owner": "synthetic-onboarding-team",
+          "ranking": [
+            {
+              "product_id": "basic",
+              "score": 0.6,
+              "utilities": {
+                "capacity": 0.0,
+                "price": 1.0,
+                "warranty": 0.0
+              }
+            },
+            {
+              "product_id": "plus",
+              "score": 0.4,
+              "utilities": {
+                "capacity": 1.0,
+                "price": 0.0,
+                "warranty": 1.0
+              }
+            }
+          ],
+          "rows": [
+            {
+              "attributes": {
+                "capacity": 500.0,
+                "price": 100.0,
+                "warranty": 12
+              },
+              "eligible": true,
+              "missing_steps": [],
+              "name": "Synthetic Basic",
+              "product_id": "basic"
+            },
+            {
+              "attributes": {
+                "capacity": 1000,
+                "price": 140,
+                "warranty": 24
+              },
+              "eligible": true,
+              "missing_steps": [],
+              "name": "Synthetic Plus",
+              "product_id": "plus"
+            },
+            {
+              "attributes": {
+                "capacity": 2000,
+                "price": 160,
+                "warranty": 36
+              },
+              "eligible": false,
+              "missing_steps": [
+                "verify"
+              ],
+              "name": "Synthetic Pro",
+              "product_id": "pro"
+            }
+          ],
+          "selected_product_id": "basic",
+          "setup_progress": {
+            "completed": 1,
+            "fraction": 0.3333333333333333,
+            "total": 3
+          },
+          "units": {
+            "capacity": "GB",
+            "price": "USD",
+            "warranty": "month"
+          }
+        },
+        "guided": {
+          "available_step_ids": [
+            "connect"
+          ],
+          "category": "setup",
+          "completed_step_ids": [
+            "account"
+          ],
+          "journey_action_ids": [
+            "configure",
+            "evaluate"
+          ],
+          "owner": "synthetic-onboarding-team",
+          "priority": "urgent",
+          "progress": {
+            "completed": 1,
+            "fraction": 0.3333333333333333,
+            "total": 3
+          },
+          "steps": [
+            {
+              "missing_prerequisites": [],
+              "status": "completed",
+              "step_id": "account"
+            },
+            {
+              "missing_prerequisites": [],
+              "status": "available",
+              "step_id": "connect"
+            },
+            {
+              "missing_prerequisites": [
+                "connect"
+              ],
+              "status": "blocked",
+              "step_id": "verify"
+            }
+          ]
+        },
+        "journey": {
+          "action_ids": [
+            "configure",
+            "evaluate"
+          ],
+          "interest_score": 2,
+          "next_actions": [
+            {
+              "action_id": "configure",
+              "interest_score": 1
+            },
+            {
+              "action_id": "learn",
+              "interest_score": 0
+            }
+          ]
+        },
+        "triage": {
+          "category": "setup",
+          "journey_action_ids": [
+            "configure",
+            "evaluate"
+          ],
+          "matched_keywords": [
+            "configure"
+          ],
+          "owner": "synthetic-onboarding-team",
+          "priority": "urgent",
+          "rule_source": "first_matching_rule"
+        }
+      },
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t097_combo4_journey_triage_guided_compare",
+    "artifact_sha256": {
+      "implementation.py": "5b18116c4874c3008243abd4d680baece93be5e9e946dcf404280863cb3df378",
+      "test_implementation.py": "fca389b2adbe73d1eb59e430912360d87a930da57651196d67fe047470e0fad4",
+      "example_input.json": "fd2908988d8a45f37b06ebed6c14b476cac1016aaf7375e82b4c3cacd4824df3",
+      "build_manifest.json": "3e18a091fb16a5ffc4639e7dd482b374a53d416337c17567296110ea70a298b6"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

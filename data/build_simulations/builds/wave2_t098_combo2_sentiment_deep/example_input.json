@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "documents": [
+    {
+      "id": "synthetic-lab",
+      "title": "Synthetic controlled checkout experiment",
+      "text": "Checkout crashes after payment in the synthetic lab. The new help panel is helpful.",
+      "claims": [
+        {"topic": "checkout instability", "stance": "supports", "quote": "Checkout crashes after payment in the synthetic lab."},
+        {"topic": "help panel usefulness", "stance": "supports", "quote": "The new help panel is helpful."}
+      ]
+    },
+    {
+      "id": "synthetic-field",
+      "title": "Synthetic field observations",
+      "text": "Checkout did not crash during the synthetic field trial. Payment logs are incomplete.",
+      "claims": [
+        {"topic": "checkout instability", "stance": "opposes", "quote": "Checkout did not crash during the synthetic field trial."},
+        {"topic": "payment loss", "stance": "uncertain", "quote": "Payment logs are incomplete."}
+      ]
+    }
+  ],
+  "issues": [
+    {"id": "checkout", "text": "Terrible checkout: broken and lost payment.", "severity": "critical", "document_ids": ["synthetic-lab", "synthetic-field"]},
+    {"id": "help", "text": "The help panel is helpful and good.", "severity": "low", "document_ids": ["synthetic-lab"]},
+    {"id": "shipping", "text": "Shipping is not fast.", "severity": "medium", "document_ids": []}
+  ]
+}

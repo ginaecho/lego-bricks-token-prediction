@@ -18,27 +18,38 @@ software-construction target described here.
 - [x] Separate 14 real-use-case references from independently designed builds.
 - [x] Enumerate 1,455 memberships and mark unmeasured entries explicitly.
 
-Current split: 14 training records, zero validation records and five test
-records. There is no trained or promoted construction-token model. The 19
-bounded Python CLI builds are not evidence of complete enterprise delivery.
+Wave-1 split: 14 training records, zero validation records and five test
+records. The 19 bounded Python CLI builds are not evidence of complete
+enterprise delivery.
+
+## Wave 2 status (2026-09-23)
+
+- [x] 120 frozen trials built by `gpt-6-astra`; all passed runtime verification,
+  none failed; 18,247,910 tokens. 19 protocol deviations (auxiliary prompt-log
+  file in staging) are recorded in `waves/wave2.json`.
+- [x] Ridge log-token model trained: validation MAPE 11.1% (gates passed);
+  single test evaluation MAPE 11.7%, MAE 16,567 vs 18,032 training-mean
+  baseline, 92.6% interval coverage. Details in `README.md` and `models/`.
+- [ ] Not yet reported: learning curves and residuals by type. The selected
+  penalty sits at the grid edge; richer order/handoff features remain open.
 
 ## 1. Freeze the next measurement protocol
 
-- [ ] Select an initial 100-200 additional independent builds, balanced across
+- [x] Select an initial 100-200 additional independent builds, balanced across
   types, pairs, triples and quadruples, with repeat trials to estimate variance.
   This is a sampling target, not a guarantee of adequate accuracy.
-- [ ] Preserve existing membership-group split assignments. Keep all repeats
+- [x] Preserve existing membership-group split assignments. Keep all repeats
   and execution-order variants of a membership in its original partition.
   Populate validation and reserve fresh unseen-combination test memberships
   before collecting or inspecting their labels.
-- [ ] Freeze comparable implementation scope, acceptance requirements, builder
+- [x] Freeze comparable implementation scope, acceptance requirements, builder
   instructions, allowed tools and model/version metadata before dispatch.
   Record actual instructions/specification fingerprints for each new trial.
-- [ ] Add unique trial IDs and immutable wave manifests so repeat measurements
+- [x] Add unique trial IDs and immutable wave manifests so repeat measurements
   cannot overwrite earlier records. Re-importing an agent is not another trial.
 - [ ] Version any richer features for order, reuse, handoffs and scope. Do not
   treat assumed staffing or months as experimentally observed token drivers.
-- [ ] Freeze baseline comparisons, acceptance thresholds, uncertainty-coverage
+- [x] Freeze baseline comparisons, acceptance thresholds, uncertainty-coverage
   targets and stopping rules using training/validation evidence only.
 
 Done when: the selected memberships, trial IDs, split groups, specifications
@@ -46,19 +57,19 @@ and evaluation rules are saved before new builders start.
 
 ## 2. Collect and preserve additional build evidence
 
-- [ ] Use isolated subscription subagents first; measure each integrated build
+- [x] Use isolated subscription subagents first; measure each integrated build
   directly rather than copying standalone source or summing standalone labels.
-- [ ] Start with bounded concurrency (planning assumption: 3-4 agents), subject
+- [x] Start with bounded concurrency (planning assumption: 3-4 agents), subject
   to subscription allowance. Record quota limits, failures and elapsed time.
-- [ ] Capture completed-agent input/output counters, cache details, model IDs,
+- [x] Capture completed-agent input/output counters, cache details, model IDs,
   timestamps, test/repair consumption and the declared measurement boundary.
   Keep unsuccessful trials as failed evidence rather than silently dropping
   their costs or substituting predicted labels.
-- [ ] Run static validation and independent runtime verification of each
+- [x] Run static validation and independent runtime verification of each
   accepted artifact; save outputs and hashes with the trial.
-- [ ] Keep parent orchestration separate from builder usage. Never export
+- [x] Keep parent orchestration separate from builder usage. Never export
   credentials, the raw session database or unrelated conversations.
-- [ ] Do not use direct paid API fallback without a separately approved budget.
+- [x] Do not use direct paid API fallback without a separately approved budget.
   Save each completed wave before local grading and update coverage afterward.
 
 Done when: each accepted label has unique authoritative events and reproducible
@@ -66,19 +77,19 @@ artifacts, validation is populated, and failed/incomplete trials remain visible.
 
 ## 3. Train and evaluate the construction predictor
 
-- [ ] Fit input and output construction tokens separately; derive total usage
+- [x] Fit input and output construction tokens separately; derive total usage
   and cost afterward. Never pool workload-execution labels into this dataset.
-- [ ] Exclude post-build sizes, actual test counts, observed usage, price labels
+- [x] Exclude post-build sizes, actual test counts, observed usage, price labels
   and pseudo outcomes from pre-build input features.
-- [ ] Compare a simple training-mean baseline with regularized models using
+- [x] Compare a simple training-mean baseline with regularized models using
   grouped cross-validation; fit preprocessing inside each training fold.
 - [ ] Tune only with training/validation groups. Report learning curves,
   train/validation gaps, MAE, relative errors, residuals by composition size
   and type, and repeat-trial variability.
-- [ ] Evaluate the frozen candidate once on untouched test groups. Publish
+- [x] Evaluate the frozen candidate once on untouched test groups. Publish
   uncertainty intervals, coverage, sample counts and limitations alongside
   metrics. Failed acceptance must not silently redefine the same test set.
-- [ ] Save immutable model artifacts, feature/protocol versions, split manifests
+- [x] Save immutable model artifacts, feature/protocol versions, split manifests
   and per-iteration reports. Promote only if the frozen gates pass; otherwise
   retain the current model and document the next measurement requirement.
 

@@ -1,0 +1,495 @@
+{
+  "id": "wave2_t036_combo4_guided_web_triage_interests",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "onboard",
+      "research",
+      "support",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "Guided onboarding",
+      "Research",
+      "AI customer support",
+      "Personalized discovery"
+    ],
+    "types": [
+      "guided",
+      "web",
+      "triage",
+      "interests"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 1,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 1,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 4,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Validated prerequisite-driven onboarding steps and progress tracking.",
+    "Allowlisted URL ingestion, retrieval and provenance-preserving findings.",
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Preference ranking, exclusion enforcement and grounded explanations."
+  ],
+  "integration": {
+    "ordered_types": [
+      "guided",
+      "web",
+      "triage",
+      "interests"
+    ],
+    "edges": [
+      {
+        "from": "guided",
+        "to": "web",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "web",
+        "to": "triage",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "triage",
+        "to": "interests",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "6fb0673f1776007f4182721c9d97a0c2c90a1824c9e388937bb7c6197fdf60f8",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "de514f8d1dc150346499dbeec7375257b7c897a175ab2086fef297aba7932d17",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t036_combo4_guided_web_triage_interests",
+  "membership_point_id": "combo4_guided_web_triage_interests",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "a51abc34affd956573810a2b179ac991842298511582f0fb92482aa74f45e41a",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 161711,
+    "output_tokens": 12130,
+    "cache_read_tokens": 147327,
+    "cache_write_tokens": 14363,
+    "total_tokens": 173841,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34141,
+        "agent_id": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+        "model": "gpt-6-astra",
+        "input_tokens": 14792,
+        "output_tokens": 316,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 831,
+        "reasoning_tokens": 138,
+        "duration_ms": 9222,
+        "created_at": "2026-09-23T09:51:55.642Z"
+      },
+      {
+        "id": 34154,
+        "agent_id": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+        "model": "gpt-6-astra",
+        "input_tokens": 15138,
+        "output_tokens": 6005,
+        "cache_read_tokens": 14789,
+        "cache_write_tokens": 346,
+        "reasoning_tokens": 851,
+        "duration_ms": 117453,
+        "created_at": "2026-09-23T09:53:49.643Z"
+      },
+      {
+        "id": 34171,
+        "agent_id": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+        "model": "gpt-6-astra",
+        "input_tokens": 21314,
+        "output_tokens": 4943,
+        "cache_read_tokens": 15135,
+        "cache_write_tokens": 6176,
+        "reasoning_tokens": 285,
+        "duration_ms": 94026,
+        "created_at": "2026-09-23T09:55:23.796Z"
+      },
+      {
+        "id": 34172,
+        "agent_id": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+        "model": "gpt-6-astra",
+        "input_tokens": 26513,
+        "output_tokens": 139,
+        "cache_read_tokens": 21311,
+        "cache_write_tokens": 5199,
+        "reasoning_tokens": 0,
+        "duration_ms": 4207,
+        "created_at": "2026-09-23T09:55:28.090Z"
+      },
+      {
+        "id": 34173,
+        "agent_id": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+        "model": "gpt-6-astra",
+        "input_tokens": 27574,
+        "output_tokens": 388,
+        "cache_read_tokens": 26510,
+        "cache_write_tokens": 1061,
+        "reasoning_tokens": 67,
+        "duration_ms": 8187,
+        "created_at": "2026-09-23T09:55:38.610Z"
+      },
+      {
+        "id": 34175,
+        "agent_id": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+        "model": "gpt-6-astra",
+        "input_tokens": 28056,
+        "output_tokens": 230,
+        "cache_read_tokens": 27571,
+        "cache_write_tokens": 482,
+        "reasoning_tokens": 0,
+        "duration_ms": 9905,
+        "created_at": "2026-09-23T09:55:48.592Z"
+      },
+      {
+        "id": 34177,
+        "agent_id": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+        "model": "gpt-6-astra",
+        "input_tokens": 28324,
+        "output_tokens": 109,
+        "cache_read_tokens": 28053,
+        "cache_write_tokens": 268,
+        "reasoning_tokens": 0,
+        "duration_ms": 4163,
+        "created_at": "2026-09-23T09:55:56.604Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5862275,
+      "observed_cache_profile_estimate_usd": 0.25474175,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.03473,
+      "observed_cache_profile_estimate_usd": 7.03473,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 2,
+      "impact_recognized": 3,
+      "roi_satisfaction": 0,
+      "future_impact_potential": 4,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.41,
+    "pseudo_annual_cost_usd": 20000,
+    "pseudo_annual_ai_value_usd": 30000,
+    "pseudo_net_impact_usd": 10000,
+    "pseudo_roi_pct": 50.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".......................................\n----------------------------------------------------------------------\nRan 39 tests in 0.673s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "fixture_label": "SYNTHETIC marketplace support and discovery demonstration",
+      "schema_version": "1.0",
+      "stages": {
+        "guided": {
+          "completed": 3,
+          "percent": 100.0,
+          "status": "complete",
+          "steps": [
+            {
+              "id": "research_consent",
+              "requires": [],
+              "status": "complete"
+            },
+            {
+              "id": "support_consent",
+              "requires": [
+                "research_consent"
+              ],
+              "status": "complete"
+            },
+            {
+              "id": "personalization_consent",
+              "requires": [
+                "support_consent"
+              ],
+              "status": "complete"
+            }
+          ],
+          "total": 3
+        },
+        "interests": {
+          "consumed_stage": "triage",
+          "eligible_count": 2,
+          "excluded": [
+            {
+              "id": "electronics_help",
+              "reason": "explicit_exclusion"
+            }
+          ],
+          "recommendations": [
+            {
+              "explanation": {
+                "accountable_owners": [
+                  "Synthetic Logistics Lead"
+                ],
+                "finding_ids": [
+                  "F1"
+                ],
+                "formula": "10 * preference_score + urgency_score",
+                "matched_preferences": {
+                  "gardening": 5,
+                  "sustainability": 3
+                },
+                "preference_score": 8,
+                "source_urls": [
+                  "https://help.example.test/delivery"
+                ],
+                "ticket_ids": [
+                  "T1"
+                ],
+                "urgency_score": 4
+              },
+              "id": "garden_help",
+              "score": 84,
+              "title": "Synthetic garden delivery assistance"
+            },
+            {
+              "explanation": {
+                "accountable_owners": [
+                  "Synthetic Logistics Lead"
+                ],
+                "finding_ids": [
+                  "F1"
+                ],
+                "formula": "10 * preference_score + urgency_score",
+                "matched_preferences": {
+                  "gardening": 5
+                },
+                "preference_score": 5,
+                "source_urls": [
+                  "https://help.example.test/delivery"
+                ],
+                "ticket_ids": [
+                  "T1"
+                ],
+                "urgency_score": 4
+              },
+              "id": "garden_tracking",
+              "score": 54,
+              "title": "Synthetic garden tracking tips"
+            }
+          ],
+          "status": "complete"
+        },
+        "triage": {
+          "consumed_stage": "web",
+          "finding_ids": [
+            "F1",
+            "F2"
+          ],
+          "status": "complete",
+          "tickets": [
+            {
+              "category": "shipping",
+              "finding_ids": [
+                "F1"
+              ],
+              "id": "T1",
+              "matched_keywords": [
+                "delivery",
+                "missing"
+              ],
+              "priority": "urgent",
+              "route": {
+                "owner": "Synthetic Logistics Lead",
+                "queue": "synthetic-logistics"
+              },
+              "rule_id": "delivery_rule",
+              "source_urls": [
+                "https://help.example.test/delivery"
+              ],
+              "topics": [
+                "gardening",
+                "sustainability"
+              ],
+              "urgent_matches": [
+                "urgent"
+              ]
+            },
+            {
+              "category": "billing",
+              "finding_ids": [
+                "F2"
+              ],
+              "id": "T2",
+              "matched_keywords": [
+                "refund",
+                "returns"
+              ],
+              "priority": "normal",
+              "route": {
+                "owner": "Synthetic Billing Lead",
+                "queue": "synthetic-billing"
+              },
+              "rule_id": "refund_rule",
+              "source_urls": [
+                "https://help.example.test/returns"
+              ],
+              "topics": [
+                "electronics"
+              ],
+              "urgent_matches": []
+            }
+          ]
+        },
+        "web": {
+          "consumed_stage": "guided",
+          "findings": [
+            {
+              "evidence": "SYNTHETIC: Track delivery of garden kits. Sustainable packaging reduces waste.",
+              "id": "F1",
+              "retrieval": "synthetic_fixture",
+              "sha256": "40098edb57dadf8277275f172f4fda2db94e29fb1261db3f2002eeab092cb3b7",
+              "title": "Synthetic delivery guide",
+              "topics": [
+                "gardening",
+                "sustainability"
+              ],
+              "url": "https://help.example.test/delivery"
+            },
+            {
+              "evidence": "SYNTHETIC: Request a refund for electronics returns within the fictional return window.",
+              "id": "F2",
+              "retrieval": "synthetic_fixture",
+              "sha256": "a46a7ee6e9d69159c0d90512d8e5cc4de5900ccde81e9812110d10d21f69c7e3",
+              "title": "Synthetic returns guide",
+              "topics": [
+                "electronics"
+              ],
+              "url": "https://help.example.test/returns"
+            }
+          ],
+          "onboarding_percent": 100.0,
+          "status": "complete"
+        }
+      },
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t036_combo4_guided_web_triage_interests",
+    "artifact_sha256": {
+      "implementation.py": "da631b4ec74ae2c5f29012e703801e7f5c03d44cc3b0268cdedbbf1572ba5e3d",
+      "test_implementation.py": "c3f5676d11fb2c3d1d69d34e055da262af186b61420236f45d6c911af6dad255",
+      "example_input.json": "0d6f36911c73d8b88300646272088cdd0256dbe38387b7929c4490f219fe919a",
+      "build_manifest.json": "12ef848a89ed4b4d1478d7cef16d2bab03fd75b73e4a4042e81edba7331507e1"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

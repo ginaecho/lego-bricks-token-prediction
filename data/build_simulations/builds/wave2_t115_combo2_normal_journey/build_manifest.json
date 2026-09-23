@@ -1,0 +1,54 @@
+{
+  "build_id": "wave2_t115_combo2_normal_journey",
+  "composition_label": "Normal research -> Journey recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version=1, synthetic=true, query:string, limit:int[1,50], profile:{skills:string[],interests:string[]}, sources:[{id,title,passages:[{id,text,action_ids}]}], actions:[{id,title,requires,provides,tags}]",
+    "output": "schema_version=1, synthetic=true, status=ok, research:{query,findings}, journey:{status,next_actions,blocked_now,steps}",
+    "finding": "id, quote, citation:{source_id,passage_id,start,end}, score, action_ids",
+    "recommendation": "action_id, title, finding_ids, score; journey steps additionally carry step, skills_before, skills_after",
+    "error": "status=error, error:string; CLI exit 2",
+    "validation": "Single validate entry point verifies strict input fields, types, uniqueness and references; recomputes canonical source extraction and canonical journey to validate stage outputs.",
+    "citation_offsets": "Zero-based, end-exclusive Python Unicode character offsets into the identified passage, not byte offsets. Full passages are exact extractive findings."
+  },
+  "cross_stage_handoffs": [
+    "Validated input -> lexical passage retrieval -> validated research findings",
+    "Validated research findings exclusively establish supported action IDs, evidence IDs and scores for personalized journey recommendations",
+    "Validated output checks evidence integrity, canonical ranking and both prerequisite transitions"
+  ],
+  "behavior": {
+    "retrieval": "Unique casefolded Unicode word overlap; positive matches only, descending score then source/passage ID; bounded by limit.",
+    "personalization": "Sum of supporting finding scores plus count of exact interest/tag matches; descending score then action ID.",
+    "next_actions": "All evidence-supported actions whose prerequisite skills are already satisfied.",
+    "journey": "Exhaustive distinct two-action feasible pairs; maximize combined score, then first score, then lexicographic IDs. Step one grants skills available to step two.",
+    "unavailable": "No supported actions yields insufficient_evidence; no feasible pair yields no_valid_two_step and empty steps. Successful processing still exits 0 with status ok.",
+    "blocked_now": "Supported actions missing skills in the initial profile; these may become executable at step two.",
+    "skill_matching": "Exact case-sensitive identifiers. An action cannot satisfy its own prerequisites with its own grants.",
+    "llm": "No LLM step or injected callable is needed or included."
+  },
+  "scope": {
+    "included": ["Clearly labeled synthetic fixtures", "Local JSON CLI", "Deterministic integrated pipeline", "Exact citations", "Prerequisite and evidence validation", "Personalized two-step journey"],
+    "excluded": ["Live retrieval", "Network calls", "Model providers", "Semantic entailment verification of fixture action links", "Longer journeys", "Enterprise persistence or authentication"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": 17,
+    "unit_test_exit_code": 0,
+    "cli_example": "passed: one JSON object, status ok, journey ready with sort then compost",
+    "cli_exit_code": 0
+  }
+}

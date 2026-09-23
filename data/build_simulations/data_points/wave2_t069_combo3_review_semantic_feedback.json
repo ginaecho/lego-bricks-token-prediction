@@ -1,0 +1,562 @@
+{
+  "id": "wave2_t069_combo3_review_semantic_feedback",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "search",
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "Smart product search",
+      "Customer insights"
+    ],
+    "types": [
+      "review",
+      "semantic",
+      "feedback"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 1,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Requirement/evidence checking and traceable gaps without certification claims.",
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Feedback deduplication, themes and traceable supporting excerpts."
+  ],
+  "integration": {
+    "ordered_types": [
+      "review",
+      "semantic",
+      "feedback"
+    ],
+    "edges": [
+      {
+        "from": "review",
+        "to": "semantic",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "semantic",
+        "to": "feedback",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "05a44e510278687fb64aa4dd1890833503fa26a48273dbb2309abc854e34dc3b",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "d821169da151122cc12de88d3fea72a0fef58ba3b55349eb4db618828f90b509",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t069_combo3_review_semantic_feedback",
+  "membership_point_id": "combo3_review_semantic_feedback",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "a3dabdd12692cbca6cd32ba89dfe960e93d41142b39152d9bb75f8679e9d5c01",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "a00a2ce0-5764-4d39-8f5c-92756cfc8ca6",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 132870,
+    "output_tokens": 11196,
+    "cache_read_tokens": 118967,
+    "cache_write_tokens": 13885,
+    "total_tokens": 144066,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34446,
+        "agent_id": "a00a2ce0-5764-4d39-8f5c-92756cfc8ca6",
+        "model": "gpt-6-astra",
+        "input_tokens": 14834,
+        "output_tokens": 679,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 797,
+        "reasoning_tokens": 516,
+        "duration_ms": 16910,
+        "created_at": "2026-09-23T10:20:58.494Z"
+      },
+      {
+        "id": 34452,
+        "agent_id": "a00a2ce0-5764-4d39-8f5c-92756cfc8ca6",
+        "model": "gpt-6-astra",
+        "input_tokens": 15543,
+        "output_tokens": 6963,
+        "cache_read_tokens": 14831,
+        "cache_write_tokens": 709,
+        "reasoning_tokens": 516,
+        "duration_ms": 112400,
+        "created_at": "2026-09-23T10:22:51.930Z"
+      },
+      {
+        "id": 34453,
+        "agent_id": "a00a2ce0-5764-4d39-8f5c-92756cfc8ca6",
+        "model": "gpt-6-astra",
+        "input_tokens": 22747,
+        "output_tokens": 165,
+        "cache_read_tokens": 15540,
+        "cache_write_tokens": 7204,
+        "reasoning_tokens": 18,
+        "duration_ms": 3526,
+        "created_at": "2026-09-23T10:22:55.536Z"
+      },
+      {
+        "id": 34470,
+        "agent_id": "a00a2ce0-5764-4d39-8f5c-92756cfc8ca6",
+        "model": "gpt-6-astra",
+        "input_tokens": 24315,
+        "output_tokens": 2947,
+        "cache_read_tokens": 22744,
+        "cache_write_tokens": 1568,
+        "reasoning_tokens": 333,
+        "duration_ms": 56358,
+        "created_at": "2026-09-23T10:24:04.664Z"
+      },
+      {
+        "id": 34471,
+        "agent_id": "a00a2ce0-5764-4d39-8f5c-92756cfc8ca6",
+        "model": "gpt-6-astra",
+        "input_tokens": 27509,
+        "output_tokens": 351,
+        "cache_read_tokens": 24312,
+        "cache_write_tokens": 3194,
+        "reasoning_tokens": 19,
+        "duration_ms": 6113,
+        "created_at": "2026-09-23T10:24:07.126Z"
+      },
+      {
+        "id": 34472,
+        "agent_id": "a00a2ce0-5764-4d39-8f5c-92756cfc8ca6",
+        "model": "gpt-6-astra",
+        "input_tokens": 27922,
+        "output_tokens": 91,
+        "cache_read_tokens": 27506,
+        "cache_write_tokens": 413,
+        "reasoning_tokens": 0,
+        "duration_ms": 2697,
+        "created_at": "2026-09-23T10:24:11.162Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.500115,
+      "observed_cache_profile_estimate_usd": 0.23243925,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.00138,
+      "observed_cache_profile_estimate_usd": 6.00138,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 5,
+      "roi_satisfaction": 0,
+      "future_impact_potential": 0,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.55,
+    "pseudo_annual_cost_usd": 80000,
+    "pseudo_annual_ai_value_usd": 130000,
+    "pseudo_net_impact_usd": 50000,
+    "pseudo_roi_pct": 62.5,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............................\n----------------------------------------------------------------------\nRan 28 tests in 0.363s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "feedback": {
+        "duplicate_count": 1,
+        "excluded_source_ids": [
+          "fb-4"
+        ],
+        "groups": [
+          {
+            "document_ids": [
+              "doc-battery"
+            ],
+            "evidence_ids": [
+              "r0d0t0",
+              "r0d0t1"
+            ],
+            "id": "fb-1",
+            "source_ids": [
+              "fb-1",
+              "fb-2"
+            ],
+            "supporting_excerpts": [
+              {
+                "document_id": "doc-battery",
+                "end": 48,
+                "excerpt": "Synthetic feedback: battery replacement is easy!",
+                "feedback_id": "fb-1",
+                "start": 0,
+                "theme_id": "maintenance"
+              },
+              {
+                "document_id": "doc-battery",
+                "end": 48,
+                "excerpt": "SYNTHETIC feedback: battery replacement is easy.",
+                "feedback_id": "fb-2",
+                "start": 0,
+                "theme_id": "maintenance"
+              }
+            ],
+            "themes": [
+              "maintenance"
+            ]
+          },
+          {
+            "document_ids": [
+              "doc-battery"
+            ],
+            "evidence_ids": [
+              "r0d0t0",
+              "r0d0t1"
+            ],
+            "id": "fb-3",
+            "source_ids": [
+              "fb-3"
+            ],
+            "supporting_excerpts": [
+              {
+                "document_id": "doc-battery",
+                "end": 42,
+                "excerpt": "Synthetic feedback: battery life is short.",
+                "feedback_id": "fb-3",
+                "start": 0,
+                "theme_id": "durability"
+              }
+            ],
+            "themes": [
+              "durability"
+            ]
+          }
+        ],
+        "scope": "Only feedback linked to documents in the semantic search hits.",
+        "themes": [
+          {
+            "group_ids": [
+              "fb-1"
+            ],
+            "id": "maintenance",
+            "unique_feedback_count": 1
+          },
+          {
+            "group_ids": [
+              "fb-3"
+            ],
+            "id": "durability",
+            "unique_feedback_count": 1
+          }
+        ]
+      },
+      "input": {
+        "documents": [
+          {
+            "id": "doc-battery",
+            "text": "This synthetic product has a rechargeable battery. Battery replacement instructions are supplied.",
+            "title": "Synthetic battery care"
+          },
+          {
+            "id": "doc-packaging",
+            "text": "The synthetic packaging uses recycled paper and includes disposal instructions.",
+            "title": "Synthetic packaging guide"
+          }
+        ],
+        "feedback": [
+          {
+            "document_id": "doc-battery",
+            "id": "fb-1",
+            "text": "Synthetic feedback: battery replacement is easy!"
+          },
+          {
+            "document_id": "doc-battery",
+            "id": "fb-2",
+            "text": "SYNTHETIC feedback: battery replacement is easy."
+          },
+          {
+            "document_id": "doc-battery",
+            "id": "fb-3",
+            "text": "Synthetic feedback: battery life is short."
+          },
+          {
+            "document_id": "doc-packaging",
+            "id": "fb-4",
+            "text": "Synthetic feedback: the packaging looks good."
+          }
+        ],
+        "query": {
+          "limit": 10,
+          "text": "battery replacement"
+        },
+        "requirements": [
+          {
+            "description": "Synthetic battery care evidence",
+            "id": "req-care",
+            "terms": [
+              "battery",
+              "replacement"
+            ]
+          },
+          {
+            "description": "Synthetic packaging evidence",
+            "id": "req-packaging",
+            "terms": [
+              "recycled",
+              "return label"
+            ]
+          },
+          {
+            "description": "Synthetic warranty evidence",
+            "id": "req-warranty",
+            "terms": [
+              "warranty"
+            ]
+          }
+        ],
+        "schema_version": 1,
+        "synthetic": true,
+        "themes": [
+          {
+            "id": "maintenance",
+            "terms": [
+              "replacement"
+            ]
+          },
+          {
+            "id": "durability",
+            "terms": [
+              "short",
+              "broken"
+            ]
+          }
+        ]
+      },
+      "review": {
+        "checks": [
+          {
+            "evidence": [
+              {
+                "document_id": "doc-battery",
+                "end": 97,
+                "excerpt": "This synthetic product has a rechargeable battery. Battery replacement instructions are supplied.",
+                "id": "r0d0t0",
+                "requirement_id": "req-care",
+                "start": 0,
+                "term": "battery"
+              },
+              {
+                "document_id": "doc-battery",
+                "end": 97,
+                "excerpt": "This synthetic product has a rechargeable battery. Battery replacement instructions are supplied.",
+                "id": "r0d0t1",
+                "requirement_id": "req-care",
+                "start": 0,
+                "term": "replacement"
+              }
+            ],
+            "missing_terms": [],
+            "requirement_id": "req-care",
+            "status": "supported"
+          },
+          {
+            "evidence": [
+              {
+                "document_id": "doc-packaging",
+                "end": 79,
+                "excerpt": "The synthetic packaging uses recycled paper and includes disposal instructions.",
+                "id": "r1d1t0",
+                "requirement_id": "req-packaging",
+                "start": 0,
+                "term": "recycled"
+              }
+            ],
+            "missing_terms": [
+              "return label"
+            ],
+            "requirement_id": "req-packaging",
+            "status": "partial"
+          },
+          {
+            "evidence": [],
+            "missing_terms": [
+              "warranty"
+            ],
+            "requirement_id": "req-warranty",
+            "status": "gap"
+          }
+        ],
+        "notice": "Term-based evidence check only; not certification or a compliance determination."
+      },
+      "schema_version": 1,
+      "semantic": {
+        "hits": [
+          {
+            "document_id": "doc-battery",
+            "evidence_id": "r0d0t0",
+            "requirement_id": "req-care",
+            "score": 1.0
+          },
+          {
+            "document_id": "doc-battery",
+            "evidence_id": "r0d0t1",
+            "requirement_id": "req-care",
+            "score": 1.0
+          }
+        ],
+        "index": [
+          {
+            "document_id": "doc-battery",
+            "end": 97,
+            "excerpt": "This synthetic product has a rechargeable battery. Battery replacement instructions are supplied.",
+            "id": "r0d0t0",
+            "requirement_id": "req-care",
+            "search_text": "Synthetic battery care This synthetic product has a rechargeable battery. Battery replacement instructions are supplied.",
+            "start": 0,
+            "term": "battery"
+          },
+          {
+            "document_id": "doc-battery",
+            "end": 97,
+            "excerpt": "This synthetic product has a rechargeable battery. Battery replacement instructions are supplied.",
+            "id": "r0d0t1",
+            "requirement_id": "req-care",
+            "search_text": "Synthetic battery care This synthetic product has a rechargeable battery. Battery replacement instructions are supplied.",
+            "start": 0,
+            "term": "replacement"
+          },
+          {
+            "document_id": "doc-packaging",
+            "end": 79,
+            "excerpt": "The synthetic packaging uses recycled paper and includes disposal instructions.",
+            "id": "r1d1t0",
+            "requirement_id": "req-packaging",
+            "search_text": "Synthetic packaging guide The synthetic packaging uses recycled paper and includes disposal instructions.",
+            "start": 0,
+            "term": "recycled"
+          }
+        ],
+        "mode": "lexical"
+      },
+      "stage": "feedback",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t069_combo3_review_semantic_feedback",
+    "artifact_sha256": {
+      "implementation.py": "a2026027a123e9b1c2d25761a74e7ca100556cd3910e9ae17f801f727e3d849b",
+      "test_implementation.py": "7c587a8ea4b0daea18cb169e9445a684f5fe913b391afabcac96f4bbd2dad143",
+      "example_input.json": "786e3232a7a4128e438f2c5dd6928665549cd8269d2869b5b0c4b1333394e698",
+      "build_manifest.json": "abb0ce6be1c3af0d9a0615da556350be8d31abd9f6e69005a1397065cd6ac695"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

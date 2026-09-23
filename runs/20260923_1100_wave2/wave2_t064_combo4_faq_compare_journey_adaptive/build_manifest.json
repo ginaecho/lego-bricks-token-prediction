@@ -1,0 +1,74 @@
+{
+  "build_id": "wave2_t064_combo4_faq_compare_journey_adaptive",
+  "composition_label": "faq_compare_journey_adaptive",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic_fixture": "literal true",
+      "question": "nonblank string of at most 1000 characters",
+      "product_ids": "nonempty unique subset of atlas, beacon, comet",
+      "preferences": {
+        "budget_usd": "positive finite number; hard maximum",
+        "min_storage_gb": "positive finite number; hard minimum",
+        "priorities": "ordered nonempty unique subset of price, storage, weight, battery"
+      },
+      "profile": {
+        "experience": "novice, intermediate, or expert",
+        "interests": "ordered unique subset of photography, travel, productivity",
+        "completed_actions": "unique known action IDs closed over all prerequisites"
+      }
+    },
+    "output": "schema_version, status, synthetic_fixture, input, stage_order, stages",
+    "error": "JSON object with status=error and error message; process exits 2",
+    "validation": "One shared validation layer rejects unknown fields, invalid numbers, duplicates, unknown enums, ungrounded outputs, inconsistent handoffs and unmet prerequisites. Each bounded deterministic stage is canonically replayed at its validation boundary before consumption by the next stage."
+  },
+  "cross_stage_handoffs": [
+    {"from": "faq", "to": "compare", "fields": ["product_ids", "status", "citations"]},
+    {"from": "compare", "to": "journey", "fields": ["ranking", "citations"]},
+    {"from": "journey", "to": "adaptive", "fields": ["product_id", "completed_after_journey", "citations"]}
+  ],
+  "behavior": {
+    "fixtures": "All phone products, knowledge-base policies and user data are explicitly synthetic.",
+    "faq": "Case-insensitive whole-token retrieval against a bounded keyword index; answers concatenate exact retrieved facts with citations. No match explicitly abstains; comparison may still proceed from requested products without claiming FAQ support.",
+    "compare": "Side-by-side normalized USD, GB, grams and mAh. Decimal 1 TB=1000 GB. Hard budget/storage filtering; lexicographic ordered preferences, ascending price/weight and descending storage/battery, then stable product_id tie break.",
+    "journey": "Selects highest-ranked eligible product, explains initially available actions, then simulates up to two prerequisite-valid actions. Fewer than two yields explicit exhausted status; zero eligible products blocks downstream recommendations.",
+    "adaptive": "Consumes hypothetical post-journey completion, not real execution. Produces an ordered remaining setup plan with prerequisite explanations, novice basics and preference-specific features. Experts and intermediate users skip optional basics.",
+    "execution": "No side effects on input, no account creation, no persistent completion updates, no live model or injected model step."
+  },
+  "scope": {
+    "included": ["Integrated four-stage CLI", "Shared versioned schema and validation",
+                 "Synthetic fixtures", "Deterministic grounded retrieval and abstention",
+                 "Unit normalization and preference ranking", "Prerequisite-aware journey",
+                 "Experience-aware onboarding", "Unit and CLI tests"],
+    "excluded": ["Production services", "Real products or policies", "Network access",
+                 "LLM providers", "Vector search", "User authentication",
+                 "Real-world action execution", "Persistent user state"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 32, "passed": 32, "failed": 0},
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status=ok and all four validated stages",
+    "error_contract": "Tests verify JSON status=error and exit 2 for missing files, malformed input, invalid encoding and incorrect CLI arguments"
+  }
+}

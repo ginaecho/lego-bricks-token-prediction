@@ -1,0 +1,447 @@
+{
+  "id": "wave2_t043_combo3_adaptive_semantic_interests",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "onboard",
+      "search",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "Guided onboarding",
+      "Smart product search",
+      "Personalized discovery"
+    ],
+    "types": [
+      "adaptive",
+      "semantic",
+      "interests"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 1,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Preference ranking, exclusion enforcement and grounded explanations."
+  ],
+  "integration": {
+    "ordered_types": [
+      "adaptive",
+      "semantic",
+      "interests"
+    ],
+    "edges": [
+      {
+        "from": "adaptive",
+        "to": "semantic",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "semantic",
+        "to": "interests",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "4bc0bc33e59173c6366a8e871e1156f43fb99185729560adf935953f2ae0a897",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "01ff0e0051756fc40bde34fcdc7868720273d7e76c29759eaa286dc833efb1de",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t043_combo3_adaptive_semantic_interests",
+  "membership_point_id": "combo3_adaptive_semantic_interests",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "768aaa587b99ec71749862ca49adede11d93fa0fa2926d3006b5d77ab96d406f",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "716faad0-6b1d-404c-8eb5-1e0c0935d760",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 134285,
+    "output_tokens": 11557,
+    "cache_read_tokens": 120658,
+    "cache_write_tokens": 13609,
+    "total_tokens": 145842,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34209,
+        "agent_id": "716faad0-6b1d-404c-8eb5-1e0c0935d760",
+        "model": "gpt-6-astra",
+        "input_tokens": 14836,
+        "output_tokens": 431,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 799,
+        "reasoning_tokens": 262,
+        "duration_ms": 11771,
+        "created_at": "2026-09-23T09:59:00.519Z"
+      },
+      {
+        "id": 34238,
+        "agent_id": "716faad0-6b1d-404c-8eb5-1e0c0935d760",
+        "model": "gpt-6-astra",
+        "input_tokens": 15293,
+        "output_tokens": 8496,
+        "cache_read_tokens": 14833,
+        "cache_write_tokens": 457,
+        "reasoning_tokens": 345,
+        "duration_ms": 130150,
+        "created_at": "2026-09-23T10:01:12.512Z"
+      },
+      {
+        "id": 34239,
+        "agent_id": "716faad0-6b1d-404c-8eb5-1e0c0935d760",
+        "model": "gpt-6-astra",
+        "input_tokens": 24115,
+        "output_tokens": 235,
+        "cache_read_tokens": 15290,
+        "cache_write_tokens": 8822,
+        "reasoning_tokens": 77,
+        "duration_ms": 6269,
+        "created_at": "2026-09-23T10:01:19.809Z"
+      },
+      {
+        "id": 34243,
+        "agent_id": "716faad0-6b1d-404c-8eb5-1e0c0935d760",
+        "model": "gpt-6-astra",
+        "input_tokens": 25111,
+        "output_tokens": 1998,
+        "cache_read_tokens": 24112,
+        "cache_write_tokens": 996,
+        "reasoning_tokens": 236,
+        "duration_ms": 42916,
+        "created_at": "2026-09-23T10:02:02.673Z"
+      },
+      {
+        "id": 34245,
+        "agent_id": "716faad0-6b1d-404c-8eb5-1e0c0935d760",
+        "model": "gpt-6-astra",
+        "input_tokens": 27284,
+        "output_tokens": 303,
+        "cache_read_tokens": 25108,
+        "cache_write_tokens": 2173,
+        "reasoning_tokens": 15,
+        "duration_ms": 6057,
+        "created_at": "2026-09-23T10:02:08.833Z"
+      },
+      {
+        "id": 34247,
+        "agent_id": "716faad0-6b1d-404c-8eb5-1e0c0935d760",
+        "model": "gpt-6-astra",
+        "input_tokens": 27646,
+        "output_tokens": 94,
+        "cache_read_tokens": 27281,
+        "cache_write_tokens": 362,
+        "reasoning_tokens": 0,
+        "duration_ms": 2933,
+        "created_at": "2026-09-23T10:02:19.158Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5090675,
+      "observed_cache_profile_estimate_usd": 0.23758700000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.10881,
+      "observed_cache_profile_estimate_usd": 6.10881,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 2,
+      "roi_satisfaction": 3,
+      "future_impact_potential": 1,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.54,
+    "pseudo_annual_cost_usd": 40000,
+    "pseudo_annual_ai_value_usd": 20000,
+    "pseudo_net_impact_usd": -20000,
+    "pseudo_roi_pct": -50.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............................\n----------------------------------------------------------------------\nRan 31 tests in 0.552s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "context": {
+        "catalog": [
+          {
+            "category": "outdoor",
+            "description": "Compact camera for hiking trips.",
+            "id": "camera-trail",
+            "min_experience": "beginner",
+            "name": "Synthetic Trail Camera",
+            "required_lessons": [
+              "basics"
+            ],
+            "tags": [
+              "camera",
+              "portable",
+              "durable"
+            ]
+          },
+          {
+            "category": "camera",
+            "description": "Camera for studio photos.",
+            "id": "camera-studio",
+            "min_experience": "beginner",
+            "name": "Synthetic Studio Camera",
+            "required_lessons": [],
+            "tags": [
+              "studio"
+            ]
+          },
+          {
+            "category": "camera",
+            "description": "Lightweight photography equipment.",
+            "id": "camera-pro",
+            "min_experience": "expert",
+            "name": "Synthetic Expert Camera",
+            "required_lessons": [
+              "compare"
+            ],
+            "tags": [
+              "portable"
+            ]
+          },
+          {
+            "category": "camera",
+            "description": "Compact photography device.",
+            "id": "camera-excluded",
+            "min_experience": "beginner",
+            "name": "Synthetic Excluded Camera",
+            "required_lessons": [],
+            "tags": [
+              "portable"
+            ]
+          },
+          {
+            "category": "restricted",
+            "description": "Lightweight photography device.",
+            "id": "camera-restricted",
+            "min_experience": "beginner",
+            "name": "Synthetic Restricted Camera",
+            "required_lessons": [],
+            "tags": [
+              "portable"
+            ]
+          },
+          {
+            "category": "outdoor",
+            "description": "Durable shelter for outdoor travel.",
+            "id": "tent",
+            "min_experience": "beginner",
+            "name": "Synthetic Hiking Tent",
+            "required_lessons": [],
+            "tags": [
+              "durable"
+            ]
+          }
+        ],
+        "fixture_label": "SYNTHETIC marketplace fixtures; not real products",
+        "options": {
+          "limit": 3,
+          "min_score": 0.0
+        },
+        "profile": {
+          "completed_lessons": [
+            "basics"
+          ],
+          "excluded_categories": [
+            "restricted"
+          ],
+          "excluded_ids": [
+            "camera-excluded"
+          ],
+          "experience": "beginner",
+          "interests": [
+            "photography",
+            "hiking"
+          ],
+          "preferences": {
+            "durable": 0.5,
+            "portable": 1.0
+          }
+        },
+        "query": "lightweight photography",
+        "schema_version": 1
+      },
+      "onboarding": {
+        "experience": "beginner",
+        "search_query": "lightweight photography",
+        "steps": [
+          {
+            "explanation": "Search supports beginner discovery.",
+            "lesson": "search",
+            "prerequisites": [
+              "basics"
+            ]
+          },
+          {
+            "explanation": "Compare product attributes against your weighted preferences.",
+            "lesson": "compare",
+            "prerequisites": [
+              "search"
+            ]
+          }
+        ]
+      },
+      "recommendations": [
+        {
+          "explanations": [
+            "Search relevance: 1.00000000",
+            "Interest concepts in category/tags: camera, outdoor",
+            "Preferred category/tag concepts: durable, portable"
+          ],
+          "id": "camera-trail",
+          "score": 1.0
+        },
+        {
+          "explanations": [
+            "Search relevance: 0.43198787",
+            "Interest concepts in category/tags: camera"
+          ],
+          "id": "camera-studio",
+          "score": 0.36599393
+        }
+      ],
+      "schema_version": 1,
+      "search": [
+        {
+          "explanations": [
+            "Matched indexed concepts: camera, portable"
+          ],
+          "id": "camera-trail",
+          "score": 1.0
+        },
+        {
+          "explanations": [
+            "Matched indexed concepts: camera"
+          ],
+          "id": "camera-studio",
+          "score": 0.43198787
+        }
+      ],
+      "stage": "interests",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t043_combo3_adaptive_semantic_interests",
+    "artifact_sha256": {
+      "implementation.py": "93ef2e92b52bbca5f02b731dd6f4d6a402b2d0991216e646ec0cc2265ac6d54b",
+      "test_implementation.py": "d1b2b31614c3de80e13415c11485471c4501eed7f2a97e4ebaff4b3d83b63c2a",
+      "example_input.json": "0417a8e9a4f89fcb5b89f025ae9a79e12e314ac43e268a311c841febcfa106de",
+      "build_manifest.json": "35a2af4764f6637637307d39c7de411506556acf40981c6a38b430bb3b71bc65"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

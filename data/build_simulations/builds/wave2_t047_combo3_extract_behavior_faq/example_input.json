@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC marketplace demonstration; no real customers",
+  "document": "Customer: synthetic-alex\nInterest: books\nQuestion: What is the return window?\nBudget: 35.50\n",
+  "fields": {
+    "customer_id": {"label": "Customer", "type": "string", "required": true},
+    "category": {"label": "Interest", "type": "string", "required": false},
+    "question": {"label": "Question", "type": "string", "required": true},
+    "budget": {"label": "Budget", "type": "number", "required": false}
+  },
+  "as_of": "2026-09-23T12:00:00+00:00",
+  "items": [
+    {"id": "book-1", "title": "Synthetic Build Guide", "category": "books"},
+    {"id": "toy-1", "title": "Synthetic Block Set", "category": "toys"},
+    {"id": "book-2", "title": "Synthetic Design Guide", "category": "books"}
+  ],
+  "events": [
+    {"customer_id": "synthetic-alex", "item_id": "toy-1", "kind": "purchase", "at": "2026-09-23T12:00:00Z"},
+    {"customer_id": "synthetic-alex", "item_id": "book-1", "kind": "browse", "at": "2026-09-16T12:00:00Z"},
+    {"customer_id": "synthetic-other", "item_id": "book-2", "kind": "purchase", "at": "2026-09-23T12:00:00Z"}
+  ],
+  "knowledge_base": [
+    {"id": "kb-books", "category": "books", "question": "What is the return window?", "answer": "Synthetic policy: books may be returned within 14 days."},
+    {"id": "kb-toys", "category": "toys", "question": "What is the return window?", "answer": "Synthetic policy: unopened toys may be returned within 30 days."}
+  ],
+  "config": {"half_life_days": 7, "top_k": 3, "faq_min_score": 0.5}
+}

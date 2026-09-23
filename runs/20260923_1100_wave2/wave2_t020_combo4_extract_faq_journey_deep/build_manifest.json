@@ -1,0 +1,143 @@
+{
+  "build_id": "wave2_t020_combo4_extract_faq_journey_deep",
+  "composition_label": "extract -> faq -> journey -> deep",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the designated isolated build directory; no other build or repository files were read or copied.",
+    "runtime": "Python 3 standard library; run with -B to avoid bytecode artifacts",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1; booleans are not integers in this schema.",
+      "synthetic": "Must be true; all supplied data is explicitly synthetic.",
+      "documents": "Array of {id: unique nonempty string, text: string}. Text can be empty.",
+      "extraction": {
+        "document_ids": "Unique existing document IDs in extraction precedence order.",
+        "fields": "Array of {id, pattern, type, required}. Pattern is a Python regular expression with exactly one capture group; type is string, integer or boolean; required is boolean."
+      },
+      "questions": "Array of {id, text, required_fields}. Required fields reference extraction field IDs.",
+      "knowledge_base": "Array of {id, question, source, requires}. Source is a document reference. Requires maps extraction field IDs to exact, type-checked scalar values.",
+      "actions": "Array of {id, title, priority, requires_fields, requires_answers, prerequisites, research_topics}. Priority is an integer; all other references are unique string arrays. Prerequisites form an acyclic graph.",
+      "completed_actions": "Unique action IDs whose prerequisites are also completed.",
+      "research_questions": "Object mapping nonempty topic IDs to nonempty research question strings.",
+      "claims": "Array of {id, topic, stance, source}. Topic references research_questions; stance is supports or opposes. These are fixture-authored annotations, not model-inferred claims."
+    },
+    "source_reference": {
+      "document_id": "Existing document ID",
+      "start": "Nonnegative integer Unicode character offset, inclusive",
+      "end": "Integer Unicode character offset, exclusive; start < end <= document length"
+    },
+    "quoted_source": "A source_reference plus text exactly equal to the source document slice.",
+    "output_envelope": {
+      "schema_version": 1,
+      "synthetic": true,
+      "status": "ok for a valid execution, including abstained answers or blocked journeys",
+      "extract": "{values, spans, missing_fields, required_missing}; every declared field has a typed value and exact quoted source or null/null.",
+      "faq": "{answers}; every question has {id, status, answer, source, kb_id, score, reason, missing_fields}. Status is answered or abstained.",
+      "journey": "{status, completed_actions, next_actions, steps, blocked}; status is ready, partial or blocked. Each selected step contains step, action_id, title, prerequisites and research_topics.",
+      "deep": "{topics, synthesis, disagreements, unresolved_questions}; each synthesis includes topic, question, assessment, document_ids and cited evidence."
+    },
+    "error_envelope": "{status: error, error: human-readable string}; one JSON object on stdout and exit code 2.",
+    "validation": [
+      "A single Validator class and shared type, reference, source and structural comparison helpers serve all four stages.",
+      "Input objects reject missing and unknown keys, duplicate IDs, unresolved references, invalid types, invalid regex captures, source bounds, cycles and inconsistent completed prerequisite sets.",
+      "The CLI also rejects duplicate JSON object keys, nonfinite numeric constants, malformed JSON and file/encoding errors.",
+      "Each stage validates the entire prior state, copies it without mutation, appends its own result, then validates the extended state.",
+      "Handoff validation recomputes bounded deterministic expectations to reject forged missing fields, ineligible or ungrounded answers, invalid journey ordering and fabricated research.",
+      "Semantic equality is recursive and type-strict, so true cannot impersonate an integer."
+    ]
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "extract",
+      "to": "faq",
+      "data": "Validated extracted values and missing fields",
+      "effect": "Missing question prerequisites cause explicit abstention; values select applicable KB policies through exact typed requirements."
+    },
+    {
+      "from": "faq",
+      "to": "journey",
+      "data": "Validated answers, answer statuses and retained extraction state",
+      "effect": "Only answered prerequisite questions and present required fields permit actions. The plan adds its first action to simulated completion before selecting the second."
+    },
+    {
+      "from": "journey",
+      "to": "deep",
+      "data": "Validated selected steps and their research topics",
+      "effect": "Only topics attached to actual selected steps enter evidence synthesis; blocked, unselected actions cannot add research topics."
+    }
+  ],
+  "behavior": {
+    "extraction": "Search selected documents in configured order, then regex matches in source order. Trim captures while preserving exact source offsets. Use the first nonempty, successfully converted match; skip invalid matches. Integer conversion accepts signed ASCII decimal digits. Boolean conversion accepts true/false/yes/no case-insensitively. Missing required fields are reported rather than causing schema failure.",
+    "retrieval": "Compare question and KB-question Unicode word-token sets after casefolding and a fixed stopword filter. Use Jaccard overlap >= 0.2 among KB entries whose requirements match. Highest overlap wins, then lexical KB ID. Scores measure lexical relevance, not factual confidence.",
+    "answers": "Return the selected source quote verbatim, never generated advice. Abstain with missing_required_fields or no_relevant_evidence and null answer/source. Eligibility and citations are checked at every handoff.",
+    "journey": "Higher integer priority wins, then lexical action ID. next_actions lists all immediately eligible uncompleted actions. Select at most two distinct actions sequentially, rechecking monotonic prerequisites after the simulated first completion. ready means exactly two validated steps; partial means one; blocked means none. blocked records initial-state blockers and may contain an action unlocked for step two. Required fields test presence, not truthiness. Nothing is executed or marked persistently complete.",
+    "research": "Group fixture-authored evidence annotations by selected research topic, preserving exact quotes and distinct source document IDs. Assess supported, opposed, disputed or insufficient_evidence. Record both sides rather than resolving conflict. Report unresolved questions for absent evidence, a single source document, conflicting evidence, or no journey topics. Assessment describes supplied evidence stances, not established real-world truth.",
+    "example_expected": {
+      "missing_fields": ["region"],
+      "answered_question_ids": ["trial", "export"],
+      "abstained_question_ids": ["residency"],
+      "two_step_action_ids": ["activate", "export"],
+      "research_topics": ["guided-onboarding", "export-reliability"],
+      "disputed_topic": "guided-onboarding",
+      "no_evidence_topic": "export-reliability"
+    },
+    "determinism": "No randomness, timestamps, mutable global state or external calls in pipeline output. The input and prior stage states are not mutated."
+  },
+  "scope": {
+    "included": [
+      "One runnable integrated Python CLI and importable stage functions",
+      "One versioned input contract and progressively extended shared output envelope",
+      "Typed schema-driven extraction, exact source spans and missing-field reporting",
+      "Lexical KB retrieval, grounded quotations and explicit abstention",
+      "Prerequisite-aware next actions and a validated two-step or explicitly incomplete journey",
+      "Multi-document evidence synthesis with disagreement and unresolved questions",
+      "Clearly labeled synthetic fixtures and executable standard-library regression tests"
+    ],
+    "excluded": [
+      "LLM calls or LLM-specific steps; no injection hook is needed or used",
+      "Networks, provider SDKs, external dependencies, agents or git",
+      "PDF/OCR parsing, embedding indexes, web crawling or live data ingestion",
+      "Semantic entailment or independent verification of fixture-authored claim stances",
+      "Global optimal planning, mutually exclusive actions, or persistent action execution",
+      "Enterprise security, throughput guarantees or sandboxing of arbitrary hostile regex patterns",
+      "Production deployment, databases, authentication and user interfaces"
+    ]
+  },
+  "test_outcomes": {
+    "runner": "unittest",
+    "test_cases": 46,
+    "passed": 46,
+    "failures": 0,
+    "errors": 0,
+    "suite_exit_code": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_stdout": "Exactly one JSON object with status ok",
+    "coverage": [
+      "All four stages and every cross-stage handoff",
+      "Exact source quotes, Unicode offsets, trimming, missing/invalid values, false and zero",
+      "FAQ relevance, tie breaking, policy eligibility and both abstention reasons",
+      "Prerequisite ordering, completed actions, cycles, blockers and partial journeys",
+      "Multidocument disagreement, agreement, single-source limits and absent evidence",
+      "Forged intermediate states, forged research, deterministic results and no mutation",
+      "Empty collections, unknown references, duplicate IDs and invalid schema types",
+      "Real CLI subprocess success, missing file and usage errors",
+      "Malformed JSON, duplicate keys, nonfinite constants, permission and decoding errors"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional marketplace seller onboarding",
+  "steps": [
+    {
+      "id": "profile",
+      "title": "Choose a synthetic seller profile",
+      "prerequisites": [],
+      "fields": {
+        "display_name": {"type": "string"},
+        "market": {"type": "string", "choices": ["crafts", "books"]}
+      }
+    },
+    {
+      "id": "inventory",
+      "title": "Configure synthetic inventory",
+      "prerequisites": ["profile"],
+      "fields": {"item_count": {"type": "integer"}}
+    },
+    {
+      "id": "review",
+      "title": "Confirm readiness",
+      "prerequisites": ["profile", "inventory"],
+      "fields": {"confirmed": {"type": "boolean", "choices": [true]}}
+    }
+  ],
+  "initial_completed": [],
+  "actions": [
+    {"step_id": "profile", "answers": {"display_name": "Synthetic Seller", "market": "books"}},
+    {"step_id": "inventory", "answers": {"item_count": 3}}
+  ]
+}

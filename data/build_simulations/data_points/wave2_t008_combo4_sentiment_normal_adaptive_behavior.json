@@ -1,0 +1,490 @@
+{
+  "id": "wave2_t008_combo4_sentiment_normal_adaptive_behavior",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights",
+      "research",
+      "onboard",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "Customer insights",
+      "Research",
+      "Guided onboarding",
+      "Personalized discovery"
+    ],
+    "types": [
+      "sentiment",
+      "normal",
+      "adaptive",
+      "behavior"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 3,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Transparent sentiment scoring and severity-aware issue prioritization.",
+    "Passage retrieval and extractive findings with exact source citations.",
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling."
+  ],
+  "integration": {
+    "ordered_types": [
+      "sentiment",
+      "normal",
+      "adaptive",
+      "behavior"
+    ],
+    "edges": [
+      {
+        "from": "sentiment",
+        "to": "normal",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "normal",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "adaptive",
+        "to": "behavior",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "cd4d2148992d0dc5724c97569fb756130ddeefc7541d4d82a6b275693c25ea5f",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "bff73eb92d194d0368e6b1c8d7dc5ef3d171b882dcd84a9caadf3e512a0c33be",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t008_combo4_sentiment_normal_adaptive_behavior",
+  "membership_point_id": "combo4_sentiment_normal_adaptive_behavior",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "c9b5eaee1a385506bb65f3535e4e840a3c2b568a5d61d41c1d6c8d46522ffffd",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "ef0c4aa0-1e32-4a20-add3-5a2c1d259482",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 133874,
+    "output_tokens": 10863,
+    "cache_read_tokens": 120718,
+    "cache_write_tokens": 13138,
+    "total_tokens": 144737,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33808,
+        "agent_id": "ef0c4aa0-1e32-4a20-add3-5a2c1d259482",
+        "model": "gpt-6-astra",
+        "input_tokens": 14788,
+        "output_tokens": 354,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 827,
+        "reasoning_tokens": 189,
+        "duration_ms": 13994,
+        "created_at": "2026-09-23T09:24:35.827Z"
+      },
+      {
+        "id": 33845,
+        "agent_id": "ef0c4aa0-1e32-4a20-add3-5a2c1d259482",
+        "model": "gpt-6-astra",
+        "input_tokens": 15172,
+        "output_tokens": 9016,
+        "cache_read_tokens": 14785,
+        "cache_write_tokens": 384,
+        "reasoning_tokens": 139,
+        "duration_ms": 161589,
+        "created_at": "2026-09-23T09:27:18.815Z"
+      },
+      {
+        "id": 33848,
+        "agent_id": "ef0c4aa0-1e32-4a20-add3-5a2c1d259482",
+        "model": "gpt-6-astra",
+        "input_tokens": 24512,
+        "output_tokens": 135,
+        "cache_read_tokens": 15169,
+        "cache_write_tokens": 9340,
+        "reasoning_tokens": 0,
+        "duration_ms": 4147,
+        "created_at": "2026-09-23T09:27:23.064Z"
+      },
+      {
+        "id": 33861,
+        "agent_id": "ef0c4aa0-1e32-4a20-add3-5a2c1d259482",
+        "model": "gpt-6-astra",
+        "input_tokens": 25532,
+        "output_tokens": 992,
+        "cache_read_tokens": 24509,
+        "cache_write_tokens": 1020,
+        "reasoning_tokens": 108,
+        "duration_ms": 20512,
+        "created_at": "2026-09-23T09:27:45.587Z"
+      },
+      {
+        "id": 33865,
+        "agent_id": "ef0c4aa0-1e32-4a20-add3-5a2c1d259482",
+        "model": "gpt-6-astra",
+        "input_tokens": 26771,
+        "output_tokens": 266,
+        "cache_read_tokens": 25529,
+        "cache_write_tokens": 1239,
+        "reasoning_tokens": 0,
+        "duration_ms": 6049,
+        "created_at": "2026-09-23T09:27:51.732Z"
+      },
+      {
+        "id": 33871,
+        "agent_id": "ef0c4aa0-1e32-4a20-add3-5a2c1d259482",
+        "model": "gpt-6-astra",
+        "input_tokens": 27099,
+        "output_tokens": 100,
+        "cache_read_tokens": 26768,
+        "cache_write_tokens": 328,
+        "reasoning_tokens": 0,
+        "duration_ms": 3349,
+        "created_at": "2026-09-23T09:28:01.083Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.49763,
+      "observed_cache_profile_estimate_usd": 0.2260145,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.971559999999999,
+      "observed_cache_profile_estimate_usd": 5.971559999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 3,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 2,
+      "delivery_quality": 3
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.5,
+    "pseudo_annual_cost_usd": 90000,
+    "pseudo_annual_ai_value_usd": 45000,
+    "pseudo_net_impact_usd": -45000,
+    "pseudo_roi_pct": -50.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "........................................\n----------------------------------------------------------------------\nRan 40 tests in 0.255s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "status": "ok",
+      "stages": {
+        "sentiment": {
+          "issues": [
+            {
+              "issue_id": "issue-1",
+              "severity": "critical",
+              "score": -1.0,
+              "label": "negative",
+              "evidence": [
+                {
+                  "token": "broken",
+                  "index": 3,
+                  "negated": false,
+                  "contribution": -1
+                },
+                {
+                  "token": "confusing",
+                  "index": 5,
+                  "negated": false,
+                  "contribution": -1
+                }
+              ],
+              "query_terms": [
+                "broken",
+                "checkout",
+                "confusing"
+              ]
+            },
+            {
+              "issue_id": "issue-2",
+              "severity": "low",
+              "score": 1.0,
+              "label": "positive",
+              "evidence": [
+                {
+                  "token": "love",
+                  "index": 1,
+                  "negated": false,
+                  "contribution": 1
+                }
+              ],
+              "query_terms": [
+                "building",
+                "guide",
+                "love"
+              ]
+            }
+          ],
+          "priority_order": [
+            "issue-1",
+            "issue-2"
+          ]
+        },
+        "research": {
+          "findings": [
+            {
+              "issue_id": "issue-1",
+              "source_id": "source-1",
+              "start": 35,
+              "end": 93,
+              "quote": "A broken checkout can be resolved by checking the address.",
+              "matched_terms": [
+                "broken",
+                "checkout"
+              ],
+              "relevance": 2,
+              "topics": [
+                "checkout"
+              ]
+            },
+            {
+              "issue_id": "issue-1",
+              "source_id": "source-1",
+              "start": 0,
+              "end": 34,
+              "quote": "Checkout requires a saved address.",
+              "matched_terms": [
+                "checkout"
+              ],
+              "relevance": 1,
+              "topics": [
+                "checkout"
+              ]
+            },
+            {
+              "issue_id": "issue-2",
+              "source_id": "source-2",
+              "start": 0,
+              "end": 48,
+              "quote": "The building guide explains safe brick assembly.",
+              "matched_terms": [
+                "building",
+                "guide"
+              ],
+              "relevance": 2,
+              "topics": [
+                "building"
+              ]
+            }
+          ],
+          "unanswered_issue_ids": [],
+          "focus_categories": [
+            "building",
+            "checkout"
+          ]
+        },
+        "onboarding": {
+          "steps": [
+            {
+              "step_id": "building",
+              "prerequisites": [],
+              "category": "building",
+              "explanation": "Matches researched category and experience; preferred format"
+            },
+            {
+              "step_id": "profile",
+              "prerequisites": [],
+              "category": "account",
+              "explanation": "Required prerequisite, even if above experience level; available format fallback"
+            },
+            {
+              "step_id": "checkout",
+              "prerequisites": [
+                "profile"
+              ],
+              "category": "checkout",
+              "explanation": "Matches researched category and experience; preferred format"
+            }
+          ],
+          "focus_categories": [
+            "building",
+            "checkout"
+          ],
+          "preferred_format": "video",
+          "research_issue_ids": [
+            "issue-1",
+            "issue-2"
+          ]
+        },
+        "behavior": {
+          "cold_start": false,
+          "event_weights": [
+            {
+              "event_id": "event-1",
+              "age_days": 1.0,
+              "weight": 0.9771599684342459
+            },
+            {
+              "event_id": "event-2",
+              "age_days": 30.0,
+              "weight": 1.5
+            }
+          ],
+          "ranking": [
+            {
+              "product_id": "checkout-help",
+              "score": 2.03,
+              "components": {
+                "history": 1.5,
+                "onboarding": 0.5,
+                "interest": 0,
+                "popularity": 0.03
+              }
+            },
+            {
+              "product_id": "kit",
+              "score": 1.8071599684342459,
+              "components": {
+                "history": 0.9771599684342459,
+                "onboarding": 0.5,
+                "interest": 0.25,
+                "popularity": 0.08000000000000002
+              }
+            },
+            {
+              "product_id": "display",
+              "score": 0.09000000000000001,
+              "components": {
+                "history": 0,
+                "onboarding": 0,
+                "interest": 0,
+                "popularity": 0.09000000000000001
+              }
+            }
+          ],
+          "focus_categories": [
+            "building",
+            "checkout"
+          ]
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t008_combo4_sentiment_normal_adaptive_behavior",
+    "artifact_sha256": {
+      "implementation.py": "111e7ac1ed52cdf40b7d7a29ff60ed2631c71b809eac0a24d312d24855b21418",
+      "test_implementation.py": "2ab309f8ceb8df3318409d9e02409e5353918e71efc0fc4156317ceeaea18512",
+      "example_input.json": "85cc6f1f329b1aebe04231154b8d9be2d78b96a23f5fb41109d065cf72803487",
+      "build_manifest.json": "c2872904ea4ccefa0b4bac30759752f767ca7d0e841e59ae91b143b206ef30df"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

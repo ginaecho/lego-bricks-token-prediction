@@ -1,0 +1,673 @@
+{
+  "id": "wave2_t119_combo4_feedback_faq_guided_normal",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights",
+      "support",
+      "onboard",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Customer insights",
+      "AI customer support",
+      "Guided onboarding",
+      "Research"
+    ],
+    "types": [
+      "feedback",
+      "faq",
+      "guided",
+      "normal"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 1,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 0,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Validated prerequisite-driven onboarding steps and progress tracking.",
+    "Passage retrieval and extractive findings with exact source citations."
+  ],
+  "integration": {
+    "ordered_types": [
+      "feedback",
+      "faq",
+      "guided",
+      "normal"
+    ],
+    "edges": [
+      {
+        "from": "feedback",
+        "to": "faq",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "faq",
+        "to": "guided",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "guided",
+        "to": "normal",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "403ec0a406925313c4f7f9f1a8340b74ae66e7ca9e6a9849b5249cf9976bc4f0",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "098521f07d01cc8c634361c4a3906b9929302e2de6cf51a144c7bcd49217e323",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t119_combo4_feedback_faq_guided_normal",
+  "membership_point_id": "combo4_feedback_faq_guided_normal",
+  "trial_kind": "repeat_of_wave2",
+  "repeat_of": "combo4_feedback_faq_guided_normal",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "2e590da8dee73ca17501638fb4a16b0c21260b5b71f6e14db9cb0386afcdfea3",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 8,
+    "input_tokens": 192877,
+    "output_tokens": 11012,
+    "cache_read_tokens": 178001,
+    "cache_write_tokens": 14852,
+    "total_tokens": 203889,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34931,
+        "agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+        "model": "gpt-6-astra",
+        "input_tokens": 14883,
+        "output_tokens": 271,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 825,
+        "reasoning_tokens": 93,
+        "duration_ms": 6335,
+        "created_at": "2026-09-23T11:17:40.385Z"
+      },
+      {
+        "id": 34948,
+        "agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+        "model": "gpt-6-astra",
+        "input_tokens": 15184,
+        "output_tokens": 9098,
+        "cache_read_tokens": 14880,
+        "cache_write_tokens": 301,
+        "reasoning_tokens": 489,
+        "duration_ms": 141973,
+        "created_at": "2026-09-23T11:20:03.566Z"
+      },
+      {
+        "id": 34952,
+        "agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+        "model": "gpt-6-astra",
+        "input_tokens": 24606,
+        "output_tokens": 209,
+        "cache_read_tokens": 15181,
+        "cache_write_tokens": 9422,
+        "reasoning_tokens": 80,
+        "duration_ms": 6172,
+        "created_at": "2026-09-23T11:20:19.571Z"
+      },
+      {
+        "id": 34954,
+        "agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+        "model": "gpt-6-astra",
+        "input_tokens": 25757,
+        "output_tokens": 685,
+        "cache_read_tokens": 24603,
+        "cache_write_tokens": 1151,
+        "reasoning_tokens": 150,
+        "duration_ms": 12985,
+        "created_at": "2026-09-23T11:20:25.302Z"
+      },
+      {
+        "id": 34956,
+        "agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+        "model": "gpt-6-astra",
+        "input_tokens": 26611,
+        "output_tokens": 137,
+        "cache_read_tokens": 25754,
+        "cache_write_tokens": 854,
+        "reasoning_tokens": 0,
+        "duration_ms": 4013,
+        "created_at": "2026-09-23T11:20:31.170Z"
+      },
+      {
+        "id": 34958,
+        "agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+        "model": "gpt-6-astra",
+        "input_tokens": 28256,
+        "output_tokens": 321,
+        "cache_read_tokens": 26608,
+        "cache_write_tokens": 1645,
+        "reasoning_tokens": 59,
+        "duration_ms": 6617,
+        "created_at": "2026-09-23T11:20:38.218Z"
+      },
+      {
+        "id": 34959,
+        "agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+        "model": "gpt-6-astra",
+        "input_tokens": 28670,
+        "output_tokens": 205,
+        "cache_read_tokens": 28253,
+        "cache_write_tokens": 414,
+        "reasoning_tokens": 0,
+        "duration_ms": 3963,
+        "created_at": "2026-09-23T11:20:41.821Z"
+      },
+      {
+        "id": 34960,
+        "agent_id": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+        "model": "gpt-6-astra",
+        "input_tokens": 28910,
+        "output_tokens": 86,
+        "cache_read_tokens": 28667,
+        "cache_write_tokens": 240,
+        "reasoning_tokens": 0,
+        "duration_ms": 3373,
+        "created_at": "2026-09-23T11:20:49.223Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6473725,
+      "observed_cache_profile_estimate_usd": 0.24687024999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.76847,
+      "observed_cache_profile_estimate_usd": 7.76847,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 4,
+      "roi_satisfaction": 2,
+      "future_impact_potential": 5,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.68,
+    "pseudo_annual_cost_usd": 80000,
+    "pseudo_annual_ai_value_usd": 35000,
+    "pseudo_net_impact_usd": -45000,
+    "pseudo_roi_pct": -56.25,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................................\n----------------------------------------------------------------------\nRan 33 tests in 0.278s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "build_id": "wave2_t119_combo4_feedback_faq_guided_normal",
+      "schema_version": 1,
+      "stages": [
+        {
+          "data": {
+            "groups": [
+              {
+                "evidence": {
+                  "end": 38,
+                  "excerpt": "I need help with account verification.",
+                  "source_id": "f1",
+                  "start": 0
+                },
+                "feedback_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "id": "f1"
+              },
+              {
+                "evidence": {
+                  "end": 43,
+                  "excerpt": "How can I enable inventory synchronization?",
+                  "source_id": "f3",
+                  "start": 0
+                },
+                "feedback_ids": [
+                  "f3"
+                ],
+                "id": "f3"
+              },
+              {
+                "evidence": {
+                  "end": 25,
+                  "excerpt": "Please add teleportation.",
+                  "source_id": "f4",
+                  "start": 0
+                },
+                "feedback_ids": [
+                  "f4"
+                ],
+                "id": "f4"
+              },
+              {
+                "evidence": {
+                  "end": 14,
+                  "excerpt": "Lovely colors!",
+                  "source_id": "f5",
+                  "start": 0
+                },
+                "feedback_ids": [
+                  "f5"
+                ],
+                "id": "f5"
+              }
+            ],
+            "themes": [
+              {
+                "evidence": [
+                  {
+                    "end": 38,
+                    "excerpt": "I need help with account verification.",
+                    "source_id": "f1",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "group_ids": [
+                  "f1"
+                ],
+                "id": "account",
+                "keywords": [
+                  "verification"
+                ],
+                "question": "How do I complete account verification?"
+              },
+              {
+                "evidence": [
+                  {
+                    "end": 43,
+                    "excerpt": "How can I enable inventory synchronization?",
+                    "source_id": "f3",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f3"
+                ],
+                "group_ids": [
+                  "f3"
+                ],
+                "id": "inventory",
+                "keywords": [
+                  "inventory",
+                  "synchronization"
+                ],
+                "question": "How do I enable inventory synchronization?"
+              },
+              {
+                "evidence": [
+                  {
+                    "end": 25,
+                    "excerpt": "Please add teleportation.",
+                    "source_id": "f4",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f4"
+                ],
+                "group_ids": [
+                  "f4"
+                ],
+                "id": "future",
+                "keywords": [
+                  "teleportation"
+                ],
+                "question": "How do I enable teleportation?"
+              }
+            ],
+            "unmatched_feedback_ids": [
+              "f5"
+            ]
+          },
+          "input_stage": "input",
+          "schema_version": 1,
+          "stage": "feedback",
+          "status": "ok"
+        },
+        {
+          "data": {
+            "answers": [
+              {
+                "answer": "Complete account verification using the confirmation link.",
+                "citations": [
+                  {
+                    "end": 58,
+                    "excerpt": "Complete account verification using the confirmation link.",
+                    "source_id": "kb-account",
+                    "start": 0
+                  }
+                ],
+                "feedback_evidence": [
+                  {
+                    "end": 38,
+                    "excerpt": "I need help with account verification.",
+                    "source_id": "f1",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "id": "account",
+                "keywords": [
+                  "verification"
+                ],
+                "question": "How do I complete account verification?",
+                "status": "answered"
+              },
+              {
+                "answer": "Enable inventory synchronization in the connector settings.",
+                "citations": [
+                  {
+                    "end": 59,
+                    "excerpt": "Enable inventory synchronization in the connector settings.",
+                    "source_id": "kb-inventory",
+                    "start": 0
+                  }
+                ],
+                "feedback_evidence": [
+                  {
+                    "end": 43,
+                    "excerpt": "How can I enable inventory synchronization?",
+                    "source_id": "f3",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f3"
+                ],
+                "id": "inventory",
+                "keywords": [
+                  "inventory",
+                  "synchronization"
+                ],
+                "question": "How do I enable inventory synchronization?",
+                "status": "answered"
+              },
+              {
+                "answer": null,
+                "citations": [],
+                "feedback_evidence": [
+                  {
+                    "end": 25,
+                    "excerpt": "Please add teleportation.",
+                    "source_id": "f4",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f4"
+                ],
+                "id": "future",
+                "keywords": [
+                  "teleportation"
+                ],
+                "question": "How do I enable teleportation?",
+                "status": "abstained"
+              }
+            ]
+          },
+          "input_stage": "feedback",
+          "schema_version": 1,
+          "stage": "faq",
+          "status": "ok"
+        },
+        {
+          "data": {
+            "progress": {
+              "completed": 1,
+              "total": 3
+            },
+            "steps": [
+              {
+                "faq_citations": [
+                  {
+                    "end": 58,
+                    "excerpt": "Complete account verification using the confirmation link.",
+                    "source_id": "kb-account",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "id": "verify",
+                "instructions": "Open the confirmation link.",
+                "requires": [],
+                "research_query": "Account verification Open the confirmation link. verification Complete account verification using the confirmation link.",
+                "status": "completed",
+                "title": "Account verification",
+                "topic": "account"
+              },
+              {
+                "faq_citations": [
+                  {
+                    "end": 59,
+                    "excerpt": "Enable inventory synchronization in the connector settings.",
+                    "source_id": "kb-inventory",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f3"
+                ],
+                "id": "sync",
+                "instructions": "Review connector settings.",
+                "requires": [
+                  "verify"
+                ],
+                "research_query": "Inventory synchronization Review connector settings. inventory synchronization Enable inventory synchronization in the connector settings.",
+                "status": "ready",
+                "title": "Inventory synchronization",
+                "topic": "inventory"
+              },
+              {
+                "faq_citations": [],
+                "feedback_ids": [
+                  "f4"
+                ],
+                "id": "future-step",
+                "instructions": "Wait for documented support.",
+                "requires": [],
+                "research_query": "Teleportation Wait for documented support. teleportation",
+                "status": "needs_answer",
+                "title": "Teleportation",
+                "topic": "future"
+              }
+            ]
+          },
+          "input_stage": "faq",
+          "schema_version": 1,
+          "stage": "guided",
+          "status": "ok"
+        },
+        {
+          "data": {
+            "findings": [
+              {
+                "citations": [
+                  {
+                    "end": 40,
+                    "excerpt": "Account verification confirms ownership.",
+                    "source_id": "research-account",
+                    "start": 0
+                  }
+                ],
+                "faq_citations": [
+                  {
+                    "end": 58,
+                    "excerpt": "Complete account verification using the confirmation link.",
+                    "source_id": "kb-account",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "finding": "Account verification confirms ownership.",
+                "id": "verify",
+                "status": "answered"
+              },
+              {
+                "citations": [
+                  {
+                    "end": 67,
+                    "excerpt": "Inventory synchronization updates stock through connector settings.",
+                    "source_id": "research-inventory",
+                    "start": 0
+                  }
+                ],
+                "faq_citations": [
+                  {
+                    "end": 59,
+                    "excerpt": "Enable inventory synchronization in the connector settings.",
+                    "source_id": "kb-inventory",
+                    "start": 0
+                  }
+                ],
+                "feedback_ids": [
+                  "f3"
+                ],
+                "finding": "Inventory synchronization updates stock through connector settings.",
+                "id": "sync",
+                "status": "answered"
+              }
+            ]
+          },
+          "input_stage": "guided",
+          "schema_version": 1,
+          "stage": "normal",
+          "status": "ok"
+        }
+      ],
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t119_combo4_feedback_faq_guided_normal",
+    "artifact_sha256": {
+      "implementation.py": "f7dc81c64b409bc5596c1067299f1d9a4d758e20ecdae4c2a0f71541bc5dbfcb",
+      "test_implementation.py": "aa48ea3160c936ec132c8e367077889628bd8cc6f05911a379dfb73173ec1482",
+      "example_input.json": "18db428ab8ce3d45ab44f563d519926569b82c435d46a063bb5fb0e49fc8738c",
+      "build_manifest.json": "a299a95a63ad02995b5117bb0777dd97425928371ccd1baab3cae326c10acbb8"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

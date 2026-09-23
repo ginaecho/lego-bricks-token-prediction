@@ -1,0 +1,149 @@
+{
+  "build_id": "wave2_t085_combo4_journey_adaptive_triage_sentiment",
+  "composition_label": "Journey recommendations -> Adaptive onboarding -> Ticket triage & routing -> Sentiment & prioritization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Authored from scratch inside the isolated build directory; no other builds or repository files inspected.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false,
+    "instruction_required_artifact": "docs\\My_prompt.txt is an additional prompt log required by an inherited repository instruction; it is not a runtime dependency or one of the four requested deliverables."
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py",
+    "working_directory": "Run both commands from this build directory.",
+    "success": "CLI emits exactly one JSON object to stdout and exits 0.",
+    "errors": "Argument, file, decoding, JSON, schema and infeasible-plan errors emit one JSON object with status error and exit 2."
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "required_exact_keys": [
+        "schema_version",
+        "fixture",
+        "profile",
+        "actions",
+        "tickets",
+        "config"
+      ],
+      "schema_version": "Integer 1; booleans are not integers.",
+      "fixture": "Must equal synthetic.",
+      "profile": {
+        "id": "Nonempty synthetic identifier.",
+        "experience": "beginner | intermediate | expert",
+        "preference": "text | video | hands_on",
+        "interests": "Unique, case-sensitive interest strings matched to action tags.",
+        "completed": "Unique known action IDs; all prerequisites of completed actions must also be completed."
+      },
+      "actions": "At most 200 objects with exact keys id, title, prerequisites, tags, support_category. IDs are unique; prerequisite references are known and acyclic; support_category identifies a configured route.",
+      "tickets": "At most 1000 objects with exact keys id, text, severity, action_id, blocked. IDs are unique; text is nonblank and at most 10000 characters; action_id is null or a known action ID; blocked is boolean; severity is low, medium, high or critical.",
+      "config": {
+        "routes": "1..100 category keys mapped to owner, queue and integer base_priority (1..4). Owner and queue must be nonblank.",
+        "rules": "At most 100 ordered objects with category and nonempty keywords list. First matching rule wins; each category must have a route.",
+        "default_category": "Known route used when neither a keyword rule nor a planned onboarding step provides a category.",
+        "sentiment_lexicon": "At most 200 lowercase single-word keys with integer weights from -5 to 5; an empty lexicon yields neutral sentiment."
+      }
+    },
+    "output": {
+      "envelope": "Validated input fields are preserved, with status=ok and stages appended. Each stage extends the same envelope rather than emitting unrelated standalone output.",
+      "stages": {
+        "journey": "profile_id, planning_only, next_actions, exactly two ordered steps.",
+        "adaptive": "profile_id, planning_only, experience, prerequisite-aware ordered guidance steps.",
+        "triage": "profile_id and ticket results carrying routing ownership, context, severity and priority.",
+        "sentiment": "Ranked issues, scoring explanation and ordering formula."
+      },
+      "error": "A separate minimal error envelope contains status=error and an explanatory error string."
+    },
+    "validation": "One shared validate(state, completed_stages) function checks the base schema and every existing stage at each boundary. Canonical recomputation of bounded pure stage outputs rejects invalid prerequisites, altered routes, wrong types, stale profile adaptation and tampered scores. Unknown schema fields, duplicate JSON object keys and non-finite JSON constants are rejected.",
+    "api": "run_pipeline(payload) returns a deep-copied final envelope without mutating input. advance(state, stage) accepts only the exact validated predecessor stage set and returns a new validated envelope."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "journey",
+      "to": "adaptive",
+      "data": "Validated action IDs, step ordering, prerequisite lists, assumed prior completions, profile identity and planning-only flag."
+    },
+    {
+      "from": "adaptive",
+      "to": "triage",
+      "data": "Validated planned action context determines fallback support category, guidance and preference format. A blocked ticket linked to a planned step receives a one-level priority boost."
+    },
+    {
+      "from": "triage",
+      "to": "sentiment",
+      "data": "Validated ticket text, category, owner, queue, action, onboarding step, severity and triage priority are consumed directly; accountable ownership is preserved in final issue rankings."
+    }
+  ],
+  "behavior": {
+    "journey": "Ready actions exclude completed or prerequisite-locked actions and are ranked by descending interest overlap then action ID. Select the highest-ranked feasible first action and the highest-ranked second action available after simulated completion. A complete two-step plan is mandatory; fewer than two remaining feasible actions is an explicit validation error.",
+    "planning_semantics": "Journey and onboarding are plans, not execution receipts. Earlier planned actions are assumed complete only for validating later steps. The profile's actual completed actions are never changed.",
+    "adaptive": "Beginner guidance uses detailed checkpoints, intermediate guidance a guided checklist, and expert guidance a quick-start checklist. The preferred format selects textual instructions describing reading, demonstration or synthetic practice. Prerequisites remain mandatory for every experience level, with explicit explanations.",
+    "triage": "Casefolded whole-word or contiguous phrase keyword matching uses configurable rule order. Punctuation separates words. Keyword routes override planned onboarding context; otherwise use that context or the accountable default route. Priority 1 is highest: take min(route base priority, severity priority), then subtract one for blocked planned steps with a floor of 1.",
+    "sentiment": "Casefolded word weights are summed and every contribution, word index and negation is exposed. An immediately preceding not, never or no reverses a word's weight. Score below zero is negative, above zero positive, otherwise neutral. Scores <= -3 raise priority to at least P2 but never downgrade a more urgent ticket.",
+    "prioritization": "Urgency = (5 - final priority) * 100 + (5 - severity priority) * 10 + min(5, max(0, -sentiment score)). Sort descending urgency, then ticket ID; ranks start at 1. Severity breaks within-priority ties before bounded negativity. Positive sentiment cannot lower triage priority.",
+    "determinism": "No clocks, random numbers, live providers or asynchronous workers are used in the pipeline. Identical validated inputs produce identical outputs.",
+    "synthetic_example": "The example chooses payout then listing, gives a blocked payout ticket billing ownership, and keeps a positively worded critical service outage at P1."
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI and versioned envelope",
+      "Prerequisite-aware personalized two-step planning",
+      "Experience/preference-aware onboarding explanations",
+      "Configurable categories, rule precedence, priorities and accountable routes",
+      "Transparent lexical sentiment and severity-aware final rankings",
+      "Shared structural and semantic validation at all handoff boundaries",
+      "Synthetic fixtures and standard-library unittest coverage",
+      "Deterministic success and JSON error CLI contracts"
+    ],
+    "excluded": [
+      "Live model providers or optional model hooks",
+      "Enterprise deployment, authentication, persistence and ticket-system integrations",
+      "Real user data, actual journey execution or completion updates",
+      "Actual video assets and interactive onboarding UI",
+      "Learned sentiment, sarcasm interpretation, multilingual semantics and extended negation scope",
+      "Production capacity claims, evaluation claims or general-purpose recommendation optimization"
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 45,
+      "passed": 45,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "verified": true,
+      "coverage": [
+        "Every pipeline stage and full cross-stage propagation",
+        "All supported experience and preference variants",
+        "Prerequisites, cycles, completed history and impossible journeys",
+        "Configured routing, ownership, precedence and severity priorities",
+        "Transparent sentiment contributions, negation, repetition and ranking",
+        "Empty tickets, empty lexicon, deterministic ties and input immutability",
+        "Tampered predecessor/output rejection",
+        "Invalid input schemas, duplicate IDs, unknown references and strict types",
+        "Real subprocess CLI success, argument errors, missing files, directory input and malformed JSON",
+        "Mocked file fixtures for invalid schemas, duplicate JSON keys, non-finite numbers and invalid UTF-8"
+      ]
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "status": "ok",
+      "stdout_json_objects": 1,
+      "journey_steps": 2,
+      "completed_pipeline_stages": 4,
+      "ranked_issues": 3,
+      "verified": true
+    }
+  }
+}

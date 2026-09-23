@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC marketplace fixtures; all products, comments and evidence are invented",
+  "synthetic": true,
+  "interests": {
+    "preferences": [
+      {"topic": "battery", "weight": 3},
+      {"topic": "outdoors", "weight": 2},
+      {"topic": "portable", "weight": 1}
+    ],
+    "excluded_product_ids": ["p-blocked"],
+    "excluded_topics": ["fragile"],
+    "limit": 3
+  },
+  "catalog": [
+    {"id": "p-trail", "name": "Synthetic Trail Lamp", "topics": ["battery", "outdoors", "portable"], "description": "Synthetic portable battery lamp intended for outdoor use."},
+    {"id": "p-desk", "name": "Synthetic Desk Lamp", "topics": ["battery", "portable"], "description": "Synthetic compact battery lamp intended for desks."},
+    {"id": "p-blocked", "name": "Synthetic Excluded Lamp", "topics": ["battery", "outdoors", "portable"], "description": "Synthetic lamp excluded explicitly by product ID."},
+    {"id": "p-glass", "name": "Synthetic Glass Lamp", "topics": ["battery", "fragile"], "description": "Synthetic fragile glass lamp excluded by topic."},
+    {"id": "p-book", "name": "Synthetic Book", "topics": ["reading"], "description": "Synthetic book with no matching interest."}
+  ],
+  "faq": {
+    "questions": [
+      {"id": "q-trail-runtime", "product_id": "p-trail", "text": "What is the battery runtime?"},
+      {"id": "q-trail-water", "product_id": "p-trail", "text": "What is the waterproof depth?"},
+      {"id": "q-desk-return", "product_id": "p-desk", "text": "What is the return policy?"},
+      {"id": "q-blocked", "product_id": "p-blocked", "text": "What is the battery runtime?"}
+    ],
+    "documents": [
+      {"id": "kb-trail", "product_ids": ["p-trail"], "text": "Synthetic specification: battery runtime is eight hours per charge under a low-brightness bench test."},
+      {"id": "kb-return", "product_ids": ["p-desk"], "text": "Synthetic return policy: unopened desk lamps may be returned within thirty days."},
+      {"id": "kb-blocked", "product_ids": ["p-blocked"], "text": "Synthetic specification: battery runtime is twelve hours per charge."}
+    ]
+  },
+  "feedback": [
+    {"id": "f1", "question_id": "q-trail-runtime", "text": "Battery charge is short; controls are confusing."},
+    {"id": "f2", "question_id": "q-trail-runtime", "text": "  BATTERY charge is short, controls are confusing!  "},
+    {"id": "f3", "question_id": "q-trail-water", "text": "The casing cracked; support could not explain waterproofing."},
+    {"id": "f4", "question_id": "q-desk-return", "text": "The return service was easy, but the price is expensive."},
+    {"id": "f5", "question_id": "q-blocked", "text": "Battery power is excellent."}
+  ],
+  "research": {
+    "documents": [
+      {
+        "id": "research-bench",
+        "product_ids": ["p-trail"],
+        "text": "Synthetic bench test: the Trail battery met full-day needs at low brightness. Synthetic controls test: setup required assistance.",
+        "claims": [
+          {"theme": "battery", "claim_key": "full-day-endurance", "statement": "Trail battery endurance meets full-day needs.", "position": "supports", "excerpt": "Synthetic bench test: the Trail battery met full-day needs at low brightness."},
+          {"theme": "usability", "claim_key": "independent-setup", "statement": "Trail setup can be completed without assistance.", "position": "opposes", "excerpt": "Synthetic controls test: setup required assistance."}
+        ]
+      },
+      {
+        "id": "research-field",
+        "product_ids": ["p-trail"],
+        "text": "Synthetic field test: the Trail battery did not meet full-day needs at high brightness. Synthetic casing study: durability remains uncertain after one drop test.",
+        "claims": [
+          {"theme": "battery", "claim_key": "full-day-endurance", "statement": "Trail battery endurance meets full-day needs.", "position": "opposes", "excerpt": "Synthetic field test: the Trail battery did not meet full-day needs at high brightness."},
+          {"theme": "durability", "claim_key": "casing-survival", "statement": "Trail casing survives repeated drops.", "position": "uncertain", "excerpt": "Synthetic casing study: durability remains uncertain after one drop test."}
+        ]
+      },
+      {
+        "id": "research-desk",
+        "product_ids": ["p-desk"],
+        "text": "Synthetic service audit: the desk lamp return process was easy to complete.",
+        "claims": [
+          {"theme": "support", "claim_key": "desk-returns", "statement": "Desk lamp returns are easy to complete.", "position": "supports", "excerpt": "Synthetic service audit: the desk lamp return process was easy to complete."}
+        ]
+      },
+      {
+        "id": "research-blocked",
+        "product_ids": ["p-blocked"],
+        "text": "Synthetic excluded product report: battery endurance was adequate.",
+        "claims": [
+          {"theme": "battery", "claim_key": "blocked-endurance", "statement": "Excluded lamp endurance is adequate.", "position": "supports", "excerpt": "Synthetic excluded product report: battery endurance was adequate."}
+        ]
+      }
+    ]
+  }
+}

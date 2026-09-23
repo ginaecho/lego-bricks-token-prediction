@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "requirements": [
+    {
+      "id": "returns",
+      "description": "Synthetic return-window evidence",
+      "required_phrases": ["returns", "30 days"],
+      "evidence_ids": ["policy-1"]
+    },
+    {
+      "id": "refunds",
+      "description": "Synthetic refund-timing evidence",
+      "required_phrases": ["refund", "5 business days"],
+      "evidence_ids": ["policy-2"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "policy-1",
+      "source": "synthetic-shop-policy",
+      "locator": "section 1",
+      "text": "Synthetic shop accepts returns within 30 days of delivery."
+    },
+    {
+      "id": "policy-2",
+      "source": "synthetic-shop-policy",
+      "locator": "section 2",
+      "text": "Synthetic shop refund timing has not been documented."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q-return",
+      "text": "What is the returns window?",
+      "requirement_ids": ["returns"]
+    },
+    {
+      "id": "q-refund",
+      "text": "How long does a refund take?",
+      "requirement_ids": ["refunds"]
+    },
+    {
+      "id": "q-unknown",
+      "text": "Can you provide a tracking number?",
+      "requirement_ids": ["returns"]
+    }
+  ]
+}

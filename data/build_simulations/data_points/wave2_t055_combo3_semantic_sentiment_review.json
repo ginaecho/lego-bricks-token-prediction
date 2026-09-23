@@ -1,0 +1,609 @@
+{
+  "id": "wave2_t055_combo3_semantic_sentiment_review",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "search",
+      "insights",
+      "documents"
+    ],
+    "basic_functionalities": [
+      "Smart product search",
+      "Customer insights",
+      "Document automation"
+    ],
+    "types": [
+      "semantic",
+      "sentiment",
+      "review"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 0,
+    "has_type_review": 1,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Transparent sentiment scoring and severity-aware issue prioritization.",
+    "Requirement/evidence checking and traceable gaps without certification claims."
+  ],
+  "integration": {
+    "ordered_types": [
+      "semantic",
+      "sentiment",
+      "review"
+    ],
+    "edges": [
+      {
+        "from": "semantic",
+        "to": "sentiment",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "sentiment",
+        "to": "review",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "45e065512fd9e82427758f96ddbe5f5372bebd74aad223029fa8aa85458de5f1",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "3fd53d7137ce8149dcd518fd480d1eddddfce49ef728bb2493abc3f2ed4d86e2",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t055_combo3_semantic_sentiment_review",
+  "membership_point_id": "combo3_semantic_sentiment_review",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "d03f0af4e78f044d3ebce7298066c443b9d21af54c75d048ee6884ca315cf5e0",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 8,
+    "input_tokens": 202232,
+    "output_tokens": 18297,
+    "cache_read_tokens": 181124,
+    "cache_write_tokens": 21084,
+    "total_tokens": 220529,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34347,
+        "agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+        "model": "gpt-6-astra",
+        "input_tokens": 14837,
+        "output_tokens": 471,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 800,
+        "reasoning_tokens": 280,
+        "duration_ms": 9827,
+        "created_at": "2026-09-23T10:11:16.987Z"
+      },
+      {
+        "id": 34350,
+        "agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+        "model": "gpt-6-astra",
+        "input_tokens": 15338,
+        "output_tokens": 986,
+        "cache_read_tokens": 14834,
+        "cache_write_tokens": 501,
+        "reasoning_tokens": 10,
+        "duration_ms": 9171,
+        "created_at": "2026-09-23T10:11:27.153Z"
+      },
+      {
+        "id": 34364,
+        "agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+        "model": "gpt-6-astra",
+        "input_tokens": 16418,
+        "output_tokens": 8045,
+        "cache_read_tokens": 15335,
+        "cache_write_tokens": 1080,
+        "reasoning_tokens": 1552,
+        "duration_ms": 94479,
+        "created_at": "2026-09-23T10:13:01.658Z"
+      },
+      {
+        "id": 34368,
+        "agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+        "model": "gpt-6-astra",
+        "input_tokens": 24630,
+        "output_tokens": 5076,
+        "cache_read_tokens": 16415,
+        "cache_write_tokens": 8212,
+        "reasoning_tokens": 322,
+        "duration_ms": 54025,
+        "created_at": "2026-09-23T10:13:55.739Z"
+      },
+      {
+        "id": 34370,
+        "agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+        "model": "gpt-6-astra",
+        "input_tokens": 29799,
+        "output_tokens": 177,
+        "cache_read_tokens": 24627,
+        "cache_write_tokens": 5169,
+        "reasoning_tokens": 38,
+        "duration_ms": 5467,
+        "created_at": "2026-09-23T10:14:03.438Z"
+      },
+      {
+        "id": 34384,
+        "agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+        "model": "gpt-6-astra",
+        "input_tokens": 31542,
+        "output_tokens": 2913,
+        "cache_read_tokens": 29796,
+        "cache_write_tokens": 1743,
+        "reasoning_tokens": 380,
+        "duration_ms": 44255,
+        "created_at": "2026-09-23T10:14:48.817Z"
+      },
+      {
+        "id": 34387,
+        "agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+        "model": "gpt-6-astra",
+        "input_tokens": 34547,
+        "output_tokens": 535,
+        "cache_read_tokens": 31539,
+        "cache_write_tokens": 3005,
+        "reasoning_tokens": 157,
+        "duration_ms": 7736,
+        "created_at": "2026-09-23T10:14:56.608Z"
+      },
+      {
+        "id": 34388,
+        "agent_id": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+        "model": "gpt-6-astra",
+        "input_tokens": 35121,
+        "output_tokens": 94,
+        "cache_read_tokens": 34544,
+        "cache_write_tokens": 574,
+        "reasoning_tokens": 0,
+        "duration_ms": 2590,
+        "created_at": "2026-09-23T10:15:00.368Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.780035,
+      "observed_cache_profile_estimate_usd": 0.372506,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 9.360420000000001,
+      "observed_cache_profile_estimate_usd": 9.360420000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 1,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 5,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.55,
+    "pseudo_annual_cost_usd": 80000,
+    "pseudo_annual_ai_value_usd": 85000,
+    "pseudo_net_impact_usd": 5000,
+    "pseudo_roi_pct": 6.25,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................................\n----------------------------------------------------------------------\nRan 36 tests in 0.876s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "documents": [
+          {
+            "id": "doc-1",
+            "product_id": "fan-1",
+            "text": "Battery safety: stop use if the housing becomes hot. Keep air vents clear.",
+            "title": "Synthetic desk fan manual"
+          },
+          {
+            "id": "doc-2",
+            "product_id": "fan-2",
+            "text": "Stand assembly: slide the stand into the base before use.",
+            "title": "Synthetic travel fan guide"
+          },
+          {
+            "id": "doc-3",
+            "product_id": "mug-1",
+            "text": "Ceramic handling: wash gently. Recall procedure: contact the fictional seller.",
+            "title": "Synthetic cup leaflet"
+          }
+        ],
+        "feedback": [
+          {
+            "id": "fb-1",
+            "product_id": "fan-1",
+            "severity": "critical",
+            "text": "The fan is good, but the battery is dangerous and smoke appeared."
+          },
+          {
+            "id": "fb-2",
+            "product_id": "fan-1",
+            "severity": "low",
+            "text": "I love the quiet airflow. Great for my desk."
+          },
+          {
+            "id": "fb-3",
+            "product_id": "fan-2",
+            "severity": "medium",
+            "text": "The stand is broken and delivery was slow."
+          },
+          {
+            "id": "fb-4",
+            "product_id": "mug-1",
+            "severity": "high",
+            "text": "A terrible broken cup."
+          }
+        ],
+        "options": {
+          "min_relevance": 0.05,
+          "top_k": 2
+        },
+        "products": [
+          {
+            "description": "Battery fan with quiet airflow for a desk.",
+            "id": "fan-1",
+            "name": "Quiet wireless fan"
+          },
+          {
+            "description": "Cordless portable fan with a compact stand.",
+            "id": "fan-2",
+            "name": "Travel fan"
+          },
+          {
+            "description": "Blue cup for coffee and tea.",
+            "id": "mug-1",
+            "name": "Ceramic mug"
+          }
+        ],
+        "query": "silent cordless fan",
+        "requirements": [
+          {
+            "description": "Locate battery safety and recall instructions.",
+            "id": "req-1",
+            "product_id": "fan-1",
+            "required_terms": [
+              "battery safety",
+              "recall procedure"
+            ]
+          },
+          {
+            "description": "Locate the stand assembly instructions.",
+            "id": "req-2",
+            "product_id": "fan-2",
+            "required_terms": [
+              "stand assembly"
+            ]
+          },
+          {
+            "description": "Locate ceramic handling instructions.",
+            "id": "req-3",
+            "product_id": "mug-1",
+            "required_terms": [
+              "ceramic handling"
+            ]
+          }
+        ]
+      },
+      "fixture_label": "SYNTHETIC: invented marketplace products, feedback, and documents",
+      "results": {
+        "review": {
+          "checks": [
+            {
+              "evidence": [
+                {
+                  "document_id": "doc-1",
+                  "end": 14,
+                  "quote": "Battery safety",
+                  "start": 0,
+                  "term": "battery safety"
+                }
+              ],
+              "feedback_ids": [
+                "fb-1",
+                "fb-2"
+              ],
+              "missing_terms": [
+                "recall procedure"
+              ],
+              "priority": "critical",
+              "priority_score": 113,
+              "product_id": "fan-1",
+              "requirement_id": "req-1",
+              "status": "gap"
+            },
+            {
+              "evidence": [
+                {
+                  "document_id": "doc-2",
+                  "end": 14,
+                  "quote": "Stand assembly",
+                  "start": 0,
+                  "term": "stand assembly"
+                }
+              ],
+              "feedback_ids": [
+                "fb-3"
+              ],
+              "missing_terms": [],
+              "priority": "medium",
+              "priority_score": 60,
+              "product_id": "fan-2",
+              "requirement_id": "req-2",
+              "status": "evidence_found"
+            }
+          ],
+          "disclaimer": "Reference-only textual requirement/evidence check; evidence_found means required phrases were located, not that claims are true or requirements are satisfied. This is not certification, compliance approval, or legal advice.",
+          "gaps": [
+            {
+              "feedback_ids": [
+                "fb-1",
+                "fb-2"
+              ],
+              "missing_terms": [
+                "recall procedure"
+              ],
+              "priority": "critical",
+              "priority_score": 113,
+              "product_id": "fan-1",
+              "requirement_id": "req-1"
+            }
+          ],
+          "unreviewed_requirement_ids": [
+            "req-3"
+          ]
+        },
+        "search": {
+          "hits": [
+            {
+              "embedding_score": null,
+              "feedback_ids": [
+                "fb-1",
+                "fb-2"
+              ],
+              "lexical_score": 0.745884,
+              "matched_concepts": [
+                "fan",
+                "quiet",
+                "wireless"
+              ],
+              "product_id": "fan-1",
+              "rank": 1,
+              "score": 0.745884
+            },
+            {
+              "embedding_score": null,
+              "feedback_ids": [
+                "fb-3"
+              ],
+              "lexical_score": 0.416465,
+              "matched_concepts": [
+                "fan",
+                "wireless"
+              ],
+              "product_id": "fan-2",
+              "rank": 2,
+              "score": 0.416465
+            }
+          ],
+          "index_stats": {
+            "concept_count": 20,
+            "product_count": 3
+          },
+          "method": "concept_tfidf"
+        },
+        "sentiment": {
+          "items": [
+            {
+              "cues": [
+                {
+                  "base_weight": 1,
+                  "contribution": 1,
+                  "multiplier": 1,
+                  "position": 3,
+                  "term": "good"
+                },
+                {
+                  "base_weight": -3,
+                  "contribution": -3,
+                  "multiplier": 1,
+                  "position": 9,
+                  "term": "dangerous"
+                },
+                {
+                  "base_weight": -2,
+                  "contribution": -2,
+                  "multiplier": 1,
+                  "position": 11,
+                  "term": "smoke"
+                }
+              ],
+              "feedback_id": "fb-1",
+              "priority": "critical",
+              "priority_score": 113,
+              "product_id": "fan-1",
+              "relevance": 0.745884,
+              "search_rank": 1,
+              "sentiment_label": "negative",
+              "sentiment_score": -0.666667,
+              "severity": "critical"
+            },
+            {
+              "cues": [
+                {
+                  "base_weight": -2,
+                  "contribution": -2,
+                  "multiplier": 1,
+                  "position": 3,
+                  "term": "broken"
+                },
+                {
+                  "base_weight": -1,
+                  "contribution": -1,
+                  "multiplier": 1,
+                  "position": 7,
+                  "term": "slow"
+                }
+              ],
+              "feedback_id": "fb-3",
+              "priority": "medium",
+              "priority_score": 60,
+              "product_id": "fan-2",
+              "relevance": 0.416465,
+              "search_rank": 2,
+              "sentiment_label": "negative",
+              "sentiment_score": -1.0,
+              "severity": "medium"
+            },
+            {
+              "cues": [
+                {
+                  "base_weight": 2,
+                  "contribution": 2,
+                  "multiplier": 1,
+                  "position": 1,
+                  "term": "love"
+                },
+                {
+                  "base_weight": 2,
+                  "contribution": 2,
+                  "multiplier": 1,
+                  "position": 6,
+                  "term": "great"
+                }
+              ],
+              "feedback_id": "fb-2",
+              "priority": "low",
+              "priority_score": 10,
+              "product_id": "fan-1",
+              "relevance": 0.745884,
+              "search_rank": 1,
+              "sentiment_label": "positive",
+              "sentiment_score": 1.0,
+              "severity": "low"
+            }
+          ]
+        }
+      },
+      "schema_version": 1,
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t055_combo3_semantic_sentiment_review",
+    "artifact_sha256": {
+      "implementation.py": "c5637d8ad0071c6b478b382a0f4fd88ee10684cf154d7fa267f4bd978449601f",
+      "test_implementation.py": "1edea2f8b5e678576175dd65f311a214bc37659e330f73a7c566458f1f3efdd0",
+      "example_input.json": "efeee6d8d4fa937699133381a0363ff4bbb80bedb6792becf67115bc61771b31",
+      "build_manifest.json": "cabe2f83f3d21f800a08819da14123ab7b8fc9847fc718cb988522e7a5590a10"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

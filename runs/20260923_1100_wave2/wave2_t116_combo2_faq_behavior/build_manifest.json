@@ -1,0 +1,54 @@
+{
+  "build_id": "wave2_t116_combo2_faq_behavior",
+  "composition_label": "Knowledge-base answers -> Behavioral personalization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated reference implementation with explicitly synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict object: schema_version, fixture_label, now, question, knowledge_base, products, events, limit. Events describe one implicit user.",
+    "products": "Unique id, nonempty name and category, popularity in [0,1].",
+    "knowledge_base": "Unique id, title, verbatim answer and unique product_ids referencing the catalog.",
+    "events": "product_id referencing catalog, kind browse or purchase, timezone-aware ISO at no later than now.",
+    "output": "schema_version, status, fixture_label, faq, behavior. FAQ has status, answer, source_ids, product_ids, confidence, reason. Behavior has cold_start and recommendations with product_id, name, score, components, faq_source_ids.",
+    "validation": "Shared validate function guards input and handoffs, checks exact grounded FAQ result and recomputes expected output; rejects unknown fields, duplicate JSON keys, nonfinite numbers and invalid references."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq",
+      "to": "behavior",
+      "payload": "Validated FAQ status, article source_ids, grounded catalog product_ids",
+      "effect": "Only cited article product_ids receive a 1.0 recommendation boost; recommendation provenance carries the same source_ids. Abstention hands off empty IDs and gives zero boost."
+    }
+  ],
+  "behavior": {
+    "retrieval": "Lowercase ASCII alphanumeric token sets excluding a documented small stopword set; query-token coverage against title plus answer. Best article wins; ties use article id. Minimum coverage 0.5.",
+    "grounding": "Answer copied verbatim from one cited article. Confidence denotes lexical coverage, not calibrated factual certainty. Unsupported queries explicitly abstain.",
+    "ranking": "Per product: 0.1 * popularity + sum(event_weight * 2 ** (-age_days / 30)) + grounded FAQ boost. Browse weight 1; purchase weight 3. Components rounded to 8 decimal places, then summed and rounded. Score descending then product id ascending.",
+    "cold_start": "No events means cold_start true; rank by popularity plus FAQ context. Empty catalog returns empty recommendations.",
+    "history_semantics": "Every supplied event is counted, including repeated events and purchases; recommendations can include previously purchased products.",
+    "errors": "File, JSON, schema and invocation errors yield one JSON object with status error and exit 2; success yields one JSON object and exit 0."
+  },
+  "scope": {
+    "included": ["Integrated deterministic pipeline", "Shared schemas and validation", "Extractive cited FAQ", "Explicit abstention", "Recency-weighted browse and purchase scoring", "Cold start", "CLI and synthetic unittest fixtures"],
+    "excluded": ["Live LLM or optional model callable", "Network access", "Semantic embeddings", "Production storage", "Multi-user identity", "Enterprise operations", "Learned ranking", "Linguistic negation reasoning"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 20,
+    "tests_failed": 0,
+    "cli": "passed: single JSON object, status ok, exit 0",
+    "error_cli": "passed: missing file, malformed JSON, invalid schema and incorrect arguments return status error and exit 2"
+  }
+}

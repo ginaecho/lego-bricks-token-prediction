@@ -1,0 +1,47 @@
+{
+  "build_id": "wave2_t051_combo3_compare_feedback_guided",
+  "composition_label": "Product comparison -> Feedback analysis -> Guided setup",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch within the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict root keys: schema_version=1, synthetic=true, products, preferences, feedback, onboarding. Product attributes require price, weight, battery, each with value/unit. Preferences map metrics to positive weight and min/max direction. Feedback has id/product_id/text. Onboarding has steps and completed_steps; each step has id/title/prerequisites/when_themes.",
+    "handoffs": "Every stage uses {schema_version:1, stage, data}; shared validate() checks both external input and stage outputs. Each consumer checks its predecessor and provenance against the original request.",
+    "output": "{schema_version:1, synthetic:true, status:ok, result:guided-envelope}. Guided embeds validated feedback, which embeds validated comparison. Errors have schema_version, status:error, error and exit code 2."
+  },
+  "cross_stage_handoffs": [
+    "Comparison normalizes attributes and ranks candidates. Its selected_product_id limits feedback analysis to the winner.",
+    "Feedback deduplicates winner reviews, emits themes with original excerpt IDs and all duplicate source IDs. Guided steps activate from these themes and carry traceable supporting excerpt IDs.",
+    "Guided setup transitively includes prerequisites even when their own theme conditions do not match; validates completed prerequisite chains."
+  ],
+  "behavior": {
+    "comparison": "Canonical units USD, g, hours; accepted units USD/cents, g/kg, hours/minutes. All three attributes required. Weighted min-max utility; equal-valued metrics give utility 1. Scores rounded to ten decimals, ties resolved by product ID.",
+    "feedback": "Casefolded Unicode word-token sequence deduplication ignores punctuation and whitespace. Representative is lexicographically first review ID. Original text is preserved. Whole-word English themes battery/setup/value/portability; unmatched reviews use general. Counts are deduplicated review counts, not sentiment scores.",
+    "guided": "Empty when_themes means unconditional; otherwise OR matching. Deterministic topological ordering with ID ties. States completed/available/blocked. Progress is completed/active steps, rounded to two decimals; no active steps means 100 percent.",
+    "errors": "Rejects unknown keys, invalid units, missing attributes, nonfinite or negative values, boolean numbers, duplicate IDs/JSON keys, unknown references, cycles, impossible completion, and tampered handoffs.",
+    "persistence": "Stateless CLI: progress is explicit in completed_steps; returned JSON is the persistent caller-owned result. No files are modified during CLI execution."
+  },
+  "scope": {
+    "included": ["Integrated deterministic pipeline", "Clearly labeled synthetic fixture", "Strict shared validation", "Provenance-preserving feedback excerpts", "Prerequisite-driven progress", "CLI JSON errors", "Standard-library unittest suite"],
+    "excluded": ["Live providers or LLM calls", "Semantic deduplication", "Sentiment inference", "Currency exchange", "Network product search", "Databases", "Authentication", "Enterprise operations", "Automatic progress persistence"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 22,
+    "cli": "passed: exit 0, one valid JSON object, status ok, selected product aurora",
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0
+  }
+}

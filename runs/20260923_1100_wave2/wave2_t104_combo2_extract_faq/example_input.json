@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "document": "SYNTHETIC SUPPORT DOCUMENT — NOT REAL CUSTOMER DATA\nCustomer: Ada Example\nOrder: 104\nQuestion: How can I return unopened bricks?\n",
+  "schema": {
+    "fields": [
+      {"name": "customer", "label": "Customer", "type": "text", "required": true},
+      {"name": "order", "label": "Order", "type": "integer", "required": true},
+      {"name": "question", "label": "Question", "type": "text", "required": true},
+      {"name": "email", "label": "Email", "type": "text", "required": false}
+    ],
+    "question_field": "question"
+  },
+  "knowledge_base": [
+    {
+      "id": "synthetic-returns",
+      "question": "How can I return unopened bricks?",
+      "answer": "{customer}, for order {order}, unopened bricks may be returned within 14 days in this synthetic shop. Contact synthetic support for a return label.",
+      "required_fields": ["customer", "order"]
+    },
+    {
+      "id": "synthetic-delivery",
+      "question": "Where is my delivery tracking code?",
+      "answer": "This synthetic shop sends a tracking code after dispatch.",
+      "required_fields": []
+    }
+  ],
+  "min_overlap": 2
+}

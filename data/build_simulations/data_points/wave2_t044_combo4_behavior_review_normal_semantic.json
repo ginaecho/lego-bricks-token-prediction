@@ -1,0 +1,708 @@
+{
+  "id": "wave2_t044_combo4_behavior_review_normal_semantic",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "documents",
+      "research",
+      "search"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Document automation",
+      "Research",
+      "Smart product search"
+    ],
+    "types": [
+      "behavior",
+      "review",
+      "normal",
+      "semantic"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 1,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 4,
+    "planned_operation_verify": 6,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Recency-weighted browsing/purchase ranking with cold-start handling.",
+    "Requirement/evidence checking and traceable gaps without certification claims.",
+    "Passage retrieval and extractive findings with exact source citations.",
+    "Search index, relevance ranking and optional injected embedding interface."
+  ],
+  "integration": {
+    "ordered_types": [
+      "behavior",
+      "review",
+      "normal",
+      "semantic"
+    ],
+    "edges": [
+      {
+        "from": "behavior",
+        "to": "review",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "review",
+        "to": "normal",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "normal",
+        "to": "semantic",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "dc3cf2fd1a055fcc100f6582f4442a96207af7bfea4749904ce247c254ea5944",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "6a899fc9da242a56e76e2e56a9b82a1ec55b645421d3568955e53249095a9db5",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t044_combo4_behavior_review_normal_semantic",
+  "membership_point_id": "combo4_behavior_review_normal_semantic",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "46be8386c610fe3aec8ba8d2ca29d9614aee8b3e2b2bdba303c60c04cc4568ba",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b74e3594-146e-4d96-b294-0dc1b7029ba9",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 145446,
+    "output_tokens": 13019,
+    "cache_read_tokens": 129282,
+    "cache_write_tokens": 16146,
+    "total_tokens": 158465,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34236,
+        "agent_id": "b74e3594-146e-4d96-b294-0dc1b7029ba9",
+        "model": "gpt-6-astra",
+        "input_tokens": 14862,
+        "output_tokens": 473,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 825,
+        "reasoning_tokens": 281,
+        "duration_ms": 12095,
+        "created_at": "2026-09-23T10:00:59.851Z"
+      },
+      {
+        "id": 34258,
+        "agent_id": "b74e3594-146e-4d96-b294-0dc1b7029ba9",
+        "model": "gpt-6-astra",
+        "input_tokens": 15366,
+        "output_tokens": 10933,
+        "cache_read_tokens": 14859,
+        "cache_write_tokens": 504,
+        "reasoning_tokens": 516,
+        "duration_ms": 174608,
+        "created_at": "2026-09-23T10:03:55.430Z"
+      },
+      {
+        "id": 34262,
+        "agent_id": "b74e3594-146e-4d96-b294-0dc1b7029ba9",
+        "model": "gpt-6-astra",
+        "input_tokens": 26697,
+        "output_tokens": 159,
+        "cache_read_tokens": 15363,
+        "cache_write_tokens": 11331,
+        "reasoning_tokens": 8,
+        "duration_ms": 4910,
+        "created_at": "2026-09-23T10:04:00.421Z"
+      },
+      {
+        "id": 34266,
+        "agent_id": "b74e3594-146e-4d96-b294-0dc1b7029ba9",
+        "model": "gpt-6-astra",
+        "input_tokens": 28503,
+        "output_tokens": 1088,
+        "cache_read_tokens": 26694,
+        "cache_write_tokens": 1806,
+        "reasoning_tokens": 337,
+        "duration_ms": 23100,
+        "created_at": "2026-09-23T10:04:25.919Z"
+      },
+      {
+        "id": 34269,
+        "agent_id": "b74e3594-146e-4d96-b294-0dc1b7029ba9",
+        "model": "gpt-6-astra",
+        "input_tokens": 29835,
+        "output_tokens": 272,
+        "cache_read_tokens": 28500,
+        "cache_write_tokens": 1332,
+        "reasoning_tokens": 0,
+        "duration_ms": 7056,
+        "created_at": "2026-09-23T10:04:33.646Z"
+      },
+      {
+        "id": 34271,
+        "agent_id": "b74e3594-146e-4d96-b294-0dc1b7029ba9",
+        "model": "gpt-6-astra",
+        "input_tokens": 30183,
+        "output_tokens": 94,
+        "cache_read_tokens": 29832,
+        "cache_write_tokens": 348,
+        "reasoning_tokens": 0,
+        "duration_ms": 4267,
+        "created_at": "2026-09-23T10:04:48.174Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5589,
+      "observed_cache_profile_estimate_usd": 0.2680155,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.7068,
+      "observed_cache_profile_estimate_usd": 6.7068,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 5,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 4,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.85,
+    "pseudo_annual_cost_usd": 20000,
+    "pseudo_annual_ai_value_usd": 65000,
+    "pseudo_net_impact_usd": 45000,
+    "pseudo_roi_pct": 225.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".....................................\n----------------------------------------------------------------------\nRan 37 tests in 0.781s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "as_of": "2026-09-23T12:00:00+00:00",
+        "documents": [
+          {
+            "id": "bag-sheet",
+            "product_id": "bag",
+            "text": "  The backpack uses recycled fabric. Waterproof performance is not tested.\nSynthetic example only."
+          },
+          {
+            "id": "coat-sheet",
+            "product_id": "coat",
+            "text": "Waterproof coating is described in this synthetic sheet. No recycled content data is supplied."
+          }
+        ],
+        "events": [
+          {
+            "kind": "purchase",
+            "product_id": "bag",
+            "timestamp": "2026-09-23T12:00:00Z",
+            "user_id": "synthetic-user"
+          },
+          {
+            "kind": "view",
+            "product_id": "coat",
+            "timestamp": "2026-09-16T12:00:00Z",
+            "user_id": "synthetic-user"
+          },
+          {
+            "kind": "purchase",
+            "product_id": "mug",
+            "timestamp": "2026-09-23T12:00:00Z",
+            "user_id": "someone-else"
+          }
+        ],
+        "half_life_days": 7,
+        "products": [
+          {
+            "description": "A recycled hiking backpack.",
+            "id": "bag",
+            "popularity": 10,
+            "title": "Synthetic Trail Backpack"
+          },
+          {
+            "description": "A waterproof coat.",
+            "id": "coat",
+            "popularity": 8,
+            "title": "Synthetic Rain Coat"
+          },
+          {
+            "description": "A steel camping cup.",
+            "id": "mug",
+            "popularity": 12,
+            "title": "Synthetic Camp Mug"
+          }
+        ],
+        "query": "recycled waterproof backpack",
+        "requirements": [
+          {
+            "description": "Locate recycled fabric wording, not verification of a claim.",
+            "id": "material",
+            "keywords": [
+              "recycled",
+              "fabric"
+            ]
+          },
+          {
+            "description": "Locate a waterproof test report reference.",
+            "id": "test-report",
+            "keywords": [
+              "waterproof",
+              "test",
+              "report"
+            ]
+          }
+        ],
+        "top_k": 3,
+        "user_id": "synthetic-user"
+      },
+      "fixture_label": "SYNTHETIC marketplace reference data; not real products or claims",
+      "results": {
+        "behavior": {
+          "cold_start": false,
+          "recommendations": [
+            {
+              "product_id": "bag",
+              "score": 3.0
+            },
+            {
+              "product_id": "coat",
+              "score": 0.5
+            },
+            {
+              "product_id": "mug",
+              "score": 0.0
+            }
+          ]
+        },
+        "normal": {
+          "products": [
+            {
+              "findings": [
+                {
+                  "citation": {
+                    "document_id": "bag-sheet",
+                    "end": 36,
+                    "quote": "The backpack uses recycled fabric.",
+                    "start": 2
+                  },
+                  "relevance": 2.5,
+                  "requirement_ids": [
+                    "material"
+                  ]
+                },
+                {
+                  "citation": {
+                    "document_id": "bag-sheet",
+                    "end": 74,
+                    "quote": "Waterproof performance is not tested.",
+                    "start": 37
+                  },
+                  "relevance": 1.25,
+                  "requirement_ids": []
+                }
+              ],
+              "gaps": [
+                "test-report"
+              ],
+              "product_id": "bag"
+            },
+            {
+              "findings": [
+                {
+                  "citation": {
+                    "document_id": "coat-sheet",
+                    "end": 56,
+                    "quote": "Waterproof coating is described in this synthetic sheet.",
+                    "start": 0
+                  },
+                  "relevance": 1.25,
+                  "requirement_ids": []
+                },
+                {
+                  "citation": {
+                    "document_id": "coat-sheet",
+                    "end": 94,
+                    "quote": "No recycled content data is supplied.",
+                    "start": 57
+                  },
+                  "relevance": 1.25,
+                  "requirement_ids": []
+                }
+              ],
+              "gaps": [
+                "material",
+                "test-report"
+              ],
+              "product_id": "coat"
+            },
+            {
+              "findings": [],
+              "gaps": [
+                "material",
+                "test-report"
+              ],
+              "product_id": "mug"
+            }
+          ]
+        },
+        "review": {
+          "notice": "Keyword evidence review only; no certification or compliance claim.",
+          "products": [
+            {
+              "checks": [
+                {
+                  "evidence": [
+                    {
+                      "document_id": "bag-sheet",
+                      "end": 36,
+                      "quote": "The backpack uses recycled fabric.",
+                      "start": 2
+                    }
+                  ],
+                  "requirement_id": "material",
+                  "status": "evidence_found"
+                },
+                {
+                  "evidence": [],
+                  "requirement_id": "test-report",
+                  "status": "gap"
+                }
+              ],
+              "document_ids": [
+                "bag-sheet"
+              ],
+              "gaps": [
+                "test-report"
+              ],
+              "product_id": "bag"
+            },
+            {
+              "checks": [
+                {
+                  "evidence": [],
+                  "requirement_id": "material",
+                  "status": "gap"
+                },
+                {
+                  "evidence": [],
+                  "requirement_id": "test-report",
+                  "status": "gap"
+                }
+              ],
+              "document_ids": [
+                "coat-sheet"
+              ],
+              "gaps": [
+                "material",
+                "test-report"
+              ],
+              "product_id": "coat"
+            },
+            {
+              "checks": [
+                {
+                  "evidence": [],
+                  "requirement_id": "material",
+                  "status": "gap"
+                },
+                {
+                  "evidence": [],
+                  "requirement_id": "test-report",
+                  "status": "gap"
+                }
+              ],
+              "document_ids": [],
+              "gaps": [
+                "material",
+                "test-report"
+              ],
+              "product_id": "mug"
+            }
+          ]
+        },
+        "semantic": {
+          "hits": [
+            {
+              "behavior_score": 3.0,
+              "citations": [
+                {
+                  "document_id": "bag-sheet",
+                  "end": 36,
+                  "quote": "The backpack uses recycled fabric.",
+                  "start": 2
+                },
+                {
+                  "document_id": "bag-sheet",
+                  "end": 74,
+                  "quote": "Waterproof performance is not tested.",
+                  "start": 37
+                }
+              ],
+              "embedding_score": 0.0,
+              "gaps": [
+                "test-report"
+              ],
+              "lexical_score": 7.021176822527965,
+              "product_id": "bag",
+              "score": 7.021176822527965
+            },
+            {
+              "behavior_score": 0.5,
+              "citations": [
+                {
+                  "document_id": "coat-sheet",
+                  "end": 56,
+                  "quote": "Waterproof coating is described in this synthetic sheet.",
+                  "start": 0
+                },
+                {
+                  "document_id": "coat-sheet",
+                  "end": 94,
+                  "quote": "No recycled content data is supplied.",
+                  "start": 57
+                }
+              ],
+              "embedding_score": 0.0,
+              "gaps": [
+                "material",
+                "test-report"
+              ],
+              "lexical_score": 3.4679173428811008,
+              "product_id": "coat",
+              "score": 3.4679173428811008
+            },
+            {
+              "behavior_score": 0.0,
+              "citations": [],
+              "embedding_score": 0.0,
+              "gaps": [
+                "material",
+                "test-report"
+              ],
+              "lexical_score": 0,
+              "product_id": "mug",
+              "score": 0.0
+            }
+          ],
+          "index": {
+            "a": [
+              "bag",
+              "coat",
+              "mug"
+            ],
+            "backpack": [
+              "bag"
+            ],
+            "camp": [
+              "mug"
+            ],
+            "camping": [
+              "mug"
+            ],
+            "coat": [
+              "coat"
+            ],
+            "coating": [
+              "coat"
+            ],
+            "content": [
+              "coat"
+            ],
+            "cup": [
+              "mug"
+            ],
+            "data": [
+              "coat"
+            ],
+            "described": [
+              "coat"
+            ],
+            "fabric": [
+              "bag"
+            ],
+            "hiking": [
+              "bag"
+            ],
+            "in": [
+              "coat"
+            ],
+            "is": [
+              "bag",
+              "coat"
+            ],
+            "mug": [
+              "mug"
+            ],
+            "no": [
+              "coat"
+            ],
+            "not": [
+              "bag"
+            ],
+            "performance": [
+              "bag"
+            ],
+            "rain": [
+              "coat"
+            ],
+            "recycled": [
+              "bag",
+              "coat"
+            ],
+            "sheet": [
+              "coat"
+            ],
+            "steel": [
+              "mug"
+            ],
+            "supplied": [
+              "coat"
+            ],
+            "synthetic": [
+              "bag",
+              "coat",
+              "mug"
+            ],
+            "tested": [
+              "bag"
+            ],
+            "the": [
+              "bag"
+            ],
+            "this": [
+              "coat"
+            ],
+            "trail": [
+              "bag"
+            ],
+            "uses": [
+              "bag"
+            ],
+            "waterproof": [
+              "bag",
+              "coat"
+            ]
+          },
+          "mode": "lexical"
+        }
+      },
+      "schema_version": 1,
+      "stage": "semantic",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t044_combo4_behavior_review_normal_semantic",
+    "artifact_sha256": {
+      "implementation.py": "c899fc45dcaae631f99864bde919d4ff6e14c82e06b93d96ba837b8ffb1380a1",
+      "test_implementation.py": "5b9e75aa82f60202fbd21918721ec467fb949d905624cd2f37d3c97198d0afde",
+      "example_input.json": "34bcb2839cc75c2e31370132503f3b31087df602caf41610e336a414ac445ccc",
+      "build_manifest.json": "345467748746beba140d55d937694a1d96b32f33ecd2e9bb26cf04ce10b2bb1c"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

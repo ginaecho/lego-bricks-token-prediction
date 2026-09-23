@@ -1,0 +1,89 @@
+{
+  "build_id": "wave2_t078_combo3_triage_normal_adaptive",
+  "composition_label": "Ticket triage & routing -> Normal research -> Adaptive onboarding",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory using clearly labeled synthetic fixtures.",
+    "runtime": "Python 3, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact fields: schema_version, synthetic, ticket, triage_config, corpus, research_config, profile, onboarding_catalog. example_input.json documents the full nested schema.",
+    "output": "One envelope with schema_version, synthetic, status, ticket_id, triage, research, onboarding. Status advances triaged -> researched -> complete; future stages are null. CLI failures emit schema_version, status:error, error and exit 2.",
+    "validation": "The shared Validator checks input at all stage boundaries, exact object fields, routing ownership, priorities, handoff consistency, exact extractive source spans, relevance, prerequisite ordering, profile preferences and citations.",
+    "citation": "document_id, document_title, passage_index (zero-based), start/end (zero-based end-exclusive Unicode character offsets), quote. Findings extract entire passages without rewriting.",
+    "profile": "experience is novice/intermediate/expert; preference is reading/hands_on.",
+    "configuration": "Categories have keyword lists, baseline priority and team/owner routing. Priority rules escalate only. Research max_findings is 1..20. Step catalog declares categories, experience_levels, evidence_keywords, prerequisites and both content formats."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "triage",
+      "to": "normal research",
+      "data": "Validated ticket identity, category, priority, accountable team/owner and ticket/category-derived query terms are preserved. Query terms drive retrieval."
+    },
+    {
+      "from": "normal research",
+      "to": "adaptive onboarding",
+      "data": "Validated category, ownership, findings and exact citations drive category/evidence selection. Selected evidence IDs and source citations are carried into the onboarding plan."
+    }
+  ],
+  "behavior": {
+    "triage": "Case-insensitive Unicode token matching, highest keyword count wins, configuration-order ties, configured default on no matches, most urgent matching priority or category baseline.",
+    "research": "Ranks passages by distinct query-token overlap; zero-overlap passages excluded; ties use document ID then passage index. Returns up to max_findings exact full-passage extracts. Empty evidence is explicit.",
+    "onboarding": "Selects category-compatible, experience-compatible steps supported by evidence keywords or marked as unconditional with an empty keyword list. Includes transitive prerequisites regardless of experience/category filters. Orders prerequisites first with stable catalog ordering and chooses preferred instruction format. Explains evidence, adaptation and prerequisite inclusion; no-evidence and empty plans are explicit.",
+    "optional_classifier": "run_pipeline(data, classifier=None) accepts an optional Python callable receiving defensive copies of ticket and categories. It must return a configured category name; invalid output or exceptions produce ValidationError. Tests inject local fixtures only.",
+    "determinism": "Pure deterministic rules, stable tie-breaking, no timestamps or randomness, defensive copies preserve caller data."
+  },
+  "scope": {
+    "included": [
+      "One sequential integrated pipeline and one shared validation boundary",
+      "Configurable categorization, escalation and accountable routing",
+      "In-memory lexical passage retrieval and exact extractive citations",
+      "Evidence-aware experience/preference adaptation and prerequisite closure",
+      "JSON CLI with structured validation and file errors",
+      "Synthetic standard-library unit and subprocess tests"
+    ],
+    "excluded": [
+      "Live models, network calls, external dependencies and external datasets",
+      "Production ticket queues, real refund submission and account operations",
+      "Semantic retrieval, generated synthesis and factual verification of corpus claims",
+      "Persistence, authentication, enterprise deployment and personalization learning"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 34,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status complete",
+      "verified_example": {
+        "category": "billing",
+        "priority": "urgent",
+        "findings": 2,
+        "onboarding_steps": 3
+      },
+      "error_contract": "Tests verify exit 2 and JSON status error for missing files, incorrect arguments, malformed JSON, duplicate JSON keys, invalid schemas, non-finite constants and invalid UTF-8."
+    }
+  }
+}

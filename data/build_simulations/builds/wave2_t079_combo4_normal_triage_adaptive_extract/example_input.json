@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "query": "invoice billing blocked",
+  "documents": [
+    {
+      "id": "synthetic-policy",
+      "text": "Synthetic billing guide: an invoice dispute requires account verification. Billing access blocked means urgent support. Invoice: SYN-1042\nCustomer: Example Person\n"
+    },
+    {
+      "id": "synthetic-onboarding",
+      "text": "Synthetic onboarding form.\nPlan: Starter\nReference: ONBOARD-22\n"
+    },
+    {
+      "id": "synthetic-unrelated",
+      "text": "Synthetic shipping guide: track a parcel using its dispatch reference."
+    }
+  ],
+  "tickets": [
+    {
+      "id": "synthetic-ticket-1",
+      "title": "Please help me get started",
+      "description": "The linked guide describes my problem.",
+      "document_ids": ["synthetic-policy"]
+    }
+  ],
+  "profile": {"experience": "beginner", "preference": "interactive"},
+  "policy": {
+    "research_limit": 8,
+    "categories": [
+      {"id": "billing", "keywords": ["billing", "invoice"], "queue": "accounts", "owner": "synthetic-billing-lead"},
+      {"id": "shipping", "keywords": ["shipping", "parcel"], "queue": "logistics", "owner": "synthetic-shipping-lead"},
+      {"id": "general", "keywords": ["general"], "queue": "helpdesk", "owner": "synthetic-support-lead"}
+    ],
+    "default_category": "general",
+    "priorities": [
+      {"priority": "urgent", "keywords": ["blocked"]},
+      {"priority": "high", "keywords": ["dispute"]}
+    ],
+    "default_priority": "normal"
+  },
+  "onboarding_steps": [
+    {
+      "id": "verify",
+      "title": "Verify the synthetic account",
+      "categories": ["general"],
+      "audiences": ["advanced"],
+      "modes": ["text"],
+      "prerequisites": [],
+      "document_ids": []
+    },
+    {
+      "id": "billing-intro",
+      "title": "Practice the synthetic invoice workflow",
+      "categories": ["billing"],
+      "audiences": ["beginner"],
+      "modes": ["text", "interactive"],
+      "prerequisites": ["verify"],
+      "document_ids": ["synthetic-onboarding"]
+    },
+    {
+      "id": "billing-shortcut",
+      "title": "Use the synthetic billing shortcut",
+      "categories": ["billing"],
+      "audiences": ["intermediate", "advanced"],
+      "modes": ["text", "video"],
+      "prerequisites": [],
+      "document_ids": []
+    }
+  ],
+  "extraction_schema": [
+    {"name": "invoice_id", "pattern": "Invoice:\\s*(?P<value>SYN-\\d+)", "required": true},
+    {"name": "customer", "pattern": "Customer:[ \\t]*(?P<value>[^\\r\\n]+)", "required": true},
+    {"name": "plan", "pattern": "Plan:[ \\t]*(?P<value>[^\\r\\n]+)", "required": true},
+    {"name": "optional_email", "pattern": "Email:[ \\t]*(?P<value>[^\\s]+)", "required": false}
+  ]
+}

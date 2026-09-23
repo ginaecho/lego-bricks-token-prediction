@@ -1,0 +1,60 @@
+{
+  "build_id": "wave2_t005_single_behavior",
+  "composition_label": "Behavioral personalization (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New reference implementation written in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "required": ["user_id", "now", "items", "events"],
+      "optional": {
+        "fixture_label": "Nonempty descriptive string; example is explicitly synthetic",
+        "limit": "Integer 0..1000, default 10; boolean rejected",
+        "half_life_days": "Finite number greater than 0 and at most 3650, default 30",
+        "exclude_purchased": "Boolean, default true"
+      },
+      "items": "Array of objects: unique nonempty id, nonempty title and category, numeric popularity in [0,1]",
+      "events": "Array of objects: nonempty user_id, catalog item_id, type browse|purchase, timezone-aware ISO 8601 timestamp no later than now",
+      "time": "now must be an explicit timezone-aware ISO 8601 timestamp; timestamps normalize to UTC",
+      "validation": "One validate function used by library and CLI; unknown fields, invalid types, duplicate item IDs and dangling event references rejected. CLI also rejects duplicate JSON fields and nonstandard numeric constants. All users' events are validated before filtering."
+    },
+    "success_output": "Object: status=ok, user_id, strategy=behavioral|cold_start, matched_event_count, excluded_purchase_count, recommendations",
+    "recommendation": "Object: item_id, title, category, score, signals={category_affinity,item_affinity,popularity}",
+    "error_output": "Object: status=error, message; CLI exits 2 on validation, JSON or file errors; exits 0 on success"
+  },
+  "cross_stage_handoffs": [
+    "Single behavior only: validated normalized request -> recency-weighted user affinities -> ranked shared JSON response"
+  ],
+  "behavior": {
+    "event_weight": "(3 for purchase, 1 for browse) * 2 ** (-age_days / half_life_days)",
+    "affinity": "Sum weighted events per category and item, divided by total user event weight. Repeat events count as repeat behavior.",
+    "personalized_score": "0.65 * category_affinity + 0.25 * item_affinity + 0.10 * popularity",
+    "cold_start": "No matching positive representable event weight: rank solely by supplied popularity. Empty catalogs return empty recommendations.",
+    "purchases": "Purchased items excluded by default, regardless of age; their events still influence category affinity. Opt out with exclude_purchased=false.",
+    "determinism": "No random values, wall-clock reads, or providers. Sort weight lists before summing; descending unrounded score, then ascending case-sensitive item ID; display scores and affinities rounded to 8 decimals.",
+    "limiting": "Apply limit after eligibility filtering and ranking; zero limit is valid."
+  },
+  "scope": {
+    "included": ["Recency-weighted browsing and purchases", "Category and direct-item personalization", "Popularity cold start", "Optional purchase exclusion", "Shared validation", "Synthetic fixtures", "CLI and unittest coverage"],
+    "excluded": ["Live data ingestion", "Persistence", "Model training", "LLM steps or providers", "Collaborative filtering", "Enterprise deployment", "Authentication", "Automatic popularity calculation"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 12,
+    "failures": 0,
+    "errors": 0,
+    "suite": "12 unittest methods covering normal, edge, invalid input, determinism, decay, cold start and CLI behavior",
+    "cli": "Passed: exit 0, one JSON object, status ok, behavioral strategy, book-b ranked first; invalid/file CLI cases exit 2 with JSON error"
+  }
+}

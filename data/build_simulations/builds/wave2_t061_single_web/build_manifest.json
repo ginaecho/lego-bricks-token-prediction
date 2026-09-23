@@ -1,0 +1,39 @@
+{
+  "build_id": "wave2_t061_single_web",
+  "composition_label": "Web research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation",
+    "runtime": "Python 3.13 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Exact keys: schema_version=1, query nonempty string containing a word, allowlisted_hosts lowercase exact ASCII hostnames, urls HTTPS URL list, fixtures list of {url,title,content_type,body,synthetic:true}. Content type is text/html or text/plain.",
+    "output": "schema_version=1, status=ok, query, synthetic=true, sources, findings, warnings. Sources retain canonical URL, title, normalized text, content type, raw UTF-8 body SHA-256 and retrieval mode. Findings retain source index, URL, title, hash, exact quote, normalized-text character offsets [start,end), and matched query terms.",
+    "error": "schema_version=1, status=error, error message; CLI exit 2.",
+    "validation": "One shared validation module validates input before retrieval and checks evidence provenance before output. Unknown keys, duplicate JSON keys, unsupported schemes, credentials, ports, unallowlisted hosts and mislabeled fixtures are rejected."
+  },
+  "cross_stage_handoffs": ["Validated canonical URLs -> synthetic fixture retrieval -> normalized visible text with body digest -> query-matched evidence with verified offsets"],
+  "behavior": [
+    "Offline retrieval exclusively from clearly labeled synthetic input fixtures; never performs network or provider calls.",
+    "Exact host allowlisting, not suffix matching. HTTPS default port only. Fragments stripped; host case normalized; query preserved. Canonical request duplicates are removed in first-seen order.",
+    "Missing fixtures yield explicit warnings and successful partial results. Empty or unmatched documents yield no findings.",
+    "HTML text extraction suppresses script, style, noscript and template content; whitespace is normalized. It is not a browser renderer.",
+    "Deterministic sentence-like splitting and case-insensitive whole-word query matching. Findings are extractive evidence, not fact verification or generated summaries.",
+    "No LLM step is required. No injected callable is used.",
+    "Bounds: 100 requested URLs, hosts and fixtures; 100000 characters per body; 12 MB input file limit checked after reading."
+  ],
+  "scope": {
+    "included": ["allowlisted URL ingestion", "offline synthetic retrieval", "HTML/plain-text extraction", "deterministic findings", "provenance", "JSON CLI", "unittest coverage"],
+    "excluded": ["live HTTP", "redirects", "browser execution", "real-world factual claims", "ranking by semantic relevance", "LLM calls", "enterprise deployment"]
+  },
+  "test_outcomes": {"status": "passed", "tests_passed": 11, "cli_exit_code": 0, "cli_output_status": "ok"}
+}

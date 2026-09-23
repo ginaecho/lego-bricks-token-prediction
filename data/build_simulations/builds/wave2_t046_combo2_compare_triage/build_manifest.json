@@ -1,0 +1,108 @@
+{
+  "build_id": "wave2_t046_combo2_compare_triage",
+  "composition_label": "Product comparison (Smart product search) -> Ticket triage & routing (AI customer support)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "required": ["schema_version", "fixture_label", "products", "preferences", "tickets", "routing"],
+      "products": "Nonempty array of unique trimmed id, name, attributes, features. price_usd required; other supported attributes optional.",
+      "attributes": {
+        "price_usd": "Nonnegative numeric USD or quantity with USD/$ suffix; minimize",
+        "ram_gb": "Nonnegative numeric GB or GB/MB suffix, 1024 MB per GB; maximize",
+        "storage_gb": "Nonnegative numeric GB or GB/TB suffix, 1024 GB per TB; maximize",
+        "battery_hours": "Nonnegative numeric hours or h/hours/min suffix; maximize",
+        "weight_kg": "Nonnegative numeric kg or kg/g suffix; minimize"
+      },
+      "preferences": "Nonempty weights object of supported attributes with finite positive weights; required_features array; optional nonnegative max_price_usd.",
+      "tickets": "Array, possibly empty, of unique trimmed id and nonempty text; optional product_id must reference input products.",
+      "routing": "Ordered rules with category, keywords, signals, priority, team and owner; fallback requires category, priority, team, owner; priority_keywords requires high and urgent arrays."
+    },
+    "output": {
+      "success": "status=ok, schema_version=1, fixture_label, comparison, triage",
+      "comparison": "Normalized products with score contributions, eligibility, missing fields/features, signals and ranks; ranked IDs; nullable recommended ID; side-by-side rows keyed by product ID.",
+      "triage": "One record per input ticket: ticket_id, category, priority, accountable team and owner, reasons, and comparison_context.",
+      "error": "status=error and error message; process exit 2"
+    },
+    "validation": "Shared require/obj/text/number/strings helpers; reject unknown fields, duplicate JSON keys and IDs, malformed quantities, nonfinite numbers, booleans as numeric values, unsupported units, missing owners and invalid references. Deterministic comparison handoff is recomputed and checked before triage."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "compare",
+      "to": "triage",
+      "payload": ["normalized products", "ranking", "recommended_product_id", "score", "rank", "signals", "missing_features"],
+      "validation": "validate_comparison enforces exact deterministic comparison contract before ticket processing.",
+      "effect": "Explicit product references use that product's comparison signals. Unreferenced tickets use the eligible recommended product. Rule signal matches can categorize and route tickets even without keyword matches; comparison context is copied into each routed result."
+    }
+  ],
+  "behavior": {
+    "normalization": "Unit suffixes and features are case-insensitive; numeric attributes are already in canonical units. No exchange rates or implicit unsupported unit conversion.",
+    "ranking": "Weighted min-max utility over observed values; equal observed values get utility 1; missing weighted attributes get utility 0 and make product ineligible. Eligible products sort first, then descending score, then ascending product ID.",
+    "eligibility": "Within optional price cap, includes every required feature, and has every weighted attribute. No eligible product yields null recommendation, not an unsupported substitute.",
+    "routing": "First ordered rule with any case-insensitive whole-word keyword/phrase or propagated signal match wins. Otherwise explicit fallback applies. Match reasons are retained.",
+    "priority": "Rule/fallback baseline normal/high/urgent; configured text matches may only escalate priority.",
+    "accountability": "Every rule and fallback must include nonempty team and owner.",
+    "null_context": "Unreferenced ticket with no eligible recommendation has null product/rank/score and no comparison signals; text and fallback routing remain active.",
+    "determinism": "No clock, randomness, external services or model calls. Input is not mutated. JSON output has sorted keys.",
+    "fixture": "All supplied products, support owners and tickets are explicitly synthetic."
+  },
+  "scope": {
+    "included": [
+      "Integrated comparison-to-triage pipeline",
+      "Strict shared validation",
+      "Five fixed numeric comparison attributes and feature constraints",
+      "Configurable ranking weights, routing rules and priority keywords",
+      "Accountable deterministic team/owner routing",
+      "CLI JSON success and error contracts",
+      "Standard-library unittest fixtures"
+    ],
+    "excluded": [
+      "Live search, model providers or LLM steps",
+      "Network access, databases and persistent ticket delivery",
+      "Currency conversion and arbitrary attribute ontologies",
+      "Authentication, enterprise deployment and production service guarantees",
+      "Semantic language understanding beyond deterministic keyword rules"
+    ],
+    "administrative_artifact": "docs\\My_prompt.txt records supplied prompts as required by the repository prompt-log instruction; it is additional to the four requested root deliverables."
+  },
+  "test_outcomes": {
+    "unittest": {"tests_run": 17, "failures": 0, "errors": 0, "result": "passed"},
+    "example_cli": {"exit_code": 0, "status": "ok", "stdout_json_objects": 1},
+    "coverage": [
+      "Attribute and unit normalization",
+      "Side-by-side comparison",
+      "Preference ranking and weight changes",
+      "Comparison signal propagation into routing",
+      "Keyword categories, priority escalation and accountable assignment",
+      "Fallback recommendation context",
+      "No eligible products",
+      "Missing attribute penalty",
+      "Single-product and empty-ticket edge cases",
+      "Stable tie breaking",
+      "Invalid numbers, units, structures and references",
+      "Tampered cross-stage handoff rejection",
+      "Rule ordering and whole-word matching",
+      "Determinism and input nonmutation",
+      "Subprocess CLI success, usage and missing-file errors",
+      "Malformed JSON, duplicate keys and invalid schema errors"
+    ]
+  }
+}

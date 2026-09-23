@@ -1,0 +1,117 @@
+{
+  "build_id": "wave2_t033_single_interests",
+  "composition_label": "Interest-based recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New standalone implementation authored in the isolated build directory; no existing source read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "fixture_label": "Required nonblank string starting with synthetic, case-insensitive.",
+      "user": {
+        "interests": "Required object mapping at most 100 normalized tag names to integer weights 1..100; empty is allowed.",
+        "exclusions": {
+          "item_ids": "Required array of at most 1000 case-sensitive item IDs.",
+          "categories": "Required array of at most 100 normalized category names.",
+          "tags": "Required array of at most 100 normalized tags."
+        }
+      },
+      "catalog": "Required array of at most 1000 objects, each with exactly id, title, category, tags. IDs must be unique. Tags is an array of at most 100 strings.",
+      "limit": "Required integer 0..100; booleans are not integers."
+    },
+    "validation": [
+      "validate_input is the shared validation and canonicalization entry point for both Python and CLI callers.",
+      "All object fields are required, with unknown fields rejected.",
+      "Strings must be nonblank and no longer than 200 characters before trimming.",
+      "All strings are trimmed; category and tag names are additionally casefolded. IDs remain case-sensitive.",
+      "Normalized duplicates in arrays, interests and catalog IDs are rejected.",
+      "CLI JSON parsing rejects duplicate keys, non-finite numeric constants, malformed JSON and invalid UTF-8.",
+      "Validation returns a fresh schema and never mutates the supplied input."
+    ],
+    "success_output": {
+      "status": "ok",
+      "fixture_label": "Validated input label.",
+      "recommendations": "Ordered array of rank (one-based), item_id, title, score, matched_interests and explanation.",
+      "matched_interests": "Evidence entries containing tag, weight and source='catalog.tags', sorted by tag.",
+      "audit": "catalog_count, eligible_match_count (before limit), unmatched_count (nonexcluded items without overlap), returned_count and excluded items with field/value reasons."
+    },
+    "error_output": {
+      "status": "error",
+      "error": {"message": "Human-readable validation or file error."}
+    },
+    "cli_contract": "Exactly one JSON object on stdout. Success exit 0; validation, argument, encoding, parsing or file errors exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality only; no external or cross-component handoff.",
+    "Within the functionality, validated canonical input passes through exclusion filtering, weighted preference ranking, evidence-based explanations and JSON output."
+  ],
+  "behavior": [
+    "An ID exclusion, category exclusion or any tag exclusion vetoes an item regardless of preference score.",
+    "Only exact normalized tag intersections earn points; categories do not earn points.",
+    "Score is the sum of matched user weights. Nonmatching eligible items are not recommended.",
+    "Sort by descending score, then ascending case-sensitive item ID; apply limit only after filtering and ranking.",
+    "All exclusion reasons are retained. Excluded audit entries sort by ID.",
+    "Explanations state only matching catalog tags, supplied weights and the computed total; no generated product claims.",
+    "Empty catalogs, empty interests, zero limits and all-excluded catalogs return successful empty recommendations.",
+    "No fallback popularity ranking, randomness, implicit preferences or live LLM step."
+  ],
+  "scope": {
+    "included": [
+      "Deterministic bounded in-memory reference implementation",
+      "Explicit user interest weighting",
+      "Hard item, category and tag exclusions",
+      "Grounded structured evidence and human-readable explanations",
+      "Clearly labeled synthetic marketplace fixtures",
+      "Python API and UTF-8 JSON file CLI",
+      "Standard-library unittest suite"
+    ],
+    "excluded": [
+      "Enterprise production delivery",
+      "Providers, network calls and LLM integration",
+      "Collaborative filtering and learned semantic similarity",
+      "Persistent profiles, inventory fetching and behavioral tracking",
+      "Authentication, serving infrastructure and concurrent processing"
+    ]
+  },
+  "test_outcomes": {
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 14,
+    "result": "passed",
+    "exit_code": 0,
+    "coverage": [
+      "Normal ranking and explicit scores",
+      "All three exclusion dimensions and veto precedence",
+      "Exact evidence-grounded explanations",
+      "Deterministic ties and catalog permutation",
+      "Canonicalization without input mutation",
+      "Empty interests, empty catalog and zero limit",
+      "All items excluded",
+      "Invalid schema, types, bounds, duplicates and exclusions",
+      "Real subprocess CLI success, missing file and argument failures",
+      "Fixture-injected malformed JSON, duplicate keys, non-finite numbers and invalid UTF-8"
+    ],
+    "example_cli": {
+      "result": "passed",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "recommended_item_ids": ["planter", "seed-kit", "craft-kit"],
+      "scores": [8, 5, 2],
+      "excluded_count": 3
+    }
+  }
+}

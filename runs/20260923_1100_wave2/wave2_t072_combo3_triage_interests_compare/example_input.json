@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "data_label": "synthetic",
+  "ticket": {
+    "id": "SYN-TICKET-001",
+    "subject": "Replacement headphones for travel",
+    "body": "My headphones are broken. I need an urgent replacement for travel."
+  },
+  "triage_policy": {
+    "categories": [
+      {
+        "id": "audio",
+        "keywords": ["headphones", "earbuds"],
+        "route": {"team": "Synthetic Audio Support", "owner": "synthetic-audio-oncall"}
+      },
+      {
+        "id": "billing",
+        "keywords": ["refund", "invoice"],
+        "route": {"team": "Synthetic Billing Support", "owner": "synthetic-billing-oncall"}
+      },
+      {
+        "id": "general",
+        "keywords": [],
+        "route": {"team": "Synthetic General Support", "owner": "synthetic-general-oncall"}
+      }
+    ],
+    "fallback_category": "general",
+    "priority_rules": [
+      {"keywords": ["broken"], "priority": "high"},
+      {"keywords": ["urgent"], "priority": "urgent"}
+    ],
+    "default_priority": "normal"
+  },
+  "preferences": {
+    "interests": [
+      {"tag": "travel", "weight": 3},
+      {"tag": "wireless", "weight": 2}
+    ],
+    "exclusions": {"product_ids": ["SYN-P3"], "tags": ["leather"]},
+    "attributes": [
+      {"name": "price", "direction": "min", "weight": 3},
+      {"name": "weight", "direction": "min", "weight": 2},
+      {"name": "battery_life", "direction": "max", "weight": 1}
+    ],
+    "limit": 3
+  },
+  "catalog": [
+    {
+      "id": "SYN-P1",
+      "name": "Synthetic Travel One",
+      "tags": ["travel", "wireless"],
+      "support_categories": ["audio"],
+      "attributes": {
+        "price": {"value": 120, "unit": "USD"},
+        "weight": {"value": 0.2, "unit": "kg"},
+        "battery_life": {"value": 20, "unit": "h"}
+      }
+    },
+    {
+      "id": "SYN-P2",
+      "name": "Synthetic Budget Two",
+      "tags": ["wireless"],
+      "support_categories": ["audio"],
+      "attributes": {
+        "price": {"value": 80, "unit": "USD"},
+        "weight": {"value": 250, "unit": "g"},
+        "battery_life": {"value": 1800, "unit": "min"}
+      }
+    },
+    {
+      "id": "SYN-P3",
+      "name": "Synthetic Excluded Three",
+      "tags": ["travel", "wireless"],
+      "support_categories": ["audio"],
+      "attributes": {"price": {"value": 50, "unit": "USD"}}
+    },
+    {
+      "id": "SYN-P4",
+      "name": "Synthetic Excluded Leather Four",
+      "tags": ["travel", "leather"],
+      "support_categories": ["audio"],
+      "attributes": {"price": {"value": 100, "unit": "USD"}}
+    },
+    {
+      "id": "SYN-P5",
+      "name": "Synthetic Billing Service Five",
+      "tags": ["travel", "wireless"],
+      "support_categories": ["billing"],
+      "attributes": {}
+    }
+  ]
+}

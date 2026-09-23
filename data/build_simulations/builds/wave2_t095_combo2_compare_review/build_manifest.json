@@ -1,0 +1,59 @@
+{
+  "build_id": "wave2_t095_combo2_compare_review",
+  "composition_label": "Product comparison (Smart product search) -> Document review (Document automation)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version=1, synthetic=true, attributes, products, preferences, requirements, documents, evidence; all records have unique IDs except preferences which have unique attribute references",
+    "attributes": "number with canonical unit (mm/cm/m/g/kg/USD/count), or text; product values are {value, optional unit}; missing attributes permitted",
+    "preferences": "numeric attribute, positive finite weight, direction min/max",
+    "requirements": "id, attribute, operator min/max/equals/exists, target winner/all, evidence_required boolean, expected value object except for exists",
+    "documents": "id and nonempty source text",
+    "evidence": "id, requirement_id, product_id, document_id, locator, exact quote, asserted value object",
+    "output": "schema_version, status, synthetic, preserved validated input, comparison, review; errors have schema_version, status=error, message",
+    "validation": "Shared validation rejects unknown fields, duplicate IDs or JSON keys, invalid references, incompatible units, nonfinite numbers, booleans used as numbers and quotes absent from source. Boundary validation recomputes deterministic stage results."
+  },
+  "cross_stage_handoffs": [
+    "compare validates input and emits normalized products, side-by-side values, weighted ranking and winner in a common envelope",
+    "review validates the entire comparison envelope before consuming its normalized attributes, winner and ranks",
+    "final shared boundary validation checks the complete review against comparison output"
+  ],
+  "behavior": {
+    "normalization": "Numeric units convert within dimension; text casefolds and collapses whitespace",
+    "ranking": "Observed min/max utility per numeric preference, weighted average; missing values score zero; constant observed values score one; ties use ascending product ID",
+    "review": "Each targeted requirement checks the normalized product value and structured evidence assertions. Checks include actual, expected, rank, source quotes and traceable gap codes",
+    "numeric_comparison": "Equality and inclusive requirement boundaries use relative and absolute tolerance 1e-9",
+    "gaps": ["missing_attribute", "requirement_not_met", "conflicting_evidence", "missing_supporting_evidence"],
+    "evidence_limit": "Exact quote presence and structured assertion agreement only; does not infer whether prose entails the assertion. Conflicting evidence remains a gap even when other evidence matches.",
+    "cli": "One JSON object on stdout; success exit 0, validation/file/JSON errors exit 2",
+    "synthetic_fixture": true
+  },
+  "scope": {
+    "included": ["Deterministic attribute normalization", "Side-by-side comparison", "Preference ranking", "Integrated requirement checks", "Structured evidence traceability", "Shared validated stage envelopes", "CLI and unittest coverage"],
+    "excluded": ["Certification or compliance claims", "Live search", "Network calls", "LLM providers or callbacks", "Semantic extraction from prose", "PDF parsing", "Currency exchange", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 17,
+    "failures": 0,
+    "errors": 0,
+    "unittest_exit_code": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "example_winner_id": "a",
+    "example_gap_count": 2
+  }
+}

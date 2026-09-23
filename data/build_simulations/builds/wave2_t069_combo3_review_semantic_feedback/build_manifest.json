@@ -1,0 +1,109 @@
+{
+  "build_id": "wave2_t069_combo3_review_semantic_feedback",
+  "composition_label": "Document review -> Semantic search -> Feedback analysis",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory; clearly labeled synthetic fixture data.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1; booleans are rejected.",
+      "synthetic": "Must be true.",
+      "documents": "List of {id, title, text}.",
+      "requirements": "List of {id, description, terms: nonempty string list}.",
+      "query": "{text: nonblank searchable string, limit: integer 1..50}.",
+      "feedback": "List of {id, document_id, text}; document references must resolve.",
+      "themes": "List of {id, terms}; id 'other' is reserved for unmatched feedback."
+    },
+    "output": {
+      "envelope": "{schema_version, status, stage, input, review, semantic, feedback}; later-stage fields are added only after prior-stage validation.",
+      "review": "Notice and per-requirement checks: supported/partial/gap, missing_terms, evidence with document and requirement IDs, verbatim excerpt, and character offsets.",
+      "semantic": "Retrieval mode, evidence search index, and ranked hits with evidence/document/requirement IDs and finite scores.",
+      "feedback": "Deduplicated groups retaining source IDs, document IDs, search evidence IDs, theme IDs, theme-specific verbatim supporting excerpts and character offsets; unique group counts per theme; excluded source IDs; duplicate count.",
+      "error": "{status: error, error: message}; CLI exit code 2."
+    },
+    "validation": [
+      "One shared validation module validates inputs and every stage boundary.",
+      "Objects reject unknown/missing keys; list collections allow at most 500 records, text at most 20000 characters, term lists 1..50 terms.",
+      "IDs are unique within each collection; normalized terms cannot repeat; empty collections are permitted.",
+      "Review and final feedback outputs are checked against deterministic derivations; the semantic index must exactly preserve review evidence.",
+      "Search hits require valid cross-stage references, unique evidence IDs, finite positive scores at most 1, bounded count and deterministic ordering.",
+      "Offsets are zero-based, end-exclusive Python Unicode character indices.",
+      "CLI rejects duplicate JSON keys, nonfinite JSON constants, malformed input, bad encoding, invalid arguments and file access errors."
+    ]
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "review",
+      "to": "semantic",
+      "data": "Validated envelope containing original input and term-matched evidence. Only this evidence is indexed; missing requirements remain traceable but do not invent searchable evidence."
+    },
+    {
+      "from": "semantic",
+      "to": "feedback",
+      "data": "Validated search hits restrict analysis to feedback associated with retrieved documents. Groups retain the hit evidence IDs, original feedback IDs and source excerpts."
+    }
+  ],
+  "behavior": {
+    "review": "Case-insensitive contiguous word-token phrase matching. A requirement is supported when all terms occur across the supplied documents, partial when some occur, and a gap when none occur. Each term/document pair supplies its first occurrence with up to 80 surrounding characters on each side. This does not establish correctness, entailment, certification or compliance.",
+    "search": "Default lexical relevance is the fraction of unique query tokens present in each evidence excerpt plus document title. Positive scores are rounded to eight decimals, sorted descending with evidence-ID tie breaks, then limited. Multiple evidence items from one document can occupy multiple hits.",
+    "optional_embedding": "Python run_pipeline(data, embedder=callable) accepts a local injected batch callable(list[str]) -> list[list[number]]. The first text is the query, followed by indexed texts. Nonempty equal-dimensional finite nonzero vectors are required, at most 4096 dimensions. Hybrid score is the mean of lexical relevance and cosine similarity clipped to [0,1]. Norm computation is scaled for large floats. Empty indexes skip invocation. Callable failures become ValidationError. No provider is configured or contacted; fixtures supply deterministic vectors.",
+    "feedback": "Filter by retrieved document IDs, then deduplicate by case-folded word-token sequence, ignoring punctuation and whitespace. Preserve all relevant original source IDs. Match configured phrase themes; multiple themes are allowed. Theme counts count unique deduplicated groups, not raw source records. Each theme gets supporting excerpts around matching terms; 'other' gets the first 240 characters. No-match searches yield empty feedback groups and list all source IDs as excluded.",
+    "determinism": "No clocks, randomness or live models participate in results. Input is copied, not mutated. An injected callable is responsible for its own determinism.",
+    "cli": "Exactly one JSON object on stdout; exit 0 on success and 2 for validation/file errors. Python API validation errors raise ValidationError."
+  },
+  "scope": {
+    "included": [
+      "One integrated pipeline and shared envelope/validation layer",
+      "Traceable term-level requirements and evidence gaps",
+      "In-memory evidence index and deterministic ranking",
+      "Optional injected embedding interface exercised with local fixtures",
+      "Feedback deduplication, explicit themes and supporting source excerpts",
+      "Synthetic fixtures, executable CLI and unittest coverage"
+    ],
+    "excluded": [
+      "Certification, legal or compliance claims",
+      "LLM entailment or automatic theme generation",
+      "Live providers, networking and third-party dependencies",
+      "Persistent or approximate-nearest-neighbor search infrastructure",
+      "Semantic duplicate detection, sentiment inference or multilingual guarantees",
+      "Production security, throughput guarantees, external document parsing and enterprise deployment"
+    ]
+  },
+  "test_outcomes": {
+    "suite": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 28,
+    "failures": 0,
+    "errors": 0,
+    "result": "passed",
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "coverage": [
+      "Review statuses, exact evidence offsets and word boundaries",
+      "Index provenance, ranking, ties and limit",
+      "Feedback deduplication, themes and late-term supporting excerpts",
+      "Cross-document duplicate provenance and query propagation",
+      "Review gaps, empty collections, no results and empty embedding batches",
+      "Invalid inputs and corrupted stage handoffs",
+      "Injected embedding success, invalid vectors, failures and numerical stability",
+      "CLI success, missing files, arguments, malformed JSON, duplicate JSON keys, nonfinite values, encoding errors",
+      "Repeatability and input immutability"
+    ]
+  }
+}

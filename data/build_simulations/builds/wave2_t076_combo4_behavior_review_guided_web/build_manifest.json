@@ -1,0 +1,100 @@
+{
+  "build_id": "wave2_t076_combo4_behavior_review_guided_web",
+  "composition_label": "Behavioral personalization -> Document review -> Guided setup -> Web research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch within the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict root fields: schema_version=1, synthetic=true, as_of (timezone-aware ISO 8601), candidates, behavior, requirements, documents, onboarding, research. See the fully synthetic example.",
+    "identifiers": "Unique within each collection; references are validated; every requirement is attached to a candidate and at least one setup step.",
+    "output": "Root schema_version, status, synthetic, as_of and stages. Every stage has schema_version, stage, items and summary. Errors contain schema_version, status=error, and error.type/message.",
+    "validation": "Shared Schema class validates all input before work, then validates each stage envelope and its cross-stage references before the next stage consumes it. Rejects unknown/missing fields, invalid references, cycles, duplicate IDs/JSON keys, naive/future timestamps, nonfinite numbers, invalid URLs and inconsistent completion.",
+    "bounds": "CLI input capped at 2000000 bytes; strings capped at 200000 characters; each input/output array capped at 1000 items. Oversized generated output is rejected rather than silently truncated.",
+    "json_output": "Exactly one JSON object on stdout; success exit 0; file/validation errors exit 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "behavior",
+      "to": "review",
+      "payload": "Validated ranking and ordered deduplicated requirement IDs; review preserves this priority and candidate traces."
+    },
+    {
+      "from": "review",
+      "to": "guided",
+      "payload": "Validated evidence states and stable gap IDs; completed steps require covered evidence and completed prerequisites."
+    },
+    {
+      "from": "guided",
+      "to": "web",
+      "payload": "Only validated ready steps with open review gaps become research targets; prerequisite-blocked and completed steps are excluded. Findings retain step, requirement and gap IDs."
+    }
+  ],
+  "behavior": {
+    "ranking": "Sum weight * similarity * 2^(-age_days/half_life_days), browse=1, purchase=3, exact candidate similarity=1, same category=0.25, unrelated category=0. Sum in event-ID order; round to 10 decimals; ties use candidate ID.",
+    "cold_start": "When no positive score remains, use stable candidate-ID ordering; no inferred interests or fabricated events.",
+    "review": "Case-insensitive literal substring checks of explicitly linked documents. At least one document must contain every required term. Evidence includes document IDs, matched and missing terms. No certification claims; negation and semantic truth are not evaluated.",
+    "guided": "Priority-aware topological traversal. Completion flags represent explicit acknowledgments, checked against evidence and prerequisite completion. Output has completed/ready/blocked states and completion fraction. State is supplied in input and returned in output, not stored in a database.",
+    "web": "Exact-host allowlisted HTTPS ingestion and offline retrieval from supplied synthetic snapshots only. Credentials, fragments, unsafe schemes, nondefault ports and control characters are rejected. Canonical host/default-port normalization; no redirects or DNS. Missing snapshots and absent source URLs remain traceable findings.",
+    "provenance": "Canonical source URL, supplied retrieval timestamp, SHA-256 of full UTF-8 snapshot, up to 500-character prefix excerpt, matched/missing terms and source=synthetic_fixture. Hashes provide reproducibility, not independent authenticity.",
+    "research_effect": "Research does not resolve evidence gaps, complete steps or assert factual truth.",
+    "determinism": "Fixed input as_of; no wall clock, random ranking, network or model calls."
+  },
+  "scope": {
+    "included": [
+      "One integrated four-stage validated pipeline",
+      "Synthetic fixture input and offline source snapshots",
+      "Recency weighting and cold-start fallback",
+      "Traceable heuristic evidence gaps",
+      "Prerequisite validation and progress tracking",
+      "Allowlisted URL ingestion and provenance-preserving fixture retrieval",
+      "CLI and standard-library unit/integration tests"
+    ],
+    "excluded": [
+      "Live HTTP retrieval, crawling, redirects or DNS",
+      "LLM/provider calls or injected model steps",
+      "Semantic/legal/compliance verification or certification",
+      "Production personalization, authentication, databases or enterprise deployment",
+      "Persistent onboarding storage outside user-managed input/output",
+      "PDF/OCR/document format parsing"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 40,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "stages_in_execution_order": ["behavior", "review", "guided", "web"],
+      "review_gap_count": 2,
+      "completed_steps": 1,
+      "ready_steps": 1,
+      "blocked_steps": 1,
+      "research_findings": 1
+    }
+  }
+}

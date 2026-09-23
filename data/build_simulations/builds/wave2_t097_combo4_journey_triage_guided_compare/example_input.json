@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "profile": {
+    "interests": [
+      "storage",
+      "value"
+    ],
+    "completed_actions": [
+      "discover"
+    ],
+    "completed_steps": [
+      "account"
+    ]
+  },
+  "actions": [
+    {
+      "id": "discover",
+      "tags": [],
+      "requires": []
+    },
+    {
+      "id": "configure",
+      "tags": [
+        "storage"
+      ],
+      "requires": [
+        "discover"
+      ]
+    },
+    {
+      "id": "evaluate",
+      "tags": [
+        "value"
+      ],
+      "requires": [
+        "configure"
+      ]
+    },
+    {
+      "id": "learn",
+      "tags": [
+        "education"
+      ],
+      "requires": [
+        "discover"
+      ]
+    }
+  ],
+  "ticket": {
+    "text": "Synthetic fixture: cannot configure storage",
+    "impact": "high"
+  },
+  "triage": {
+    "rules": [
+      {
+        "category": "setup",
+        "keywords": [
+          "configure",
+          "setup"
+        ],
+        "priority": "normal",
+        "owner": "synthetic-onboarding-team"
+      },
+      {
+        "category": "billing",
+        "keywords": [
+          "invoice"
+        ],
+        "priority": "high",
+        "owner": "synthetic-billing-team"
+      }
+    ],
+    "default": {
+      "category": "general",
+      "priority": "low",
+      "owner": "synthetic-help-team"
+    },
+    "impact_priorities": {
+      "low": "low",
+      "medium": "normal",
+      "high": "urgent"
+    }
+  },
+  "steps": [
+    {
+      "id": "account",
+      "action_id": "discover",
+      "categories": [
+        "*"
+      ],
+      "requires": []
+    },
+    {
+      "id": "connect",
+      "action_id": "configure",
+      "categories": [
+        "setup"
+      ],
+      "requires": [
+        "account"
+      ]
+    },
+    {
+      "id": "verify",
+      "action_id": "evaluate",
+      "categories": [
+        "setup"
+      ],
+      "requires": [
+        "connect"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "id": "basic",
+      "name": "Synthetic Basic",
+      "attributes": {
+        "price": {
+          "value": 10000,
+          "unit": "cent"
+        },
+        "capacity": {
+          "value": 0.5,
+          "unit": "TB"
+        },
+        "warranty": {
+          "value": 1,
+          "unit": "year"
+        }
+      },
+      "requires_steps": [
+        "account"
+      ]
+    },
+    {
+      "id": "plus",
+      "name": "Synthetic Plus",
+      "attributes": {
+        "price": {
+          "value": 140,
+          "unit": "USD"
+        },
+        "capacity": {
+          "value": 1000,
+          "unit": "GB"
+        },
+        "warranty": {
+          "value": 24,
+          "unit": "month"
+        }
+      },
+      "requires_steps": [
+        "account"
+      ]
+    },
+    {
+      "id": "pro",
+      "name": "Synthetic Pro",
+      "attributes": {
+        "price": {
+          "value": 160,
+          "unit": "USD"
+        },
+        "capacity": {
+          "value": 2,
+          "unit": "TB"
+        },
+        "warranty": {
+          "value": 3,
+          "unit": "year"
+        }
+      },
+      "requires_steps": [
+        "verify"
+      ]
+    }
+  ],
+  "preferences": {
+    "price": {
+      "weight": 0.6,
+      "direction": "min"
+    },
+    "capacity": {
+      "weight": 0.3,
+      "direction": "max"
+    },
+    "warranty": {
+      "weight": 0.1,
+      "direction": "max"
+    }
+  }
+}

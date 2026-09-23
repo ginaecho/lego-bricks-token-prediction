@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC customer and fictional products; no real customer data",
+  "document": "Customer: Demo Person\nOrder: 1042\nQuestion: My battery is broken and unsafe. Can I get a refund?\n",
+  "fields": [
+    {"name": "customer", "pattern": "^Customer: (?P<value>.+)$", "type": "string", "required": true},
+    {"name": "order", "pattern": "^Order: (?P<value>.+)$", "type": "integer", "required": true},
+    {"name": "question", "pattern": "^Question: (?P<value>.+)$", "type": "string", "required": true},
+    {"name": "email", "pattern": "^Email: (?P<value>.+)$", "type": "string", "required": false}
+  ],
+  "question_field": "question",
+  "knowledge_base": [
+    {"id": "kb-refund", "question": "broken unsafe battery refund", "answer": "Synthetic policy: stop using an unsafe device and contact support for a return assessment."},
+    {"id": "kb-delivery", "question": "delivery shipment tracking", "answer": "Synthetic policy: tracking appears on your order page."}
+  ],
+  "retrieval_threshold": 0.5,
+  "products": [
+    {"id": "budget", "name": "Synthetic Budget", "attributes": {"price": {"value": 5000, "unit": "cents"}, "battery": {"value": 120, "unit": "minutes"}, "warranty": {"value": 6, "unit": "months"}}},
+    {"id": "care", "name": "Synthetic Care", "attributes": {"price": {"value": 80, "unit": "USD"}, "battery": {"value": 4, "unit": "hours"}, "warranty": {"value": 2, "unit": "years"}}}
+  ],
+  "preferences": [
+    {"attribute": "price", "direction": "min", "weight": 1},
+    {"attribute": "battery", "direction": "max", "weight": 1}
+  ]
+}

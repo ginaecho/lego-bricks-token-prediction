@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "documents": [
+    {"id": "synthetic-contract", "text": "SYNTHETIC EXAMPLE\nPlan: Starter\nRegion: EU\nOwner: Ada\n"},
+    {"id": "synthetic-support-note", "text": "SYNTHETIC EXAMPLE\nPlan: Enterprise\nRegion: EU\n"}
+  ],
+  "fields": [
+    {"name": "plan", "pattern": "(?m)^Plan: (?P<value>[^\\n]+)$", "required": true},
+    {"name": "region", "pattern": "(?m)^Region: (?P<value>[^\\n]+)$", "required": true},
+    {"name": "owner", "pattern": "(?m)^Owner: (?P<value>[^\\n]+)$", "required": false}
+  ],
+  "steps": [
+    {"id": "region", "title": "Confirm service region", "requires_fields": ["region"], "prerequisites": [], "complete": true},
+    {"id": "plan", "title": "Confirm subscription plan", "requires_fields": ["plan"], "prerequisites": ["region"], "complete": true},
+    {"id": "launch", "title": "Launch synthetic workspace", "requires_fields": ["owner"], "prerequisites": ["plan"], "complete": false}
+  ],
+  "feedback": [
+    {"id": "synthetic-feedback-1", "step_id": "plan", "text": "The broken plan selection is frustrating and not helpful.", "severity": "high"},
+    {"id": "synthetic-feedback-2", "step_id": "region", "text": "The region setup is easy and great.", "severity": "low"},
+    {"id": "synthetic-feedback-3", "step_id": "launch", "text": "Launch is slow.", "severity": "critical"}
+  ]
+}

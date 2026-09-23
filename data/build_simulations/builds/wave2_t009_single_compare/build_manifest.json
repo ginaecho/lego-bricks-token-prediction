@@ -1,0 +1,105 @@
+{
+  "build_id": "wave2_t009_single_compare",
+  "composition_label": "Product comparison (Smart product search): Attribute normalization, side-by-side comparison and preference ranking",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored directly in the isolated build directory; no other build or repository files read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py",
+    "working_directory": "C:\\Users\\tzuchunchen\\.copilot\\session-state\\2a19c1c6-7d0e-4fb8-87e0-3035680cfe71\\files\\marketplace-sales\\runs\\20260923_1100_wave2\\wave2_t009_single_compare"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Required integer 1; booleans rejected.",
+      "fixture_label": "Required nonempty text. Example is explicitly synthetic.",
+      "attributes": "1..30 objects: id, label, type (number/text/boolean); optional unit and aliases list (0..20). Attribute ids and aliases are whitespace-normalized and casefolded, globally unique.",
+      "products": "2..50 objects: unique case-sensitive nonempty id, nonempty name, attributes object. Attribute keys accept declared aliases. Absent or null values are missing. Unknown keys and duplicate canonical values are rejected.",
+      "preferences": "1..30 objects: attribute, mode, positive finite numeric weight; value required for target/equals, prohibited for higher/lower. Each canonical attribute appears at most once. Numeric modes require numeric attributes."
+    },
+    "success_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "fixture_label": "Input fixture label with whitespace normalized",
+      "normalized_products": "Input product order preserved; attributes contain every declared canonical key, canonical scalar values or null.",
+      "comparison": "product_order plus rows in attribute declaration order. Each row includes attribute, label, type, unit or null, and product-id-to-value mapping.",
+      "ranking": "Descending score, then case-sensitive product id; sequential rank, product_id, score and per-preference contributions with attribute/mode/missing/score/weighted_score."
+    },
+    "error_output": {"status": "error", "error": "Human-readable validation or file error"},
+    "validation": "One shared validate function checks structure, rejects unknown fields and normalizes products and preference values before comparison/ranking. JSON loader also rejects duplicate keys and nonfinite constants. Finite overflow checks cover conversions. No third-party validation library.",
+    "cli": "Exactly one input path. UTF-8 JSON input; exactly one JSON output object. Exit 0 on success; exit 2 for file, parsing or validation errors."
+  },
+  "cross_stage_handoffs": [
+    "JSON object -> shared validation -> canonical attribute definitions, normalized product records and normalized preferences",
+    "Normalized product records -> side-by-side attribute rows without additional transformations",
+    "Same normalized product records and preferences -> weighted scoring contributions -> deterministic ranking",
+    "Comparison rows, normalized products and ranking -> one versioned success output"
+  ],
+  "behavior": {
+    "normalization": [
+      "Text values: collapse whitespace and casefold. Boolean values: native booleans or case-insensitive true/false/yes/no strings.",
+      "Numeric values: finite JSON numbers or numeric strings with optional unit suffix; bare values use the attribute's declared unit.",
+      "Supported mass units: g, kg, oz, lb. Length: mm, cm, m, in. Decimal storage: MB, GB, TB (1000-based). Currency: USD only.",
+      "Convert compatible numeric units to declared canonical units. Unit labels are case-insensitive. No currency exchange; incompatible/unknown units rejected. Unitless numeric attributes cannot accept unit suffixes."
+    ],
+    "ranking": [
+      "Missing preference values score zero and keep their preference weight in the denominator.",
+      "Higher/lower: min-max score over nonmissing candidates; equal available values score one.",
+      "Equals: exact equality after shared normalization scores one, mismatch zero.",
+      "Target: score = 1 / (1 + absolute distance / span). Span is candidate maximum minus minimum; when zero or unavailable, use max(abs(target), 1). Arithmetic is scaled to reduce overflow risk.",
+      "Total is the positive-weight average. Weights are scaled by their maximum to avoid summation overflow.",
+      "Aggregate scores are rounded to six decimal places before ordering; equal displayed scores sort by product id. Contribution scores are also rounded to six decimals, so displayed contributions may differ slightly from the displayed aggregate when summed."
+    ],
+    "determinism": "No randomness, clock-dependent results, network access, live providers or LLM step.",
+    "synthetic_example": "Imaginary portable computers Alpha, Beta and Gamma; expected ranking alpha (0.566667), gamma (0.5), beta (0.4)."
+  },
+  "scope": {
+    "included": [
+      "Caller-supplied bounded product candidates",
+      "Declared attribute aliases and typed normalization",
+      "Side-by-side JSON comparison",
+      "Explainable weighted preference ranking",
+      "Shared validation, structured errors and runnable CLI",
+      "Synthetic examples and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "External catalog retrieval or search engine",
+      "Live pricing, currency exchange or tax calculations",
+      "Fuzzy matching and inferred attributes",
+      "LLM or injected provider integration",
+      "Web UI, persistent database and enterprise deployment",
+      "Domain-specific restrictions on negative numeric values"
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {"tests_run": 12, "passed": 12, "failures": 0, "errors": 0, "exit_code": 0},
+    "example_cli": {"exit_code": 0, "stdout_json_objects": 1, "status": "ok", "ranking": ["alpha", "gamma", "beta"]},
+    "coverage": [
+      "Synthetic normal comparison, conversions and expected ranking",
+      "Determinism and input immutability",
+      "All values missing and deterministic ties",
+      "Equal numeric values",
+      "Target preference with unit conversion",
+      "Invalid scalars, unsupported units and nonfinite values",
+      "Invalid schema, aliases, duplicate ids and duplicate canonical attributes",
+      "Invalid preference modes, values and weights",
+      "Very large finite values and weights",
+      "Successful real CLI subprocess",
+      "Missing-file, directory and argument CLI failures",
+      "Malformed JSON, duplicate keys and nonfinite constants using in-memory fixtures"
+    ]
+  }
+}

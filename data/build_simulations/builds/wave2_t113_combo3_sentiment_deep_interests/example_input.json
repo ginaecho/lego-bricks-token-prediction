@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional customer feedback, research and discovery catalog",
+  "feedback": [
+    {"id": "f-delivery", "topic": "delivery", "text": "Delivery was slow and terrible.", "severity": "high"},
+    {"id": "f-safety", "topic": "safety", "text": "Great service, but the latch is unsafe.", "severity": "critical"},
+    {"id": "f-help", "topic": "support", "text": "The guide was not bad and helpful.", "severity": "low"},
+    {"id": "f-delivery-2", "topic": "delivery", "text": "I love the fast tracking updates.", "severity": "medium"}
+  ],
+  "documents": [
+    {
+      "id": "doc-a",
+      "title": "SYNTHETIC internal pilot",
+      "text": "Scheduled dispatch reduces delivery delays. A revised latch improves safety.",
+      "evidence": [
+        {"topic": "delivery", "claim": "Scheduled dispatch reduces delays", "stance": "support", "quote": "Scheduled dispatch reduces delivery delays."},
+        {"topic": "safety", "claim": "A revised latch improves safety", "stance": "support", "quote": "A revised latch improves safety."}
+      ]
+    },
+    {
+      "id": "doc-b",
+      "title": "SYNTHETIC independent follow-up",
+      "text": "Scheduled dispatch did not reduce delivery delays. Safety outcomes of the revised latch remain unclear.",
+      "evidence": [
+        {"topic": "delivery", "claim": "Scheduled dispatch reduces delays", "stance": "refute", "quote": "Scheduled dispatch did not reduce delivery delays."},
+        {"topic": "safety", "claim": "A revised latch improves safety", "stance": "uncertain", "quote": "Safety outcomes of the revised latch remain unclear."}
+      ]
+    }
+  ],
+  "preferences": {
+    "interests": [{"tag": "operations", "weight": 3}, {"tag": "safety", "weight": 4}],
+    "excluded_tags": ["sponsored"],
+    "excluded_item_ids": ["blocked-guide"],
+    "limit": 5
+  },
+  "catalog": [
+    {"id": "dispatch-guide", "title": "SYNTHETIC Dispatch Options Guide", "tags": ["operations"], "topics": ["delivery"]},
+    {"id": "latch-review", "title": "SYNTHETIC Latch Evidence Review", "tags": ["safety"], "topics": ["safety"]},
+    {"id": "sponsored-review", "title": "SYNTHETIC Sponsored Review", "tags": ["safety", "sponsored"], "topics": ["safety"]},
+    {"id": "blocked-guide", "title": "SYNTHETIC Excluded Guide", "tags": ["operations"], "topics": ["delivery"]},
+    {"id": "help-guide", "title": "SYNTHETIC Help Guide", "tags": ["operations"], "topics": ["support"]}
+  ]
+}

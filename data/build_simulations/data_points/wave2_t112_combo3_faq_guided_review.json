@@ -1,0 +1,439 @@
+{
+  "id": "wave2_t112_combo3_faq_guided_review",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "support",
+      "onboard",
+      "documents"
+    ],
+    "basic_functionalities": [
+      "AI customer support",
+      "Guided onboarding",
+      "Document automation"
+    ],
+    "types": [
+      "faq",
+      "guided",
+      "review"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 1,
+    "has_type_guided": 1,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 0,
+    "planned_operation_plan": 3,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Validated prerequisite-driven onboarding steps and progress tracking.",
+    "Requirement/evidence checking and traceable gaps without certification claims."
+  ],
+  "integration": {
+    "ordered_types": [
+      "faq",
+      "guided",
+      "review"
+    ],
+    "edges": [
+      {
+        "from": "faq",
+        "to": "guided",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "guided",
+        "to": "review",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "ca4e5cf762972bed3da862b77e5a72725a3be4147bd53d87d59821b5cc44dc61",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "c9ff6a133a3c01cedd1087d115ab3c259491c5c0ae1927d00e887d1b78215141",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t112_combo3_faq_guided_review",
+  "membership_point_id": "combo3_faq_guided_review",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "a96c3a9c2b53d6ae77da34e3ebc981253372933397c55ddaa08eee78c7d6375b",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b2833881-66fd-42e8-a469-e5f57fdf5859",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 132308,
+    "output_tokens": 10121,
+    "cache_read_tokens": 120257,
+    "cache_write_tokens": 12033,
+    "total_tokens": 142429,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34876,
+        "agent_id": "b2833881-66fd-42e8-a469-e5f57fdf5859",
+        "model": "gpt-6-astra",
+        "input_tokens": 14857,
+        "output_tokens": 686,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 799,
+        "reasoning_tokens": 516,
+        "duration_ms": 21470,
+        "created_at": "2026-09-23T11:12:20.186Z"
+      },
+      {
+        "id": 34897,
+        "agent_id": "b2833881-66fd-42e8-a469-e5f57fdf5859",
+        "model": "gpt-6-astra",
+        "input_tokens": 15569,
+        "output_tokens": 8563,
+        "cache_read_tokens": 14854,
+        "cache_write_tokens": 712,
+        "reasoning_tokens": 516,
+        "duration_ms": 134356,
+        "created_at": "2026-09-23T11:14:37.097Z"
+      },
+      {
+        "id": 34898,
+        "agent_id": "b2833881-66fd-42e8-a469-e5f57fdf5859",
+        "model": "gpt-6-astra",
+        "input_tokens": 24452,
+        "output_tokens": 298,
+        "cache_read_tokens": 15566,
+        "cache_write_tokens": 8883,
+        "reasoning_tokens": 158,
+        "duration_ms": 8011,
+        "created_at": "2026-09-23T11:14:44.870Z"
+      },
+      {
+        "id": 34900,
+        "agent_id": "b2833881-66fd-42e8-a469-e5f57fdf5859",
+        "model": "gpt-6-astra",
+        "input_tokens": 25485,
+        "output_tokens": 277,
+        "cache_read_tokens": 24449,
+        "cache_write_tokens": 1033,
+        "reasoning_tokens": 14,
+        "duration_ms": 5930,
+        "created_at": "2026-09-23T11:14:52.688Z"
+      },
+      {
+        "id": 34901,
+        "agent_id": "b2833881-66fd-42e8-a469-e5f57fdf5859",
+        "model": "gpt-6-astra",
+        "input_tokens": 25854,
+        "output_tokens": 201,
+        "cache_read_tokens": 25482,
+        "cache_write_tokens": 369,
+        "reasoning_tokens": 0,
+        "duration_ms": 4057,
+        "created_at": "2026-09-23T11:14:56.596Z"
+      },
+      {
+        "id": 34904,
+        "agent_id": "b2833881-66fd-42e8-a469-e5f57fdf5859",
+        "model": "gpt-6-astra",
+        "input_tokens": 26091,
+        "output_tokens": 96,
+        "cache_read_tokens": 25851,
+        "cache_write_tokens": 237,
+        "reasoning_tokens": 0,
+        "duration_ms": 3292,
+        "created_at": "2026-09-23T11:15:05.279Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.48258499999999993,
+      "observed_cache_profile_estimate_usd": 0.21200675000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.79102,
+      "observed_cache_profile_estimate_usd": 5.79102,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 5,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 0,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.59,
+    "pseudo_annual_cost_usd": 30000,
+    "pseudo_annual_ai_value_usd": 140000,
+    "pseudo_net_impact_usd": 110000,
+    "pseudo_roi_pct": 366.6666666666667,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..........................\n----------------------------------------------------------------------\nRan 26 tests in 1.001s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "synthetic": true,
+      "status": "needs_attention",
+      "stages": {
+        "faq": {
+          "status": "complete",
+          "article_ids": [
+            "faq_payouts"
+          ],
+          "step_ids": [
+            "configure_payouts"
+          ],
+          "requirement_ids": [
+            "payout_record"
+          ],
+          "data": {
+            "answer": "SYNTHETIC FAQ: Verify the seller account before configuring payouts. Record account verification and a payout schedule in your setup document.",
+            "citations": [
+              {
+                "article_id": "faq_payouts",
+                "quote": "SYNTHETIC FAQ: Verify the seller account before configuring payouts. Record account verification and a payout schedule in your setup document."
+              }
+            ],
+            "reason": null
+          }
+        },
+        "guided": {
+          "status": "complete",
+          "article_ids": [
+            "faq_payouts"
+          ],
+          "step_ids": [
+            "verify_account",
+            "configure_payouts"
+          ],
+          "requirement_ids": [
+            "account_record",
+            "payout_record"
+          ],
+          "data": {
+            "steps": [
+              {
+                "step_id": "verify_account",
+                "title": "SYNTHETIC: Verify seller account",
+                "prerequisites": [],
+                "status": "completed",
+                "blocked_by": [],
+                "requirement_ids": [
+                  "account_record"
+                ]
+              },
+              {
+                "step_id": "configure_payouts",
+                "title": "SYNTHETIC: Configure payout schedule",
+                "prerequisites": [
+                  "verify_account"
+                ],
+                "status": "ready",
+                "blocked_by": [],
+                "requirement_ids": [
+                  "payout_record"
+                ]
+              }
+            ],
+            "progress": {
+              "completed": 1,
+              "total": 2,
+              "fraction": 0.5
+            },
+            "next_step_ids": [
+              "configure_payouts"
+            ]
+          }
+        },
+        "review": {
+          "status": "complete",
+          "article_ids": [
+            "faq_payouts"
+          ],
+          "step_ids": [
+            "verify_account",
+            "configure_payouts"
+          ],
+          "requirement_ids": [
+            "account_record",
+            "payout_record"
+          ],
+          "data": {
+            "checks": [
+              {
+                "requirement_id": "account_record",
+                "description": "SYNTHETIC: Record account verification.",
+                "status": "evidence_match",
+                "step_ids": [
+                  "verify_account"
+                ],
+                "article_ids": [
+                  "faq_payouts"
+                ],
+                "evidence": [
+                  {
+                    "evidence_id": "account_quote",
+                    "document_id": "setup_notes",
+                    "quote": "Account verified.",
+                    "start": 19,
+                    "end": 36,
+                    "missing_terms": []
+                  }
+                ]
+              },
+              {
+                "requirement_id": "payout_record",
+                "description": "SYNTHETIC: Record a weekly payout schedule.",
+                "status": "gap",
+                "step_ids": [
+                  "configure_payouts"
+                ],
+                "article_ids": [
+                  "faq_payouts"
+                ],
+                "evidence": []
+              }
+            ],
+            "gaps": [
+              {
+                "kind": "incomplete_setup",
+                "step_id": "configure_payouts",
+                "blocked_by": [],
+                "article_ids": [
+                  "faq_payouts"
+                ]
+              },
+              {
+                "kind": "missing_evidence",
+                "requirement_id": "payout_record",
+                "step_ids": [
+                  "configure_payouts"
+                ],
+                "article_ids": [
+                  "faq_payouts"
+                ],
+                "evidence_ids": [],
+                "required_terms": [
+                  "payout",
+                  "weekly"
+                ]
+              }
+            ],
+            "disclaimer": "Synthetic reference review only. Evidence matches are not certification, legal advice, or a determination of compliance.",
+            "method": "All required tokens must occur in one exact evidence quote; token matching does not establish semantic truth."
+          }
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t112_combo3_faq_guided_review",
+    "artifact_sha256": {
+      "implementation.py": "aa66659c0e583264fdb631db86872ff076dcfb4b843d63e02484330928be75f7",
+      "test_implementation.py": "6ef16f1401ae483de098aef0327a87294f42383ed1133fe2d8a5b1921fe2bbde",
+      "example_input.json": "d2753faef9b934a5df28d1db8f6f4cb578f388e0a4440a6872c901099953e798",
+      "build_manifest.json": "5c694e99821e56bd6c8942d6fcb5e082068a0f327adb9ce9e55df60dab7dc3c9"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

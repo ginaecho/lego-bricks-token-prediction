@@ -1,0 +1,50 @@
+{
+  "build_id": "wave2_t098_combo2_sentiment_deep",
+  "composition_label": "Sentiment & prioritization -> Deep research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact fields: schema_version, synthetic:true, documents[], issues[]. Documents: id,title,text,claims[]. Claims: canonical lowercase topic, stance(supports/opposes/uncertain), quote verbatim in document text. Issues: id,text,severity(low/medium/high/critical),document_ids[]. IDs and issue references are unique and references must exist. Empty collections are accepted.",
+    "output": "status, schema_version, synthetic, sentiment{schema_version,issues[]}, research{schema_version,findings[]}. Errors: status:error,error:string with exit 2.",
+    "validation": "One validate entry point dispatches input and both intermediate/output schemas. Stage validators replay deterministic transformations against validated source context, checking ordering, provenance, scores and complete evidence. Strict JSON rejects duplicate keys and nonstandard constants."
+  },
+  "cross_stage_handoffs": [
+    "Research receives the validated sentiment envelope, not raw issues. It preserves issue IDs, ranked order, severity, priority, document references, sentiment score and label.",
+    "Research dereferences only documents attached to each prioritized issue. Every extracted evidence quote retains document ID and title."
+  ],
+  "behavior": {
+    "sentiment": "Casefolded whole-word fixed lexicon; contributions expose token, word index, base weight, negation and contribution. not/never/no negate the next sentiment word within three subsequent word tokens, bounded by punctuation. Sum sign determines label. No sarcasm, morphology or contraction inference.",
+    "priority": "Severity base low=0, medium=100, high=200, critical=300 plus min(99,max(0,-sentiment_score)*10). Severity always dominates sentiment. Ties sort by issue ID.",
+    "research": "Aggregate explicitly annotated grounded claims per canonical topic. Counts are distinct document IDs per stance, not claim counts. Both supporting and opposing evidence means disputed; otherwise uncertain evidence means inconclusive; otherwise supported/opposed. Evidence is never majority-voted away.",
+    "unresolved_questions": "Flag conflicts, uncertainty, single-document support, no claims and attached documents missing annotations. Different document IDs are source counts, not a guarantee of independent authorship.",
+    "determinism": "No randomness, time fields, network access, model provider or filesystem writes at runtime. Input objects are not mutated. CLI also accepts '-' for JSON stdin.",
+    "synthetic_fixture": "All example documents, claims and customer issues are synthetic."
+  },
+  "scope": {
+    "included": ["Transparent lexical sentiment", "Severity-aware ranking", "Validated sequential handoff", "Multi-document grounded claim synthesis", "Disagreement and unresolved questions", "JSON CLI and unittest coverage"],
+    "excluded": ["Live search or crawling", "LLM or provider calls", "Automated claim extraction", "Factual verification beyond quote grounding", "Source independence verification", "Enterprise deployment", "Sarcasm and general linguistic understanding"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 20,
+    "tests_passed": 20,
+    "test_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One valid JSON object with status ok, three prioritized issues and three propagated research findings",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_command": "python -B implementation.py example_input.json"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "build_id": "wave2_t067_combo4_extract_deep_guided_sentiment",
+  "composition_label": "Structured extraction -> Deep research -> Guided setup -> Sentiment & prioritization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build; synthetic fixture data",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact keys: schema_version=1, synthetic=true, documents[{id,text}], fields[{name,pattern,required}], steps[{id,title,requires_fields,prerequisites,complete}], feedback[{id,step_id,text,severity}]",
+    "output": "One growing envelope: schema_version, status=ok, stage, input, then extraction, research, onboarding, insights. Error envelope: status=error,error; exit 2.",
+    "validation": "Shared strict input validator and validate_state for every transition. Recomputed deterministic outputs reject tampered provenance or state. Unknown keys, duplicate IDs, duplicate JSON keys, non-finite JSON numbers, wrong types, unknown references, invalid patterns and dependency cycles are rejected.",
+    "limits": "1..100 documents, 1..30 fields, 1..100 steps, 0..100 feedback entries, strings <=20000 characters.",
+    "field_patterns": "Python regular expressions with named capture group value; use inline flags as needed. Every nonblank match is retained.",
+    "offsets": "Zero-based, end-exclusive Python Unicode character offsets into original source document text.",
+    "severity": ["low", "medium", "high", "critical"]
+  },
+  "cross_stage_handoffs": [
+    "extract -> deep: validated per-document field captures with original value, source document, span, and required/optional missing-field flags",
+    "deep -> guided: provenance-bearing normalized claims, consensus/disputed/missing status, usable flag and unresolved questions",
+    "guided -> sentiment: validated prerequisite-driven step states, completion progress, and feedback enriched with its referenced step status"
+  ],
+  "behavior": {
+    "extraction": "Schema-driven regex extraction; empty and unmatched captures count as missing; all other matches retain exact source spans.",
+    "research": "Case-fold and collapse whitespace to group claims across documents, retain all evidence, list unique supporting documents, flag all competing values without majority voting, report missing evidence.",
+    "guided": "Stable topological prerequisite evaluation. A field is usable only with consensus, and required fields must occur in every document. Optional fields may be absent in some documents. Disputed and entirely missing fields cannot satisfy steps. Completion requests cannot bypass blocked prerequisites. Progress counts only completed steps.",
+    "sentiment": "Published English token lexicon with individual contributions; immediate whitespace-separated not/no/never reverses the next lexicon word; summed scores clipped to [-5,5].",
+    "priority": "min(100, severity weight + 3*max(0,-sentiment score) + onboarding weight). Severity low/medium/high/critical=10/30/60/90; blocked/ready/completed=10/5/0. Sort descending priority, descending severity, ascending id.",
+    "determinism": "No clocks, random sources, model calls or network calls; input is not mutated."
+  },
+  "scope": {
+    "included": [
+      "Single integrated CLI and versioned state schema",
+      "Four validated deterministic stages",
+      "Synthetic multi-document fixture",
+      "Source provenance, disagreement, unresolved questions",
+      "Dependency and progress tracking",
+      "Transparent sentiment and severity-aware ranking",
+      "Executable unittest coverage including real CLI subprocesses"
+    ],
+    "excluded": [
+      "Live research, scraping, external providers and LLMs",
+      "Semantic or multilingual language understanding, sarcasm detection",
+      "PDF/OCR ingestion and arbitrary binary formats",
+      "Persistent user accounts or external workflow storage",
+      "Enterprise security, concurrency and production hardening",
+      "Regex sandboxing or execution timeouts; use trusted field patterns"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": {"runner": "unittest", "cases": 31, "failures": 0, "errors": 0},
+    "cli": {"exit_code": 0, "stdout_json_objects": 1, "status": "ok", "final_stage": "sentiment"},
+    "coverage": "Every stage; Unicode source spans and token boundaries; missing optional and required fields; consensus and disagreement; multiple and empty captures; prerequisite cycles and ordering; blocked completion; progress; cross-stage propagation and tampering; deterministic behavior; scoring and priority; invalid input; CLI arguments, missing files, decoding and JSON errors."
+  }
+}

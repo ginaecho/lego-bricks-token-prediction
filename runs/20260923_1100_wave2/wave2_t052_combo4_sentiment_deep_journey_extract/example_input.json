@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "feedback": [
+    {"id": "synthetic-f1", "topic": "checkout", "text": "Checkout is broken and terrible, not good.", "severity": "critical"},
+    {"id": "synthetic-f2", "topic": "delivery", "text": "Delivery is slow but support is helpful.", "severity": "medium"},
+    {"id": "synthetic-f3", "topic": "checkout", "text": "The new checkout is great.", "severity": "low"}
+  ],
+  "documents": [
+    {
+      "id": "synthetic-research-a",
+      "text": "Synthetic observations. Checkout failures increased. Delivery timing is uncertain.",
+      "claims": [
+        {"topic": "checkout", "stance": "supports", "quote": "Checkout failures increased."},
+        {"topic": "delivery", "stance": "uncertain", "quote": "Delivery timing is uncertain."}
+      ]
+    },
+    {
+      "id": "synthetic-research-b",
+      "text": "Synthetic counterexample. Checkout failures decreased.",
+      "claims": [
+        {"topic": "checkout", "stance": "opposes", "quote": "Checkout failures decreased."}
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "a-checkout-audit", "title": "Audit conflicting checkout evidence",
+      "topic": "checkout",
+      "description": "Owner: Synthetic Support\nETA days: 2\nReview both synthetic checkout reports.",
+      "prerequisites": []
+    },
+    {
+      "id": "b-delivery-review", "title": "Review delivery uncertainty after audit",
+      "topic": "delivery",
+      "description": "Owner: Synthetic Operations\nETA days: 4\nResolve the uncertain delivery observation.",
+      "prerequisites": ["a-checkout-audit"]
+    },
+    {
+      "id": "c-checkout-fix", "title": "Plan checkout remediation",
+      "topic": "checkout",
+      "description": "Owner: Synthetic Engineering\nETA days: 3",
+      "prerequisites": ["a-checkout-audit"]
+    }
+  ],
+  "profile": {"completed": []},
+  "extraction_schema": [
+    {"name": "owner", "source": "description", "label": "Owner", "type": "string", "required": true},
+    {"name": "eta_days", "source": "description", "label": "ETA days", "type": "integer", "required": true},
+    {"name": "approval", "source": "description", "label": "Approval", "type": "string", "required": false}
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "build_id": "wave2_t059_combo3_journey_deep_triage",
+  "composition_label": "Journey recommendations -> Deep research -> Ticket triage & routing",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact keys: schema_version=1, synthetic=true, profile{completed,interests}, actions[{id,title,requires,topics}], documents[{id,title,text,claims:[{topic,position,quote}]}], routing{rules:[{kind,topics,route}],default:route}. route={category,priority,owner}. Arrays of identifiers are unique nonblank strings. Priorities: low, normal, high, urgent.",
+    "output": "Envelope: schema_version, synthetic, status, journey, research, triage. Journey: next_actions, two steps, research_topics. Research: topics, findings, issues. Triage: tickets, ticket_count. Errors: status=error and error text, exit 2.",
+    "validation": "Shared validate dispatcher checks input types, exact fields, references, uniqueness, acyclic prerequisites and literal source quotations. Each derived output is compared with the canonical deterministic result from validated upstream data. No stage accepts an altered handoff.",
+    "identity": "Action IDs and document IDs are unique within their collections. Topic and position labels are case-sensitive, exact canonical strings supplied by the fixture author."
+  },
+  "cross_stage_handoffs": [
+    "Journey -> research: validated two-step action IDs and union of their topics determine the exclusive research scope.",
+    "Research -> triage: validated conflict, evidence_gap and corroboration_needed issues become exactly one ticket each; source quotes, document IDs, topic and action IDs are preserved."
+  ],
+  "behavior": {
+    "journey": "Only currently feasible actions are recommended as next actions. Enumerates valid ordered pairs, maximizing total interest overlap, then first-step overlap, then lexical IDs. Step two may depend on step one. Completed actions cannot recur. Fewer than two feasible remaining actions is an error.",
+    "research": "Synthesizes all relevant supplied document claims, preserving citations. Multiple exact positions are disagreement; one position across two or more document IDs is consensus; one document requires corroboration; no evidence is unanswered. Consensus is agreement, not verified truth.",
+    "triage": "First matching rule by issue kind and optional topic filter wins. Empty topic filters are wildcards. Default routing is mandatory. Every ticket has a nonblank accountable owner, category, priority and open status.",
+    "determinism": "Input is not mutated. Action and document order do not affect results. Routing rule order intentionally determines precedence.",
+    "cli": "One JSON object on stdout. Success exits 0; usage, file, JSON and validation errors exit 2. Duplicate keys and non-finite JSON constants are rejected."
+  },
+  "scope": {
+    "included": ["Synthetic local JSON fixtures", "Prerequisite-aware personalized two-step planning", "Multi-document claim synthesis and unresolved questions", "Configurable accountable routing", "Shared validation and provenance", "CLI and unittest coverage"],
+    "excluded": ["Network research", "Model providers or LLM calls", "Natural-language claim extraction", "Semantic equivalence inference", "Truth verification or source independence verification", "Ticket service integration", "Persistence beyond JSON output", "Enterprise production concerns"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"command": "python -B -m unittest discover -s . -p test_implementation.py", "tests_run": 22, "failures": 0, "errors": 0, "exit_code": 0},
+    "cli": {"command": "python -B implementation.py example_input.json", "exit_code": 0, "stdout_json_objects": 1, "status": "ok", "journey_steps": 2, "research_findings": 3, "tickets": 2}
+  }
+}

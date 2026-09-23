@@ -1,0 +1,541 @@
+{
+  "id": "wave2_t090_combo3_journey_adaptive_review",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "onboard",
+      "documents"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Guided onboarding",
+      "Document automation"
+    ],
+    "types": [
+      "journey",
+      "adaptive",
+      "review"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 1,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 1,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 4,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Prerequisite-aware next actions and a validated two-step journey.",
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Requirement/evidence checking and traceable gaps without certification claims."
+  ],
+  "integration": {
+    "ordered_types": [
+      "journey",
+      "adaptive",
+      "review"
+    ],
+    "edges": [
+      {
+        "from": "journey",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "adaptive",
+        "to": "review",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "786b5c3527c7a265829e498014368ed24aebb1263a3e513659b362a3ee40f572",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "6074d72f35ac58f07e088c17068858a6ec08205676d18b89e602a582a1dad2a4",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t090_combo3_journey_adaptive_review",
+  "membership_point_id": "combo3_journey_adaptive_review",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "9bcd59df507b0e043db59e2be85c532d835d6b9cbabfb42e1abc913ebdb28884",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "0504fdbb-2fa7-4b05-aef0-f84c92fc7c82",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 133894,
+    "output_tokens": 11096,
+    "cache_read_tokens": 120464,
+    "cache_write_tokens": 13412,
+    "total_tokens": 144990,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34674,
+        "agent_id": "0504fdbb-2fa7-4b05-aef0-f84c92fc7c82",
+        "model": "gpt-6-astra",
+        "input_tokens": 14837,
+        "output_tokens": 1362,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 800,
+        "reasoning_tokens": 265,
+        "duration_ms": 23490,
+        "created_at": "2026-09-23T10:47:37.882Z"
+      },
+      {
+        "id": 34698,
+        "agent_id": "0504fdbb-2fa7-4b05-aef0-f84c92fc7c82",
+        "model": "gpt-6-astra",
+        "input_tokens": 16230,
+        "output_tokens": 6973,
+        "cache_read_tokens": 14834,
+        "cache_write_tokens": 1393,
+        "reasoning_tokens": 461,
+        "duration_ms": 106865,
+        "created_at": "2026-09-23T10:51:16.458Z"
+      },
+      {
+        "id": 34700,
+        "agent_id": "0504fdbb-2fa7-4b05-aef0-f84c92fc7c82",
+        "model": "gpt-6-astra",
+        "input_tokens": 23447,
+        "output_tokens": 323,
+        "cache_read_tokens": 16227,
+        "cache_write_tokens": 7217,
+        "reasoning_tokens": 160,
+        "duration_ms": 8001,
+        "created_at": "2026-09-23T10:51:20.887Z"
+      },
+      {
+        "id": 34712,
+        "agent_id": "0504fdbb-2fa7-4b05-aef0-f84c92fc7c82",
+        "model": "gpt-6-astra",
+        "input_tokens": 24958,
+        "output_tokens": 1923,
+        "cache_read_tokens": 23444,
+        "cache_write_tokens": 1511,
+        "reasoning_tokens": 150,
+        "duration_ms": 35668,
+        "created_at": "2026-09-23T10:52:10.989Z"
+      },
+      {
+        "id": 34718,
+        "agent_id": "0504fdbb-2fa7-4b05-aef0-f84c92fc7c82",
+        "model": "gpt-6-astra",
+        "input_tokens": 26973,
+        "output_tokens": 430,
+        "cache_read_tokens": 24955,
+        "cache_write_tokens": 2015,
+        "reasoning_tokens": 64,
+        "duration_ms": 9694,
+        "created_at": "2026-09-23T10:52:31.377Z"
+      },
+      {
+        "id": 34721,
+        "agent_id": "0504fdbb-2fa7-4b05-aef0-f84c92fc7c82",
+        "model": "gpt-6-astra",
+        "input_tokens": 27449,
+        "output_tokens": 85,
+        "cache_read_tokens": 26970,
+        "cache_write_tokens": 476,
+        "reasoning_tokens": 0,
+        "duration_ms": 3058,
+        "created_at": "2026-09-23T10:52:42.521Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.501175,
+      "observed_cache_profile_estimate_usd": 0.230131,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.0141,
+      "observed_cache_profile_estimate_usd": 6.0141,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 2,
+      "impact_recognized": 2,
+      "roi_satisfaction": 5,
+      "future_impact_potential": 4,
+      "delivery_quality": 1
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.53,
+    "pseudo_annual_cost_usd": 30000,
+    "pseudo_annual_ai_value_usd": 85000,
+    "pseudo_net_impact_usd": 55000,
+    "pseudo_roi_pct": 183.33333333333334,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............................\n----------------------------------------------------------------------\nRan 31 tests in 1.501s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "actions": [
+        {
+          "id": "orientation",
+          "prerequisites": [],
+          "requirement_ids": [],
+          "title": "Explore the fictional marketplace",
+          "topic": "basics"
+        },
+        {
+          "id": "seller-profile",
+          "prerequisites": [
+            "orientation"
+          ],
+          "requirement_ids": [
+            "seller-identity"
+          ],
+          "title": "Prepare a synthetic seller profile",
+          "topic": "selling"
+        },
+        {
+          "id": "publish-listing",
+          "prerequisites": [
+            "seller-profile"
+          ],
+          "requirement_ids": [
+            "seller-identity",
+            "returns-policy"
+          ],
+          "title": "Prepare a fictional product listing",
+          "topic": "selling"
+        },
+        {
+          "id": "buyer-tour",
+          "prerequisites": [],
+          "requirement_ids": [],
+          "title": "Explore buyer discovery",
+          "topic": "buying"
+        }
+      ],
+      "adaptive": {
+        "review_requirement_ids": [
+          "returns-policy",
+          "seller-identity"
+        ],
+        "state": "ready",
+        "steps": [
+          {
+            "action_id": "seller-profile",
+            "depth": "guided",
+            "explanation": "beginner experience selects guided instructions; exercise is the first preferred format. All prerequisites are already completed.",
+            "format": "exercise",
+            "instructions": [
+              "Read the explanation",
+              "Practice with synthetic data",
+              "Confirm completion"
+            ],
+            "prerequisites": [
+              "orientation"
+            ],
+            "readiness": "ready_now",
+            "requirement_ids": [
+              "seller-identity"
+            ],
+            "requires_completion": [],
+            "source_journey_step_id": "journey-1",
+            "step_id": "onboarding-1"
+          },
+          {
+            "action_id": "publish-listing",
+            "depth": "guided",
+            "explanation": "beginner experience selects guided instructions; exercise is the first preferred format. Finish prerequisites before starting.",
+            "format": "exercise",
+            "instructions": [
+              "Read the explanation",
+              "Practice with synthetic data",
+              "Confirm completion"
+            ],
+            "prerequisites": [
+              "seller-profile"
+            ],
+            "readiness": "conditional",
+            "requirement_ids": [
+              "returns-policy",
+              "seller-identity"
+            ],
+            "requires_completion": [
+              "seller-profile"
+            ],
+            "source_journey_step_id": "journey-2",
+            "step_id": "onboarding-2"
+          }
+        ]
+      },
+      "documents": [
+        {
+          "id": "synthetic-profile",
+          "locator": "fixture:profile#paragraph-1",
+          "requirement_ids": [
+            "seller-identity"
+          ],
+          "text": "SYNTHETIC: Seller Example Bricks. Address: 123 Imaginary Lane."
+        },
+        {
+          "id": "synthetic-policy",
+          "locator": "fixture:policy#paragraph-2",
+          "requirement_ids": [
+            "returns-policy"
+          ],
+          "text": "SYNTHETIC: Returns are discussed, but this policy is incomplete."
+        }
+      ],
+      "fixture_label": "SYNTHETIC: fictional marketplace seller onboarding",
+      "journey": {
+        "completion_policy": "Planning does not mark any action as completed.",
+        "next_actions": [
+          "seller-profile",
+          "buyer-tour"
+        ],
+        "state": "ready",
+        "steps": [
+          {
+            "action_id": "seller-profile",
+            "prerequisites": [
+              "orientation"
+            ],
+            "reason": "Matches a stated interest.",
+            "requirement_ids": [
+              "seller-identity"
+            ],
+            "step_id": "journey-1"
+          },
+          {
+            "action_id": "publish-listing",
+            "prerequisites": [
+              "seller-profile"
+            ],
+            "reason": "Matches a stated interest.",
+            "requirement_ids": [
+              "returns-policy",
+              "seller-identity"
+            ],
+            "step_id": "journey-2"
+          }
+        ]
+      },
+      "profile": {
+        "completed_actions": [
+          "orientation"
+        ],
+        "experience": "beginner",
+        "interests": [
+          "selling"
+        ],
+        "preferred_formats": [
+          "exercise",
+          "text"
+        ]
+      },
+      "requirements": [
+        {
+          "description": "Fictional profile evidence names a seller and address.",
+          "id": "seller-identity",
+          "required_terms": [
+            "seller",
+            "address"
+          ]
+        },
+        {
+          "description": "Fictional policy evidence mentions returns and refund.",
+          "id": "returns-policy",
+          "required_terms": [
+            "returns",
+            "refund"
+          ]
+        }
+      ],
+      "review": {
+        "disclaimer": "Synthetic reference review: lexical evidence checks only; not certification, legal advice, or verification of document authenticity.",
+        "findings": [
+          {
+            "action_ids": [
+              "publish-listing"
+            ],
+            "description": "Fictional policy evidence mentions returns and refund.",
+            "journey_step_ids": [
+              "journey-2"
+            ],
+            "observations": [
+              {
+                "document_id": "synthetic-policy",
+                "locator": "fixture:policy#paragraph-2",
+                "missing_terms": [
+                  "refund"
+                ],
+                "result": "insufficient"
+              }
+            ],
+            "onboarding_step_ids": [
+              "onboarding-2"
+            ],
+            "requirement_id": "returns-policy",
+            "result": "gap"
+          },
+          {
+            "action_ids": [
+              "publish-listing",
+              "seller-profile"
+            ],
+            "description": "Fictional profile evidence names a seller and address.",
+            "journey_step_ids": [
+              "journey-1",
+              "journey-2"
+            ],
+            "observations": [
+              {
+                "document_id": "synthetic-profile",
+                "locator": "fixture:profile#paragraph-1",
+                "missing_terms": [],
+                "result": "lexical_match"
+              }
+            ],
+            "onboarding_step_ids": [
+              "onboarding-1",
+              "onboarding-2"
+            ],
+            "requirement_id": "seller-identity",
+            "result": "evidence_found"
+          }
+        ],
+        "gaps": [
+          {
+            "action_ids": [
+              "publish-listing"
+            ],
+            "evidence_document_ids": [
+              "synthetic-policy"
+            ],
+            "journey_step_ids": [
+              "journey-2"
+            ],
+            "onboarding_step_ids": [
+              "onboarding-2"
+            ],
+            "reason": "insufficient_terms",
+            "requested_terms": [
+              "refund",
+              "returns"
+            ],
+            "requirement_id": "returns-policy"
+          }
+        ],
+        "state": "gaps_found"
+      },
+      "schema_version": 1,
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t090_combo3_journey_adaptive_review",
+    "artifact_sha256": {
+      "implementation.py": "ac848bf30abbbdbe93fed357cb6505bb6bbc5e3ee7bd4e9b475b350313fe3a5e",
+      "test_implementation.py": "b154267f75ef8be963be44a5cc87601bb280b0838b616ef369acbe058369b1af",
+      "example_input.json": "6a7406cbcf4a6c8a97574018b5f8f37f024ca08688af2a2e7a0b632c6d30280e",
+      "build_manifest.json": "74fdd7c228845e22aab9a9a9e1ed414368d61753d67bce47a56dc0e02c845075"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

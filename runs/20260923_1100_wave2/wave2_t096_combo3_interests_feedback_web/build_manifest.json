@@ -1,0 +1,49 @@
+{
+  "build_id": "wave2_t096_combo3_interests_feedback_web",
+  "composition_label": "Interest-based recommendations -> Feedback analysis -> Web research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact fields schema_version, synthetic=true, profile, items, feedback, web. Profile has normalized weighted interests, excluded tags and IDs, limit. Items have unique id/name/tags; feedback has unique id/item_id/text. Web has exact DNS allowlist, page snapshots id/url/title/content, max_findings.",
+    "output": "One JSON envelope: status, schema_version, synthetic, interests, feedback, web. Errors contain status=error and error text with exit 2.",
+    "validation": "Shared validate(kind,value,context) rejects invalid fields, types, limits, IDs, foreign keys, URLs and ungrounded stage outputs. Every consumer validates its preceding stage with source context.",
+    "bounds": "Input file <=2,000,000 bytes; collections <=1000; content <=20,000 characters; preferences <=100; recommendation and finding limits 1..100; integer weights 1..100."
+  },
+  "cross_stage_handoffs": [
+    "Interests -> feedback: ranked recommendation IDs determine exactly which feedback is analyzed; grounded interest terms accompany the analysis.",
+    "Feedback -> web: validated themes create lexical queries carrying contributing feedback IDs and recommended interest terms. All findings retain query theme, supporting feedback IDs, page ID, title, allowlisted canonical URL and exact content offsets."
+  ],
+  "behavior": {
+    "interests": "Sum weights of exact matching normalized tags, exclude forbidden IDs/tags before ranking, remove zero scores, break ties by ID, enforce top-k. Explanations expose matched tags and weights.",
+    "feedback": "Deduplicate by item ID plus casefolded whitespace-collapsed text. Preserve all source IDs and original first excerpt. Lexical multi-label themes quality/shipping/value; unmatched feedback is other. Theme counts count distinct feedback groups, not duplicate records.",
+    "web": "Offline ingestion of supplied synthetic URL snapshots only. HTTPS, exact allowlisted host, no credentials, fragments, backslashes, whitespace or nonstandard ports. Canonical URL deduplication. Retrieve snapshots matching feedback-theme terms; rank by matched theme terms plus contextual interests, then theme/page ID; bounded output. Findings quote full snapshots, never invent summaries.",
+    "empty_cases": "No recommendations yields no feedback or research. No recognized feedback themes yields no queries. No page match yields no findings.",
+    "determinism": "No clock, randomness, network, provider or injected model required. Input objects remain unchanged."
+  },
+  "scope": {
+    "included": ["Integrated deterministic CLI pipeline", "Strict shared schema and grounded handoff validation", "Clearly labeled synthetic fixtures", "Offline allowlisted page ingestion and lexical retrieval", "Traceable excerpts and provenance", "Standard-library unittest and subprocess CLI checks"],
+    "excluded": ["Live HTTP requests or crawling", "Live models", "Authentication and persistence services", "Semantic sentiment inference", "Independent verification of page assertions", "Production-scale indexing", "Automatic URL alias resolution beyond host/port normalization"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 23,
+    "failures": 0,
+    "errors": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_status": "passed: exit 0, one JSON object, status ok",
+    "coverage": ["Ranking and grounded reasons", "Exclusion and top-k propagation", "Stable tie breaking", "Deduplication with all source IDs", "Cross-item deduplication boundary", "Feedback-to-research provenance", "Exact snapshot excerpts", "Determinism and input immutability", "Empty inputs and unmatched themes", "Allowlist and URL rejection", "Duplicate URLs and IDs", "Invalid schema and foreign keys", "Tampered stage handoffs", "CLI success, argument errors and missing files", "Malformed JSON, encoding, duplicate keys, nonfinite numbers and size bound"]
+  }
+}

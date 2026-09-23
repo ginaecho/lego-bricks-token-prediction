@@ -1,0 +1,353 @@
+{
+  "id": "wave2_t065_combo2_web_triage",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "research",
+      "support"
+    ],
+    "basic_functionalities": [
+      "Research",
+      "AI customer support"
+    ],
+    "types": [
+      "web",
+      "triage"
+    ],
+    "functionality_count": 2,
+    "integration_edge_count": 1,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 9,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.75,
+    "staff_data_scientist": 0.25,
+    "staff_architect": 0.125,
+    "staff_consultant": 0.125,
+    "staff_software_engineer": 0.625,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 1,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 2,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 2,
+    "planned_operation_write": 2
+  },
+  "requirements": [
+    "Allowlisted URL ingestion, retrieval and provenance-preserving findings.",
+    "Configurable ticket categorization, priority and accountable routing."
+  ],
+  "integration": {
+    "ordered_types": [
+      "web",
+      "triage"
+    ],
+    "edges": [
+      {
+        "from": "web",
+        "to": "triage",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "4f2f95bfdf2dac9956fd87ff7dac010ad3b6b10c6e655fd8900c208051fd3fe5",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "62abc9b5e331d196e46b2c67e3e149b0a83a269d3c5d490bcdaa011e878dc9fb",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t065_combo2_web_triage",
+  "membership_point_id": "combo2_web_triage",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "dc5ab6ab97283f74dd83b64669912303e04656c239ca86f0f77d567b93527b94",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "e9dd7d63-c526-4733-afd1-9ad37c8ef080",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 117209,
+    "output_tokens": 6539,
+    "cache_read_tokens": 108953,
+    "cache_write_tokens": 8238,
+    "total_tokens": 123748,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34408,
+        "agent_id": "e9dd7d63-c526-4733-afd1-9ad37c8ef080",
+        "model": "gpt-6-astra",
+        "input_tokens": 14809,
+        "output_tokens": 438,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 772,
+        "reasoning_tokens": 263,
+        "duration_ms": 12448,
+        "created_at": "2026-09-23T10:16:54.188Z"
+      },
+      {
+        "id": 34418,
+        "agent_id": "e9dd7d63-c526-4733-afd1-9ad37c8ef080",
+        "model": "gpt-6-astra",
+        "input_tokens": 15277,
+        "output_tokens": 5442,
+        "cache_read_tokens": 14806,
+        "cache_write_tokens": 468,
+        "reasoning_tokens": 0,
+        "duration_ms": 77852,
+        "created_at": "2026-09-23T10:18:13.205Z"
+      },
+      {
+        "id": 34419,
+        "agent_id": "e9dd7d63-c526-4733-afd1-9ad37c8ef080",
+        "model": "gpt-6-astra",
+        "input_tokens": 21031,
+        "output_tokens": 144,
+        "cache_read_tokens": 15274,
+        "cache_write_tokens": 5754,
+        "reasoning_tokens": 7,
+        "duration_ms": 2733,
+        "created_at": "2026-09-23T10:18:16.032Z"
+      },
+      {
+        "id": 34424,
+        "agent_id": "e9dd7d63-c526-4733-afd1-9ad37c8ef080",
+        "model": "gpt-6-astra",
+        "input_tokens": 21754,
+        "output_tokens": 219,
+        "cache_read_tokens": 21028,
+        "cache_write_tokens": 723,
+        "reasoning_tokens": 43,
+        "duration_ms": 4950,
+        "created_at": "2026-09-23T10:18:26.724Z"
+      },
+      {
+        "id": 34426,
+        "agent_id": "e9dd7d63-c526-4733-afd1-9ad37c8ef080",
+        "model": "gpt-6-astra",
+        "input_tokens": 22063,
+        "output_tokens": 177,
+        "cache_read_tokens": 21751,
+        "cache_write_tokens": 309,
+        "reasoning_tokens": 0,
+        "duration_ms": 5852,
+        "created_at": "2026-09-23T10:18:31.040Z"
+      },
+      {
+        "id": 34427,
+        "agent_id": "e9dd7d63-c526-4733-afd1-9ad37c8ef080",
+        "model": "gpt-6-astra",
+        "input_tokens": 22275,
+        "output_tokens": 119,
+        "cache_read_tokens": 22060,
+        "cache_write_tokens": 212,
+        "reasoning_tokens": 0,
+        "duration_ms": 2680,
+        "created_at": "2026-09-23T10:18:35.546Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.39110749999999994,
+      "observed_cache_profile_estimate_usd": 0.14596325000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.693289999999999,
+      "observed_cache_profile_estimate_usd": 4.693289999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 4,
+      "roi_satisfaction": 2,
+      "future_impact_potential": 0,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.64,
+    "pseudo_annual_cost_usd": 85000,
+    "pseudo_annual_ai_value_usd": 30000,
+    "pseudo_net_impact_usd": -55000,
+    "pseudo_roi_pct": -64.70588235294117,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.364s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "research": {
+        "findings": [
+          {
+            "content": "SYNTHETIC FIXTURE: Checkout outage is currently affecting purchases.",
+            "retrieval": "synthetic-offline-fixture",
+            "sha256": "e0e67a355f6127cf9bb413c51495427a9bc03b0581b40cadbfb6d64bd23c71bb",
+            "source_id": "status",
+            "url": "https://support.example.test/status"
+          },
+          {
+            "content": "SYNTHETIC FIXTURE: Refund requests are handled by the billing team.",
+            "retrieval": "synthetic-offline-fixture",
+            "sha256": "41d4170b4fe2f61ac1d7754ec6bcc5287c482d1d482eaf4fe6c310ace068729d",
+            "source_id": "refund-policy",
+            "url": "https://support.example.test/refunds"
+          }
+        ],
+        "schema_version": 1,
+        "synthetic": true
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true,
+      "tickets": [
+        {
+          "citations": [
+            {
+              "sha256": "e0e67a355f6127cf9bb413c51495427a9bc03b0581b40cadbfb6d64bd23c71bb",
+              "source_id": "status",
+              "url": "https://support.example.test/status"
+            }
+          ],
+          "id": "SYN-001",
+          "matched_keywords": [
+            "outage"
+          ],
+          "route": {
+            "category": "incident",
+            "owner": "synthetic-oncall",
+            "priority": 1,
+            "team": "operations"
+          },
+          "subject": "Cannot finish order"
+        },
+        {
+          "citations": [
+            {
+              "sha256": "41d4170b4fe2f61ac1d7754ec6bcc5287c482d1d482eaf4fe6c310ace068729d",
+              "source_id": "refund-policy",
+              "url": "https://support.example.test/refunds"
+            }
+          ],
+          "id": "SYN-002",
+          "matched_keywords": [
+            "refund"
+          ],
+          "route": {
+            "category": "billing",
+            "owner": "synthetic-billing-lead",
+            "priority": 3,
+            "team": "billing-support"
+          },
+          "subject": "Question about my payment"
+        },
+        {
+          "citations": [],
+          "id": "SYN-003",
+          "matched_keywords": [],
+          "route": {
+            "category": "general",
+            "owner": "synthetic-support-lead",
+            "priority": 4,
+            "team": "customer-support"
+          },
+          "subject": "General question"
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t065_combo2_web_triage",
+    "artifact_sha256": {
+      "implementation.py": "bb0f550c36f8dd359802d71f05f33ba1b76e372f361e5a9e44324f0f3f92a1d8",
+      "test_implementation.py": "230931b7e23e9feb3065bfd8a2b2e860aadf65730e8f538692f1eafa392fe5e3",
+      "example_input.json": "05d985249613dd32821b5a3897272c8cf7ee3e810d89a113ba1c8259fbb86fb6",
+      "build_manifest.json": "209d8f9779eb5a44863fd7b758767b0ff7cf28fa40160800c943f728b746ec9b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

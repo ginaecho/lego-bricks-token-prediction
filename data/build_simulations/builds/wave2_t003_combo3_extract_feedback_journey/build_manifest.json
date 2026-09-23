@@ -1,0 +1,111 @@
+{
+  "build_id": "wave2_t003_combo3_extract_feedback_journey",
+  "composition_label": "Structured extraction -> Feedback analysis -> Journey recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory; no existing source read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Exactly 1.0.",
+      "fixture_label": "Nonblank provenance label; supplied fixture explicitly marked SYNTHETIC.",
+      "documents": "Up to 100 unique {id, text} documents, with at most 100000 Unicode characters each.",
+      "field_schema": "Up to 50 {name, label, type, required} declarations. Unique names and labels. String fields customer, feedback and goal must be declared. Additional fields supported. Types: string and integer.",
+      "themes": "Up to 100 {id, keywords} definitions; keywords use normalized whole-word phrase matching.",
+      "actions": "Up to 100 unique {id, title, prerequisites, theme_ids} definitions, validated for references and acyclic prerequisites.",
+      "profile": "{completed_action_ids}: distinct known action IDs asserted already complete."
+    },
+    "output": {
+      "envelope": "{schema_version, status, fixture_label, extraction, feedback, journey}",
+      "stage_envelopes": "Every stage includes schema_version and stage.",
+      "extraction": "Documents contain typed fields with source spans, missing_fields and missing_required_fields.",
+      "feedback": "Deduplicated items retain every occurrence and extracted customer/goal context. Themes retain feedback IDs and all supporting source excerpts. Unmatched items, skipped documents and duplicate_count are explicit.",
+      "journey": "Status ready or blocked; all immediately eligible next_actions, validated two-step steps or empty steps with reason. Recommendations include score, theme IDs and supporting feedback IDs.",
+      "errors": "{status: error, error: message}; stdout JSON, exit 2."
+    },
+    "validation": "Single validate(stage, payload, data, previous) boundary rejects unexpected keys and invalid input references. Deterministic stage outputs are rederived from validated preceding-stage output and compared recursively with exact types, checking all spans, provenance, missing-field lists, deduplication, ranking and prerequisites."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "extraction",
+      "to": "feedback",
+      "contract": "Feedback analysis first validates extraction, then consumes only its typed feedback field, source span and extracted customer/goal context. It does not independently extract source documents."
+    },
+    {
+      "from": "feedback",
+      "to": "journey",
+      "contract": "Journey first validates feedback against extraction. Theme-to-feedback references determine action evidence and scores; input action definitions and completed actions constrain eligibility."
+    }
+  ],
+  "behavior": {
+    "extraction": "Exact case-sensitive label at line start followed by a colon. Single-line value trimmed; duplicate labels rejected, blank or absent fields reported missing. Integer values accept an optional sign and 1-18 ASCII digits. Unknown source lines ignored. Required-field absence remains a visible diagnostic, not a fabricated value or fatal error.",
+    "spans": "Half-open [start, end) Python Unicode character offsets into original, unnormalized document text; excerpts reproduce the referenced text exactly.",
+    "deduplication": "NFKC, casefold, Unicode word tokens joined by single spaces. Punctuation and whitespace differences deduplicate globally while preserving all document occurrences. IDs follow first encounter order. Empty word content is explicitly skipped.",
+    "themes": "Deterministic configured whole-word or phrase matching; multi-theme matches allowed. Excerpts are complete extracted feedback values, not generated summaries.",
+    "recommendations": "Score is distinct deduplicated feedback IDs supporting an action's matched themes. Enumerate all valid two-action sequences. Rank by total per-step score, then first-step score, then lexical action IDs. The same evidence may support both steps. Prerequisites may be already complete or completed by step one. Zero-evidence actions are allowed as explicit catalog fallback. Missing two-step candidates produce blocked status, never a fabricated or partial journey.",
+    "determinism": "No randomness, live providers or LLM steps. No input mutation. The same input order produces byte-stable JSON output.",
+    "cli": "Exactly one input file argument. UTF-8 JSON only; duplicate JSON keys and nonstandard numeric constants rejected. Successful pipeline status is ok even when journey is blocked. Errors are a single JSON object with exit 2."
+  },
+  "scope": {
+    "included": [
+      "One integrated runnable CLI and one shared validation layer",
+      "Schema-driven line-oriented extraction with source provenance",
+      "Deduplication, configured themes and traceable supporting excerpts",
+      "Evidence-ranked next actions and validated two-step prerequisite-aware journeys",
+      "Synthetic fixture and unittest coverage including CLI subprocesses"
+    ],
+    "excluded": [
+      "Live LLMs, optional provider adapters and networks",
+      "PDF, OCR, multiline or free-form semantic extraction",
+      "Enterprise persistence, authentication and deployment",
+      "Learned sentiment or theme clustering",
+      "Automatic prerequisite completion or inference of missing facts",
+      "Per-customer separate journeys; this reference ranks feedback for one supplied profile"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 32,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "extracted_documents": 4,
+      "unique_feedback_items": 2,
+      "duplicate_count": 1,
+      "journey_status": "ready",
+      "journey_action_ids": ["01-profile", "02-guide"]
+    },
+    "covered": [
+      "Schema-driven extraction, integer conversion, dynamic fields and missing-field reporting",
+      "Exact Unicode and CRLF source spans, blank values and repeated-label rejection",
+      "Normalization, deduplication, retained contexts, whole-word themes and supporting excerpts",
+      "Cross-stage content propagation and tampered-handoff rejection",
+      "Completed actions, prerequisites, deterministic ranking, blocked journeys and empty data",
+      "Invalid schemas, references, cycles, strict JSON parsing and file errors",
+      "CLI subprocess success, malformed JSON, invalid schema, missing file and usage errors",
+      "Determinism and unchanged caller input"
+    ]
+  }
+}

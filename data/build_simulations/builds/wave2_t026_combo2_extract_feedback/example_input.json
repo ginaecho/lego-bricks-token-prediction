@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "schema": {
+    "fields": [
+      {"name": "customer", "pattern": "(?m)^Customer: (?P<value>[^\\n]*)", "required": true},
+      {"name": "feedback", "pattern": "(?m)^Feedback: (?P<value>[^\\n]*)", "required": true},
+      {"name": "order", "pattern": "(?m)^Order: (?P<value>[^\\n]*)", "required": false}
+    ]
+  },
+  "documents": [
+    {"id": "synthetic-001", "text": "Customer: Ada Example\nFeedback:   Delivery was slow, but support was helpful!  \nOrder: SYN-100"},
+    {"id": "synthetic-002", "text": "Customer: Bo Example\nFeedback: delivery was SLOW but support was helpful."},
+    {"id": "synthetic-003", "text": "Customer: Cy Example\nFeedback: Packaging was beautiful."},
+    {"id": "synthetic-004", "text": "Customer: Dee Example\nOrder: SYN-104"}
+  ],
+  "feedback_config": {
+    "text_field": "feedback",
+    "themes": [
+      {"name": "shipping", "keywords": ["delivery", "slow"]},
+      {"name": "service", "keywords": ["support", "helpful"]},
+      {"name": "pricing", "keywords": ["expensive"]}
+    ]
+  }
+}

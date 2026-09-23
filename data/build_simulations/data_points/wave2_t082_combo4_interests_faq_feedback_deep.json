@@ -1,0 +1,809 @@
+{
+  "id": "wave2_t082_combo4_interests_faq_feedback_deep",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "support",
+      "insights",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "AI customer support",
+      "Customer insights",
+      "Research"
+    ],
+    "types": [
+      "interests",
+      "faq",
+      "feedback",
+      "deep"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Preference ranking, exclusion enforcement and grounded explanations.",
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions."
+  ],
+  "integration": {
+    "ordered_types": [
+      "interests",
+      "faq",
+      "feedback",
+      "deep"
+    ],
+    "edges": [
+      {
+        "from": "interests",
+        "to": "faq",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "faq",
+        "to": "feedback",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "feedback",
+        "to": "deep",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "b37cc2af610b315fa8482b882adf194f64f7803d684008c949aaae572a5b8a6f",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "946c5c6f05d694904846651d263d9e2363cd98e2552d7ac1dc355d466c9eec7f",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t082_combo4_interests_faq_feedback_deep",
+  "membership_point_id": "combo4_interests_faq_feedback_deep",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "f97f1d605125ca9799b5df59bcad51ef9b1d3e2956755decda4e80fbf3e16f90",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 200138,
+    "output_tokens": 20033,
+    "cache_read_tokens": 176034,
+    "cache_write_tokens": 24083,
+    "total_tokens": 220171,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34584,
+        "agent_id": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+        "model": "gpt-6-astra",
+        "input_tokens": 14863,
+        "output_tokens": 715,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 826,
+        "reasoning_tokens": 516,
+        "duration_ms": 20347,
+        "created_at": "2026-09-23T10:36:29.068Z"
+      },
+      {
+        "id": 34631,
+        "agent_id": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+        "model": "gpt-6-astra",
+        "input_tokens": 15608,
+        "output_tokens": 10208,
+        "cache_read_tokens": 14860,
+        "cache_write_tokens": 745,
+        "reasoning_tokens": 1480,
+        "duration_ms": 163478,
+        "created_at": "2026-09-23T10:42:20.298Z"
+      },
+      {
+        "id": 34641,
+        "agent_id": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+        "model": "gpt-6-astra",
+        "input_tokens": 25987,
+        "output_tokens": 6384,
+        "cache_read_tokens": 15605,
+        "cache_write_tokens": 10379,
+        "reasoning_tokens": 516,
+        "duration_ms": 104160,
+        "created_at": "2026-09-23T10:43:50.581Z"
+      },
+      {
+        "id": 34642,
+        "agent_id": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+        "model": "gpt-6-astra",
+        "input_tokens": 32544,
+        "output_tokens": 285,
+        "cache_read_tokens": 25984,
+        "cache_write_tokens": 6557,
+        "reasoning_tokens": 20,
+        "duration_ms": 8636,
+        "created_at": "2026-09-23T10:43:51.789Z"
+      },
+      {
+        "id": 34651,
+        "agent_id": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+        "model": "gpt-6-astra",
+        "input_tokens": 35468,
+        "output_tokens": 1830,
+        "cache_read_tokens": 32541,
+        "cache_write_tokens": 2924,
+        "reasoning_tokens": 1074,
+        "duration_ms": 57432,
+        "created_at": "2026-09-23T10:44:42.090Z"
+      },
+      {
+        "id": 34655,
+        "agent_id": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+        "model": "gpt-6-astra",
+        "input_tokens": 37548,
+        "output_tokens": 504,
+        "cache_read_tokens": 35465,
+        "cache_write_tokens": 2080,
+        "reasoning_tokens": 105,
+        "duration_ms": 10716,
+        "created_at": "2026-09-23T10:44:59.172Z"
+      },
+      {
+        "id": 34657,
+        "agent_id": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+        "model": "gpt-6-astra",
+        "input_tokens": 38120,
+        "output_tokens": 107,
+        "cache_read_tokens": 37545,
+        "cache_write_tokens": 572,
+        "reasoning_tokens": 0,
+        "duration_ms": 9617,
+        "created_at": "2026-09-23T10:45:11.798Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.8008400000000001,
+      "observed_cache_profile_estimate_usd": 0.4047635,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 9.61008,
+      "observed_cache_profile_estimate_usd": 9.61008,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 4,
+      "roi_satisfaction": 2,
+      "future_impact_potential": 5,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.62,
+    "pseudo_annual_cost_usd": 45000,
+    "pseudo_annual_ai_value_usd": 150000,
+    "pseudo_net_impact_usd": 105000,
+    "pseudo_roi_pct": 233.33333333333334,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "........................................\n----------------------------------------------------------------------\nRan 40 tests in 1.302s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "fixture_label": "SYNTHETIC marketplace fixtures; all products, comments and evidence are invented",
+      "stages": {
+        "interests": {
+          "stage": "interests",
+          "input_ids": [
+            "p-trail",
+            "p-desk",
+            "p-blocked",
+            "p-glass",
+            "p-book"
+          ],
+          "recommendations": [
+            {
+              "product_id": "p-trail",
+              "score": 6,
+              "matched_preferences": [
+                {
+                  "topic": "battery",
+                  "weight": 3
+                },
+                {
+                  "topic": "outdoors",
+                  "weight": 2
+                },
+                {
+                  "topic": "portable",
+                  "weight": 1
+                }
+              ],
+              "explanation": "Matched preferences: battery (3), outdoors (2), portable (1). Score: 6. Source: p-trail.",
+              "evidence": [
+                {
+                  "source_id": "p-trail",
+                  "excerpt": "Synthetic portable battery lamp intended for outdoor use."
+                }
+              ]
+            },
+            {
+              "product_id": "p-desk",
+              "score": 4,
+              "matched_preferences": [
+                {
+                  "topic": "battery",
+                  "weight": 3
+                },
+                {
+                  "topic": "portable",
+                  "weight": 1
+                }
+              ],
+              "explanation": "Matched preferences: battery (3), portable (1). Score: 4. Source: p-desk.",
+              "evidence": [
+                {
+                  "source_id": "p-desk",
+                  "excerpt": "Synthetic compact battery lamp intended for desks."
+                }
+              ]
+            }
+          ],
+          "excluded_product_ids": [
+            "p-blocked",
+            "p-glass"
+          ]
+        },
+        "faq": {
+          "stage": "faq",
+          "input_ids": [
+            "p-trail",
+            "p-desk"
+          ],
+          "answers": [
+            {
+              "question_id": "q-trail-runtime",
+              "product_id": "p-trail",
+              "question": "What is the battery runtime?",
+              "status": "answered",
+              "answer": "Synthetic specification: battery runtime is eight hours per charge under a low-brightness bench test.",
+              "citations": [
+                {
+                  "source_id": "kb-trail",
+                  "excerpt": "Synthetic specification: battery runtime is eight hours per charge under a low-brightness bench test."
+                }
+              ],
+              "reason": "Verbatim knowledge-base excerpts; not independently verified."
+            },
+            {
+              "question_id": "q-trail-water",
+              "product_id": "p-trail",
+              "question": "What is the waterproof depth?",
+              "status": "abstained",
+              "answer": null,
+              "citations": [],
+              "reason": "No product-scoped source covers all query terms."
+            },
+            {
+              "question_id": "q-desk-return",
+              "product_id": "p-desk",
+              "question": "What is the return policy?",
+              "status": "answered",
+              "answer": "Synthetic return policy: unopened desk lamps may be returned within thirty days.",
+              "citations": [
+                {
+                  "source_id": "kb-return",
+                  "excerpt": "Synthetic return policy: unopened desk lamps may be returned within thirty days."
+                }
+              ],
+              "reason": "Verbatim knowledge-base excerpts; not independently verified."
+            }
+          ],
+          "skipped_question_ids": [
+            "q-blocked"
+          ]
+        },
+        "feedback": {
+          "stage": "feedback",
+          "input_ids": [
+            "q-trail-runtime",
+            "q-trail-water",
+            "q-desk-return"
+          ],
+          "items": [
+            {
+              "feedback_id": "f1",
+              "product_id": "p-trail",
+              "question_id": "q-trail-runtime",
+              "text": "Battery charge is short; controls are confusing.",
+              "duplicate_ids": [
+                "f2"
+              ],
+              "themes": [
+                "battery",
+                "usability"
+              ]
+            },
+            {
+              "feedback_id": "f3",
+              "product_id": "p-trail",
+              "question_id": "q-trail-water",
+              "text": "The casing cracked; support could not explain waterproofing.",
+              "duplicate_ids": [],
+              "themes": [
+                "durability",
+                "support"
+              ]
+            },
+            {
+              "feedback_id": "f4",
+              "product_id": "p-desk",
+              "question_id": "q-desk-return",
+              "text": "The return service was easy, but the price is expensive.",
+              "duplicate_ids": [],
+              "themes": [
+                "price",
+                "support",
+                "usability"
+              ]
+            }
+          ],
+          "themes": [
+            {
+              "theme": "battery",
+              "count": 1,
+              "product_ids": [
+                "p-trail"
+              ],
+              "question_ids": [
+                "q-trail-runtime"
+              ],
+              "excerpts": [
+                {
+                  "feedback_id": "f1",
+                  "excerpt": "Battery charge is short; controls are confusing.",
+                  "duplicate_ids": [
+                    "f2"
+                  ]
+                }
+              ]
+            },
+            {
+              "theme": "durability",
+              "count": 1,
+              "product_ids": [
+                "p-trail"
+              ],
+              "question_ids": [
+                "q-trail-water"
+              ],
+              "excerpts": [
+                {
+                  "feedback_id": "f3",
+                  "excerpt": "The casing cracked; support could not explain waterproofing.",
+                  "duplicate_ids": []
+                }
+              ]
+            },
+            {
+              "theme": "price",
+              "count": 1,
+              "product_ids": [
+                "p-desk"
+              ],
+              "question_ids": [
+                "q-desk-return"
+              ],
+              "excerpts": [
+                {
+                  "feedback_id": "f4",
+                  "excerpt": "The return service was easy, but the price is expensive.",
+                  "duplicate_ids": []
+                }
+              ]
+            },
+            {
+              "theme": "support",
+              "count": 2,
+              "product_ids": [
+                "p-desk",
+                "p-trail"
+              ],
+              "question_ids": [
+                "q-desk-return",
+                "q-trail-water"
+              ],
+              "excerpts": [
+                {
+                  "feedback_id": "f3",
+                  "excerpt": "The casing cracked; support could not explain waterproofing.",
+                  "duplicate_ids": []
+                },
+                {
+                  "feedback_id": "f4",
+                  "excerpt": "The return service was easy, but the price is expensive.",
+                  "duplicate_ids": []
+                }
+              ]
+            },
+            {
+              "theme": "usability",
+              "count": 2,
+              "product_ids": [
+                "p-desk",
+                "p-trail"
+              ],
+              "question_ids": [
+                "q-desk-return",
+                "q-trail-runtime"
+              ],
+              "excerpts": [
+                {
+                  "feedback_id": "f1",
+                  "excerpt": "Battery charge is short; controls are confusing.",
+                  "duplicate_ids": [
+                    "f2"
+                  ]
+                },
+                {
+                  "feedback_id": "f4",
+                  "excerpt": "The return service was easy, but the price is expensive.",
+                  "duplicate_ids": []
+                }
+              ]
+            }
+          ],
+          "skipped_feedback_ids": [
+            "f5"
+          ],
+          "unanswered_question_ids": [
+            "q-trail-water"
+          ]
+        },
+        "deep": {
+          "stage": "deep",
+          "input_ids": [
+            "f1",
+            "f3",
+            "f4"
+          ],
+          "findings": [
+            {
+              "theme": "battery",
+              "product_id": "p-trail",
+              "feedback_ids": [
+                "f1"
+              ],
+              "feedback_excerpts": [
+                {
+                  "feedback_id": "f1",
+                  "excerpt": "Battery charge is short; controls are confusing.",
+                  "duplicate_ids": [
+                    "f2"
+                  ]
+                }
+              ],
+              "claims": [
+                {
+                  "claim_key": "full-day-endurance",
+                  "statement": "Trail battery endurance meets full-day needs.",
+                  "evidence": [
+                    {
+                      "source_id": "research-bench",
+                      "excerpt": "Synthetic bench test: the Trail battery met full-day needs at low brightness.",
+                      "position": "supports"
+                    },
+                    {
+                      "source_id": "research-field",
+                      "excerpt": "Synthetic field test: the Trail battery did not meet full-day needs at high brightness.",
+                      "position": "opposes"
+                    }
+                  ],
+                  "assessment": "mixed"
+                }
+              ],
+              "summary": "1 unique feedback item(s); 2 research document(s); 0 supported, 0 opposed, 1 mixed, 0 uncertain. Assessments describe supplied evidence, not verified facts.",
+              "unresolved": [
+                "Conflicting evidence for full-day-endurance; no consensus inferred."
+              ]
+            },
+            {
+              "theme": "durability",
+              "product_id": "p-trail",
+              "feedback_ids": [
+                "f3"
+              ],
+              "feedback_excerpts": [
+                {
+                  "feedback_id": "f3",
+                  "excerpt": "The casing cracked; support could not explain waterproofing.",
+                  "duplicate_ids": []
+                }
+              ],
+              "claims": [
+                {
+                  "claim_key": "casing-survival",
+                  "statement": "Trail casing survives repeated drops.",
+                  "evidence": [
+                    {
+                      "source_id": "research-field",
+                      "excerpt": "Synthetic casing study: durability remains uncertain after one drop test.",
+                      "position": "uncertain"
+                    }
+                  ],
+                  "assessment": "uncertain"
+                }
+              ],
+              "summary": "1 unique feedback item(s); 1 research document(s); 0 supported, 0 opposed, 0 mixed, 1 uncertain. Assessments describe supplied evidence, not verified facts.",
+              "unresolved": [
+                "Only uncertain evidence for casing-survival.",
+                "Only one document for casing-survival; independent corroboration missing."
+              ]
+            },
+            {
+              "theme": "price",
+              "product_id": "p-desk",
+              "feedback_ids": [
+                "f4"
+              ],
+              "feedback_excerpts": [
+                {
+                  "feedback_id": "f4",
+                  "excerpt": "The return service was easy, but the price is expensive.",
+                  "duplicate_ids": []
+                }
+              ],
+              "claims": [],
+              "summary": "1 unique feedback item(s); 0 research document(s); 0 supported, 0 opposed, 0 mixed, 0 uncertain. Assessments describe supplied evidence, not verified facts.",
+              "unresolved": [
+                "No research evidence for this product and feedback theme."
+              ]
+            },
+            {
+              "theme": "support",
+              "product_id": "p-desk",
+              "feedback_ids": [
+                "f4"
+              ],
+              "feedback_excerpts": [
+                {
+                  "feedback_id": "f4",
+                  "excerpt": "The return service was easy, but the price is expensive.",
+                  "duplicate_ids": []
+                }
+              ],
+              "claims": [
+                {
+                  "claim_key": "desk-returns",
+                  "statement": "Desk lamp returns are easy to complete.",
+                  "evidence": [
+                    {
+                      "source_id": "research-desk",
+                      "excerpt": "Synthetic service audit: the desk lamp return process was easy to complete.",
+                      "position": "supports"
+                    }
+                  ],
+                  "assessment": "supported"
+                }
+              ],
+              "summary": "1 unique feedback item(s); 1 research document(s); 1 supported, 0 opposed, 0 mixed, 0 uncertain. Assessments describe supplied evidence, not verified facts.",
+              "unresolved": [
+                "Only one document for desk-returns; independent corroboration missing."
+              ]
+            },
+            {
+              "theme": "support",
+              "product_id": "p-trail",
+              "feedback_ids": [
+                "f3"
+              ],
+              "feedback_excerpts": [
+                {
+                  "feedback_id": "f3",
+                  "excerpt": "The casing cracked; support could not explain waterproofing.",
+                  "duplicate_ids": []
+                }
+              ],
+              "claims": [],
+              "summary": "1 unique feedback item(s); 0 research document(s); 0 supported, 0 opposed, 0 mixed, 0 uncertain. Assessments describe supplied evidence, not verified facts.",
+              "unresolved": [
+                "No research evidence for this product and feedback theme."
+              ]
+            },
+            {
+              "theme": "usability",
+              "product_id": "p-desk",
+              "feedback_ids": [
+                "f4"
+              ],
+              "feedback_excerpts": [
+                {
+                  "feedback_id": "f4",
+                  "excerpt": "The return service was easy, but the price is expensive.",
+                  "duplicate_ids": []
+                }
+              ],
+              "claims": [],
+              "summary": "1 unique feedback item(s); 0 research document(s); 0 supported, 0 opposed, 0 mixed, 0 uncertain. Assessments describe supplied evidence, not verified facts.",
+              "unresolved": [
+                "No research evidence for this product and feedback theme."
+              ]
+            },
+            {
+              "theme": "usability",
+              "product_id": "p-trail",
+              "feedback_ids": [
+                "f1"
+              ],
+              "feedback_excerpts": [
+                {
+                  "feedback_id": "f1",
+                  "excerpt": "Battery charge is short; controls are confusing.",
+                  "duplicate_ids": [
+                    "f2"
+                  ]
+                }
+              ],
+              "claims": [
+                {
+                  "claim_key": "independent-setup",
+                  "statement": "Trail setup can be completed without assistance.",
+                  "evidence": [
+                    {
+                      "source_id": "research-bench",
+                      "excerpt": "Synthetic controls test: setup required assistance.",
+                      "position": "opposes"
+                    }
+                  ],
+                  "assessment": "opposed"
+                }
+              ],
+              "summary": "1 unique feedback item(s); 1 research document(s); 0 supported, 1 opposed, 0 mixed, 0 uncertain. Assessments describe supplied evidence, not verified facts.",
+              "unresolved": [
+                "Only one document for independent-setup; independent corroboration missing."
+              ]
+            }
+          ],
+          "disagreements": [
+            {
+              "theme": "battery",
+              "product_id": "p-trail",
+              "claim_key": "full-day-endurance",
+              "source_ids": [
+                "research-bench",
+                "research-field"
+              ]
+            }
+          ],
+          "unresolved_questions": [
+            {
+              "question_id": "q-trail-water",
+              "question": "What is the waterproof depth?",
+              "reason": "FAQ abstention remains unresolved; research is not a substitute FAQ answer."
+            }
+          ],
+          "documents_used": [
+            "research-bench",
+            "research-desk",
+            "research-field"
+          ]
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t082_combo4_interests_faq_feedback_deep",
+    "artifact_sha256": {
+      "implementation.py": "c506af3b9586f2f0b9ec747f8fce21b314493861fe994d4d2a982819b17c48e2",
+      "test_implementation.py": "62710e2b3b6b43deb5a81ee2c61ae30ffe9764492ed6a7d6376dff5383211301",
+      "example_input.json": "2dc0f5d82977c95ef5ee3e0d1d7f67637ed01e936e7b06b591accb73591f06e3",
+      "build_manifest.json": "d6b8bc345de3a9d8de5b0d4e02a6de02ce60264fb328c3429a959d086ffdf68e"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

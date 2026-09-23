@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "attributes": [
+    {"id": "weight", "kind": "number", "unit": "kg"},
+    {"id": "price", "kind": "number", "unit": "USD"},
+    {"id": "material", "kind": "text"}
+  ],
+  "products": [
+    {"id": "a", "name": "Synthetic Compact Stand", "attributes": {
+      "weight": {"value": 800, "unit": "g"},
+      "price": {"value": 40},
+      "material": {"value": "  ALUMINUM  "}
+    }},
+    {"id": "b", "name": "Synthetic Budget Stand", "attributes": {
+      "weight": {"value": 1.2, "unit": "kg"},
+      "price": {"value": 30},
+      "material": {"value": "steel"}
+    }}
+  ],
+  "preferences": [
+    {"attribute": "weight", "direction": "min", "weight": 3},
+    {"attribute": "price", "direction": "min", "weight": 1}
+  ],
+  "requirements": [
+    {"id": "portable", "attribute": "weight", "operator": "max",
+     "expected": {"value": 1, "unit": "kg"}, "target": "winner", "evidence_required": true},
+    {"id": "metal", "attribute": "material", "operator": "equals",
+     "expected": {"value": "aluminum"}, "target": "all", "evidence_required": false},
+    {"id": "price_record", "attribute": "price", "operator": "exists",
+     "target": "winner", "evidence_required": true}
+  ],
+  "documents": [
+    {"id": "synthetic-sheet", "text": "SYNTHETIC fixture. Compact Stand mass: 800 g. Material: aluminum."}
+  ],
+  "evidence": [
+    {"id": "mass-quote", "requirement_id": "portable", "product_id": "a",
+     "document_id": "synthetic-sheet", "locator": "sentence 2",
+     "quote": "Compact Stand mass: 800 g.", "asserted": {"value": 800, "unit": "g"}}
+  ]
+}

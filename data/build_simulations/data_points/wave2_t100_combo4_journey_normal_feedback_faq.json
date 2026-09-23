@@ -1,0 +1,597 @@
+{
+  "id": "wave2_t100_combo4_journey_normal_feedback_faq",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "research",
+      "insights",
+      "support"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Research",
+      "Customer insights",
+      "AI customer support"
+    ],
+    "types": [
+      "journey",
+      "normal",
+      "feedback",
+      "faq"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 1,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 0,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Prerequisite-aware next actions and a validated two-step journey.",
+    "Passage retrieval and extractive findings with exact source citations.",
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Knowledge-base retrieval, grounded answers and explicit abstention."
+  ],
+  "integration": {
+    "ordered_types": [
+      "journey",
+      "normal",
+      "feedback",
+      "faq"
+    ],
+    "edges": [
+      {
+        "from": "journey",
+        "to": "normal",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "normal",
+        "to": "feedback",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "feedback",
+        "to": "faq",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "dd284ff87ee855a71ca4a21dd9c800d0598d0588833e71aa4c99296501cb99f9",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "7c2d25426f740f692b4dbcd4c6bbb95fac55c799f85239ed520273e5a693bca8",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t100_combo4_journey_normal_feedback_faq",
+  "membership_point_id": "combo4_journey_normal_feedback_faq",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "35b58cf016f5d60c8f1af6b17cff4f2bc75a037ff5d10bc32b250b8d82fbe425",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 178890,
+    "output_tokens": 15806,
+    "cache_read_tokens": 160250,
+    "cache_write_tokens": 18619,
+    "total_tokens": 194696,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34787,
+        "agent_id": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+        "model": "gpt-6-astra",
+        "input_tokens": 14886,
+        "output_tokens": 694,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 828,
+        "reasoning_tokens": 516,
+        "duration_ms": 18076,
+        "created_at": "2026-09-23T11:02:28.120Z"
+      },
+      {
+        "id": 34796,
+        "agent_id": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+        "model": "gpt-6-astra",
+        "input_tokens": 15610,
+        "output_tokens": 6995,
+        "cache_read_tokens": 14883,
+        "cache_write_tokens": 724,
+        "reasoning_tokens": 516,
+        "duration_ms": 103879,
+        "created_at": "2026-09-23T11:04:13.337Z"
+      },
+      {
+        "id": 34813,
+        "agent_id": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+        "model": "gpt-6-astra",
+        "input_tokens": 22774,
+        "output_tokens": 6565,
+        "cache_read_tokens": 15607,
+        "cache_write_tokens": 7164,
+        "reasoning_tokens": 369,
+        "duration_ms": 98743,
+        "created_at": "2026-09-23T11:06:01.230Z"
+      },
+      {
+        "id": 34815,
+        "agent_id": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+        "model": "gpt-6-astra",
+        "input_tokens": 29592,
+        "output_tokens": 196,
+        "cache_read_tokens": 22771,
+        "cache_write_tokens": 6818,
+        "reasoning_tokens": 0,
+        "duration_ms": 7319,
+        "created_at": "2026-09-23T11:06:04.401Z"
+      },
+      {
+        "id": 34821,
+        "agent_id": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+        "model": "gpt-6-astra",
+        "input_tokens": 31084,
+        "output_tokens": 936,
+        "cache_read_tokens": 29589,
+        "cache_write_tokens": 1492,
+        "reasoning_tokens": 332,
+        "duration_ms": 21499,
+        "created_at": "2026-09-23T11:06:31.395Z"
+      },
+      {
+        "id": 34823,
+        "agent_id": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+        "model": "gpt-6-astra",
+        "input_tokens": 32267,
+        "output_tokens": 344,
+        "cache_read_tokens": 31081,
+        "cache_write_tokens": 1183,
+        "reasoning_tokens": 0,
+        "duration_ms": 6487,
+        "created_at": "2026-09-23T11:06:35.974Z"
+      },
+      {
+        "id": 34824,
+        "agent_id": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+        "model": "gpt-6-astra",
+        "input_tokens": 32677,
+        "output_tokens": 76,
+        "cache_read_tokens": 32264,
+        "cache_write_tokens": 410,
+        "reasoning_tokens": 0,
+        "duration_ms": 4605,
+        "created_at": "2026-09-23T11:06:43.329Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6843149999999999,
+      "observed_cache_profile_estimate_usd": 0.32375250000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 8.211780000000001,
+      "observed_cache_profile_estimate_usd": 8.211780000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 2,
+      "impact_recognized": 3,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 2,
+      "delivery_quality": 3
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.5599999999999999,
+    "pseudo_annual_cost_usd": 50000,
+    "pseudo_annual_ai_value_usd": 75000,
+    "pseudo_net_impact_usd": 25000,
+    "pseudo_roi_pct": 50.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".....................................\n----------------------------------------------------------------------\nRan 37 tests in 0.998s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "stages": [
+        {
+          "data": {
+            "next_actions": [
+              "a_setup",
+              "c_ads"
+            ],
+            "steps": [
+              {
+                "id": "a_setup",
+                "position": 1,
+                "research_query": "shop setup checklist",
+                "title": "Set up the synthetic shop"
+              },
+              {
+                "id": "b_shipping",
+                "position": 2,
+                "research_query": "shipping delivery tracking",
+                "title": "Configure synthetic shipping"
+              }
+            ]
+          },
+          "schema_version": 1,
+          "stage": "journey",
+          "status": "ok"
+        },
+        {
+          "data": {
+            "findings": [
+              {
+                "action_id": "a_setup",
+                "citations": [
+                  {
+                    "collection": "passages",
+                    "end": 85,
+                    "id": "p_setup",
+                    "quote": "The shop setup checklist includes address and billing details.",
+                    "source": "synthetic://research/setup",
+                    "start": 23
+                  }
+                ],
+                "query": "shop setup checklist",
+                "status": "found",
+                "text": "The shop setup checklist includes address and billing details."
+              },
+              {
+                "action_id": "b_shipping",
+                "citations": [
+                  {
+                    "collection": "passages",
+                    "end": 68,
+                    "id": "p_shipping",
+                    "quote": "Shipping delivery tracking helps shoppers understand order progress.",
+                    "source": "synthetic://research/shipping",
+                    "start": 0
+                  }
+                ],
+                "query": "shipping delivery tracking",
+                "status": "found",
+                "text": "Shipping delivery tracking helps shoppers understand order progress."
+              }
+            ]
+          },
+          "schema_version": 1,
+          "stage": "normal",
+          "status": "ok"
+        },
+        {
+          "data": {
+            "excluded_feedback_ids": [
+              "f5"
+            ],
+            "groups": [
+              {
+                "excerpt": {
+                  "collection": "feedback",
+                  "end": 27,
+                  "id": "f1",
+                  "quote": "Shipping delivery was late!",
+                  "source": "f1",
+                  "start": 0
+                },
+                "id": "f1",
+                "member_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "passage_ids": [
+                  "p_shipping"
+                ]
+              },
+              {
+                "excerpt": {
+                  "collection": "feedback",
+                  "end": 38,
+                  "id": "f3",
+                  "quote": "Billing refund requests are confusing.",
+                  "source": "f3",
+                  "start": 0
+                },
+                "id": "f3",
+                "member_ids": [
+                  "f3"
+                ],
+                "passage_ids": [
+                  "p_setup"
+                ]
+              },
+              {
+                "excerpt": {
+                  "collection": "feedback",
+                  "end": 24,
+                  "id": "f4",
+                  "quote": "The shop setup was easy.",
+                  "source": "f4",
+                  "start": 0
+                },
+                "id": "f4",
+                "member_ids": [
+                  "f4"
+                ],
+                "passage_ids": [
+                  "p_setup"
+                ]
+              },
+              {
+                "excerpt": {
+                  "collection": "feedback",
+                  "end": 20,
+                  "id": "f6",
+                  "quote": "Purple looks lovely.",
+                  "source": "f6",
+                  "start": 0
+                },
+                "id": "f6",
+                "member_ids": [
+                  "f6"
+                ],
+                "passage_ids": [
+                  "p_setup"
+                ]
+              }
+            ],
+            "research_passage_ids": [
+              "p_setup",
+              "p_shipping"
+            ],
+            "themes": [
+              {
+                "excerpts": [
+                  {
+                    "collection": "feedback",
+                    "end": 38,
+                    "id": "f3",
+                    "quote": "Billing refund requests are confusing.",
+                    "source": "f3",
+                    "start": 0
+                  }
+                ],
+                "group_ids": [
+                  "f3"
+                ],
+                "id": "billing",
+                "keywords": [
+                  "billing",
+                  "refund"
+                ],
+                "question": "How are billing refund requests handled?",
+                "unique_count": 1
+              },
+              {
+                "excerpts": [
+                  {
+                    "collection": "feedback",
+                    "end": 24,
+                    "id": "f4",
+                    "quote": "The shop setup was easy.",
+                    "source": "f4",
+                    "start": 0
+                  }
+                ],
+                "group_ids": [
+                  "f4"
+                ],
+                "id": "setup",
+                "keywords": [
+                  "setup",
+                  "easy"
+                ],
+                "question": "What does the shop setup checklist require?",
+                "unique_count": 1
+              },
+              {
+                "excerpts": [
+                  {
+                    "collection": "feedback",
+                    "end": 27,
+                    "id": "f1",
+                    "quote": "Shipping delivery was late!",
+                    "source": "f1",
+                    "start": 0
+                  }
+                ],
+                "group_ids": [
+                  "f1"
+                ],
+                "id": "shipping",
+                "keywords": [
+                  "shipping",
+                  "delivery",
+                  "late"
+                ],
+                "question": "What are shipping delivery times?",
+                "unique_count": 1
+              }
+            ],
+            "unclassified_group_ids": [
+              "f6"
+            ]
+          },
+          "schema_version": 1,
+          "stage": "feedback",
+          "status": "ok"
+        },
+        {
+          "data": {
+            "answers": [
+              {
+                "answer": null,
+                "citations": [],
+                "question": "How are billing refund requests handled?",
+                "reason": "No sufficiently relevant knowledge-base sentence.",
+                "status": "abstained",
+                "supporting_feedback_ids": [
+                  "f3"
+                ],
+                "theme_id": "billing"
+              },
+              {
+                "answer": "The shop setup checklist requires a shop address and a contact email.",
+                "citations": [
+                  {
+                    "collection": "knowledge_base",
+                    "end": 69,
+                    "id": "kb_setup",
+                    "quote": "The shop setup checklist requires a shop address and a contact email.",
+                    "source": "synthetic://kb/setup",
+                    "start": 0
+                  }
+                ],
+                "question": "What does the shop setup checklist require?",
+                "reason": null,
+                "status": "answered",
+                "supporting_feedback_ids": [
+                  "f4"
+                ],
+                "theme_id": "setup"
+              },
+              {
+                "answer": "Shipping delivery usually takes three business days.",
+                "citations": [
+                  {
+                    "collection": "knowledge_base",
+                    "end": 52,
+                    "id": "kb_shipping",
+                    "quote": "Shipping delivery usually takes three business days.",
+                    "source": "synthetic://kb/shipping",
+                    "start": 0
+                  }
+                ],
+                "question": "What are shipping delivery times?",
+                "reason": null,
+                "status": "answered",
+                "supporting_feedback_ids": [
+                  "f1"
+                ],
+                "theme_id": "shipping"
+              }
+            ],
+            "status": "partial"
+          },
+          "schema_version": 1,
+          "stage": "faq",
+          "status": "ok"
+        }
+      ],
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t100_combo4_journey_normal_feedback_faq",
+    "artifact_sha256": {
+      "implementation.py": "b508574b4338f1b0294cd8f0d4ed984634774d39a0e613ed00179474beaa469b",
+      "test_implementation.py": "a62986dcdc648ae82f47bbc00262a90f18f8fa631a616f39d6dcbaa07667ed3e",
+      "example_input.json": "87ea64332a4698db3cc4df2fc09e00ef3716ec69f121c1e339ae67eb53295bc3",
+      "build_manifest.json": "0377afc196ca007738a47767707c10792af94eaaaee54f36cd08455f7e2bbac7"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

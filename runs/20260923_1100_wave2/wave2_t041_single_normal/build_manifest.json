@@ -1,0 +1,71 @@
+{
+  "build_id": "wave2_t041_single_normal",
+  "composition_label": "Normal research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "query": "Required nonblank string, at most 10000 characters",
+      "sources": "Required list, 0..100 objects with exactly id, title, text; unique nonblank ids, nonblank titles, string texts up to 100000 characters",
+      "max_findings": "Optional integer 1..50, default 5; booleans rejected"
+    },
+    "output": {
+      "status": "ok",
+      "query": "Original query",
+      "findings": "Ranked array of {text, score, matched_terms, citation: {source_id, source_title, start, end}}",
+      "summary": "{sources_examined, matching_passages, findings_returned, no_matches}"
+    },
+    "error": "{status: error, error: message}; exit code 2",
+    "validation": "One validate function checks input and source-backed evidence; JSON decoding rejects duplicate keys and nonstandard numeric constants.",
+    "citation_contract": "Zero-based Unicode character offsets, start inclusive and end exclusive, into the exact supplied source text. Every finding text equals source.text[start:end]."
+  },
+  "cross_stage_handoffs": [
+    "Single Research functionality: validated request -> passage spans -> token-overlap ranking -> validated extractive findings -> JSON output. No separate composition stages."
+  ],
+  "behavior": {
+    "fixtures": "All example documents and test source material are explicitly synthetic.",
+    "retrieval": "Split at sentence-ending punctuation followed by whitespace and at line breaks. Trim boundary whitespace without changing source coordinates.",
+    "ranking": "Case-folded Unicode word tokens; rank by number of distinct overlapping query tokens descending. Score is overlap/query-token count rounded to six decimals. Ties use input source order then character start.",
+    "extraction": "Return exact matching passages, never generated paraphrases; preserve duplicate occurrences with their distinct citations.",
+    "empty_results": "Empty sources, blank source texts, tokenless queries and unmatched terms return status ok with no findings.",
+    "cli": "Exactly one JSON object on stdout; exit 0 for success and 2 for validation or file errors."
+  },
+  "scope": {
+    "included": [
+      "Deterministic local passage retrieval",
+      "Extractive findings with verifiable source citations",
+      "Shared request and evidence validation",
+      "Bounded input sizes and output count",
+      "Standard-library unit and CLI tests"
+    ],
+    "excluded": [
+      "Networks and live providers",
+      "LLM calls or injected model hooks; none required",
+      "Semantic embeddings, stemming and stopword filtering",
+      "Linguistic sentence parsing, OCR and document format conversion",
+      "Fact checking, source credibility assessment and enterprise operation"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 11,
+    "cli_status": "passed: exit 0, one JSON object, status ok, three cited findings"
+  }
+}

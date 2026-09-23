@@ -1,0 +1,96 @@
+{
+  "build_id": "wave2_t100_combo4_journey_normal_feedback_faq",
+  "composition_label": "Journey recommendations -> Normal research -> Feedback analysis -> Knowledge-base answers",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written from scratch for this isolated build; clearly labeled synthetic fixtures.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1; booleans are not accepted as integers.",
+      "synthetic": "Must be true.",
+      "profile": "completed: unique action/prerequisite IDs; goals: nonempty unique strings.",
+      "actions": "Records with id, title, prerequisites, tags, research_query.",
+      "passages": "Research records with id, source, text.",
+      "feedback": "Feedback records with id, text, passage_ids referencing research passages.",
+      "themes": "Controlled theme definitions with id, keywords, question.",
+      "knowledge_base": "Support policy records with id, source, text."
+    },
+    "output": {
+      "success": "schema_version, status=ok, synthetic=true, stages in required execution order.",
+      "stage_envelope": "schema_version, status=ok, stage, data. Stage status describes successful execution; data contains found/no_evidence or answered/abstained outcomes.",
+      "citation": "collection, id, source, start, end, quote. Offsets are zero-based Python Unicode codepoint indexes, end-exclusive; quote must equal the original source slice.",
+      "error": "schema_version, status=error, error; exit code 2."
+    },
+    "validation": "Validator is shared by all stages. Strict input fields and unique IDs; bounded collections (200) and text (20000 codepoints); valid foreign keys; two prerequisite-valid distinct steps; exact extractive sources; dedup membership; theme support; sequential handoff identity. Every stage revalidates its incoming chain and validates its outgoing envelope. Duplicate JSON object keys and nonstandard numeric constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "journey",
+      "to": "normal",
+      "data": "Two ordered action IDs and their validated research queries determine research retrieval; findings preserve both."
+    },
+    {
+      "from": "normal",
+      "to": "feedback",
+      "data": "Only passages actually cited in research findings select linked feedback. With no research evidence, feedback and FAQ stay empty."
+    },
+    {
+      "from": "feedback",
+      "to": "faq",
+      "data": "Only themes supported by deduplicated in-scope feedback supply FAQ questions, keyword anchors, and supporting feedback group IDs."
+    }
+  ],
+  "behavior": {
+    "journey": "Rank eligible next actions by goal/tag token overlap then ID. Select the first feasible pair in that priority order, recomputing prerequisite eligibility after step one. Impossible two-step journeys are validation errors.",
+    "normal": "Token-overlap retrieval over sentence spans with at least one non-stopword overlap. Rank sentences by overlap then earliest offset; rank source records by overlap then ID. Return the strongest exact sentence per step or explicit no_evidence.",
+    "feedback": "Select linked records, normalize case/whitespace/punctuation for deduplication, preserve all member IDs and in-scope passage links, and retain an exact representative excerpt. Controlled keyword themes can overlap. Report unique counts, excluded IDs, and unclassified groups.",
+    "faq": "Retrieve KB sentences using the supported theme's question and keywords. Require at least two distinct overlapping tokens and at least one theme keyword. Answers are verbatim KB extracts, never feedback-as-policy. Missing/weak evidence yields explicit abstention with null answer, empty citations, and a reason. Aggregate statuses: answered, partial, abstained, no_feedback.",
+    "determinism": "Stable ID and offset tie-breaks; no randomness, clocks, mutation of inputs, live providers, or optional LLM calls.",
+    "synthetic_fixture": "Example yields setup then shipping; exact setup/shipping findings; duplicate shipping comments count once; out-of-scope advertising is excluded; setup/shipping FAQ answers are grounded while billing explicitly abstains."
+  },
+  "scope": {
+    "included": [
+      "One in-memory integrated CLI pipeline",
+      "Shared versioned input/output envelopes and validation",
+      "Prerequisite-aware personalized journey",
+      "Exact research citations and explicit missing evidence",
+      "Traceable scoped feedback deduplication and controlled themes",
+      "Grounded extractive FAQ answers and abstention",
+      "Synthetic fixtures and standard-library unit/CLI tests"
+    ],
+    "excluded": [
+      "Production deployment, persistence, authentication, and enterprise infrastructure",
+      "Networks, provider calls, external dependencies, and agents",
+      "Semantic embeddings, learned classification, free-form generated answers",
+      "Semantic entailment, policy conflict resolution, multilingual tokenization, or advanced sentence segmentation",
+      "Automatically inferred themes or fuzzy/semantic feedback deduplication",
+      "Full dependency-graph optimization; only the selected two-step path is required to be feasible"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 37,
+    "failures": 0,
+    "errors": 0,
+    "cli_exit_code": 0,
+    "cli_stdout": "Exactly one parsed JSON object with status ok and four ordered stages.",
+    "coverage": "All four stages, prerequisite edge cases, exact Unicode citations, deterministic ties, deduplication and theme traceability, full propagation, tampered handoffs, empty and irrelevant evidence, invalid schemas, malformed JSON, duplicate keys, large numeric literals, file errors, usage, and real subprocess CLI behavior."
+  }
+}

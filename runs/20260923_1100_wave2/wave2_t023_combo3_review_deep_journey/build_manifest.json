@@ -1,0 +1,52 @@
+{
+  "build_id": "wave2_t023_combo3_review_deep_journey",
+  "composition_label": "Document review -> Deep research -> Journey recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original integrated reference implementation using clearly labeled synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact fields: schema_version, synthetic=true, requirements, documents, actions, completed_actions. Requirements: id, text, min_sources (positive integer). Documents: id, title, content, evidence. Evidence: globally unique id, requirement_id, stance (supports/contradicts/unknown), verbatim quote. Actions: id, title, requirement_ids, prerequisites. Completed action IDs must include prerequisite closure.",
+    "output": "One JSON object with schema_version, synthetic, status=ok, review, deep, journey. Stage envelopes share schema_version, synthetic and stage. Journey has ready/blocked status; blocked is a valid pipeline result, not an error.",
+    "errors": "One JSON object with status=error and error message, exit 2; successful pipeline exits 0.",
+    "validation": "Shared validate function enforces strict input schema, unique IDs, references, quote provenance, acyclic prerequisite graph and exact deterministic stage schemas. Every stage validates the previous handoff against its source before consuming it. JSON duplicate keys and nonstandard constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    {"from": "review", "to": "deep", "data": "Validated requirement statuses, reasons and evidence citations are synthesized without rereading raw document content."},
+    {"from": "deep", "to": "journey", "data": "Validated findings, unresolved questions and citations drive action priorities and traceable recommendations; input supplies the personalized action/prerequisite/completion constraints."}
+  ],
+  "behavior": {
+    "review": "Count distinct supporting document IDs against configured thresholds; contradictory evidence overrides sufficient support. Emit satisfied, conflict, contradicted, insufficient, unknown or missing status and traceable gaps.",
+    "deep": "Synthesize all provided documents per requirement with exact citations, supported/contested/adverse/incomplete findings, explicit supporting-versus-contradicting disagreements and unresolved questions.",
+    "journey": "Score unresolved conflict/adverse=5, insufficient/missing=4, unknown=3, satisfied=1 per addressed requirement. Enumerate valid ordered distinct pairs, maximize summed scores, then first-step score, then lexical IDs. Completed actions are excluded. Recommend currently executable actions and validate both steps sequentially. Return blocked with no claimed two-step journey when fewer than two steps are feasible.",
+    "determinism": "Stable ID sorting, no randomness, no timestamps, no live provider or optional LLM required.",
+    "traceability": "Original document/evidence/requirement IDs and verbatim quotes flow into research; question and evidence IDs flow into journey actions.",
+    "limitations": "Evidence stances are supplied assertions, not NLP-verified entailment. Distinct document IDs do not prove source independence. Recommendations do not resolve evidence gaps automatically. Step two is conditional on completing step one. No certification claims."
+  },
+  "scope": {
+    "included": ["Synthetic fixture", "Integrated deterministic three-stage pipeline", "Strict shared validation", "Multi-document evidence synthesis", "Prerequisite-aware two-step planning", "CLI JSON/file error handling", "Standard-library unittest fixtures"],
+    "excluded": ["Certification", "Live research or model calls", "Semantic interpretation of documents", "Document ingestion/OCR", "External dependency installation", "Enterprise persistence/authentication", "Automatic action execution"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 27,
+    "failures": 0,
+    "errors": 0,
+    "cli_command": "python -B implementation.py example_input.json",
+    "cli_exit_code": 0,
+    "cli_result": "One JSON object with status=ok and a ready, prerequisite-valid inspect -> reconcile journey",
+    "coverage": ["Each pipeline stage", "Cross-stage evidence and question propagation", "Tampered handoff rejection", "Distinct-source counting", "Contradictory and unknown evidence", "Empty documents and actions", "Incomplete and completed journeys", "Prerequisite cycles and unknown references", "Input order independence", "Input immutability", "Strict schema and types", "CLI success, usage, file and JSON errors"]
+  }
+}

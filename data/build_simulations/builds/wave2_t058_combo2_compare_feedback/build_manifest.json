@@ -1,0 +1,54 @@
+{
+  "build_id": "wave2_t058_combo2_compare_feedback",
+  "composition_label": "Product comparison (Smart product search) -> Feedback analysis (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope": "schema_version, data_label, products, preferences, feedback; comparison adds status and comparison; feedback adds insights",
+    "products": "Unique id, nonempty name, attributes object",
+    "attributes": "Canonical price (USD), weight (kg), battery_hours (hours); aliases cost, mass, battery. Numeric values use canonical units; strings support USD/$, kg/g, h/hours/min. Nonnegative finite values only.",
+    "preferences": "Canonical attribute -> {weight: finite nonnegative number, direction: min|max}; at least one positive weight; every product must supply all preference attributes",
+    "feedback": "Unique id, known product_id, nonempty text containing at least one word",
+    "comparison": "Ordered rows with product_id, consecutive rank, score in [0,1], normalized attributes for side-by-side comparison",
+    "insights": "Rank-ordered product rows with propagated score/rank, raw_count, unique_count, themes and exact supporting excerpts with source IDs",
+    "validation": "Shared validate function checks all stage boundaries, strict object fields, referential integrity, measurements, ranking and excerpt provenance"
+  },
+  "cross_stage_handoffs": [
+    "compare validates input, normalizes attributes, produces and validates comparison envelope",
+    "feedback_analysis accepts only validated comparison envelope, preserves ranked product metadata and source feedback, then validates final insights"
+  ],
+  "behavior": {
+    "ranking": "Weighted min-max utilities across products; equal-valued criteria contribute 1; weights scaled to prevent overflow; scores rounded to 12 decimals; ties sorted by product ID",
+    "deduplication": "Within each product only, casefolded Unicode word sequences ignoring punctuation and whitespace. Duplicate source IDs and every exact original excerpt are retained.",
+    "themes": "Deterministic whole-word keyword themes battery, portability, quality, value; general fallback. Counts use unique feedback groups; a group may support multiple themes.",
+    "no_feedback": "Products remain present with zero counts and empty themes",
+    "error_contract": "Invalid input, JSON, arguments, encoding or file errors print one JSON object with status error and exit 2; success prints one JSON object and exits 0",
+    "fixture": "example_input.json is explicitly labeled synthetic; products and feedback are fictional",
+    "side_effects": "Pipeline deep-copies input; CLI reads one input file and writes stdout only"
+  },
+  "scope": {
+    "included": ["Attribute normalization", "Side-by-side comparison", "Preference ranking", "Per-product deduplication", "Keyword themes", "Exact traceable excerpts", "Integrated validation", "CLI and unittest coverage"],
+    "excluded": ["Live search", "Networks", "LLM providers or callables", "Currency conversion", "Fuzzy semantic deduplication", "Sentiment inference", "Enterprise deployment", "Persistence"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 16,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object, status ok; three ranked products with traceable feedback insights",
+    "coverage": ["Normalization", "Weighted ranking", "Deduplication", "Theme excerpts", "Cross-stage propagation and validation", "Tampered provenance rejection", "Empty feedback", "Single product", "Ties", "Per-product deduplication boundaries", "Invalid schemas and measurements", "Invalid preferences", "Large finite weights", "Determinism and input immutability", "CLI success and errors"]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "build_id": "wave2_t081_combo3_feedback_interests_semantic",
+  "composition_label": "Feedback analysis -> Interest-based recommendations -> Semantic search",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original integrated reference implementation written for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "fixture_label": "nonempty provenance text; supplied example is explicitly synthetic",
+      "products": "list of unique {id, name, description, category, tags: list[str]}",
+      "feedback": "list of unique {id, customer_id, product_id, text, rating: finite number 1..5}; product references must exist",
+      "preferences": "{interests: mapping of normalized feature names to finite weights 0..10, exclude: {product_ids, categories, tags}: string lists, limit: integer 1..100}",
+      "search": "{query: string, limit: integer 1..100}"
+    },
+    "output": "{status: ok, schema_version: 1, fixture_label, feedback: {records, themes, signals, duplicates_removed}, interests: {profile, eligible_product_ids, recommendations}, search: {query, mode, index, results}}",
+    "error": "{status: error, error: string}; CLI exit code 2",
+    "validation": "Shared validate(kind, value, context) validates input and each stage handoff. Feedback and interest payloads are checked against deterministic recomputation, including evidence and exclusions. Search validates candidate boundaries, result counts and numeric scores. Unknown input fields, duplicate JSON keys, boolean numerics, nonfinite numbers and invalid references are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validated feedback records yield deduplicated category/tag/theme affinities with source IDs. Interest ranking consumes those signals plus explicit preferences.",
+    "Validated interest recommendations define the exact search index candidate set. Excluded products and products outside the preference shortlist cannot reappear. Search receives interest scores for relevance tie-breaking."
+  ],
+  "behavior": {
+    "feedback": "Customer/product/Unicode-word-normalized-text deduplication; conflicting duplicate ratings rejected. Ratings map linearly to sentiment [-1,1]. Fixed keyword themes preserve exact original excerpts and all duplicate source IDs; theme count counts unique records. Feature affinity is mean sentiment across unique relevant records.",
+    "interests": "Exact normalized category/tag match, explicit weight plus deduplicated feedback affinity. Scores sum nonzero matching feature weights, including negative affinity. ID/category/tag exclusions precede ranking. Explanations identify catalog features, explicit/feedback weights and traceable source IDs. Ties use product ID.",
+    "search": "Build an in-memory token-frequency index over the validated recommendation shortlist. Rank by logarithmic term frequency times smoothed inverse document frequency, plus optional cosine embedding similarity. Interest score then product ID break ties. Empty or unmatched queries fall back to preference order in lexical mode; zero-relevance candidates remain eligible.",
+    "injection": "Library run_pipeline(data, embedder=None) optionally accepts one callable taking [query, candidate_document, ...] and returning a list of equal-length, nonempty finite numeric vectors. Callbacks are tested with synthetic fixtures only; no network implementation exists. Zero vectors produce zero similarity. Caller-supplied callbacks are responsible for deterministic behavior.",
+    "determinism": "Stable sorted evidence, profiles, feature lists and ID tie-breakers; no randomness, clocks, model calls or input mutation."
+  },
+  "scope": {
+    "included": ["One integrated CLI pipeline", "Shared schema and validation", "Traceable deduplicated feedback", "Signed preference scoring", "Hard exclusions", "In-memory lexical retrieval", "Optional validated embedding injection", "Synthetic fixture and standard-library tests"],
+    "excluded": ["Live LLM or embedding providers", "Trained semantic model", "Persistence or enterprise scale indexing", "Authentication", "Multi-user profile management", "Free-text negation interpretation", "Production deployment", "External packages"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_test_count": 27,
+    "unit_tests_passed": 27,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "cli_output": "One valid JSON object; top search result is bottle",
+    "coverage": ["All three stages", "Feedback-to-interest and interest-to-search propagation", "Evidence integrity", "Hard exclusions", "Determinism and input immutability", "Empty inputs and fallback behavior", "Malformed schema, JSON and encoding", "CLI success, usage and file errors", "Valid, malformed and failing injected embedding fixtures"]
+  }
+}

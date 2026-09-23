@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "preferences": {
+    "interests": {"travel": 3, "photography": 2},
+    "excluded_ids": [],
+    "excluded_tags": ["restricted"],
+    "priorities": {"price": 4, "weight": 2},
+    "experience": "beginner",
+    "limit": 3
+  },
+  "products": [
+    {"id": "camera-a", "name": "Synthetic Trail Camera", "tags": ["travel", "photography"],
+     "attributes": {"price": {"value": 12000, "unit": "cents"}, "weight": {"value": 0.4, "unit": "kg"}}},
+    {"id": "camera-b", "name": "Synthetic Studio Camera", "tags": ["photography"],
+     "attributes": {"price": {"value": 240, "unit": "USD"}, "weight": {"value": 900, "unit": "g"}}},
+    {"id": "camera-x", "name": "Synthetic Excluded Camera", "tags": ["travel", "restricted"],
+     "attributes": {"price": {"value": 1, "unit": "USD"}}}
+  ],
+  "onboarding_steps": [
+    {"id": "safety", "title": "Synthetic safety check", "instructions": "Read the fixture safety card.",
+     "tags": [], "experience_levels": ["expert"], "prerequisites": []},
+    {"id": "setup", "title": "Synthetic camera setup", "instructions": "Select the fixture travel preset.",
+     "tags": ["travel"], "experience_levels": ["beginner", "intermediate"], "prerequisites": ["safety"]},
+    {"id": "advanced", "title": "Synthetic advanced settings", "instructions": "Inspect manual settings.",
+     "tags": ["photography"], "experience_levels": ["expert"], "prerequisites": ["safety"]}
+  ],
+  "feedback": [
+    {"id": "f1", "product_id": "camera-a", "step_id": "setup", "text": "Setup is easy and the price is good."},
+    {"id": "f2", "product_id": "camera-a", "step_id": "setup", "text": "  SETUP is easy and the price is good. "},
+    {"id": "f3", "product_id": "camera-a", "text": "A durable camera."},
+    {"id": "f4", "product_id": "camera-b", "text": "Expensive."},
+    {"id": "f5", "product_id": "camera-a", "step_id": "advanced", "text": "Confusing advanced controls."}
+  ]
+}

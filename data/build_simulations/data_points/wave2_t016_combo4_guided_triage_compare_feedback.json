@@ -1,0 +1,942 @@
+{
+  "id": "wave2_t016_combo4_guided_triage_compare_feedback",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "onboard",
+      "support",
+      "search",
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Guided onboarding",
+      "AI customer support",
+      "Smart product search",
+      "Customer insights"
+    ],
+    "types": [
+      "guided",
+      "triage",
+      "compare",
+      "feedback"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 1,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 6,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Validated prerequisite-driven onboarding steps and progress tracking.",
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Attribute normalization, side-by-side comparison and preference ranking.",
+    "Feedback deduplication, themes and traceable supporting excerpts."
+  ],
+  "integration": {
+    "ordered_types": [
+      "guided",
+      "triage",
+      "compare",
+      "feedback"
+    ],
+    "edges": [
+      {
+        "from": "guided",
+        "to": "triage",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "triage",
+        "to": "compare",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "compare",
+        "to": "feedback",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "cc1b7b4ebc059406ba10b32cd2059bd456d1ba411cd6124bde580b6e4d635bc3",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "636a1fccfd815694bb7fe3c4512ba7c79945adbb9d3e89c031c605e997f04ad8",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t016_combo4_guided_triage_compare_feedback",
+  "membership_point_id": "combo4_guided_triage_compare_feedback",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "eb2c2f6c672c41d7357fa806ac5e67771e1c62f7defb4443928e8920f7d5d9c2",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 8,
+    "input_tokens": 216262,
+    "output_tokens": 15021,
+    "cache_read_tokens": 196460,
+    "cache_write_tokens": 19778,
+    "total_tokens": 231283,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33970,
+        "agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+        "model": "gpt-6-astra",
+        "input_tokens": 14792,
+        "output_tokens": 545,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 831,
+        "reasoning_tokens": 331,
+        "duration_ms": 15511,
+        "created_at": "2026-09-23T09:34:20.113Z"
+      },
+      {
+        "id": 34001,
+        "agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+        "model": "gpt-6-astra",
+        "input_tokens": 15367,
+        "output_tokens": 12447,
+        "cache_read_tokens": 14789,
+        "cache_write_tokens": 575,
+        "reasoning_tokens": 516,
+        "duration_ms": 222863,
+        "created_at": "2026-09-23T09:38:04.649Z"
+      },
+      {
+        "id": 34002,
+        "agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+        "model": "gpt-6-astra",
+        "input_tokens": 28138,
+        "output_tokens": 164,
+        "cache_read_tokens": 15364,
+        "cache_write_tokens": 12771,
+        "reasoning_tokens": 7,
+        "duration_ms": 5119,
+        "created_at": "2026-09-23T09:38:09.872Z"
+      },
+      {
+        "id": 34004,
+        "agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+        "model": "gpt-6-astra",
+        "input_tokens": 28699,
+        "output_tokens": 669,
+        "cache_read_tokens": 28135,
+        "cache_write_tokens": 561,
+        "reasoning_tokens": 230,
+        "duration_ms": 17020,
+        "created_at": "2026-09-23T09:38:28.773Z"
+      },
+      {
+        "id": 34006,
+        "agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+        "model": "gpt-6-astra",
+        "input_tokens": 29538,
+        "output_tokens": 156,
+        "cache_read_tokens": 28696,
+        "cache_write_tokens": 839,
+        "reasoning_tokens": 0,
+        "duration_ms": 7895,
+        "created_at": "2026-09-23T09:38:36.774Z"
+      },
+      {
+        "id": 34009,
+        "agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+        "model": "gpt-6-astra",
+        "input_tokens": 32675,
+        "output_tokens": 546,
+        "cache_read_tokens": 29535,
+        "cache_write_tokens": 3137,
+        "reasoning_tokens": 66,
+        "duration_ms": 11515,
+        "created_at": "2026-09-23T09:38:50.236Z"
+      },
+      {
+        "id": 34011,
+        "agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+        "model": "gpt-6-astra",
+        "input_tokens": 33314,
+        "output_tokens": 384,
+        "cache_read_tokens": 32672,
+        "cache_write_tokens": 639,
+        "reasoning_tokens": 0,
+        "duration_ms": 8169,
+        "created_at": "2026-09-23T09:38:58.499Z"
+      },
+      {
+        "id": 34013,
+        "agent_id": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+        "model": "gpt-6-astra",
+        "input_tokens": 33739,
+        "output_tokens": 110,
+        "cache_read_tokens": 33311,
+        "cache_write_tokens": 425,
+        "reasoning_tokens": 0,
+        "duration_ms": 4262,
+        "created_at": "2026-09-23T09:39:06.622Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.76597,
+      "observed_cache_profile_estimate_usd": 0.32393500000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 9.19164,
+      "observed_cache_profile_estimate_usd": 9.19164,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 2,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 4,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.76,
+    "pseudo_annual_cost_usd": 75000,
+    "pseudo_annual_ai_value_usd": 15000,
+    "pseudo_net_impact_usd": -60000,
+    "pseudo_roi_pct": -80.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................................\n----------------------------------------------------------------------\nRan 34 tests in 0.620s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "request": {
+        "feedback": [
+          {
+            "id": "feedback-1",
+            "product_id": "product-a",
+            "text": "Fast memory and a fair price!",
+            "ticket_id": "ticket-1"
+          },
+          {
+            "id": "feedback-2",
+            "product_id": "product-a",
+            "text": "  FAST memory and a fair price.  ",
+            "ticket_id": "ticket-1"
+          },
+          {
+            "id": "feedback-3",
+            "product_id": "product-c",
+            "text": "Light for travel, good price.",
+            "ticket_id": "ticket-2"
+          },
+          {
+            "id": "feedback-4",
+            "product_id": "product-b",
+            "text": "Fast, but heavy for travel.",
+            "ticket_id": "ticket-1"
+          }
+        ],
+        "feedback_themes": {
+          "performance": [
+            "fast",
+            "memory"
+          ],
+          "portability": [
+            "light",
+            "heavy",
+            "travel"
+          ],
+          "value": [
+            "price"
+          ]
+        },
+        "guided": {
+          "completed_steps": [
+            "profile",
+            "preferences"
+          ],
+          "customer_id": "synthetic-customer-1",
+          "preferences": {
+            "max_price_usd": 1200,
+            "min_memory_gb": 8,
+            "preferred_brand": "ExampleCo",
+            "weights": {
+              "brand": 1,
+              "memory_gb": 2,
+              "price_usd": 3,
+              "weight_kg": 1
+            }
+          },
+          "steps": [
+            {
+              "id": "profile",
+              "required": true,
+              "requires": []
+            },
+            {
+              "id": "preferences",
+              "required": true,
+              "requires": [
+                "profile"
+              ]
+            },
+            {
+              "id": "newsletter",
+              "required": false,
+              "requires": [
+                "preferences"
+              ]
+            }
+          ]
+        },
+        "products": [
+          {
+            "attributes": {
+              "brand": "ExampleCo",
+              "price": {
+                "unit": "USD",
+                "value": 900
+              },
+              "ram": {
+                "unit": "MB",
+                "value": 16384
+              },
+              "weight": {
+                "unit": "g",
+                "value": 1400
+              }
+            },
+            "id": "product-a",
+            "name": "Synthetic Swift 16"
+          },
+          {
+            "attributes": {
+              "brand": "DemoWorks",
+              "memory_gb": {
+                "unit": "GB",
+                "value": 32
+              },
+              "price_usd": {
+                "unit": "usd",
+                "value": 1100
+              },
+              "weight_kg": {
+                "unit": "kg",
+                "value": 2
+              }
+            },
+            "id": "product-b",
+            "name": "Synthetic Power 32"
+          },
+          {
+            "attributes": {
+              "brand": "ExampleCo",
+              "memory": {
+                "unit": "GB",
+                "value": 8
+              },
+              "price": {
+                "unit": "USD",
+                "value": 650
+              },
+              "weight": {
+                "unit": "kg",
+                "value": 1.1
+              }
+            },
+            "id": "product-c",
+            "name": "Synthetic Mini 8"
+          }
+        ],
+        "schema_version": 1,
+        "synthetic": true,
+        "triage": {
+          "default": {
+            "category": "general",
+            "owner": "synthetic-help-team",
+            "preferences": {},
+            "priority": "normal"
+          },
+          "rules": [
+            {
+              "category": "performance",
+              "keywords": [
+                "slow",
+                "memory"
+              ],
+              "owner": "synthetic-performance-team",
+              "preferences": {
+                "min_memory_gb": 16
+              },
+              "priority": "high"
+            },
+            {
+              "category": "portability",
+              "keywords": [
+                "travel",
+                "light"
+              ],
+              "owner": "synthetic-mobile-team",
+              "preferences": {
+                "max_weight_kg": 1.5
+              },
+              "priority": "normal"
+            }
+          ],
+          "tickets": [
+            {
+              "customer_id": "synthetic-customer-1",
+              "id": "ticket-1",
+              "text": "My old laptop is slow and needs more memory."
+            },
+            {
+              "customer_id": "synthetic-customer-1",
+              "id": "ticket-2",
+              "text": "I travel and need a light laptop."
+            }
+          ]
+        }
+      },
+      "results": {
+        "compare": {
+          "comparisons": [
+            {
+              "category": "performance",
+              "columns": [
+                "price_usd",
+                "memory_gb",
+                "weight_kg",
+                "brand"
+              ],
+              "outcome": "ranked",
+              "owner": "synthetic-performance-team",
+              "preferences": {
+                "max_price_usd": 1200,
+                "min_memory_gb": 16,
+                "preferred_brand": "ExampleCo",
+                "weights": {
+                  "brand": 1,
+                  "memory_gb": 2,
+                  "price_usd": 3,
+                  "weight_kg": 1
+                }
+              },
+              "priority": "high",
+              "products": [
+                {
+                  "attributes": {
+                    "brand": "exampleco",
+                    "memory_gb": 16.0,
+                    "price_usd": 900.0,
+                    "weight_kg": 1.4
+                  },
+                  "eligible": true,
+                  "id": "product-a",
+                  "name": "Synthetic Swift 16",
+                  "rank": 1,
+                  "rejection_reasons": [],
+                  "score": 0.714286
+                },
+                {
+                  "attributes": {
+                    "brand": "demoworks",
+                    "memory_gb": 32.0,
+                    "price_usd": 1100.0,
+                    "weight_kg": 2.0
+                  },
+                  "eligible": true,
+                  "id": "product-b",
+                  "name": "Synthetic Power 32",
+                  "rank": 2,
+                  "rejection_reasons": [],
+                  "score": 0.285714
+                },
+                {
+                  "attributes": {
+                    "brand": "exampleco",
+                    "memory_gb": 8.0,
+                    "price_usd": 650.0,
+                    "weight_kg": 1.1
+                  },
+                  "eligible": false,
+                  "id": "product-c",
+                  "name": "Synthetic Mini 8",
+                  "rank": null,
+                  "rejection_reasons": [
+                    "min_memory_gb"
+                  ],
+                  "score": null
+                }
+              ],
+              "ranked_product_ids": [
+                "product-a",
+                "product-b"
+              ],
+              "recommended_product_id": "product-a",
+              "ticket_id": "ticket-1"
+            },
+            {
+              "category": "portability",
+              "columns": [
+                "price_usd",
+                "memory_gb",
+                "weight_kg",
+                "brand"
+              ],
+              "outcome": "ranked",
+              "owner": "synthetic-mobile-team",
+              "preferences": {
+                "max_price_usd": 1200,
+                "max_weight_kg": 1.5,
+                "min_memory_gb": 8,
+                "preferred_brand": "ExampleCo",
+                "weights": {
+                  "brand": 1,
+                  "memory_gb": 2,
+                  "price_usd": 3,
+                  "weight_kg": 1
+                }
+              },
+              "priority": "normal",
+              "products": [
+                {
+                  "attributes": {
+                    "brand": "exampleco",
+                    "memory_gb": 16.0,
+                    "price_usd": 900.0,
+                    "weight_kg": 1.4
+                  },
+                  "eligible": true,
+                  "id": "product-a",
+                  "name": "Synthetic Swift 16",
+                  "rank": 2,
+                  "rejection_reasons": [],
+                  "score": 0.428571
+                },
+                {
+                  "attributes": {
+                    "brand": "demoworks",
+                    "memory_gb": 32.0,
+                    "price_usd": 1100.0,
+                    "weight_kg": 2.0
+                  },
+                  "eligible": false,
+                  "id": "product-b",
+                  "name": "Synthetic Power 32",
+                  "rank": null,
+                  "rejection_reasons": [
+                    "max_weight_kg"
+                  ],
+                  "score": null
+                },
+                {
+                  "attributes": {
+                    "brand": "exampleco",
+                    "memory_gb": 8.0,
+                    "price_usd": 650.0,
+                    "weight_kg": 1.1
+                  },
+                  "eligible": true,
+                  "id": "product-c",
+                  "name": "Synthetic Mini 8",
+                  "rank": 1,
+                  "rejection_reasons": [],
+                  "score": 0.714286
+                }
+              ],
+              "ranked_product_ids": [
+                "product-c",
+                "product-a"
+              ],
+              "recommended_product_id": "product-c",
+              "ticket_id": "ticket-2"
+            }
+          ]
+        },
+        "feedback": {
+          "duplicates_removed": 1,
+          "groups": [
+            {
+              "category": "performance",
+              "comparison_rank": 1,
+              "comparison_score": 0.714286,
+              "evidence": [
+                {
+                  "excerpt": "Fast memory and a fair price!",
+                  "source_id": "feedback-1"
+                },
+                {
+                  "excerpt": "  FAST memory and a fair price.  ",
+                  "source_id": "feedback-2"
+                }
+              ],
+              "id": "feedback-1",
+              "owner": "synthetic-performance-team",
+              "product_id": "product-a",
+              "source_ids": [
+                "feedback-1",
+                "feedback-2"
+              ],
+              "themes": [
+                "performance",
+                "value"
+              ],
+              "ticket_id": "ticket-1",
+              "was_recommended": true
+            },
+            {
+              "category": "portability",
+              "comparison_rank": 1,
+              "comparison_score": 0.714286,
+              "evidence": [
+                {
+                  "excerpt": "Light for travel, good price.",
+                  "source_id": "feedback-3"
+                }
+              ],
+              "id": "feedback-3",
+              "owner": "synthetic-mobile-team",
+              "product_id": "product-c",
+              "source_ids": [
+                "feedback-3"
+              ],
+              "themes": [
+                "value",
+                "portability"
+              ],
+              "ticket_id": "ticket-2",
+              "was_recommended": true
+            },
+            {
+              "category": "performance",
+              "comparison_rank": 2,
+              "comparison_score": 0.285714,
+              "evidence": [
+                {
+                  "excerpt": "Fast, but heavy for travel.",
+                  "source_id": "feedback-4"
+                }
+              ],
+              "id": "feedback-4",
+              "owner": "synthetic-performance-team",
+              "product_id": "product-b",
+              "source_ids": [
+                "feedback-4"
+              ],
+              "themes": [
+                "performance",
+                "portability"
+              ],
+              "ticket_id": "ticket-1",
+              "was_recommended": false
+            }
+          ],
+          "raw_count": 4,
+          "themes": [
+            {
+              "evidence": [
+                {
+                  "excerpt": "Fast memory and a fair price!",
+                  "feedback_id": "feedback-1",
+                  "matched_keywords": [
+                    "fast",
+                    "memory"
+                  ],
+                  "product_id": "product-a",
+                  "source_id": "feedback-1",
+                  "ticket_id": "ticket-1"
+                },
+                {
+                  "excerpt": "  FAST memory and a fair price.  ",
+                  "feedback_id": "feedback-1",
+                  "matched_keywords": [
+                    "fast",
+                    "memory"
+                  ],
+                  "product_id": "product-a",
+                  "source_id": "feedback-2",
+                  "ticket_id": "ticket-1"
+                },
+                {
+                  "excerpt": "Fast, but heavy for travel.",
+                  "feedback_id": "feedback-4",
+                  "matched_keywords": [
+                    "fast"
+                  ],
+                  "product_id": "product-b",
+                  "source_id": "feedback-4",
+                  "ticket_id": "ticket-1"
+                }
+              ],
+              "theme": "performance",
+              "unique_feedback_count": 2
+            },
+            {
+              "evidence": [
+                {
+                  "excerpt": "Light for travel, good price.",
+                  "feedback_id": "feedback-3",
+                  "matched_keywords": [
+                    "light",
+                    "travel"
+                  ],
+                  "product_id": "product-c",
+                  "source_id": "feedback-3",
+                  "ticket_id": "ticket-2"
+                },
+                {
+                  "excerpt": "Fast, but heavy for travel.",
+                  "feedback_id": "feedback-4",
+                  "matched_keywords": [
+                    "heavy",
+                    "travel"
+                  ],
+                  "product_id": "product-b",
+                  "source_id": "feedback-4",
+                  "ticket_id": "ticket-1"
+                }
+              ],
+              "theme": "portability",
+              "unique_feedback_count": 2
+            },
+            {
+              "evidence": [
+                {
+                  "excerpt": "Fast memory and a fair price!",
+                  "feedback_id": "feedback-1",
+                  "matched_keywords": [
+                    "price"
+                  ],
+                  "product_id": "product-a",
+                  "source_id": "feedback-1",
+                  "ticket_id": "ticket-1"
+                },
+                {
+                  "excerpt": "  FAST memory and a fair price.  ",
+                  "feedback_id": "feedback-1",
+                  "matched_keywords": [
+                    "price"
+                  ],
+                  "product_id": "product-a",
+                  "source_id": "feedback-2",
+                  "ticket_id": "ticket-1"
+                },
+                {
+                  "excerpt": "Light for travel, good price.",
+                  "feedback_id": "feedback-3",
+                  "matched_keywords": [
+                    "price"
+                  ],
+                  "product_id": "product-c",
+                  "source_id": "feedback-3",
+                  "ticket_id": "ticket-2"
+                }
+              ],
+              "theme": "value",
+              "unique_feedback_count": 2
+            }
+          ],
+          "unique_count": 3,
+          "unthemed_count": 0
+        },
+        "guided": {
+          "completed_count": 2,
+          "customer_id": "synthetic-customer-1",
+          "preferences": {
+            "max_price_usd": 1200,
+            "min_memory_gb": 8,
+            "preferred_brand": "ExampleCo",
+            "weights": {
+              "brand": 1,
+              "memory_gb": 2,
+              "price_usd": 3,
+              "weight_kg": 1
+            }
+          },
+          "progress": 0.666667,
+          "ready_for_triage": true,
+          "required_remaining": [],
+          "steps": [
+            {
+              "id": "profile",
+              "missing_prerequisites": [],
+              "required": true,
+              "status": "completed"
+            },
+            {
+              "id": "preferences",
+              "missing_prerequisites": [],
+              "required": true,
+              "status": "completed"
+            },
+            {
+              "id": "newsletter",
+              "missing_prerequisites": [],
+              "required": false,
+              "status": "ready"
+            }
+          ],
+          "total_count": 3
+        },
+        "triage": {
+          "tickets": [
+            {
+              "category": "performance",
+              "customer_id": "synthetic-customer-1",
+              "id": "ticket-1",
+              "matched_keywords": [
+                "slow",
+                "memory"
+              ],
+              "owner": "synthetic-performance-team",
+              "preferences": {
+                "max_price_usd": 1200,
+                "min_memory_gb": 16,
+                "preferred_brand": "ExampleCo",
+                "weights": {
+                  "brand": 1,
+                  "memory_gb": 2,
+                  "price_usd": 3,
+                  "weight_kg": 1
+                }
+              },
+              "priority": "high"
+            },
+            {
+              "category": "portability",
+              "customer_id": "synthetic-customer-1",
+              "id": "ticket-2",
+              "matched_keywords": [
+                "travel",
+                "light"
+              ],
+              "owner": "synthetic-mobile-team",
+              "preferences": {
+                "max_price_usd": 1200,
+                "max_weight_kg": 1.5,
+                "min_memory_gb": 8,
+                "preferred_brand": "ExampleCo",
+                "weights": {
+                  "brand": 1,
+                  "memory_gb": 2,
+                  "price_usd": 3,
+                  "weight_kg": 1
+                }
+              },
+              "priority": "normal"
+            }
+          ]
+        }
+      },
+      "schema_version": 1,
+      "stage": "feedback",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t016_combo4_guided_triage_compare_feedback",
+    "artifact_sha256": {
+      "implementation.py": "6b6c54f247b64d90413fce92e7003a2065904ff2c7cfa6367386425bb80de592",
+      "test_implementation.py": "dd4e1e6b6a185e732bff6553fad4c1250c369806421196c6167750f4c2d3fb70",
+      "example_input.json": "50e5121ed764f6eef3f7d57299d42cc3b24ae748ab160f058783d400fca3507c",
+      "build_manifest.json": "c389a9798c19c8a87328695db51e7be5eb39171b7f7a854ef06968ae44895bb7"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

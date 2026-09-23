@@ -1,0 +1,56 @@
+{
+  "build_id": "wave2_t101_combo2_semantic_review",
+  "composition_label": "Semantic search -> Document review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated reference implementation using synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version=1, synthetic=true, query, products[{id,title,description,documents[{id,text}]}], requirements[{id,description,terms}], optional limit (1..100, default 5), optional min_score (0..1, default 0.1)",
+    "output": "schema_version, synthetic, status, query, search{method,hits[{rank,product_id,score,document_ids}]}, review{checks,evidence_found,gaps,notice}",
+    "validation": "Shared ValidationError/require/type/finite-number checks; strict object fields, unique identifiers, nonempty terms and query, validated search handoff on producer and consumer.",
+    "errors": "CLI prints one JSON object with status=error and exits 2 for usage, file, decoding, JSON or schema failures."
+  },
+  "cross_stage_handoffs": [
+    "Semantic search emits ranked product identifiers, bounded finite scores and document identifiers.",
+    "Review validates ranks, scores, identifiers, threshold and exact document provenance before examining only retrieved products.",
+    "Evidence and partial-evidence records retain product ID, document ID, search rank, search score, excerpt, matched terms and missing terms."
+  ],
+  "behavior": {
+    "search": "In-memory product text index includes title, description and documents. Default lexical query-token coverage is a transparent baseline, not learned semantic understanding. Positive scores meeting min_score are sorted by descending score then product ID and limited.",
+    "optional_embedding": "run_pipeline(data, embedding=callable) accepts a batch callable receiving query followed by indexed texts. It must return equal-dimensional finite nonzero numeric lists. Validated normalized cosine similarity is clamped to [0,1]. No provider is called. Supplied callable determinism is the caller's responsibility.",
+    "review": "A requirement has evidence_found only if all normalized token phrases occur in one retrieved document. Otherwise a traceable gap includes examined documents, partial evidence and a reason. Requirements are evaluated across retrieved products, not independently per product.",
+    "limitations": "Term occurrence does not establish truth, handle negation, or prove compliance. Descriptions and product titles support search but are not review evidence. No certification claims.",
+    "synthetic_data": "All example products, documents and requirements are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["Integrated CLI pipeline", "Shared validation", "Deterministic ranking", "Injected embedding fixtures", "Traceable requirement gaps", "CLI error handling"],
+    "excluded": ["Live providers", "External dependencies", "Persistent search services", "Document parsing beyond supplied text", "Certification", "Enterprise delivery"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 19,
+    "tests_failed": 0,
+    "test_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_result": "One JSON object with status=ok, one retrieved product, one evidence_found requirement and one traceable gap.",
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_command": "python -B implementation.py example_input.json"
+  }
+}

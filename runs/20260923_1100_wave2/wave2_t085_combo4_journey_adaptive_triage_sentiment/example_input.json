@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "fixture": "synthetic",
+  "profile": {
+    "id": "synthetic-seller-001",
+    "experience": "beginner",
+    "preference": "hands_on",
+    "interests": ["selling", "payments"],
+    "completed": ["account"]
+  },
+  "actions": [
+    {
+      "id": "account",
+      "title": "Create your synthetic account",
+      "prerequisites": [],
+      "tags": ["basics"],
+      "support_category": "general"
+    },
+    {
+      "id": "payout",
+      "title": "Configure synthetic payouts",
+      "prerequisites": ["account"],
+      "tags": ["payments", "selling"],
+      "support_category": "billing"
+    },
+    {
+      "id": "listing",
+      "title": "Publish a synthetic listing",
+      "prerequisites": ["payout"],
+      "tags": ["selling"],
+      "support_category": "technical"
+    },
+    {
+      "id": "tour",
+      "title": "Explore the synthetic marketplace",
+      "prerequisites": ["account"],
+      "tags": ["discovery"],
+      "support_category": "general"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "synthetic-ticket-001",
+      "text": "I am frustrated and stuck while completing this step.",
+      "severity": "medium",
+      "action_id": "payout",
+      "blocked": true
+    },
+    {
+      "id": "synthetic-ticket-002",
+      "text": "Great help, but the service outage is critical.",
+      "severity": "critical",
+      "action_id": "listing",
+      "blocked": false
+    },
+    {
+      "id": "synthetic-ticket-003",
+      "text": "Please explain the dashboard.",
+      "severity": "low",
+      "action_id": null,
+      "blocked": false
+    }
+  ],
+  "config": {
+    "routes": {
+      "general": {"owner": "synthetic-support-lead", "queue": "synthetic-general", "base_priority": 4},
+      "billing": {"owner": "synthetic-billing-lead", "queue": "synthetic-billing", "base_priority": 3},
+      "technical": {"owner": "synthetic-engineering-lead", "queue": "synthetic-technical", "base_priority": 3}
+    },
+    "rules": [
+      {"category": "technical", "keywords": ["service outage", "crash", "broken"]},
+      {"category": "billing", "keywords": ["refund", "invoice"]}
+    ],
+    "default_category": "general",
+    "sentiment_lexicon": {
+      "great": 3,
+      "good": 2,
+      "love": 3,
+      "frustrated": -3,
+      "stuck": -2,
+      "broken": -2,
+      "hate": -4,
+      "bad": -2
+    }
+  }
+}

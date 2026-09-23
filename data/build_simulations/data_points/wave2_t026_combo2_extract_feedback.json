@@ -1,0 +1,552 @@
+{
+  "id": "wave2_t026_combo2_extract_feedback",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "Customer insights"
+    ],
+    "types": [
+      "extract",
+      "feedback"
+    ],
+    "functionality_count": 2,
+    "integration_edge_count": 1,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 9,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.75,
+    "staff_data_scientist": 0.25,
+    "staff_architect": 0.125,
+    "staff_consultant": 0.125,
+    "staff_software_engineer": 0.625,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 5,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 0,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 0,
+    "planned_operation_verify": 2,
+    "planned_operation_write": 2
+  },
+  "requirements": [
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Feedback deduplication, themes and traceable supporting excerpts."
+  ],
+  "integration": {
+    "ordered_types": [
+      "extract",
+      "feedback"
+    ],
+    "edges": [
+      {
+        "from": "extract",
+        "to": "feedback",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "ed317f487598f45e0b108bcc1e83eac6ab972a19f6069974b68e19ac6e630edc",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "52d17556c2e29b06f200273b4e37b0ce5ac80498fe160b8e87fe4938474d4ab4",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t026_combo2_extract_feedback",
+  "membership_point_id": "combo2_extract_feedback",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "0e0fd871a0ca986c44ea2e85deceb4a91c1e3f418d212f8954d01f6fcb1a71b0",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "2ca1a3dc-6155-479d-8284-52e551f1b186",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 126682,
+    "output_tokens": 8754,
+    "cache_read_tokens": 115361,
+    "cache_write_tokens": 11303,
+    "total_tokens": 135436,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34050,
+        "agent_id": "2ca1a3dc-6155-479d-8284-52e551f1b186",
+        "model": "gpt-6-astra",
+        "input_tokens": 14728,
+        "output_tokens": 563,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 767,
+        "reasoning_tokens": 395,
+        "duration_ms": 18807,
+        "created_at": "2026-09-23T09:42:28.052Z"
+      },
+      {
+        "id": 34067,
+        "agent_id": "2ca1a3dc-6155-479d-8284-52e551f1b186",
+        "model": "gpt-6-astra",
+        "input_tokens": 15317,
+        "output_tokens": 6916,
+        "cache_read_tokens": 14725,
+        "cache_write_tokens": 589,
+        "reasoning_tokens": 305,
+        "duration_ms": 124739,
+        "created_at": "2026-09-23T09:44:24.534Z"
+      },
+      {
+        "id": 34069,
+        "agent_id": "2ca1a3dc-6155-479d-8284-52e551f1b186",
+        "model": "gpt-6-astra",
+        "input_tokens": 22541,
+        "output_tokens": 152,
+        "cache_read_tokens": 15314,
+        "cache_write_tokens": 7224,
+        "reasoning_tokens": 0,
+        "duration_ms": 4156,
+        "created_at": "2026-09-23T09:44:29.145Z"
+      },
+      {
+        "id": 34072,
+        "agent_id": "2ca1a3dc-6155-479d-8284-52e551f1b186",
+        "model": "gpt-6-astra",
+        "input_tokens": 23952,
+        "output_tokens": 693,
+        "cache_read_tokens": 22538,
+        "cache_write_tokens": 1411,
+        "reasoning_tokens": 129,
+        "duration_ms": 15902,
+        "created_at": "2026-09-23T09:44:44.087Z"
+      },
+      {
+        "id": 34073,
+        "agent_id": "2ca1a3dc-6155-479d-8284-52e551f1b186",
+        "model": "gpt-6-astra",
+        "input_tokens": 24880,
+        "output_tokens": 324,
+        "cache_read_tokens": 23949,
+        "cache_write_tokens": 928,
+        "reasoning_tokens": 0,
+        "duration_ms": 8085,
+        "created_at": "2026-09-23T09:44:52.261Z"
+      },
+      {
+        "id": 34076,
+        "agent_id": "2ca1a3dc-6155-479d-8284-52e551f1b186",
+        "model": "gpt-6-astra",
+        "input_tokens": 25264,
+        "output_tokens": 106,
+        "cache_read_tokens": 24877,
+        "cache_write_tokens": 384,
+        "reasoning_tokens": 0,
+        "duration_ms": 3339,
+        "created_at": "2026-09-23T09:45:00.922Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.44801500000000005,
+      "observed_cache_profile_estimate_usd": 0.18845275,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.376180000000001,
+      "observed_cache_profile_estimate_usd": 5.376180000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 3,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 4,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.57,
+    "pseudo_annual_cost_usd": 90000,
+    "pseudo_annual_ai_value_usd": 100000,
+    "pseudo_net_impact_usd": 10000,
+    "pseudo_roi_pct": 11.11111111111111,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.309s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true,
+      "extraction": {
+        "records": [
+          {
+            "document_id": "synthetic-001",
+            "fields": {
+              "customer": {
+                "value": "Ada Example",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 10,
+                  "end": 21
+                }
+              },
+              "feedback": {
+                "value": "Delivery was slow, but support was helpful!",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 34,
+                  "end": 77
+                }
+              },
+              "order": {
+                "value": "SYN-100",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 87,
+                  "end": 94
+                }
+              }
+            },
+            "missing_fields": [],
+            "complete": true
+          },
+          {
+            "document_id": "synthetic-002",
+            "fields": {
+              "customer": {
+                "value": "Bo Example",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 10,
+                  "end": 20
+                }
+              },
+              "feedback": {
+                "value": "delivery was SLOW but support was helpful.",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 31,
+                  "end": 73
+                }
+              },
+              "order": null
+            },
+            "missing_fields": [
+              {
+                "field": "order",
+                "required": false
+              }
+            ],
+            "complete": true
+          },
+          {
+            "document_id": "synthetic-003",
+            "fields": {
+              "customer": {
+                "value": "Cy Example",
+                "source": {
+                  "document_id": "synthetic-003",
+                  "start": 10,
+                  "end": 20
+                }
+              },
+              "feedback": {
+                "value": "Packaging was beautiful.",
+                "source": {
+                  "document_id": "synthetic-003",
+                  "start": 31,
+                  "end": 55
+                }
+              },
+              "order": null
+            },
+            "missing_fields": [
+              {
+                "field": "order",
+                "required": false
+              }
+            ],
+            "complete": true
+          },
+          {
+            "document_id": "synthetic-004",
+            "fields": {
+              "customer": {
+                "value": "Dee Example",
+                "source": {
+                  "document_id": "synthetic-004",
+                  "start": 10,
+                  "end": 21
+                }
+              },
+              "feedback": null,
+              "order": {
+                "value": "SYN-104",
+                "source": {
+                  "document_id": "synthetic-004",
+                  "start": 29,
+                  "end": 36
+                }
+              }
+            },
+            "missing_fields": [
+              {
+                "field": "feedback",
+                "required": true
+              }
+            ],
+            "complete": false
+          }
+        ]
+      },
+      "feedback": {
+        "groups": [
+          {
+            "id": "feedback-1",
+            "dedup_key": "delivery was slow but support was helpful",
+            "representative_text": "Delivery was slow, but support was helpful!",
+            "document_ids": [
+              "synthetic-001",
+              "synthetic-002"
+            ]
+          },
+          {
+            "id": "feedback-2",
+            "dedup_key": "packaging was beautiful",
+            "representative_text": "Packaging was beautiful.",
+            "document_ids": [
+              "synthetic-003"
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "shipping",
+            "unique_feedback_count": 1,
+            "group_ids": [
+              "feedback-1"
+            ],
+            "supporting_excerpts": [
+              {
+                "group_id": "feedback-1",
+                "document_id": "synthetic-001",
+                "keyword": "delivery",
+                "excerpt": "Delivery",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 34,
+                  "end": 42
+                }
+              },
+              {
+                "group_id": "feedback-1",
+                "document_id": "synthetic-001",
+                "keyword": "slow",
+                "excerpt": "slow",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 47,
+                  "end": 51
+                }
+              },
+              {
+                "group_id": "feedback-1",
+                "document_id": "synthetic-002",
+                "keyword": "delivery",
+                "excerpt": "delivery",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 31,
+                  "end": 39
+                }
+              },
+              {
+                "group_id": "feedback-1",
+                "document_id": "synthetic-002",
+                "keyword": "slow",
+                "excerpt": "SLOW",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 44,
+                  "end": 48
+                }
+              }
+            ]
+          },
+          {
+            "name": "service",
+            "unique_feedback_count": 1,
+            "group_ids": [
+              "feedback-1"
+            ],
+            "supporting_excerpts": [
+              {
+                "group_id": "feedback-1",
+                "document_id": "synthetic-001",
+                "keyword": "support",
+                "excerpt": "support",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 57,
+                  "end": 64
+                }
+              },
+              {
+                "group_id": "feedback-1",
+                "document_id": "synthetic-001",
+                "keyword": "helpful",
+                "excerpt": "helpful",
+                "source": {
+                  "document_id": "synthetic-001",
+                  "start": 69,
+                  "end": 76
+                }
+              },
+              {
+                "group_id": "feedback-1",
+                "document_id": "synthetic-002",
+                "keyword": "support",
+                "excerpt": "support",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 53,
+                  "end": 60
+                }
+              },
+              {
+                "group_id": "feedback-1",
+                "document_id": "synthetic-002",
+                "keyword": "helpful",
+                "excerpt": "helpful",
+                "source": {
+                  "document_id": "synthetic-002",
+                  "start": 65,
+                  "end": 72
+                }
+              }
+            ]
+          },
+          {
+            "name": "pricing",
+            "unique_feedback_count": 0,
+            "group_ids": [],
+            "supporting_excerpts": []
+          }
+        ],
+        "skipped_documents": [
+          {
+            "document_id": "synthetic-004",
+            "reason": "missing_required_fields"
+          }
+        ],
+        "unclassified_group_ids": [
+          "feedback-2"
+        ],
+        "counts": {
+          "input_documents": 4,
+          "eligible_documents": 3,
+          "unique_feedback": 2,
+          "duplicate_documents": 1,
+          "skipped_documents": 1
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t026_combo2_extract_feedback",
+    "artifact_sha256": {
+      "implementation.py": "af37a97256829202eb77a1406c00aed64791f43e2f7fec0db0b18e727f70d12c",
+      "test_implementation.py": "8a7fc2f37c9d357af111cdff1aaff13a88858ae081b01ba26ed9c9c4ec115b9d",
+      "example_input.json": "81c1222c95d91a79b62aad75d051ffcc6d5db6511aec7d2e070f41240bcdc109",
+      "build_manifest.json": "6db241451ae449efc3337f22700c589173f75368f19bef3f1dadd80185e05152"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

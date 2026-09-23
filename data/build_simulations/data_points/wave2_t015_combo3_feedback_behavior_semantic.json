@@ -1,0 +1,540 @@
+{
+  "id": "wave2_t015_combo3_feedback_behavior_semantic",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights",
+      "recommend",
+      "search"
+    ],
+    "basic_functionalities": [
+      "Customer insights",
+      "Personalized discovery",
+      "Smart product search"
+    ],
+    "types": [
+      "feedback",
+      "behavior",
+      "semantic"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling.",
+    "Search index, relevance ranking and optional injected embedding interface."
+  ],
+  "integration": {
+    "ordered_types": [
+      "feedback",
+      "behavior",
+      "semantic"
+    ],
+    "edges": [
+      {
+        "from": "feedback",
+        "to": "behavior",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "behavior",
+        "to": "semantic",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "ffe7c9cb9b202ccf8f8cd452f58c5ffa7490be2dcb26fbd8349842239b3e5406",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "be69dc30729853b198fef360c30db3dea707fba1959873c7cd03a0f4977141d5",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t015_combo3_feedback_behavior_semantic",
+  "membership_point_id": "combo3_feedback_behavior_semantic",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "ed1fd6071e17d5cb41118d4073d848f6c4cc4edc63e95823017e4b6839f72a75",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "ddcb7aef-60af-4ffd-9701-449ff1e2498d",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 147234,
+    "output_tokens": 15118,
+    "cache_read_tokens": 129604,
+    "cache_write_tokens": 17612,
+    "total_tokens": 162352,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33896,
+        "agent_id": "ddcb7aef-60af-4ffd-9701-449ff1e2498d",
+        "model": "gpt-6-astra",
+        "input_tokens": 14760,
+        "output_tokens": 552,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 799,
+        "reasoning_tokens": 350,
+        "duration_ms": 16953,
+        "created_at": "2026-09-23T09:29:25.707Z"
+      },
+      {
+        "id": 33948,
+        "agent_id": "ddcb7aef-60af-4ffd-9701-449ff1e2498d",
+        "model": "gpt-6-astra",
+        "input_tokens": 15348,
+        "output_tokens": 10765,
+        "cache_read_tokens": 14757,
+        "cache_write_tokens": 588,
+        "reasoning_tokens": 656,
+        "duration_ms": 201643,
+        "created_at": "2026-09-23T09:32:48.351Z"
+      },
+      {
+        "id": 33954,
+        "agent_id": "ddcb7aef-60af-4ffd-9701-449ff1e2498d",
+        "model": "gpt-6-astra",
+        "input_tokens": 26354,
+        "output_tokens": 417,
+        "cache_read_tokens": 15345,
+        "cache_write_tokens": 11006,
+        "reasoning_tokens": 278,
+        "duration_ms": 12700,
+        "created_at": "2026-09-23T09:33:06.038Z"
+      },
+      {
+        "id": 33966,
+        "agent_id": "ddcb7aef-60af-4ffd-9701-449ff1e2498d",
+        "model": "gpt-6-astra",
+        "input_tokens": 27994,
+        "output_tokens": 2964,
+        "cache_read_tokens": 26351,
+        "cache_write_tokens": 1640,
+        "reasoning_tokens": 282,
+        "duration_ms": 62680,
+        "created_at": "2026-09-23T09:34:07.566Z"
+      },
+      {
+        "id": 33969,
+        "agent_id": "ddcb7aef-60af-4ffd-9701-449ff1e2498d",
+        "model": "gpt-6-astra",
+        "input_tokens": 31205,
+        "output_tokens": 306,
+        "cache_read_tokens": 27991,
+        "cache_write_tokens": 3211,
+        "reasoning_tokens": 0,
+        "duration_ms": 6949,
+        "created_at": "2026-09-23T09:34:14.628Z"
+      },
+      {
+        "id": 33972,
+        "agent_id": "ddcb7aef-60af-4ffd-9701-449ff1e2498d",
+        "model": "gpt-6-astra",
+        "input_tokens": 31573,
+        "output_tokens": 114,
+        "cache_read_tokens": 31202,
+        "cache_write_tokens": 368,
+        "reasoning_tokens": 0,
+        "duration_ms": 5600,
+        "created_at": "2026-09-23T09:34:27.576Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5948549999999999,
+      "observed_cache_profile_estimate_usd": 0.303246,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.13826,
+      "observed_cache_profile_estimate_usd": 7.13826,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 1,
+      "roi_satisfaction": 0,
+      "future_impact_potential": 3,
+      "delivery_quality": 5
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.32,
+    "pseudo_annual_cost_usd": 85000,
+    "pseudo_annual_ai_value_usd": 130000,
+    "pseudo_net_impact_usd": 45000,
+    "pseudo_roi_pct": 52.94117647058823,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................................\n----------------------------------------------------------------------\nRan 32 tests in 0.530s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "behavior": {
+        "cold_start": false,
+        "half_life_days": 30,
+        "ranking": [
+          {
+            "event_score": 2.9314799053027376,
+            "feedback_adjustment": 0.5,
+            "feedback_ids": [
+              "f1"
+            ],
+            "interaction_ids": [
+              "e1"
+            ],
+            "normalized_score": 1.0,
+            "product_id": "p1",
+            "score": 4.2268498816284215,
+            "tag_score": 0.7953699763256844,
+            "themes": [
+              "comfort",
+              "quality"
+            ]
+          },
+          {
+            "event_score": 0.5,
+            "feedback_adjustment": 0.0,
+            "feedback_ids": [
+              "f3"
+            ],
+            "interaction_ids": [
+              "e2"
+            ],
+            "normalized_score": 0.13186337088203645,
+            "product_id": "p2",
+            "score": 0.9914349881628421,
+            "tag_score": 0.4914349881628422,
+            "themes": [
+              "quality",
+              "value"
+            ]
+          },
+          {
+            "event_score": 0.0,
+            "feedback_adjustment": 0.5,
+            "feedback_ids": [
+              "f4"
+            ],
+            "interaction_ids": [],
+            "normalized_score": 0.0,
+            "product_id": "p3",
+            "score": 0.5,
+            "tag_score": 0.0,
+            "themes": [
+              "comfort"
+            ]
+          }
+        ]
+      },
+      "feedback": {
+        "duplicate_count": 1,
+        "input_count": 4,
+        "items": [
+          {
+            "customer_id": "synthetic-alex",
+            "excerpt": "Great quality, comfortable and durable!",
+            "id": "f1",
+            "product_id": "p1",
+            "sentiment": 1.0,
+            "source_ids": [
+              "f1",
+              "f2"
+            ],
+            "themes": [
+              "comfort",
+              "quality"
+            ]
+          },
+          {
+            "customer_id": "synthetic-bea",
+            "excerpt": "Affordable price but flimsy quality.",
+            "id": "f3",
+            "product_id": "p2",
+            "sentiment": 0.0,
+            "source_ids": [
+              "f3"
+            ],
+            "themes": [
+              "quality",
+              "value"
+            ]
+          },
+          {
+            "customer_id": "synthetic-cam",
+            "excerpt": "Love the soft comfort.",
+            "id": "f4",
+            "product_id": "p3",
+            "sentiment": 1.0,
+            "source_ids": [
+              "f4"
+            ],
+            "themes": [
+              "comfort"
+            ]
+          }
+        ],
+        "product_signals": {
+          "p1": {
+            "feedback_ids": [
+              "f1"
+            ],
+            "sentiment": 1.0,
+            "themes": [
+              "comfort",
+              "quality"
+            ]
+          },
+          "p2": {
+            "feedback_ids": [
+              "f3"
+            ],
+            "sentiment": 0.0,
+            "themes": [
+              "quality",
+              "value"
+            ]
+          },
+          "p3": {
+            "feedback_ids": [
+              "f4"
+            ],
+            "sentiment": 1.0,
+            "themes": [
+              "comfort"
+            ]
+          }
+        },
+        "themes": {
+          "comfort": [
+            {
+              "excerpt": "Great quality, comfortable and durable!",
+              "feedback_id": "f1",
+              "product_id": "p1"
+            },
+            {
+              "excerpt": "Love the soft comfort.",
+              "feedback_id": "f4",
+              "product_id": "p3"
+            }
+          ],
+          "quality": [
+            {
+              "excerpt": "Great quality, comfortable and durable!",
+              "feedback_id": "f1",
+              "product_id": "p1"
+            },
+            {
+              "excerpt": "Affordable price but flimsy quality.",
+              "feedback_id": "f3",
+              "product_id": "p2"
+            }
+          ],
+          "value": [
+            {
+              "excerpt": "Affordable price but flimsy quality.",
+              "feedback_id": "f3",
+              "product_id": "p2"
+            }
+          ]
+        },
+        "unique_count": 3
+      },
+      "schema_version": 1,
+      "semantic": {
+        "embedding_used": false,
+        "index": {
+          "p1": {
+            "comfortable": 1,
+            "durable": 1,
+            "footwear": 2,
+            "for": 1,
+            "outdoor": 3,
+            "shoes": 1,
+            "sneaker": 3,
+            "synthetic": 3,
+            "trail": 3,
+            "walks": 1
+          },
+          "p2": {
+            "affordable": 1,
+            "city": 6,
+            "footwear": 2,
+            "for": 1,
+            "shoes": 1,
+            "sneaker": 3,
+            "synthetic": 3,
+            "walking": 1
+          },
+          "p3": {
+            "a": 1,
+            "corner": 1,
+            "for": 1,
+            "furniture": 2,
+            "home": 2,
+            "quiet": 1,
+            "reading": 4,
+            "sofa": 4,
+            "soft": 1,
+            "synthetic": 3
+          }
+        },
+        "query": "comfortable trainers",
+        "results": [
+          {
+            "embedding_score": 0.0,
+            "feedback_ids": [
+              "f1"
+            ],
+            "lexical_score": 4.395492601704872,
+            "matched_terms": [
+              "comfortable",
+              "sneaker"
+            ],
+            "personalization": 1.0,
+            "product_id": "p1",
+            "relevance": 1.0,
+            "score": 1.0,
+            "themes": [
+              "comfort",
+              "quality"
+            ],
+            "title": "Synthetic Trail Sneakers"
+          },
+          {
+            "embedding_score": 0.0,
+            "feedback_ids": [
+              "f3"
+            ],
+            "lexical_score": 2.7023454211449267,
+            "matched_terms": [
+              "sneaker"
+            ],
+            "personalization": 0.13186337088203645,
+            "product_id": "p2",
+            "relevance": 0.6147992195679667,
+            "score": 0.5182120498307806,
+            "themes": [
+              "quality",
+              "value"
+            ],
+            "title": "Synthetic City Sneakers"
+          }
+        ]
+      },
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t015_combo3_feedback_behavior_semantic",
+    "artifact_sha256": {
+      "implementation.py": "a75ba5f3ab470b5b3052e4aea88cb75ceddeb516dc2679b4162a1d22fbb871c9",
+      "test_implementation.py": "87991d7c3d790dbb40f5164cfab5cf9cba6dae8fdb520846dffe1a48c6ea5690",
+      "example_input.json": "b18338895e2e33deef788c259b4da10e11d645cdf9b9a29df0ce1d60fb59da58",
+      "build_manifest.json": "ae3143a2c053b183f08aeb8e4589ce2536f2d524599886112b98c7988bed9aaa"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

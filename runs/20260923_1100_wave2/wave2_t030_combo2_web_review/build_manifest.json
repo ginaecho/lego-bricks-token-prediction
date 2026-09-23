@@ -1,0 +1,62 @@
+{
+  "build_id": "wave2_t030_combo2_web_review",
+  "composition_label": "Web research (Research) -> Document review (Document automation)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written directly for this build.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope": ["schema_version", "synthetic", "status", "request", "research", "review"],
+    "lifecycle": "input (null stages) -> researched (validated findings) -> ok (validated review)",
+    "request": "Exact allowlisted hosts, requested URLs, synthetic response fixtures, one document, uniquely identified requirements with nonempty document_terms and evidence_terms.",
+    "validation": "One shared validator checks all phases, strict keys/types, limits, uniqueness and URL policy. Offline deterministic replay validates complete stage structures and provenance; JSON canonicalization distinguishes booleans from integers.",
+    "errors": "CLI emits one JSON error object and exits 2 for invalid input, JSON, encoding, usage or file errors."
+  },
+  "cross_stage_handoffs": [
+    "Research retrieves only requested fixture URLs, records redirect chains, source identities, original text and SHA-256 content digests.",
+    "Research findings carry requirement ID, source ID, final URL, digest, exact quote and zero-based character offsets.",
+    "Review executes only after research validation, links matching finding IDs and document offsets, and records missing terms by requirement with checked source IDs.",
+    "Final envelope is validated before output. Source retrieval failures remain traceable and produce evidence gaps rather than fabricated findings."
+  ],
+  "behavior": {
+    "retrieval": "Offline fixture map only, no networking. HTTPS exact-host allowlist also checked on redirects; credentials, fragments, backslashes and non-443 ports rejected. Five redirects maximum; loops, missing fixtures and HTTP failures are recorded.",
+    "matching": "Deterministic case-sensitive literal substring matching. First occurrence per source/term. All required document and evidence terms must match; evidence can span requested sources.",
+    "provenance": "SHA-256 of UTF-8 source/document text; quote offsets are Python Unicode character indices, not byte positions. Fixtures and complete request retained in final envelope.",
+    "interpretation": "Textual support only. No certification, compliance approval or truth-verification claims.",
+    "synthetic_data": "Example explicitly labeled SYNTHETIC and uses reserved .example domain.",
+    "additional_artifacts": "docs\\My_prompt.txt preserves the required prompt log; not a runtime deliverable."
+  },
+  "scope": {
+    "included": ["Integrated two-stage pipeline", "Shared envelope and validator", "Offline allowlisted retrieval", "Traceable findings and gaps", "Strict JSON CLI", "Deterministic unittest fixtures"],
+    "excluded": ["Live networking", "Model providers or LLM steps", "HTML parsing", "PDF/DOCX extraction", "Semantic entailment or contradiction detection", "Freshness or authenticity verification", "Production deployment", "Certification"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 18,
+    "failures": 0,
+    "errors": 0,
+    "cli": {
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status ok",
+      "findings": 2,
+      "review_gaps": 2
+    }
+  }
+}

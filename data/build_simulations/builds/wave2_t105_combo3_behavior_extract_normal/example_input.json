@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "as_of": "2026-09-23T12:00:00+00:00",
+  "documents": [
+    {
+      "id": "synthetic-solar-kit",
+      "category": "energy",
+      "text": "Synthetic fixture: invented solar marketplace listing.\nProduct: Aurora solar kit\nPrice: 120 credits\nWarranty: 24 months\nAvailable: 2026-10-01",
+      "popularity": 7
+    },
+    {
+      "id": "synthetic-battery",
+      "category": "energy",
+      "text": "Synthetic fixture: invented storage marketplace listing.\nProduct: Nova battery\nPrice: 90 credits\nWarranty: 12 months",
+      "popularity": 5
+    },
+    {
+      "id": "synthetic-lamp",
+      "category": "home",
+      "text": "Synthetic fixture: invented home marketplace listing.\nProduct: Luna lamp\nPrice: 25 credits\nAvailable: 2026-09-30",
+      "popularity": 20
+    }
+  ],
+  "events": [
+    {"document_id": "synthetic-solar-kit", "kind": "purchase", "at": "2026-09-22T12:00:00Z"},
+    {"document_id": "synthetic-lamp", "kind": "browse", "at": "2026-08-01T12:00:00Z"}
+  ],
+  "behavior": {"top_k": 2, "half_life_days": 7, "purchase_weight": 3},
+  "extraction_schema": [
+    {"name": "product", "pattern": "^Product: (?P<value>[^\\r\\n]+)", "type": "string", "required": true},
+    {"name": "price", "pattern": "^Price: (?P<value>[0-9]+) credits", "type": "integer", "required": true},
+    {"name": "warranty", "pattern": "^Warranty: (?P<value>[0-9]+) months", "type": "integer", "required": false},
+    {"name": "available", "pattern": "^Available: (?P<value>[^\\r\\n]+)", "type": "date", "required": false}
+  ],
+  "research": {"queries": ["solar kit", "Warranty months", "Price credits", "unobtainium"], "max_findings": 3}
+}

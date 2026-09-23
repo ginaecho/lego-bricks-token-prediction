@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: imaginary portable computers; not real offers",
+  "attributes": [
+    {"id": "price", "label": "Price", "type": "number", "unit": "USD", "aliases": ["cost"]},
+    {"id": "mass", "label": "Weight", "type": "number", "unit": "kg", "aliases": ["weight"]},
+    {"id": "storage", "label": "Storage", "type": "number", "unit": "GB"},
+    {"id": "color", "label": "Color", "type": "text"},
+    {"id": "touch", "label": "Touchscreen", "type": "boolean"}
+  ],
+  "products": [
+    {"id": "alpha", "name": "Synthetic Alpha", "attributes": {"cost": "800 USD", "weight": "1500 g", "storage": "0.5 TB", "color": " SILVER ", "touch": "yes"}},
+    {"id": "beta", "name": "Synthetic Beta", "attributes": {"price": 1000, "mass": "1 kg", "storage": "1000 GB", "color": "Black", "touch": false}},
+    {"id": "gamma", "name": "Synthetic Gamma", "attributes": {"price": "600 usd", "mass": "2000 g", "storage": "250000 MB", "color": "silver"}}
+  ],
+  "preferences": [
+    {"attribute": "price", "mode": "lower", "weight": 4},
+    {"attribute": "weight", "mode": "lower", "weight": 2},
+    {"attribute": "storage", "mode": "higher", "weight": 2},
+    {"attribute": "color", "mode": "equals", "value": "Silver", "weight": 1},
+    {"attribute": "touch", "mode": "equals", "value": true, "weight": 1}
+  ]
+}

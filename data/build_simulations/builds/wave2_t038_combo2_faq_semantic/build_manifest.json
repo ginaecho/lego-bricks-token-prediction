@@ -1,0 +1,88 @@
+{
+  "build_id": "wave2_t038_combo2_faq_semantic",
+  "composition_label": "Knowledge-base answers (AI customer support) -> Semantic search (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3.13.15 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic_fixture": "true required",
+      "request": "query: nonblank searchable string; top_k: integer 1..100 default 5; faq_min_score: finite 0..1 default 0.6; search_min_score: finite 0..1 default 0.01",
+      "knowledge_base": "list of {id, question, answer, keywords: string[], product_ids: string[]}",
+      "products": "list of {id, title, description, tags: string[]}"
+    },
+    "output": "schema_version, synthetic_fixture, status=ok, faq={status,answer,citations,confidence,handoff}, semantic={query,expanded_terms,embedding_used,results}",
+    "error": "schema_version=1, status=error, error=message; CLI exit code 2",
+    "validation": "Shared validate() boundary checks input, FAQ grounding and product references, then semantic output. Unknown input fields, duplicate IDs or JSON keys, nonfinite values and invalid embedding shapes are rejected.",
+    "faq_handoff": "query preserved exactly, grounded_terms derived only from cited FAQ keywords, product_ids restricted to cited FAQ references",
+    "search_result": "product_id, title, score, components={lexical,embedding,faq_link}, faq_linked"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq",
+      "to": "semantic",
+      "consumed": ["handoff.query", "handoff.grounded_terms", "handoff.product_ids"],
+      "validation": "FAQ output is checked before indexing or invoking an injected embedder. Search query expansion and link flags are checked against that validated output.",
+      "abstention": "No answer, citations, grounded terms or product links; original query still drives product search."
+    }
+  ],
+  "behavior": {
+    "faq": "Retrieve by normalized query-token coverage of FAQ question and keywords; require positive evidence and configured threshold; deterministic ID tie-break. Grounded answer is the cited answer verbatim, not generated text. Confidence is lexical coverage, not calibrated probability.",
+    "index": "In-memory inverted product index with maximum per-token field weight: title=3, tags=2, description=1.",
+    "semantic": "Deterministic English token normalization with a small explicit alias dictionary; enrich query with cited FAQ keywords. Lexical relevance is weighted token coverage normalized by 3 times expanded-query size.",
+    "ranking": "Without embedding: 0.9 lexical + 0.1 FAQ link. With embedding: 0.6 lexical + 0.3 nonnegative cosine + 0.1 FAQ link. Round scores to eight decimals, filter positive scores at configured threshold, sort descending then product ID, truncate top_k.",
+    "embedding_interface": "Optional run_pipeline(payload, embedder=callable). Callable receives normalized enriched query followed by catalog descriptions and returns one finite, nonzero, equal-dimensional numeric vector per text. Synthetic fixtures only; no live provider.",
+    "cli": "Exactly one JSON object to stdout. Success exit 0; file, decoding, schema and JSON errors exit 2."
+  },
+  "scope": {
+    "included": [
+      "One integrated FAQ-to-search pipeline",
+      "Shared schemas and validation",
+      "Explicit abstention and grounded citations",
+      "Deterministic ranking and injected embedding fixture tests",
+      "Clearly labeled synthetic data",
+      "CLI success and error handling"
+    ],
+    "excluded": [
+      "Live LLMs, providers or network access",
+      "Production-scale persistence and indexing",
+      "General natural-language entailment, negation or contradiction detection",
+      "Learned semantic embeddings unless supplied by caller",
+      "Authentication, telemetry and enterprise deployment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "run": 17,
+      "passed": 17,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status=ok",
+      "faq_status": "answered",
+      "first_product_id": "synthetic-ridge"
+    }
+  }
+}

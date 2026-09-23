@@ -1,0 +1,109 @@
+{
+  "build_id": "wave2_t032_combo4_compare_extract_adaptive_deep",
+  "composition_label": "compare -> extract -> adaptive -> deep",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Authored from scratch in the isolated build directory; no repository or other build files read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py",
+    "working_directory": "Run both commands from the directory containing these four files."
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1.",
+      "synthetic": "Boolean true; the reference accepts explicitly synthetic fixtures.",
+      "products": "Nonempty array of unique id, name, and nonempty attributes mapping. Every measurement has finite nonnegative numeric value and unit.",
+      "comparison": "Nonempty unique criteria array with canonical attribute, min/max direction, and positive finite weight.",
+      "documents": "Array of unique id, product_ids, text. Product references must exist; an empty product_ids list denotes a global document.",
+      "extraction_schema": "Nonempty fields array with unique name, string/number/boolean type, globally unique literal labels, and required flag.",
+      "onboarding": "Beginner/intermediate/expert experience, ordered visual/hands_on/concise preferences, completed task ids, and tasks with id/title/min_experience/modes/prerequisites/requires_fields/explanation.",
+      "research": "Nonempty questions array with unique id, declared field reference, and text."
+    },
+    "output": {
+      "envelope": "schema_version, status=ok, stage, synthetic=true, request, results.",
+      "results": "Cumulative comparison, extraction, onboarding, research artifacts. Intermediate envelopes contain only artifacts through their declared stage.",
+      "comparison": "Canonical side-by-side rows, ranking with weighted contributions, selected product and document ids.",
+      "extraction": "Selected product/document ids; typed fields and all valid source evidence; missing, missing-required, and conflicting fields; invalid-value issues.",
+      "onboarding": "Selected product, experience/preferences, topologically ordered explained task states, readiness/completion indexes, unresolved fields, research focus.",
+      "research": "Selected product/focus, per-question evidence groups and citations, disagreement and unresolved indexes, onboarding blockers, bounded synthesis.",
+      "errors": "One JSON object with schema_version=1, status=error, and error.type/error.message; exit code 2.",
+      "source_spans": "Zero-based, half-open Python Unicode character offsets into original document.text, not UTF-8 byte offsets."
+    },
+    "validation": "One declarative recursive validator serves request and cumulative output schemas. Unknown/missing keys, booleans masquerading as numbers, non-finite values, duplicate JSON keys, duplicate identifiers, unsupported units, dangling references, cycles, and inconsistent completed prerequisites are rejected. Semantic handoff checks verify selections, document membership, normalized rows, field definitions, source slices/types, conflict/missing indexes, profile propagation, and research indexes. Every stage validates its predecessor and its own output."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "compare",
+      "to": "extract",
+      "consumed": "Validated selected product and matching/global document ids plus the shared extraction schema.",
+      "effect": "Only selected-product and global documents can contribute extracted evidence."
+    },
+    {
+      "from": "extract",
+      "to": "adaptive",
+      "consumed": "Validated typed evidence, missing fields, conflicting fields, selected product, and request onboarding profile.",
+      "effect": "Missing or disputed required task fields block that task. Other tasks remain independently actionable. Required missing fields and conflicts become research focus."
+    },
+    {
+      "from": "adaptive",
+      "to": "deep",
+      "consumed": "Validated onboarding research focus, blocked tasks, selected product, and carried-forward extraction citations.",
+      "effect": "Research prioritizes focus-related questions, propagates blockers, and synthesizes all extracted evidence without refetching documents."
+    }
+  ],
+  "behavior": {
+    "comparison": "Normalize price/cost to USD, weight/mass to grams (g/kg/lb), and battery/battery_life to hours (h/hr/hours/min). Canonical keys also work. Rank by weighted min-max utility across this candidate set; missing values receive zero utility and equal observed values receive one. Weights are scaled to avoid sum overflow; ties resolve lexicographically by product id.",
+    "extraction": "Case-insensitive literal label: value lines, including label aliases and CRLF. Values are trimmed while spans retain original text positions. Numbers accept decimal/scientific syntax; booleans accept yes/no/true/false. Invalid values produce issues rather than invented values. All valid matches are retained. The first valid value is representative, never an adjudication of conflicting evidence.",
+    "adaptive": "Stable topological scheduling uses ordered modality preferences to prioritize simultaneously available tasks. Task states are completed, ready, waiting, or blocked. Prerequisites must be explicitly completed, never merely scheduled, to unlock dependents. Missing/disputed fields, experience requirements, and blocked prerequisites yield explanations. Delivery mode and guidance adapt to the profile.",
+    "deep": "Group evidence by typed exact value, count distinct documents, and retain every citation. Multiple values yield disputed status, absent evidence yields unresolved status, and one value yields supported status with single-source or source-independence caveats. Disputed questions remain unresolved. No majority-vote truth claims or external facts.",
+    "determinism": "No random values, clocks, live models, or provider calls in the implementation. Inputs and predecessor envelopes are not mutated.",
+    "fixture": "Three explicitly synthetic scanner products; Atlas wins the default preference ranking. Two Atlas documents agree on USB and offline operation, disagree on warranty length, and omit the activation code. A competitor document is excluded.",
+    "entry_points": "run_pipeline(request), compare(request), extract(compare_envelope), adaptive(extract_envelope), deep(adaptive_envelope), and main(argv). Stage functions are integrated handoff components, not standalone programs."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic CLI pipeline with shared schemas and validation.",
+      "Synthetic product comparison, line-based typed document extraction, prerequisite-aware onboarding, and local multi-document evidence synthesis.",
+      "Source character spans, conflict preservation, missing-field reporting, explanations, and unresolved research questions.",
+      "Standard-library unit, integration, mutation, invalid-input, and subprocess CLI tests."
+    ],
+    "excluded": [
+      "Live web research, networks, model providers, and LLM steps.",
+      "PDF/OCR, arbitrary prose understanding, fuzzy field matching, semantic paraphrase matching, or free-form research inference.",
+      "Currency conversion beyond USD, universal product taxonomies, probabilistic confidence, source trust scoring, or established source independence.",
+      "Persistent user accounts, interactive onboarding state updates, enterprise infrastructure, and production deployment."
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 33,
+      "failures": 0,
+      "errors": 0,
+      "result": "passed"
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status=ok, stage=deep, and all four cumulative results.",
+      "stderr": "",
+      "result": "passed"
+    },
+    "error_cli": "Verified missing file, malformed JSON, wrong argument count, schema violations, duplicate JSON keys, and non-finite JSON constants return a JSON error and exit code 2.",
+    "filesystem": "Exactly the four deliverables; tests use in-memory injected files for additional payloads and -B suppresses bytecode artifacts."
+  }
+}

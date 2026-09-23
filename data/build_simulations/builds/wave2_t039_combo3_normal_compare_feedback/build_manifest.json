@@ -1,0 +1,111 @@
+{
+  "build_id": "wave2_t039_combo3_normal_compare_feedback",
+  "composition_label": "normal_compare_feedback",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "true; all data must be explicitly synthetic",
+      "query": "nonblank text containing searchable terms",
+      "max_findings": "optional integer 1..1000, default 20",
+      "sources": "array of unique id, title, text",
+      "products": "array of unique id, name, source_ids, attributes",
+      "attributes": "optional price {value,currency:USD}, weight {value,unit:g|kg}, battery {value,unit:h|min}",
+      "preferences": "nonempty unique attribute selections from price_usd, weight_g, battery_hours, each with direction min|max and positive finite weight",
+      "feedback": "array of unique id, product_id, text; references must exist"
+    },
+    "output": {
+      "success": "schema_version:1, status:ok, synthetic:true, research, comparison, feedback",
+      "error": "schema_version:1, status:error, error:string; exit 2",
+      "research": "findings with extractive text, matched_terms and source_id/title/start/end/quote citation; supported product_ids",
+      "comparison": "canonical columns, side-by-side rows with finding_ids, ranking with rank, product_id, score, utilities",
+      "feedback": "selected_product_ids in ranking order, unique_feedback_count, duplicate_count, themes with counts and exact supporting excerpts"
+    },
+    "validation": "One validate() dispatch layer checks input types, references, finite values, units, exact citations and cross-stage consistency. Every stage validates incoming and outgoing handoffs. JSON duplicate keys and nonfinite constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "comparison",
+      "data": "Validated findings and supported product_ids determine eligible comparison rows; rows retain finding_ids pointing to exact source citations."
+    },
+    {
+      "from": "comparison",
+      "to": "feedback",
+      "data": "Validated ranking restricts feedback to compared products; excerpts retain comparison_rank, product_id, exact feedback text, original feedback_id and duplicate_ids."
+    }
+  ],
+  "behavior": {
+    "research": "Sentence passages split on .!? and newlines; Unicode word-token query overlap ignoring a small explicit English stopword set; order by descending matched-term count, source id, then offset. Offsets are zero-based half-open Unicode character indices.",
+    "normalization": "USD retained; kg multiplied by 1000 for grams; minutes divided by 60 for hours. Unsupported units/currency fail validation; omitted attributes remain null.",
+    "ranking": "Weighted min-max utility among research-supported products. Preferred direction sets utility orientation. Missing values score zero; tied present values score one. Weights are scaled to avoid overflow; scores rounded to eight decimals; ties resolved by product id.",
+    "deduplication": "Per-product case-folded Unicode word-token sequence ignores punctuation and whitespace. Representative is the lexicographically smallest feedback id; all other original ids remain traceable.",
+    "themes": "Deterministic explicit keyword vocabularies for battery, price, weight, usability, reliability; unmatched feedback falls under other. One unique item may support multiple themes, so theme counts are not additive.",
+    "empty_matches": "Returns successful empty research, comparison and feedback collections.",
+    "synthetic_fixture": "All products, sources and feedback in example_input.json are invented.",
+    "prompt_logging": "An ancillary docs\\My_prompt.txt records the supplied prompts; the four requested deliverables are listed above."
+  },
+  "scope": {
+    "included": [
+      "Integrated offline deterministic research-comparison-feedback pipeline",
+      "Exact source citations and feedback provenance",
+      "Canonical units, preference ranking and missing-value handling",
+      "Shared validation, CLI JSON errors and standard-library unit tests"
+    ],
+    "excluded": [
+      "Live search, networks, external model providers and LLM generation",
+      "Independent verification or extraction of product attributes from prose",
+      "Semantic retrieval, paraphrase deduplication, sentiment inference",
+      "Currency conversion, enterprise deployment and persistence services"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 34,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "research_findings": 2,
+      "compared_products": 2,
+      "top_ranked_product": "aero",
+      "unique_feedback_count": 4,
+      "duplicate_count": 1
+    },
+    "coverage": [
+      "Exact extraction and Unicode offsets",
+      "Unit normalization, ranked preferences, ties and missing attributes",
+      "Research eligibility and preference propagation into feedback",
+      "Deduplication, multi-theme excerpts and provenance",
+      "Empty collections and no-match behavior",
+      "Invalid input types, units, currency, numbers and references",
+      "Tampered cross-stage handoffs",
+      "Determinism and input immutability",
+      "CLI success, usage, file, JSON and schema errors"
+    ]
+  }
+}

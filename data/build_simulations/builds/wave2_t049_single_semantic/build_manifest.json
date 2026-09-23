@@ -1,0 +1,55 @@
+{
+  "build_id": "wave2_t049_single_semantic",
+  "composition_label": "Semantic search (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1",
+      "dataset_label": "Required nonblank string, maximum 200 characters; example and tests clearly labeled SYNTHETIC",
+      "query": "Required nonblank string, maximum 2000 characters; punctuation-only yields no lexical matches",
+      "products": "Required array, possibly empty, maximum 10000 objects. Required unique nonblank id (max 200) and title (max 1000). Optional description string (max 10000), category string (max 1000), tags array (max 100 nonblank strings of max 200 characters).",
+      "options": "Optional object: limit integer 1..100 (default 10), min_score number 0..1 (default 0), embedding_weight number 0..1 (default 0.35). Booleans are not numbers. Unknown fields rejected throughout."
+    },
+    "output": "status=ok, schema_version, dataset_label, query, indexed_count, matched_count before limiting, embedding_used, results array of id/title/score/lexical_score/embedding_score/matched_terms.",
+    "errors": "CLI prints one JSON object with status=error and error message, exits 2 for validation, usage, decoding or file errors. Python search raises ValidationError.",
+    "embedding_contract": "Optional search(payload, embedder=callable). Called once with [query, document1, ...], including query alone for empty catalogs. Return list/tuple of same count of vectors; each vector list/tuple has identical dimension 1..4096, finite numeric components within +/-1e100, and nonzero norm. Exceptions and invalid output become ValidationError. No callable loading from JSON."
+  },
+  "cross_stage_handoffs": [
+    "Single search stage: shared input validation -> normalized products -> in-memory inverted index -> lexical ranking -> optional validated embedding scores -> common result schema."
+  ],
+  "behavior": {
+    "index": "Per-request inverted index; Unicode casefolded alphanumeric tokenization; title repeated twice for boosting, followed by category, tags, description.",
+    "ranking": "BM25 with k1=1.2 and b=0.75. Exact query terms weight 1; built-in synonym expansions weight 0.65. Raw lexical scores normalized as 1-exp(-score).",
+    "synonyms": "Small fixed groups for shoes/sneakers/trainers, sofas/couches, wireless/cordless, headphones/headsets, bikes/bicycles, laptops/notebooks.",
+    "embeddings": "Optional nonnegative cosine similarity blended with lexical scores by embedding_weight. Without injection, lexical score is used unchanged. CLI never injects embeddings.",
+    "ordering": "Descending unrounded score then ascending product id. Zero scores excluded; min_score inclusive; limit applied last. Display scores rounded to eight decimal places.",
+    "determinism": "Deterministic built-in logic and fixture callables; injected production callables must themselves be deterministic to preserve this property."
+  },
+  "scope": {
+    "included": ["Smart product search", "Shared strict validation", "In-memory search index", "Relevance ranking", "Optional Python embedding callable", "Synthetic fixtures", "CLI JSON output"],
+    "excluded": ["Live providers", "Network calls", "Persistent index", "Learned semantic model", "Multilingual synonym dictionaries", "Query intent LLM", "Enterprise infrastructure"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 14,
+    "tests_passed": 14,
+    "test_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_result": "One JSON object, status ok; SYN-002 ranked before synonym match SYN-001; unrelated SYN-003 excluded",
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_command": "python -B implementation.py example_input.json"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "build_id": "wave2_t094_combo4_deep_review_behavior_compare",
+  "composition_label": "Deep research -> Document review -> Behavioral personalization -> Product comparison",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory; no other builds or repository files accessed.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact fields: schema_version, synthetic=true, as_of UTC timestamp, documents, requirements, products, events, preferences. IDs must be unique within their collections and references must exist.",
+    "documents": "id, title, published_at, claims. Each claim: product_id, requirement_id, stance (supports/opposes/uncertain), quote. One claim per product/requirement per document.",
+    "requirements": "id, description, mandatory boolean. At least one requirement.",
+    "products": "id, name, category, attributes: price, weight, runtime; each null or {value, unit}. At least one product.",
+    "events": "id, product_id, type (browse/purchase), at. Duplicate IDs and future dates rejected. One user's caller-supplied activity only.",
+    "preferences": "half_life_days > 0, unique preferred_categories, nonnegative weights for price/weight/runtime/behavior with positive sum, nullable max_price_usd.",
+    "stage_envelope": "schema_version, stage, records, warnings. Each record carries product_id. Shared validation reconstructs expected deterministic artifacts to verify schema, evidence provenance, numerical results, eligibility, and gap preservation at every handoff.",
+    "output": "schema_version, synthetic=true, status=ok, as_of, stages with research/review/behavior/compare artifacts; errors have schema_version, status=error, error and exit code 2.",
+    "numbers": "Finite nonnegative values only; booleans are not numbers. Physical measurements and budgets capped at 1e12, weights at 1e6, half-life between 0.001 and 1e6 days.",
+    "canonical_units": {"price": "USD", "weight": "g", "runtime": "h"}
+  },
+  "cross_stage_handoffs": [
+    {"from": "research", "to": "review", "payload": "Per-product requirement findings: state, every matching document/claim-index citation, quote, stance, unresolved question. Review adds mandatory flags, gaps, eligibility."},
+    {"from": "review", "to": "behavior", "payload": "Validated eligibility gates personalization; full checks and gap IDs persist. Ineligible products remain explicit excluded records with zero activity score."},
+    {"from": "behavior", "to": "compare", "payload": "Validated eligible IDs and normalized behavioral scores drive comparison; review checks, gaps and behavior mode persist in every ranked record. Budget exclusions remain explicit warnings."}
+  ],
+  "behavior": {
+    "research": "Synthesize all supplied documents per product/requirement. Support plus opposition is disputed; otherwise any uncertain claim is unresolved; support-only is supported; opposition-only contradicted; absence missing. Every non-supported finding has an unresolved evidence question. Conflicts are never silently resolved by majority.",
+    "review": "Only supported mandatory requirements pass the evidence gate. Optional gaps remain visible but do not block. No certification or compliance claim.",
+    "personalization": "Signal sums event_weight * 2^(-age_days/half_life_days), with browse=1 and purchase=3. Divide by largest eligible product signal. If no positive eligible history remains (including underflow), category preference yields 1 or 0; no preferred category gives neutral zero scores.",
+    "comparison": "Normalize USD, g/kg and h/min. Apply nullable hard USD budget; missing price fails a set budget. Min-max utilities favor cheaper, lighter, longer-runtime products; missing values score 0, equal known values 1. Weighted mean combines attributes and behavior. Exact ties sort by product ID. Records with canonical attributes form the side-by-side comparison.",
+    "determinism": "Fixed caller-provided as_of; no clock, random source, network, or model. Research and review order by product ID; citations by document ID; comparison by descending unrounded score then product ID.",
+    "error_handling": "Strict JSON keys and references; duplicate JSON object keys and non-finite constants rejected; malformed/file/encoding/validation errors print one JSON object with status error and exit 2."
+  },
+  "scope": {
+    "included": ["Synthetic local fixture", "Integrated deterministic pipeline", "Shared validation", "Traceable disagreement and evidence gaps", "Single-user recency ranking", "Cold start", "Normalized comparison", "CLI and unittest coverage"],
+    "excluded": ["External research retrieval", "Live LLM or provider calls", "LLM-dependent stages", "Certification", "Real-world evidence verification", "Currency conversion", "Enterprise persistence/authentication", "Learned recommendations", "Free-text claim extraction"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 30,
+    "failures": 0,
+    "errors": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "example_ranking": ["b", "a"],
+    "coverage": ["All four stages", "Every cross-stage handoff", "Evidence citation integrity", "Disagreement and uncertainty", "Optional and mandatory gaps", "Recency and purchases", "Cold start and neutral ties", "Unit normalization", "Missing attributes and budget", "Determinism and input immutability", "Invalid inputs and JSON", "CLI success, usage, file and encoding errors"],
+    "unittest_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_command": "python -B implementation.py example_input.json"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "build_id": "wave2_t043_combo3_adaptive_semantic_interests",
+  "composition_label": "Adaptive onboarding -> Semantic search -> Interest-based recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory; no other builds or repository files read or copied.",
+    "runtime": "Python 3, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1, not boolean.",
+      "fixture_label": "Nonblank fixture provenance string. Bundled data is explicitly SYNTHETIC.",
+      "profile": {
+        "experience": "beginner | intermediate | expert",
+        "interests": "Unique nonblank strings; used as fallback query and recommendation concepts.",
+        "preferences": "Map from category/tag phrases to finite weights in [0, 1].",
+        "excluded_ids": "Unique product IDs; exact case-sensitive matching.",
+        "excluded_categories": "Unique category strings; case-insensitive matching.",
+        "completed_lessons": "Unique basics/search/compare lessons; prerequisite closure required."
+      },
+      "query": "String; blank query falls back to interests, then to explicit browsing.",
+      "catalog": "At most 1000 products with unique id, name, description, category, tags, min_experience and required_lessons.",
+      "options": {
+        "limit": "Integer 1..100; final recommendation limit.",
+        "min_score": "Finite [0, 1] inclusive search-score threshold."
+      }
+    },
+    "output": {
+      "success": "status=ok plus shared envelope: schema_version, stage=interests, context, onboarding, search, recommendations.",
+      "context": "Validated deep copy of the request, shared through all stages.",
+      "onboarding": "experience, effective search_query and prerequisite-ordered steps with explanations.",
+      "ranked_rows": "Search and recommendation rows contain id, finite score in [0,1], and nonempty explanations.",
+      "error": "Single JSON object with status=error and error message; exit code 2."
+    },
+    "validation": "One validation layer with reusable type/range helpers, validate_request and validate_envelope. Both sides of every handoff validate schema, stage order, eligibility, result provenance, uniqueness, threshold and ranking. Unknown fields and duplicate JSON keys are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "adaptive",
+      "to": "semantic",
+      "consumed": "Validated envelope containing effective query, profile, exclusions, weighted preferences, completed prerequisites and catalog. Semantic search reads the onboarding query, not a newly generated query."
+    },
+    {
+      "from": "semantic",
+      "to": "interests",
+      "consumed": "Validated eligible search candidates with relevance scores plus unchanged context. Discovery can only rerank these candidates; it cannot introduce unseen or excluded products."
+    }
+  ],
+  "behavior": {
+    "onboarding": "Basics -> search -> compare prerequisite graph. Completed lessons are skipped. Preferences or expert experience add comparison guidance; explanations use experience/preferences. Plans do not mark lessons complete or unlock products.",
+    "semantic_search": "Unicode word normalization, curated synonym concepts, eligible-product inverted index and IDF-weighted query coverage. Nonmatching products are omitted for nonblank concept queries; blank browsing starts at zero relevance.",
+    "optional_embeddings": "Python-only injected callable accepting [query, document, ...], returning a batch of equal-dimensional nonzero finite numeric vectors. No provider loading from JSON. Cosine similarity is clamped to [0,1] and blended equally with lexical relevance. Shape, type, magnitude and callback failures are validated with synthetic fixtures.",
+    "interest_ranking": "Normalized weighted mean: search weight 0.5, interest overlap weight 0.3 when interests exist, preference match weight 0.2 when positive preference weights exist. Matching uses category/tag concepts only.",
+    "exclusions": "IDs, case-insensitive categories, experience and completed lesson prerequisites enforced before indexing and at every result handoff.",
+    "grounding": "Search explanations name actual indexed concept matches or numeric injected similarity. Recommendations cite actual category/tag interest and preference matches and inherited relevance; absence of preference matches is stated.",
+    "determinism": "Scores rounded to eight decimal places; descending score with ascending product ID ties; sorted query concepts and explanation matches. Injected callables must themselves be deterministic.",
+    "cli": "One JSON object on stdout. Success exit 0; argument, file, JSON and validation failures exit 2. No live services, filesystem writes or application logging during CLI execution."
+  },
+  "scope": {
+    "included": [
+      "One integrated three-stage pipeline",
+      "Shared validated schema and stage envelopes",
+      "Synthetic fixtures and standard-library unittest coverage",
+      "CLI and optional fixture-tested embedding callable"
+    ],
+    "excluded": [
+      "Production authentication, user persistence or databases",
+      "Live models, networks, providers or external dependencies",
+      "Learned semantic models; built-in semantic matching is a bounded synonym baseline",
+      "Automatic completion of onboarding lessons",
+      "Enterprise infrastructure and deployment"
+    ],
+    "administrative_note": "A separate docs\\My_prompt.txt prompt audit log is retained to satisfy the enclosing environment's mandatory prompt-logging instruction; it is not a runtime deliverable."
+  },
+  "test_outcomes": {
+    "runner": "unittest",
+    "tests_run": 31,
+    "passed": 31,
+    "failed": 0,
+    "errors": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "example_top_recommendation": "camera-trail",
+    "coverage": [
+      "Adaptive experience/preference guidance and prerequisites",
+      "Synonym search, threshold, empty/no-match/browse cases and deterministic ties",
+      "Embedding success, malformed vectors and callback failures",
+      "Preference reranking and grounded attribute explanations",
+      "Cross-stage query propagation, provenance and eligibility",
+      "Invalid schema, duplicate IDs, nonfinite values and corrupted handoffs",
+      "CLI success, usage, file, malformed JSON and validation errors",
+      "Input immutability and repeatability"
+    ]
+  }
+}

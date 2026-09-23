@@ -1,0 +1,61 @@
+{
+  "build_id": "wave2_t029_single_guided",
+  "composition_label": "Guided setup (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input_required": ["schema_version", "fixture_label", "steps"],
+    "input_optional": ["initial_completed", "actions"],
+    "step": {"id": "unique nonempty string", "title": "nonempty string", "prerequisites": "unique known step IDs forming a DAG", "fields": "answer name to type/required/choices specification"},
+    "field_types": ["string (nonblank)", "integer (not boolean)", "boolean"],
+    "action": {"step_id": "known step ID", "answers": "object matching declared fields"},
+    "output_success": ["schema_version", "status", "fixture_label", "state", "progress", "steps", "next_steps", "events"],
+    "output_error": ["schema_version", "status", "error"],
+    "validation": "Single shared validation layer for direct API and CLI; unknown properties and duplicate JSON keys rejected. Field choices use strict type validation before membership checks."
+  },
+  "cross_stage_handoffs": [
+    "One integrated stage: validated step graph and answer schema feed ordered completion processing, then deterministic progress and available-step guidance.",
+    "For subsequent requests, copy output.state.completed to input.initial_completed and supply new actions with the same steps."
+  ],
+  "behavior": [
+    "All fixture records are clearly labeled synthetic.",
+    "Prerequisites must be completed before an action can complete a step.",
+    "Reject duplicate completion, unknown steps, cyclic graphs and invalid answers.",
+    "Output preserves input step order; actions execute in input order.",
+    "Progress includes completion count, total, percentage, finished flag, locked steps and available next steps.",
+    "Requests are atomic and do not mutate input or write runtime state.",
+    "Successful CLI invocation prints one JSON object and exits 0; validation and file errors print one error JSON object and exit 2."
+  ],
+  "scope": {
+    "included": ["Prerequisite graph validation", "Typed required/optional answers and choices", "Ordered completion actions", "Trusted checkpoint resume", "Progress tracking", "CLI JSON contract", "Standard-library unittest fixtures"],
+    "excluded": ["Live providers or LLM calls", "Network activity", "Authentication", "Trusted attestation of checkpoint completion", "Database persistence", "Interactive UI", "Enterprise workflow orchestration", "Arbitrary business-specific numeric bounds", "Configuration migration between checkpoints"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 13,
+    "failures": 0,
+    "errors": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_status": "passed",
+    "cli_exit_code": 0,
+    "cli_result": "One JSON object; 2 of 3 steps completed (66.67 percent), review available."
+  }
+}

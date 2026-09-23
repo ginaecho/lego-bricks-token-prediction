@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "fixture_label": "synthetic",
+  "question": "How do I export a report?",
+  "setup": {
+    "product": "DemoDesk",
+    "steps": [
+      {"id": "account", "requires": [], "required": true},
+      {"id": "workspace", "requires": ["account"], "required": true},
+      {"id": "tour", "requires": ["workspace"], "required": false}
+    ],
+    "completed": ["account", "workspace"]
+  },
+  "knowledge": [
+    {"id": "faq-export", "product": "DemoDesk", "text": "Synthetic FAQ: Export a report from Reports using Export CSV."},
+    {"id": "faq-profile", "product": "DemoDesk", "text": "Synthetic FAQ: Change your avatar in Profile settings."},
+    {"id": "other-export", "product": "OtherProduct", "text": "Synthetic other product: Export is unavailable."}
+  ],
+  "research": {
+    "allowlisted_hosts": ["docs.demodesk.example"],
+    "pages": [
+      {
+        "id": "web-export",
+        "url": "https://docs.demodesk.example/export",
+        "title": "Synthetic export guide",
+        "text": "Synthetic web snapshot: Report export supports CSV and preserves column headings."
+      },
+      {
+        "id": "web-theme",
+        "url": "https://docs.demodesk.example/themes",
+        "title": "Synthetic theme guide",
+        "text": "Synthetic web snapshot: Themes include light and dark appearances."
+      }
+    ]
+  }
+}

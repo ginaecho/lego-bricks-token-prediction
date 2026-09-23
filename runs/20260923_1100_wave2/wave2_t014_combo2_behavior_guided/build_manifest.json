@@ -1,0 +1,95 @@
+{
+  "build_id": "wave2_t014_combo2_behavior_guided",
+  "composition_label": "Behavioral personalization -> Guided setup",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New reference implementation authored in the isolated build directory",
+    "runtime": "Python 3.13.15; Python 3 standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "fixture_kind": "literal synthetic",
+      "user_id": "nonempty synthetic user identifier; events belong to this user",
+      "now": "timezone-aware ISO 8601 timestamp; no wall-clock dependence",
+      "settings": "top_n integer 1..1000; half_life_days finite number 0.000001..365000",
+      "catalog": "unique products: id, title, nonnegative finite popularity <= 1e12, setup_step_ids",
+      "steps": "unique steps: id, title, prerequisite IDs forming a directed acyclic graph",
+      "events": "product_id, action browse or purchase, timezone-aware at <= now",
+      "completed_step_ids": "unique existing IDs; completed prerequisites must also be recorded"
+    },
+    "output": "schema_version, status, validated request snapshot, behavior, guided",
+    "behavior": "cold_start, strategy, recommendations with rank, product_id, score, event_count",
+    "guided": "source_product_ids, steps with status and prerequisite/product provenance, next_step_ids, progress",
+    "error": "schema_version 1, status error, message; stdout JSON and exit 2",
+    "validation": "Single Schema layer validates input, the behavior handoff, and final output; rejects unknown fields, duplicate IDs/JSON keys, invalid references, nonfinite numbers, cycles, and invalid completions. Stage artifacts are checked against the deterministic derivations."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "behavior_stage",
+      "to": "guided_stage",
+      "payload": "Validated common envelope containing request snapshot and ranked recommendations; guided is initially null",
+      "consumption": "Guided stage validates the entire handoff before resolving only recommended products to their setup steps and transitive prerequisites. Shared prerequisites are deduplicated and retain ordered product provenance."
+    }
+  ],
+  "behavior": {
+    "personalization": "Sum action_weight * 2^(-age_days / half_life_days); browse=1, purchase=4. Rank by descending score, descending popularity, then lexical product ID. Unobserved products have zero behavioral score.",
+    "cold_start": "When events are empty, rank by descending popularity then lexical product ID. Empty catalogs produce no recommendations.",
+    "guided_setup": "Topologically ordered prerequisite closure for top_n recommended products. Completed state comes only from validated completion IDs, not purchases. Incomplete steps are available only when all immediate prerequisites are completed; otherwise blocked.",
+    "progress_tracking": "Rerun with updated completed_step_ids; only selected plan steps count. Progress is completed/total, with empty plans complete at fraction 1.0.",
+    "determinism": "Explicit reference time; deterministic tie-breaking and topological ordering; stable summation of event weights; no random, network, or LLM steps.",
+    "synthetic_fixture": "Three fictional device products, five onboarding steps, and one synthetic shopper."
+  },
+  "scope": {
+    "included": [
+      "Integrated two-stage CLI pipeline",
+      "Shared validation and artifact schema",
+      "Recency-weighted browsing/purchase recommendations",
+      "Popularity fallback",
+      "Prerequisite validation and personalization-driven setup plans",
+      "Progress snapshots and next available steps",
+      "Limits of 1000 products, 1000 steps, and 10000 events",
+      "Standard-library unittest and CLI tests"
+    ],
+    "excluded": [
+      "Live providers or LLM calls",
+      "External dependencies or network access",
+      "Accounts, authentication, payment processing",
+      "Persistent database or interactive setup execution",
+      "Automatic completion inferred from purchase",
+      "Enterprise deployment or recommendation model training"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 23,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status ok",
+      "recommended_product_ids": ["camera", "printer"],
+      "next_step_ids": ["network"],
+      "progress_fraction": 0.25
+    },
+    "error_paths": "Tests verified exit 2 and JSON status error for missing files, malformed JSON, schema errors, and incorrect CLI arguments."
+  }
+}

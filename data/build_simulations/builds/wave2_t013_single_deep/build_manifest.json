@@ -1,0 +1,69 @@
+{
+  "build_id": "wave2_t013_single_deep",
+  "composition_label": "Deep research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3.13.15; Python 3 standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "required_keys": ["schema_version", "synthetic", "research_question", "documents", "claims", "questions"],
+      "schema_version": "Integer 1 (not boolean)",
+      "synthetic": "Must be true; all supplied content is synthetic fixture data",
+      "documents": "0..100 objects: unique id, title, text",
+      "claims": "1..100 objects: unique id, statement, evidence array",
+      "evidence": "0..500 entries per claim: document_id, exact source quote, stance (support/oppose/neutral), quality (low/medium/high), context",
+      "questions": "0..100 objects: unique id, question, unique claim_ids referencing existing claims",
+      "constraints": "No unknown fields. Nonblank strings. IDs <=100 chars, context <=200, title <=1000, document text <=100000, other input strings <=10000. UTF-8 JSON files <=2000000 bytes; duplicate JSON keys and nonstandard constants rejected."
+    },
+    "output": {
+      "success": "status=ok, synthetic=true, research_question, summary, findings, disagreements, unresolved_questions, limitations",
+      "finding": "claim_id, statement, status, per-context counts and quality weights, exact attributed citations",
+      "statuses": ["supported", "opposed", "contested", "context_dependent", "insufficient"],
+      "error": "One JSON object with status=error and error message; exit 2",
+      "success_exit": 0
+    },
+    "validation": "One shared validate(value, kind) boundary layer for input and success output, using common structural primitives; CLI errors share one error envelope."
+  },
+  "cross_stage_handoffs": [
+    "Single integrated Research stage: validated request -> source-linked evidence normalization -> context synthesis -> disagreement/gap reporting -> validated response. No independent downstream stages."
+  ],
+  "behavior": {
+    "determinism": "Claims, contexts, citations, source IDs and requested questions are sorted. No randomness, dates, model inference or external data.",
+    "evidence_synthesis": "Groups explicitly supplied evidence by claim and exact context label; emits both attributed quotations and aggregate findings.",
+    "quality": "Low/medium/high map to 1/2/3. Each source contributes at most its highest weight per stance and context. Duplicate identical citations retain the highest supplied quality. Weights never override contradictions.",
+    "disagreement": "Support and opposition in the same context is contested, including internal contradictions within one document. Opposing directions only across contexts are context-dependent, not direct disagreements.",
+    "unresolved": "Creates questions for contested, context-dependent and insufficient claims. All explicitly supplied follow-up questions remain open even when linked claims are supported.",
+    "safety_of_conclusions": "Support is a description of caller-annotated evidence, not a truth claim. Neutral evidence cannot resolve a claim. Quotations must occur literally in the referenced document."
+  },
+  "scope": {
+    "included": ["Multi-document synthesis", "Source attribution", "Context-aware disagreements", "Unresolved questions", "Strict bounded schema", "Deterministic JSON CLI", "Synthetic fixtures"],
+    "excluded": ["Live research or retrieval", "LLM calls or injected inference", "Semantic claim extraction", "Automated assessment of source independence", "Truth verification", "Statistical confidence", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 16,
+    "failures": 0,
+    "test_exit_code": 0,
+    "cli": "Passed: emitted one valid JSON object with status ok",
+    "cli_exit_code": 0,
+    "example_summary": {"documents": 3, "claims": 3, "disagreements": 1, "open_questions": 3},
+    "coverage": ["Multi-document synthesis", "Citation deduplication", "Source-weight caps", "Context-dependent findings", "Empty evidence", "Opposition-only evidence", "Internal source contradictions", "Determinism and nonmutation", "Invalid schemas and references", "Output validation", "CLI success", "CLI missing files and arguments", "CLI invalid schema", "Malformed JSON and UTF-8 and oversized inputs", "Explicit unresolved questions", "Maximum statement length"]
+  }
+}

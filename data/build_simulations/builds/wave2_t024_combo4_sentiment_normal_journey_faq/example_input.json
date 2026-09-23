@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "fixture_label": "SYNTHETIC marketplace checkout support; invented people-free data",
+  "retrieval_limit": 3,
+  "feedback": [
+    {
+      "id": "checkout-issue",
+      "text": "Checkout is broken and payment is blocked. I am frustrated.",
+      "severity": "critical"
+    },
+    {
+      "id": "catalog-praise",
+      "text": "The catalog is great and helpful.",
+      "severity": "normal"
+    }
+  ],
+  "research_passages": [
+    {
+      "id": "payment-guide",
+      "source": "synthetic:research/payment-guide",
+      "text": "Checkout payment failures require checking payment details before retrying checkout. Keep the original order reference."
+    },
+    {
+      "id": "catalog-guide",
+      "source": "synthetic:research/catalog-guide",
+      "text": "The catalog provides helpful product filters."
+    }
+  ],
+  "actions": [
+    {
+      "id": "check-payment",
+      "title": "Check payment details",
+      "prerequisites": [],
+      "passage_ids": ["payment-guide"],
+      "faq_question": "How do I check payment details?"
+    },
+    {
+      "id": "retry-checkout",
+      "title": "Retry checkout",
+      "prerequisites": ["check-payment"],
+      "passage_ids": ["payment-guide"],
+      "faq_question": "How do I retry checkout?"
+    },
+    {
+      "id": "filter-catalog",
+      "title": "Filter the catalog",
+      "prerequisites": [],
+      "passage_ids": ["catalog-guide"],
+      "faq_question": "How do I filter the catalog?"
+    }
+  ],
+  "completed_action_ids": [],
+  "knowledge_base": [
+    {
+      "id": "kb-payment",
+      "source": "synthetic:kb/payment",
+      "text": "Check payment details in the synthetic billing screen and confirm the expiry date.",
+      "action_ids": ["check-payment"]
+    },
+    {
+      "id": "kb-retry",
+      "source": "synthetic:kb/retry",
+      "text": "Retry checkout once after checking payment details; retain the original order reference.",
+      "action_ids": ["retry-checkout"]
+    }
+  ]
+}

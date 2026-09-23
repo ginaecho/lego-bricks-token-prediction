@@ -1,0 +1,50 @@
+{
+  "build_id": "wave2_t065_combo2_web_triage",
+  "composition_label": "Web research -> Ticket triage & routing",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version, synthetic=true, allowed_hosts, pages (URL -> synthetic text), sources (id,url), tickets (id,subject,body,source_ids), routing (rules,fallback)",
+    "output": "status, schema_version, synthetic, research envelope, triaged tickets with route, matched_keywords and citations",
+    "validation": "Single validate function checks all input, route, research and final-output boundaries; strict object fields, unique IDs, allowlisted URLs, reference integrity, digests, accountable owners and priorities",
+    "error": "One JSON object with status=error and error message on stdout; exit 2"
+  },
+  "cross_stage_handoffs": [
+    "Validated input sources retrieve exact text from offline pages fixtures; no network transport is used.",
+    "Research produces validated source_id, original URL, full content, SHA-256 digest and explicit synthetic retrieval mode.",
+    "Triage validates the research envelope against original fixtures, uses only ticket-linked findings and retains citation IDs, URLs and digests.",
+    "Final shared validation verifies ticket identity, decision and complete citation propagation."
+  ],
+  "behavior": {
+    "retrieval": "Exact URL lookup into explicitly synthetic offline fixtures; missing fixtures fail closed. HTTPS host matching is exact, with no credentials, fragments or nonstandard ports. No redirects occur.",
+    "classification": "Case-insensitive substring matching over subject, body and explicitly linked research content; configured keywords are literal, not regex.",
+    "priority": "Integer 1 highest through 4 lowest; most urgent matching rule wins, configuration order breaks ties.",
+    "routing": "Every matched or fallback route includes category, priority, team and named accountable owner.",
+    "fallback": "Unmatched tickets use mandatory configured fallback; empty ticket/source batches are supported.",
+    "determinism": "No time, random values, models, live providers or external I/O beyond CLI input/output."
+  },
+  "scope": {
+    "included": ["Offline URL ingestion and retrieval", "Provenance-preserving research findings", "Configurable deterministic classification, priority and ownership", "Validated integrated handoff", "JSON CLI and unittest fixtures"],
+    "excluded": ["Live HTTP or search", "HTML rendering or scraping", "LLM inference", "Ticket platform integrations", "Authentication", "Enterprise operational guarantees"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 17,
+    "cli_status": "passed: one JSON object, status=ok, exit 0",
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "query": "portable battery",
+  "max_findings": 20,
+  "sources": [
+    {
+      "id": "source-a",
+      "title": "SYNTHETIC: Aero product sheet",
+      "text": "The Aero is portable with a long battery runtime. Its case is blue."
+    },
+    {
+      "id": "source-b",
+      "title": "SYNTHETIC: Breeze product sheet",
+      "text": "Breeze offers a portable design and rechargeable battery. Its case is green."
+    },
+    {
+      "id": "source-c",
+      "title": "SYNTHETIC: Desk product sheet",
+      "text": "Desk is a stationary mains-powered appliance."
+    }
+  ],
+  "products": [
+    {
+      "id": "aero",
+      "name": "SYNTHETIC Aero",
+      "source_ids": ["source-a"],
+      "attributes": {
+        "price": {"value": 120, "currency": "USD"},
+        "weight": {"value": 0.8, "unit": "kg"},
+        "battery": {"value": 600, "unit": "min"}
+      }
+    },
+    {
+      "id": "breeze",
+      "name": "SYNTHETIC Breeze",
+      "source_ids": ["source-b"],
+      "attributes": {
+        "price": {"value": 100, "currency": "USD"},
+        "weight": {"value": 1000, "unit": "g"},
+        "battery": {"value": 8, "unit": "h"}
+      }
+    },
+    {
+      "id": "desk",
+      "name": "SYNTHETIC Desk",
+      "source_ids": ["source-c"],
+      "attributes": {
+        "price": {"value": 60, "currency": "USD"},
+        "weight": {"value": 3000, "unit": "g"}
+      }
+    }
+  ],
+  "preferences": [
+    {"attribute": "price_usd", "direction": "min", "weight": 2},
+    {"attribute": "weight_g", "direction": "min", "weight": 1},
+    {"attribute": "battery_hours", "direction": "max", "weight": 3}
+  ],
+  "feedback": [
+    {"id": "f1", "product_id": "aero", "text": "Great battery, easy setup!"},
+    {"id": "f2", "product_id": "aero", "text": "great BATTERY easy setup"},
+    {"id": "f3", "product_id": "breeze", "text": "Affordable price but heavy."},
+    {"id": "f4", "product_id": "breeze", "text": "Battery charge is reliable."},
+    {"id": "f5", "product_id": "desk", "text": "Heavy but cheap."},
+    {"id": "f6", "product_id": "aero", "text": "Lovely color."}
+  ]
+}

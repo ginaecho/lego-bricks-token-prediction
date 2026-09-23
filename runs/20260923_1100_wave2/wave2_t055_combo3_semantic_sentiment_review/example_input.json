@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: invented marketplace products, feedback, and documents",
+  "status": "input",
+  "data": {
+    "query": "silent cordless fan",
+    "options": {"top_k": 2, "min_relevance": 0.05},
+    "products": [
+      {"id": "fan-1", "name": "Quiet wireless fan", "description": "Battery fan with quiet airflow for a desk."},
+      {"id": "fan-2", "name": "Travel fan", "description": "Cordless portable fan with a compact stand."},
+      {"id": "mug-1", "name": "Ceramic mug", "description": "Blue cup for coffee and tea."}
+    ],
+    "feedback": [
+      {"id": "fb-1", "product_id": "fan-1", "text": "The fan is good, but the battery is dangerous and smoke appeared.", "severity": "critical"},
+      {"id": "fb-2", "product_id": "fan-1", "text": "I love the quiet airflow. Great for my desk.", "severity": "low"},
+      {"id": "fb-3", "product_id": "fan-2", "text": "The stand is broken and delivery was slow.", "severity": "medium"},
+      {"id": "fb-4", "product_id": "mug-1", "text": "A terrible broken cup.", "severity": "high"}
+    ],
+    "requirements": [
+      {"id": "req-1", "product_id": "fan-1", "description": "Locate battery safety and recall instructions.", "required_terms": ["battery safety", "recall procedure"]},
+      {"id": "req-2", "product_id": "fan-2", "description": "Locate the stand assembly instructions.", "required_terms": ["stand assembly"]},
+      {"id": "req-3", "product_id": "mug-1", "description": "Locate ceramic handling instructions.", "required_terms": ["ceramic handling"]}
+    ],
+    "documents": [
+      {"id": "doc-1", "product_id": "fan-1", "title": "Synthetic desk fan manual", "text": "Battery safety: stop use if the housing becomes hot. Keep air vents clear."},
+      {"id": "doc-2", "product_id": "fan-2", "title": "Synthetic travel fan guide", "text": "Stand assembly: slide the stand into the base before use."},
+      {"id": "doc-3", "product_id": "mug-1", "title": "Synthetic cup leaflet", "text": "Ceramic handling: wash gently. Recall procedure: contact the fictional seller."}
+    ]
+  },
+  "results": {}
+}

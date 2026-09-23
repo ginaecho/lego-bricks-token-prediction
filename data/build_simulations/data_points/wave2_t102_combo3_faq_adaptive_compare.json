@@ -1,0 +1,661 @@
+{
+  "id": "wave2_t102_combo3_faq_adaptive_compare",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "support",
+      "onboard",
+      "search"
+    ],
+    "basic_functionalities": [
+      "AI customer support",
+      "Guided onboarding",
+      "Smart product search"
+    ],
+    "types": [
+      "faq",
+      "adaptive",
+      "compare"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Attribute normalization, side-by-side comparison and preference ranking."
+  ],
+  "integration": {
+    "ordered_types": [
+      "faq",
+      "adaptive",
+      "compare"
+    ],
+    "edges": [
+      {
+        "from": "faq",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "adaptive",
+        "to": "compare",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "f27fc62d82d0b518c5cae56bef521dec402b1c6fad9de881f474c2ab3f8e2277",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "5e60cd4d8e7a6af582dd758eec4b145bce83d1bc16463f80fe0ddc847bc9efe6",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t102_combo3_faq_adaptive_compare",
+  "membership_point_id": "combo3_faq_adaptive_compare",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "9a3952bdf04222d46d5b0305aa4365da7022ce7fef22b9b236b97bc3741b898c",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 8,
+    "input_tokens": 209543,
+    "output_tokens": 15455,
+    "cache_read_tokens": 192416,
+    "cache_write_tokens": 17103,
+    "total_tokens": 224998,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34788,
+        "agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+        "model": "gpt-6-astra",
+        "input_tokens": 14857,
+        "output_tokens": 717,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 799,
+        "reasoning_tokens": 516,
+        "duration_ms": 20483,
+        "created_at": "2026-09-23T11:02:28.963Z"
+      },
+      {
+        "id": 34812,
+        "agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+        "model": "gpt-6-astra",
+        "input_tokens": 15604,
+        "output_tokens": 12293,
+        "cache_read_tokens": 14854,
+        "cache_write_tokens": 747,
+        "reasoning_tokens": 1552,
+        "duration_ms": 202990,
+        "created_at": "2026-09-23T11:06:00.615Z"
+      },
+      {
+        "id": 34814,
+        "agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+        "model": "gpt-6-astra",
+        "input_tokens": 28217,
+        "output_tokens": 475,
+        "cache_read_tokens": 15601,
+        "cache_write_tokens": 12613,
+        "reasoning_tokens": 280,
+        "duration_ms": 10950,
+        "created_at": "2026-09-23T11:06:03.906Z"
+      },
+      {
+        "id": 34820,
+        "agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+        "model": "gpt-6-astra",
+        "input_tokens": 28975,
+        "output_tokens": 713,
+        "cache_read_tokens": 28214,
+        "cache_write_tokens": 758,
+        "reasoning_tokens": 230,
+        "duration_ms": 13987,
+        "created_at": "2026-09-23T11:06:29.540Z"
+      },
+      {
+        "id": 34822,
+        "agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+        "model": "gpt-6-astra",
+        "input_tokens": 29781,
+        "output_tokens": 358,
+        "cache_read_tokens": 28972,
+        "cache_write_tokens": 806,
+        "reasoning_tokens": 0,
+        "duration_ms": 6336,
+        "created_at": "2026-09-23T11:06:33.787Z"
+      },
+      {
+        "id": 34825,
+        "agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+        "model": "gpt-6-astra",
+        "input_tokens": 30223,
+        "output_tokens": 410,
+        "cache_read_tokens": 29778,
+        "cache_write_tokens": 442,
+        "reasoning_tokens": 14,
+        "duration_ms": 6931,
+        "created_at": "2026-09-23T11:06:45.996Z"
+      },
+      {
+        "id": 34826,
+        "agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+        "model": "gpt-6-astra",
+        "input_tokens": 30725,
+        "output_tokens": 384,
+        "cache_read_tokens": 30220,
+        "cache_write_tokens": 502,
+        "reasoning_tokens": 164,
+        "duration_ms": 9195,
+        "created_at": "2026-09-23T11:06:47.749Z"
+      },
+      {
+        "id": 34828,
+        "agent_id": "2cf84b05-c260-4223-8294-075008e2e6c9",
+        "model": "gpt-6-astra",
+        "input_tokens": 31161,
+        "output_tokens": 105,
+        "cache_read_tokens": 30722,
+        "cache_write_tokens": 436,
+        "reasoning_tokens": 0,
+        "duration_ms": 3170,
+        "created_at": "2026-09-23T11:06:59.144Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.7556824999999999,
+      "observed_cache_profile_estimate_usd": 0.32274650000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 9.06819,
+      "observed_cache_profile_estimate_usd": 9.06819,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 3,
+      "roi_satisfaction": 0,
+      "future_impact_potential": 1,
+      "delivery_quality": 1
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.19999999999999998,
+    "pseudo_annual_cost_usd": 35000,
+    "pseudo_annual_ai_value_usd": 100000,
+    "pseudo_net_impact_usd": 65000,
+    "pseudo_roi_pct": 185.71428571428572,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "......................................\n----------------------------------------------------------------------\nRan 38 tests in 0.979s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "fixture_label": "SYNTHETIC portable work-light marketplace; not real product claims",
+      "status": "ok",
+      "request": {
+        "question": "How should I choose battery runtime for portable lighting?",
+        "profile": {
+          "experience": "beginner",
+          "onboarding_mode": "guided",
+          "completed_steps": [],
+          "priorities": {
+            "price": 3,
+            "battery": 5
+          },
+          "max_price_usd": 100
+        },
+        "knowledge_base": [
+          {
+            "id": "faq-runtime",
+            "question": "How should I choose battery runtime for portable lighting?",
+            "answer": "For this synthetic catalog, compare rated battery hours and carrying weight. Runtime depends on the brightness setting; test your preferred setting before a long trip.",
+            "keywords": [
+              "battery",
+              "runtime",
+              "portable",
+              "lighting"
+            ],
+            "topics": [
+              "portable-lighting"
+            ],
+            "attribute_hints": [
+              "battery",
+              "weight"
+            ]
+          },
+          {
+            "id": "faq-returns",
+            "question": "What is the synthetic return policy?",
+            "answer": "This fictional store accepts unused items within 14 days.",
+            "keywords": [
+              "return",
+              "refund",
+              "policy"
+            ],
+            "topics": [
+              "returns"
+            ],
+            "attribute_hints": []
+          }
+        ],
+        "onboarding_steps": [
+          {
+            "id": "account",
+            "title": "Set up your fictional account",
+            "explanation": "An account is required before saving a brightness profile.",
+            "prerequisites": [],
+            "topics": [],
+            "audiences": [
+              "beginner"
+            ]
+          },
+          {
+            "id": "brightness",
+            "title": "Choose your brightness setting",
+            "explanation": "Brightness affects battery runtime, so choose it before comparing runtime claims.",
+            "prerequisites": [
+              "account"
+            ],
+            "topics": [
+              "portable-lighting"
+            ],
+            "audiences": [
+              "beginner",
+              "intermediate",
+              "expert"
+            ]
+          },
+          {
+            "id": "advanced-profile",
+            "title": "Configure a custom lighting profile",
+            "explanation": "Experienced users can save a custom brightness schedule.",
+            "prerequisites": [
+              "brightness"
+            ],
+            "topics": [
+              "portable-lighting"
+            ],
+            "audiences": [
+              "expert"
+            ]
+          },
+          {
+            "id": "return-checklist",
+            "title": "Review the return checklist",
+            "explanation": "Review the fictional return conditions before arranging a return.",
+            "prerequisites": [],
+            "topics": [
+              "returns"
+            ],
+            "audiences": [
+              "beginner",
+              "intermediate",
+              "expert"
+            ]
+          }
+        ],
+        "products": [
+          {
+            "id": "light-a",
+            "name": "SYNTHETIC Pocket Light",
+            "attributes": {
+              "cost": {
+                "value": 40,
+                "unit": "USD"
+              },
+              "mass": {
+                "value": 0.25,
+                "unit": "kg"
+              },
+              "battery_life": {
+                "value": 240,
+                "unit": "min"
+              },
+              "review_score": {
+                "value": 8,
+                "unit": "/10"
+              }
+            }
+          },
+          {
+            "id": "light-b",
+            "name": "SYNTHETIC Trail Light",
+            "attributes": {
+              "price": {
+                "value": 70,
+                "unit": "$"
+              },
+              "weight": {
+                "value": 400,
+                "unit": "g"
+              },
+              "battery": {
+                "value": 10,
+                "unit": "h"
+              },
+              "rating": {
+                "value": 90,
+                "unit": "%"
+              }
+            }
+          },
+          {
+            "id": "light-c",
+            "name": "SYNTHETIC Expedition Light",
+            "attributes": {
+              "price": {
+                "value": 140,
+                "unit": "USD"
+              },
+              "weight": {
+                "value": 0.7,
+                "unit": "kg"
+              },
+              "battery": {
+                "value": 20,
+                "unit": "h"
+              },
+              "rating": {
+                "value": 4.8,
+                "unit": "/5"
+              }
+            }
+          }
+        ]
+      },
+      "stages": {
+        "faq": {
+          "status": "answered",
+          "answer": "For this synthetic catalog, compare rated battery hours and carrying weight. Runtime depends on the brightness setting; test your preferred setting before a long trip.",
+          "sources": [
+            "faq-runtime"
+          ],
+          "confidence": 1.0,
+          "reason": "matched",
+          "topics": [
+            "portable-lighting"
+          ],
+          "attribute_hints": [
+            "battery",
+            "weight"
+          ]
+        },
+        "adaptive": {
+          "based_on_faq": "answered",
+          "topics": [
+            "portable-lighting"
+          ],
+          "mode": "guided",
+          "experience": "beginner",
+          "steps": [
+            {
+              "id": "account",
+              "title": "Set up your fictional account",
+              "prerequisites": [],
+              "explanation": "An account is required before saving a brightness profile.",
+              "selection_reason": "Matches beginner experience and general onboarding.",
+              "delivery": "Follow the guided instructions and confirm completion."
+            },
+            {
+              "id": "brightness",
+              "title": "Choose your brightness setting",
+              "prerequisites": [
+                "account"
+              ],
+              "explanation": "Brightness affects battery runtime, so choose it before comparing runtime claims.",
+              "selection_reason": "Matches beginner experience and answered FAQ topics.",
+              "delivery": "Follow the guided instructions and confirm completion."
+            }
+          ],
+          "completed_steps": [],
+          "weights": {
+            "price": 0.2727272727272727,
+            "weight": 0.18181818181818182,
+            "battery": 0.45454545454545453,
+            "rating": 0.09090909090909091
+          },
+          "weight_reasons": {
+            "price": "Explicit user priority.",
+            "weight": "Grounded FAQ attribute hint.",
+            "battery": "Explicit user priority.",
+            "rating": "Default balanced priority."
+          },
+          "max_price_usd": 100,
+          "explanation": "Uses grounded FAQ topics; explicit preferences override FAQ hints."
+        },
+        "compare": {
+          "weights": {
+            "price": 0.2727272727272727,
+            "weight": 0.18181818181818182,
+            "battery": 0.45454545454545453,
+            "rating": 0.09090909090909091
+          },
+          "max_price_usd": 100,
+          "normalized_products": [
+            {
+              "id": "light-a",
+              "name": "SYNTHETIC Pocket Light",
+              "attributes": {
+                "price": 40.0,
+                "weight": 250.0,
+                "battery": 4.0,
+                "rating": 4.0
+              }
+            },
+            {
+              "id": "light-b",
+              "name": "SYNTHETIC Trail Light",
+              "attributes": {
+                "price": 70.0,
+                "weight": 400.0,
+                "battery": 10.0,
+                "rating": 4.5
+              }
+            },
+            {
+              "id": "light-c",
+              "name": "SYNTHETIC Expedition Light",
+              "attributes": {
+                "price": 140.0,
+                "weight": 700.0,
+                "battery": 20.0,
+                "rating": 4.8
+              }
+            }
+          ],
+          "side_by_side": [
+            {
+              "attribute": "price",
+              "unit": "USD",
+              "preferred": "lower",
+              "weight": 0.2727272727272727,
+              "values": {
+                "light-a": 40.0,
+                "light-b": 70.0
+              }
+            },
+            {
+              "attribute": "weight",
+              "unit": "g",
+              "preferred": "lower",
+              "weight": 0.18181818181818182,
+              "values": {
+                "light-a": 250.0,
+                "light-b": 400.0
+              }
+            },
+            {
+              "attribute": "battery",
+              "unit": "h",
+              "preferred": "higher",
+              "weight": 0.45454545454545453,
+              "values": {
+                "light-a": 4.0,
+                "light-b": 10.0
+              }
+            },
+            {
+              "attribute": "rating",
+              "unit": "/5",
+              "preferred": "higher",
+              "weight": 0.09090909090909091,
+              "values": {
+                "light-a": 4.0,
+                "light-b": 4.5
+              }
+            }
+          ],
+          "ranking": [
+            {
+              "product_id": "light-b",
+              "score": 0.545455,
+              "contributions": {
+                "price": 0.0,
+                "weight": 0.0,
+                "battery": 0.454545,
+                "rating": 0.090909
+              },
+              "missing_attributes": [],
+              "rank": 1
+            },
+            {
+              "product_id": "light-a",
+              "score": 0.454545,
+              "contributions": {
+                "price": 0.272727,
+                "weight": 0.181818,
+                "battery": 0.0,
+                "rating": 0.0
+              },
+              "missing_attributes": [],
+              "rank": 2
+            }
+          ],
+          "excluded": [
+            {
+              "product_id": "light-c",
+              "reason": "over_budget"
+            }
+          ],
+          "explanation": "Eligible-catalog min-max utility, weighted by onboarding preferences. Missing values score zero; equal known values score one. Scores round to six decimals; ties break by product ID. Budget excludes unknown prices. Scores are relative, not quality guarantees."
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t102_combo3_faq_adaptive_compare",
+    "artifact_sha256": {
+      "implementation.py": "ded777922377d9424a311d726e0bdee235b302192c032ce9de28f454e9757974",
+      "test_implementation.py": "a78e3f5dd5907df777eb3a43d4195218d85b4df5563573badf4202a599c276b0",
+      "example_input.json": "6362261d1bfa1d7ade129bbe9bd114d279dd5704747ff00be865c3dbddafd889",
+      "build_manifest.json": "74e2598fd8e56f90a0f23a4fe922043f30d7c0462c4b6b685e5585aa3e926e9a"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

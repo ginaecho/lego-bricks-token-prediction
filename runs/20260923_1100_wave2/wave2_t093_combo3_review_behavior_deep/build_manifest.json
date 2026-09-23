@@ -1,0 +1,101 @@
+{
+  "build_id": "wave2_t093_combo3_review_behavior_deep",
+  "composition_label": "Document review -> Behavioral personalization -> Deep research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, independently authored isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope": {
+      "schema_version": "integer 1",
+      "synthetic": "true; explicitly labeled synthetic-only fixtures",
+      "status": "ok",
+      "stage": "input | review | behavior | deep",
+      "data": "as_of, requirements, documents, events",
+      "review": "null until reviewed; checked_evidence, document_checks, gaps, notice",
+      "behavior": "null until personalized; ranking, review_gaps, cold_start, weights, notice",
+      "deep": "null until synthesized; reading_order, findings, disagreements, unresolved_questions, notice"
+    },
+    "input_records": {
+      "requirement": "id, question; nonblank text; unique id",
+      "document": "id, title, text, evidence[]; unique id",
+      "evidence": "id, requirement_id, stance (supports|contradicts), quote; globally unique evidence id",
+      "event": "id, document_id, kind (browse|purchase), at; unique event id"
+    },
+    "validation": [
+      "One shared validate function checks every stage on entry and exit.",
+      "Strict object fields, nonblank strings, referential integrity, unique IDs, timezone-aware timestamps, no future events.",
+      "Evidence quotes must exactly occur in source text; offsets are Unicode character offsets, end-exclusive, first occurrence.",
+      "Deterministic stage contracts are recomputed to reject tampered handoffs including missing evidence or changed scores.",
+      "CLI rejects duplicate JSON keys, nonfinite numbers, invalid JSON, invalid schemas and file errors."
+    ],
+    "error_contract": "One JSON object with status:error and error:{type,message}; exit 2. Success emits one JSON envelope; exit 0."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "review",
+      "to": "behavior",
+      "consumes": "Validated document_checks, checked_evidence and traceable requirement gaps; original validated events remain in the shared envelope.",
+      "produces": "Ranking of all reviewed documents with evidence IDs, traceable event contributions, coverage prior and copied review gaps."
+    },
+    {
+      "from": "behavior",
+      "to": "deep",
+      "consumes": "Validated ranking, ranked evidence IDs, scores and review gaps, resolving quotes through retained reviewed evidence.",
+      "produces": "Rank-ordered citations and reading order; complete per-requirement synthesis, unresolved gaps and polarity disagreements."
+    }
+  ],
+  "behavior": {
+    "review": "Exact quote and requirement checks; no-support and contradiction gaps. Evidence stance is supplied by the synthetic fixture, not inferred or independently verified.",
+    "ranking": "score = distinct evidenced requirements / total requirements + sum(event_weight * 0.5 ** (age_days / 30)); browse=1, purchase=3. Contradictory and supporting evidence contribute equally to coverage.",
+    "cold_start": "No global history uses coverage prior and document-ID tie-breaking; unseen documents retain the same prior. No minimum score filter.",
+    "determinism": "Fixed input as_of, sorted identifiers and stable score/document-ID ordering; no system clock, randomness, network or provider.",
+    "synthesis": "Extractive per-requirement findings retain every citation. Both polarities yield disagreement; absent support or any counterevidence yields unresolved questions. Popularity never resolves evidence conflicts.",
+    "edge_cases": "No documents is permitted and produces unresolved gaps; requirements must be nonempty. Contradict-only evidence is unresolved, not a two-sided disagreement. Empty history is supported."
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI and shared immutable-style envelope",
+      "Deterministic traceable review, personalization and multi-document synthesis",
+      "Synthetic fixture and offline unittest suite"
+    ],
+    "excluded": [
+      "Certification, compliance assurances, factual truth verification",
+      "Live research, scraping, networks, LLM calls and model providers",
+      "Semantic stance inference, embeddings, recommender training",
+      "Enterprise persistence, authentication, production-scale workloads",
+      "Cross-user profiling; input events represent one anonymous synthetic session"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_passed": 33,
+      "failures": 0,
+      "errors": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One valid JSON object; status ok; stage deep",
+      "error_cases": "Missing file and invalid arguments return one JSON error with exit 2; malformed JSON, duplicate keys, nonfinite numbers and invalid schemas also tested."
+    }
+  }
+}

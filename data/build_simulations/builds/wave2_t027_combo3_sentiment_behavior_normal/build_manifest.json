@@ -1,0 +1,53 @@
+{
+  "build_id": "wave2_t027_combo3_sentiment_behavior_normal",
+  "composition_label": "Sentiment & prioritization -> Behavioral personalization -> Normal research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact fields: schema_version=1, synthetic=true, as_of (timezone-aware ISO timestamp), customer_id, feedback[], events[], catalog[], sources[]. Entity fields are documented by example_input.json and validate_input.",
+    "output": "One envelope: schema_version, status=ok, synthetic=true, input, sentiment, behavior, research. Each stage extends the validated previous envelope without mutating it.",
+    "validation": "Shared validate gateway enforces exact input keys, scalar types, finite bounded popularity, unique collection IDs, customer scope, category/product references, event kinds, severity enum, timezone awareness, and no future events. Boundary outputs are recomputed against deterministic stage contracts.",
+    "errors": "CLI validation, decoding, usage, and file errors print one JSON object with status=error and exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Sentiment supplies scored issues, priorities, categories, and feedback IDs to behavior; negative or high/critical issues add category attention.",
+    "Behavior supplies selected top-three product IDs, order, scores, and issue IDs to research; product metadata and linked feedback construct lexical retrieval queries.",
+    "Research preserves product order, behavior scores, issue IDs, and exact source passages with source ID, title and end-exclusive Unicode character offsets."
+  ],
+  "behavior": {
+    "sentiment": "Fixed English lexicon with transparent per-token evidence; odd negation count in previous three word tokens flips a contribution. Severity base 10/35/65/90 plus negative bonus capped at 10; overall cap 100. Priority descending, ID ascending ties.",
+    "personalization": "Browse weight 1, purchase weight 3; decay 1/(1+age_days/30), direct item weight plus 0.25 category affinity plus max relevant priority/100 plus popularity*0.1. Rounded to eight decimals, ties by product ID.",
+    "cold_start": "With no events, use severity-aware issue attention plus popularity; without issues, popularity then stable ID. No purchase exclusion.",
+    "research": "Blank-line passages ranked by unique ASCII lexical term overlap excluding a small stopword set. Top two positive-overlap passages per selected product, ties by source ID and offset. Findings are exact excerpts, never generated paraphrases. Missing evidence is explicit.",
+    "empty_data": "Empty collections accepted when references remain valid; empty catalog yields no ranked products or research results.",
+    "synthetic_fixture": "All example entities and source texts are clearly labeled synthetic."
+  },
+  "scope": {
+    "included": ["Integrated CLI pipeline", "Strict shared validation", "Transparent sentiment and priority", "Recency and purchase signals", "Cold-start fallback", "Exact extractive citations", "Deterministic local unittest fixtures"],
+    "excluded": ["Live providers or networking", "LLM calls", "Enterprise deployment", "Persistence or training", "Semantic embeddings", "Source-truth verification", "Multilingual sentiment", "Clinical or product-safety certification"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 20,
+    "failures": 0,
+    "errors": 0,
+    "unittest_exit_code": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_stdout": "One valid JSON object with status=ok",
+    "deliverable_file_set_verified": true
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "build_id": "wave2_t106_combo4_interests_faq_semantic_web",
+  "composition_label": "Interest-based recommendations -> Knowledge-base answers -> Semantic search -> Web research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Version 1 object: schema_version, SYNTHETIC fixture_label, profile, products, faqs, web, settings. All keys required; unknown keys rejected.",
+    "profile": "Weighted interest tags, excluded tags, excluded product IDs, question",
+    "sources": "Products have id/title/description/tags; FAQs have id/question/answer/product_ids; supplied web snapshots have url/title/text/product_ids.",
+    "settings": "limit (1..20); faq_threshold, search_threshold, web_threshold (0..1)",
+    "output": "schema_version, fixture_label, status, ordered stages",
+    "shared_stage_envelope": "stage, status (ok or abstained), reason, query, product_ids, items, evidence",
+    "shared_item": "id, product_ids, score (0..1), text, citations",
+    "shared_evidence": "id, kind, source_id, title, text, url, product_ids",
+    "validation": "One validation layer validates strict input shapes, source references, finite numbers, URLs, every stage envelope, grounding, exclusions, citations and handoff scope. CLI file/JSON/validation failures return one status:error JSON object and exit 2."
+  },
+  "cross_stage_handoffs": [
+    "interests -> faq: validated ranked recommendation IDs constrain eligible FAQ records; question plus matched preference tags becomes the retrieval query.",
+    "faq -> semantic: validated FAQ output preserves product scope and appends the verbatim supported answer to the query; on abstention the prior query remains unchanged.",
+    "semantic -> web: validated search result IDs constrain offline snapshot retrieval; inherited enriched query ranks snapshots.",
+    "All stages retain upstream evidence in order; downstream product scope cannot expand. Sources referencing excluded products are never exposed."
+  ],
+  "behavior": {
+    "interests": "Normalized exact tag matching, positive weighted preference score, exclusions before ranking, deterministic source-ID tie breaks, grounded match explanations.",
+    "faq": "Extractive TF-IDF retrieval with question-word overlap, threshold and product scope gating; one verbatim answer with citation or explicit abstention.",
+    "semantic": "Deterministic TF-IDF cosine search index over eligible products. Optional run_pipeline(request, embedder=callable) accepts a batch of source strings followed by the enriched query; returns same-size, finite, nonzero, equal-dimension vector lists. Scores blend lexical and nonnegative embedding cosine equally. No callable is loaded by the CLI.",
+    "web": "Caller-supplied snapshots only. Exact lowercase DNS hostname allowlist; HTTPS on default port, no credentials, fragments, controls or backslashes. No redirects or network fetching. Findings are verbatim excerpts with original URL citations and inherited provenance.",
+    "abstention": "Empty or below-threshold results produce stage status abstained and a reason. A successfully executed pipeline retains top-level status ok even when one or more stages abstain.",
+    "determinism": "Stable source-ID tie ordering, bounded inputs, no random sampling, no generated unsupported claims."
+  },
+  "scope": {
+    "included": ["One integrated offline pipeline", "Shared schemas and validation", "Synthetic fixtures", "Optional fixture-tested embedding injection", "Grounded extractive answers and findings", "CLI error contract"],
+    "excluded": ["Live HTTP ingestion or providers", "LLM generation", "Production authentication or persistence", "Crawling and redirect handling", "Learned synonym semantics without injected embeddings", "Verification of snapshot authenticity or real-world truth"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 35,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status ok and all four ordered stages successful",
+    "coverage": ["All stages", "Exclusion and scope propagation", "FAQ query enrichment", "Provenance retention", "Abstention", "Empty sources", "Deterministic ranking", "Injected embeddings and invalid vectors", "URL allowlist enforcement", "Invalid schema and numbers", "Forged handoff rejection", "CLI success and error behavior"]
+  }
+}

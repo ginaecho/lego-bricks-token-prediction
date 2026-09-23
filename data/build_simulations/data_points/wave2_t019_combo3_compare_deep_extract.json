@@ -1,0 +1,898 @@
+{
+  "id": "wave2_t019_combo3_compare_deep_extract",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "search",
+      "research",
+      "documents"
+    ],
+    "basic_functionalities": [
+      "Smart product search",
+      "Research",
+      "Document automation"
+    ],
+    "types": [
+      "compare",
+      "deep",
+      "extract"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 7,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Attribute normalization, side-by-side comparison and preference ranking.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions.",
+    "Schema-driven field extraction, source spans and missing-field reporting."
+  ],
+  "integration": {
+    "ordered_types": [
+      "compare",
+      "deep",
+      "extract"
+    ],
+    "edges": [
+      {
+        "from": "compare",
+        "to": "deep",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "deep",
+        "to": "extract",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "06f9d1398e473f6508025cb41a16ebd64d67f2117c58b705fde3b2fe3a23a196",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "27df456dd6e31c20882ebbad933373430466305f5c049be98134a728cb8cf9c3",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t019_combo3_compare_deep_extract",
+  "membership_point_id": "combo3_compare_deep_extract",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "d02f9e3b6966adc56a1e5d83076ee1c4071c4e77711d4e817b446b59f631cd3d",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 8,
+    "input_tokens": 226517,
+    "output_tokens": 16719,
+    "cache_read_tokens": 205529,
+    "cache_write_tokens": 20964,
+    "total_tokens": 243236,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33979,
+        "agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+        "model": "gpt-6-astra",
+        "input_tokens": 14755,
+        "output_tokens": 301,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 794,
+        "reasoning_tokens": 153,
+        "duration_ms": 9524,
+        "created_at": "2026-09-23T09:34:49.943Z"
+      },
+      {
+        "id": 34008,
+        "agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+        "model": "gpt-6-astra",
+        "input_tokens": 15086,
+        "output_tokens": 12857,
+        "cache_read_tokens": 14752,
+        "cache_write_tokens": 331,
+        "reasoning_tokens": 1133,
+        "duration_ms": 238196,
+        "created_at": "2026-09-23T09:38:49.399Z"
+      },
+      {
+        "id": 34010,
+        "agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+        "model": "gpt-6-astra",
+        "input_tokens": 28259,
+        "output_tokens": 159,
+        "cache_read_tokens": 15083,
+        "cache_write_tokens": 13173,
+        "reasoning_tokens": 24,
+        "duration_ms": 4690,
+        "created_at": "2026-09-23T09:38:54.211Z"
+      },
+      {
+        "id": 34020,
+        "agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+        "model": "gpt-6-astra",
+        "input_tokens": 31277,
+        "output_tokens": 2120,
+        "cache_read_tokens": 28256,
+        "cache_write_tokens": 3018,
+        "reasoning_tokens": 646,
+        "duration_ms": 43262,
+        "created_at": "2026-09-23T09:39:46.029Z"
+      },
+      {
+        "id": 34023,
+        "agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+        "model": "gpt-6-astra",
+        "input_tokens": 33563,
+        "output_tokens": 348,
+        "cache_read_tokens": 31274,
+        "cache_write_tokens": 2286,
+        "reasoning_tokens": 81,
+        "duration_ms": 8327,
+        "created_at": "2026-09-23T09:39:52.059Z"
+      },
+      {
+        "id": 34024,
+        "agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+        "model": "gpt-6-astra",
+        "input_tokens": 33970,
+        "output_tokens": 621,
+        "cache_read_tokens": 33560,
+        "cache_write_tokens": 407,
+        "reasoning_tokens": 105,
+        "duration_ms": 17114,
+        "created_at": "2026-09-23T09:40:07.655Z"
+      },
+      {
+        "id": 34025,
+        "agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+        "model": "gpt-6-astra",
+        "input_tokens": 34682,
+        "output_tokens": 209,
+        "cache_read_tokens": 33967,
+        "cache_write_tokens": 712,
+        "reasoning_tokens": 0,
+        "duration_ms": 5164,
+        "created_at": "2026-09-23T09:40:12.881Z"
+      },
+      {
+        "id": 34027,
+        "agent_id": "c854deee-d304-4af0-8546-a9027a95af4e",
+        "model": "gpt-6-astra",
+        "input_tokens": 34925,
+        "output_tokens": 104,
+        "cache_read_tokens": 34679,
+        "cache_write_tokens": 243,
+        "reasoning_tokens": 0,
+        "duration_ms": 4143,
+        "created_at": "2026-09-23T09:40:20.009Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.8170775,
+      "observed_cache_profile_estimate_usd": 0.3546372500000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 9.80493,
+      "observed_cache_profile_estimate_usd": 9.80493,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 2,
+      "roi_satisfaction": 2,
+      "future_impact_potential": 4,
+      "delivery_quality": 1
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.35,
+    "pseudo_annual_cost_usd": 15000,
+    "pseudo_annual_ai_value_usd": 15000,
+    "pseudo_net_impact_usd": 0,
+    "pseudo_roi_pct": 0.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.844s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "comparison": {
+        "columns": [
+          "synthetic-a",
+          "synthetic-b"
+        ],
+        "products": [
+          {
+            "attributes": {
+              "battery": {
+                "unit": "h",
+                "value": 10.0
+              },
+              "finish": {
+                "unit": null,
+                "value": "blue"
+              },
+              "mass": {
+                "unit": "g",
+                "value": 500.0
+              },
+              "price": {
+                "unit": "USD",
+                "value": 80.0
+              }
+            },
+            "id": "synthetic-a",
+            "name": "Synthetic Comet Speaker",
+            "preference_scores": {
+              "battery": 0.0,
+              "finish": 1.0,
+              "price": 1.0
+            },
+            "rank": 1,
+            "score": 0.8
+          },
+          {
+            "attributes": {
+              "battery": {
+                "unit": "h",
+                "value": 12.0
+              },
+              "finish": {
+                "unit": null,
+                "value": "red"
+              },
+              "mass": {
+                "unit": "g",
+                "value": 450.0
+              },
+              "price": {
+                "unit": "USD",
+                "value": 100
+              }
+            },
+            "id": "synthetic-b",
+            "name": "Synthetic Orbit Speaker",
+            "preference_scores": {
+              "battery": 1.0,
+              "finish": 0.0,
+              "price": 0.0
+            },
+            "rank": 2,
+            "score": 0.2
+          }
+        ],
+        "side_by_side": [
+          {
+            "attribute": "price",
+            "unit": "USD",
+            "values": {
+              "synthetic-a": 80.0,
+              "synthetic-b": 100
+            }
+          },
+          {
+            "attribute": "battery",
+            "unit": "h",
+            "values": {
+              "synthetic-a": 10.0,
+              "synthetic-b": 12.0
+            }
+          },
+          {
+            "attribute": "finish",
+            "unit": null,
+            "values": {
+              "synthetic-a": "blue",
+              "synthetic-b": "red"
+            }
+          },
+          {
+            "attribute": "mass",
+            "unit": "g",
+            "values": {
+              "synthetic-a": 500.0,
+              "synthetic-b": 450.0
+            }
+          }
+        ],
+        "stage": "compare",
+        "winner_id": "synthetic-a"
+      },
+      "extraction": {
+        "complete": false,
+        "fields": {
+          "alternative_battery": {
+            "reason": null,
+            "source_path": "research.products[1].findings[1].consensus_value",
+            "source_spans": [
+              {
+                "document_id": "synthetic-b-lab",
+                "end": 58,
+                "quote": "12 h",
+                "start": 54
+              }
+            ],
+            "status": "found",
+            "unit": "h",
+            "value": 12.0
+          },
+          "battery_hours": {
+            "reason": "conflicting evidence",
+            "source_path": "research.products[0].findings[1].consensus_value",
+            "source_spans": [],
+            "status": "missing",
+            "unit": "h",
+            "value": null
+          },
+          "evidence_count": {
+            "reason": null,
+            "source_path": "research.products[0].findings[*].evidence",
+            "source_spans": [
+              {
+                "document_id": "synthetic-a-lab",
+                "end": 62,
+                "quote": "80 USD",
+                "start": 56
+              },
+              {
+                "document_id": "synthetic-a-review",
+                "end": 80,
+                "quote": "80 USD",
+                "start": 74
+              },
+              {
+                "document_id": "synthetic-a-lab",
+                "end": 85,
+                "quote": "10 hours",
+                "start": 77
+              },
+              {
+                "document_id": "synthetic-a-review",
+                "end": 93,
+                "quote": "9 h",
+                "start": 90
+              },
+              {
+                "document_id": "synthetic-a-lab",
+                "end": 97,
+                "quote": "Blue",
+                "start": 93
+              },
+              {
+                "document_id": "synthetic-a-review",
+                "end": 105,
+                "quote": "blue",
+                "start": 101
+              }
+            ],
+            "status": "found",
+            "unit": null,
+            "value": 6
+          },
+          "has_conflicts": {
+            "reason": null,
+            "source_path": "research.products[0].findings[*].status",
+            "source_spans": [
+              {
+                "document_id": "synthetic-a-lab",
+                "end": 85,
+                "quote": "10 hours",
+                "start": 77
+              },
+              {
+                "document_id": "synthetic-a-review",
+                "end": 93,
+                "quote": "9 h",
+                "start": 90
+              }
+            ],
+            "status": "found",
+            "unit": null,
+            "value": true
+          },
+          "mass_grams": {
+            "reason": "no usable documentary evidence",
+            "source_path": "research.products[0].findings[3].consensus_value",
+            "source_spans": [],
+            "status": "missing",
+            "unit": "g",
+            "value": null
+          },
+          "open_questions": {
+            "reason": null,
+            "source_path": "research.products[0].unresolved_questions",
+            "source_spans": [],
+            "status": "found",
+            "unit": null,
+            "value": 2
+          },
+          "preference_score": {
+            "reason": null,
+            "source_path": "research.products[0].score",
+            "source_spans": [],
+            "status": "found",
+            "unit": null,
+            "value": 0.8
+          },
+          "recommended_product": {
+            "reason": null,
+            "source_path": "research.products[0].name",
+            "source_spans": [],
+            "status": "found",
+            "unit": null,
+            "value": "Synthetic Comet Speaker"
+          },
+          "research_summary": {
+            "reason": null,
+            "source_path": "research.products[0].summary",
+            "source_spans": [
+              {
+                "document_id": "synthetic-a-lab",
+                "end": 62,
+                "quote": "80 USD",
+                "start": 56
+              },
+              {
+                "document_id": "synthetic-a-review",
+                "end": 80,
+                "quote": "80 USD",
+                "start": 74
+              },
+              {
+                "document_id": "synthetic-a-lab",
+                "end": 85,
+                "quote": "10 hours",
+                "start": 77
+              },
+              {
+                "document_id": "synthetic-a-review",
+                "end": 93,
+                "quote": "9 h",
+                "start": 90
+              },
+              {
+                "document_id": "synthetic-a-lab",
+                "end": 97,
+                "quote": "Blue",
+                "start": 93
+              },
+              {
+                "document_id": "synthetic-a-review",
+                "end": 105,
+                "quote": "blue",
+                "start": 101
+              }
+            ],
+            "status": "found",
+            "unit": null,
+            "value": "Synthetic Comet Speaker (comparison rank 1): 2 supported, 1 disputed, 1 without evidence. 2 unresolved questions. Support is not independent verification."
+          },
+          "verified_price": {
+            "reason": null,
+            "source_path": "research.products[0].findings[0].consensus_value",
+            "source_spans": [
+              {
+                "document_id": "synthetic-a-lab",
+                "end": 62,
+                "quote": "80 USD",
+                "start": 56
+              },
+              {
+                "document_id": "synthetic-a-review",
+                "end": 80,
+                "quote": "80 USD",
+                "start": 74
+              }
+            ],
+            "status": "found",
+            "unit": "USD",
+            "value": 80.0
+          }
+        },
+        "missing_fields": [
+          "battery_hours",
+          "mass_grams"
+        ],
+        "required_missing": [
+          "battery_hours"
+        ],
+        "stage": "extract"
+      },
+      "research": {
+        "disagreements": [
+          {
+            "attribute": "battery",
+            "catalog_value": 10.0,
+            "product_id": "synthetic-a",
+            "values": [
+              10.0,
+              9.0
+            ]
+          }
+        ],
+        "documents_used": [
+          "synthetic-a-lab",
+          "synthetic-a-review",
+          "synthetic-b-lab"
+        ],
+        "products": [
+          {
+            "attributes": {
+              "battery": {
+                "unit": "h",
+                "value": 10.0
+              },
+              "finish": {
+                "unit": null,
+                "value": "blue"
+              },
+              "mass": {
+                "unit": "g",
+                "value": 500.0
+              },
+              "price": {
+                "unit": "USD",
+                "value": 80.0
+              }
+            },
+            "findings": [
+              {
+                "attribute": "price",
+                "catalog_value": 80.0,
+                "consensus_value": 80.0,
+                "distinct_values": [
+                  80.0
+                ],
+                "document_count": 2,
+                "evidence": [
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-a-lab",
+                      "end": 62,
+                      "quote": "80 USD",
+                      "start": 56
+                    },
+                    "value": 80.0
+                  },
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-a-review",
+                      "end": 80,
+                      "quote": "80 USD",
+                      "start": 74
+                    },
+                    "value": 80.0
+                  }
+                ],
+                "status": "supported",
+                "unit": "USD"
+              },
+              {
+                "attribute": "battery",
+                "catalog_value": 10.0,
+                "consensus_value": null,
+                "distinct_values": [
+                  10.0,
+                  9.0
+                ],
+                "document_count": 2,
+                "evidence": [
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-a-lab",
+                      "end": 85,
+                      "quote": "10 hours",
+                      "start": 77
+                    },
+                    "value": 10.0
+                  },
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-a-review",
+                      "end": 93,
+                      "quote": "9 h",
+                      "start": 90
+                    },
+                    "value": 9.0
+                  }
+                ],
+                "status": "disputed",
+                "unit": "h"
+              },
+              {
+                "attribute": "finish",
+                "catalog_value": "blue",
+                "consensus_value": "blue",
+                "distinct_values": [
+                  "blue"
+                ],
+                "document_count": 2,
+                "evidence": [
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-a-lab",
+                      "end": 97,
+                      "quote": "Blue",
+                      "start": 93
+                    },
+                    "value": "blue"
+                  },
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-a-review",
+                      "end": 105,
+                      "quote": "blue",
+                      "start": 101
+                    },
+                    "value": "blue"
+                  }
+                ],
+                "status": "supported",
+                "unit": null
+              },
+              {
+                "attribute": "mass",
+                "catalog_value": 500.0,
+                "consensus_value": null,
+                "distinct_values": [],
+                "document_count": 0,
+                "evidence": [],
+                "status": "unresolved",
+                "unit": "g"
+              }
+            ],
+            "id": "synthetic-a",
+            "name": "Synthetic Comet Speaker",
+            "preference_scores": {
+              "battery": 0.0,
+              "finish": 1.0,
+              "price": 1.0
+            },
+            "rank": 1,
+            "score": 0.8,
+            "summary": "Synthetic Comet Speaker (comparison rank 1): 2 supported, 1 disputed, 1 without evidence. 2 unresolved questions. Support is not independent verification.",
+            "unresolved_questions": [
+              "Which conflicting battery value is correct?",
+              "What independent evidence establishes mass?"
+            ]
+          },
+          {
+            "attributes": {
+              "battery": {
+                "unit": "h",
+                "value": 12.0
+              },
+              "finish": {
+                "unit": null,
+                "value": "red"
+              },
+              "mass": {
+                "unit": "g",
+                "value": 450.0
+              },
+              "price": {
+                "unit": "USD",
+                "value": 100
+              }
+            },
+            "findings": [
+              {
+                "attribute": "price",
+                "catalog_value": 100,
+                "consensus_value": 100.0,
+                "distinct_values": [
+                  100.0
+                ],
+                "document_count": 1,
+                "evidence": [
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-b-lab",
+                      "end": 44,
+                      "quote": "100 USD",
+                      "start": 37
+                    },
+                    "value": 100.0
+                  }
+                ],
+                "status": "supported",
+                "unit": "USD"
+              },
+              {
+                "attribute": "battery",
+                "catalog_value": 12.0,
+                "consensus_value": 12.0,
+                "distinct_values": [
+                  12.0
+                ],
+                "document_count": 1,
+                "evidence": [
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-b-lab",
+                      "end": 58,
+                      "quote": "12 h",
+                      "start": 54
+                    },
+                    "value": 12.0
+                  }
+                ],
+                "status": "supported",
+                "unit": "h"
+              },
+              {
+                "attribute": "finish",
+                "catalog_value": "red",
+                "consensus_value": "red",
+                "distinct_values": [
+                  "red"
+                ],
+                "document_count": 1,
+                "evidence": [
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-b-lab",
+                      "end": 70,
+                      "quote": "red",
+                      "start": 67
+                    },
+                    "value": "red"
+                  }
+                ],
+                "status": "supported",
+                "unit": null
+              },
+              {
+                "attribute": "mass",
+                "catalog_value": 450.0,
+                "consensus_value": 450.0,
+                "distinct_values": [
+                  450.0
+                ],
+                "document_count": 1,
+                "evidence": [
+                  {
+                    "source_span": {
+                      "document_id": "synthetic-b-lab",
+                      "end": 82,
+                      "quote": "450 g",
+                      "start": 77
+                    },
+                    "value": 450.0
+                  }
+                ],
+                "status": "supported",
+                "unit": "g"
+              }
+            ],
+            "id": "synthetic-b",
+            "name": "Synthetic Orbit Speaker",
+            "preference_scores": {
+              "battery": 1.0,
+              "finish": 0.0,
+              "price": 0.0
+            },
+            "rank": 2,
+            "score": 0.2,
+            "summary": "Synthetic Orbit Speaker (comparison rank 2): 4 supported, 0 disputed, 0 without evidence. 0 unresolved questions. Support is not independent verification.",
+            "unresolved_questions": []
+          }
+        ],
+        "stage": "deep",
+        "winner_id": "synthetic-a"
+      },
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t019_combo3_compare_deep_extract",
+    "artifact_sha256": {
+      "implementation.py": "31775d556324c1be5c87fcd3d87b3df443179a4f6035dfc026a7c4e6947416c0",
+      "test_implementation.py": "a4c7b0451d6cfc8c3f3daf9dc3ac2ac0fa33e44098c1bda018a63c393aace126",
+      "example_input.json": "2af8ad52a104c86f4f8b13e1dfee8a14290f2edab3ec28fe82379532571e8086",
+      "build_manifest.json": "feca93a1a1d9df6de58e52f21b68e9d6584d4d8655a6a8e7e2ceb2f67ef9fb52"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

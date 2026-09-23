@@ -1,0 +1,64 @@
+{
+  "build_id": "wave2_t089_combo2_journey_guided",
+  "composition_label": "Journey recommendations -> Guided setup",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "fixture_label": "literal synthetic",
+      "profile": "goal: nonempty string; interests and completed: unique string arrays",
+      "actions": "nonempty array of unique id, title, prerequisites, tags, goals; prerequisite references form a DAG",
+      "progress_events": "ordered array of action_id and status (in_progress or completed)"
+    },
+    "output": {
+      "success": "status ok, schema_version, fixture_label, journey, guided",
+      "error": "status error and error message; exit code 2",
+      "journey": "schema_version, fixture_label, goal, initial_completed, exactly two steps",
+      "shared_step": "id, title, prerequisites, relevance_score",
+      "guided": "same version, fixture and goal, shared steps plus status, completed_ids, progress"
+    },
+    "validation": "Shared ValidationError, fields, text, strings, validate_input and validate_journey enforce strict schemas, DAG references, completed prerequisite closure and handoff integrity."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "recommend",
+      "to": "guided_setup",
+      "payload": "Validated two-step journey with immutable-by-convention catalog metadata, goal and initial completion context",
+      "validation": "Producer and consumer both call validate_journey; guided setup never reselects actions or trusts altered prerequisites."
+    }
+  ],
+  "behavior": {
+    "recommendations": "Enumerate feasible ordered pairs excluding completed actions. Second action must match the goal. Maximize total relevance: 10 for goal match plus 3 per matching interest tag. Break ties by first and second action IDs.",
+    "onboarding": "Replay explicit progress events against actual completed prerequisites, not planned completion. Reject off-journey events, duplicates and invalid transitions. Completion may be reported directly or after in_progress.",
+    "statuses": ["blocked", "ready", "in_progress", "completed"],
+    "progress": "Completed selected steps / 2; initial completed actions do not inflate progress.",
+    "insufficient_actions": "Return a validation error rather than padding or repeating actions.",
+    "cli": "Exactly one input path. Print exactly one JSON object. Success exits 0; validation, JSON, encoding and file failures exit 2.",
+    "synthetic_data": "All fixture titles, interests and actions are synthetic."
+  },
+  "scope": {
+    "included": ["Deterministic personalized discovery", "Prerequisite-aware exact two-step planning", "Validated journey-to-guided pipeline", "Ordered onboarding progress replay", "Strict JSON CLI", "Standard-library unittest coverage"],
+    "excluded": ["Live providers and LLM calls", "Network access", "External packages", "Persistent account storage", "Actual marketplace actions", "Enterprise orchestration", "Automatic prerequisite insertion beyond the two-step bound"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 19, "failures": 0, "errors": 0},
+    "cli_exit_code": 0,
+    "example_result": "status ok; catalog completed, publish in_progress; progress 50 percent",
+    "coverage": ["Both stages", "Cross-stage metadata propagation", "Handoff tampering", "Personalization and deterministic ordering", "Prerequisite bridges", "Cycles and missing references", "Insufficient journeys", "Invalid schemas", "Progress transitions", "CLI success and error behavior"]
+  }
+}

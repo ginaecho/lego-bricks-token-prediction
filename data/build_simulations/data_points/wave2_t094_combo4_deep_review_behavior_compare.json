@@ -1,0 +1,793 @@
+{
+  "id": "wave2_t094_combo4_deep_review_behavior_compare",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "research",
+      "documents",
+      "recommend",
+      "search"
+    ],
+    "basic_functionalities": [
+      "Research",
+      "Document automation",
+      "Personalized discovery",
+      "Smart product search"
+    ],
+    "types": [
+      "deep",
+      "review",
+      "behavior",
+      "compare"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 1,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 7,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 4,
+    "planned_operation_verify": 7,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Multi-document evidence synthesis, disagreement and unresolved questions.",
+    "Requirement/evidence checking and traceable gaps without certification claims.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling.",
+    "Attribute normalization, side-by-side comparison and preference ranking."
+  ],
+  "integration": {
+    "ordered_types": [
+      "deep",
+      "review",
+      "behavior",
+      "compare"
+    ],
+    "edges": [
+      {
+        "from": "deep",
+        "to": "review",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "review",
+        "to": "behavior",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "behavior",
+        "to": "compare",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "7a8b200b1cc246ff8b19272c8fdad9ae0eb6070bae39ca78d70edff291533007",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "e802f348802e1176a9b3ccaa82cdd00d2a3bee5635ac398487beb820655c8e39",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t094_combo4_deep_review_behavior_compare",
+  "membership_point_id": "combo4_deep_review_behavior_compare",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "7e12dc468fde0406fa734fffd4244a1ef1de1af33e0d0b4cca50f0fe8645b00e",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "5d4cf54d-589b-4a75-bb50-d56e7f34a913",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 137427,
+    "output_tokens": 12200,
+    "cache_read_tokens": 109768,
+    "cache_write_tokens": 27641,
+    "total_tokens": 149627,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34702,
+        "agent_id": "5d4cf54d-589b-4a75-bb50-d56e7f34a913",
+        "model": "gpt-6-astra",
+        "input_tokens": 14882,
+        "output_tokens": 276,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 14879,
+        "reasoning_tokens": 96,
+        "duration_ms": 7019,
+        "created_at": "2026-09-23T10:51:22.006Z"
+      },
+      {
+        "id": 34732,
+        "agent_id": "5d4cf54d-589b-4a75-bb50-d56e7f34a913",
+        "model": "gpt-6-astra",
+        "input_tokens": 15188,
+        "output_tokens": 10323,
+        "cache_read_tokens": 14879,
+        "cache_write_tokens": 306,
+        "reasoning_tokens": 403,
+        "duration_ms": 160066,
+        "created_at": "2026-09-23T10:54:00.716Z"
+      },
+      {
+        "id": 34733,
+        "agent_id": "5d4cf54d-589b-4a75-bb50-d56e7f34a913",
+        "model": "gpt-6-astra",
+        "input_tokens": 25831,
+        "output_tokens": 629,
+        "cache_read_tokens": 15185,
+        "cache_write_tokens": 10643,
+        "reasoning_tokens": 279,
+        "duration_ms": 13266,
+        "created_at": "2026-09-23T10:54:14.157Z"
+      },
+      {
+        "id": 34734,
+        "agent_id": "5d4cf54d-589b-4a75-bb50-d56e7f34a913",
+        "model": "gpt-6-astra",
+        "input_tokens": 26536,
+        "output_tokens": 641,
+        "cache_read_tokens": 25828,
+        "cache_write_tokens": 705,
+        "reasoning_tokens": 204,
+        "duration_ms": 13489,
+        "created_at": "2026-09-23T10:54:32.217Z"
+      },
+      {
+        "id": 34735,
+        "agent_id": "5d4cf54d-589b-4a75-bb50-d56e7f34a913",
+        "model": "gpt-6-astra",
+        "input_tokens": 27346,
+        "output_tokens": 239,
+        "cache_read_tokens": 26533,
+        "cache_write_tokens": 810,
+        "reasoning_tokens": 0,
+        "duration_ms": 4980,
+        "created_at": "2026-09-23T10:54:35.990Z"
+      },
+      {
+        "id": 34738,
+        "agent_id": "5d4cf54d-589b-4a75-bb50-d56e7f34a913",
+        "model": "gpt-6-astra",
+        "input_tokens": 27644,
+        "output_tokens": 92,
+        "cache_read_tokens": 27343,
+        "cache_write_tokens": 298,
+        "reasoning_tokens": 0,
+        "duration_ms": 2568,
+        "created_at": "2026-09-23T10:54:52.369Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5265675,
+      "observed_cache_profile_estimate_usd": 0.2795895,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.31881,
+      "observed_cache_profile_estimate_usd": 6.31881,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 4,
+      "roi_satisfaction": 3,
+      "future_impact_potential": 4,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.46,
+    "pseudo_annual_cost_usd": 75000,
+    "pseudo_annual_ai_value_usd": 110000,
+    "pseudo_net_impact_usd": 35000,
+    "pseudo_roi_pct": 46.666666666666664,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 1.341s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "as_of": "2026-09-23T10:00:00Z",
+      "schema_version": "1.0",
+      "stages": {
+        "behavior": {
+          "records": [
+            {
+              "eligible": true,
+              "mode": "history",
+              "product_id": "a",
+              "raw_signal": 1.0,
+              "review_checks": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 0,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: A supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 0,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: A operated outdoors.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": true,
+                  "requirement_id": "outdoor",
+                  "state": "supported",
+                  "unresolved_question": null
+                },
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 1,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: A battery is replaceable.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": false,
+                  "requirement_id": "repair",
+                  "state": "supported",
+                  "unresolved_question": null
+                }
+              ],
+              "review_gaps": [],
+              "score": 0.6666666666666666
+            },
+            {
+              "eligible": true,
+              "mode": "history",
+              "product_id": "b",
+              "raw_signal": 1.5,
+              "review_checks": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 2,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: B supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 1,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: B operated outdoors.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": true,
+                  "requirement_id": "outdoor",
+                  "state": "supported",
+                  "unresolved_question": null
+                },
+                {
+                  "evidence": [],
+                  "mandatory": false,
+                  "requirement_id": "repair",
+                  "state": "missing",
+                  "unresolved_question": "What evidence resolves repair for b?"
+                }
+              ],
+              "review_gaps": [
+                "repair"
+              ],
+              "score": 1.0
+            },
+            {
+              "eligible": false,
+              "mode": "excluded",
+              "product_id": "c",
+              "raw_signal": 0.0,
+              "review_checks": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 3,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: C supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 2,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: C is indoor-only.",
+                      "stance": "opposes"
+                    }
+                  ],
+                  "mandatory": true,
+                  "requirement_id": "outdoor",
+                  "state": "disputed",
+                  "unresolved_question": "What evidence resolves outdoor for c?"
+                },
+                {
+                  "evidence": [],
+                  "mandatory": false,
+                  "requirement_id": "repair",
+                  "state": "missing",
+                  "unresolved_question": "What evidence resolves repair for c?"
+                }
+              ],
+              "review_gaps": [
+                "outdoor",
+                "repair"
+              ],
+              "score": 0.0
+            }
+          ],
+          "schema_version": "1.0",
+          "stage": "behavior",
+          "warnings": [
+            "Ineligible products cannot gain eligibility through activity.",
+            "Cold start uses explicit category preferences; ties remain neutral."
+          ]
+        },
+        "compare": {
+          "records": [
+            {
+              "attributes": {
+                "price": 40.0,
+                "runtime": 5.0,
+                "weight": 200.0
+              },
+              "behavior_mode": "history",
+              "behavior_score": 1.0,
+              "name": "SYNTHETIC Pocket Light",
+              "product_id": "b",
+              "rank": 1,
+              "review_checks": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 2,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: B supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 1,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: B operated outdoors.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": true,
+                  "requirement_id": "outdoor",
+                  "state": "supported",
+                  "unresolved_question": null
+                },
+                {
+                  "evidence": [],
+                  "mandatory": false,
+                  "requirement_id": "repair",
+                  "state": "missing",
+                  "unresolved_question": "What evidence resolves repair for b?"
+                }
+              ],
+              "review_gaps": [
+                "repair"
+              ],
+              "score": 0.8,
+              "units": {
+                "price": "USD",
+                "runtime": "h",
+                "weight": "g"
+              },
+              "utilities": {
+                "behavior": 1.0,
+                "price": 1.0,
+                "runtime": 0.0,
+                "weight": 1.0
+              }
+            },
+            {
+              "attributes": {
+                "price": 60.0,
+                "runtime": 8.0,
+                "weight": 300.0
+              },
+              "behavior_mode": "history",
+              "behavior_score": 0.6666666666666666,
+              "name": "SYNTHETIC Trail Light",
+              "product_id": "a",
+              "rank": 2,
+              "review_checks": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 0,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: A supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 0,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: A operated outdoors.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": true,
+                  "requirement_id": "outdoor",
+                  "state": "supported",
+                  "unresolved_question": null
+                },
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 1,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: A battery is replaceable.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": false,
+                  "requirement_id": "repair",
+                  "state": "supported",
+                  "unresolved_question": null
+                }
+              ],
+              "review_gaps": [],
+              "score": 0.4666666666666666,
+              "units": {
+                "price": "USD",
+                "runtime": "h",
+                "weight": "g"
+              },
+              "utilities": {
+                "behavior": 0.6666666666666666,
+                "price": 0.0,
+                "runtime": 1.0,
+                "weight": 0.0
+              }
+            }
+          ],
+          "schema_version": "1.0",
+          "stage": "compare",
+          "warnings": [
+            "c: mandatory evidence gap",
+            "Lower price/weight and higher runtime are preferred.",
+            "Missing attributes receive zero utility; equal known values receive one.",
+            "Scores are relative to eligible, within-budget candidates, not quality guarantees."
+          ]
+        },
+        "research": {
+          "records": [
+            {
+              "findings": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 0,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: A supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 0,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: A operated outdoors.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "requirement_id": "outdoor",
+                  "state": "supported",
+                  "unresolved_question": null
+                },
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 1,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: A battery is replaceable.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "requirement_id": "repair",
+                  "state": "supported",
+                  "unresolved_question": null
+                }
+              ],
+              "product_id": "a"
+            },
+            {
+              "findings": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 2,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: B supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 1,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: B operated outdoors.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "requirement_id": "outdoor",
+                  "state": "supported",
+                  "unresolved_question": null
+                },
+                {
+                  "evidence": [],
+                  "requirement_id": "repair",
+                  "state": "missing",
+                  "unresolved_question": "What evidence resolves repair for b?"
+                }
+              ],
+              "product_id": "b"
+            },
+            {
+              "findings": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 3,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: C supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 2,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: C is indoor-only.",
+                      "stance": "opposes"
+                    }
+                  ],
+                  "requirement_id": "outdoor",
+                  "state": "disputed",
+                  "unresolved_question": "What evidence resolves outdoor for c?"
+                },
+                {
+                  "evidence": [],
+                  "requirement_id": "repair",
+                  "state": "missing",
+                  "unresolved_question": "What evidence resolves repair for c?"
+                }
+              ],
+              "product_id": "c"
+            }
+          ],
+          "schema_version": "1.0",
+          "stage": "research",
+          "warnings": [
+            "Caller-supplied evidence; no external verification."
+          ]
+        },
+        "review": {
+          "records": [
+            {
+              "checks": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 0,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: A supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 0,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: A operated outdoors.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": true,
+                  "requirement_id": "outdoor",
+                  "state": "supported",
+                  "unresolved_question": null
+                },
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 1,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: A battery is replaceable.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": false,
+                  "requirement_id": "repair",
+                  "state": "supported",
+                  "unresolved_question": null
+                }
+              ],
+              "eligible": true,
+              "gaps": [],
+              "product_id": "a"
+            },
+            {
+              "checks": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 2,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: B supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 1,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: B operated outdoors.",
+                      "stance": "supports"
+                    }
+                  ],
+                  "mandatory": true,
+                  "requirement_id": "outdoor",
+                  "state": "supported",
+                  "unresolved_question": null
+                },
+                {
+                  "evidence": [],
+                  "mandatory": false,
+                  "requirement_id": "repair",
+                  "state": "missing",
+                  "unresolved_question": "What evidence resolves repair for b?"
+                }
+              ],
+              "eligible": true,
+              "gaps": [
+                "repair"
+              ],
+              "product_id": "b"
+            },
+            {
+              "checks": [
+                {
+                  "evidence": [
+                    {
+                      "claim_index": 3,
+                      "document_id": "manual",
+                      "quote": "Synthetic manual: C supports outdoor use.",
+                      "stance": "supports"
+                    },
+                    {
+                      "claim_index": 2,
+                      "document_id": "report",
+                      "quote": "Synthetic observation: C is indoor-only.",
+                      "stance": "opposes"
+                    }
+                  ],
+                  "mandatory": true,
+                  "requirement_id": "outdoor",
+                  "state": "disputed",
+                  "unresolved_question": "What evidence resolves outdoor for c?"
+                },
+                {
+                  "evidence": [],
+                  "mandatory": false,
+                  "requirement_id": "repair",
+                  "state": "missing",
+                  "unresolved_question": "What evidence resolves repair for c?"
+                }
+              ],
+              "eligible": false,
+              "gaps": [
+                "outdoor",
+                "repair"
+              ],
+              "product_id": "c"
+            }
+          ],
+          "schema_version": "1.0",
+          "stage": "review",
+          "warnings": [
+            "Requirement review is not certification or a compliance claim."
+          ]
+        }
+      },
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t094_combo4_deep_review_behavior_compare",
+    "artifact_sha256": {
+      "implementation.py": "57796009224386671e2a1a5d236bfb835dc9fb43f5f6e98c951334ef4678b1a9",
+      "test_implementation.py": "5465b742bf666a36b397406197076a955873c1893528463df9c275a53d742f57",
+      "example_input.json": "0443d16a08da1bcf9c8b01580269e9b264d1b8202e451d805827c3758cacd1bd",
+      "build_manifest.json": "a9a932a66aa8c2fbb3541d9c2c24030d49aae358a9ce4c7124bd620698057673"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

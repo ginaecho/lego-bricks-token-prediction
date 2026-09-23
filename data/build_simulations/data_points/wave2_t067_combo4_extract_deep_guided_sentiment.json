@@ -1,0 +1,897 @@
+{
+  "id": "wave2_t067_combo4_extract_deep_guided_sentiment",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "research",
+      "onboard",
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "Research",
+      "Guided onboarding",
+      "Customer insights"
+    ],
+    "types": [
+      "extract",
+      "deep",
+      "guided",
+      "sentiment"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 1,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 7,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 4,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions.",
+    "Validated prerequisite-driven onboarding steps and progress tracking.",
+    "Transparent sentiment scoring and severity-aware issue prioritization."
+  ],
+  "integration": {
+    "ordered_types": [
+      "extract",
+      "deep",
+      "guided",
+      "sentiment"
+    ],
+    "edges": [
+      {
+        "from": "extract",
+        "to": "deep",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "deep",
+        "to": "guided",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "guided",
+        "to": "sentiment",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "447a61ca797ac322c74bc61bbcbef635a57fdadef4d40a6663552b9562f6ccab",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "f5d8c1529ff8a3cf26cf87d3278030d801c3d7fa7e04aa36c5581baf6f242abb",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t067_combo4_extract_deep_guided_sentiment",
+  "membership_point_id": "combo4_extract_deep_guided_sentiment",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "53a198b027a4e5300cad0ce17b2765b4b22b998f9fb9eadc27508f3140a533d8",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "2db9165f-f087-49cd-bcef-b7323d6b9307",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 140020,
+    "output_tokens": 11015,
+    "cache_read_tokens": 125100,
+    "cache_write_tokens": 14902,
+    "total_tokens": 151035,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34447,
+        "agent_id": "2db9165f-f087-49cd-bcef-b7323d6b9307",
+        "model": "gpt-6-astra",
+        "input_tokens": 14863,
+        "output_tokens": 698,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 826,
+        "reasoning_tokens": 516,
+        "duration_ms": 19315,
+        "created_at": "2026-09-23T10:21:01.376Z"
+      },
+      {
+        "id": 34458,
+        "agent_id": "2db9165f-f087-49cd-bcef-b7323d6b9307",
+        "model": "gpt-6-astra",
+        "input_tokens": 15591,
+        "output_tokens": 8798,
+        "cache_read_tokens": 14860,
+        "cache_write_tokens": 728,
+        "reasoning_tokens": 306,
+        "duration_ms": 139890,
+        "created_at": "2026-09-23T10:23:22.178Z"
+      },
+      {
+        "id": 34459,
+        "agent_id": "2db9165f-f087-49cd-bcef-b7323d6b9307",
+        "model": "gpt-6-astra",
+        "input_tokens": 24717,
+        "output_tokens": 169,
+        "cache_read_tokens": 15588,
+        "cache_write_tokens": 9126,
+        "reasoning_tokens": 9,
+        "duration_ms": 3652,
+        "created_at": "2026-09-23T10:23:29.594Z"
+      },
+      {
+        "id": 34467,
+        "agent_id": "2db9165f-f087-49cd-bcef-b7323d6b9307",
+        "model": "gpt-6-astra",
+        "input_tokens": 27373,
+        "output_tokens": 914,
+        "cache_read_tokens": 24714,
+        "cache_write_tokens": 2656,
+        "reasoning_tokens": 220,
+        "duration_ms": 16473,
+        "created_at": "2026-09-23T10:23:55.437Z"
+      },
+      {
+        "id": 34468,
+        "agent_id": "2db9165f-f087-49cd-bcef-b7323d6b9307",
+        "model": "gpt-6-astra",
+        "input_tokens": 28537,
+        "output_tokens": 342,
+        "cache_read_tokens": 27370,
+        "cache_write_tokens": 1164,
+        "reasoning_tokens": 0,
+        "duration_ms": 6054,
+        "created_at": "2026-09-23T10:23:58.356Z"
+      },
+      {
+        "id": 34469,
+        "agent_id": "2db9165f-f087-49cd-bcef-b7323d6b9307",
+        "model": "gpt-6-astra",
+        "input_tokens": 28939,
+        "output_tokens": 94,
+        "cache_read_tokens": 28534,
+        "cache_write_tokens": 402,
+        "reasoning_tokens": 0,
+        "duration_ms": 3294,
+        "created_at": "2026-09-23T10:24:04.120Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.515275,
+      "observed_cache_profile_estimate_usd": 0.2338,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.1833,
+      "observed_cache_profile_estimate_usd": 6.1833,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 4,
+      "roi_satisfaction": 2,
+      "future_impact_potential": 0,
+      "delivery_quality": 1
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.49,
+    "pseudo_annual_cost_usd": 15000,
+    "pseudo_annual_ai_value_usd": 110000,
+    "pseudo_net_impact_usd": 95000,
+    "pseudo_roi_pct": 633.3333333333334,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............................\n----------------------------------------------------------------------\nRan 31 tests in 0.619s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "stage": "sentiment",
+      "input": {
+        "schema_version": 1,
+        "synthetic": true,
+        "documents": [
+          {
+            "id": "synthetic-contract",
+            "text": "SYNTHETIC EXAMPLE\nPlan: Starter\nRegion: EU\nOwner: Ada\n"
+          },
+          {
+            "id": "synthetic-support-note",
+            "text": "SYNTHETIC EXAMPLE\nPlan: Enterprise\nRegion: EU\n"
+          }
+        ],
+        "fields": [
+          {
+            "name": "plan",
+            "pattern": "(?m)^Plan: (?P<value>[^\\n]+)$",
+            "required": true
+          },
+          {
+            "name": "region",
+            "pattern": "(?m)^Region: (?P<value>[^\\n]+)$",
+            "required": true
+          },
+          {
+            "name": "owner",
+            "pattern": "(?m)^Owner: (?P<value>[^\\n]+)$",
+            "required": false
+          }
+        ],
+        "steps": [
+          {
+            "id": "region",
+            "title": "Confirm service region",
+            "requires_fields": [
+              "region"
+            ],
+            "prerequisites": [],
+            "complete": true
+          },
+          {
+            "id": "plan",
+            "title": "Confirm subscription plan",
+            "requires_fields": [
+              "plan"
+            ],
+            "prerequisites": [
+              "region"
+            ],
+            "complete": true
+          },
+          {
+            "id": "launch",
+            "title": "Launch synthetic workspace",
+            "requires_fields": [
+              "owner"
+            ],
+            "prerequisites": [
+              "plan"
+            ],
+            "complete": false
+          }
+        ],
+        "feedback": [
+          {
+            "id": "synthetic-feedback-1",
+            "step_id": "plan",
+            "text": "The broken plan selection is frustrating and not helpful.",
+            "severity": "high"
+          },
+          {
+            "id": "synthetic-feedback-2",
+            "step_id": "region",
+            "text": "The region setup is easy and great.",
+            "severity": "low"
+          },
+          {
+            "id": "synthetic-feedback-3",
+            "step_id": "launch",
+            "text": "Launch is slow.",
+            "severity": "critical"
+          }
+        ]
+      },
+      "extraction": {
+        "documents": [
+          {
+            "document_id": "synthetic-contract",
+            "fields": {
+              "plan": [
+                {
+                  "value": "Starter",
+                  "document_id": "synthetic-contract",
+                  "span": {
+                    "start": 24,
+                    "end": 31
+                  }
+                }
+              ],
+              "region": [
+                {
+                  "value": "EU",
+                  "document_id": "synthetic-contract",
+                  "span": {
+                    "start": 40,
+                    "end": 42
+                  }
+                }
+              ],
+              "owner": [
+                {
+                  "value": "Ada",
+                  "document_id": "synthetic-contract",
+                  "span": {
+                    "start": 50,
+                    "end": 53
+                  }
+                }
+              ]
+            },
+            "missing": []
+          },
+          {
+            "document_id": "synthetic-support-note",
+            "fields": {
+              "plan": [
+                {
+                  "value": "Enterprise",
+                  "document_id": "synthetic-support-note",
+                  "span": {
+                    "start": 24,
+                    "end": 34
+                  }
+                }
+              ],
+              "region": [
+                {
+                  "value": "EU",
+                  "document_id": "synthetic-support-note",
+                  "span": {
+                    "start": 43,
+                    "end": 45
+                  }
+                }
+              ],
+              "owner": []
+            },
+            "missing": [
+              {
+                "field": "owner",
+                "required": false
+              }
+            ]
+          }
+        ]
+      },
+      "research": {
+        "topics": [
+          {
+            "field": "plan",
+            "status": "disputed",
+            "claims": [
+              {
+                "normalized_value": "enterprise",
+                "evidence": [
+                  {
+                    "value": "Enterprise",
+                    "document_id": "synthetic-support-note",
+                    "span": {
+                      "start": 24,
+                      "end": 34
+                    }
+                  }
+                ],
+                "supporting_documents": [
+                  "synthetic-support-note"
+                ]
+              },
+              {
+                "normalized_value": "starter",
+                "evidence": [
+                  {
+                    "value": "Starter",
+                    "document_id": "synthetic-contract",
+                    "span": {
+                      "start": 24,
+                      "end": 31
+                    }
+                  }
+                ],
+                "supporting_documents": [
+                  "synthetic-contract"
+                ]
+              }
+            ],
+            "missing_documents": [],
+            "usable": false
+          },
+          {
+            "field": "region",
+            "status": "consensus",
+            "claims": [
+              {
+                "normalized_value": "eu",
+                "evidence": [
+                  {
+                    "value": "EU",
+                    "document_id": "synthetic-contract",
+                    "span": {
+                      "start": 40,
+                      "end": 42
+                    }
+                  },
+                  {
+                    "value": "EU",
+                    "document_id": "synthetic-support-note",
+                    "span": {
+                      "start": 43,
+                      "end": 45
+                    }
+                  }
+                ],
+                "supporting_documents": [
+                  "synthetic-contract",
+                  "synthetic-support-note"
+                ]
+              }
+            ],
+            "missing_documents": [],
+            "usable": true
+          },
+          {
+            "field": "owner",
+            "status": "consensus",
+            "claims": [
+              {
+                "normalized_value": "ada",
+                "evidence": [
+                  {
+                    "value": "Ada",
+                    "document_id": "synthetic-contract",
+                    "span": {
+                      "start": 50,
+                      "end": 53
+                    }
+                  }
+                ],
+                "supporting_documents": [
+                  "synthetic-contract"
+                ]
+              }
+            ],
+            "missing_documents": [
+              "synthetic-support-note"
+            ],
+            "usable": true
+          }
+        ],
+        "disagreements": [
+          {
+            "field": "plan",
+            "values": [
+              "enterprise",
+              "starter"
+            ]
+          }
+        ],
+        "unresolved_questions": [
+          {
+            "field": "plan",
+            "kind": "disagreement",
+            "question": "Which value for plan is authoritative?"
+          },
+          {
+            "field": "owner",
+            "kind": "missing_evidence",
+            "document_ids": [
+              "synthetic-support-note"
+            ],
+            "required": false,
+            "question": "Can the missing documents supply owner?"
+          }
+        ],
+        "summary": {
+          "document_count": 2,
+          "consensus_fields": [
+            "region",
+            "owner"
+          ],
+          "disputed_fields": [
+            "plan"
+          ]
+        }
+      },
+      "onboarding": {
+        "steps": [
+          {
+            "id": "region",
+            "title": "Confirm service region",
+            "status": "completed",
+            "completion_requested": true,
+            "blocked_fields": [],
+            "blocked_prerequisites": [],
+            "evidence": {
+              "region": [
+                {
+                  "normalized_value": "eu",
+                  "evidence": [
+                    {
+                      "value": "EU",
+                      "document_id": "synthetic-contract",
+                      "span": {
+                        "start": 40,
+                        "end": 42
+                      }
+                    },
+                    {
+                      "value": "EU",
+                      "document_id": "synthetic-support-note",
+                      "span": {
+                        "start": 43,
+                        "end": 45
+                      }
+                    }
+                  ],
+                  "supporting_documents": [
+                    "synthetic-contract",
+                    "synthetic-support-note"
+                  ]
+                }
+              ]
+            },
+            "unresolved_questions": []
+          },
+          {
+            "id": "plan",
+            "title": "Confirm subscription plan",
+            "status": "blocked",
+            "completion_requested": true,
+            "blocked_fields": [
+              "plan"
+            ],
+            "blocked_prerequisites": [],
+            "evidence": {
+              "plan": [
+                {
+                  "normalized_value": "enterprise",
+                  "evidence": [
+                    {
+                      "value": "Enterprise",
+                      "document_id": "synthetic-support-note",
+                      "span": {
+                        "start": 24,
+                        "end": 34
+                      }
+                    }
+                  ],
+                  "supporting_documents": [
+                    "synthetic-support-note"
+                  ]
+                },
+                {
+                  "normalized_value": "starter",
+                  "evidence": [
+                    {
+                      "value": "Starter",
+                      "document_id": "synthetic-contract",
+                      "span": {
+                        "start": 24,
+                        "end": 31
+                      }
+                    }
+                  ],
+                  "supporting_documents": [
+                    "synthetic-contract"
+                  ]
+                }
+              ]
+            },
+            "unresolved_questions": [
+              {
+                "field": "plan",
+                "kind": "disagreement",
+                "question": "Which value for plan is authoritative?"
+              }
+            ]
+          },
+          {
+            "id": "launch",
+            "title": "Launch synthetic workspace",
+            "status": "blocked",
+            "completion_requested": false,
+            "blocked_fields": [],
+            "blocked_prerequisites": [
+              "plan"
+            ],
+            "evidence": {
+              "owner": [
+                {
+                  "normalized_value": "ada",
+                  "evidence": [
+                    {
+                      "value": "Ada",
+                      "document_id": "synthetic-contract",
+                      "span": {
+                        "start": 50,
+                        "end": 53
+                      }
+                    }
+                  ],
+                  "supporting_documents": [
+                    "synthetic-contract"
+                  ]
+                }
+              ]
+            },
+            "unresolved_questions": [
+              {
+                "field": "owner",
+                "kind": "missing_evidence",
+                "document_ids": [
+                  "synthetic-support-note"
+                ],
+                "required": false,
+                "question": "Can the missing documents supply owner?"
+              }
+            ]
+          }
+        ],
+        "progress": {
+          "completed": 1,
+          "total": 3,
+          "fraction": 0.3333333333333333
+        },
+        "feedback": [
+          {
+            "id": "synthetic-feedback-1",
+            "step_id": "plan",
+            "text": "The broken plan selection is frustrating and not helpful.",
+            "severity": "high",
+            "step_status": "blocked"
+          },
+          {
+            "id": "synthetic-feedback-2",
+            "step_id": "region",
+            "text": "The region setup is easy and great.",
+            "severity": "low",
+            "step_status": "completed"
+          },
+          {
+            "id": "synthetic-feedback-3",
+            "step_id": "launch",
+            "text": "Launch is slow.",
+            "severity": "critical",
+            "step_status": "blocked"
+          }
+        ]
+      },
+      "insights": {
+        "issues": [
+          {
+            "id": "synthetic-feedback-3",
+            "step_id": "launch",
+            "text": "Launch is slow.",
+            "severity": "critical",
+            "step_status": "blocked",
+            "sentiment": {
+              "score": -1,
+              "raw_score": -1,
+              "label": "negative",
+              "contributions": [
+                {
+                  "token": "slow",
+                  "base_weight": -1,
+                  "negated": false,
+                  "contribution": -1
+                }
+              ]
+            },
+            "priority": 100,
+            "priority_components": {
+              "severity": 90,
+              "negative_sentiment": 3,
+              "onboarding": 10
+            },
+            "rank": 1
+          },
+          {
+            "id": "synthetic-feedback-1",
+            "step_id": "plan",
+            "text": "The broken plan selection is frustrating and not helpful.",
+            "severity": "high",
+            "step_status": "blocked",
+            "sentiment": {
+              "score": -5,
+              "raw_score": -5,
+              "label": "negative",
+              "contributions": [
+                {
+                  "token": "broken",
+                  "base_weight": -2,
+                  "negated": false,
+                  "contribution": -2
+                },
+                {
+                  "token": "frustrating",
+                  "base_weight": -2,
+                  "negated": false,
+                  "contribution": -2
+                },
+                {
+                  "token": "helpful",
+                  "base_weight": 1,
+                  "negated": true,
+                  "contribution": -1
+                }
+              ]
+            },
+            "priority": 85,
+            "priority_components": {
+              "severity": 60,
+              "negative_sentiment": 15,
+              "onboarding": 10
+            },
+            "rank": 2
+          },
+          {
+            "id": "synthetic-feedback-2",
+            "step_id": "region",
+            "text": "The region setup is easy and great.",
+            "severity": "low",
+            "step_status": "completed",
+            "sentiment": {
+              "score": 3,
+              "raw_score": 3,
+              "label": "positive",
+              "contributions": [
+                {
+                  "token": "easy",
+                  "base_weight": 1,
+                  "negated": false,
+                  "contribution": 1
+                },
+                {
+                  "token": "great",
+                  "base_weight": 2,
+                  "negated": false,
+                  "contribution": 2
+                }
+              ]
+            },
+            "priority": 10,
+            "priority_components": {
+              "severity": 10,
+              "negative_sentiment": 0,
+              "onboarding": 0
+            },
+            "rank": 3
+          }
+        ],
+        "policy": {
+          "lexicon": {
+            "good": 1,
+            "great": 2,
+            "easy": 1,
+            "helpful": 1,
+            "love": 2,
+            "excellent": 2,
+            "bad": -1,
+            "broken": -2,
+            "confusing": -1,
+            "frustrating": -2,
+            "hate": -2,
+            "slow": -1,
+            "terrible": -2
+          },
+          "severity_weights": {
+            "low": 10,
+            "medium": 30,
+            "high": 60,
+            "critical": 90
+          },
+          "sentiment_range": [
+            -5,
+            5
+          ],
+          "negative_sentiment_multiplier": 3,
+          "onboarding_weights": {
+            "blocked": 10,
+            "ready": 5,
+            "completed": 0
+          },
+          "priority_cap": 100,
+          "tie_break": "severity descending, id ascending",
+          "negation": "immediately preceding not/no/never separated only by whitespace",
+          "limitations": "English lexicon only; no sarcasm, intent, or contextual language inference"
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t067_combo4_extract_deep_guided_sentiment",
+    "artifact_sha256": {
+      "implementation.py": "b60f3d19a07162ae93b424dbd37f8f8df591d58c0b61042f2dd244ece3ae60dd",
+      "test_implementation.py": "4d2a8417c96773fb39f8f809aba88b007fd3348326b5620ee4604d9abe75f6a0",
+      "example_input.json": "bf942de47bfd66496559491aa1ee5c818dd973a5d865a87e0c17202305138f1e",
+      "build_manifest.json": "f15b94e7e548a831048197ef84d965714b8dee86d980479efcc2dc078238a3cc"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

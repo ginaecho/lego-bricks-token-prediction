@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "fixture_kind": "synthetic",
+  "user_id": "synthetic-shopper-001",
+  "now": "2026-09-23T10:00:00Z",
+  "settings": {"top_n": 2, "half_life_days": 7},
+  "catalog": [
+    {"id": "camera", "title": "Synthetic camera kit", "popularity": 30, "setup_step_ids": ["camera-ready"]},
+    {"id": "printer", "title": "Synthetic printer kit", "popularity": 50, "setup_step_ids": ["printer-ready"]},
+    {"id": "speaker", "title": "Synthetic speaker kit", "popularity": 100, "setup_step_ids": ["speaker-ready"]}
+  ],
+  "steps": [
+    {"id": "account", "title": "Create synthetic account", "prerequisites": []},
+    {"id": "network", "title": "Configure synthetic network", "prerequisites": ["account"]},
+    {"id": "camera-ready", "title": "Pair synthetic camera", "prerequisites": ["network"]},
+    {"id": "printer-ready", "title": "Pair synthetic printer", "prerequisites": ["network"]},
+    {"id": "speaker-ready", "title": "Pair synthetic speaker", "prerequisites": ["account"]}
+  ],
+  "events": [
+    {"product_id": "camera", "action": "purchase", "at": "2026-09-23T10:00:00Z"},
+    {"product_id": "printer", "action": "browse", "at": "2026-09-23T10:00:00Z"},
+    {"product_id": "speaker", "action": "purchase", "at": "2026-08-26T10:00:00Z"}
+  ],
+  "completed_step_ids": ["account"]
+}

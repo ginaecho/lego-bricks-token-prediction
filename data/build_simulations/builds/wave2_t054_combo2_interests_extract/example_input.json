@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC marketplace discovery and document extraction fixture",
+  "preferences": {
+    "interests": {"gardening": 3, "solar": 2},
+    "excluded_ids": ["blocked"],
+    "excluded_tags": ["restricted"],
+    "limit": 3
+  },
+  "documents": [
+    {"id": "garden", "title": "Synthetic garden workshop", "tags": ["gardening"], "text": "Organizer: Fictional Green Club\nSeats: 12\n"},
+    {"id": "solar-garden", "title": "Synthetic solar garden kit", "tags": ["solar", "gardening"], "text": "Organizer: Imaginary Makers\nSeats: 8\nLocation: Demo Hall\n"},
+    {"id": "blocked", "title": "Synthetic excluded listing", "tags": ["solar", "gardening"], "text": "Organizer: Excluded\nSeats: 99"},
+    {"id": "restricted", "title": "Synthetic restricted listing", "tags": ["gardening", "restricted"], "text": "Seats: 100"},
+    {"id": "unmatched", "title": "Synthetic unrelated listing", "tags": ["music"], "text": "Seats: 4"}
+  ],
+  "extraction_schema": [
+    {"name": "organizer", "label": "Organizer", "type": "string", "required": true},
+    {"name": "seats", "label": "Seats", "type": "integer", "required": true},
+    {"name": "location", "label": "Location", "type": "string", "required": false}
+  ]
+}

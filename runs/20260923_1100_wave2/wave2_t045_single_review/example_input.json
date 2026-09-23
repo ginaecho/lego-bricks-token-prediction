@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "dataset_label": "SYNTHETIC fixture: fictional document review",
+  "document": {
+    "id": "SYN-DOC-001",
+    "title": "Synthetic workshop procedure"
+  },
+  "requirements": [
+    {
+      "id": "R-OWNER",
+      "description": "Name the procedure owner and review interval.",
+      "required_terms": ["owner", "annual"],
+      "min_evidence": 1
+    },
+    {
+      "id": "R-TRAIN",
+      "description": "Provide two training records with completion dates.",
+      "required_terms": ["training", "completed"],
+      "min_evidence": 2
+    },
+    {
+      "id": "R-ESC",
+      "description": "Describe escalation.",
+      "required_terms": ["escalation"],
+      "min_evidence": 1
+    }
+  ],
+  "evidence": [
+    {
+      "id": "SYN-E-1",
+      "requirement_id": "R-OWNER",
+      "source": "synthetic-procedure",
+      "locator": "section 1, paragraph 2",
+      "text": "The OWNER is the fictional workshop lead. An annual review is planned."
+    },
+    {
+      "id": "SYN-E-2",
+      "requirement_id": "R-TRAIN",
+      "source": "synthetic-training-record",
+      "locator": "row 1",
+      "text": "Training completed on a fictional recorded date."
+    },
+    {
+      "id": "SYN-E-3",
+      "requirement_id": "R-TRAIN",
+      "source": "synthetic-training-plan",
+      "locator": "row 2",
+      "text": "Training is planned."
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "build_id": "wave2_t019_combo3_compare_deep_extract",
+  "composition_label": "Product comparison -> Deep research -> Structured extraction",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written directly for this isolated build; no existing implementation read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "One input envelope: synthetic=true, attribute definitions, products, preferences, documents, extraction_schema.",
+    "output": "One output envelope: status, schema_version, synthetic, comparison, research, extraction.",
+    "validation": "The same strict recursive schema validator checks inputs and every stage boundary. Semantic validation enforces aliases, identifiers, references, unit conversions, preference compatibility, extraction type compatibility, ranks, side-by-side consistency, exact document spans, source/value correspondence and evidence/synthesis/aggregate consistency.",
+    "schema_subset": ["type", "enum", "anyOf", "properties", "required", "additionalProperties", "items", "minItems", "minLength", "minimum", "maximum", "exclusiveMinimum"],
+    "numeric_values": "Finite non-boolean numbers. Numeric scalars imply canonical units; strings and {value,unit} objects support configured positive multiplicative unit conversions. Normalized values round to 12 decimal places.",
+    "document_grammar": "A document belongs to one product; recognized claims are complete lines in attribute alias: value form. Other prose is ignored. Recognized malformed claims become unresolved questions.",
+    "extraction_rules": "Each schema field declares id, type, required, source, optional product_id (default comparison winner), and attribute for attribute sources. Sources: name, score, attribute, summary, evidence_count, unresolved_count, has_disagreement.",
+    "source_spans": "Document id, zero-based start, end-exclusive end, and exact quote in original decoded document text. Offsets count Python Unicode characters, not UTF-8 bytes. Derived/catalog metadata fields carry research source paths; document-backed fields also carry exact source spans."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "compare",
+      "to": "deep",
+      "payload": "Validated ranked product records, canonical attributes, preference scores, winner, and side-by-side comparison.",
+      "consumption": "Research processes the ranked records without reranking, aligns documentary claims to shared canonical attributes, and checks disagreement against the normalized catalog values."
+    },
+    {
+      "from": "deep",
+      "to": "extract",
+      "payload": "Validated research records with inherited ranking, supported consensus values, documentary evidence spans, disputed findings, summaries, and unresolved questions.",
+      "consumption": "Extraction selects the research winner or an explicit product, populates schema fields from research only, and reports unsupported/disputed values as missing instead of guessing."
+    }
+  ],
+  "behavior": {
+    "comparison": "Weighted min-max preference scores; min/max for numbers, exact normalized match for number/text. Missing attributes score zero. Equal present values score one. Scores round to 12 decimal places; ties break by product id.",
+    "research": "All matching documents contribute evidence. Repeated agreeing claims are supported, not verified truth. Documentary disagreements or catalog/document mismatches are disputed. Absent usable evidence and malformed recognized claims produce unresolved questions.",
+    "extraction": "Attribute fields require undisputed documentary consensus; catalog-only values are not represented as documented facts. Required and optional missing fields are reported separately. complete depends only on required fields.",
+    "errors": "CLI file, encoding, JSON, and validation errors produce one JSON object with status=error and exit 2. Successful pipeline execution prints one JSON object and exits 0, even when required extracted fields are missing.",
+    "determinism": "No clock, randomness, network, subprocess providers, or model calls in implementation.",
+    "synthetic_example": "Clearly labeled synthetic speakers. The top-ranked speaker has consistent price evidence, conflicting battery claims, and no mass evidence, intentionally demonstrating missing-field reporting."
+  },
+  "scope": {
+    "included": ["Integrated three-stage pipeline", "Shared schemas and validation", "Attribute aliases and units", "Side-by-side preference ranking", "Multi-document synthesis", "Disagreement and unresolved questions", "Schema-driven typed fields", "Source spans", "Missing fields", "CLI JSON errors", "Synthetic fixtures"],
+    "excluded": ["Live search", "Provider or LLM calls", "Natural-language inference outside explicit claim lines", "PDF/OCR", "Currency exchange", "Offset unit conversions", "Independent factual verification", "Enterprise deployment", "Persistence", "Full JSON Schema specification"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 25,
+    "tests_failed": 0,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_stdout": "Exactly one parseable JSON object with status=ok; no stderr.",
+    "deliverable_check": "Exactly the four requested files; no cache or scratch files.",
+    "coverage": [
+      "Each stage and shared output schema",
+      "Attribute aliases, text and unit normalization",
+      "Weighted ranking, ties, singleton and missing attributes",
+      "Multi-document support, disagreements and unresolved questions",
+      "Required and optional missing fields",
+      "Exact source spans, Unicode and CRLF",
+      "Both cross-stage handoffs and changed winner/evidence propagation",
+      "Malformed stage data, fabricated consensus and inconsistent side-by-side data",
+      "Invalid input, duplicate identifiers, unknown references, nonfinite numbers and booleans",
+      "Dimensionless values, very large weights, extreme ranges and close large integers",
+      "Determinism and input immutability",
+      "CLI success, usage, missing files, directory inputs, malformed JSON, duplicate JSON keys and encoding failures"
+    ]
+  }
+}

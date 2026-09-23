@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "status": "input",
+  "request": {
+    "allowlisted_hosts": ["research.example"],
+    "urls": ["https://research.example/old-policy", "https://research.example/unavailable"],
+    "fixtures": {
+      "https://research.example/old-policy": {
+        "status_code": 302,
+        "location": "https://research.example/policy"
+      },
+      "https://research.example/policy": {
+        "status_code": 200,
+        "title": "SYNTHETIC supplier policy",
+        "text": "SYNTHETIC FIXTURE: Supplier retention is 30 days. Records use encryption at rest."
+      },
+      "https://research.example/unavailable": {"status_code": 503}
+    },
+    "document": {
+      "id": "synthetic-draft-1",
+      "title": "SYNTHETIC draft handling procedure",
+      "text": "SYNTHETIC DOCUMENT: Retention is 30 days. We use encryption at rest."
+    },
+    "requirements": [
+      {
+        "id": "RETENTION",
+        "description": "SYNTHETIC: draft and source must mention 30-day retention.",
+        "document_terms": ["30 days"],
+        "evidence_terms": ["30 days"]
+      },
+      {
+        "id": "ENCRYPTION",
+        "description": "SYNTHETIC: draft and source must mention at-rest encryption.",
+        "document_terms": ["encryption at rest"],
+        "evidence_terms": ["encryption at rest"]
+      },
+      {
+        "id": "AUDIT",
+        "description": "SYNTHETIC: draft and source must mention annual audits.",
+        "document_terms": ["annual audit"],
+        "evidence_terms": ["annual audit"]
+      }
+    ]
+  },
+  "research": null,
+  "review": null
+}

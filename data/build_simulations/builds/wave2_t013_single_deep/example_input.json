@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "research_question": "In this synthetic marketplace pilot, does expedited shipping improve sales without increasing returns?",
+  "documents": [
+    {
+      "id": "pilot-a",
+      "title": "SYNTHETIC: Urban pilot A",
+      "text": "Urban orders rose by 12% with expedited shipping. Returns were unchanged. The pilot lasted two weeks."
+    },
+    {
+      "id": "pilot-b",
+      "title": "SYNTHETIC: Urban replication B",
+      "text": "Urban orders did not increase with expedited shipping. Returns were unchanged. Price changes may explain the difference."
+    },
+    {
+      "id": "pilot-c",
+      "title": "SYNTHETIC: Rural pilot C",
+      "text": "Rural orders fell with expedited shipping. Long-term retention was not measured."
+    }
+  ],
+  "claims": [
+    {
+      "id": "sales",
+      "statement": "Expedited shipping increases orders.",
+      "evidence": [
+        {"document_id": "pilot-a", "quote": "Urban orders rose by 12% with expedited shipping.", "stance": "support", "quality": "medium", "context": "urban"},
+        {"document_id": "pilot-b", "quote": "Urban orders did not increase with expedited shipping.", "stance": "oppose", "quality": "high", "context": "urban"},
+        {"document_id": "pilot-c", "quote": "Rural orders fell with expedited shipping.", "stance": "oppose", "quality": "medium", "context": "rural"}
+      ]
+    },
+    {
+      "id": "returns",
+      "statement": "Expedited shipping leaves returns unchanged.",
+      "evidence": [
+        {"document_id": "pilot-a", "quote": "Returns were unchanged.", "stance": "support", "quality": "medium", "context": "urban"},
+        {"document_id": "pilot-b", "quote": "Returns were unchanged.", "stance": "support", "quality": "high", "context": "urban"}
+      ]
+    },
+    {
+      "id": "retention",
+      "statement": "Expedited shipping improves long-term retention.",
+      "evidence": [
+        {"document_id": "pilot-c", "quote": "Long-term retention was not measured.", "stance": "neutral", "quality": "high", "context": "rural"}
+      ]
+    }
+  ],
+  "questions": [
+    {"id": "confounders", "question": "Would a longer randomized pilot controlling for price resolve the sales disagreement?", "claim_ids": ["sales"]}
+  ]
+}

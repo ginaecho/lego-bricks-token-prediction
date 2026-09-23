@@ -1,0 +1,48 @@
+{
+  "build_id": "wave2_t087_combo3_extract_compare_guided",
+  "composition_label": "Structured extraction -> Product comparison -> Guided setup",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored within isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict object: schema_version, synthetic=true, documents[{id,text}], preferences{weights,max_price?,min_storage?}, onboarding{completed,answers,transfer_gb}",
+    "output": "One envelope with schema_version, synthetic, status, request, extraction, comparison, guided",
+    "field_schema": "name (required text), price (required USD), storage (required GB), warranty (optional months)",
+    "validation": "Shared validate() validates requests and each stage handoff; extraction verifies provenance and normalization; comparison and guided outputs are checked against upstream data.",
+    "errors": "File, JSON and request validation errors produce one JSON object with status=error and exit 2."
+  },
+  "cross_stage_handoffs": [
+    "extract -> compare: validated field records, missing fields, completeness and document identity",
+    "compare -> guided: validated ranking, selected product ID and normalized storage capacity"
+  ],
+  "behavior": {
+    "extraction": "Case-insensitive line labels Name, Price, Storage, Warranty. Other lines ignored. Duplicate recognized labels and malformed present values rejected. Blank/absent values reported missing. Spans are zero-based half-open Python Unicode character offsets into original text.",
+    "normalization": "USD or $ or bare price, decimal GB/TB (1 TB=1000 GB), months/years (1 year=12 months). Nonnegative amounts capped at 1e12 normalized units.",
+    "comparison": "All products shown side-by-side. Incomplete products and hard-constraint failures excluded from ranking. Weighted min-max utilities among eligible products: lower price and higher storage/warranty preferred. Missing warranty scores as zero months. Equal attribute values yield utility 1. Scores rounded to 8 decimals; ties use ascending ID. Weights are 0..1, positive total, normalized by their sum.",
+    "guided": "Purchase -> configure -> transfer. Completion requires all preceding steps and corresponding evidence (purchase_confirmed, device_name, transfer_confirmed). Transfer also requires selected product storage >= transfer_gb. Evidence alone never auto-completes steps. Progress is completed steps / 3. No eligible product yields blocked setup; prior completions then rejected.",
+    "state": "Stateless replay: callers persist completed IDs and answers in subsequent input. No hidden files or side effects.",
+    "fixtures": "All example products and answers are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["Shared deterministic pipeline", "Source spans and missing-field reporting", "Attribute normalization and weighted ranking", "Validated prerequisites and progress", "CLI and unittest coverage"],
+    "excluded": ["Live providers or LLMs", "OCR or PDF parsing", "Arbitrary free-text extraction", "Currency conversion", "External persistence", "Interactive UI", "Enterprise workflows"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {"tests_run": 28, "failures": 0, "errors": 0, "exit_code": 0},
+    "example_cli": {"exit_code": 0, "stdout_json_objects": 1, "status": "ok", "selected_id": "synthetic-b", "next_step": "configure"},
+    "coverage": ["Extraction and Unicode source spans", "Missing and duplicate fields", "Unit normalization", "Ranking and tie-breaking", "Budget and preference propagation", "Prerequisites and evidence", "Capacity gating", "Full and blocked progress", "Invalid input and handoff tampering", "Strict JSON and CLI success/error behavior"]
+  }
+}

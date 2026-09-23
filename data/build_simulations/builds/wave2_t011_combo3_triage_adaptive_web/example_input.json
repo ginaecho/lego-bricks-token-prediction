@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "ticket": {
+    "id": "SYNTHETIC-TICKET-011",
+    "subject": "Invoice setup help",
+    "body": "My synthetic workspace needs billing and invoice configuration.",
+    "severity": "normal"
+  },
+  "profile": {
+    "experience": "beginner",
+    "preferred_format": "interactive",
+    "completed_steps": []
+  },
+  "config": {
+    "categories": [
+      {
+        "name": "billing",
+        "keywords": ["invoice", "billing"],
+        "team": "Synthetic Billing Support",
+        "owner": "synthetic-billing-owner",
+        "default_priority": "normal",
+        "onboarding_steps": ["configure-billing"],
+        "research_terms": ["invoice"]
+      },
+      {
+        "name": "general",
+        "keywords": ["help"],
+        "team": "Synthetic General Support",
+        "owner": "synthetic-general-owner",
+        "default_priority": "low",
+        "onboarding_steps": ["workspace-basics"],
+        "research_terms": ["workspace"]
+      }
+    ],
+    "fallback_category": "general",
+    "priority_rules": [
+      {"keywords": ["outage", "locked"], "priority": "urgent"}
+    ],
+    "steps": [
+      {
+        "id": "workspace-basics",
+        "title": "Synthetic workspace introduction",
+        "prerequisites": [],
+        "min_experience": "beginner",
+        "formats": ["text", "video"],
+        "research_terms": ["workspace"]
+      },
+      {
+        "id": "configure-billing",
+        "title": "Synthetic billing configuration",
+        "prerequisites": ["workspace-basics"],
+        "min_experience": "beginner",
+        "formats": ["interactive", "text"],
+        "research_terms": ["billing", "configuration"]
+      }
+    ],
+    "allowlisted_hosts": ["docs.synthetic.example"],
+    "max_findings": 3
+  },
+  "sources": [
+    {
+      "id": "synthetic-guide-1",
+      "url": "https://docs.synthetic.example/billing",
+      "title": "Synthetic billing guide",
+      "content": "Synthetic fixture: open workspace settings for billing configuration. Invoice previews are available in the billing panel.",
+      "synthetic": true
+    },
+    {
+      "id": "synthetic-guide-2",
+      "url": "https://docs.synthetic.example/workspace",
+      "title": "Synthetic workspace guide",
+      "content": "Synthetic fixture: a workspace contains preferences and account settings.",
+      "synthetic": true
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "build_id": "wave2_t028_combo4_semantic_web_review_behavior",
+  "composition_label": "semantic -> web -> review -> behavior",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Newly authored isolated Python reference implementation",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version=1, synthetic=true, query, timezone-aware now, allowlisted_hosts, products, documents, requirements; optional events=[], limit=10, half_life_days=30",
+    "product": "id, title, description, optional tags, source_urls",
+    "document": "url, text; all content is supplied synthetic fixture data",
+    "requirement": "id, text, keywords, optional min_sources=1",
+    "event": "product_id, kind=browse|purchase, timestamp",
+    "output": "schema_version, status, synthetic, stages={semantic,web,review,behavior}",
+    "stage": "schema_version, status, stage, candidates; candidate fields accumulate without replacing prior evidence",
+    "validation": "Shared ValidationError, input validation, stage envelope validation, source attribution, exact quoted offsets, requirement/evidence consistency, finite scores",
+    "errors": "CLI emits one JSON error object and exits 2 for file, decoding, JSON and validation errors; success exits 0"
+  },
+  "cross_stage_handoffs": [
+    "semantic -> web: validated product IDs, relevance scores and matched tokens define the only candidates researched",
+    "web -> review: validated retrieved sources, requirement-specific quotations, character offsets and missing URLs",
+    "review -> behavior: validated checks, gaps and coverage enter final ranking; all source evidence and gaps remain visible"
+  ],
+  "behavior": {
+    "semantic": "Inverted token index with query-token recall score, deterministic product-ID tie breaks, top-k. Optional injected embedding callable receives query plus catalog texts and returns equal-length finite numeric vectors. Hybrid score is 0.6 lexical + 0.4 nonnegative cosine; zero vectors contribute zero.",
+    "web": "Offline fixture retrieval only. Exact lowercase allowlisted HTTPS hosts, default/443 port, no credentials, fragments, whitespace or backslashes. Unknown permitted URLs become traceable missing sources. No network access.",
+    "review": "All requirement keyword tokens must appear in one source sentence. Coverage requires min_sources distinct URLs. Quotations retain source URL and exact offsets. Missing evidence produces explicit gaps. Keyword matches are not semantic entailment, certification or fact verification.",
+    "personalization": "Browse weight 1, purchase weight 3; decay=2^(-age_days/half_life_days). Product affinity=sum/(1+sum). Active-history score=0.55 semantic + 0.25 review coverage + 0.20 affinity. Cold-start score=0.70 semantic + 0.30 coverage when no positive candidate history. Future/unknown-product events rejected.",
+    "edge_cases": "No search matches produce empty downstream stages. Empty requirements yield vacuous coverage=1. Events outside current candidates trigger cold start. Repeated events count as independent observations. Stable ID tie breaks and injected now guarantee deterministic output."
+  },
+  "scope": {
+    "included": ["One integrated offline CLI pipeline", "Shared validation and schemas", "Injected embedding fixture interface", "Synthetic provenance-preserving retrieval", "Traceable review gaps", "Recency-weighted personalization", "Automated tests"],
+    "excluded": ["Live HTTP fetching", "Live models or providers", "Certification", "Factual verification", "Negation or semantic entailment analysis", "Production persistence", "Enterprise authorization", "Cross-product collaborative recommendations"]
+  },
+  "test_outcomes": {"status": "passed", "tests_passed": 36, "cli_exit_code": 0, "cli_output": "One valid JSON object with status ok", "error_paths": "Missing file, usage, malformed JSON, duplicate JSON keys, invalid schema and nonfinite values emit JSON status error with exit 2"}
+}

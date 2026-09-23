@@ -1,0 +1,93 @@
+{
+  "build_id": "wave2_t079_combo4_normal_triage_adaptive_extract",
+  "composition_label": "Normal research -> Ticket triage & routing -> Adaptive onboarding -> Structured extraction",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this isolated build using clearly labeled synthetic fixtures",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version=1, synthetic=true, query, documents[id,text], tickets[id,title,description,document_ids], profile[experience,preference], policy, onboarding_steps, extraction_schema",
+    "policy": "Ordered categories[id,keywords,queue,owner], default_category, ordered priorities[priority,keywords], default_priority, research_limit (1..100)",
+    "onboarding_steps": "id,title,categories,audiences,modes,prerequisites,document_ids; category '*' targets every category",
+    "extraction_schema": "Ordered fields[name,pattern,required]; regex must contain a named 'value' capture group",
+    "output": "One envelope with schema_version, status, synthetic, immutable copy of input, stages containing the contiguous prefix research/triage/adaptive/extract",
+    "source": "document_id,start,end,text; zero-based half-open Unicode character offsets into original document",
+    "validation": "One shared validate boundary checks input, stage ordering, identities, exact citations, accountability, evidence/document handoffs, prerequisite ordering and missing-field consistency before and after every stage",
+    "errors": "Validation, file and JSON decoding errors print one JSON object with status=error and exit 2"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "triage",
+      "data": "Validated extractive findings and exact sources; each ticket only receives findings from its linked documents"
+    },
+    {
+      "from": "triage",
+      "to": "adaptive",
+      "data": "Validated category drives path selection; priority, queue, accountable owner, finding IDs and document IDs propagate"
+    },
+    {
+      "from": "adaptive",
+      "to": "extract",
+      "data": "Validated prerequisite-ordered step selections expand ticket document scope; extraction consumes only these documents and retains routing, evidence and step lineage"
+    }
+  ],
+  "behavior": {
+    "research": "Unicode word-overlap retrieval over punctuation/newline-delimited passages, descending score, stable document/span ties, configurable result limit; findings are verbatim",
+    "triage": "Case-insensitive boundary-aware keyword/phrase matching on ticket text plus linked findings; highest category keyword count, configuration-order ties, explicit fallback; first matching priority rule wins",
+    "adaptive": "Category and experience select steps; recursively includes prerequisites even outside their audience/category; preferred supported presentation mode or explained first-mode fallback",
+    "extraction": "Case-insensitive multiline trusted regex configuration; first nonempty named capture in assigned document order; exact spans; null missing values; lists all missing and required missing fields; complete refers only to required fields",
+    "determinism": "No randomness, current-time dependencies, network requests, provider calls or LLM steps",
+    "limits": "100 documents, tickets, steps or extraction fields; 20000 characters per text; 500 characters per regex; 100-character identifiers"
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic CLI and shared validation layer",
+      "Synthetic end-to-end fixture",
+      "Extractive research and source tracing",
+      "Configurable accountable routing",
+      "Experience/preference-aware onboarding with prerequisite explanations",
+      "Schema-driven extraction and missing-field reporting",
+      "Standard-library unittest and subprocess CLI coverage"
+    ],
+    "excluded": [
+      "Live research, external providers, LLM calls and integrations",
+      "Enterprise authentication, persistence, queues and deployment",
+      "Semantic inference beyond deterministic lexical rules",
+      "OCR, binary documents and semantic field type conversion",
+      "Sandboxed untrusted regex execution or regex timeout guarantees"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 35,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status=ok and all four validated stages",
+      "stderr": ""
+    }
+  }
+}

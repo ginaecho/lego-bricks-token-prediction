@@ -1,0 +1,80 @@
+{
+  "build_id": "wave2_t047_combo3_extract_behavior_faq",
+  "composition_label": "Structured extraction -> Behavioral personalization -> Knowledge-base answers",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "definition": "implementation.py SCHEMAS, validated by check() and validate()",
+    "input": "Strict object: schema_version, fixture_label, document, fields, as_of, items, events, knowledge_base, config. Unknown keys rejected. All example data synthetic.",
+    "fields": "Mapping from field names to label/type/required. Types: string or number. customer_id/category/question must be declared string fields; additional fields are supported.",
+    "output": "One status=ok JSON envelope: schema_version, extraction, behavior, faq. Error envelope: status=error and error; exit 2.",
+    "extraction": "Every declared field maps to null or value/raw/span. Spans are half-open Unicode character offsets. Sorted missing_fields and missing_required.",
+    "behavior": "Validated extracted context, cold_start, matched_events, ranked recommendations with component scores.",
+    "faq": "status=answered or abstained, question, category, answer, citation, retrieval_score, reason.",
+    "constraints": "Strict booleans, finite numbers, nonblank identifiers, positive half-life and integer top_k, threshold in [0,1], timezone-aware ISO timestamps, no future events, unique catalog/KB IDs, known event item references."
+  },
+  "cross_stage_handoffs": [
+    "extract -> behavior: validate extracted types, source spans, raw/value equivalence and missing reports; customer_id selects events, category supplies interest prior, question passes into context.",
+    "behavior -> faq: validate ranking types/order/score components and cold-start state; the highest-ranked item category filters knowledge retrieval, and validated context supplies the extracted question.",
+    "faq -> output: validate exact answer/citation text against a category-matching KB article; validate shared final output envelope."
+  ],
+  "behavior": {
+    "extraction": "Case-insensitive escaped label followed by colon at line start; whitespace trimmed while preserving exact source offsets. Missing/blank fields reported without stopping downstream stages. Repeated labels and invalid numeric values are errors.",
+    "ranking": "Sum purchase=3 and browse=1 times 0.5 ** (age_days / half_life_days), plus 0.5 for exact extracted category match. Events from other customers excluded. Score ties broken by item ID.",
+    "cold_start": "No matching customer events: category preference then stable item-ID fallback. No customer ID never matches events. Empty catalog leads to FAQ abstention.",
+    "retrieval": "Category restricted to top recommendation. Score is fraction of normalized non-stopword query tokens present in article question. Highest score wins, article-ID tie-break. Positive score meeting inclusive faq_min_score required.",
+    "grounding": "Answer is copied verbatim from one selected KB article, with article ID and exact quote. No generated claims.",
+    "abstention": "missing_question, no_recommendations, or insufficient_evidence; null answer and citation.",
+    "determinism": "Explicit as_of, stable ties, no system clock, random state, network, model calls or mutable global pipeline state."
+  },
+  "scope": {
+    "included": [
+      "One integrated offline CLI pipeline and shared validation layer",
+      "Schema-driven line-field extraction and numeric coercion",
+      "Recency-weighted personalized ranking with cold-start handling",
+      "Grounded lexical knowledge retrieval and explicit abstention",
+      "Synthetic fixtures, in-process handoff validation and subprocess CLI tests"
+    ],
+    "excluded": [
+      "OCR, PDF parsing and arbitrary free-form semantic extraction",
+      "Live providers, LLM generation or injected model callables",
+      "Embeddings, synonym inference and learned personalization",
+      "Authentication, storage, event deduplication and enterprise deployment",
+      "Catalog availability filtering and multi-article answer synthesis"
+    ]
+  },
+  "test_outcomes": {
+    "state": "passed",
+    "unittest": {
+      "tests_run": 34,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status=ok",
+      "top_recommendation": "toy-1",
+      "faq_status": "answered",
+      "citation_id": "kb-toys"
+    }
+  }
+}

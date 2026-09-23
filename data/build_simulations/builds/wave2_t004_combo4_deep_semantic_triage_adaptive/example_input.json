@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC marketplace fixtures; no real products, customers, or claims",
+  "questions": [
+    {"id": "offline", "question": "Does Trail Kit support offline synchronization?", "proposition": "Trail Kit synchronizes while offline."},
+    {"id": "export", "question": "Can Trail Kit export CSV?", "proposition": "Trail Kit exports CSV."},
+    {"id": "retention", "question": "How long are exports retained?", "proposition": "Exports are retained for thirty days."}
+  ],
+  "documents": [
+    {
+      "id": "guide", "title": "Synthetic Trail Kit guide", "source": "Synthetic vendor handbook",
+      "evidence": [
+        {"question_id": "offline", "stance": "support", "excerpt": "Offline synchronization works in the demonstration.", "product_ids": ["trail-kit"]},
+        {"question_id": "export", "stance": "support", "excerpt": "Trail Kit exports CSV reports.", "product_ids": ["trail-kit"]}
+      ]
+    },
+    {
+      "id": "trial", "title": "Synthetic independent trial", "source": "Synthetic field lab",
+      "evidence": [
+        {"question_id": "offline", "stance": "oppose", "excerpt": "Offline synchronization failed; the trial required a connection.", "product_ids": ["trail-kit"]},
+        {"question_id": "export", "stance": "support", "excerpt": "CSV export succeeded in a controlled trial.", "product_ids": ["trail-kit"]}
+      ]
+    }
+  ],
+  "products": [
+    {"id": "trail-kit", "name": "Trail Kit", "description": "A field reporting toolkit.", "tags": ["portable", "reports"]},
+    {"id": "desk-kit", "name": "Desk Kit", "description": "A desktop calendar and task board.", "tags": ["office", "calendar"]}
+  ],
+  "search": {
+    "query": "offline synchronization",
+    "top_k": 2,
+    "embedding_weight": 0,
+    "synonyms": [{"term": "sync", "equivalents": ["synchronization"]}]
+  },
+  "ticket": {"id": "SYNTHETIC-101", "subject": "Help with setup", "body": "I need setup instructions for offline synchronization."},
+  "routing": {
+    "rules": [
+      {"id": "setup", "keywords": ["setup", "instructions"], "category": "configuration", "priority": "normal", "team": "Product Support", "owner": "synthetic-support-owner", "onboarding_track": "setup"},
+      {"id": "billing", "keywords": ["invoice", "refund"], "category": "billing", "priority": "high", "team": "Account Support", "owner": "synthetic-billing-owner", "onboarding_track": "account"}
+    ],
+    "fallback": {"category": "general", "priority": "normal", "team": "Help Desk", "owner": "synthetic-help-owner", "onboarding_track": "general"},
+    "urgent_keywords": ["data loss", "outage"]
+  },
+  "profile": {
+    "experience": "beginner",
+    "preferred_formats": ["interactive", "video"],
+    "completed_step_ids": []
+  },
+  "onboarding": {
+    "review_step_id": "review",
+    "steps": [
+      {"id": "welcome", "title": "Synthetic account orientation", "tracks": ["general", "account"], "levels": ["beginner"], "formats": ["text", "video"], "prerequisites": [], "product_ids": []},
+      {"id": "review", "title": "Review conflicting evidence with the accountable owner", "tracks": ["setup"], "levels": ["beginner", "intermediate", "advanced"], "formats": ["text"], "prerequisites": ["welcome"], "product_ids": []},
+      {"id": "connect", "title": "Connect the synthetic Trail Kit", "tracks": ["setup"], "levels": ["beginner", "intermediate"], "formats": ["interactive", "text"], "prerequisites": ["welcome"], "product_ids": ["trail-kit"]},
+      {"id": "automate", "title": "Configure advanced report automation", "tracks": ["setup"], "levels": ["advanced"], "formats": ["text"], "prerequisites": ["connect"], "product_ids": ["trail-kit"]},
+      {"id": "account", "title": "Inspect the synthetic invoice", "tracks": ["account"], "levels": ["beginner", "intermediate", "advanced"], "formats": ["text"], "prerequisites": ["welcome"], "product_ids": []}
+    ]
+  }
+}

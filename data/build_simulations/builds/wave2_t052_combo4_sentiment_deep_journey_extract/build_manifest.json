@@ -1,0 +1,97 @@
+{
+  "build_id": "wave2_t052_combo4_sentiment_deep_journey_extract",
+  "composition_label": "Sentiment & prioritization -> Deep research -> Journey recommendations -> Structured extraction",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch within this isolated build directory, using clearly labeled synthetic fixture data.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1; booleans are rejected.",
+      "synthetic": "Must be true: this bounded reference accepts labeled synthetic data.",
+      "feedback": "Array of {id, topic, text, severity}; severity is low, medium, high, critical.",
+      "documents": "Array of {id, text, claims}; claim is {topic, stance, quote}; stance is supports, opposes, uncertain; quote must occur verbatim in document text.",
+      "actions": "Array of {id, title, topic, description, prerequisites}; prerequisites reference action IDs.",
+      "profile": "{completed: [action IDs]}",
+      "extraction_schema": "Array of {name, source, label, type, required}; source is title/description; type is string/integer; label is literal, without colon or newline."
+    },
+    "success_envelope": "{schema_version: 1, status: ok, input: validated original input, stages: {sentiment, deep, journey, extract}}",
+    "error_envelope": "{status: error, error: human-readable message}; exit 2",
+    "validation": "One shared validation layer checks strict object keys, types, bounded arrays, unique identifiers, references, quotes and schema definitions. Every stage validates the entire preceding pipeline prefix before consuming it, and validates its new output. Output semantic validation recomputes deterministic stage results, rejecting forged priorities, spans, evidence, steps and fields.",
+    "bounds": "Arrays have at most 50 entries; text fields at most 10000 characters; extraction specification strings at most 100 characters; CLI input at most 2000000 characters.",
+    "source_spans": "Zero-based, end-exclusive Python Unicode code-point offsets, never byte offsets."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "sentiment",
+      "to": "deep",
+      "consumed": "Prioritized topics, priorities, severity and feedback IDs select research topics and remain attached to evidence reports."
+    },
+    {
+      "from": "deep",
+      "to": "journey",
+      "consumed": "Research topics and inherited priorities rank prerequisite-valid plans; conclusions, source document IDs and unresolved questions accompany recommendations."
+    },
+    {
+      "from": "journey",
+      "to": "extract",
+      "consumed": "Only recommended step titles/descriptions are extracted; field provenance identifies the selected action, source field and exact span. Journey status is propagated."
+    }
+  ],
+  "behavior": {
+    "sentiment": "Case-insensitive English word lexicon with individual token spans, base weights, preceding-token negation and summed scores. Priorities are severity weight * 10 + max(0, -score); severity weights are 1/3/6/10. Topics use maximum member priority, never average away severe complaints; priority is severity-aware but unbounded negative text may outrank a higher severity. Topic ties sort lexically.",
+    "deep": "Synthesizes supplied attributed claims for feedback topics across documents; deduplicates identical claim records within sources. Supports/opposes coexistence is disagreement, never settled by voting. Explicit uncertainty, conflicts and absent evidence create unresolved questions. No outside retrieval or inference.",
+    "journey": "Enumerates ordered pairs of distinct uncompleted catalog actions. Each step must satisfy prerequisites from profile completion or earlier steps. Chooses a relevant two-step plan maximizing sum of distinct researched-topic priorities; lexical action-ID tuple breaks ties. Off-topic actions are allowed only when they supply a prerequisite to a later relevant step, never as padding. Reports currently eligible actions and carries research caveats. If no valid pair exists, returns the best relevant singleton or empty plan with blocked status. Cycles are allowed as input but cannot produce an invalid plan.",
+    "extract": "Literal case-sensitive line-label extraction from selected steps; first nonblank occurrence in journey/source order wins. String and signed ASCII integer conversion, match counts and exact source spans are emitted. Invalid integers are missing with retained source provenance. All missing fields and required missing fields are listed separately; optional missing fields do not make extraction incomplete.",
+    "cli": "One JSON object on stdout, exit 0 for a valid input even when journey is blocked or extraction incomplete. File, encoding, usage and validation errors produce status error and exit 2. Rejects duplicate JSON keys and nonfinite JSON constants.",
+    "determinism": "No randomness, timestamps, providers, external dependencies or mutable global pipeline state. Original request is not mutated."
+  },
+  "scope": {
+    "included": [
+      "Integrated sequential pipeline, shared schema and validation",
+      "Transparent sentiment and severity-aware priority",
+      "Multi-document attributed synthesis and unresolved questions",
+      "Prerequisite-aware next actions and validated two-step journey",
+      "Schema-driven structured fields with source spans and missing reports",
+      "Synthetic fixture, unittest coverage and JSON CLI"
+    ],
+    "excluded": [
+      "Live retrieval, networks, model providers and LLM calls",
+      "Enterprise deployment, persistence and authentication",
+      "Learned sentiment, sarcasm handling, multilingual sentiment and comprehensive negation scope",
+      "Automatic claim extraction from arbitrary documents or factual verification",
+      "Unbounded planning, arbitrary regular expressions, OCR and free-form document parsing"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 30,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "example_journey_status": "complete",
+    "example_extraction_complete": true,
+    "verified": [
+      "All 30 unittest cases passed using the documented command.",
+      "The documented CLI command emitted one JSON success object and exited 0.",
+      "Error CLI subprocess tests confirmed exit 2 and JSON status error.",
+      "Tests cover each stage, cross-stage propagation, boundary validation, source spans, invalid inputs, edge cases and deterministic behavior."
+    ]
+  }
+}

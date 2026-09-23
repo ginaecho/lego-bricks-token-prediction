@@ -1,0 +1,71 @@
+{
+  "build_id": "wave2_t075_combo3_guided_sentiment_deep",
+  "composition_label": "Guided setup -> Sentiment & prioritization -> Deep research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "boolean true, required fixture label",
+      "prerequisites": "object of prerequisite identifiers to booleans",
+      "steps": "array of {id,title,prerequisites:string[],depends_on:string[],completed:boolean}",
+      "feedback": "array of {id,step_id,topic,text,severity:low|medium|high|critical}",
+      "documents": "array of {id,title,claims:[{topic,position:support|oppose|neutral,evidence}]}",
+      "research_questions": "array of {id,topic,question}; topic must have feedback"
+    },
+    "handoff": "Versioned envelope {schema_version,synthetic,stage,input,guided,sentiment}; a shared validator checks exact structure, input validity and recomputes derived contracts before consumption.",
+    "output": "{schema_version:1,status:ok,synthetic:true,guided,sentiment,deep}; failure: {schema_version:1,status:error,error:string}",
+    "validation": "Exact field sets, nonblank strings, strict booleans/version, unique row IDs and references, defined references, acyclic dependencies, legal completion, legal severities and claim positions, duplicate JSON keys and nonfinite numbers rejected."
+  },
+  "cross_stage_handoffs": [
+    "Guided -> sentiment: validated completed step IDs gate feedback; progress and prerequisite blockers remain in the final shared output.",
+    "Sentiment -> deep: validated ranked issues supply research topics, ordering, priority scores, sentiment labels, issue IDs and onboarding step provenance.",
+    "Deep synthesis operates only on prioritized feedback topics and the original validated documents retained in the shared envelope."
+  ],
+  "behavior": {
+    "guided": "Complete, ready and blocked states; exact missing prerequisites and waiting dependencies; completed/total/fraction progress; empty onboarding has fraction 1.",
+    "sentiment": "Published English lexicon mean with match-level contributions, three-token negation and punctuation reset. Unmatched text is neutral with explicit no-coverage label. Severity base plus negative-sentiment bonus yields deterministic ranks; ties by issue ID. Higher severity always outranks lower severity.",
+    "deep": "Exact-topic synthesis of supplied structured claims; document-level position counts do not multiply repeated claims. Exact quotes, document IDs and claim indices support audit. Opposed stances flag disagreement. Missing evidence, single-source limitations and supplied questions remain unresolved; no majority vote establishes truth.",
+    "cli": "One JSON object on stdout; exit 0 for success, exit 2 for validation, file, encoding or JSON errors."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic pipeline with shared validation",
+      "Synthetic fixture data and traceable provenance",
+      "Validated stage ordering and tamper detection",
+      "Multi-document disagreement and unresolved questions",
+      "Standard-library unittest and subprocess CLI checks"
+    ],
+    "excluded": [
+      "Network access, external retrieval or live providers",
+      "LLM calls or injected model hooks; none needed for deterministic reference",
+      "Factual verification, source credibility inference or question answering",
+      "Enterprise authentication, databases, persistence services or UI",
+      "General language understanding, sarcasm and multilingual sentiment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 28,
+    "tests_exit_code": 0,
+    "cli_exit_code": 0
+  }
+}

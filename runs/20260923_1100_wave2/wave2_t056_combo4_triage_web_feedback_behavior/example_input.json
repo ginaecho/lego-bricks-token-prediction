@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "tickets": [
+    {"id": "t1", "text": "Urgent refund request for a duplicate invoice", "urls": ["https://help.example.test/refunds#policy"]},
+    {"id": "t2", "text": "My parcel delivery is late", "urls": ["https://help.example.test/delivery", "https://untrusted.example.test/tracking"]},
+    {"id": "t3", "text": "A general question", "urls": ["https://help.example.test/missing"]}
+  ],
+  "triage_config": {
+    "categories": [
+      {"name": "billing", "keywords": ["refund", "invoice"], "owner": "billing-team", "priority": "normal"},
+      {"name": "shipping", "keywords": ["parcel", "delivery"], "owner": "delivery-team", "priority": "normal"},
+      {"name": "general", "keywords": [], "owner": "support-team", "priority": "low"}
+    ],
+    "default_category": "general",
+    "urgent_keywords": ["urgent", "fraud"]
+  },
+  "web_config": {
+    "allowed_hosts": ["help.example.test"],
+    "max_excerpt_chars": 100,
+    "snapshots": [
+      {"url": "https://help.example.test/refunds", "title": "Synthetic refund guide", "content": "Synthetic policy: a duplicate invoice is reviewed by the billing team. Refund updates arrive by email.", "retrieved_at": "2026-09-20T10:00:00Z"},
+      {"url": "https://help.example.test/delivery", "title": "Synthetic delivery guide", "content": "Synthetic policy: parcel delivery updates include tracking and an estimated arrival date.", "retrieved_at": "2026-09-21T10:00:00Z"}
+    ]
+  },
+  "feedback": [
+    {"id": "f1", "ticket_id": "t1", "text": "Refund updates are unclear."},
+    {"id": "f2", "ticket_id": "t1", "text": "REFUND updates are unclear!"},
+    {"id": "f3", "ticket_id": "t2", "text": "Please improve these updates."}
+  ],
+  "behavior": {
+    "now": "2026-09-23T10:00:00Z",
+    "user_id": "synthetic-user",
+    "half_life_days": 7,
+    "limit": 3,
+    "catalog": [
+      {"id": "billing-guide", "title": "Synthetic billing guide", "themes": ["billing"], "popularity": 10},
+      {"id": "delivery-guide", "title": "Synthetic parcel guide", "themes": ["shipping"], "popularity": 5},
+      {"id": "welcome-guide", "title": "Synthetic welcome guide", "themes": ["general"], "popularity": 20}
+    ],
+    "events": [
+      {"id": "e1", "user_id": "synthetic-user", "item_id": "billing-guide", "kind": "browse", "at": "2026-09-16T10:00:00Z"},
+      {"id": "e2", "user_id": "synthetic-user", "item_id": "delivery-guide", "kind": "purchase", "at": "2026-09-23T10:00:00Z"},
+      {"id": "e3", "user_id": "another-synthetic-user", "item_id": "welcome-guide", "kind": "purchase", "at": "2026-09-23T10:00:00Z"}
+    ]
+  }
+}

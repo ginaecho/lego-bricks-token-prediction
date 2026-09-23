@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "ticket": {
+    "id": "SYNTHETIC-1001",
+    "subject": "Urgent: duplicate invoice charge",
+    "body": "I am new to billing. How do I review an invoice and request a refund for a duplicate charge?"
+  },
+  "triage_config": {
+    "categories": [
+      {
+        "name": "billing",
+        "keywords": ["invoice", "refund", "charge", "billing"],
+        "priority": "normal",
+        "routing": {"team": "Synthetic Billing Support", "owner": "synthetic-billing-owner"}
+      },
+      {
+        "name": "account",
+        "keywords": ["password", "login"],
+        "priority": "normal",
+        "routing": {"team": "Synthetic Account Support", "owner": "synthetic-account-owner"}
+      },
+      {
+        "name": "general",
+        "keywords": [],
+        "priority": "low",
+        "routing": {"team": "Synthetic Help Desk", "owner": "synthetic-help-owner"}
+      }
+    ],
+    "default_category": "general",
+    "priority_rules": [
+      {"priority": "urgent", "keywords": ["urgent", "outage"]},
+      {"priority": "high", "keywords": ["duplicate"]}
+    ]
+  },
+  "corpus": [
+    {
+      "id": "synthetic-billing-guide",
+      "title": "Synthetic billing guide (not real product policy)",
+      "passages": [
+        "Review the invoice identifier and charge history before requesting a refund for a duplicate charge.",
+        "In this synthetic billing system, a refund request includes the invoice identifier and a short explanation."
+      ]
+    },
+    {
+      "id": "synthetic-account-guide",
+      "title": "Synthetic account guide",
+      "passages": ["A password reset link is available on the login screen."]
+    }
+  ],
+  "research_config": {"max_findings": 2},
+  "profile": {"experience": "novice", "preference": "hands_on"},
+  "onboarding_catalog": [
+    {
+      "id": "orientation",
+      "title": "Understand the synthetic workspace",
+      "categories": ["*"],
+      "experience_levels": ["novice"],
+      "evidence_keywords": [],
+      "prerequisites": [],
+      "content": {
+        "reading": "Read the synthetic workspace overview and locate the help panel.",
+        "hands_on": "Open the synthetic workspace and locate the help panel."
+      }
+    },
+    {
+      "id": "review-invoice",
+      "title": "Review the invoice",
+      "categories": ["billing"],
+      "experience_levels": ["novice", "intermediate", "expert"],
+      "evidence_keywords": ["invoice"],
+      "prerequisites": ["orientation"],
+      "content": {
+        "reading": "Read the cited invoice guidance and note which identifier is needed.",
+        "hands_on": "In the synthetic workspace, locate the invoice identifier and compare the charge history."
+      }
+    },
+    {
+      "id": "request-refund",
+      "title": "Prepare a synthetic refund request",
+      "categories": ["billing"],
+      "experience_levels": ["novice", "intermediate", "expert"],
+      "evidence_keywords": ["refund"],
+      "prerequisites": ["review-invoice"],
+      "content": {
+        "reading": "Read the cited refund instructions before preparing a request.",
+        "hands_on": "Draft a synthetic refund request with the invoice identifier and explanation; do not submit it."
+      }
+    },
+    {
+      "id": "reset-password",
+      "title": "Find password help",
+      "categories": ["account"],
+      "experience_levels": ["novice", "intermediate", "expert"],
+      "evidence_keywords": ["password"],
+      "prerequisites": ["orientation"],
+      "content": {
+        "reading": "Read the cited password-reset instructions.",
+        "hands_on": "Locate the reset link in the synthetic login screen."
+      }
+    }
+  ]
+}

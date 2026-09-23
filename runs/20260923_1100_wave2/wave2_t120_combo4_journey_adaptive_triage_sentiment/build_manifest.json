@@ -1,0 +1,91 @@
+{
+  "build_id": "wave2_t120_combo4_journey_adaptive_triage_sentiment",
+  "composition_label": "Journey recommendations -> Adaptive onboarding -> Ticket triage & routing -> Sentiment & prioritization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact fields: schema_version=1, synthetic=true, profile, actions, tickets, routing. See example_input.json for the complete synthetic fixture.",
+    "profile": "experience: beginner/intermediate/expert; preferences: ordered unique strings including optional format and interest tags; completed: unique known action IDs.",
+    "actions": "Unique id, title, prerequisite IDs, tags, format (video/text/interactive), integer difficulty 1..3. All prerequisites must exist; cycles are rejected.",
+    "tickets": "Unique id, nonempty text, known action_id, severity (low/medium/high/critical). Empty ticket lists are valid.",
+    "routing": "Ordered rules with unique category, single-word keywords, priority and nonempty accountable owner; fallback has category/priority/owner.",
+    "output": "Envelope: schema_version, status, stage, input snapshot, accumulated results keyed by journey/adaptive/triage/sentiment.",
+    "validation": "The shared validate boundary checks exact envelope keys, input, stage order and deterministic expected output for every preceding stage before accepting a handoff. Public orchestration is run(data) or advance(envelope, stage).",
+    "errors": "CLI emits one JSON object with status=error and exit 2 on file, decoding, JSON or schema validation errors. Duplicate JSON keys and nonfinite constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "journey",
+      "to": "adaptive",
+      "data": "Validated two ordered action IDs, scores, explanations and satisfied prerequisites become onboarding modules without reordering."
+    },
+    {
+      "from": "adaptive",
+      "to": "triage",
+      "data": "Validated module action IDs and experience/preference choices become per-ticket onboarding context; active onboarding imposes a medium priority floor."
+    },
+    {
+      "from": "triage",
+      "to": "sentiment",
+      "data": "Validated routed tickets preserve text, action ID, severity, category, accountable owner, baseline priority and onboarding context in ranked issues."
+    }
+  ],
+  "behavior": {
+    "journey": "Eligible uncompleted actions score 3 per preference match minus difficulty distance from experience target. Descending score then ascending action ID determines order. Reevaluate prerequisites after the first planned step to produce exactly two steps; impossible two-step plans fail explicitly. Planned completion is hypothetical, never persisted as actual completion.",
+    "adaptive": "Beginner uses guided depth, intermediate standard, expert fast-track. First recognized format preference wins, otherwise the catalog format. Format selection is a reference presentation preference, not an assertion that external media exists.",
+    "triage": "Case-insensitive alphabetic token matching; most distinct matching keywords wins; configuration order breaks ties. No match uses fallback. Priority is the maximum of configured priority, reported severity and onboarding floor.",
+    "sentiment": "Transparent English lexicon and per-token contribution records. Immediately preceding not/never/no reverses polarity. Sum determines positive/neutral/negative. Score <= -2 raises baseline one level capped at critical. Positive sentiment never reduces severity. Sort by descending final priority, ascending sentiment score, then ticket ID.",
+    "determinism": "No clock, random generator, persistence, network or provider influences results. Caller input is deep-copied.",
+    "llm": "No LLM step is needed or implemented."
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI pipeline and shared validated envelope",
+      "Synthetic fixture and deterministic reference policies",
+      "Prerequisite validation, explanatory recommendations and two-step planning",
+      "Experience/preference-aware onboarding",
+      "Configurable accountable support routing",
+      "Auditable sentiment and severity-aware ranked issues",
+      "Unit, handoff-tampering and real CLI subprocess tests"
+    ],
+    "excluded": [
+      "Enterprise operations, authentication, databases and UI",
+      "External providers, live data and external dependencies",
+      "Semantic or multilingual sentiment, sarcasm and long-range negation",
+      "Executing actions, actual ticket delivery, or actual media generation",
+      "Model training and optional LLM injection"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 37,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "example_exit_code": 0,
+      "stdout": "One JSON object with status=ok and stage=sentiment",
+      "error_contract": "Missing file, directory and missing arguments return one error JSON object and exit 2; malformed JSON, duplicate keys, nonfinite constants and invalid schemas also tested."
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "documents": [
+    {"id": "synthetic-intake", "text": "SYNTHETIC CUSTOMER INTAKE\nName: Ada Example\nPlan: starter\nSeats: 4\nConsent: yes\n"},
+    {"id": "synthetic-kb", "text": "Starter accounts can activate a guided trial.\nStarter accounts can export CSV reports."},
+    {"id": "synthetic-study-a", "text": "Synthetic pilot A supports guided onboarding for faster activation."},
+    {"id": "synthetic-study-b", "text": "Synthetic pilot B opposes guided onboarding because setup took longer."}
+  ],
+  "extraction": {
+    "document_ids": ["synthetic-intake"],
+    "fields": [
+      {"id": "name", "pattern": "Name: ([^\\n]+)", "type": "string", "required": true},
+      {"id": "plan", "pattern": "Plan: ([^\\n]+)", "type": "string", "required": true},
+      {"id": "seats", "pattern": "Seats: ([^\\n]+)", "type": "integer", "required": true},
+      {"id": "consent", "pattern": "Consent: ([^\\n]+)", "type": "boolean", "required": true},
+      {"id": "region", "pattern": "Region: ([^\\n]+)", "type": "string", "required": false}
+    ]
+  },
+  "questions": [
+    {"id": "trial", "text": "How can I activate a guided trial?", "required_fields": ["plan"]},
+    {"id": "export", "text": "Can I export CSV reports?", "required_fields": ["plan"]},
+    {"id": "residency", "text": "Where is regional data residency?", "required_fields": ["region"]}
+  ],
+  "knowledge_base": [
+    {"id": "trial-policy", "question": "How can I activate a guided trial?", "source": {"document_id": "synthetic-kb", "start": 0, "end": 45}, "requires": {"plan": "starter"}},
+    {"id": "export-policy", "question": "Can I export CSV reports?", "source": {"document_id": "synthetic-kb", "start": 46, "end": 86}, "requires": {"plan": "starter"}}
+  ],
+  "actions": [
+    {"id": "activate", "title": "Activate the guided trial", "priority": 20, "requires_fields": ["name", "seats"], "requires_answers": ["trial"], "prerequisites": [], "research_topics": ["guided-onboarding"]},
+    {"id": "export", "title": "Try the first CSV export", "priority": 30, "requires_fields": [], "requires_answers": ["export"], "prerequisites": ["activate"], "research_topics": ["export-reliability"]},
+    {"id": "regional-review", "title": "Review regional residency", "priority": 10, "requires_fields": ["region"], "requires_answers": ["residency"], "prerequisites": [], "research_topics": ["residency"]}
+  ],
+  "completed_actions": [],
+  "research_questions": {
+    "guided-onboarding": "Does guided onboarding accelerate activation in these synthetic pilots?",
+    "export-reliability": "Is CSV export reliable across repeated synthetic trials?",
+    "residency": "Which residency choices are available?"
+  },
+  "claims": [
+    {"id": "pilot-a", "topic": "guided-onboarding", "stance": "supports", "source": {"document_id": "synthetic-study-a", "start": 0, "end": 67}},
+    {"id": "pilot-b", "topic": "guided-onboarding", "stance": "opposes", "source": {"document_id": "synthetic-study-b", "start": 0, "end": 70}}
+  ]
+}

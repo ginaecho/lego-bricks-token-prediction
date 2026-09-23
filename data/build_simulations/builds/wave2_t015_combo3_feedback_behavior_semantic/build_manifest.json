@@ -1,0 +1,133 @@
+{
+  "build_id": "wave2_t015_combo3_feedback_behavior_semantic",
+  "composition_label": "Feedback analysis -> Behavioral personalization -> Semantic search",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch inside the isolated build directory; no repository or other build files accessed.",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py",
+    "execution_directory": "Directory containing the four deliverables",
+    "injected_embedding_python_api": "implementation.run_pipeline(document, embedding=callable)"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Required integer 1; booleans rejected.",
+      "synthetic": "Required literal true; all supplied fixtures are synthetic.",
+      "as_of": "Required timezone-aware ISO 8601 timestamp; normalized to UTC and used as the deterministic clock.",
+      "products": "Array of {id, title, description, tags: string[]}; unique nonblank ids, nonblank titles, descriptions may be empty.",
+      "feedback": "Array of {id, customer_id, product_id, timestamp, text}; unique ids, known product references, nonfuture timezone-aware timestamps, nonblank text containing words.",
+      "interactions": "Array of {id, customer_id, product_id, timestamp, action}; unique ids, known product references, nonfuture timezone-aware timestamps; action browse or purchase.",
+      "request": "{customer_id: nonblank string, query: string, limit: integer from 1 through 100}; blank query means discovery.",
+      "config": "Optional {half_life_days: number in [0.001,36500] default 30, feedback_weight: number in [0,10] default 0.5, personalization_weight: number in [0,1] default 0.2}."
+    },
+    "output": {
+      "success": "{status: ok, schema_version: 1, synthetic: true, feedback: FeedbackResult, behavior: BehaviorResult, semantic: SearchResult}",
+      "failure": "{status: error, error: string}; CLI exit code 2; a single JSON object on stdout.",
+      "FeedbackResult": "input_count, unique_count, duplicate_count, deduplicated items with representative id and source_ids, themes with verbatim evidence, product_signals covering every catalog product.",
+      "BehaviorResult": "cold_start, half_life_days, ranking containing every product exactly once with score decomposition, normalized score, interaction evidence, feedback ids and themes.",
+      "SearchResult": "query, embedding_used, per-product weighted term-frequency index, limited relevance-ranked results with score decomposition and carried feedback evidence."
+    },
+    "validation": "One Validator class validates input and each intermediate/output contract. Downstream stages explicitly validate their upstream handoffs. Validation enforces coverage, references, verbatim excerpts, finite scores, score decomposition, stable ordering and evidence propagation. Unknown input fields, duplicate JSON keys, nonfinite numbers, unsupported actions, naive/future timestamps and malformed files are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "feedback",
+      "to": "behavior",
+      "contract": "Validated FeedbackResult.product_signals maps every product id to average deduplicated sentiment, supporting feedback ids and themes.",
+      "effect": "Product sentiment adds feedback_weight * sentiment to the behavioral score; provenance and themes are retained."
+    },
+    {
+      "from": "behavior",
+      "to": "semantic",
+      "contract": "Validated BehaviorResult.ranking provides normalized product affinity, feedback ids and themes.",
+      "effect": "Affinity reranks relevant search candidates; blank-query discovery uses affinity alone. Feedback ids and themes propagate to final results."
+    }
+  ],
+  "behavior": {
+    "feedback": {
+      "deduplication": "NFKC normalization, case folding and Unicode word tokenization; duplicate key includes customer and product. Earliest timestamp then id chooses the representative; all source ids remain traceable.",
+      "themes": "Deterministic keyword categories quality, comfort, value and delivery; other for unmatched feedback. Supporting excerpts reproduce original text exactly.",
+      "sentiment": "Local positive/negative lexicons with immediate not/never/no negation; (positive-negative)/max(1,positive+negative). Product averages count each deduplicated observation once."
+    },
+    "personalization": {
+      "event_score": "Sum(action_weight * 2 ** (-age_days / half_life_days)); browse weight 1, purchase weight 3.",
+      "tag_score": "0.25 times mean affinity over unique normalized product tags; tag affinity sums selected event contributions from products carrying that tag.",
+      "total": "event_score + tag_score + feedback_weight * product_sentiment.",
+      "normalization": "Min-max across catalog; all tied values map to 0.5.",
+      "cold_start": "If the requested customer has no interactions, use global recency-weighted interactions; without global events, fall back to feedback; without either, deterministic product-id ties."
+    },
+    "search": {
+      "index": "In-memory Unicode token index; title frequency weighted 3, tags 2, description 1; fixed synonym canonicalization includes couch/sofa and trainers/sneakers/sneaker.",
+      "lexical_score": "Sum over distinct matched query terms of (1 + log(weighted term frequency)) * (1 + log((1 + catalog size)/(1 + document frequency))). Normalize by maximum candidate lexical score.",
+      "embedding_interface": "Optional injected callable receives [query, product text in sorted-id order...] and returns an equal-length list/tuple of finite, nonzero, equal-dimensional numeric vectors. Only local test fixtures are used. Stable scaled normalization prevents finite-vector overflow.",
+      "relevance": "Without embeddings, normalized lexical score; with embeddings, 0.8 * normalized lexical score + 0.2 * max(0, cosine similarity).",
+      "final_score": "(1-personalization_weight) * relevance + personalization_weight * behavior.normalized_score. Blank-query discovery uses normalized affinity alone.",
+      "candidate_policy": "Nonblank queries require a lexical hit or positive embedding cosine; personalization alone never admits unrelated products. No match returns an empty list.",
+      "ties": "Descending final score, descending relevance, then ascending product id; behavior ties also resolve by ascending product id."
+    },
+    "determinism": "Explicit as_of, sorted processing, stable ties, no random state, no input mutation and no live services. An injected callable must itself be deterministic to preserve this property."
+  },
+  "scope": {
+    "included": [
+      "One sequential integrated pipeline and shared validation layer",
+      "Synthetic catalog, feedback, customer identities and interactions",
+      "Deduplication, theme evidence and lexicon sentiment",
+      "Recency and tag-based ranking with explainable cold start",
+      "Weighted lexical search, small synonym dictionary and optional local embedding seam",
+      "CLI JSON success/error protocol",
+      "Standard-library unittest suite with isolated in-memory invalid-file fixtures"
+    ],
+    "excluded": [
+      "Live LLM/model providers, network access and external dependencies",
+      "Trained semantic models or broad natural-language understanding",
+      "Fuzzy duplicate detection, sarcasm detection or multilingual sentiment",
+      "Database persistence, distributed indexes, incremental updates and production scale",
+      "Authentication, deployment infrastructure and enterprise operations",
+      "Inventory, pricing optimization and learned recommender training",
+      "Independent standalone programs for each stage"
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "status": "passed",
+      "tests_run": 32,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli_example": {
+      "status": "ok",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "feedback_input_count": 4,
+      "feedback_unique_count": 3,
+      "first_search_product": "p1"
+    },
+    "coverage": [
+      "Each stage and numeric recency formula",
+      "Deduplication boundaries and traceable theme excerpts",
+      "Feedback changes propagate through behavior to final search ordering",
+      "User isolation, unseen-tag transfer and cold-start fallbacks",
+      "Lexical synonyms, no-match queries, limits and discovery",
+      "Injected embedding success, exceptions, malformed vectors and overflow resistance",
+      "Intermediate handoff tampering and downstream-stage blocking",
+      "Empty catalog, no history, stable ties and permutation determinism",
+      "Invalid schemas, references, future dates, timezone normalization and UTC overflow",
+      "CLI subprocess success, missing files, argument errors, malformed JSON and decoding failures"
+    ]
+  }
+}

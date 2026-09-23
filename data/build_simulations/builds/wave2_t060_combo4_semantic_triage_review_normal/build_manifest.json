@@ -1,0 +1,93 @@
+{
+  "build_id": "wave2_t060_combo4_semantic_triage_review_normal",
+  "composition_label": "semantic -> triage -> review -> normal",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written in the isolated build directory; no other build or repository files accessed.",
+    "runtime": "Python 3.10+ standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "request": {
+      "schema_version": "Exactly 1.0",
+      "synthetic": "Must be true",
+      "query": "Nonempty text containing words",
+      "products": "Unique id, name, description, source_ids referencing sources",
+      "tickets": "Unique id, subject, body",
+      "requirements": "Unique id, description, category (route category or *), nonempty terms",
+      "sources": "Unique id, title, passages with locally unique id and nonempty text",
+      "config": "search_limit/research_limit integers 1..100; ordered routing_rules with category/terms/priority/owner; default_route with category/priority/owner"
+    },
+    "output": "schema_version, synthetic, status, validated input snapshot, ordered stages semantic/triage/review/normal",
+    "errors": "One JSON object with schema_version, status=error, error.type and error.message; CLI exit 2",
+    "validation": "One shared validation module in implementation.py validates requests, ordered stage handoffs, coverage, ownership, source references and exact character citation spans. Unknown request keys and duplicate JSON keys are rejected.",
+    "citation": "source_id, passage_id, start inclusive, end exclusive, quote; offsets are Python Unicode character positions in the original passage"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "semantic",
+      "to": "triage",
+      "data": "Ranked product IDs, source IDs and product text drive contextual routing; validation prevents source provenance changes."
+    },
+    {
+      "from": "triage",
+      "to": "review",
+      "data": "Ticket ID, route category, accountable owner, priority and eligible product sources determine scoped requirements and evidence."
+    },
+    {
+      "from": "review",
+      "to": "normal",
+      "data": "Per-ticket requirement status and missing terms focus passage retrieval; owner, priority and unresolved terms persist in extractive findings."
+    }
+  ],
+  "behavior": {
+    "semantic": "In-memory TF-IDF cosine index, casefolded Unicode word tokens, score descending then ID ascending. Only positive scores returned. Optional injected embedding(text) callable adds positive cosine similarity; vectors must be finite numeric lists/tuples with consistent dimensions. No live provider.",
+    "triage": "Each matching ticket term contributes 3; each matching selected-product-context term contributes 1. Highest rule score wins; configuration order breaks ties; default route handles zero matches. Priority and accountable owner are explicit configuration values.",
+    "review": "Each applicable requirement selects the single eligible passage matching most whole-word phrases; ties use source and passage ID. All terms yields supported, some partial, none missing. Exact evidence and missing terms are preserved. This is a literal-evidence heuristic, not entailment or certification.",
+    "normal": "Retrieves passages only from routed product sources using missing terms (otherwise requirement terms) and requirement description. Extracts the sentence with greatest query-token overlap; earliest sentence wins ties. Findings are exact quotes, never generated claims. Research does not silently resolve review gaps.",
+    "empty_data": "Empty products, tickets, requirements or passages are valid if references remain valid. No search hit yields no eligible sources and no fabricated evidence.",
+    "determinism": "Stable scores and tie rules; input is deep-copied and not mutated. Injected callables must themselves be deterministic for repeatable results.",
+    "synthetic_fixtures": "Example includes one relevant charger, one irrelevant fan, one warranty ticket, supported/partial/missing evidence, and an unrelated source that must not close gaps."
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI and library pipeline with shared schema and validation",
+      "Configurable accountable routing",
+      "Optional fixture-tested embedding injection",
+      "Traceable literal evidence gaps",
+      "Source-restricted extractive research",
+      "CLI JSON validation and file-error handling"
+    ],
+    "excluded": [
+      "Live providers, networks, external packages, agents and git",
+      "Enterprise persistence, authentication, concurrent services and deployment",
+      "Semantic entailment, certification, legal or compliance judgments",
+      "Model training, learned classifiers and generated research conclusions"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "test_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "verified_runtime": "Python 3.13.15",
+    "coverage": "All four stages, embedding fixtures and failures, source isolation, handoff tampering, route ownership, exact Unicode/newline citations, edge cases, malformed input, and CLI success/file/usage/JSON errors."
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC",
+  "profile": {
+    "interests": {"privacy": 5, "analytics": 3},
+    "excluded_topics": ["advertising"],
+    "excluded_items": [],
+    "experience": "beginner",
+    "preferred_format": "text",
+    "completed_steps": [],
+    "limit": 3
+  },
+  "catalog": [
+    {"id": "privacy-kit", "title": "Synthetic Privacy Starter", "topics": ["privacy"]},
+    {"id": "analytics-kit", "title": "Synthetic Analytics Starter", "topics": ["analytics"]},
+    {"id": "ad-kit", "title": "Synthetic Advertising Analytics", "topics": ["analytics", "advertising"]}
+  ],
+  "steps": [
+    {"id": "basics", "topic": "foundations", "format": "text", "audience": "beginner", "prerequisites": [], "queries": ["data inventory"]},
+    {"id": "privacy", "topic": "privacy", "format": "text", "audience": "all", "prerequisites": ["basics"], "queries": ["retention schedule"]},
+    {"id": "analytics", "topic": "analytics", "format": "video", "audience": "all", "prerequisites": ["basics"], "queries": ["aggregate metrics"]}
+  ],
+  "allowed_hosts": ["research.example.test"],
+  "sources": [
+    {"id": "guide", "url": "https://research.example.test/synthetic-guide", "title": "SYNTHETIC research snapshot", "body": "SYNTHETIC guidance: Maintain a data inventory. Define a retention schedule. Prefer aggregate metrics. This is invented fixture content, not authoritative guidance."}
+  ],
+  "documents": [
+    {"id": "policy", "title": "SYNTHETIC draft policy", "body": "SYNTHETIC policy: We maintain a data inventory and a retention schedule. Analytics procedures remain unwritten."}
+  ],
+  "requirements": [
+    {"id": "inventory-check", "step_id": "basics", "phrase": "data inventory", "document_ids": ["policy"]},
+    {"id": "retention-check", "step_id": "privacy", "phrase": "retention schedule", "document_ids": ["policy"]},
+    {"id": "metrics-check", "step_id": "analytics", "phrase": "aggregate metrics", "document_ids": ["policy"]}
+  ]
+}

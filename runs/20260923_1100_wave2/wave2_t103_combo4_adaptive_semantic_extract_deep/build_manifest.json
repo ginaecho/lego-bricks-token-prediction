@@ -1,0 +1,55 @@
+{
+  "build_id": "wave2_t103_combo4_adaptive_semantic_extract_deep",
+  "composition_label": "Adaptive onboarding -> Semantic search -> Structured extraction -> Deep research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated reference implementation authored for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "schema_version, synthetic=true, profile, query, documents[{id,title,text}], fields[{name,aliases,type,required}], optional options",
+    "profile": "experience: novice/intermediate/expert; focus_terms: unique strings; completed_prerequisites: search_basics/source_verification; explanation_detail: brief/detailed",
+    "options": "top_k integer 1..100 (default 5); min_score finite number 0..1 (default 0.01)",
+    "field_types": ["string", "number", "boolean", "date"],
+    "output": "schema_version, status=ok, synthetic=true, stages{adaptive,semantic,extract,deep}; errors: schema_version,status=error,error",
+    "validation": "Shared validation helpers and validate_stage enforce boundary shapes, prerequisite state, ordering, identifiers, typed values, source spans and evidence-derived research.",
+    "span_convention": "Zero-based, half-open Unicode character offsets into the original document text, not bytes.",
+    "strict_json": "Duplicate object keys and nonfinite constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    "adaptive -> semantic: validated original query, preferences and prerequisite readiness; unmet prerequisites stop execution with a validation error",
+    "semantic -> extract: validated ordered document IDs and relevance scores select all and only retrieved documents",
+    "extract -> deep: validated schema fields, typed occurrences, original source spans, missing and invalid fields ground synthesis"
+  ],
+  "behavior": {
+    "adaptive": "Novices require search_basics and source_verification in order; other levels require source_verification. User-declared completion gates search. Preference selects explanation length and relevance refinements.",
+    "semantic": "Casefolded Unicode token inverted index; query terms weight 2 and additional preference terms weight 1; inverse-document-frequency weighted coverage; descending score and document-ID tie break.",
+    "optional_injection": "run_pipeline(data, embedder=callable): callable receives [expanded_query, document_title_plus_text, ...] once and returns same-count, equal-dimensional, nonzero finite numeric vectors. Hybrid uses 70% lexical and 30% nonnegative cosine. Fixture-tested; never calls a live provider.",
+    "extract": "Anchored case-insensitive Label: value lines; literal aliases; repeated fields retained; whitespace trimmed with original offsets retained. Strict finite numbers, yes/no/true/false booleans, ISO calendar dates. Invalid values retained with reasons and spans; required fields with no valid value are missing.",
+    "deep": "Groups exact typed values per schema field; repeated occurrences preserve provenance but document support is deduplicated. Multiple values, even within one source, produce disagreement. Missing, invalid, disputed and unsupported fields yield questions. No winner or truth probability is invented.",
+    "cli": "One JSON object to stdout. Success exit 0; validation, JSON, encoding and file failures exit 2.",
+    "determinism": "Stable token index, ranking tie break and group ordering; no randomness, timestamps, network, or filesystem mutation during execution."
+  },
+  "scope": {
+    "included": ["Single integrated in-memory pipeline", "Clearly labeled synthetic fixtures", "Strict shared schemas", "Auditable provenance", "Optional fixture-tested Python embedding callable", "CLI and unittest validation"],
+    "excluded": ["Live LLMs and providers", "Network research", "Arbitrary prose extraction", "PDF/OCR parsing", "Persistent search service", "Semantic entity resolution", "Currency/unit conversion", "Truth adjudication", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 28,
+    "unittest_failures": 0,
+    "cli_exit_code": 0,
+    "cli_stdout": "One valid JSON object with status ok",
+    "coverage": ["All four stages", "Prerequisite gating", "Preference handoff", "Ranking and top-k propagation", "Source spans and typed values", "Missing and invalid fields", "Contradictions and deduplicated support", "Empty results and corpus", "Injected embedding fixtures and failures", "Malformed schemas and handoffs", "Determinism", "CLI success, usage, file, JSON and validation errors"]
+  }
+}

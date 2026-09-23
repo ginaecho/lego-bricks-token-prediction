@@ -1,0 +1,536 @@
+{
+  "id": "wave2_t066_combo3_web_extract_behavior",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "research",
+      "documents",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "Research",
+      "Document automation",
+      "Personalized discovery"
+    ],
+    "types": [
+      "web",
+      "extract",
+      "behavior"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 1,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 5,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Allowlisted URL ingestion, retrieval and provenance-preserving findings.",
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling."
+  ],
+  "integration": {
+    "ordered_types": [
+      "web",
+      "extract",
+      "behavior"
+    ],
+    "edges": [
+      {
+        "from": "web",
+        "to": "extract",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "extract",
+        "to": "behavior",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "8877b0b93b3f6b073ffb0a9f22fcebd92dc363f2f10bdb97859b35529f134ee7",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "e35735d7a9a33406c6267cdcd890788a984c5f2e0a1d9dfb649923989bedcc3b",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t066_combo3_web_extract_behavior",
+  "membership_point_id": "combo3_web_extract_behavior",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "13048dc8752b06f176f0768a11abbbce3f7babb72ecc6d9a763ff459904e160d",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "33a31a2e-ff18-4fa5-9bd7-05904097f2b1",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 132107,
+    "output_tokens": 9937,
+    "cache_read_tokens": 119384,
+    "cache_write_tokens": 12705,
+    "total_tokens": 142044,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34448,
+        "agent_id": "33a31a2e-ff18-4fa5-9bd7-05904097f2b1",
+        "model": "gpt-6-astra",
+        "input_tokens": 14833,
+        "output_tokens": 703,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 796,
+        "reasoning_tokens": 514,
+        "duration_ms": 22291,
+        "created_at": "2026-09-23T10:21:03.395Z"
+      },
+      {
+        "id": 34454,
+        "agent_id": "33a31a2e-ff18-4fa5-9bd7-05904097f2b1",
+        "model": "gpt-6-astra",
+        "input_tokens": 15566,
+        "output_tokens": 7530,
+        "cache_read_tokens": 14830,
+        "cache_write_tokens": 733,
+        "reasoning_tokens": 140,
+        "duration_ms": 116609,
+        "created_at": "2026-09-23T10:23:00.815Z"
+      },
+      {
+        "id": 34455,
+        "agent_id": "33a31a2e-ff18-4fa5-9bd7-05904097f2b1",
+        "model": "gpt-6-astra",
+        "input_tokens": 23408,
+        "output_tokens": 277,
+        "cache_read_tokens": 15563,
+        "cache_write_tokens": 7842,
+        "reasoning_tokens": 123,
+        "duration_ms": 6566,
+        "created_at": "2026-09-23T10:23:07.460Z"
+      },
+      {
+        "id": 34461,
+        "agent_id": "33a31a2e-ff18-4fa5-9bd7-05904097f2b1",
+        "model": "gpt-6-astra",
+        "input_tokens": 25135,
+        "output_tokens": 1050,
+        "cache_read_tokens": 23405,
+        "cache_write_tokens": 1727,
+        "reasoning_tokens": 252,
+        "duration_ms": 18909,
+        "created_at": "2026-09-23T10:23:35.554Z"
+      },
+      {
+        "id": 34464,
+        "agent_id": "33a31a2e-ff18-4fa5-9bd7-05904097f2b1",
+        "model": "gpt-6-astra",
+        "input_tokens": 26423,
+        "output_tokens": 256,
+        "cache_read_tokens": 25132,
+        "cache_write_tokens": 1288,
+        "reasoning_tokens": 0,
+        "duration_ms": 5064,
+        "created_at": "2026-09-23T10:23:45.288Z"
+      },
+      {
+        "id": 34466,
+        "agent_id": "33a31a2e-ff18-4fa5-9bd7-05904097f2b1",
+        "model": "gpt-6-astra",
+        "input_tokens": 26742,
+        "output_tokens": 121,
+        "cache_read_tokens": 26420,
+        "cache_write_tokens": 319,
+        "reasoning_tokens": 0,
+        "duration_ms": 3442,
+        "created_at": "2026-09-23T10:23:52.537Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.47932250000000004,
+      "observed_cache_profile_estimate_usd": 0.21070850000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.75187,
+      "observed_cache_profile_estimate_usd": 5.75187,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 1,
+      "roi_satisfaction": 5,
+      "future_impact_potential": 4,
+      "delivery_quality": 3
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.48,
+    "pseudo_annual_cost_usd": 30000,
+    "pseudo_annual_ai_value_usd": 150000,
+    "pseudo_net_impact_usd": 120000,
+    "pseudo_roi_pct": 400.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.706s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "synthetic": true,
+      "research": {
+        "documents": [
+          {
+            "requested_url": "https://shop.example/red",
+            "url": "https://shop.example/products/red",
+            "retrieval_chain": [
+              "https://shop.example/red",
+              "https://shop.example/products/red"
+            ],
+            "text": "Synthetic product listing\nID: red\nTitle: Red building bricks\nCategory: toys\nPrice: 12.50\nStock: 8\n",
+            "sha256": "c3d2b2189310d2640524aec44bd866203372775d8a9afd12d3496216450b80cc",
+            "retrieved_at": "2026-09-23T12:00:00Z",
+            "transport": "synthetic_fixture"
+          },
+          {
+            "requested_url": "https://shop.example/blue",
+            "url": "https://shop.example/blue",
+            "retrieval_chain": [
+              "https://shop.example/blue"
+            ],
+            "text": "Synthetic product listing\nID: blue\nTitle: Blue building bricks\nCategory: toys\nPrice: 10\n",
+            "sha256": "e41bae50928a4f1aeb2a24a37940991576f274660219dae0b450f2e9612dd3c9",
+            "retrieved_at": "2026-09-23T12:00:00Z",
+            "transport": "synthetic_fixture"
+          },
+          {
+            "requested_url": "https://shop.example/book",
+            "url": "https://shop.example/book",
+            "retrieval_chain": [
+              "https://shop.example/book"
+            ],
+            "text": "Synthetic product listing\nID: book\nTitle: Garden handbook\nCategory: books\nPrice: 15\nStock: 4\n",
+            "sha256": "325bacff9197634f7db0749370acb3bda5fbc04e7bef8646071b9f6bec035546",
+            "retrieved_at": "2026-09-23T12:00:00Z",
+            "transport": "synthetic_fixture"
+          }
+        ]
+      },
+      "extraction": {
+        "records": [
+          {
+            "source": {
+              "url": "https://shop.example/products/red",
+              "sha256": "c3d2b2189310d2640524aec44bd866203372775d8a9afd12d3496216450b80cc"
+            },
+            "fields": {
+              "id": {
+                "status": "present",
+                "value": "red",
+                "span": [
+                  30,
+                  33
+                ]
+              },
+              "title": {
+                "status": "present",
+                "value": "Red building bricks",
+                "span": [
+                  41,
+                  60
+                ]
+              },
+              "category": {
+                "status": "present",
+                "value": "toys",
+                "span": [
+                  71,
+                  75
+                ]
+              },
+              "price": {
+                "status": "present",
+                "value": 12.5,
+                "span": [
+                  83,
+                  88
+                ]
+              },
+              "stock": {
+                "status": "present",
+                "value": 8,
+                "span": [
+                  96,
+                  97
+                ]
+              }
+            },
+            "missing_fields": [],
+            "missing_required": []
+          },
+          {
+            "source": {
+              "url": "https://shop.example/blue",
+              "sha256": "e41bae50928a4f1aeb2a24a37940991576f274660219dae0b450f2e9612dd3c9"
+            },
+            "fields": {
+              "id": {
+                "status": "present",
+                "value": "blue",
+                "span": [
+                  30,
+                  34
+                ]
+              },
+              "title": {
+                "status": "present",
+                "value": "Blue building bricks",
+                "span": [
+                  42,
+                  62
+                ]
+              },
+              "category": {
+                "status": "present",
+                "value": "toys",
+                "span": [
+                  73,
+                  77
+                ]
+              },
+              "price": {
+                "status": "present",
+                "value": 10.0,
+                "span": [
+                  85,
+                  87
+                ]
+              },
+              "stock": {
+                "status": "missing",
+                "value": null,
+                "span": null
+              }
+            },
+            "missing_fields": [
+              "stock"
+            ],
+            "missing_required": []
+          },
+          {
+            "source": {
+              "url": "https://shop.example/book",
+              "sha256": "325bacff9197634f7db0749370acb3bda5fbc04e7bef8646071b9f6bec035546"
+            },
+            "fields": {
+              "id": {
+                "status": "present",
+                "value": "book",
+                "span": [
+                  30,
+                  34
+                ]
+              },
+              "title": {
+                "status": "present",
+                "value": "Garden handbook",
+                "span": [
+                  42,
+                  57
+                ]
+              },
+              "category": {
+                "status": "present",
+                "value": "books",
+                "span": [
+                  68,
+                  73
+                ]
+              },
+              "price": {
+                "status": "present",
+                "value": 15.0,
+                "span": [
+                  81,
+                  83
+                ]
+              },
+              "stock": {
+                "status": "present",
+                "value": 4,
+                "span": [
+                  91,
+                  92
+                ]
+              }
+            },
+            "missing_fields": [],
+            "missing_required": []
+          }
+        ]
+      },
+      "behavior": {
+        "cold_start": false,
+        "events_used": 2,
+        "events_ignored": 0,
+        "excluded": [],
+        "recommendations": [
+          {
+            "id": "red",
+            "title": "Red building bricks",
+            "category": "toys",
+            "price": 12.5,
+            "stock": 8,
+            "source": {
+              "url": "https://shop.example/products/red",
+              "sha256": "c3d2b2189310d2640524aec44bd866203372775d8a9afd12d3496216450b80cc"
+            },
+            "score": 6.0,
+            "explanation": {
+              "direct_weight": 3.0,
+              "category_weight": 3.0
+            }
+          },
+          {
+            "id": "blue",
+            "title": "Blue building bricks",
+            "category": "toys",
+            "price": 10.0,
+            "stock": null,
+            "source": {
+              "url": "https://shop.example/blue",
+              "sha256": "e41bae50928a4f1aeb2a24a37940991576f274660219dae0b450f2e9612dd3c9"
+            },
+            "score": 3.0,
+            "explanation": {
+              "direct_weight": 0,
+              "category_weight": 3.0
+            }
+          },
+          {
+            "id": "book",
+            "title": "Garden handbook",
+            "category": "books",
+            "price": 15.0,
+            "stock": 4,
+            "source": {
+              "url": "https://shop.example/book",
+              "sha256": "325bacff9197634f7db0749370acb3bda5fbc04e7bef8646071b9f6bec035546"
+            },
+            "score": 1.0,
+            "explanation": {
+              "direct_weight": 0.5,
+              "category_weight": 0.5
+            }
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t066_combo3_web_extract_behavior",
+    "artifact_sha256": {
+      "implementation.py": "6cca5d6090e0f9d3b71307bee4a102c51fbea764795fc7382895a1dfbec7bf61",
+      "test_implementation.py": "54f92b1d53da8d8517b202c75dd6d92b2f649aeb79576ce132dce901c95ecff2",
+      "example_input.json": "f5a9042ac5a5288803e42fea3f5c5877144657612aa73c1d71268b6f22a738c3",
+      "build_manifest.json": "5c92d1101ee8e8686ab693de37d6effbab8a425b14a8ad54f55c65b0ebe39b14"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

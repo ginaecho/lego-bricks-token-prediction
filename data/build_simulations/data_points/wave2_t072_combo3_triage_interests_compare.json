@@ -1,0 +1,467 @@
+{
+  "id": "wave2_t072_combo3_triage_interests_compare",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "support",
+      "recommend",
+      "search"
+    ],
+    "basic_functionalities": [
+      "AI customer support",
+      "Personalized discovery",
+      "Smart product search"
+    ],
+    "types": [
+      "triage",
+      "interests",
+      "compare"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Preference ranking, exclusion enforcement and grounded explanations.",
+    "Attribute normalization, side-by-side comparison and preference ranking."
+  ],
+  "integration": {
+    "ordered_types": [
+      "triage",
+      "interests",
+      "compare"
+    ],
+    "edges": [
+      {
+        "from": "triage",
+        "to": "interests",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "interests",
+        "to": "compare",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "1da83a1ef7420e3f17c7a4019ac8e132cd2ce6ce11233e5ed6ef6166d7a59d95",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "96a967a0e3988f5c02c7f646e7177aa21880a8f09a263f2358eaf9083f44e3e3",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t072_combo3_triage_interests_compare",
+  "membership_point_id": "combo3_triage_interests_compare",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "9ac36db987e3447220ca2b28de22448465ef878a6b9e2f0ef064c01401576f58",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "50b7b23e-bc4a-4042-aa9c-2615efd17ec5",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 140231,
+    "output_tokens": 12062,
+    "cache_read_tokens": 125999,
+    "cache_write_tokens": 14214,
+    "total_tokens": 152293,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34486,
+        "agent_id": "50b7b23e-bc4a-4042-aa9c-2615efd17ec5",
+        "model": "gpt-6-astra",
+        "input_tokens": 14839,
+        "output_tokens": 351,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 802,
+        "reasoning_tokens": 172,
+        "duration_ms": 8749,
+        "created_at": "2026-09-23T10:25:52.769Z"
+      },
+      {
+        "id": 34523,
+        "agent_id": "50b7b23e-bc4a-4042-aa9c-2615efd17ec5",
+        "model": "gpt-6-astra",
+        "input_tokens": 15220,
+        "output_tokens": 10844,
+        "cache_read_tokens": 14836,
+        "cache_write_tokens": 381,
+        "reasoning_tokens": 1034,
+        "duration_ms": 166032,
+        "created_at": "2026-09-23T10:30:45.387Z"
+      },
+      {
+        "id": 34525,
+        "agent_id": "50b7b23e-bc4a-4042-aa9c-2615efd17ec5",
+        "model": "gpt-6-astra",
+        "input_tokens": 26384,
+        "output_tokens": 186,
+        "cache_read_tokens": 15217,
+        "cache_write_tokens": 11164,
+        "reasoning_tokens": 24,
+        "duration_ms": 4201,
+        "created_at": "2026-09-23T10:30:57.814Z"
+      },
+      {
+        "id": 34529,
+        "agent_id": "50b7b23e-bc4a-4042-aa9c-2615efd17ec5",
+        "model": "gpt-6-astra",
+        "input_tokens": 27539,
+        "output_tokens": 367,
+        "cache_read_tokens": 26381,
+        "cache_write_tokens": 1155,
+        "reasoning_tokens": 48,
+        "duration_ms": 7070,
+        "created_at": "2026-09-23T10:31:16.397Z"
+      },
+      {
+        "id": 34533,
+        "agent_id": "50b7b23e-bc4a-4042-aa9c-2615efd17ec5",
+        "model": "gpt-6-astra",
+        "input_tokens": 27998,
+        "output_tokens": 217,
+        "cache_read_tokens": 27536,
+        "cache_write_tokens": 459,
+        "reasoning_tokens": 0,
+        "duration_ms": 4036,
+        "created_at": "2026-09-23T10:31:24.864Z"
+      },
+      {
+        "id": 34534,
+        "agent_id": "50b7b23e-bc4a-4042-aa9c-2615efd17ec5",
+        "model": "gpt-6-astra",
+        "input_tokens": 28251,
+        "output_tokens": 97,
+        "cache_read_tokens": 27995,
+        "cache_write_tokens": 253,
+        "reasoning_tokens": 0,
+        "duration_ms": 2717,
+        "created_at": "2026-09-23T10:31:34.213Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5315075,
+      "observed_cache_profile_estimate_usd": 0.24800975,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.378089999999999,
+      "observed_cache_profile_estimate_usd": 6.378089999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 0,
+      "roi_satisfaction": 5,
+      "future_impact_potential": 0,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.62,
+    "pseudo_annual_cost_usd": 50000,
+    "pseudo_annual_ai_value_usd": 60000,
+    "pseudo_net_impact_usd": 10000,
+    "pseudo_roi_pct": 20.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............................\n----------------------------------------------------------------------\nRan 29 tests in 1.073s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "data_label": "synthetic",
+      "status": "ok",
+      "ticket_id": "SYN-TICKET-001",
+      "triage": {
+        "category": "audio",
+        "priority": "urgent",
+        "route": {
+          "team": "Synthetic Audio Support",
+          "owner": "synthetic-audio-oncall"
+        },
+        "category_evidence": [
+          "headphones"
+        ],
+        "used_fallback": false,
+        "priority_evidence": [
+          {
+            "priority": "high",
+            "keywords": [
+              "broken"
+            ]
+          },
+          {
+            "priority": "urgent",
+            "keywords": [
+              "urgent"
+            ]
+          }
+        ]
+      },
+      "interests": {
+        "category": "audio",
+        "priority": "urgent",
+        "accountable_route": {
+          "team": "Synthetic Audio Support",
+          "owner": "synthetic-audio-oncall"
+        },
+        "recommendations": [
+          {
+            "product_id": "SYN-P1",
+            "interest_score": 1.0,
+            "matched_interests": [
+              {
+                "tag": "travel",
+                "weight": 3
+              },
+              {
+                "tag": "wireless",
+                "weight": 2
+              }
+            ],
+            "explanation": [
+              "Catalog tag 'travel' matches preference (weight 3).",
+              "Catalog tag 'wireless' matches preference (weight 2)."
+            ]
+          },
+          {
+            "product_id": "SYN-P2",
+            "interest_score": 0.4,
+            "matched_interests": [
+              {
+                "tag": "wireless",
+                "weight": 2
+              }
+            ],
+            "explanation": [
+              "Catalog tag 'wireless' matches preference (weight 2)."
+            ]
+          }
+        ],
+        "excluded": [
+          {
+            "product_id": "SYN-P3",
+            "reasons": [
+              "explicit_product_id"
+            ]
+          },
+          {
+            "product_id": "SYN-P4",
+            "reasons": [
+              "excluded_tag:leather"
+            ]
+          }
+        ],
+        "category_ineligible": [
+          "SYN-P5"
+        ],
+        "eligible_count": 2
+      },
+      "comparison": {
+        "category": "audio",
+        "priority": "urgent",
+        "accountable_route": {
+          "team": "Synthetic Audio Support",
+          "owner": "synthetic-audio-oncall"
+        },
+        "attribute_units": {
+          "price": "USD",
+          "weight": "g",
+          "battery_life": "h"
+        },
+        "ranking_basis": "weighted_attribute_utility",
+        "rows": [
+          {
+            "product_id": "SYN-P2",
+            "name": "Synthetic Budget Two",
+            "normalized_attributes": {
+              "price": 80.0,
+              "weight": 250.0,
+              "battery_life": 30.0
+            },
+            "interest_score": 0.4,
+            "preference_score": 0.6666666666666666,
+            "preference_evidence": [
+              {
+                "attribute": "price",
+                "direction": "min",
+                "weight": 3,
+                "normalized_value": 80.0,
+                "utility": 1.0,
+                "explanation": "Catalog value 80.0 USD; prefer min."
+              },
+              {
+                "attribute": "weight",
+                "direction": "min",
+                "weight": 2,
+                "normalized_value": 250.0,
+                "utility": 0.0,
+                "explanation": "Catalog value 250.0 g; prefer min."
+              },
+              {
+                "attribute": "battery_life",
+                "direction": "max",
+                "weight": 1,
+                "normalized_value": 30.0,
+                "utility": 1.0,
+                "explanation": "Catalog value 30.0 h; prefer max."
+              }
+            ],
+            "rank": 1
+          },
+          {
+            "product_id": "SYN-P1",
+            "name": "Synthetic Travel One",
+            "normalized_attributes": {
+              "price": 120.0,
+              "weight": 200.0,
+              "battery_life": 20.0
+            },
+            "interest_score": 1.0,
+            "preference_score": 0.3333333333333333,
+            "preference_evidence": [
+              {
+                "attribute": "price",
+                "direction": "min",
+                "weight": 3,
+                "normalized_value": 120.0,
+                "utility": 0.0,
+                "explanation": "Catalog value 120.0 USD; prefer min."
+              },
+              {
+                "attribute": "weight",
+                "direction": "min",
+                "weight": 2,
+                "normalized_value": 200.0,
+                "utility": 1.0,
+                "explanation": "Catalog value 200.0 g; prefer min."
+              },
+              {
+                "attribute": "battery_life",
+                "direction": "max",
+                "weight": 1,
+                "normalized_value": 20.0,
+                "utility": 0.0,
+                "explanation": "Catalog value 20.0 h; prefer max."
+              }
+            ],
+            "rank": 2
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t072_combo3_triage_interests_compare",
+    "artifact_sha256": {
+      "implementation.py": "8f99ed793a24f4b3c5d82f78665eeb9c0af87bbbdbd9d975cb6263ff5f95cb3d",
+      "test_implementation.py": "66ba5c5f2f8eb33afc9a93746a34422a527ce5b2fab2aeb741d300aab0c08df1",
+      "example_input.json": "b829460f82765b6f0d95f343468dec7e458130589cce531605966f4c560fcb87",
+      "build_manifest.json": "f1d18ef6304ff4e280c82cda1903841a81203ab208f83133c5230dab23d98a18"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

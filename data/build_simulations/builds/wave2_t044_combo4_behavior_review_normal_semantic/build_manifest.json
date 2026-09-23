@@ -1,0 +1,56 @@
+{
+  "build_id": "wave2_t044_combo4_behavior_review_normal_semantic",
+  "composition_label": "behavior -> review -> normal -> semantic",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "envelope": ["schema_version", "fixture_label", "stage", "status", "data", "results"],
+    "data": ["as_of", "user_id", "query", "top_k", "half_life_days", "products", "events", "documents", "requirements"],
+    "input": "stage=input, status=ok, results={}, fixture_label starts with SYNTHETIC",
+    "output": "Same envelope and unchanged data; cumulative validated results; final stage=semantic.",
+    "validation": "One validate boundary before/after every stage; strict fields, unique ids, referential integrity, timezone-aware dates, finite numbers, exact citation spans and candidate/gap propagation.",
+    "citation": "document_id, start, end, quote; zero-based half-open Python Unicode character offsets into the original document text.",
+    "errors": "One JSON object with status=error and an error message; CLI exits 2."
+  },
+  "cross_stage_handoffs": [
+    "behavior -> review: top_k ranked candidate ids, preserving rank order",
+    "review -> normal: reviewed document ids, evidence citations, requirement checks and gap ids",
+    "normal -> semantic: only reviewed candidate contexts; extractive findings supply index text; exact citations and gaps retained in each hit"
+  ],
+  "behavior": {
+    "personalization": "Current user's view=1 and purchase=3, exponentially decayed by explicit as_of and half_life_days. Other users ignored. Future events rejected. Cold start ranks catalog popularity. Stable ties use popularity then product id.",
+    "review": "All requirement keyword tokens must occur in one sentence/newline-delimited passage. Status means only evidence_found or gap; no certification/compliance determination. Negation and truth are not inferred.",
+    "normal": "Extractive retrieval scores query token overlap plus gap-keyword overlap and linked requirement evidence. Top_k passages per product; exact spans and requirement links retained.",
+    "semantic": "In-memory inverted index over selected catalog text plus retrieved findings; log term frequency and smoothed inverse document frequency. Optional injected text-to-vector callable adds cosine similarity. Behavior score breaks search ties, then id.",
+    "embedding_contract": "Callable receives query/product context strings and returns a nonempty finite nonzero numeric list/tuple with fixed dimension. Failures are validation errors. Empty queries skip embeddings. No live provider. Determinism requires a deterministic injected callable.",
+    "empty_cases": "Empty catalog yields empty results; missing documents yield traceable gaps; empty query yields zero relevance and behavioral tie-breaking; no requirements is valid.",
+    "boundedness": "Behavior and per-product research outputs bounded by top_k. All selected candidates remain search hits, including zero-match hits. Suitable for small fixtures, not adversarial resource exhaustion."
+  },
+  "scope": {
+    "included": ["four-stage integrated pipeline", "shared envelope and validation", "synthetic fixtures", "CLI JSON errors", "injected embedding fixtures", "exact source provenance"],
+    "excluded": ["live models or providers", "networks", "LLM generation", "certification claims", "truth or negation verification", "persistent search services", "enterprise operation", "production security hardening"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "test_cases": 37,
+    "tests_passed": 37,
+    "failures": 0,
+    "cli_exit_code": 0,
+    "cli_stdout": "One validated JSON object with status=ok and stage=semantic.",
+    "coverage": ["all four stages", "cross-stage candidate/evidence/gap propagation", "determinism and input immutability", "empty data", "cold start", "timestamp and numeric validation", "CLI file/JSON/schema errors", "injected embedding fixtures and malformed vectors", "tampered handoff rejection", "Unicode citation offsets"]
+  }
+}

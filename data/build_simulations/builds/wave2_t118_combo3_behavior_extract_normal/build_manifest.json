@@ -1,0 +1,47 @@
+{
+  "build_id": "wave2_t118_combo3_behavior_extract_normal",
+  "composition_label": "behavior -> extract -> normal",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated reference implementation using clearly labeled synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict object: schema_version, synthetic=true, items, documents, events, fields, query, config. Items have id, categories, popularity in [0,1], document_ids; documents have id, title, text; events have item_id, kind=browse|purchase, nonnegative age_days. Fields have name, pattern with exactly one capturing group, type=string|number, required boolean. Config has positive half_life_days, max_items and max_findings.",
+    "output": "One envelope: schema_version, status=ok, validated input, behavior, extraction, research. Errors use status=error and error message with exit code 2.",
+    "validation": "Shared validate(value, stage) validates original input and stage boundaries, references, counts, ranking ordering, exact source citations, extracted field types and values, missing-field reports, and research provenance.",
+    "citations": "document_id, start (inclusive), end (exclusive), quote. Offsets count Python Unicode code points in original document text."
+  },
+  "cross_stage_handoffs": [
+    "Behavior selects ranked items and deduplicated document_ids; extraction validates and processes exactly those documents in that order.",
+    "Extraction provides typed fields, citations, missing fields and conversion diagnostics. Research validates these records, restricts retrieval to their documents, and links fields whose spans are contained in each finding."
+  ],
+  "behavior": {
+    "ranking": "Event weight = (purchase:3, browse:1) * 2^(-age_days/half_life_days). Weight is distributed equally across event item categories. Candidate score sums matching category weights plus 0.25 times its direct event weights. Item id breaks ties.",
+    "cold_start": "No positive event weights, including fully decayed histories: rank by popularity, then item id. Empty catalogs are valid.",
+    "extraction": "Case-sensitive regex patterns use the first match and exactly one capture group. Preserve string values; convert numbers to finite floats. Absent/blank captures are missing; invalid numeric captures additionally report errors. Missing required fields do not stop research.",
+    "research": "Deterministic sentence-like passage splitting at periods, exclamation marks, question marks and newlines. Casefolded Unicode word-token overlap divided by query token count; positive-score passages only. Ties sort by document id then source offset. Findings are exact source text, not generated assertions.",
+    "determinism": "No clock, random source, network, model, or external dependency."
+  },
+  "scope": {
+    "included": ["Integrated CLI", "Shared strict schema and validation", "Recency ranking and cold-start fallback", "Regex extraction and missing-field reporting", "Exact source citations", "Bounded extractive passage retrieval", "Synthetic examples and unit tests"],
+    "excluded": ["Live providers or optional LLM execution", "External search", "OCR or binary document formats", "Semantic inference", "Production-scale indexing", "Authentication and persistence", "Untrusted-regex execution hardening", "Language-aware sentence segmentation or decimal-aware splitting"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 23, "passed": 23, "failed": 0},
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status ok",
+    "error_behavior": "Missing files and invalid usage verified in subprocesses; malformed JSON, duplicate keys, nonfinite JSON and schema failures verified through CLI main."
+  }
+}

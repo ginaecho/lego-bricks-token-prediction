@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "profile": {
+    "experience": "beginner",
+    "preferences": ["interactive", "selling"],
+    "completed": []
+  },
+  "actions": [
+    {"id": "account", "title": "Synthetic account setup", "prerequisites": [], "tags": ["selling"], "format": "interactive", "difficulty": 1},
+    {"id": "listing", "title": "Synthetic first listing", "prerequisites": ["account"], "tags": ["selling"], "format": "text", "difficulty": 1},
+    {"id": "analytics", "title": "Synthetic analytics tour", "prerequisites": ["listing"], "tags": ["analytics"], "format": "video", "difficulty": 3},
+    {"id": "browse", "title": "Synthetic browsing tour", "prerequisites": [], "tags": ["buying"], "format": "video", "difficulty": 1}
+  ],
+  "tickets": [
+    {"id": "SYN-1", "text": "The listing upload is broken and confusing.", "action_id": "listing", "severity": "high"},
+    {"id": "SYN-2", "text": "Great payment guide, but I have a question.", "action_id": "account", "severity": "low"},
+    {"id": "SYN-3", "text": "Please explain these metrics.", "action_id": "analytics", "severity": "low"}
+  ],
+  "routing": {
+    "rules": [
+      {"category": "technical", "keywords": ["upload", "broken"], "priority": "medium", "owner": "synthetic-platform-team"},
+      {"category": "billing", "keywords": ["payment", "invoice"], "priority": "low", "owner": "synthetic-billing-team"}
+    ],
+    "fallback": {"category": "general", "priority": "low", "owner": "synthetic-support-team"}
+  }
+}

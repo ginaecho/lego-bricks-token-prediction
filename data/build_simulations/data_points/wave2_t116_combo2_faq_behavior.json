@@ -1,0 +1,331 @@
+{
+  "id": "wave2_t116_combo2_faq_behavior",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "support",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "AI customer support",
+      "Personalized discovery"
+    ],
+    "types": [
+      "faq",
+      "behavior"
+    ],
+    "functionality_count": 2,
+    "integration_edge_count": 1,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 9,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.75,
+    "staff_data_scientist": 0.25,
+    "staff_architect": 0.125,
+    "staff_consultant": 0.125,
+    "staff_software_engineer": 0.625,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 1,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 1,
+    "planned_operation_verify": 2,
+    "planned_operation_write": 2
+  },
+  "requirements": [
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling."
+  ],
+  "integration": {
+    "ordered_types": [
+      "faq",
+      "behavior"
+    ],
+    "edges": [
+      {
+        "from": "faq",
+        "to": "behavior",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "615c4f13a534b450fe811bfaf7768c14bed8d6711d0d7e6262ccee637d068c5c",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "4b4daeffcbd55a059df4fd437624ea6e6331aa947d0b4aea8f71b4f0299bf58c",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t116_combo2_faq_behavior",
+  "membership_point_id": "combo2_faq_behavior",
+  "trial_kind": "repeat_of_wave2",
+  "repeat_of": "combo2_faq_behavior",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "8cd7a79fd23f566b2623f68cbda329f112083845a7710739cd9b76a5eae34280",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "384057bd-1681-4a3a-b6d7-00880bdc4215",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 118167,
+    "output_tokens": 6932,
+    "cache_read_tokens": 109375,
+    "cache_write_tokens": 8774,
+    "total_tokens": 125099,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34906,
+        "agent_id": "384057bd-1681-4a3a-b6d7-00880bdc4215",
+        "model": "gpt-6-astra",
+        "input_tokens": 14830,
+        "output_tokens": 563,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 772,
+        "reasoning_tokens": 385,
+        "duration_ms": 17037,
+        "created_at": "2026-09-23T11:15:17.484Z"
+      },
+      {
+        "id": 34922,
+        "agent_id": "384057bd-1681-4a3a-b6d7-00880bdc4215",
+        "model": "gpt-6-astra",
+        "input_tokens": 15425,
+        "output_tokens": 5438,
+        "cache_read_tokens": 14827,
+        "cache_write_tokens": 595,
+        "reasoning_tokens": 0,
+        "duration_ms": 81203,
+        "created_at": "2026-09-23T11:16:48.170Z"
+      },
+      {
+        "id": 34923,
+        "agent_id": "384057bd-1681-4a3a-b6d7-00880bdc4215",
+        "model": "gpt-6-astra",
+        "input_tokens": 21175,
+        "output_tokens": 136,
+        "cache_read_tokens": 15422,
+        "cache_write_tokens": 5750,
+        "reasoning_tokens": 0,
+        "duration_ms": 3557,
+        "created_at": "2026-09-23T11:16:49.546Z"
+      },
+      {
+        "id": 34924,
+        "agent_id": "384057bd-1681-4a3a-b6d7-00880bdc4215",
+        "model": "gpt-6-astra",
+        "input_tokens": 21641,
+        "output_tokens": 458,
+        "cache_read_tokens": 21172,
+        "cache_write_tokens": 466,
+        "reasoning_tokens": 91,
+        "duration_ms": 8348,
+        "created_at": "2026-09-23T11:16:53.249Z"
+      },
+      {
+        "id": 34925,
+        "agent_id": "384057bd-1681-4a3a-b6d7-00880bdc4215",
+        "model": "gpt-6-astra",
+        "input_tokens": 22264,
+        "output_tokens": 229,
+        "cache_read_tokens": 21638,
+        "cache_write_tokens": 623,
+        "reasoning_tokens": 0,
+        "duration_ms": 4837,
+        "created_at": "2026-09-23T11:16:55.074Z"
+      },
+      {
+        "id": 34928,
+        "agent_id": "384057bd-1681-4a3a-b6d7-00880bdc4215",
+        "model": "gpt-6-astra",
+        "input_tokens": 22832,
+        "output_tokens": 108,
+        "cache_read_tokens": 22261,
+        "cache_write_tokens": 568,
+        "reasoning_tokens": 0,
+        "duration_ms": 2879,
+        "created_at": "2026-09-23T11:17:02.848Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.39939749999999996,
+      "observed_cache_profile_estimate_usd": 0.15330375,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.792769999999999,
+      "observed_cache_profile_estimate_usd": 4.792769999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 4,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 4,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.62,
+    "pseudo_annual_cost_usd": 35000,
+    "pseudo_annual_ai_value_usd": 30000,
+    "pseudo_net_impact_usd": -5000,
+    "pseudo_roi_pct": -14.285714285714286,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................\n----------------------------------------------------------------------\nRan 20 tests in 0.727s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "behavior": {
+        "cold_start": false,
+        "recommendations": [
+          {
+            "components": {
+              "faq": 1.0,
+              "history": 1.0,
+              "popularity": 0.04
+            },
+            "faq_source_ids": [
+              "faq-bottle"
+            ],
+            "name": "Synthetic Trail Bottle",
+            "product_id": "bottle",
+            "score": 2.04
+          },
+          {
+            "components": {
+              "faq": 0.0,
+              "history": 1.5,
+              "popularity": 0.08
+            },
+            "faq_source_ids": [],
+            "name": "Synthetic Day Pack",
+            "product_id": "pack",
+            "score": 1.58
+          },
+          {
+            "components": {
+              "faq": 0.0,
+              "history": 0.0,
+              "popularity": 0.06
+            },
+            "faq_source_ids": [],
+            "name": "Synthetic Sun Hat",
+            "product_id": "hat",
+            "score": 0.06
+          }
+        ]
+      },
+      "faq": {
+        "answer": "Clean the trail bottle by hand with warm water. Do not use a dishwasher.",
+        "confidence": 1.0,
+        "product_ids": [
+          "bottle"
+        ],
+        "reason": "Extracted verbatim from cited article.",
+        "source_ids": [
+          "faq-bottle"
+        ],
+        "status": "answered"
+      },
+      "fixture_label": "SYNTHETIC: fictional outdoor shop and single-user events",
+      "schema_version": 1,
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t116_combo2_faq_behavior",
+    "artifact_sha256": {
+      "implementation.py": "d73387ce50a57cc84401be29dc0c64e4d992f47a06015ef4373d664e36a089dd",
+      "test_implementation.py": "13275eacc563bef42eefb360b292e306729ef7f00d8f7d635dba557acc29bdeb",
+      "example_input.json": "6b7c4479d871b59f3d056d1eea6e5b025076555b9cced5166fd90a6aca0e2808",
+      "build_manifest.json": "b8ac6c62be05ee414c95dbafc3fffa5c4bdb964df92889e4a592d48106f5f64f"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

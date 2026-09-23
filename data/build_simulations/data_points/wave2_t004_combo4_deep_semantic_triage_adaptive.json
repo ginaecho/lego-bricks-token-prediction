@@ -1,0 +1,497 @@
+{
+  "id": "wave2_t004_combo4_deep_semantic_triage_adaptive",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "research",
+      "search",
+      "support",
+      "onboard"
+    ],
+    "basic_functionalities": [
+      "Research",
+      "Smart product search",
+      "AI customer support",
+      "Guided onboarding"
+    ],
+    "types": [
+      "deep",
+      "semantic",
+      "triage",
+      "adaptive"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 5,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 3,
+    "planned_operation_retrieve": 6,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Multi-document evidence synthesis, disagreement and unresolved questions.",
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Experience/preference-aware onboarding with prerequisites and explanations."
+  ],
+  "integration": {
+    "ordered_types": [
+      "deep",
+      "semantic",
+      "triage",
+      "adaptive"
+    ],
+    "edges": [
+      {
+        "from": "deep",
+        "to": "semantic",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "semantic",
+        "to": "triage",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "triage",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "3c9e94a36a39856eb80e64f11dbc1f24a8e47d71a8e293fc132ae923c93fede3",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "be3a7cc671472f6ace77973604c132cfae549f6af8c5c395a88ec5128f159849",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t004_combo4_deep_semantic_triage_adaptive",
+  "membership_point_id": "combo4_deep_semantic_triage_adaptive",
+  "trial_kind": "repeat_of_wave1",
+  "repeat_of": "combo4_deep_semantic_triage_adaptive",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "ba0158d4b29c3a2938bb40dba87a65e7bc0d8ec73442b996008dc65499513558",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 192159,
+    "output_tokens": 18786,
+    "cache_read_tokens": 170964,
+    "cache_write_tokens": 21174,
+    "total_tokens": 210945,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33757,
+        "agent_id": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+        "model": "gpt-6-astra",
+        "input_tokens": 14793,
+        "output_tokens": 289,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 832,
+        "reasoning_tokens": 102,
+        "duration_ms": 9209,
+        "created_at": "2026-09-23T09:20:00.529Z"
+      },
+      {
+        "id": 33794,
+        "agent_id": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+        "model": "gpt-6-astra",
+        "input_tokens": 15116,
+        "output_tokens": 10133,
+        "cache_read_tokens": 14790,
+        "cache_write_tokens": 323,
+        "reasoning_tokens": 1552,
+        "duration_ms": 213571,
+        "created_at": "2026-09-23T09:23:35.697Z"
+      },
+      {
+        "id": 33822,
+        "agent_id": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+        "model": "gpt-6-astra",
+        "input_tokens": 25422,
+        "output_tokens": 7174,
+        "cache_read_tokens": 15113,
+        "cache_write_tokens": 10306,
+        "reasoning_tokens": 451,
+        "duration_ms": 141820,
+        "created_at": "2026-09-23T09:25:57.413Z"
+      },
+      {
+        "id": 33823,
+        "agent_id": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+        "model": "gpt-6-astra",
+        "input_tokens": 32771,
+        "output_tokens": 140,
+        "cache_read_tokens": 25419,
+        "cache_write_tokens": 7349,
+        "reasoning_tokens": 0,
+        "duration_ms": 4145,
+        "created_at": "2026-09-23T09:26:01.534Z"
+      },
+      {
+        "id": 33828,
+        "agent_id": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+        "model": "gpt-6-astra",
+        "input_tokens": 34068,
+        "output_tokens": 691,
+        "cache_read_tokens": 32768,
+        "cache_write_tokens": 1297,
+        "reasoning_tokens": 355,
+        "duration_ms": 18998,
+        "created_at": "2026-09-23T09:26:24.307Z"
+      },
+      {
+        "id": 33832,
+        "agent_id": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+        "model": "gpt-6-astra",
+        "input_tokens": 34854,
+        "output_tokens": 244,
+        "cache_read_tokens": 34065,
+        "cache_write_tokens": 786,
+        "reasoning_tokens": 0,
+        "duration_ms": 5245,
+        "created_at": "2026-09-23T09:26:35.870Z"
+      },
+      {
+        "id": 33834,
+        "agent_id": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+        "model": "gpt-6-astra",
+        "input_tokens": 35135,
+        "output_tokens": 115,
+        "cache_read_tokens": 34851,
+        "cache_write_tokens": 281,
+        "reasoning_tokens": 0,
+        "duration_ms": 4389,
+        "created_at": "2026-09-23T09:26:44.967Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.7621875,
+      "observed_cache_profile_estimate_usd": 0.37751850000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 9.14625,
+      "observed_cache_profile_estimate_usd": 9.14625,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 1,
+      "roi_satisfaction": 0,
+      "future_impact_potential": 1,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.49,
+    "pseudo_annual_cost_usd": 85000,
+    "pseudo_annual_ai_value_usd": 55000,
+    "pseudo_net_impact_usd": -30000,
+    "pseudo_roi_pct": -35.294117647058826,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...........................................\n----------------------------------------------------------------------\nRan 43 tests in 1.161s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "fixture_label": "SYNTHETIC marketplace fixtures; no real products, customers, or claims",
+      "stages": {
+        "research": {
+          "findings": [
+            {
+              "question_id": "offline",
+              "question": "Does Trail Kit support offline synchronization?",
+              "proposition": "Trail Kit synchronizes while offline.",
+              "status": "disputed",
+              "source_count": 2,
+              "evidence": [
+                {
+                  "evidence_id": "guide:1",
+                  "document_id": "guide",
+                  "source": "Synthetic vendor handbook",
+                  "excerpt": "Offline synchronization works in the demonstration.",
+                  "stance": "support",
+                  "product_ids": [
+                    "trail-kit"
+                  ]
+                },
+                {
+                  "evidence_id": "trial:1",
+                  "document_id": "trial",
+                  "source": "Synthetic field lab",
+                  "excerpt": "Offline synchronization failed; the trial required a connection.",
+                  "stance": "oppose",
+                  "product_ids": [
+                    "trail-kit"
+                  ]
+                }
+              ],
+              "summary": "disputed: 1 supporting, 1 opposing, 0 uncertain excerpts across 2 distinct sources. Counts describe supplied evidence, not a probability or truth verdict."
+            },
+            {
+              "question_id": "export",
+              "question": "Can Trail Kit export CSV?",
+              "proposition": "Trail Kit exports CSV.",
+              "status": "supported",
+              "source_count": 2,
+              "evidence": [
+                {
+                  "evidence_id": "guide:2",
+                  "document_id": "guide",
+                  "source": "Synthetic vendor handbook",
+                  "excerpt": "Trail Kit exports CSV reports.",
+                  "stance": "support",
+                  "product_ids": [
+                    "trail-kit"
+                  ]
+                },
+                {
+                  "evidence_id": "trial:2",
+                  "document_id": "trial",
+                  "source": "Synthetic field lab",
+                  "excerpt": "CSV export succeeded in a controlled trial.",
+                  "stance": "support",
+                  "product_ids": [
+                    "trail-kit"
+                  ]
+                }
+              ],
+              "summary": "supported: 2 supporting, 0 opposing, 0 uncertain excerpts across 2 distinct sources. Counts describe supplied evidence, not a probability or truth verdict."
+            },
+            {
+              "question_id": "retention",
+              "question": "How long are exports retained?",
+              "proposition": "Exports are retained for thirty days.",
+              "status": "unanswered",
+              "source_count": 0,
+              "evidence": [],
+              "summary": "unanswered: 0 supporting, 0 opposing, 0 uncertain excerpts across 0 distinct sources. Counts describe supplied evidence, not a probability or truth verdict."
+            }
+          ],
+          "unresolved_question_ids": [
+            "offline",
+            "retention"
+          ]
+        },
+        "semantic": {
+          "query": "offline synchronization",
+          "embedding_used": false,
+          "index": [
+            {
+              "product_id": "trail-kit",
+              "term_count": 28,
+              "evidence_ids": [
+                "guide:1",
+                "trial:1",
+                "guide:2",
+                "trial:2"
+              ]
+            },
+            {
+              "product_id": "desk-kit",
+              "term_count": 9,
+              "evidence_ids": []
+            }
+          ],
+          "results": [
+            {
+              "product_id": "trail-kit",
+              "name": "Trail Kit",
+              "score": 0.399666,
+              "lexical_score": 0.399666,
+              "embedding_score": null,
+              "evidence_ids": [
+                "guide:1",
+                "trial:1",
+                "guide:2",
+                "trial:2"
+              ],
+              "attention_question_ids": [
+                "offline"
+              ]
+            }
+          ]
+        },
+        "triage": {
+          "ticket_id": "SYNTHETIC-101",
+          "rule_id": "setup",
+          "category": "configuration",
+          "priority": "high",
+          "team": "Product Support",
+          "owner": "synthetic-support-owner",
+          "onboarding_track": "setup",
+          "selected_product_id": "trail-kit",
+          "evidence_ids": [
+            "guide:1",
+            "trial:1",
+            "guide:2",
+            "trial:2"
+          ],
+          "attention_question_ids": [
+            "offline"
+          ],
+          "reasons": [
+            "Rule setup matched: setup, instructions. Most matching configured keywords wins; ties use configuration order.",
+            "Configured route priority: normal.",
+            "Selected product has unresolved evidence: offline.",
+            "Selected the highest-ranked product."
+          ]
+        },
+        "adaptive": {
+          "experience": "beginner",
+          "track": "setup",
+          "accountable_owner": "synthetic-support-owner",
+          "selected_product_id": "trail-kit",
+          "needs_human_review": true,
+          "attention_question_ids": [
+            "offline"
+          ],
+          "explanations": [
+            "Completed steps are treated as satisfied and omitted; prerequisites override experience filters.",
+            "Topological order is stable in catalog order; a ready evidence-review step is prioritized.",
+            "Accountable handoff: Product Support / synthetic-support-owner.",
+            "Human review remains required even if the review tutorial was completed."
+          ],
+          "steps": [
+            {
+              "step_id": "welcome",
+              "title": "Synthetic account orientation",
+              "format": "video",
+              "prerequisites": [],
+              "reason": "Required prerequisite for connect; overrides level/track filters. Uses preferred video format."
+            },
+            {
+              "step_id": "review",
+              "title": "Review conflicting evidence with the accountable owner",
+              "format": "text",
+              "prerequisites": [
+                "welcome"
+              ],
+              "reason": "Required evidence review for unresolved selected-product findings. No preferred format available; uses first supported format."
+            },
+            {
+              "step_id": "connect",
+              "title": "Connect the synthetic Trail Kit",
+              "format": "interactive",
+              "prerequisites": [
+                "welcome"
+              ],
+              "reason": "Matches routed track, experience, and product applicability. Uses preferred interactive format."
+            }
+          ]
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t004_combo4_deep_semantic_triage_adaptive",
+    "artifact_sha256": {
+      "implementation.py": "0b83625edc140334748050a7beab99598cf98fab9b6ca6b38586663d577b90c5",
+      "test_implementation.py": "cf8708f1c5a2443b5dbaf25bb4fe2485470dfc2a865bc754838b0ae03bd9f14e",
+      "example_input.json": "856daacecd74577370f600fa567360ddd301853c5d75dbbd8d6d7790a804e3f3",
+      "build_manifest.json": "4cdf6ff22ce366abcc989abcdc15c08d086db0cb3cf93c4e92e0637977ea0ef3"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

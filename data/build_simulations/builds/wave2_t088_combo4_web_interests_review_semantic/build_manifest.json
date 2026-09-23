@@ -1,0 +1,57 @@
+{
+  "build_id": "wave2_t088_combo4_web_interests_review_semantic",
+  "composition_label": "Web research -> Interest-based recommendations -> Document review -> Semantic search",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch within the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "request": "schema_version, synthetic=true, allowlisted_hosts, sources, fixture_pages, preferences, requirements, search",
+    "envelope": "schema_version, synthetic, status, stage, request, sources, findings, recommendations, reviews, search",
+    "validation": "One shared validate entrypoint enforces request shape and types, URL allowlist, source identity and SHA-256 provenance, grounded recommendation evidence, review coverage, index linkage, ranking order, numeric bounds and stage order.",
+    "error_output": {"status": "error", "error": "Human-readable validation or file error; CLI exits 2"}
+  },
+  "cross_stage_handoffs": [
+    {"from": "web", "to": "interests", "data": "Validated source text and findings with source IDs, URLs, SHA-256 and exact character spans"},
+    {"from": "interests", "to": "review", "data": "Validated ranked, exclusion-filtered product recommendations and grounded finding references"},
+    {"from": "review", "to": "semantic", "data": "Validated per-product requirement checks and gap counts; searchable documents are created only for reviewed recommendations"}
+  ],
+  "behavior": {
+    "research": "Exact-host HTTPS allowlist; default retrieval from synthetic fixture_pages; optional retriever(url)->str injection. No built-in network client or redirect handling.",
+    "recommendations": "Score counts interests whose words occur together in a cited source. Case-insensitive tag exclusion and exact product-ID exclusion happen before ranking. Ties use product ID. Zero-score candidates remain eligible.",
+    "review": "Each applicable requirement needs all keyword phrases in one source. Findings record checked sources, matched evidence, missing keywords and traceable gaps. Tag-specific requirements can be not_applicable. No certification claims.",
+    "semantic": "In-memory inverted token index with cosine bag-of-words ranking by default. Optional embedder(text)->finite numeric sequence enables injected vector ranking. Zero or negative similarity is omitted. Source text, not unmet requirement descriptions, is indexed. Hits preserve review state and finding IDs.",
+    "injections": "Python callable interfaces are tested with deterministic synthetic fixtures only. No LLM or provider is necessary.",
+    "determinism": "Stable source order, stable product-ID tie breaking, no clock, random state, generated IDs or live requests. Injected callables are responsible for deterministic results.",
+    "provenance_retention": "All retrieved sources remain in the research ledger, including excluded products; exclusions apply to recommendations, reviews, search documents, index and hits."
+  },
+  "scope": {
+    "included": ["Single integrated CLI and Python API", "Strict bounded synthetic inputs", "Shared validation at every handoff", "Fixture retrieval", "Grounded ranking", "Traceable keyword evidence checking", "Lexical and injected-embedding search", "CLI error contract"],
+    "excluded": ["Live network retrieval", "Provider calls", "HTML parsing or crawling", "Real-world fact verification", "Certification or compliance claims", "Production deployment", "Persistent database", "Learned semantic models", "Untrusted callable sandboxing"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 29,
+    "failures": 0,
+    "errors": 0,
+    "cli": {
+      "status": "passed",
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status ok and stage semantic",
+      "stderr": ""
+    },
+    "coverage": ["Each pipeline stage", "Cross-stage provenance and exclusions", "Ranking and deterministic ties", "Traceable review gaps", "Embedding and retriever fixture injection", "Invalid inputs and unsafe URLs", "Tampered handoffs", "CLI success, missing file, malformed JSON, duplicate keys and validation errors"]
+  }
+}

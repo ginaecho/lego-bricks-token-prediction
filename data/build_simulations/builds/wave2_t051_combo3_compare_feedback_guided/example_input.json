@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "products": [
+    {"id": "aurora", "name": "Synthetic Aurora Speaker", "attributes": {
+      "price": {"value": 8000, "unit": "cents"},
+      "weight": {"value": 0.5, "unit": "kg"},
+      "battery": {"value": 600, "unit": "minutes"}
+    }},
+    {"id": "beacon", "name": "Synthetic Beacon Speaker", "attributes": {
+      "price": {"value": 100, "unit": "USD"},
+      "weight": {"value": 700, "unit": "g"},
+      "battery": {"value": 14, "unit": "hours"}
+    }}
+  ],
+  "preferences": {
+    "price": {"weight": 3, "direction": "min"},
+    "weight": {"weight": 1, "direction": "min"},
+    "battery": {"weight": 1, "direction": "max"}
+  },
+  "feedback": [
+    {"id": "r1", "product_id": "aurora", "text": "Setup needs pairing. Battery charge is confusing."},
+    {"id": "r2", "product_id": "aurora", "text": " setup NEEDS pairing; battery charge is confusing! "},
+    {"id": "r3", "product_id": "aurora", "text": "Light and good value."},
+    {"id": "r4", "product_id": "beacon", "text": "Battery lasts well."}
+  ],
+  "onboarding": {
+    "steps": [
+      {"id": "unpack", "title": "Unpack synthetic product", "prerequisites": [], "when_themes": []},
+      {"id": "pair", "title": "Pair synthetic speaker", "prerequisites": ["unpack"], "when_themes": ["setup"]},
+      {"id": "charge", "title": "Review charging instructions", "prerequisites": ["pair"], "when_themes": ["battery"]}
+    ],
+    "completed_steps": ["unpack"]
+  }
+}

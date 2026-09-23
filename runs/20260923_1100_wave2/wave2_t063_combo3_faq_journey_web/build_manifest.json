@@ -1,0 +1,117 @@
+{
+  "build_id": "wave2_t063_combo3_faq_journey_web",
+  "composition_label": "Knowledge-base answers -> Journey recommendations -> Web research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory; no repository or other build files read or copied.",
+    "runtime": "Python 3 standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py",
+    "working_directory": "Run both commands in the directory containing these four files."
+  },
+  "shared_schema": {
+    "version": 1,
+    "fixture_label": "synthetic",
+    "validation_layer": "implementation.Validator validates the shared input, each preceding output before consumption, each newly produced stage output, and the final envelope. Unknown and missing fields are rejected.",
+    "input": {
+      "schema_version": "Integer 1, not boolean",
+      "fixture_label": "Literal synthetic",
+      "question": "Nonblank string",
+      "knowledge_base": "List of {id, title, text, topics}; unique IDs, nonempty unique topic lists",
+      "actions": "List of {id, title, required_topics, prerequisites, research_terms}; unique IDs; known topics; existing prerequisite IDs; acyclic dependency graph; nonempty topic and research-term lists",
+      "completed_actions": "Unique known action IDs representing externally supplied completed history",
+      "web": "{allowlist, pages}; allowlist contains lowercase exact domain names; pages contain unique {id, url, title, text} records with unique URLs"
+    },
+    "output": {
+      "envelope": "{schema_version: 1, fixture_label: synthetic, status: ok, faq, journey, web}",
+      "faq": "{status: answered|abstained, answer: string|null, citations: [{source_id, quote}], topics, reason}",
+      "journey": "{status: ready|blocked, faq_source_ids, topics, steps: [{position, action_id, title, prerequisites, research_terms}], reason}",
+      "web": "{status: complete|partial|abstained|blocked, action_ids, findings, unfulfilled_action_ids, reason}",
+      "finding": "{action_id, research_terms, faq_source_ids, source_id, url, title, quote, sha256, ingestion: supplied_snapshot}",
+      "error": "{status: error, error: string}, printed as one JSON object with exit code 2"
+    },
+    "limits": {
+      "input_file_bytes": 2000000,
+      "text_characters": 20000,
+      "items_per_collection": 100,
+      "faq_sources": 2,
+      "journey_steps": 2,
+      "web_findings_per_action": 1
+    }
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq",
+      "to": "journey",
+      "data": "Validated answer status, exact citation IDs, and source-derived topics",
+      "invariants": "Only actions whose required topics are supported by retrieved FAQ documents are eligible. Abstention blocks the journey. Citation IDs and topics are carried unchanged."
+    },
+    {
+      "from": "journey",
+      "to": "web",
+      "data": "Validated ordered two-step plan, action IDs, research terms, and inherited FAQ citation IDs",
+      "invariants": "Only chosen actions are researched. Findings preserve action and FAQ provenance. Blocked journeys do not perform retrieval. Missing evidence is explicit per action."
+    }
+  ],
+  "behavior": {
+    "faq": "ASCII alphanumeric token overlap against document title plus body, after a small stopword filter. Positive-score documents rank by descending overlap then ascending source ID; at most two are selected. Answers concatenate exact full document texts. No matching evidence produces explicit abstention.",
+    "journey": "Eligible uncompleted actions are ordered by ID. A deterministic two-action lookahead selects the first valid pair. Prerequisites must be completed initially or by step one. Fewer than two feasible steps yields a blocked journey rather than an invalid partial plan.",
+    "web": "Offline ingestion of caller-supplied URL/text snapshots only. HTTPS, an exact allowlisted hostname, no userinfo, no fragment, and absent or 443 port are required. Malformed or disallowed URLs reject the entire input, even if they would not be retrieved. No redirects or network fetches occur. Each action retrieves one positive-overlap page using its propagated research terms, with source-ID tie-breaking.",
+    "provenance": "Every finding retains the supplied URL, source ID, title, exact body text, SHA-256 of UTF-8 body text, action ID, original research terms, and upstream FAQ source IDs. Hashes identify supplied text, not independently verified web authenticity.",
+    "errors": "Malformed or duplicate-key JSON, nonstandard JSON constants, invalid schemas, invalid URLs, Unicode errors, excessive nesting, usage errors, and file errors produce JSON status error with exit 2. Normal abstention and blocked plans are valid pipeline outcomes with exit 0.",
+    "determinism": "No random numbers, live providers, timestamps in results, or optional external services."
+  },
+  "scope": {
+    "included": [
+      "Single integrated pipeline and shared validation layer",
+      "Clearly labeled synthetic fixtures",
+      "Extractive grounded FAQ answers and abstention",
+      "Prerequisite-aware two-step recommendations",
+      "Allowlisted offline URL snapshot ingestion",
+      "Exact evidence and cross-stage provenance preservation",
+      "CLI and Python callable entry point",
+      "Unittest coverage of stages, propagation, invalid inputs, tampering, edge cases, and CLI behavior"
+    ],
+    "excluded": [
+      "Live HTTP fetching, crawling, redirects, or freshness verification",
+      "LLM invocation or provider integrations",
+      "Semantic retrieval, entailment guarantees, and factual verification of supplied documents",
+      "HTML parsing, JavaScript execution, or page rendering",
+      "Persistence, authentication, enterprise deployment, and production security guarantees",
+      "Historical validation of caller-supplied completed actions"
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 25,
+      "passed": 25,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One JSON object",
+      "status": "ok",
+      "faq_status": "answered",
+      "journey_status": "ready",
+      "web_status": "complete",
+      "journey_steps": 2,
+      "findings": 2
+    }
+  }
+}

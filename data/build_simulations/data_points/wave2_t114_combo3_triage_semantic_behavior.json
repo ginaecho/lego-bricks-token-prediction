@@ -1,0 +1,419 @@
+{
+  "id": "wave2_t114_combo3_triage_semantic_behavior",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "support",
+      "search",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "AI customer support",
+      "Smart product search",
+      "Personalized discovery"
+    ],
+    "types": [
+      "triage",
+      "semantic",
+      "behavior"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 2,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling."
+  ],
+  "integration": {
+    "ordered_types": [
+      "triage",
+      "semantic",
+      "behavior"
+    ],
+    "edges": [
+      {
+        "from": "triage",
+        "to": "semantic",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "semantic",
+        "to": "behavior",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "e0582d24969efb2a74351d09745beb0a9e840cd97512fcbfb1b0fd8093ee3d56",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "a85e082efc80294fb1b038e572be369c11212061c668227d6bc0af07b96d556a",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t114_combo3_triage_semantic_behavior",
+  "membership_point_id": "combo3_triage_semantic_behavior",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "5cd2baf4297949503be93a36882d5d06feca8ae8713633d9b560b41e2e9e453f",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "750e1ae6-6795-4fbb-9c1d-5cc21a5c106f",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 130440,
+    "output_tokens": 9738,
+    "cache_read_tokens": 118746,
+    "cache_write_tokens": 11676,
+    "total_tokens": 140178,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34883,
+        "agent_id": "750e1ae6-6795-4fbb-9c1d-5cc21a5c106f",
+        "model": "gpt-6-astra",
+        "input_tokens": 14863,
+        "output_tokens": 314,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 805,
+        "reasoning_tokens": 148,
+        "duration_ms": 8252,
+        "created_at": "2026-09-23T11:13:06.133Z"
+      },
+      {
+        "id": 34907,
+        "agent_id": "750e1ae6-6795-4fbb-9c1d-5cc21a5c106f",
+        "model": "gpt-6-astra",
+        "input_tokens": 15207,
+        "output_tokens": 8596,
+        "cache_read_tokens": 14860,
+        "cache_write_tokens": 344,
+        "reasoning_tokens": 504,
+        "duration_ms": 136680,
+        "created_at": "2026-09-23T11:15:22.724Z"
+      },
+      {
+        "id": 34908,
+        "agent_id": "750e1ae6-6795-4fbb-9c1d-5cc21a5c106f",
+        "model": "gpt-6-astra",
+        "input_tokens": 24123,
+        "output_tokens": 160,
+        "cache_read_tokens": 15204,
+        "cache_write_tokens": 8916,
+        "reasoning_tokens": 0,
+        "duration_ms": 3441,
+        "created_at": "2026-09-23T11:15:26.255Z"
+      },
+      {
+        "id": 34909,
+        "agent_id": "750e1ae6-6795-4fbb-9c1d-5cc21a5c106f",
+        "model": "gpt-6-astra",
+        "input_tokens": 25023,
+        "output_tokens": 375,
+        "cache_read_tokens": 24120,
+        "cache_write_tokens": 900,
+        "reasoning_tokens": 95,
+        "duration_ms": 8269,
+        "created_at": "2026-09-23T11:15:36.760Z"
+      },
+      {
+        "id": 34911,
+        "agent_id": "750e1ae6-6795-4fbb-9c1d-5cc21a5c106f",
+        "model": "gpt-6-astra",
+        "input_tokens": 25490,
+        "output_tokens": 208,
+        "cache_read_tokens": 25020,
+        "cache_write_tokens": 467,
+        "reasoning_tokens": 0,
+        "duration_ms": 6471,
+        "created_at": "2026-09-23T11:15:43.291Z"
+      },
+      {
+        "id": 34912,
+        "agent_id": "750e1ae6-6795-4fbb-9c1d-5cc21a5c106f",
+        "model": "gpt-6-astra",
+        "input_tokens": 25734,
+        "output_tokens": 85,
+        "cache_read_tokens": 25487,
+        "cache_write_tokens": 244,
+        "reasoning_tokens": 0,
+        "duration_ms": 2978,
+        "created_at": "2026-09-23T11:15:51.737Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.47217,
+      "observed_cache_profile_estimate_usd": 0.2049915,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.66604,
+      "observed_cache_profile_estimate_usd": 5.66604,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 3,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 3,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.61,
+    "pseudo_annual_cost_usd": 65000,
+    "pseudo_annual_ai_value_usd": 30000,
+    "pseudo_net_impact_usd": -35000,
+    "pseudo_roi_pct": -53.84615384615385,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.681s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "behavior": {
+        "accountable_team": "payments",
+        "cold_start": false,
+        "priority": "high",
+        "recommendations": [
+          {
+            "personalization_score": 0.3683898463,
+            "product_id": "p3",
+            "score": 0.7017231796,
+            "semantic_score": 0.3333333333,
+            "title": "Headphones travel case"
+          },
+          {
+            "personalization_score": 0.0,
+            "product_id": "p2",
+            "score": 0.7,
+            "semantic_score": 0.7,
+            "title": "Payment protection"
+          }
+        ],
+        "ticket_id": "synthetic-ticket-114"
+      },
+      "request": {
+        "as_of": "2026-09-23T12:00:00Z",
+        "catalog": [
+          {
+            "category": "audio",
+            "description": "Audio headphones with wireless charging",
+            "id": "p1",
+            "popularity": 0.8,
+            "title": "Wireless headphones"
+          },
+          {
+            "category": "billing",
+            "description": "Refund protection for headphones purchases",
+            "id": "p2",
+            "popularity": 0.4,
+            "title": "Payment protection"
+          },
+          {
+            "category": "audio",
+            "description": "Protective case for wireless headphones",
+            "id": "p3",
+            "popularity": 0.6,
+            "title": "Headphones travel case"
+          }
+        ],
+        "config": {
+          "behavior_weight": 0.5,
+          "cold_start_weight": 0.1,
+          "default_route": {
+            "category": "general",
+            "priority": "normal",
+            "team": "support"
+          },
+          "final_limit": 2,
+          "half_life_days": 30.0,
+          "routes": [
+            {
+              "category": "billing",
+              "keywords": [
+                "refund",
+                "payment",
+                "invoice"
+              ],
+              "priority": "high",
+              "team": "payments"
+            },
+            {
+              "category": "technical",
+              "keywords": [
+                "broken",
+                "error",
+                "setup"
+              ],
+              "priority": "normal",
+              "team": "technical-support"
+            }
+          ],
+          "search_limit": 3
+        },
+        "events": [
+          {
+            "action": "browse",
+            "product_id": "p1",
+            "timestamp": "2026-09-22T12:00:00Z"
+          },
+          {
+            "action": "purchase",
+            "product_id": "p3",
+            "timestamp": "2026-09-20T12:00:00Z"
+          }
+        ],
+        "fixture_label": "SYNTHETIC marketplace support and discovery fixture",
+        "schema_version": 1,
+        "ticket": {
+          "id": "synthetic-ticket-114",
+          "text": "Refund payment for my wireless headphones"
+        }
+      },
+      "schema_version": 1,
+      "semantic": {
+        "candidates": [
+          {
+            "product_id": "p2",
+            "semantic_score": 0.7
+          },
+          {
+            "product_id": "p3",
+            "semantic_score": 0.3333333333
+          },
+          {
+            "product_id": "p1",
+            "semantic_score": 0.2222222222
+          }
+        ],
+        "category": "billing",
+        "embedding_used": false,
+        "query": "Refund payment for my wireless headphones",
+        "ticket_id": "synthetic-ticket-114"
+      },
+      "status": "ok",
+      "triage": {
+        "accountable_team": "payments",
+        "category": "billing",
+        "matched_keywords": [
+          "refund",
+          "payment"
+        ],
+        "priority": "high",
+        "query": "Refund payment for my wireless headphones",
+        "ticket_id": "synthetic-ticket-114"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t114_combo3_triage_semantic_behavior",
+    "artifact_sha256": {
+      "implementation.py": "a2bc2bd1111f01f557c7776892f96a8f26c7ff51992d2565f634cec3e436736b",
+      "test_implementation.py": "1d7642c57a15a83e49911e424c1e84bf7c3492c648f43845827b54db74855a20",
+      "example_input.json": "750cfc7e4dc1ce3db6110d1443a228046d4a392070650b1e88142e1aae4d7097",
+      "build_manifest.json": "8ea550731fbbf431e3a99ccd4f227fdc54ccdcd83bb2b5a439224e33d5cb7d51"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

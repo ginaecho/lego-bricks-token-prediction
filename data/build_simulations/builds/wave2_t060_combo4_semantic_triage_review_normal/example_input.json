@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "query": "Aurora travel charger",
+  "products": [
+    {
+      "id": "product-aurora",
+      "name": "SYNTHETIC Aurora travel charger",
+      "description": "Portable USB travel charger with warranty support.",
+      "source_ids": ["manual-aurora"]
+    },
+    {
+      "id": "product-breeze",
+      "name": "SYNTHETIC Breeze fan",
+      "description": "Desktop cooling appliance.",
+      "source_ids": ["manual-breeze"]
+    }
+  ],
+  "tickets": [
+    {
+      "id": "ticket-001",
+      "subject": "SYNTHETIC Aurora warranty question",
+      "body": "My travel charger failed. Does the warranty cover repair and replacement?"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "requirement-repair",
+      "description": "Warranty repair instructions",
+      "category": "warranty",
+      "terms": ["warranty", "repair"]
+    },
+    {
+      "id": "requirement-replacement",
+      "description": "Warranty replacement period",
+      "category": "warranty",
+      "terms": ["replacement", "30 days"]
+    },
+    {
+      "id": "requirement-recycling",
+      "description": "Recycling instructions",
+      "category": "*",
+      "terms": ["recycling"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "manual-aurora",
+      "title": "SYNTHETIC Aurora reference manual",
+      "passages": [
+        {
+          "id": "p1",
+          "text": "SYNTHETIC reference data. The warranty includes repair through the service desk."
+        },
+        {
+          "id": "p2",
+          "text": "Replacement requests need a receipt. No replacement period is specified here."
+        }
+      ]
+    },
+    {
+      "id": "manual-breeze",
+      "title": "SYNTHETIC unrelated fan manual",
+      "passages": [
+        {
+          "id": "p1",
+          "text": "The fan replacement period is 30 days. Recycling instructions apply to the fan."
+        }
+      ]
+    }
+  ],
+  "config": {
+    "search_limit": 2,
+    "research_limit": 2,
+    "routing_rules": [
+      {
+        "category": "warranty",
+        "terms": ["warranty", "repair", "replacement"],
+        "priority": "high",
+        "owner": "synthetic-service-desk"
+      },
+      {
+        "category": "delivery",
+        "terms": ["shipping", "delivery"],
+        "priority": "normal",
+        "owner": "synthetic-logistics-desk"
+      }
+    ],
+    "default_route": {
+      "category": "general",
+      "priority": "normal",
+      "owner": "synthetic-general-desk"
+    }
+  }
+}

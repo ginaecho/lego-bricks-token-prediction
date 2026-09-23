@@ -1,0 +1,398 @@
+{
+  "id": "wave2_t086_combo2_faq_behavior",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "support",
+      "recommend"
+    ],
+    "basic_functionalities": [
+      "AI customer support",
+      "Personalized discovery"
+    ],
+    "types": [
+      "faq",
+      "behavior"
+    ],
+    "functionality_count": 2,
+    "integration_edge_count": 1,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 9,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.75,
+    "staff_data_scientist": 0.25,
+    "staff_architect": 0.125,
+    "staff_consultant": 0.125,
+    "staff_software_engineer": 0.625,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 1,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 1,
+    "planned_operation_verify": 2,
+    "planned_operation_write": 2
+  },
+  "requirements": [
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling."
+  ],
+  "integration": {
+    "ordered_types": [
+      "faq",
+      "behavior"
+    ],
+    "edges": [
+      {
+        "from": "faq",
+        "to": "behavior",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "615c4f13a534b450fe811bfaf7768c14bed8d6711d0d7e6262ccee637d068c5c",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "8dded16faa7f370093252c2b3cc7526ad17015df96f16f956c44165d5aa1744a",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t086_combo2_faq_behavior",
+  "membership_point_id": "combo2_faq_behavior",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "5b04623352917e6e5e7f3905472c49d258353810d4e65257f59fa28aecb0d392",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "6a8939b3-0abd-4363-b693-58b54746d229",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 125579,
+    "output_tokens": 8563,
+    "cache_read_tokens": 115140,
+    "cache_write_tokens": 10421,
+    "total_tokens": 134142,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34621,
+        "agent_id": "6a8939b3-0abd-4363-b693-58b54746d229",
+        "model": "gpt-6-astra",
+        "input_tokens": 14809,
+        "output_tokens": 293,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 772,
+        "reasoning_tokens": 118,
+        "duration_ms": 6978,
+        "created_at": "2026-09-23T10:41:23.244Z"
+      },
+      {
+        "id": 34649,
+        "agent_id": "6a8939b3-0abd-4363-b693-58b54746d229",
+        "model": "gpt-6-astra",
+        "input_tokens": 15132,
+        "output_tokens": 7581,
+        "cache_read_tokens": 14806,
+        "cache_write_tokens": 323,
+        "reasoning_tokens": 516,
+        "duration_ms": 120603,
+        "created_at": "2026-09-23T10:44:29.702Z"
+      },
+      {
+        "id": 34650,
+        "agent_id": "6a8939b3-0abd-4363-b693-58b54746d229",
+        "model": "gpt-6-astra",
+        "input_tokens": 23025,
+        "output_tokens": 158,
+        "cache_read_tokens": 15129,
+        "cache_write_tokens": 7893,
+        "reasoning_tokens": 0,
+        "duration_ms": 3356,
+        "created_at": "2026-09-23T10:44:31.607Z"
+      },
+      {
+        "id": 34652,
+        "agent_id": "6a8939b3-0abd-4363-b693-58b54746d229",
+        "model": "gpt-6-astra",
+        "input_tokens": 23914,
+        "output_tokens": 237,
+        "cache_read_tokens": 23022,
+        "cache_write_tokens": 889,
+        "reasoning_tokens": 57,
+        "duration_ms": 5058,
+        "created_at": "2026-09-23T10:44:43.786Z"
+      },
+      {
+        "id": 34653,
+        "agent_id": "6a8939b3-0abd-4363-b693-58b54746d229",
+        "model": "gpt-6-astra",
+        "input_tokens": 24241,
+        "output_tokens": 180,
+        "cache_read_tokens": 23911,
+        "cache_write_tokens": 327,
+        "reasoning_tokens": 0,
+        "duration_ms": 3747,
+        "created_at": "2026-09-23T10:44:47.462Z"
+      },
+      {
+        "id": 34654,
+        "agent_id": "6a8939b3-0abd-4363-b693-58b54746d229",
+        "model": "gpt-6-astra",
+        "input_tokens": 24458,
+        "output_tokens": 114,
+        "cache_read_tokens": 24238,
+        "cache_write_tokens": 217,
+        "reasoning_tokens": 0,
+        "duration_ms": 2916,
+        "created_at": "2026-09-23T10:44:58.254Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.44239249999999997,
+      "observed_cache_profile_estimate_usd": 0.18332750000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.3087100000000005,
+      "observed_cache_profile_estimate_usd": 5.3087100000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 0,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 5,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.56,
+    "pseudo_annual_cost_usd": 75000,
+    "pseudo_annual_ai_value_usd": 70000,
+    "pseudo_net_impact_usd": -5000,
+    "pseudo_roi_pct": -6.666666666666667,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 1.204s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "behavior": {
+        "faq_product_ids": [
+          "trail-jacket"
+        ],
+        "faq_status": "answered",
+        "mode": "personalized",
+        "recommendations": [
+          {
+            "components": {
+              "faq_score": 2,
+              "history_score": 1.5,
+              "popularity_score": 0.005
+            },
+            "name": "Synthetic Trail Jacket",
+            "product_id": "trail-jacket",
+            "score": 3.505
+          },
+          {
+            "components": {
+              "faq_score": 0.0,
+              "history_score": 0.9771599684342459,
+              "popularity_score": 0.006999999999999999
+            },
+            "name": "Synthetic Day Pack",
+            "product_id": "day-pack",
+            "score": 0.9841599684342459
+          },
+          {
+            "components": {
+              "faq_score": 0.0,
+              "history_score": 0.0,
+              "popularity_score": 0.009000000000000001
+            },
+            "name": "Synthetic Ceramic Mug",
+            "product_id": "ceramic-mug",
+            "score": 0.009000000000000001
+          }
+        ]
+      },
+      "faq": {
+        "answer": "Wash the trail jacket in cold water and air dry. Do not use bleach.",
+        "evidence": [
+          {
+            "kb_id": "care-jacket",
+            "product_ids": [
+              "trail-jacket"
+            ],
+            "score": 1.0,
+            "text": "Wash the trail jacket in cold water and air dry. Do not use bleach."
+          }
+        ],
+        "product_ids": [
+          "trail-jacket"
+        ],
+        "reason": null,
+        "status": "answered"
+      },
+      "fixture_label": "synthetic marketplace support and discovery example",
+      "request": {
+        "as_of": "2026-09-23T12:00:00Z",
+        "events": [
+          {
+            "id": "event-1",
+            "product_id": "day-pack",
+            "timestamp": "2026-09-22T12:00:00Z",
+            "type": "view"
+          },
+          {
+            "id": "event-2",
+            "product_id": "trail-jacket",
+            "timestamp": "2026-08-24T12:00:00Z",
+            "type": "purchase"
+          }
+        ],
+        "fixture_label": "synthetic marketplace support and discovery example",
+        "knowledge_base": [
+          {
+            "id": "care-jacket",
+            "product_ids": [
+              "trail-jacket"
+            ],
+            "text": "Wash the trail jacket in cold water and air dry. Do not use bleach.",
+            "title": "Wash trail jacket"
+          },
+          {
+            "id": "mug-care",
+            "product_ids": [
+              "ceramic-mug"
+            ],
+            "text": "The ceramic mug is dishwasher safe.",
+            "title": "Ceramic mug care"
+          }
+        ],
+        "products": [
+          {
+            "id": "trail-jacket",
+            "name": "Synthetic Trail Jacket",
+            "popularity": 0.5
+          },
+          {
+            "id": "ceramic-mug",
+            "name": "Synthetic Ceramic Mug",
+            "popularity": 0.9
+          },
+          {
+            "id": "day-pack",
+            "name": "Synthetic Day Pack",
+            "popularity": 0.7
+          }
+        ],
+        "query": "Can I wash the trail jacket?",
+        "schema_version": 1,
+        "settings": {
+          "faq_boost": 2,
+          "half_life_days": 30,
+          "min_match": 0.5,
+          "top_k": 3
+        }
+      },
+      "schema_version": 1,
+      "stage": "complete",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t086_combo2_faq_behavior",
+    "artifact_sha256": {
+      "implementation.py": "b766787ca405abeca123e526872441d93cb1bd99ac4e47f9449953e178f8d678",
+      "test_implementation.py": "814cd850689bdff2464ada4769ab4c6af3198a11a3031911f74669f2abfbe0b9",
+      "example_input.json": "6364db447c166929873246df402d3810dcccc3dfd80e6b26d66271ba63c49be6",
+      "build_manifest.json": "ba0792a9267f81de498a78d775b5e69291c01f9bc6a6f0cbace81ba4e8ec3861"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

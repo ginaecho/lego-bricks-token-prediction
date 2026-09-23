@@ -1,0 +1,67 @@
+{
+  "build_id": "wave2_t026_combo2_extract_feedback",
+  "composition_label": "Structured extraction (Document automation) -> Feedback analysis (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "boolean; fixture explicitly uses true",
+      "schema": "fields: nonempty list of unique name, trusted Python regex pattern with named value group, required boolean",
+      "documents": "list of unique id and text objects",
+      "feedback_config": "text_field references schema; themes contain unique names and nonempty keyword lists"
+    },
+    "output": {
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": "propagated unchanged from input",
+      "extraction": "records: document_id, fields (value/source or null), missing_fields (field/required), complete",
+      "feedback": "groups, themes with unique-feedback counts and supporting excerpts, skipped_documents, unclassified_group_ids, counts"
+    },
+    "source": "document_id plus start/end half-open Python Unicode character offsets into original document text",
+    "validation": "One validate dispatcher guards input, extraction, feedback and final output. Deterministic semantic revalidation rejects modified values, offsets, membership, counts and excerpts. Unknown object keys are rejected.",
+    "error": "CLI prints exactly one JSON object with status error and error message; exit 2 for validation, file, decoding, malformed JSON and usage failures."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "extraction",
+      "to": "feedback",
+      "contract": "Feedback consumes only validated extraction records; required-field incompleteness skips the record; missing optional feedback and punctuation-only feedback have distinct skip reasons. Values and source spans propagate into groups and keyword evidence."
+    }
+  ],
+  "behavior": {
+    "extraction": "First regex match per field per document; trim captured outer whitespace and adjust source offsets. Unmatched, unmatched optional group, empty or whitespace-only captures are missing. Missing optional fields do not make a record incomplete.",
+    "deduplication": "Global across eligible documents: casefold, extract Unicode word tokens, join with single spaces. Punctuation and whitespace variants deduplicate. Digits and underscores remain significant. Stable first-seen representative and group IDs; all source document IDs retained.",
+    "themes": "Case-insensitive literal keyword/phrase matching with Unicode word boundaries against each original extracted feedback. Every nonoverlapping match per keyword is traced; each group counts at most once per theme. Themes may overlap; zero-count and unclassified themes/groups remain explicit.",
+    "limits": "100 documents, 20000 characters per document, 30 fields, 500 characters per pattern, 30 themes and 30 keywords per theme, 100 characters per keyword/name/identifier.",
+    "synthetic_example": "Four invented documents: two duplicate feedbacks, one unclassified feedback and one missing required feedback. Expected 3 eligible documents, 2 unique feedbacks, 1 duplicate, 1 skipped.",
+    "ordering": "Preserves input document, field, theme and keyword order; matches are source ordered within each keyword.",
+    "side_effects": "CLI only reads its supplied JSON path and writes stdout; no files, caches, external calls or providers are required."
+  },
+  "scope": {
+    "included": ["Integrated deterministic pipeline", "Schema-driven regex extraction", "Missing-field reporting", "Source-span provenance", "Feedback deduplication", "Keyword themes", "Traceable supporting excerpts", "Shared semantic validation", "Synthetic fixtures", "CLI and unittest coverage"],
+    "excluded": ["Live LLM or optional LLM step", "OCR/PDF parsing", "Semantic paraphrase deduplication", "Sentiment inference", "Production persistence", "Multi-value field extraction", "Untrusted-regex safety or timeouts", "Enterprise delivery"],
+    "caveats": ["Schemas and regexes must be trusted; Python re does not provide execution timeouts.", "Deduplication is lexical, not semantic: case/punctuation distinctions can be lost.", "Keyword matching does not interpret negation, sentiment or intent.", "Offset units are Python code points, not bytes or UTF-16 units."]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 17,
+    "unittest_exit_code": 0,
+    "cli": "passed; one JSON object with status ok; expected example counts verified",
+    "cli_exit_code": 0,
+    "error_behavior": "Missing file, missing arguments, malformed JSON, invalid schema, duplicate JSON keys, decoding failure and invalid regex repetition return JSON status error and exit 2."
+  }
+}

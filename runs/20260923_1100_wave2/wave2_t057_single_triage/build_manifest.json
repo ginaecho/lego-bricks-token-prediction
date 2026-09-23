@@ -1,0 +1,53 @@
+{
+  "build_id": "wave2_t057_single_triage",
+  "composition_label": "Ticket triage & routing (AI customer support)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "schema_version (integer 1), config, tickets; unknown fields rejected",
+    "config": "categories: unique nonblank strings; teams: nonblank team-to-accountable-owner mapping; rules: ordered rules; default: decision",
+    "rule": "id: unique string; keywords: nonempty unique strings; optional channels: nonempty unique exact-match strings; decision",
+    "ticket": "unique nonblank id, nonblank subject and channel, string body (may be empty)",
+    "decision": "category from configured categories, priority in low/normal/high/urgent, team from configured teams",
+    "success_output": "schema_version=1, status=ok, ordered assignments, summary with total/by_priority/by_team",
+    "assignment": "ticket_id, category, priority, team, accountable_owner, source, nullable rule_id, matched_keywords",
+    "error_output": "status=error, error message; CLI exit code 2",
+    "validation": "One shared validate function for input and all rule/default/injected decisions; strict JSON rejects duplicate keys and nonfinite constants"
+  },
+  "cross_stage_handoffs": [
+    "Single integrated stage: validated tickets/config -> first matching rule or injected/default decision -> validated decision with accountable owner -> JSON report"
+  ],
+  "behavior": {
+    "matching": "Casefolded substring match against subject and body; any keyword matches; optional channel filter uses exact case-sensitive membership",
+    "precedence": "First matching rule wins, independent of priority severity; no rule match uses injected callable if supplied, otherwise configured default",
+    "accountability": "Every team must map to one nonblank accountable owner; owner derives only from validated configuration",
+    "optional_ai_seam": "triage(payload, classifier=None); local callable receives ticket copy and returns validated decision, tested with synthetic fixtures only; callable failures abort the batch",
+    "determinism": "No randomness, clocks or generated IDs; preserves ticket order; injected callable determinism is caller responsibility",
+    "atomicity": "Invalid input or decisions abort the batch without partial output",
+    "synthetic_data": "All example ticket content and owner identities are explicitly synthetic"
+  },
+  "scope": {
+    "included": ["configurable categorization", "priority assignment", "accountable team routing", "audit match metadata", "summary", "JSON CLI", "local optional callable", "unit and CLI tests"],
+    "excluded": ["live AI providers", "network requests", "ticket-system integrations", "persistence", "authentication", "SLA timers", "load balancing", "enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 13,
+    "unittest_passed": 13,
+    "unittest_exit_code": 0,
+    "cli_example": "passed: one JSON object with status ok and three accountable assignments",
+    "cli_exit_code": 0
+  }
+}

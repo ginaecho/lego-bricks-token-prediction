@@ -1,0 +1,52 @@
+{
+  "build_id": "wave2_t012_combo4_interests_adaptive_web_review",
+  "composition_label": "Interest-based recommendations -> Adaptive onboarding -> Web research -> Document review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original deterministic Python implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "fixture_label": "SYNTHETIC",
+    "input": "Exact-key JSON object: schema_version, fixture_label, profile, catalog, steps, allowed_hosts, sources, documents, requirements. example_input.json is the complete reference fixture.",
+    "profile": "Weighted interests 1..10; excluded topic/item IDs; beginner/experienced; preferred text/video format; completed step IDs; limit 0..100.",
+    "entities": "Unique IDs per collection. Catalog items reference topics; steps reference prerequisite IDs and literal research queries; requirements reference a step and nonempty assigned document IDs.",
+    "output": "Success envelope: schema_version, fixture_label, status=ok, ordered stages {interests, adaptive, web, review}. Failure envelope: status=error and error; process exit 2.",
+    "validation": "One shared validate function checks input and each accumulated stage output before the next stage executes. Validates exact fields, weights, IDs, graph cycles, allowlist, ranking, exclusions, prerequisite order, lineage, evidence offsets, and review status/gaps.",
+    "evidence": "Research findings retain source ID, exact URL, selected step ID, query, exact quote, and Python Unicode string start/end offsets. Review records retain requirement/step IDs, finding IDs and document IDs with exact quote offsets."
+  },
+  "cross_stage_handoffs": [
+    "interests -> adaptive: validated ranked catalog IDs determine onboarding topics, ordering and recommendation lineage.",
+    "adaptive -> web: only validated scheduled step IDs and their configured queries are researched; blocked, skipped and completed steps do not generate queries.",
+    "web -> review: validated findings scoped to selected step IDs supply literal research evidence; only assigned documents supply document evidence."
+  ],
+  "behavior": {
+    "recommendations": "Rank by sum of matched interest weights descending, then ID ascending. Any excluded item or intersecting excluded topic vetoes recommendation. Explain using only declared matched weights.",
+    "onboarding": "Walk ranked recommendations and format-preferred roots; topologically expand prerequisites without duplicates. Experienced users skip optional beginner roots, but required prerequisites remain. Completed steps satisfy prerequisites without rescheduling. An excluded prerequisite blocks its entire root without adding partial steps.",
+    "research": "Offline URL snapshot ingestion only: source bodies are supplied in input. Every source must use HTTPS and an exact allowlisted lowercase hostname; reject credentials, fragments, non-443 ports, whitespace and backslashes. No DNS, HTTP, redirects or network retrieval. Literal case-insensitive first-match snippets retain exact source offsets; missing queries are explicit.",
+    "review": "A selected requirement needs both a same-step research quote and an assigned-document quote containing its literal phrase. Report evidence_present, gap, or out_of_scope with traceable missing-evidence reasons. No certification or semantic-compliance claims.",
+    "determinism": "No randomness, time-dependent output, external services, injected LLM or model provider. Does not mutate caller input.",
+    "cli": "Print exactly one JSON object; success exit 0, input/file/JSON validation failures exit 2. Duplicate JSON keys are rejected."
+  },
+  "scope": {
+    "included": ["Single integrated pipeline", "Shared validation and schema", "Synthetic local URL snapshots", "Preference and exclusion enforcement", "Prerequisite-aware onboarding", "Literal retrieval and provenance", "Requirement/evidence checks", "CLI and unittest coverage"],
+    "excluded": ["Live web requests or providers", "LLM generation", "Semantic truth or negation interpretation", "Document parsing beyond supplied plain text", "Certification or legal determinations", "Enterprise hardening", "Persistent databases", "Authentication"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "unittest",
+    "test_cases": 37,
+    "cli": "passed: exit 0, one JSON object, status ok; 2 recommendations, 3 scheduled steps, 3 findings, 2 evidence_present checks and 1 gap",
+    "error_cli": "Verified JSON status error and exit 2 for missing arguments, missing files, directory paths, malformed JSON, duplicate keys, decoding errors and invalid schema"
+  }
+}

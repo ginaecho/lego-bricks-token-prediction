@@ -1,0 +1,57 @@
+{
+  "build_id": "wave2_t017_single_extract",
+  "composition_label": "Structured extraction (Document automation)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation built from the supplied requirements",
+    "runtime": "Python 3.13.15, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "document": "Unicode string, including empty string",
+      "schema": "Nonempty list of exact {name, labels, type, required} objects; globally unique case-insensitive literal labels and unique identifier names"
+    },
+    "field_types": ["string", "integer", "number", "date"],
+    "output": {
+      "status": "ok | incomplete | error",
+      "fields": "Field-name map to {value, source_text, span:{start,end}} or null",
+      "missing_fields": "List of {field,required}, including optional absent fields",
+      "invalid_fields": "List of {field,message,source_text,span}",
+      "error": "On validation, JSON, file or usage failures: {status:error,message:string} only"
+    },
+    "validation": "Single validate function for request structure and typed extracted values; JSON loader additionally rejects duplicate keys and nonstandard constants"
+  },
+  "cross_stage_handoffs": [
+    "Single extraction stage: validated request -> literal labeled-line scan -> shared typed-value validation -> JSON report"
+  ],
+  "behavior": {
+    "matching": "Case-insensitive whole literal labels at line start after optional indentation; colon or equals separator; label aliases supported",
+    "duplicates": "First matching document line wins, even if blank or invalid",
+    "spans": "Zero-based, end-exclusive Unicode code-point offsets into the unmodified document; leading and trailing value whitespace excluded",
+    "missing": "Blank and absent values are reported; required missing values make status incomplete",
+    "invalid_values": "Any invalid typed value makes status incomplete and preserves source evidence; invalid values are not also reported as missing",
+    "numbers": "Signed integers or finite decimal floats, no currency, grouping or exponent notation; decimal numbers use binary float precision",
+    "dates": "Strict YYYY-MM-DD calendar dates",
+    "exit_codes": {"0": "Extraction completed, including incomplete reports", "2": "Validation, JSON, file or usage error"}
+  },
+  "scope": {
+    "included": ["Deterministic schema-driven extraction", "Source spans", "Missing and invalid field reports", "Synthetic fixtures", "CLI JSON errors"],
+    "excluded": ["OCR", "PDF parsing", "Tables", "Multiline values", "Semantic inference", "LLM calls", "Live providers", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 11,
+    "unittest_exit_code": 0,
+    "cli_example": "passed: one JSON object, status ok, optional purchase_order reported missing",
+    "cli_exit_code": 0
+  }
+}

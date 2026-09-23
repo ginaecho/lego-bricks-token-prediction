@@ -1,0 +1,527 @@
+{
+  "id": "wave2_t096_combo3_interests_feedback_web",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "insights",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Customer insights",
+      "Research"
+    ],
+    "types": [
+      "interests",
+      "feedback",
+      "web"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 1,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Preference ranking, exclusion enforcement and grounded explanations.",
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Allowlisted URL ingestion, retrieval and provenance-preserving findings."
+  ],
+  "integration": {
+    "ordered_types": [
+      "interests",
+      "feedback",
+      "web"
+    ],
+    "edges": [
+      {
+        "from": "interests",
+        "to": "feedback",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "feedback",
+        "to": "web",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "4ada3f1b8c3209b60897ac3e4d2f853f0a93f5d82f0ca783d0296f229e166314",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "286e4a761bf40e09cd65f873a49e336f9f35916c1803dbd0df38cafe2229d1aa",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t096_combo3_interests_feedback_web",
+  "membership_point_id": "combo3_interests_feedback_web",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "51e9c44ddd7b57dd228621e9649f3cc1639d7aab01763826385ae7515094bab4",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "f47ce2ea-943b-43f6-bed1-708d577ebe4a",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 128097,
+    "output_tokens": 9023,
+    "cache_read_tokens": 116962,
+    "cache_write_tokens": 11117,
+    "total_tokens": 137120,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34740,
+        "agent_id": "f47ce2ea-943b-43f6-bed1-708d577ebe4a",
+        "model": "gpt-6-astra",
+        "input_tokens": 14853,
+        "output_tokens": 285,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 795,
+        "reasoning_tokens": 115,
+        "duration_ms": 8451,
+        "created_at": "2026-09-23T10:54:59.806Z"
+      },
+      {
+        "id": 34760,
+        "agent_id": "f47ce2ea-943b-43f6-bed1-708d577ebe4a",
+        "model": "gpt-6-astra",
+        "input_tokens": 15164,
+        "output_tokens": 7973,
+        "cache_read_tokens": 14850,
+        "cache_write_tokens": 311,
+        "reasoning_tokens": 509,
+        "duration_ms": 128911,
+        "created_at": "2026-09-23T10:59:41.835Z"
+      },
+      {
+        "id": 34761,
+        "agent_id": "f47ce2ea-943b-43f6-bed1-708d577ebe4a",
+        "model": "gpt-6-astra",
+        "input_tokens": 23453,
+        "output_tokens": 136,
+        "cache_read_tokens": 15161,
+        "cache_write_tokens": 8289,
+        "reasoning_tokens": 0,
+        "duration_ms": 3759,
+        "created_at": "2026-09-23T10:59:44.533Z"
+      },
+      {
+        "id": 34768,
+        "agent_id": "f47ce2ea-943b-43f6-bed1-708d577ebe4a",
+        "model": "gpt-6-astra",
+        "input_tokens": 24518,
+        "output_tokens": 325,
+        "cache_read_tokens": 23450,
+        "cache_write_tokens": 1065,
+        "reasoning_tokens": 27,
+        "duration_ms": 9158,
+        "created_at": "2026-09-23T11:00:05.159Z"
+      },
+      {
+        "id": 34770,
+        "agent_id": "f47ce2ea-943b-43f6-bed1-708d577ebe4a",
+        "model": "gpt-6-astra",
+        "input_tokens": 24934,
+        "output_tokens": 206,
+        "cache_read_tokens": 24515,
+        "cache_write_tokens": 416,
+        "reasoning_tokens": 0,
+        "duration_ms": 4076,
+        "created_at": "2026-09-23T11:00:14.816Z"
+      },
+      {
+        "id": 34772,
+        "agent_id": "f47ce2ea-943b-43f6-bed1-708d577ebe4a",
+        "model": "gpt-6-astra",
+        "input_tokens": 25175,
+        "output_tokens": 98,
+        "cache_read_tokens": 24931,
+        "cache_write_tokens": 241,
+        "reasoning_tokens": 0,
+        "duration_ms": 3156,
+        "created_at": "2026-09-23T11:00:21.920Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.45558750000000003,
+      "observed_cache_profile_estimate_usd": 0.192423,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.46705,
+      "observed_cache_profile_estimate_usd": 5.46705,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 5,
+      "roi_satisfaction": 0,
+      "future_impact_potential": 1,
+      "delivery_quality": 5
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.66,
+    "pseudo_annual_cost_usd": 25000,
+    "pseudo_annual_ai_value_usd": 30000,
+    "pseudo_net_impact_usd": 5000,
+    "pseudo_roi_pct": 20.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 0.415s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "feedback": {
+        "analyzed_ids": [
+          "f1",
+          "f2",
+          "f3"
+        ],
+        "duplicate_count": 1,
+        "interest_terms": [
+          "cycling",
+          "outdoors"
+        ],
+        "selected_item_ids": [
+          "bottle",
+          "bag"
+        ],
+        "themes": [
+          {
+            "count": 2,
+            "excerpts": [
+              {
+                "feedback_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "item_id": "bottle",
+                "text": "Sturdy quality for cycling. Delivery arrived late."
+              },
+              {
+                "feedback_ids": [
+                  "f3"
+                ],
+                "item_id": "bag",
+                "text": "Expensive price, but durable quality."
+              }
+            ],
+            "theme": "quality"
+          },
+          {
+            "count": 1,
+            "excerpts": [
+              {
+                "feedback_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "item_id": "bottle",
+                "text": "Sturdy quality for cycling. Delivery arrived late."
+              }
+            ],
+            "theme": "shipping"
+          },
+          {
+            "count": 1,
+            "excerpts": [
+              {
+                "feedback_ids": [
+                  "f3"
+                ],
+                "item_id": "bag",
+                "text": "Expensive price, but durable quality."
+              }
+            ],
+            "theme": "value"
+          }
+        ]
+      },
+      "interests": {
+        "recommendations": [
+          {
+            "item_id": "bottle",
+            "reasons": [
+              {
+                "tag": "cycling",
+                "weight": 5
+              },
+              {
+                "tag": "outdoors",
+                "weight": 3
+              }
+            ],
+            "score": 8
+          },
+          {
+            "item_id": "bag",
+            "reasons": [
+              {
+                "tag": "cycling",
+                "weight": 5
+              }
+            ],
+            "score": 5
+          }
+        ]
+      },
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true,
+      "web": {
+        "findings": [
+          {
+            "end": 87,
+            "excerpt": "Synthetic research: cycling outdoors equipment quality depends on durable construction.",
+            "feedback_ids": [
+              "f1",
+              "f2",
+              "f3"
+            ],
+            "matched_interests": [
+              "cycling",
+              "outdoors"
+            ],
+            "matched_terms": [
+              "durable",
+              "quality"
+            ],
+            "page_id": "p1",
+            "score": 4,
+            "start": 0,
+            "theme": "quality",
+            "title": "Synthetic durability snapshot",
+            "url": "https://research.example/quality"
+          },
+          {
+            "end": 62,
+            "excerpt": "Synthetic research: cycling shipping and delivery can be late.",
+            "feedback_ids": [
+              "f1",
+              "f2"
+            ],
+            "matched_interests": [
+              "cycling"
+            ],
+            "matched_terms": [
+              "delivery",
+              "late",
+              "shipping"
+            ],
+            "page_id": "p2",
+            "score": 4,
+            "start": 0,
+            "theme": "shipping",
+            "title": "Synthetic delivery snapshot",
+            "url": "https://research.example/shipping"
+          },
+          {
+            "end": 92,
+            "excerpt": "Synthetic research: cycling equipment price and value vary; expensive is not always durable.",
+            "feedback_ids": [
+              "f3"
+            ],
+            "matched_interests": [
+              "cycling"
+            ],
+            "matched_terms": [
+              "expensive",
+              "price",
+              "value"
+            ],
+            "page_id": "p3",
+            "score": 4,
+            "start": 0,
+            "theme": "value",
+            "title": "Synthetic price snapshot",
+            "url": "https://research.example/value"
+          },
+          {
+            "end": 92,
+            "excerpt": "Synthetic research: cycling equipment price and value vary; expensive is not always durable.",
+            "feedback_ids": [
+              "f1",
+              "f2",
+              "f3"
+            ],
+            "matched_interests": [
+              "cycling"
+            ],
+            "matched_terms": [
+              "durable"
+            ],
+            "page_id": "p3",
+            "score": 2,
+            "start": 0,
+            "theme": "quality",
+            "title": "Synthetic price snapshot",
+            "url": "https://research.example/value"
+          }
+        ],
+        "queries": [
+          {
+            "feedback_ids": [
+              "f1",
+              "f2",
+              "f3"
+            ],
+            "interest_terms": [
+              "cycling",
+              "outdoors"
+            ],
+            "terms": [
+              "broken",
+              "durable",
+              "quality",
+              "sturdy"
+            ],
+            "theme": "quality"
+          },
+          {
+            "feedback_ids": [
+              "f1",
+              "f2"
+            ],
+            "interest_terms": [
+              "cycling",
+              "outdoors"
+            ],
+            "terms": [
+              "arrived",
+              "delivery",
+              "late",
+              "shipping"
+            ],
+            "theme": "shipping"
+          },
+          {
+            "feedback_ids": [
+              "f3"
+            ],
+            "interest_terms": [
+              "cycling",
+              "outdoors"
+            ],
+            "terms": [
+              "cheap",
+              "expensive",
+              "price",
+              "value"
+            ],
+            "theme": "value"
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t096_combo3_interests_feedback_web",
+    "artifact_sha256": {
+      "implementation.py": "32fc4541aece908d02428e30010f3ace05f61f75b97753512aa630f39b4d5f1b",
+      "test_implementation.py": "fb87dc2e3810122f3c926dde1a489bb34b336e6f5a8d66e212854d8195a0410a",
+      "example_input.json": "46903be8e4413c6493d8a384b48a82740f3bd6efdcde0f2e7f3a28e50931b4a6",
+      "build_manifest.json": "62bfd0bd217d58a7c3bf1a4bbe0e9cd5d4b0db200b2f8fb8861237a8a28f31c8"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

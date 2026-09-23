@@ -1,0 +1,892 @@
+{
+  "id": "wave2_t103_combo4_adaptive_semantic_extract_deep",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "onboard",
+      "search",
+      "documents",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Guided onboarding",
+      "Smart product search",
+      "Document automation",
+      "Research"
+    ],
+    "types": [
+      "adaptive",
+      "semantic",
+      "extract",
+      "deep"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 6,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 3,
+    "planned_operation_retrieve": 5,
+    "planned_operation_verify": 5,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions."
+  ],
+  "integration": {
+    "ordered_types": [
+      "adaptive",
+      "semantic",
+      "extract",
+      "deep"
+    ],
+    "edges": [
+      {
+        "from": "adaptive",
+        "to": "semantic",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "semantic",
+        "to": "extract",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "extract",
+        "to": "deep",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "cc3d1890bb6a0d236a961d3f0a1526527ed2f0fba6328ef25b8bb81c3b6c0e89",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "791639a8a85b9461fb212f1e81c2bad1ab6463b2c2ab71543efb63f7e9845726",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t103_combo4_adaptive_semantic_extract_deep",
+  "membership_point_id": "combo4_adaptive_semantic_extract_deep",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "253f9b65243481b07115e0a1305045f0ed8d1209be89054a4f6e0b7080a12f84",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "ceab1eef-bfb6-452d-98be-dba46bf7bce6",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 141816,
+    "output_tokens": 12008,
+    "cache_read_tokens": 126541,
+    "cache_write_tokens": 15257,
+    "total_tokens": 153824,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34786,
+        "agent_id": "ceab1eef-bfb6-452d-98be-dba46bf7bce6",
+        "model": "gpt-6-astra",
+        "input_tokens": 14883,
+        "output_tokens": 383,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 825,
+        "reasoning_tokens": 201,
+        "duration_ms": 10357,
+        "created_at": "2026-09-23T11:02:17.628Z"
+      },
+      {
+        "id": 34802,
+        "agent_id": "ceab1eef-bfb6-452d-98be-dba46bf7bce6",
+        "model": "gpt-6-astra",
+        "input_tokens": 15297,
+        "output_tokens": 10071,
+        "cache_read_tokens": 14880,
+        "cache_write_tokens": 414,
+        "reasoning_tokens": 516,
+        "duration_ms": 157690,
+        "created_at": "2026-09-23T11:04:56.249Z"
+      },
+      {
+        "id": 34804,
+        "agent_id": "ceab1eef-bfb6-452d-98be-dba46bf7bce6",
+        "model": "gpt-6-astra",
+        "input_tokens": 25696,
+        "output_tokens": 166,
+        "cache_read_tokens": 15294,
+        "cache_write_tokens": 10399,
+        "reasoning_tokens": 8,
+        "duration_ms": 4281,
+        "created_at": "2026-09-23T11:05:01.310Z"
+      },
+      {
+        "id": 34807,
+        "agent_id": "ceab1eef-bfb6-452d-98be-dba46bf7bce6",
+        "model": "gpt-6-astra",
+        "input_tokens": 27691,
+        "output_tokens": 993,
+        "cache_read_tokens": 25693,
+        "cache_write_tokens": 1995,
+        "reasoning_tokens": 161,
+        "duration_ms": 17372,
+        "created_at": "2026-09-23T11:05:35.132Z"
+      },
+      {
+        "id": 34808,
+        "agent_id": "ceab1eef-bfb6-452d-98be-dba46bf7bce6",
+        "model": "gpt-6-astra",
+        "input_tokens": 28934,
+        "output_tokens": 302,
+        "cache_read_tokens": 27688,
+        "cache_write_tokens": 1243,
+        "reasoning_tokens": 0,
+        "duration_ms": 5738,
+        "created_at": "2026-09-23T11:05:38.775Z"
+      },
+      {
+        "id": 34809,
+        "agent_id": "ceab1eef-bfb6-452d-98be-dba46bf7bce6",
+        "model": "gpt-6-astra",
+        "input_tokens": 29315,
+        "output_tokens": 93,
+        "cache_read_tokens": 28931,
+        "cache_write_tokens": 381,
+        "reasoning_tokens": 0,
+        "duration_ms": 2271,
+        "created_at": "2026-09-23T11:05:44.303Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.53466,
+      "observed_cache_profile_estimate_usd": 0.24994275000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.415919999999999,
+      "observed_cache_profile_estimate_usd": 6.415919999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 1,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 2,
+      "delivery_quality": 5
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.52,
+    "pseudo_annual_cost_usd": 20000,
+    "pseudo_annual_ai_value_usd": 105000,
+    "pseudo_net_impact_usd": 85000,
+    "pseudo_roi_pct": 425.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............................\n----------------------------------------------------------------------\nRan 28 tests in 0.548s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true,
+      "stages": {
+        "adaptive": {
+          "query": "solar lantern",
+          "focus_terms": [
+            "battery",
+            "portable"
+          ],
+          "required_prerequisites": [
+            "search_basics",
+            "source_verification"
+          ],
+          "missing_prerequisites": [],
+          "ready": true,
+          "steps": [
+            "search_basics",
+            "source_verification",
+            "semantic",
+            "extract",
+            "deep"
+          ],
+          "explanation": "Verify sources before synthesis; preferences refine relevance, not evidence. Novices first learn search basics. Source verification remains mandatory for all levels. Extraction preserves original character spans; research reports conflicting values without choosing a winner."
+        },
+        "semantic": {
+          "query": "solar lantern",
+          "focus_terms": [
+            "battery",
+            "portable"
+          ],
+          "mode": "lexical",
+          "index": {
+            "01": [
+              "catalog"
+            ],
+            "03": [
+              "lab"
+            ],
+            "09": [
+              "catalog",
+              "lab"
+            ],
+            "12": [
+              "catalog"
+            ],
+            "2026": [
+              "catalog",
+              "lab"
+            ],
+            "29": [
+              "catalog"
+            ],
+            "5": [
+              "catalog"
+            ],
+            "8": [
+              "unrelated"
+            ],
+            "9": [
+              "lab"
+            ],
+            "battery": [
+              "catalog",
+              "lab"
+            ],
+            "bowl": [
+              "unrelated"
+            ],
+            "catalog": [
+              "catalog"
+            ],
+            "ceramic": [
+              "unrelated"
+            ],
+            "claims": [
+              "catalog"
+            ],
+            "fixture": [
+              "catalog",
+              "lab",
+              "unrelated"
+            ],
+            "hours": [
+              "catalog",
+              "lab"
+            ],
+            "lab": [
+              "lab"
+            ],
+            "lantern": [
+              "catalog",
+              "lab"
+            ],
+            "luma": [
+              "catalog",
+              "lab"
+            ],
+            "no": [
+              "lab"
+            ],
+            "not": [
+              "catalog",
+              "lab"
+            ],
+            "note": [
+              "lab"
+            ],
+            "portable": [
+              "catalog",
+              "lab"
+            ],
+            "price": [
+              "catalog",
+              "unrelated"
+            ],
+            "product": [
+              "catalog",
+              "lab",
+              "unrelated"
+            ],
+            "real": [
+              "catalog",
+              "lab"
+            ],
+            "results": [
+              "lab"
+            ],
+            "reviewed": [
+              "catalog",
+              "lab"
+            ],
+            "sample": [
+              "catalog",
+              "lab",
+              "unrelated"
+            ],
+            "solar": [
+              "catalog",
+              "lab"
+            ],
+            "synthetic": [
+              "catalog",
+              "lab",
+              "unrelated"
+            ],
+            "test": [
+              "lab"
+            ],
+            "usd": [
+              "catalog",
+              "unrelated"
+            ],
+            "waterproof": [
+              "catalog",
+              "lab"
+            ],
+            "with": [
+              "catalog"
+            ],
+            "yes": [
+              "catalog"
+            ]
+          },
+          "results": [
+            {
+              "document_id": "catalog",
+              "score": 1.0,
+              "matched_terms": [
+                "battery",
+                "lantern",
+                "portable",
+                "solar"
+              ]
+            },
+            {
+              "document_id": "lab",
+              "score": 1.0,
+              "matched_terms": [
+                "battery",
+                "lantern",
+                "portable",
+                "solar"
+              ]
+            }
+          ]
+        },
+        "extract": {
+          "documents": [
+            {
+              "document_id": "catalog",
+              "relevance": 1.0,
+              "fields": {
+                "product": [
+                  {
+                    "value": "Luma Sample",
+                    "raw": "Luma Sample",
+                    "span": [
+                      90,
+                      101
+                    ]
+                  }
+                ],
+                "battery_hours": [
+                  {
+                    "value": 12.0,
+                    "raw": "12",
+                    "span": [
+                      117,
+                      119
+                    ]
+                  }
+                ],
+                "price_usd": [
+                  {
+                    "value": 29.5,
+                    "raw": "29.5",
+                    "span": [
+                      131,
+                      135
+                    ]
+                  }
+                ],
+                "waterproof": [
+                  {
+                    "value": true,
+                    "raw": "yes",
+                    "span": [
+                      148,
+                      151
+                    ]
+                  }
+                ],
+                "reviewed": [
+                  {
+                    "value": "2026-09-01",
+                    "raw": "2026-09-01",
+                    "span": [
+                      162,
+                      172
+                    ]
+                  }
+                ]
+              },
+              "missing_fields": [],
+              "invalid_fields": []
+            },
+            {
+              "document_id": "lab",
+              "relevance": 1.0,
+              "fields": {
+                "product": [
+                  {
+                    "value": "Luma Sample",
+                    "raw": "Luma Sample",
+                    "span": [
+                      87,
+                      98
+                    ]
+                  }
+                ],
+                "battery_hours": [
+                  {
+                    "value": 9.0,
+                    "raw": "9",
+                    "span": [
+                      114,
+                      115
+                    ]
+                  }
+                ],
+                "price_usd": [],
+                "waterproof": [
+                  {
+                    "value": false,
+                    "raw": "no",
+                    "span": [
+                      128,
+                      130
+                    ]
+                  }
+                ],
+                "reviewed": [
+                  {
+                    "value": "2026-09-03",
+                    "raw": "2026-09-03",
+                    "span": [
+                      141,
+                      151
+                    ]
+                  }
+                ]
+              },
+              "missing_fields": [
+                "price_usd"
+              ],
+              "invalid_fields": []
+            }
+          ]
+        },
+        "deep": {
+          "documents_considered": [
+            "catalog",
+            "lab"
+          ],
+          "findings": [
+            {
+              "field": "product",
+              "state": "supported",
+              "variants": [
+                {
+                  "value": "Luma Sample",
+                  "evidence": [
+                    {
+                      "document_id": "catalog",
+                      "span": [
+                        90,
+                        101
+                      ],
+                      "raw": "Luma Sample"
+                    },
+                    {
+                      "document_id": "lab",
+                      "span": [
+                        87,
+                        98
+                      ],
+                      "raw": "Luma Sample"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "catalog",
+                    "lab"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "battery_hours",
+              "state": "disputed",
+              "variants": [
+                {
+                  "value": 12.0,
+                  "evidence": [
+                    {
+                      "document_id": "catalog",
+                      "span": [
+                        117,
+                        119
+                      ],
+                      "raw": "12"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "catalog"
+                  ]
+                },
+                {
+                  "value": 9.0,
+                  "evidence": [
+                    {
+                      "document_id": "lab",
+                      "span": [
+                        114,
+                        115
+                      ],
+                      "raw": "9"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "lab"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "price_usd",
+              "state": "supported",
+              "variants": [
+                {
+                  "value": 29.5,
+                  "evidence": [
+                    {
+                      "document_id": "catalog",
+                      "span": [
+                        131,
+                        135
+                      ],
+                      "raw": "29.5"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "catalog"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "waterproof",
+              "state": "disputed",
+              "variants": [
+                {
+                  "value": false,
+                  "evidence": [
+                    {
+                      "document_id": "lab",
+                      "span": [
+                        128,
+                        130
+                      ],
+                      "raw": "no"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "lab"
+                  ]
+                },
+                {
+                  "value": true,
+                  "evidence": [
+                    {
+                      "document_id": "catalog",
+                      "span": [
+                        148,
+                        151
+                      ],
+                      "raw": "yes"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "catalog"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "reviewed",
+              "state": "disputed",
+              "variants": [
+                {
+                  "value": "2026-09-01",
+                  "evidence": [
+                    {
+                      "document_id": "catalog",
+                      "span": [
+                        162,
+                        172
+                      ],
+                      "raw": "2026-09-01"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "catalog"
+                  ]
+                },
+                {
+                  "value": "2026-09-03",
+                  "evidence": [
+                    {
+                      "document_id": "lab",
+                      "span": [
+                        141,
+                        151
+                      ],
+                      "raw": "2026-09-03"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "lab"
+                  ]
+                }
+              ]
+            }
+          ],
+          "disagreements": [
+            {
+              "field": "battery_hours",
+              "variants": [
+                {
+                  "value": 12.0,
+                  "evidence": [
+                    {
+                      "document_id": "catalog",
+                      "span": [
+                        117,
+                        119
+                      ],
+                      "raw": "12"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "catalog"
+                  ]
+                },
+                {
+                  "value": 9.0,
+                  "evidence": [
+                    {
+                      "document_id": "lab",
+                      "span": [
+                        114,
+                        115
+                      ],
+                      "raw": "9"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "lab"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "waterproof",
+              "variants": [
+                {
+                  "value": false,
+                  "evidence": [
+                    {
+                      "document_id": "lab",
+                      "span": [
+                        128,
+                        130
+                      ],
+                      "raw": "no"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "lab"
+                  ]
+                },
+                {
+                  "value": true,
+                  "evidence": [
+                    {
+                      "document_id": "catalog",
+                      "span": [
+                        148,
+                        151
+                      ],
+                      "raw": "yes"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "catalog"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "reviewed",
+              "variants": [
+                {
+                  "value": "2026-09-01",
+                  "evidence": [
+                    {
+                      "document_id": "catalog",
+                      "span": [
+                        162,
+                        172
+                      ],
+                      "raw": "2026-09-01"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "catalog"
+                  ]
+                },
+                {
+                  "value": "2026-09-03",
+                  "evidence": [
+                    {
+                      "document_id": "lab",
+                      "span": [
+                        141,
+                        151
+                      ],
+                      "raw": "2026-09-03"
+                    }
+                  ],
+                  "supporting_documents": [
+                    "lab"
+                  ]
+                }
+              ]
+            }
+          ],
+          "unresolved_questions": [
+            "Which reported battery_hours value applies? Sources disagree; no winner was inferred.",
+            "What is price_usd in document lab?",
+            "Which reported waterproof value applies? Sources disagree; no winner was inferred.",
+            "Which reported reviewed value applies? Sources disagree; no winner was inferred."
+          ],
+          "summary": "Synthesized 2 synthetic documents; 3 disputed fields. Support is not proof of truth."
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t103_combo4_adaptive_semantic_extract_deep",
+    "artifact_sha256": {
+      "implementation.py": "21a0c4178e2fea650a75d55cbb5878d29c5ba1f1df94ab04603c478daeaaeec8",
+      "test_implementation.py": "16df1e60491cff0ccb2bab4a6bdcfcdc9de11eb073383187acbf6350b1bb07e9",
+      "example_input.json": "db98c8cee478b8a0ea03f615f528f2761d639d68d47e974590f4a5e190ff7cd7",
+      "build_manifest.json": "0d3b4230a0efed0f0ad0ae9695f6e5fb2d31ed731f21597aba33a091f53cae7a"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

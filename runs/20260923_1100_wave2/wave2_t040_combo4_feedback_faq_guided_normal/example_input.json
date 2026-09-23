@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional Acorn marketplace onboarding",
+  "feedback": [
+    {"id": "f1", "text": "How do I connect inventory?"},
+    {"id": "f2", "text": "  how do I CONNECT inventory?  "},
+    {"id": "f3", "text": "I need help with alerts."},
+    {"id": "f4", "text": "Can I activate teleportation?"}
+  ],
+  "themes": [
+    {"id": "inventory", "label": "Inventory connection", "keywords": ["inventory"], "question": "How do I connect inventory?"},
+    {"id": "alerts", "label": "Alert setup", "keywords": ["alerts"], "question": "How do I enable alerts?"},
+    {"id": "teleportation", "label": "Unsupported request", "keywords": ["teleportation"], "question": "Can I activate teleportation?"}
+  ],
+  "knowledge_base": [
+    {"id": "kb-setup", "title": "Synthetic setup handbook", "passages": [
+      {"id": "inventory", "text": "Connect inventory using Settings, Inventory, then Link catalog."},
+      {"id": "alerts", "text": "Enable alerts using Settings, Alerts, then Save preferences."}
+    ]}
+  ],
+  "setup_steps": [
+    {"id": "connect", "instruction": "Link your synthetic inventory catalog.", "theme_ids": ["inventory"], "prerequisites": [], "research_query": "inventory synchronization"},
+    {"id": "notify", "instruction": "Save synthetic alert preferences.", "theme_ids": ["alerts"], "prerequisites": ["connect"], "research_query": "alerts delivery"},
+    {"id": "teleport", "instruction": "Activate fictional teleportation.", "theme_ids": ["teleportation"], "prerequisites": [], "research_query": "teleportation"},
+    {"id": "audit", "instruction": "Check inventory after alert setup.", "theme_ids": ["inventory", "alerts"], "prerequisites": ["notify"], "research_query": "inventory verification"}
+  ],
+  "completed_step_ids": ["connect"],
+  "research_sources": [
+    {"id": "research-1", "title": "Synthetic lab notes", "passages": [
+      {"id": "p1", "text": "Inventory synchronization ran every five minutes in this synthetic trial."},
+      {"id": "p2", "text": "Alerts delivery required saved preferences in this synthetic trial."}
+    ]}
+  ]
+}

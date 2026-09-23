@@ -1,0 +1,70 @@
+{
+  "build_id": "wave2_t086_combo2_faq_behavior",
+  "composition_label": "Knowledge-base answers (AI customer support) -> Behavioral personalization (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "fixture_label": "nonblank string beginning with synthetic",
+      "query": "nonblank question",
+      "as_of": "timezone-aware ISO 8601 timestamp; fixes the deterministic evaluation clock",
+      "knowledge_base": "array of unique {id, title, text, product_ids}; references must exist",
+      "products": "array of unique {id, name, popularity}; popularity in [0, 1]",
+      "events": "array of unique {id, product_id, type, timestamp}; type view or purchase; no future events",
+      "settings": "optional object: half_life_days (default 30), top_k (5), min_match (0.3), faq_boost (2)"
+    },
+    "output": "Envelope with schema_version, fixture_label, status=ok, stage=complete, request, faq, behavior",
+    "faq": "{status: answered|abstained, answer: verbatim evidence text|null, evidence: [{kb_id,text,score,product_ids}], product_ids, reason}",
+    "behavior": "{mode: cold_start|personalized, faq_status, faq_product_ids, recommendations: [{product_id,name,score,components}]}",
+    "validation": "One validate(value, phase) boundary layer checks input, FAQ handoff and final output. Unknown fields, duplicate IDs, invalid references, invalid dates and nonfinite numbers are rejected. JSON parsing rejects duplicate keys and nonfinite constants.",
+    "errors": "CLI prints one JSON object with status=error and error description to stdout and exits 2; success exits 0"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq_stage",
+      "to": "behavior_stage",
+      "contract": "Validated FAQ envelope carries the copied request, retrieved evidence, grounded answer or explicit abstention, and evidence-linked product IDs.",
+      "consumption": "Behavior validates the envelope before using FAQ product IDs as ranking boosts. FAQ status and product IDs propagate into final behavior output.",
+      "integrity": "Validation recomputes retrieval, verifies exact evidence and product provenance, and restricts answers to verbatim evidence. Final ranking is recomputed for validation."
+    }
+  ],
+  "behavior": {
+    "retrieval": "Casefolded Unicode word-token query coverage over title and text, minus a fixed stopword list; threshold-inclusive top 3 entries, ties broken by knowledge ID.",
+    "grounding": "Default answer is the best retrieved passage verbatim. No evidence means null answer with explicit abstained status and reason.",
+    "optional_callable": "run(request, answerer) injects a Python callable receiving copied evidence. It must return one retrieved text verbatim. It is never invoked on abstention. No provider is included.",
+    "history": "Sum weight * 2^(-age_days / half_life_days) per product; view=1, purchase=3. Purchase products remain eligible.",
+    "ranking": "history_score + faq_score + popularity_score, descending; ties use product ID. FAQ score is configured boost for evidence-linked products. Return at most top_k.",
+    "cold_start": "No events: use full popularity plus FAQ relevance. Otherwise popularity is weighted by 0.01. Empty catalogs return empty recommendations; abstention disables FAQ boosts.",
+    "determinism": "Fixed request as_of timestamp, stable ID sorting, no randomness or current-time calls, copied boundary data."
+  },
+  "scope": {
+    "included": ["Integrated FAQ-to-behavior pipeline", "Shared validation and envelope", "Synthetic fixtures", "Optional callable fixture validation", "CLI error handling", "Unit and subprocess CLI tests"],
+    "excluded": ["Live LLMs or embeddings", "Network access", "Production persistence", "Authentication", "Enterprise service deployment", "Semantic entailment", "Multi-user identity resolution"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 17,
+    "unittest_exit_code": 0,
+    "cli": "passed; one JSON object, status ok, grounded jacket-care answer, personalized recommendations",
+    "cli_exit_code": 0
+  }
+}

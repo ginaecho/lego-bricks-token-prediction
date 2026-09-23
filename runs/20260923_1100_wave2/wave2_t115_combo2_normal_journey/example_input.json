@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "query": "garden compost",
+  "limit": 5,
+  "profile": {"skills": [], "interests": ["sustainability"]},
+  "sources": [
+    {
+      "id": "synthetic-guide",
+      "title": "Synthetic garden learning guide",
+      "passages": [
+        {"id": "basics", "text": "Garden compost starts with sorting plant scraps.", "action_ids": ["sort"]},
+        {"id": "practice", "text": "A garden compost bin needs sorted scraps and regular turning.", "action_ids": ["compost"]},
+        {"id": "unrelated", "text": "Synthetic watercolor exercises use paper.", "action_ids": ["paint"]}
+      ]
+    }
+  ],
+  "actions": [
+    {"id": "sort", "title": "Learn to sort plant scraps", "requires": [], "provides": ["sorting"], "tags": ["sustainability"]},
+    {"id": "compost", "title": "Start a practice compost bin", "requires": ["sorting"], "provides": ["composting"], "tags": ["sustainability"]},
+    {"id": "paint", "title": "Try watercolor", "requires": [], "provides": ["painting"], "tags": ["art"]}
+  ]
+}

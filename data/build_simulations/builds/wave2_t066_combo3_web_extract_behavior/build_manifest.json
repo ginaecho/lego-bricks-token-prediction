@@ -1,0 +1,56 @@
+{
+  "build_id": "wave2_t066_combo3_web_extract_behavior",
+  "composition_label": "Web research -> Structured extraction -> Behavioral personalization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original integrated reference implementation written for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "synthetic=true; exact hostname allowlist; HTTPS urls; URL-keyed fixtures with text XOR redirect; fields with name/label/type/required; timezone-aware now; optional history and ranking",
+    "core_fields": "Required id/title/category strings and nonnegative numeric price; additional string/number/integer fields supported. source/score/explanation are reserved names.",
+    "output": "status/schema_version/synthetic plus research.documents, extraction.records and behavior. CLI errors return status=error and error.",
+    "validation": "One validate(stage, data) boundary shared by the pipeline; each consuming stage revalidates the upstream bundle.",
+    "spans": "Half-open Unicode code-point offsets into preserved source text; not byte offsets."
+  },
+  "cross_stage_handoffs": [
+    "Research validates allowlisted URLs and offline redirect chains, preserving requested/final URL, retrieval chain, fixture timestamp, exact text and SHA-256.",
+    "Extraction consumes validated documents; escaped schema labels match case-sensitive line-start Label: value entries; duplicate labels fail. Values retain exact source spans and source URL/digest; absent or empty values are reported.",
+    "Behavior consumes validated extracted records; missing required fields exclude candidates. Extracted IDs associate history with category and candidate; provenance flows into recommendations."
+  ],
+  "behavior": {
+    "retrieval": "Offline synthetic fixture retrieval only. No network fallback. At most 10 URLs per redirect chain; cycles fail.",
+    "scoring": "Event weight = action multiplier * 2^(-age_days / half_life_days); purchase multiplier 3, view multiplier 1. Score = candidate direct weight + category weight.",
+    "defaults": "half_life_days=30; limit=10; history=[]",
+    "cold_start": "No history referring to eligible extracted candidates: all scores zero, deterministic ascending ID order.",
+    "unknown_history": "Ignored and counted. Future timestamps, unknown actions and naive timestamps fail validation.",
+    "tie_break": "Descending unrounded score, then ascending case-sensitive product ID.",
+    "duplicates": "Canonical duplicate requested URLs and duplicate eligible extracted product IDs fail.",
+    "purchases": "Purchased products remain eligible; repeated history entries count as separate events.",
+    "errors": "Malformed present typed values fail the pipeline; absent/empty fields produce missing reports. CLI validation/file failures emit one JSON object and exit 2."
+  },
+  "scope": {
+    "included": ["Deterministic synthetic offline ingestion", "Redirect allowlist validation", "Provenance-preserving findings", "Schema-driven labeled-text extraction", "Source-span validation", "Missing-field reports", "Recency-weighted personalization", "Cold-start handling", "Integrated CLI and unittest coverage"],
+    "excluded": ["Live HTTP retrieval", "HTML rendering or arbitrary document parsing", "LLMs or external providers", "Production security guarantees", "Persistent browsing storage", "Semantic search", "Authentication"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_passed": 25,
+    "tests_failed": 0,
+    "cli_example_exit_code": 0,
+    "cli_example_status": "ok",
+    "cli_error_exit_code": 2,
+    "coverage": ["All three stages", "Cross-stage provenance and tamper detection", "Unicode spans", "Missing fields", "Allowlist and redirects", "Recency and purchase weights", "Cold-start and unknown history", "Schema and value errors", "CLI success, file, JSON and schema errors"]
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "build_id": "wave2_t011_combo3_triage_adaptive_web",
+  "composition_label": "Ticket triage & routing -> Adaptive onboarding -> Web research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory using synthetic fixtures.",
+    "runtime": "Python 3.13.15; standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact fields: schema_version=1, synthetic=true, ticket, profile, config, sources. Ticket: id, subject, body, severity. Profile: experience, preferred_format, completed_steps. Config defines categories, fallback_category, priority_rules, steps, allowlisted_hosts, max_findings.",
+    "output": "Single cumulative envelope: schema_version, status, stage, input, triage, adaptive, web. Stage artifacts are null until their stage completes. Successful final stage is web.",
+    "validation": "Shared exact-object, bounded-string/list, enum and integer validators. Full schema and graph validated at every stage boundary; downstream deterministic artifacts recomputed to validate handoffs and provenance.",
+    "error": "One JSON object with schema_version=1, status=error, error message; CLI exits 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "triage",
+      "to": "adaptive",
+      "fields": ["ticket_id", "category", "priority", "owner", "onboarding_steps", "research_terms"],
+      "validation": "Configured category, accountable route, priority floor and exact configured step/topic lists verified before adaptive execution."
+    },
+    {
+      "from": "adaptive",
+      "to": "web",
+      "fields": ["ticket_id", "category", "priority", "owner", "plan", "research_terms"],
+      "validation": "Adaptive plan, prerequisites, experience gates, formats and accumulated topics verified before retrieval."
+    }
+  ],
+  "behavior": {
+    "triage": "Whole-token keyword-set matching, greatest matched keyword count, category configuration order breaks ties, configured fallback on zero matches. Highest of ticket severity, category priority, optional classifier proposal and matching priority rules wins. Team and accountable owner always come from configuration.",
+    "adaptive": "Depth-first prerequisite ordering, completed steps omitted, unmet experience requirements block steps and dependents with reasons. Preferred format selected when available, otherwise first configured format. Research terms accumulate from category and scheduled steps.",
+    "research": "Offline URL ingestion of explicitly synthetic provided snapshots only. HTTPS, exact allowlisted DNS hostname, no credentials, fragment or non-443 port. Canonical duplicate URLs rejected. ASCII alphanumeric token overlap with adaptive research terms ranks source bodies; source ID breaks ties; result count bounded. Findings preserve entire original source text, canonical URL, title, source ID and character offsets. No matches returns no_results.",
+    "injection": "Optional run_pipeline classifier callable receives a defensive ticket copy and category names. Its exact category/priority schema is validated; fixtures test valid output, invalid output, mutation isolation and exceptions. CLI remains deterministic and does not load plugins.",
+    "bounds": "Maximum 100 entries per configured array, 20 findings, 10000 characters per general text field, 200 per identifier/configured term, 2 million characters per CLI JSON input. Unknown fields, duplicate JSON keys and nonstandard constants rejected."
+  },
+  "scope": {
+    "included": [
+      "Integrated cumulative validated pipeline",
+      "Configurable accountable ticket routing and priority",
+      "Preference/experience-aware prerequisite planning",
+      "Offline allowlisted snapshot research with exact provenance",
+      "Optional fixture-tested local classifier callable",
+      "Deterministic CLI and unittest coverage"
+    ],
+    "excluded": [
+      "Live HTTP fetching, redirects, DNS resolution and external model providers",
+      "Production authentication, persistence, UI and enterprise deployment",
+      "Semantic search, natural-language generation and factual verification",
+      "Automatic completion of onboarding tasks or reassignment of ownership",
+      "Inference of learner experience beyond the supplied profile"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 25,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "final_stage": "web",
+      "findings": 2
+    },
+    "coverage": [
+      "All three stages and both validated cross-stage handoffs",
+      "Determinism, input immutability, category tie and fallback behavior",
+      "Priority escalation, keyword boundaries and accountable routing",
+      "Prerequisite ordering, completion skipping and experience blocking",
+      "Preference selection, fallback explanations and empty recommendations",
+      "Retrieval ranking, limits, empty results and exact source provenance",
+      "Allowlist enforcement, URL canonicalization and duplicate rejection",
+      "Malformed schemas, cycles, unknown references and synthetic labeling",
+      "Valid, invalid, mutating and failing injected classifier fixtures",
+      "Tampered handoffs, provenance and out-of-order stage rejection",
+      "CLI success, missing file, usage, malformed JSON and invalid input"
+    ]
+  }
+}

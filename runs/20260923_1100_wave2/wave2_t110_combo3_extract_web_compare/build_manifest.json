@@ -1,0 +1,53 @@
+{
+  "build_id": "wave2_t110_combo3_extract_web_compare",
+  "composition_label": "Structured extraction -> Web research -> Product comparison",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact keys: schema_version, synthetic=true, fields, documents, allowed_hosts, pages, preferences.",
+    "fields": "Named string or numeric fields, literal line labels, required flags. Numeric fields declare canonical unit and positive conversion factors, canonical factor 1.",
+    "documents": "Unique product_id, source text, ordered unique HTTPS research_urls.",
+    "pages": "Synthetic offline fixtures with unique URL, title and text; no network retrieval.",
+    "preferences": "Unique field preferences with positive finite weight; min/max for numeric fields, target for strings.",
+    "evidence": "Typed value, source unit, raw text, zero-based half-open character span and document/page source provenance.",
+    "output": "status, schema_version, synthetic, extraction, research, comparison; each stage has schema_version and product-ID-preserving products.",
+    "validation": "Single validate function handles input and all stage boundaries; validates source slices, handoff identities, retrieved findings, normalization and ranking."
+  },
+  "cross_stage_handoffs": [
+    "Extraction validates input and emits product field evidence, research URLs and missing-field reports. Research validates this output before ingesting URLs.",
+    "Research carries document evidence and appends ordered page findings and retrieval status per URL. Comparison validates this combined output before selecting and normalizing evidence."
+  ],
+  "behavior": {
+    "extraction": "First case-insensitive literal Label: value line per field. Empty labels count as missing. Invalid present numeric values fail validation. Required omissions are reported, not fatal.",
+    "research": "Exact lowercase hostname allowlist; HTTPS only; credentials, nonstandard ports, whitespace and fragments rejected. Only referenced fixtures are ingested. Blocked or absent fixtures yield blocked/unavailable status, never network fallback.",
+    "selection": "Document value wins; otherwise first retrieved page value. Alternatives and normalized conflicts are retained.",
+    "comparison": "Products form side-by-side rows with identical attribute columns. Numeric conversion uses field factors; strings normalize whitespace and case. Missing required attributes remain reported.",
+    "ranking": "Weighted min/max relative utility or exact normalized string target. Missing values score 0; equal present numeric values score 1. Scores rounded to 12 decimals. Ties sort by product_id.",
+    "cli": "One JSON object to stdout, exit 0 on success; JSON status error and exit 2 for validation, JSON, usage and file errors."
+  },
+  "scope": {
+    "included": ["Synthetic fixtures", "Schema-driven line extraction", "Source spans", "Offline allowlisted ingestion", "Provenance", "Unit normalization", "Conflict reporting", "Preference ranking", "Shared stage validation", "CLI and unittest coverage"],
+    "excluded": ["Live network retrieval", "Model providers", "LLM steps", "HTML parsing", "OCR", "Arbitrary document formats", "Currency exchange", "Redirect following", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 25,
+    "unittest_failures": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "example_top_product": "alpha"
+  }
+}

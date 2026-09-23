@@ -1,0 +1,498 @@
+{
+  "id": "wave2_t087_combo3_extract_compare_guided",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "search",
+      "onboard"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "Smart product search",
+      "Guided onboarding"
+    ],
+    "types": [
+      "extract",
+      "compare",
+      "guided"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 1,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 6,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Attribute normalization, side-by-side comparison and preference ranking.",
+    "Validated prerequisite-driven onboarding steps and progress tracking."
+  ],
+  "integration": {
+    "ordered_types": [
+      "extract",
+      "compare",
+      "guided"
+    ],
+    "edges": [
+      {
+        "from": "extract",
+        "to": "compare",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "compare",
+        "to": "guided",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "4c8f21c16db14959d2dddf0b0e75f8476d5b354fe33d97f301263cf215b2adf4",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "49f5efea175bc68fafcc5de334c39c12b24b2c2832582e5b160b3a84f499bded",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t087_combo3_extract_compare_guided",
+  "membership_point_id": "combo3_extract_compare_guided",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "babf20df9fdfab24914d89f61f346accb9c791fa8920048d966f808f237a2a3a",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "bc1b9ac4-12c7-439f-83c5-ece36bf7a956",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 124032,
+    "output_tokens": 8170,
+    "cache_read_tokens": 113740,
+    "cache_write_tokens": 10274,
+    "total_tokens": 132202,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34647,
+        "agent_id": "bc1b9ac4-12c7-439f-83c5-ece36bf7a956",
+        "model": "gpt-6-astra",
+        "input_tokens": 14833,
+        "output_tokens": 159,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 796,
+        "reasoning_tokens": 0,
+        "duration_ms": 3951,
+        "created_at": "2026-09-23T10:44:17.610Z"
+      },
+      {
+        "id": 34663,
+        "agent_id": "bc1b9ac4-12c7-439f-83c5-ece36bf7a956",
+        "model": "gpt-6-astra",
+        "input_tokens": 15022,
+        "output_tokens": 7092,
+        "cache_read_tokens": 14830,
+        "cache_write_tokens": 189,
+        "reasoning_tokens": 281,
+        "duration_ms": 113979,
+        "created_at": "2026-09-23T10:46:08.472Z"
+      },
+      {
+        "id": 34664,
+        "agent_id": "bc1b9ac4-12c7-439f-83c5-ece36bf7a956",
+        "model": "gpt-6-astra",
+        "input_tokens": 22430,
+        "output_tokens": 150,
+        "cache_read_tokens": 15019,
+        "cache_write_tokens": 7408,
+        "reasoning_tokens": 0,
+        "duration_ms": 3170,
+        "created_at": "2026-09-23T10:46:12.400Z"
+      },
+      {
+        "id": 34665,
+        "agent_id": "bc1b9ac4-12c7-439f-83c5-ece36bf7a956",
+        "model": "gpt-6-astra",
+        "input_tokens": 23510,
+        "output_tokens": 325,
+        "cache_read_tokens": 22427,
+        "cache_write_tokens": 1080,
+        "reasoning_tokens": 46,
+        "duration_ms": 6289,
+        "created_at": "2026-09-23T10:46:22.364Z"
+      },
+      {
+        "id": 34666,
+        "agent_id": "bc1b9ac4-12c7-439f-83c5-ece36bf7a956",
+        "model": "gpt-6-astra",
+        "input_tokens": 23926,
+        "output_tokens": 328,
+        "cache_read_tokens": 23507,
+        "cache_write_tokens": 416,
+        "reasoning_tokens": 0,
+        "duration_ms": 5787,
+        "created_at": "2026-09-23T10:46:25.280Z"
+      },
+      {
+        "id": 34667,
+        "agent_id": "bc1b9ac4-12c7-439f-83c5-ece36bf7a956",
+        "model": "gpt-6-astra",
+        "input_tokens": 24311,
+        "output_tokens": 116,
+        "cache_read_tokens": 23923,
+        "cache_write_tokens": 385,
+        "reasoning_tokens": 0,
+        "duration_ms": 3507,
+        "created_at": "2026-09-23T10:46:33.655Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.43263,
+      "observed_cache_profile_estimate_usd": 0.17671499999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.19156,
+      "observed_cache_profile_estimate_usd": 5.19156,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 2,
+      "impact_recognized": 3,
+      "roi_satisfaction": 5,
+      "future_impact_potential": 2,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.51,
+    "pseudo_annual_cost_usd": 60000,
+    "pseudo_annual_ai_value_usd": 100000,
+    "pseudo_net_impact_usd": 40000,
+    "pseudo_roi_pct": 66.66666666666667,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............................\n----------------------------------------------------------------------\nRan 28 tests in 1.701s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "synthetic": true,
+      "status": "ok",
+      "request": {
+        "schema_version": "1.0",
+        "synthetic": true,
+        "documents": [
+          {
+            "id": "synthetic-a",
+            "text": "Synthetic product listing\nName: Demo Pocket\nPrice: USD 450\nStorage: 512 GB\nWarranty: 12 months\n"
+          },
+          {
+            "id": "synthetic-b",
+            "text": "Synthetic product listing\nName: Demo Studio\nPrice: $600\nStorage: 1 TB\nWarranty: 2 years\n"
+          }
+        ],
+        "preferences": {
+          "weights": {
+            "price": 0.3,
+            "storage": 0.5,
+            "warranty": 0.2
+          },
+          "max_price": 700,
+          "min_storage": 256
+        },
+        "onboarding": {
+          "completed": [
+            "purchase"
+          ],
+          "answers": {
+            "purchase_confirmed": true,
+            "device_name": "Synthetic workstation"
+          },
+          "transfer_gb": 700
+        }
+      },
+      "extraction": [
+        {
+          "id": "synthetic-a",
+          "fields": {
+            "name": {
+              "raw": "Demo Pocket",
+              "span": [
+                32,
+                43
+              ],
+              "value": "Demo Pocket",
+              "unit": null
+            },
+            "price": {
+              "raw": "USD 450",
+              "span": [
+                51,
+                58
+              ],
+              "value": 450.0,
+              "unit": "USD"
+            },
+            "storage": {
+              "raw": "512 GB",
+              "span": [
+                68,
+                74
+              ],
+              "value": 512.0,
+              "unit": "GB"
+            },
+            "warranty": {
+              "raw": "12 months",
+              "span": [
+                85,
+                94
+              ],
+              "value": 12.0,
+              "unit": "months"
+            }
+          },
+          "missing_fields": [],
+          "complete": true
+        },
+        {
+          "id": "synthetic-b",
+          "fields": {
+            "name": {
+              "raw": "Demo Studio",
+              "span": [
+                32,
+                43
+              ],
+              "value": "Demo Studio",
+              "unit": null
+            },
+            "price": {
+              "raw": "$600",
+              "span": [
+                51,
+                55
+              ],
+              "value": 600.0,
+              "unit": "USD"
+            },
+            "storage": {
+              "raw": "1 TB",
+              "span": [
+                65,
+                69
+              ],
+              "value": 1000.0,
+              "unit": "GB"
+            },
+            "warranty": {
+              "raw": "2 years",
+              "span": [
+                80,
+                87
+              ],
+              "value": 24.0,
+              "unit": "months"
+            }
+          },
+          "missing_fields": [],
+          "complete": true
+        }
+      ],
+      "comparison": {
+        "units": {
+          "name": null,
+          "price": "USD",
+          "storage": "GB",
+          "warranty": "months"
+        },
+        "side_by_side": [
+          {
+            "id": "synthetic-a",
+            "attributes": {
+              "name": "Demo Pocket",
+              "price": 450.0,
+              "storage": 512.0,
+              "warranty": 12.0
+            },
+            "eligible": true
+          },
+          {
+            "id": "synthetic-b",
+            "attributes": {
+              "name": "Demo Studio",
+              "price": 600.0,
+              "storage": 1000.0,
+              "warranty": 24.0
+            },
+            "eligible": true
+          }
+        ],
+        "excluded": [],
+        "ranking": [
+          {
+            "id": "synthetic-b",
+            "score": 0.7,
+            "utilities": {
+              "price": 0.0,
+              "storage": 1.0,
+              "warranty": 1.0
+            }
+          },
+          {
+            "id": "synthetic-a",
+            "score": 0.3,
+            "utilities": {
+              "price": 1.0,
+              "storage": 0.0,
+              "warranty": 0.0
+            }
+          }
+        ],
+        "selected_id": "synthetic-b"
+      },
+      "guided": {
+        "selected_id": "synthetic-b",
+        "status": "in_progress",
+        "steps": [
+          {
+            "id": "purchase",
+            "prerequisites": [],
+            "status": "completed",
+            "blockers": [],
+            "evidence_valid": true
+          },
+          {
+            "id": "configure",
+            "prerequisites": [
+              "purchase"
+            ],
+            "status": "ready",
+            "blockers": [],
+            "evidence_valid": true
+          },
+          {
+            "id": "transfer",
+            "prerequisites": [
+              "purchase",
+              "configure"
+            ],
+            "status": "blocked",
+            "blockers": [
+              "configure"
+            ],
+            "evidence_valid": false
+          }
+        ],
+        "next_step": "configure",
+        "progress": 0.333333
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t087_combo3_extract_compare_guided",
+    "artifact_sha256": {
+      "implementation.py": "58cc99e02728c5651580553c84443f181a34df9f16c70c56200fe69423e93b36",
+      "test_implementation.py": "0b2c492ab926f913353a114fbaeccb71c12b2fc19834a2a0c20101d08ede55d8",
+      "example_input.json": "c6d19d2dd3cfc8275a47550a6446d7aff9c1a6a88271a0345737d2f1772eb694",
+      "build_manifest.json": "efc9358366e07553d04ce0924af992e3ea2a3a76f126b61eeab13f087bd21a10"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

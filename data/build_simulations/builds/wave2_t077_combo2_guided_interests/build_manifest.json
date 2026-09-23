@@ -1,0 +1,83 @@
+{
+  "build_id": "wave2_t077_combo2_guided_interests",
+  "composition_label": "Guided setup (Guided onboarding) -> Interest-based recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1, not boolean",
+      "fixture_label": "Literal synthetic",
+      "onboarding.completed_steps": "Ordered prefix of profile, consent, preferences. Each object has step_id and answers.",
+      "profile.answers": "Nonempty user_id and display_name strings",
+      "consent.answers": "Boolean personalized_discovery",
+      "preferences.answers": "Unique nonempty ranked_interests array; unique excluded_categories and excluded_item_ids arrays (may be empty)",
+      "discovery.limit": "Integer 1..100",
+      "discovery.catalog": "Array of unique-id objects with id, title, category and unique string-array tags"
+    },
+    "output": {
+      "success": "schema_version, fixture_label, status=ok, onboarding progress, discovery results or skipped reason",
+      "failure": "status=error and error string; CLI exit 2"
+    },
+    "validation": "Shared exact-field, text, array and requirement validators reject unknown/missing fields, whitespace-padded or empty strings, invalid types, duplicates, invalid prerequisites, non-finite JSON constants and duplicate JSON object keys. All catalog data is validated even if onboarding is incomplete.",
+    "matching": "Case-sensitive exact matches; no inferred synonyms or taxonomy. Unknown interests and exclusions are accepted."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "guided_setup",
+      "to": "recommend",
+      "contract": "Immutable DiscoveryContext containing validated user_id, ranked_interests, excluded_categories and excluded_item_ids. Created only after all three prerequisite-ordered steps pass and consent is true.",
+      "gating": "Incomplete onboarding skips discovery. Declined consent blocks preferences and skips discovery. Out-of-order or duplicate steps fail validation."
+    }
+  ],
+  "behavior": {
+    "progress": "Reports completed steps, counts, percentage, per-step completed/available/locked states, next step and blocked reason. Resume by submitting an extended valid completed_steps prefix.",
+    "ranking": "For N interests, rank i (zero-based) weighs N-i. Sum weights of exact category/tag matches; count each interest once even if present in both fields.",
+    "exclusions": "Excluded categories or item IDs remove candidates before scoring, regardless of interest strength.",
+    "explanations": "Every recommendation exposes matched interest, input-derived weight, exact category/tags evidence source and total score.",
+    "ties_and_limit": "Descending score, ascending item id; apply limit only after filtering and ranking. Report pre-limit eligible count, excluded count and unmatched count.",
+    "no_matches": "Return successful empty recommendations, never irrelevant filler.",
+    "execution": "Stateless deterministic pipeline; does not modify inputs or persist user data. One JSON object on stdout."
+  },
+  "scope": {
+    "included": [
+      "One integrated validated pipeline",
+      "Clearly labeled synthetic fixture",
+      "Prerequisite enforcement and resumable input-driven progress",
+      "Consent gating, ranked interests, hard exclusions and grounded explanations",
+      "CLI JSON and file error handling",
+      "Standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live providers, LLMs and networking",
+      "Authentication, external storage, UI and production deployment",
+      "Learned rankings, fuzzy matching and collaborative filtering",
+      "Enterprise-scale ingestion and durable onboarding sessions"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 18,
+    "cli_status": "passed",
+    "tests_exit_code": 0,
+    "cli_exit_code": 0,
+    "example_result": "Complete onboarding; two grounded recommendations; two exclusions; one unmatched item."
+  }
+}

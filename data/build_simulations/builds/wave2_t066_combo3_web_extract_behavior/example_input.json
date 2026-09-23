@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "allowlist": ["shop.example"],
+  "urls": ["https://shop.example/red", "https://shop.example/blue", "https://shop.example/book"],
+  "fixtures": {
+    "https://shop.example/red": {"redirect": "https://shop.example/products/red"},
+    "https://shop.example/products/red": {"text": "Synthetic product listing\nID: red\nTitle: Red building bricks\nCategory: toys\nPrice: 12.50\nStock: 8\n"},
+    "https://shop.example/blue": {"text": "Synthetic product listing\nID: blue\nTitle: Blue building bricks\nCategory: toys\nPrice: 10\n"},
+    "https://shop.example/book": {"text": "Synthetic product listing\nID: book\nTitle: Garden handbook\nCategory: books\nPrice: 15\nStock: 4\n"}
+  },
+  "fields": [
+    {"name": "id", "label": "ID", "type": "string", "required": true},
+    {"name": "title", "label": "Title", "type": "string", "required": true},
+    {"name": "category", "label": "Category", "type": "string", "required": true},
+    {"name": "price", "label": "Price", "type": "number", "required": true},
+    {"name": "stock", "label": "Stock", "type": "integer", "required": false}
+  ],
+  "now": "2026-09-23T12:00:00Z",
+  "history": [
+    {"product_id": "red", "action": "purchase", "at": "2026-09-23T12:00:00Z"},
+    {"product_id": "book", "action": "view", "at": "2026-08-24T12:00:00Z"}
+  ],
+  "ranking": {"half_life_days": 30, "limit": 10}
+}

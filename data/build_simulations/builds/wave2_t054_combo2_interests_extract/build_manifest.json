@@ -1,0 +1,53 @@
+{
+  "build_id": "wave2_t054_combo2_interests_extract",
+  "composition_label": "Interest-based recommendations -> Structured extraction",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original integrated implementation authored for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict envelope: schema_version, fixture_label, preferences, documents, extraction_schema",
+    "preferences": "interests maps case-sensitive tags to positive finite weights <= 1000000; excluded_ids and excluded_tags are unique string arrays; limit is a nonnegative integer",
+    "documents": "Unique id, title, unique case-sensitive tags, and text",
+    "extraction_schema": "Nonempty list of unique name and label definitions with type string or integer and boolean required",
+    "output": "status, schema_version, fixture_label, recommendations, extractions",
+    "validation": "Shared validate function checks input, grounded recommendation handoff, and final source-grounded output. Unknown input keys and duplicate JSON keys are rejected.",
+    "source_spans": "Half-open Unicode character offsets relative to the original document text; text stores the exact trimmed source substring",
+    "errors": "File, JSON and validation errors print one JSON object with status error and exit 2"
+  },
+  "cross_stage_handoffs": [
+    "Validated input feeds deterministic preference ranking and exclusion filtering",
+    "Extraction validates the complete ranking handoff against source preferences and catalog",
+    "Only selected documents are extracted, preserving recommendation order, document ID and one-based rank",
+    "Shared validation verifies the final output before CLI serialization"
+  ],
+  "behavior": {
+    "ranking": "Sum weights for matched tags, exclude IDs/tags before ranking, omit nonmatches, descending score then ascending ID, apply limit",
+    "explanations": "List only matched catalog tags and their actual preference weights",
+    "extraction": "First exact case-sensitive Label: value line; horizontal indentation allowed; trimmed nonempty value; integer values accept signed ASCII decimal digits",
+    "missing": "Absent or blank first value produces null value/span and missing_fields entry; required fields additionally appear in missing_required_fields",
+    "invalid_values": "Nonempty invalid integer in a selected document fails the pipeline; unselected document contents are not extracted",
+    "fixture_data": "All example documents are explicitly labeled synthetic"
+  },
+  "scope": {
+    "included": ["Deterministic integrated CLI", "Preference ranking", "Exclusions", "Grounded explanations", "Schema-driven extraction", "Source spans", "Missing-field reporting", "Shared validation", "Standard-library unittest suite"],
+    "excluded": ["Live providers", "LLM calls", "Semantic inference", "PDF/OCR", "Nested field types", "Enterprise deployment", "Network access", "Third-party dependencies"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {"tests_run": 18, "failures": 0, "errors": 0, "exit_code": 0},
+    "example_cli": {"exit_code": 0, "stdout_json_objects": 1, "status": "ok", "recommendations": 2, "extractions": 2},
+    "coverage": ["Ranking and grounded explanation", "Exclusions", "Cross-stage order and limit", "Tie-breaking", "Typed values and source spans", "Missing and required fields", "Unicode and CRLF", "Empty matches and zero limit", "Empty catalog", "Invalid inputs", "Duplicate identifiers and schema", "Tampered handoff rejection", "Selected versus excluded invalid content", "Literal field labels", "Final output validation", "CLI success", "CLI file and usage errors", "Malformed JSON and duplicate keys"]
+  }
+}

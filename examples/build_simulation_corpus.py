@@ -7,6 +7,7 @@ import csv
 import hashlib
 import html
 import json
+import shutil
 import subprocess
 import sys
 from collections import Counter
@@ -15,6 +16,9 @@ from pathlib import Path
 from token_yield.build_simulations import (
     BUILD_SCOPE, FAMILIES, REWARD_WEIGHTS, STAFF, combination_design, complete_point,
     planned_point, point_id, pseudo_outcomes, read_usage, write_json,
+)
+from token_yield.build_waves import (
+    BUILDER_TEMPLATE, BUILDER_TEMPLATE_VERSION, instructions, select_wave, trial_point,
 )
 from token_yield.marketplace_agent_contracts import ATOMS, contracts
 
@@ -109,12 +113,103 @@ def initialize(root: Path) -> None:
     summarize(root)
 
 
-def import_build(root: Path, database: Path, identifier: str) -> None:
-    campaign = read(root / "campaign.json")
+WAVE2_QUOTAS = {
+    "2_train": 20, "2_validation": 5, "2_test": 5,
+    "3_train": 23, "3_validation": 6, "3_test": 6,
+    "4_train": 18, "4_validation": 6, "4_test": 6,
+    "repeat_2_train": 1, "repeat_2_validation": 1, "repeat_3_train": 1,
+    "repeat_3_validation": 1, "repeat_4_train": 1, "repeat_4_validation": 1,
+}
+
+
+def wave_path(root: Path, wave: str) -> Path:
+    return root / "waves" / f"{wave}.json"
+
+
+def plan_wave(root: Path, wave: str, session_id: str, staging: str, model: str, seed: int) -> None:
+    target = wave_path(root, wave)
+    if target.exists():
+        raise ValueError(f"{target} is frozen; create a new wave instead of re-planning")
+    measured = []
+    for path in sorted((root / "data_points").glob("*.json")):
+        point = read(path)
+        if point["status"] == "measured_build_passed" and not point.get("wave"):
+            measured.append({"id": point["id"], "types": point["input_features"]["types"],
+                             "split_group": point["split_group"]})
+    trials = select_wave(measured, WAVE2_QUOTAS, seed, wave)
+    for trial in trials:
+        directory = str(ROOT / staging / trial["trial_id"])
+        text = instructions(trial, directory)
+        trial["staging_directory"] = f"{staging}/{trial['trial_id']}"
+        trial["builder_instructions_sha256"] = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        point_path = root / "data_points" / (trial["trial_id"] + ".json")
+        if point_path.exists():
+            raise ValueError(f"Trial record already exists: {point_path.name}")
+        write_json(point_path, trial_point(trial, wave, trial["builder_instructions_sha256"]))
+    write_json(target, {
+        "protocol": "agent-software-build-v1", "wave": wave, "parent_session_id": session_id,
+        "status": "frozen_before_dispatch", "selection_seed": seed, "quotas": WAVE2_QUOTAS,
+        "selection_inputs": "Memberships, split groups and wave-1 build IDs only; no token labels were read.",
+        "builder_model_requested": model, "concurrency_plan": 5,
+        "direct_paid_api_calls_authorized_for_this_wave": False,
+        "builder_instructions_version": BUILDER_TEMPLATE_VERSION,
+        "builder_instructions_template": BUILDER_TEMPLATE,
+        "builder_instructions_template_sha256": hashlib.sha256(BUILDER_TEMPLATE.encode("utf-8")).hexdigest(),
+        "staging_root": staging,
+        "evaluation_rules": {
+            "targets": "Fit input and output construction tokens separately; derive total and cost afterward.",
+            "features": "Pre-build input_features only; no observed sizes, test counts, usage, prices or pseudo outcomes.",
+            "baseline": "Training-mean per target; candidates are regularized linear models chosen by grouped CV on train+validation groups.",
+            "acceptance_gates": {"validation_total_mape_max": 0.20, "must_beat_baseline_mae_on_validation": True,
+                                 "interval_coverage_target": 0.80},
+            "test_policy": "Test groups are evaluated once with the frozen candidate; failure does not redefine the test set.",
+        },
+        "trials": trials, "builders": {}, "failures": {},
+    })
+    print(json.dumps({"wave": wave, "trials": len(trials),
+                      "by_size": dict(Counter(len(t["types"]) for t in trials)),
+                      "by_split": dict(Counter(t["split"] for t in trials))}))
+
+
+def dispatch_text(root: Path, wave: str, trial_id: str) -> None:
+    manifest = read(wave_path(root, wave))
+    trial = next(item for item in manifest["trials"] if item["trial_id"] == trial_id)
+    text = instructions(trial, str(ROOT / trial["staging_directory"]))
+    if hashlib.sha256(text.encode("utf-8")).hexdigest() != trial["builder_instructions_sha256"]:
+        raise ValueError("Instructions differ from the frozen fingerprint")
+    print(text)
+
+
+def register(root: Path, wave: str, trial_id: str, agent: str, status: str | None) -> None:
+    path = wave_path(root, wave)
+    manifest = read(path)
+    if trial_id not in {item["trial_id"] for item in manifest["trials"]}:
+        raise ValueError(f"Unknown trial {trial_id}")
+    if status:
+        manifest["failures"][trial_id] = {"agent_id": agent, "reason": status}
+    else:
+        if trial_id in manifest["builders"] and manifest["builders"][trial_id] != agent:
+            raise ValueError("A trial is measured by exactly one builder session")
+        manifest["builders"][trial_id] = agent
+    write_json(path, manifest)
+
+
+def import_build(root: Path, database: Path, identifier: str, wave: str | None = None) -> None:
+    if wave:
+        campaign = read(wave_path(root, wave))
+        trial = next(item for item in campaign["trials"] if item["trial_id"] == identifier)
+        staged = ROOT / trial["staging_directory"]
+        directory = root / "builds" / identifier
+        directory.mkdir(parents=True, exist_ok=True)
+        for name in ("implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"):
+            if (staged / name).is_file():
+                shutil.copyfile(staged / name, directory / name)
+    else:
+        campaign = read(root / "campaign.json")
+        directory = root / "builds" / identifier
     agent = campaign["builders"][identifier]
     point_path = root / "data_points" / (identifier + ".json")
     point = read(point_path)
-    directory = root / "builds" / identifier
     names = ("implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json")
     for name in names:
         if not (directory / name).is_file():
@@ -240,18 +335,34 @@ Ordinal ROI satisfaction is not financial ROI. Verified customer ROI is unknown.
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("initialize", "import", "summarize"))
+    parser.add_argument("action", choices=("initialize", "import", "summarize", "plan-wave",
+                                           "instructions", "register"))
     parser.add_argument("--root", type=Path, default=CORPUS)
     parser.add_argument("--copilot-db", type=Path)
     parser.add_argument("--ids", nargs="+")
+    parser.add_argument("--wave")
+    parser.add_argument("--session-id")
+    parser.add_argument("--staging")
+    parser.add_argument("--model", default="gpt-6-astra")
+    parser.add_argument("--seed", type=int, default=20260923)
+    parser.add_argument("--agent-id")
+    parser.add_argument("--failed")
     args = parser.parse_args()
     if args.action == "initialize":
         initialize(args.root)
+    elif args.action == "plan-wave":
+        if not (args.wave and args.session_id and args.staging):
+            parser.error("plan-wave requires --wave, --session-id and --staging")
+        plan_wave(args.root, args.wave, args.session_id, args.staging, args.model, args.seed)
+    elif args.action == "instructions":
+        dispatch_text(args.root, args.wave, args.ids[0])
+    elif args.action == "register":
+        register(args.root, args.wave, args.ids[0], args.agent_id, args.failed)
     elif args.action == "import":
         if args.copilot_db is None or not args.ids:
             parser.error("import requires --copilot-db and explicit completed --ids")
         for identifier in args.ids:
-            import_build(args.root, args.copilot_db, identifier)
+            import_build(args.root, args.copilot_db, identifier, args.wave)
         summarize(args.root)
     else:
         summarize(args.root)

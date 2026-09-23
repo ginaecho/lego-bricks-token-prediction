@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "fixture_label": "synthetic",
+  "profile": {
+    "goal": "launch-store",
+    "interests": ["crafts"],
+    "completed": ["account"]
+  },
+  "actions": [
+    {"id": "account", "title": "Create a synthetic merchant account", "prerequisites": [], "tags": [], "goals": []},
+    {"id": "catalog", "title": "Set up a craft catalog", "prerequisites": ["account"], "tags": ["crafts"], "goals": ["launch-store"]},
+    {"id": "publish", "title": "Publish the synthetic storefront", "prerequisites": ["catalog"], "tags": ["crafts"], "goals": ["launch-store"]},
+    {"id": "analytics", "title": "Explore sample analytics", "prerequisites": ["account"], "tags": ["metrics"], "goals": ["understand-sales"]}
+  ],
+  "progress_events": [
+    {"action_id": "catalog", "status": "completed"},
+    {"action_id": "publish", "status": "in_progress"}
+  ]
+}

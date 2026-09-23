@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "synthetic_data": true,
+  "query": "marketplace sales analytics",
+  "profile": {"skills": ["basic-spreadsheets"], "goals": ["sales-dashboard"]},
+  "passages": [
+    {
+      "id": "synthetic-cleaning",
+      "title": "Synthetic marketplace data preparation guide",
+      "source_uri": "synthetic:marketplace/cleaning",
+      "text": "This is a synthetic teaching fixture. Marketplace sales analytics starts with cleaning order data using basic spreadsheets."
+    },
+    {
+      "id": "synthetic-dashboard",
+      "title": "Synthetic marketplace dashboard guide",
+      "source_uri": "synthetic:marketplace/dashboard",
+      "text": "Marketplace sales analytics dashboards require clean order data. Build a dashboard from the prepared table."
+    },
+    {
+      "id": "synthetic-unrelated",
+      "title": "Synthetic garden guide",
+      "source_uri": "synthetic:garden",
+      "text": "Water seedlings gently each morning."
+    }
+  ],
+  "actions": [
+    {
+      "id": "clean-orders",
+      "label": "Practice cleaning synthetic marketplace orders",
+      "requires": ["basic-spreadsheets"],
+      "grants": ["clean-orders"],
+      "evidence_passage_ids": ["synthetic-cleaning"]
+    },
+    {
+      "id": "build-dashboard",
+      "label": "Build a synthetic sales dashboard",
+      "requires": ["clean-orders"],
+      "grants": ["sales-dashboard"],
+      "evidence_passage_ids": ["synthetic-dashboard"]
+    }
+  ]
+}

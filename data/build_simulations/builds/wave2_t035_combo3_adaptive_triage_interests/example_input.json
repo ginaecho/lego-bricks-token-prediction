@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "status": "ok",
+  "stage": "input",
+  "request": {
+    "profile": {
+      "experience": "beginner",
+      "presentation": "guided",
+      "interests": {"design": 5, "automation": 4, "analytics": 3},
+      "excluded_tags": ["advertising"],
+      "completed_steps": ["basics"]
+    },
+    "tickets": [
+      {"id": "synthetic-ticket-1", "text": "Automation setup is broken", "status": "open"},
+      {"id": "synthetic-ticket-2", "text": "Thanks for the billing help", "status": "resolved"}
+    ],
+    "routing": {
+      "default_category": "general",
+      "default_owner": "synthetic-support-team",
+      "default_priority": "normal",
+      "onboarding_owner": "synthetic-onboarding-team",
+      "rules": [
+        {
+          "id": "automation-setup",
+          "keywords": ["automation", "setup"],
+          "category": "setup",
+          "priority": "high",
+          "owner": "synthetic-product-team",
+          "prerequisites": ["workspace"],
+          "avoid_tags": ["automation"]
+        },
+        {
+          "id": "billing",
+          "keywords": ["billing", "invoice"],
+          "category": "billing",
+          "priority": "normal",
+          "owner": "synthetic-billing-team",
+          "prerequisites": [],
+          "avoid_tags": ["analytics"]
+        }
+      ]
+    },
+    "catalog": [
+      {"id": "synthetic-a", "title": "Synthetic design dashboard", "tags": ["design", "analytics"]},
+      {"id": "synthetic-b", "title": "Synthetic automation toolkit", "tags": ["automation", "design"]},
+      {"id": "synthetic-c", "title": "Synthetic promoted template", "tags": ["design", "advertising"]},
+      {"id": "synthetic-d", "title": "Synthetic design basics", "tags": ["design"]},
+      {"id": "synthetic-e", "title": "Synthetic unrelated item", "tags": ["gardening"]}
+    ],
+    "limit": 3
+  }
+}

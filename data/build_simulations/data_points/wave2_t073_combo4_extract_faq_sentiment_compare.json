@@ -1,0 +1,573 @@
+{
+  "id": "wave2_t073_combo4_extract_faq_sentiment_compare",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "support",
+      "insights",
+      "search"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "AI customer support",
+      "Customer insights",
+      "Smart product search"
+    ],
+    "types": [
+      "extract",
+      "faq",
+      "sentiment",
+      "compare"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 1,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 6,
+    "planned_operation_classify": 5,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Schema-driven field extraction, source spans and missing-field reporting.",
+    "Knowledge-base retrieval, grounded answers and explicit abstention.",
+    "Transparent sentiment scoring and severity-aware issue prioritization.",
+    "Attribute normalization, side-by-side comparison and preference ranking."
+  ],
+  "integration": {
+    "ordered_types": [
+      "extract",
+      "faq",
+      "sentiment",
+      "compare"
+    ],
+    "edges": [
+      {
+        "from": "extract",
+        "to": "faq",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "faq",
+        "to": "sentiment",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "sentiment",
+        "to": "compare",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "e05c3f9f4290ef2627e600de0bb5dc747a376d02cb8839336b0594cf11a5e48e",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "808c98d0d87ccb9bf6e58d47221d40ee80dbb1f4d1a0107a2e16d15e4276796a",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t073_combo4_extract_faq_sentiment_compare",
+  "membership_point_id": "combo4_extract_faq_sentiment_compare",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "6e41bc5a79c27eea1eddaa56a0c4355b91a9426ae87471d13c79b904447dc154",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "61ebf1cb-3b7a-48a1-946f-927cf68e43f0",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 131212,
+    "output_tokens": 11376,
+    "cache_read_tokens": 118632,
+    "cache_write_tokens": 12562,
+    "total_tokens": 142588,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34487,
+        "agent_id": "61ebf1cb-3b7a-48a1-946f-927cf68e43f0",
+        "model": "gpt-6-astra",
+        "input_tokens": 14866,
+        "output_tokens": 516,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 829,
+        "reasoning_tokens": 345,
+        "duration_ms": 13003,
+        "created_at": "2026-09-23T10:25:57.486Z"
+      },
+      {
+        "id": 34495,
+        "agent_id": "61ebf1cb-3b7a-48a1-946f-927cf68e43f0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15408,
+        "output_tokens": 8159,
+        "cache_read_tokens": 14863,
+        "cache_write_tokens": 542,
+        "reasoning_tokens": 190,
+        "duration_ms": 78050,
+        "created_at": "2026-09-23T10:27:16.340Z"
+      },
+      {
+        "id": 34497,
+        "agent_id": "61ebf1cb-3b7a-48a1-946f-927cf68e43f0",
+        "model": "gpt-6-astra",
+        "input_tokens": 23814,
+        "output_tokens": 294,
+        "cache_read_tokens": 15405,
+        "cache_write_tokens": 8406,
+        "reasoning_tokens": 58,
+        "duration_ms": 6591,
+        "created_at": "2026-09-23T10:27:24.348Z"
+      },
+      {
+        "id": 34501,
+        "agent_id": "61ebf1cb-3b7a-48a1-946f-927cf68e43f0",
+        "model": "gpt-6-astra",
+        "input_tokens": 24168,
+        "output_tokens": 2096,
+        "cache_read_tokens": 23811,
+        "cache_write_tokens": 354,
+        "reasoning_tokens": 135,
+        "duration_ms": 27475,
+        "created_at": "2026-09-23T10:27:54.589Z"
+      },
+      {
+        "id": 34504,
+        "agent_id": "61ebf1cb-3b7a-48a1-946f-927cf68e43f0",
+        "model": "gpt-6-astra",
+        "input_tokens": 26357,
+        "output_tokens": 208,
+        "cache_read_tokens": 24165,
+        "cache_write_tokens": 2189,
+        "reasoning_tokens": 13,
+        "duration_ms": 4621,
+        "created_at": "2026-09-23T10:28:27.851Z"
+      },
+      {
+        "id": 34506,
+        "agent_id": "61ebf1cb-3b7a-48a1-946f-927cf68e43f0",
+        "model": "gpt-6-astra",
+        "input_tokens": 26599,
+        "output_tokens": 103,
+        "cache_read_tokens": 26354,
+        "cache_write_tokens": 242,
+        "reasoning_tokens": 0,
+        "duration_ms": 6826,
+        "created_at": "2026-09-23T10:28:41.827Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.49866999999999995,
+      "observed_cache_profile_estimate_usd": 0.23174799999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.98404,
+      "observed_cache_profile_estimate_usd": 5.98404,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 5,
+      "impact_recognized": 2,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 2,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.54,
+    "pseudo_annual_cost_usd": 15000,
+    "pseudo_annual_ai_value_usd": 65000,
+    "pseudo_net_impact_usd": 50000,
+    "pseudo_roi_pct": 333.3333333333333,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................................\n----------------------------------------------------------------------\nRan 33 tests in 0.760s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "stage": "compare",
+      "request": {
+        "schema_version": "1.0",
+        "fixture_label": "SYNTHETIC customer and fictional products; no real customer data",
+        "document": "Customer: Demo Person\nOrder: 1042\nQuestion: My battery is broken and unsafe. Can I get a refund?\n",
+        "fields": [
+          {
+            "name": "customer",
+            "pattern": "^Customer: (?P<value>.+)$",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "order",
+            "pattern": "^Order: (?P<value>.+)$",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "question",
+            "pattern": "^Question: (?P<value>.+)$",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "email",
+            "pattern": "^Email: (?P<value>.+)$",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "question_field": "question",
+        "knowledge_base": [
+          {
+            "id": "kb-refund",
+            "question": "broken unsafe battery refund",
+            "answer": "Synthetic policy: stop using an unsafe device and contact support for a return assessment."
+          },
+          {
+            "id": "kb-delivery",
+            "question": "delivery shipment tracking",
+            "answer": "Synthetic policy: tracking appears on your order page."
+          }
+        ],
+        "retrieval_threshold": 0.5,
+        "products": [
+          {
+            "id": "budget",
+            "name": "Synthetic Budget",
+            "attributes": {
+              "price": {
+                "value": 5000,
+                "unit": "cents"
+              },
+              "battery": {
+                "value": 120,
+                "unit": "minutes"
+              },
+              "warranty": {
+                "value": 6,
+                "unit": "months"
+              }
+            }
+          },
+          {
+            "id": "care",
+            "name": "Synthetic Care",
+            "attributes": {
+              "price": {
+                "value": 80,
+                "unit": "USD"
+              },
+              "battery": {
+                "value": 4,
+                "unit": "hours"
+              },
+              "warranty": {
+                "value": 2,
+                "unit": "years"
+              }
+            }
+          }
+        ],
+        "preferences": [
+          {
+            "attribute": "price",
+            "direction": "min",
+            "weight": 1
+          },
+          {
+            "attribute": "battery",
+            "direction": "max",
+            "weight": 1
+          }
+        ]
+      },
+      "data": {
+        "extract": {
+          "fields": {
+            "customer": {
+              "value": "Demo Person",
+              "source_text": "Demo Person",
+              "span": [
+                10,
+                21
+              ]
+            },
+            "order": {
+              "value": 1042,
+              "source_text": "1042",
+              "span": [
+                29,
+                33
+              ]
+            },
+            "question": {
+              "value": "My battery is broken and unsafe. Can I get a refund?",
+              "source_text": "My battery is broken and unsafe. Can I get a refund?",
+              "span": [
+                44,
+                96
+              ]
+            }
+          },
+          "missing_fields": [
+            "email"
+          ],
+          "missing_required": [],
+          "invalid_fields": []
+        },
+        "faq": {
+          "query": "My battery is broken and unsafe. Can I get a refund?",
+          "status": "answered",
+          "answer": "Synthetic policy: stop using an unsafe device and contact support for a return assessment.",
+          "citation": "kb-refund",
+          "confidence": 0.8,
+          "reason": null
+        },
+        "sentiment": {
+          "source_text": "My battery is broken and unsafe. Can I get a refund?",
+          "faq_status": "answered",
+          "score": -6,
+          "label": "negative",
+          "contributions": [
+            {
+              "token": "broken",
+              "token_index": 3,
+              "negated": false,
+              "score": -2
+            },
+            {
+              "token": "unsafe",
+              "token_index": 5,
+              "negated": false,
+              "score": -3
+            },
+            {
+              "token": "refund",
+              "token_index": 10,
+              "negated": false,
+              "score": -1
+            }
+          ],
+          "severity": "critical",
+          "severity_terms": [
+            "unsafe"
+          ],
+          "priority": 100,
+          "priority_reasons": [
+            "severity:critical",
+            "negative_sentiment:+10"
+          ]
+        },
+        "compare": {
+          "issue_priority": 100,
+          "issue_severity": "critical",
+          "faq_status": "answered",
+          "units": {
+            "price": "USD",
+            "battery": "hours",
+            "warranty": "months"
+          },
+          "side_by_side": [
+            {
+              "id": "budget",
+              "name": "Synthetic Budget",
+              "attributes": {
+                "price": 50.0,
+                "battery": 2.0,
+                "warranty": 6
+              }
+            },
+            {
+              "id": "care",
+              "name": "Synthetic Care",
+              "attributes": {
+                "price": 80,
+                "battery": 4,
+                "warranty": 24
+              }
+            }
+          ],
+          "effective_preferences": [
+            {
+              "attribute": "price",
+              "direction": "min",
+              "weight": 1
+            },
+            {
+              "attribute": "battery",
+              "direction": "max",
+              "weight": 1
+            },
+            {
+              "attribute": "warranty",
+              "direction": "max",
+              "weight": 2
+            }
+          ],
+          "adjustments": [
+            "High-priority issue adds warranty preference (weight 2)"
+          ],
+          "ranking": [
+            {
+              "id": "care",
+              "score": 0.75,
+              "contributions": [
+                {
+                  "attribute": "price",
+                  "utility": 0.0,
+                  "weight": 1,
+                  "missing": false
+                },
+                {
+                  "attribute": "battery",
+                  "utility": 1.0,
+                  "weight": 1,
+                  "missing": false
+                },
+                {
+                  "attribute": "warranty",
+                  "utility": 1.0,
+                  "weight": 2,
+                  "missing": false
+                }
+              ]
+            },
+            {
+              "id": "budget",
+              "score": 0.25,
+              "contributions": [
+                {
+                  "attribute": "price",
+                  "utility": 1.0,
+                  "weight": 1,
+                  "missing": false
+                },
+                {
+                  "attribute": "battery",
+                  "utility": 0.0,
+                  "weight": 1,
+                  "missing": false
+                },
+                {
+                  "attribute": "warranty",
+                  "utility": 0.0,
+                  "weight": 2,
+                  "missing": false
+                }
+              ]
+            }
+          ],
+          "recommended_product_id": "care"
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t073_combo4_extract_faq_sentiment_compare",
+    "artifact_sha256": {
+      "implementation.py": "f259946b24ec7e3bd2b268c38425766e0df5fe50570790b8619f026b311b17fd",
+      "test_implementation.py": "af3a1d9346505066c9d34cd9daf2584483223511a69b4476b164d966c3f2b98a",
+      "example_input.json": "2c11d32e436bc5150abd1f07fd2664bfe303022ee20cee8bc38cc396db4e47ee",
+      "build_manifest.json": "86183c1ff5906dc3feaa0a5c38b9dab4dda7960ebc9eed7a32177e6394bd2a2e"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

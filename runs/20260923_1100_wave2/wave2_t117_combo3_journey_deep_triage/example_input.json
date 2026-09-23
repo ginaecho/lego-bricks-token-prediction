@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "request_id": "SYNTHETIC-demo-117",
+  "user": {
+    "id": "SYNTHETIC-customer-7",
+    "goals": ["safe-launch", "analytics"],
+    "completed_actions": ["create-account"]
+  },
+  "actions": [
+    {
+      "id": "create-account",
+      "title": "Create a synthetic marketplace account",
+      "goals": ["safe-launch"],
+      "prerequisites": [],
+      "research_topics": ["account-readiness"]
+    },
+    {
+      "id": "enable-checkout",
+      "title": "Enable synthetic checkout",
+      "goals": ["safe-launch"],
+      "prerequisites": ["create-account"],
+      "research_topics": ["checkout-ready"]
+    },
+    {
+      "id": "launch-store",
+      "title": "Launch the synthetic store",
+      "goals": ["safe-launch"],
+      "prerequisites": ["enable-checkout"],
+      "research_topics": ["checkout-ready", "refunds-ready", "region-ready"]
+    },
+    {
+      "id": "view-analytics",
+      "title": "Inspect synthetic analytics",
+      "goals": ["analytics"],
+      "prerequisites": ["create-account"],
+      "research_topics": ["analytics-ready"]
+    }
+  ],
+  "documents": [
+    {
+      "id": "SYNTHETIC-guide",
+      "title": "Synthetic launch guide; not real product documentation",
+      "claims": [
+        {"topic": "checkout-ready", "stance": "supports", "text": "The synthetic guide says checkout is ready."},
+        {"topic": "refunds-ready", "stance": "supports", "text": "The synthetic guide says refunds are ready."},
+        {"topic": "analytics-ready", "stance": "supports", "text": "The synthetic guide says analytics is ready."}
+      ]
+    },
+    {
+      "id": "SYNTHETIC-test-report",
+      "title": "Synthetic QA report; not real customer evidence",
+      "claims": [
+        {"topic": "checkout-ready", "stance": "opposes", "text": "The synthetic test report says checkout is not ready."},
+        {"topic": "refunds-ready", "stance": "supports", "text": "The synthetic test report says refunds are ready."}
+      ]
+    }
+  ],
+  "routing": {
+    "categories": [
+      {"id": "payments", "topics": ["checkout-ready", "refunds-ready"], "owner": "SYNTHETIC-payments-lead", "queue": "SYNTHETIC-payments-review"},
+      {"id": "analytics", "topics": ["analytics-ready"], "owner": "SYNTHETIC-analytics-lead", "queue": "SYNTHETIC-analytics-review"},
+      {"id": "general", "topics": [], "owner": "SYNTHETIC-support-lead", "queue": "SYNTHETIC-support-review"}
+    ],
+    "fallback_category": "general",
+    "priorities": {
+      "disagreement": "urgent",
+      "missing_evidence": "high",
+      "uncertain": "high",
+      "limited_sources": "normal",
+      "resolved": "low"
+    }
+  }
+}

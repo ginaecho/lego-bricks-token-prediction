@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "now": "2026-09-23T12:00:00Z",
+  "customer": {
+    "experience": "beginner",
+    "preferred_format": "video",
+    "interests": ["building"],
+    "completed_steps": []
+  },
+  "issues": [
+    {"id": "issue-1", "text": "My checkout is broken and confusing.", "severity": "critical"},
+    {"id": "issue-2", "text": "I love the building guide.", "severity": "low"}
+  ],
+  "sources": [
+    {"id": "source-1", "title": "Synthetic checkout guide", "text": "Checkout requires a saved address. A broken checkout can be resolved by checking the address.", "topics": ["checkout"]},
+    {"id": "source-2", "title": "Synthetic building guide", "text": "The building guide explains safe brick assembly.", "topics": ["building"]}
+  ],
+  "steps": [
+    {"id": "profile", "title": "Save an address", "category": "account", "level": "beginner", "format": "text", "prerequisites": []},
+    {"id": "checkout", "title": "Try checkout", "category": "checkout", "level": "beginner", "format": "video", "prerequisites": ["profile"]},
+    {"id": "building", "title": "First assembly", "category": "building", "level": "beginner", "format": "video", "prerequisites": []},
+    {"id": "advanced", "title": "Advanced assembly", "category": "building", "level": "expert", "format": "text", "prerequisites": ["building"]}
+  ],
+  "products": [
+    {"id": "kit", "title": "Synthetic starter kit", "category": "building", "popularity": 0.8},
+    {"id": "checkout-help", "title": "Synthetic checkout tutorial", "category": "checkout", "popularity": 0.3},
+    {"id": "display", "title": "Synthetic display stand", "category": "display", "popularity": 0.9}
+  ],
+  "events": [
+    {"id": "event-1", "product_id": "kit", "kind": "browse", "at": "2026-09-22T12:00:00Z"},
+    {"id": "event-2", "product_id": "checkout-help", "kind": "purchase", "at": "2026-08-24T12:00:00Z"}
+  ]
+}

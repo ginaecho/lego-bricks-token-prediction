@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "guided": {
+    "customer_id": "synthetic-customer-1",
+    "steps": [
+      {"id": "profile", "requires": [], "required": true},
+      {"id": "preferences", "requires": ["profile"], "required": true},
+      {"id": "newsletter", "requires": ["preferences"], "required": false}
+    ],
+    "completed_steps": ["profile", "preferences"],
+    "preferences": {
+      "max_price_usd": 1200,
+      "min_memory_gb": 8,
+      "preferred_brand": "ExampleCo",
+      "weights": {"price_usd": 3, "memory_gb": 2, "weight_kg": 1, "brand": 1}
+    }
+  },
+  "triage": {
+    "rules": [
+      {
+        "category": "performance",
+        "keywords": ["slow", "memory"],
+        "priority": "high",
+        "owner": "synthetic-performance-team",
+        "preferences": {"min_memory_gb": 16}
+      },
+      {
+        "category": "portability",
+        "keywords": ["travel", "light"],
+        "priority": "normal",
+        "owner": "synthetic-mobile-team",
+        "preferences": {"max_weight_kg": 1.5}
+      }
+    ],
+    "default": {
+      "category": "general",
+      "priority": "normal",
+      "owner": "synthetic-help-team",
+      "preferences": {}
+    },
+    "tickets": [
+      {"id": "ticket-1", "customer_id": "synthetic-customer-1", "text": "My old laptop is slow and needs more memory."},
+      {"id": "ticket-2", "customer_id": "synthetic-customer-1", "text": "I travel and need a light laptop."}
+    ]
+  },
+  "products": [
+    {
+      "id": "product-a",
+      "name": "Synthetic Swift 16",
+      "attributes": {
+        "price": {"value": 900, "unit": "USD"},
+        "ram": {"value": 16384, "unit": "MB"},
+        "weight": {"value": 1400, "unit": "g"},
+        "brand": "ExampleCo"
+      }
+    },
+    {
+      "id": "product-b",
+      "name": "Synthetic Power 32",
+      "attributes": {
+        "price_usd": {"value": 1100, "unit": "usd"},
+        "memory_gb": {"value": 32, "unit": "GB"},
+        "weight_kg": {"value": 2, "unit": "kg"},
+        "brand": "DemoWorks"
+      }
+    },
+    {
+      "id": "product-c",
+      "name": "Synthetic Mini 8",
+      "attributes": {
+        "price": {"value": 650, "unit": "USD"},
+        "memory": {"value": 8, "unit": "GB"},
+        "weight": {"value": 1.1, "unit": "kg"},
+        "brand": "ExampleCo"
+      }
+    }
+  ],
+  "feedback": [
+    {"id": "feedback-1", "ticket_id": "ticket-1", "product_id": "product-a", "text": "Fast memory and a fair price!"},
+    {"id": "feedback-2", "ticket_id": "ticket-1", "product_id": "product-a", "text": "  FAST memory and a fair price.  "},
+    {"id": "feedback-3", "ticket_id": "ticket-2", "product_id": "product-c", "text": "Light for travel, good price."},
+    {"id": "feedback-4", "ticket_id": "ticket-1", "product_id": "product-b", "text": "Fast, but heavy for travel."}
+  ],
+  "feedback_themes": {
+    "performance": ["fast", "memory"],
+    "value": ["price"],
+    "portability": ["light", "heavy", "travel"]
+  }
+}

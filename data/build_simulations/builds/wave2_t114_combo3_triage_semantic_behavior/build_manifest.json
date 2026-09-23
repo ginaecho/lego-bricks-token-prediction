@@ -1,0 +1,50 @@
+{
+  "build_id": "wave2_t114_combo3_triage_semantic_behavior",
+  "composition_label": "Ticket triage & routing -> Semantic search -> Behavioral personalization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version, fixture_label, timezone-aware as_of, ticket {id,text}, catalog [{id,title,description,category,popularity}], events [{product_id,action,timestamp}], optional config",
+    "output": "One envelope: schema_version, status, normalized request, triage, semantic, behavior. Errors: {status:error,error:message}, exit 2.",
+    "validation": "One Validator validates input, numeric bounds, known product references, unique catalog ids, injected vector shape, timezone and non-future history, and every stage boundary. Unknown input/config fields rejected.",
+    "config": "routes [{category,keywords,priority,team}], default_route {category,priority,team}, search_limit and final_limit (1..1000), half_life_days (0.000001..1000000), behavior_weight and cold_start_weight (0..100). Popularity is 0..1. Priorities: low, normal, high, urgent."
+  },
+  "cross_stage_handoffs": [
+    "Triage validates input, selects category/priority/accountable_team, and preserves ticket_id and query in a validated envelope.",
+    "Semantic consumes validated triage: query builds retrieval scores; routed category adds a relevance boost; ticket and category provenance are preserved.",
+    "Behavior consumes only validated semantic candidates, preserves their semantic scores, reranks with history, and propagates ticket, priority and accountable team."
+  ],
+  "behavior": {
+    "triage": "Casefolded Unicode token-set keyword matching; all keyword tokens must occur in ticket. Most keyword hits wins; configured order breaks ties. Zero matches uses default route.",
+    "semantic": "In-memory inverted token index; lexical Jaccard relevance. Optional injected embed(list[str])->list[list[number]] uses 0.5 lexical + 0.5 nonnegative cosine. Category match adds 0.2. All catalog products are eligible including zero-score fallback; descending score then product id, truncated to search_limit.",
+    "personalization": "Per-product evidence sums browse=1 and purchase=3, decayed by 2^(-age_days/half_life_days). Bonus=behavior_weight*evidence/(1+evidence). Empty history uses cold_start_weight*popularity. Final score=semantic+bonus. Sort descending then product id; truncate final_limit.",
+    "determinism": "Explicit as_of; no wall-clock dependence or randomness. Scores rounded to ten decimal places. No request mutation. Empty catalog returns empty recommendations.",
+    "fixtures": "All example records and callable embedding fixtures are explicitly synthetic. Embedding injection exists only as a Python library parameter; CLI never loads providers."
+  },
+  "scope": {
+    "included": ["Integrated CLI pipeline", "Shared schemas and validation", "Configurable accountable routing", "Lexical index and optional injected embedding similarity", "Recency and purchase-weighted reranking", "Cold-start popularity", "Unit and CLI tests"],
+    "excluded": ["Live providers or networks", "Trained language models", "Persistent search service", "Enterprise access control", "Deployment", "Real customer data", "Cross-product collaborative filtering"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 25,
+    "tests_failed": 0,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_stdout": "One valid JSON object with status ok",
+    "coverage": ["All three stages", "Validated cross-stage propagation", "Injected embedding fixtures and failures", "Routing ties and defaults", "Recency half-life", "Purchases versus browsing", "Cold start", "Empty catalog", "Deterministic ties", "Invalid schemas, timestamps and configuration", "CLI success, file errors, argument errors and malformed JSON"]
+  }
+}

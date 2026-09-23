@@ -1,0 +1,53 @@
+{
+  "build_id": "wave2_t048_combo4_interests_compare_adaptive_feedback",
+  "composition_label": "interests_compare_adaptive_feedback",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory using synthetic fixtures.",
+    "runtime": "Python 3.13.15; standard library only; implementation requires Python 3.9+",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Object: schema_version=1, synthetic=true, preferences, products, onboarding_steps, feedback. Unknown fields rejected.",
+    "preferences": "interests: tag-to-weight map; excluded_ids/tags: unique string lists; priorities: price/weight-to-weight map; experience: beginner/intermediate/expert; optional limit integer 1..100, default 3. Weights finite 0..100.",
+    "products": "Unique id, name, tags, attributes with optional price {value,unit:USD|cents} and weight {value,unit:g|kg}. Values finite, nonnegative, nonboolean.",
+    "onboarding_steps": "Unique id, title, instructions, tags, experience_levels, prerequisites. Prerequisites reference existing ids in an acyclic graph.",
+    "feedback": "Unique id, known product_id, nonblank text, optional known step_id or null.",
+    "output": "One JSON object: schema_version, synthetic, status=ok, interests, compare, adaptive, feedback. Errors: status=error and error text, exit 2.",
+    "validation": "validate(kind,value,context) is the shared boundary. Every stage validates its incoming handoff and outgoing schema, including candidate identity, normalized values, selected product, prerequisites and evidence provenance."
+  },
+  "cross_stage_handoffs": [
+    "interests -> compare: only recommended nonexcluded candidate ids and their grounded interest scores",
+    "compare -> adaptive: selected highest-ranking product and original preference/experience context",
+    "adaptive -> feedback: selected product and prerequisite-complete ordered step ids define feedback scope"
+  ],
+  "behavior": {
+    "interests": "Sum positively weighted matching product tags; explicit id/tag exclusions override interest; sort descending score then id; apply limit; neutral candidates have explicit fallback explanations.",
+    "compare": "Normalize cents to USD and kg to g. Output shared columns and per-product attribute rows. Each lower-is-better priority contributes weight*(max-value)/(max-min); equal known values contribute full priority; missing values contribute zero and remain null. Add carried interest score; descending score then id selects winner.",
+    "adaptive": "Select steps matching experience and selected product tags, or untagged steps. Recursively include all prerequisites even if filtered initially. Topological ordering prioritizes currently-ready steps by user interest weights then id. Preserve fixture instructions and explain selection.",
+    "feedback": "Filter to selected product and planned steps, retaining product-wide feedback. Deduplicate casefolded whitespace-normalized text within step context. Rule-based whole-word themes usability/quality/value, multi-label allowed; unmatched text goes to other. Every theme has verbatim excerpts, source ids and step ids. Duplicate counts count messages, not repeated thematic evidence.",
+    "empty": "No candidates yields null selection, empty onboarding and themes; all feedback is explicitly ignored.",
+    "determinism": "Stable id tie breaking; no randomness, time dependence, mutable input state, network calls or live model calls."
+  },
+  "scope": {
+    "included": ["Integrated four-stage pipeline", "Strict shared input and handoff validation", "Synthetic fixtures", "Deterministic ranking and rule-based themes", "CLI JSON errors", "Traceable evidence", "Standard-library unittest suite"],
+    "excluded": ["Live catalogs", "Currency exchange", "Semantic paraphrase deduplication", "Sentiment inference", "LLM integrations", "Authentication", "Persistent databases", "Enterprise deployment", "Cross-product onboarding prerequisites"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 34,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_result": "One valid JSON object with status=ok; camera-a selected consistently across comparison, onboarding and feedback.",
+    "coverage": ["All four stages", "Cross-stage selection and scope propagation", "Tampered handoff rejection", "Exclusions", "Normalization", "Missing/equal attributes", "Preference-sensitive ranking", "Prerequisite closure and cycles", "Experience-sensitive onboarding", "Deduplication and verbatim provenance", "Empty catalogs", "Invalid schemas and references", "CLI success and JSON errors", "Repeatability and input immutability"]
+  }
+}

@@ -1,0 +1,608 @@
+{
+  "id": "wave2_t079_combo4_normal_triage_adaptive_extract",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "research",
+      "support",
+      "onboard",
+      "documents"
+    ],
+    "basic_functionalities": [
+      "Research",
+      "AI customer support",
+      "Guided onboarding",
+      "Document automation"
+    ],
+    "types": [
+      "normal",
+      "triage",
+      "adaptive",
+      "extract"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 1,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 6,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Passage retrieval and extractive findings with exact source citations.",
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Schema-driven field extraction, source spans and missing-field reporting."
+  ],
+  "integration": {
+    "ordered_types": [
+      "normal",
+      "triage",
+      "adaptive",
+      "extract"
+    ],
+    "edges": [
+      {
+        "from": "normal",
+        "to": "triage",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "triage",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "adaptive",
+        "to": "extract",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "c2f82b759c1b3e6e22f41f2779ee7c54aa2ee574fc7874bea458cbf5fcc9de19",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "2d258b824d40514fac36f90fc768ff5440e5764dc6433fbdb72608714fca5631",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t079_combo4_normal_triage_adaptive_extract",
+  "membership_point_id": "combo4_normal_triage_adaptive_extract",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "b2f13dda13ffa230a59d65d84cc428a19d4967ce1e8e37f311b5ac0ed19422a5",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "931485bb-e804-4e5f-a695-302bd2502a05",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 145268,
+    "output_tokens": 13229,
+    "cache_read_tokens": 129279,
+    "cache_write_tokens": 15971,
+    "total_tokens": 158497,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34558,
+        "agent_id": "931485bb-e804-4e5f-a695-302bd2502a05",
+        "model": "gpt-6-astra",
+        "input_tokens": 14866,
+        "output_tokens": 698,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 829,
+        "reasoning_tokens": 516,
+        "duration_ms": 18465,
+        "created_at": "2026-09-23T10:33:27.356Z"
+      },
+      {
+        "id": 34586,
+        "agent_id": "931485bb-e804-4e5f-a695-302bd2502a05",
+        "model": "gpt-6-astra",
+        "input_tokens": 15597,
+        "output_tokens": 10928,
+        "cache_read_tokens": 14863,
+        "cache_write_tokens": 731,
+        "reasoning_tokens": 457,
+        "duration_ms": 165995,
+        "created_at": "2026-09-23T10:36:54.092Z"
+      },
+      {
+        "id": 34589,
+        "agent_id": "931485bb-e804-4e5f-a695-302bd2502a05",
+        "model": "gpt-6-astra",
+        "input_tokens": 26849,
+        "output_tokens": 166,
+        "cache_read_tokens": 15594,
+        "cache_write_tokens": 11252,
+        "reasoning_tokens": 9,
+        "duration_ms": 3630,
+        "created_at": "2026-09-23T10:37:05.695Z"
+      },
+      {
+        "id": 34595,
+        "agent_id": "931485bb-e804-4e5f-a695-302bd2502a05",
+        "model": "gpt-6-astra",
+        "input_tokens": 28373,
+        "output_tokens": 955,
+        "cache_read_tokens": 26846,
+        "cache_write_tokens": 1524,
+        "reasoning_tokens": 310,
+        "duration_ms": 17837,
+        "created_at": "2026-09-23T10:38:03.489Z"
+      },
+      {
+        "id": 34599,
+        "agent_id": "931485bb-e804-4e5f-a695-302bd2502a05",
+        "model": "gpt-6-astra",
+        "input_tokens": 29575,
+        "output_tokens": 371,
+        "cache_read_tokens": 28370,
+        "cache_write_tokens": 1202,
+        "reasoning_tokens": 0,
+        "duration_ms": 6409,
+        "created_at": "2026-09-23T10:38:15.809Z"
+      },
+      {
+        "id": 34600,
+        "agent_id": "931485bb-e804-4e5f-a695-302bd2502a05",
+        "model": "gpt-6-astra",
+        "input_tokens": 30008,
+        "output_tokens": 111,
+        "cache_read_tokens": 29572,
+        "cache_write_tokens": 433,
+        "reasoning_tokens": 0,
+        "duration_ms": 5350,
+        "created_at": "2026-09-23T10:38:32.959Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.561605,
+      "observed_cache_profile_estimate_usd": 0.27072725000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.73926,
+      "observed_cache_profile_estimate_usd": 6.73926,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 5,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 1,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.49,
+    "pseudo_annual_cost_usd": 80000,
+    "pseudo_annual_ai_value_usd": 45000,
+    "pseudo_net_impact_usd": -35000,
+    "pseudo_roi_pct": -43.75,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................................\n----------------------------------------------------------------------\nRan 35 tests in 0.977s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true,
+      "input": {
+        "schema_version": 1,
+        "synthetic": true,
+        "query": "invoice billing blocked",
+        "documents": [
+          {
+            "id": "synthetic-policy",
+            "text": "Synthetic billing guide: an invoice dispute requires account verification. Billing access blocked means urgent support. Invoice: SYN-1042\nCustomer: Example Person\n"
+          },
+          {
+            "id": "synthetic-onboarding",
+            "text": "Synthetic onboarding form.\nPlan: Starter\nReference: ONBOARD-22\n"
+          },
+          {
+            "id": "synthetic-unrelated",
+            "text": "Synthetic shipping guide: track a parcel using its dispatch reference."
+          }
+        ],
+        "tickets": [
+          {
+            "id": "synthetic-ticket-1",
+            "title": "Please help me get started",
+            "description": "The linked guide describes my problem.",
+            "document_ids": [
+              "synthetic-policy"
+            ]
+          }
+        ],
+        "profile": {
+          "experience": "beginner",
+          "preference": "interactive"
+        },
+        "policy": {
+          "research_limit": 8,
+          "categories": [
+            {
+              "id": "billing",
+              "keywords": [
+                "billing",
+                "invoice"
+              ],
+              "queue": "accounts",
+              "owner": "synthetic-billing-lead"
+            },
+            {
+              "id": "shipping",
+              "keywords": [
+                "shipping",
+                "parcel"
+              ],
+              "queue": "logistics",
+              "owner": "synthetic-shipping-lead"
+            },
+            {
+              "id": "general",
+              "keywords": [
+                "general"
+              ],
+              "queue": "helpdesk",
+              "owner": "synthetic-support-lead"
+            }
+          ],
+          "default_category": "general",
+          "priorities": [
+            {
+              "priority": "urgent",
+              "keywords": [
+                "blocked"
+              ]
+            },
+            {
+              "priority": "high",
+              "keywords": [
+                "dispute"
+              ]
+            }
+          ],
+          "default_priority": "normal"
+        },
+        "onboarding_steps": [
+          {
+            "id": "verify",
+            "title": "Verify the synthetic account",
+            "categories": [
+              "general"
+            ],
+            "audiences": [
+              "advanced"
+            ],
+            "modes": [
+              "text"
+            ],
+            "prerequisites": [],
+            "document_ids": []
+          },
+          {
+            "id": "billing-intro",
+            "title": "Practice the synthetic invoice workflow",
+            "categories": [
+              "billing"
+            ],
+            "audiences": [
+              "beginner"
+            ],
+            "modes": [
+              "text",
+              "interactive"
+            ],
+            "prerequisites": [
+              "verify"
+            ],
+            "document_ids": [
+              "synthetic-onboarding"
+            ]
+          },
+          {
+            "id": "billing-shortcut",
+            "title": "Use the synthetic billing shortcut",
+            "categories": [
+              "billing"
+            ],
+            "audiences": [
+              "intermediate",
+              "advanced"
+            ],
+            "modes": [
+              "text",
+              "video"
+            ],
+            "prerequisites": [],
+            "document_ids": []
+          }
+        ],
+        "extraction_schema": [
+          {
+            "name": "invoice_id",
+            "pattern": "Invoice:\\s*(?P<value>SYN-\\d+)",
+            "required": true
+          },
+          {
+            "name": "customer",
+            "pattern": "Customer:[ \\t]*(?P<value>[^\\r\\n]+)",
+            "required": true
+          },
+          {
+            "name": "plan",
+            "pattern": "Plan:[ \\t]*(?P<value>[^\\r\\n]+)",
+            "required": true
+          },
+          {
+            "name": "optional_email",
+            "pattern": "Email:[ \\t]*(?P<value>[^\\s]+)",
+            "required": false
+          }
+        ]
+      },
+      "stages": {
+        "research": {
+          "query": "invoice billing blocked",
+          "findings": [
+            {
+              "id": "finding-1",
+              "finding": "Synthetic billing guide: an invoice dispute requires account verification.",
+              "score": 2,
+              "source": {
+                "document_id": "synthetic-policy",
+                "start": 0,
+                "end": 74,
+                "text": "Synthetic billing guide: an invoice dispute requires account verification."
+              }
+            },
+            {
+              "id": "finding-2",
+              "finding": "Billing access blocked means urgent support.",
+              "score": 2,
+              "source": {
+                "document_id": "synthetic-policy",
+                "start": 75,
+                "end": 119,
+                "text": "Billing access blocked means urgent support."
+              }
+            },
+            {
+              "id": "finding-3",
+              "finding": "Invoice: SYN-1042",
+              "score": 1,
+              "source": {
+                "document_id": "synthetic-policy",
+                "start": 120,
+                "end": 137,
+                "text": "Invoice: SYN-1042"
+              }
+            }
+          ]
+        },
+        "triage": {
+          "tickets": [
+            {
+              "ticket_id": "synthetic-ticket-1",
+              "category": "billing",
+              "priority": "urgent",
+              "queue": "accounts",
+              "owner": "synthetic-billing-lead",
+              "document_ids": [
+                "synthetic-policy"
+              ],
+              "finding_ids": [
+                "finding-1",
+                "finding-2",
+                "finding-3"
+              ],
+              "explanation": "category keyword score 2; priority keyword: blocked; ties use category configuration order"
+            }
+          ]
+        },
+        "adaptive": {
+          "assignments": [
+            {
+              "ticket_id": "synthetic-ticket-1",
+              "category": "billing",
+              "priority": "urgent",
+              "queue": "accounts",
+              "owner": "synthetic-billing-lead",
+              "finding_ids": [
+                "finding-1",
+                "finding-2",
+                "finding-3"
+              ],
+              "document_ids": [
+                "synthetic-policy",
+                "synthetic-onboarding"
+              ],
+              "steps": [
+                {
+                  "step_id": "verify",
+                  "title": "Verify the synthetic account",
+                  "mode": "text",
+                  "explanation": "prerequisite for billing-intro; preference unavailable, first supported mode"
+                },
+                {
+                  "step_id": "billing-intro",
+                  "title": "Practice the synthetic invoice workflow",
+                  "mode": "interactive",
+                  "explanation": "matches category billing and experience beginner; preferred mode"
+                }
+              ]
+            }
+          ]
+        },
+        "extract": {
+          "records": [
+            {
+              "ticket_id": "synthetic-ticket-1",
+              "category": "billing",
+              "priority": "urgent",
+              "queue": "accounts",
+              "owner": "synthetic-billing-lead",
+              "finding_ids": [
+                "finding-1",
+                "finding-2",
+                "finding-3"
+              ],
+              "document_ids": [
+                "synthetic-policy",
+                "synthetic-onboarding"
+              ],
+              "step_ids": [
+                "verify",
+                "billing-intro"
+              ],
+              "fields": {
+                "invoice_id": {
+                  "value": "SYN-1042",
+                  "source": {
+                    "document_id": "synthetic-policy",
+                    "start": 129,
+                    "end": 137,
+                    "text": "SYN-1042"
+                  }
+                },
+                "customer": {
+                  "value": "Example Person",
+                  "source": {
+                    "document_id": "synthetic-policy",
+                    "start": 148,
+                    "end": 162,
+                    "text": "Example Person"
+                  }
+                },
+                "plan": {
+                  "value": "Starter",
+                  "source": {
+                    "document_id": "synthetic-onboarding",
+                    "start": 33,
+                    "end": 40,
+                    "text": "Starter"
+                  }
+                },
+                "optional_email": null
+              },
+              "missing_fields": [
+                "optional_email"
+              ],
+              "missing_required_fields": [],
+              "complete": true
+            }
+          ]
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t079_combo4_normal_triage_adaptive_extract",
+    "artifact_sha256": {
+      "implementation.py": "c9c9b6b38eeba4929f8cc879f8d49859a5e82f6ce734e6eff44acedfece32bd7",
+      "test_implementation.py": "f91b433aec9de69b95feb379a54db6ae2b23f8fa8a5efa61667dff8b53af8bad",
+      "example_input.json": "50d94bd4d416a16213661184960a011ccd92eafab7519cbab7967ed370aff79e",
+      "build_manifest.json": "33404bce20ee0bdda8f45304c005111d8037ebd2a668515eec17b36c518e584a"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

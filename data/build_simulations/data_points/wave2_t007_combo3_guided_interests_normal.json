@@ -1,0 +1,452 @@
+{
+  "id": "wave2_t007_combo3_guided_interests_normal",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "onboard",
+      "recommend",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Guided onboarding",
+      "Personalized discovery",
+      "Research"
+    ],
+    "types": [
+      "guided",
+      "interests",
+      "normal"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 1,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 2,
+    "planned_operation_classify": 1,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 3,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Validated prerequisite-driven onboarding steps and progress tracking.",
+    "Preference ranking, exclusion enforcement and grounded explanations.",
+    "Passage retrieval and extractive findings with exact source citations."
+  ],
+  "integration": {
+    "ordered_types": [
+      "guided",
+      "interests",
+      "normal"
+    ],
+    "edges": [
+      {
+        "from": "guided",
+        "to": "interests",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "interests",
+        "to": "normal",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "bd5226807a1aaeb7d74f9bf305ab82cbc836065e2df44918f25218d3d247d3ee",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "4cc5b128d86e0eda4eece5d49b85b0f1e85fe796c4644075d306babbc915ba93",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t007_combo3_guided_interests_normal",
+  "membership_point_id": "combo3_guided_interests_normal",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "a007c65bc4d9d7fbf3c853895ae4f834adde46b84e7137e9718bcb4d3cbc8b4d",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "9fac6a44-e05b-400c-bedb-fc4f7d8b522e",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 130997,
+    "output_tokens": 10036,
+    "cache_read_tokens": 118181,
+    "cache_write_tokens": 12798,
+    "total_tokens": 141033,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 33810,
+        "agent_id": "9fac6a44-e05b-400c-bedb-fc4f7d8b522e",
+        "model": "gpt-6-astra",
+        "input_tokens": 14756,
+        "output_tokens": 477,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 795,
+        "reasoning_tokens": 312,
+        "duration_ms": 15031,
+        "created_at": "2026-09-23T09:24:36.945Z"
+      },
+      {
+        "id": 33851,
+        "agent_id": "9fac6a44-e05b-400c-bedb-fc4f7d8b522e",
+        "model": "gpt-6-astra",
+        "input_tokens": 15263,
+        "output_tokens": 8187,
+        "cache_read_tokens": 14753,
+        "cache_write_tokens": 507,
+        "reasoning_tokens": 499,
+        "duration_ms": 167519,
+        "created_at": "2026-09-23T09:27:26.394Z"
+      },
+      {
+        "id": 33854,
+        "agent_id": "9fac6a44-e05b-400c-bedb-fc4f7d8b522e",
+        "model": "gpt-6-astra",
+        "input_tokens": 23770,
+        "output_tokens": 143,
+        "cache_read_tokens": 15260,
+        "cache_write_tokens": 8507,
+        "reasoning_tokens": 7,
+        "duration_ms": 4051,
+        "created_at": "2026-09-23T09:27:30.589Z"
+      },
+      {
+        "id": 33867,
+        "agent_id": "9fac6a44-e05b-400c-bedb-fc4f7d8b522e",
+        "model": "gpt-6-astra",
+        "input_tokens": 24645,
+        "output_tokens": 915,
+        "cache_read_tokens": 23767,
+        "cache_write_tokens": 875,
+        "reasoning_tokens": 190,
+        "duration_ms": 21332,
+        "created_at": "2026-09-23T09:27:54.498Z"
+      },
+      {
+        "id": 33872,
+        "agent_id": "9fac6a44-e05b-400c-bedb-fc4f7d8b522e",
+        "model": "gpt-6-astra",
+        "input_tokens": 25804,
+        "output_tokens": 215,
+        "cache_read_tokens": 24642,
+        "cache_write_tokens": 1159,
+        "reasoning_tokens": 0,
+        "duration_ms": 5414,
+        "created_at": "2026-09-23T09:28:02.419Z"
+      },
+      {
+        "id": 33874,
+        "agent_id": "9fac6a44-e05b-400c-bedb-fc4f7d8b522e",
+        "model": "gpt-6-astra",
+        "input_tokens": 26759,
+        "output_tokens": 99,
+        "cache_read_tokens": 25801,
+        "cache_write_tokens": 955,
+        "reasoning_tokens": 0,
+        "duration_ms": 3446,
+        "created_at": "2026-09-23T09:28:07.322Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4780325,
+      "observed_cache_profile_estimate_usd": 0.21212525000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.736390000000001,
+      "observed_cache_profile_estimate_usd": 5.736390000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 0,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 1,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.24,
+    "pseudo_annual_cost_usd": 60000,
+    "pseudo_annual_ai_value_usd": 30000,
+    "pseudo_net_impact_usd": -30000,
+    "pseudo_roi_pct": -50.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............................\n----------------------------------------------------------------------\nRan 28 tests in 0.538s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "fixture_label": "SYNTHETIC FIXTURE",
+      "status": "ok",
+      "guided": {
+        "completed_steps": [
+          "consent",
+          "profile",
+          "preferences"
+        ],
+        "remaining_steps": [],
+        "next_step": null,
+        "progress": {
+          "completed": 3,
+          "total": 3,
+          "fraction": 1.0
+        },
+        "ready": true,
+        "profile": {
+          "display_name": "Synthetic Avery",
+          "region": "Example Region"
+        },
+        "preferences": {
+          "interests": [
+            {
+              "topic": "gardening",
+              "weight": 3
+            },
+            {
+              "topic": "water",
+              "weight": 2
+            }
+          ],
+          "exclude_topics": [
+            "advertising"
+          ],
+          "exclude_ids": [
+            "blocked-guide"
+          ],
+          "max_recommendations": 3
+        }
+      },
+      "interests": {
+        "profile": {
+          "display_name": "Synthetic Avery",
+          "region": "Example Region"
+        },
+        "preferences": {
+          "interests": [
+            {
+              "topic": "gardening",
+              "weight": 3
+            },
+            {
+              "topic": "water",
+              "weight": 2
+            }
+          ],
+          "exclude_topics": [
+            "advertising"
+          ],
+          "exclude_ids": [
+            "blocked-guide"
+          ],
+          "max_recommendations": 3
+        },
+        "recommendations": [
+          {
+            "item_id": "garden-water",
+            "title": "Synthetic garden water notes",
+            "score": 5,
+            "matched_interests": [
+              {
+                "topic": "gardening",
+                "weight": 3
+              },
+              {
+                "topic": "water",
+                "weight": 2
+              }
+            ],
+            "explanation": "Matched declared interests: gardening (weight 3), water (weight 2)"
+          },
+          {
+            "item_id": "garden-basics",
+            "title": "Synthetic gardening basics",
+            "score": 3,
+            "matched_interests": [
+              {
+                "topic": "gardening",
+                "weight": 3
+              }
+            ],
+            "explanation": "Matched declared interests: gardening (weight 3)"
+          }
+        ],
+        "excluded": [
+          {
+            "item_id": "blocked-guide",
+            "reasons": [
+              "excluded_id"
+            ]
+          },
+          {
+            "item_id": "sponsored",
+            "reasons": [
+              "excluded_topic"
+            ]
+          }
+        ]
+      },
+      "normal": {
+        "query": "garden water irrigation soil",
+        "eligible_item_ids": [
+          "garden-water",
+          "garden-basics"
+        ],
+        "findings": [
+          {
+            "text": "A rain barrel stores water for garden irrigation.",
+            "matched_query_terms": [
+              "garden",
+              "irrigation",
+              "water"
+            ],
+            "retrieval_score": 3,
+            "citation": {
+              "item_id": "garden-water",
+              "passage_id": "p2",
+              "source": "synthetic://garden-water#p2",
+              "start": 0,
+              "end": 49
+            }
+          },
+          {
+            "text": "Mulch helps retain soil moisture in this synthetic garden.",
+            "matched_query_terms": [
+              "garden",
+              "soil"
+            ],
+            "retrieval_score": 2,
+            "citation": {
+              "item_id": "garden-water",
+              "passage_id": "p1",
+              "source": "synthetic://garden-water#p1",
+              "start": 0,
+              "end": 58
+            }
+          },
+          {
+            "text": "Compost improves soil structure in this illustrative garden.",
+            "matched_query_terms": [
+              "garden",
+              "soil"
+            ],
+            "retrieval_score": 2,
+            "citation": {
+              "item_id": "garden-basics",
+              "passage_id": "p1",
+              "source": "synthetic://garden-basics#p1",
+              "start": 0,
+              "end": 60
+            }
+          }
+        ],
+        "no_evidence": false
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t007_combo3_guided_interests_normal",
+    "artifact_sha256": {
+      "implementation.py": "38c3811a7faa62764cd664ee0c1b84cc8fe88c49291b9bfd21bc2abf5f62a815",
+      "test_implementation.py": "59bd4f20aa2f1be0225b9b660f248af07fa4f9d324d767907fb792b5b12fb294",
+      "example_input.json": "7b9178acf360478981f0b627778451fd667a5cb3a43ac1ca76ec4e429ad3ccdb",
+      "build_manifest.json": "953e1494bfeaa583f8a0e33e30619c2e34bc48368302beefab38680b5589d0c3"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

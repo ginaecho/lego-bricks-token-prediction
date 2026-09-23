@@ -1,0 +1,97 @@
+{
+  "build_id": "wave2_t024_combo4_sentiment_normal_journey_faq",
+  "composition_label": "Sentiment & prioritization -> Normal research -> Journey recommendations -> Knowledge-base answers",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New integrated implementation written for this isolated build; synthetic fixture data",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "exact string 1.0",
+      "synthetic": "exact boolean true",
+      "fixture_label": "nonempty label, at most 200 characters",
+      "feedback": "array of {id, text, severity}; severity is low|normal|high|critical",
+      "research_passages": "array of {id, source, text}; sources are labels, never fetched",
+      "actions": "array of {id, title, prerequisites, passage_ids, faq_question}",
+      "completed_action_ids": "unique known action identifiers",
+      "knowledge_base": "array of {id, source, text, action_ids}",
+      "retrieval_limit": "integer 1..5, not a boolean"
+    },
+    "output": "One {schema_version, status: ok, input, stages} envelope; stages are the unbroken ordered pipeline sentiment, normal, journey, faq",
+    "errors": "One {status: error, error: message} object on stdout; CLI exit 2",
+    "citation": "{document_id, source, start, end, quote}; half-open Python Unicode character offsets into the original document text",
+    "validation": "One shared validate function checks exact fields, bounded collections/text, identifiers, references, acyclic prerequisites, and canonically recomputes each stage against its validated predecessor. Unknown fields, duplicate IDs/JSON keys, nonfinite JSON constants, altered citations, reordered journeys, and unsupported answers are rejected.",
+    "bounds": "At most 200 records per collection, 50 actions, 10000 characters per feedback/document; titles 500, source labels 500, FAQ questions 1000. IDs are 1..64 ASCII alphanumerics, underscores, or hyphens and begin with an alphanumeric."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "sentiment",
+      "to": "normal",
+      "data": "Highest-priority validated issue text supplies retrieval terms; feedback ID, severity, sentiment score/label and priority rank become the focus."
+    },
+    {
+      "from": "normal",
+      "to": "journey",
+      "data": "Only retrieved passage IDs support actions; exact finding citations accompany steps. Focus metadata is preserved."
+    },
+    {
+      "from": "journey",
+      "to": "faq",
+      "data": "Only the two validated journey action IDs generate FAQ questions. Action-scoped KB evidence grounds answers; no journey means explicit abstention. Focus metadata is preserved."
+    }
+  ],
+  "behavior": {
+    "sentiment": "Fixed English lexicon, additive integer score and per-term offsets/weights. An odd number of negators in preceding three words flips weight; punctuation resets scope. No matches is neutral. Severity dominates all sentiment magnitudes; ties use ascending score then identifier.",
+    "normal": "Unique case-insensitive ASCII word overlap excluding explicit stopwords, using only the top issue. Rank passages by overlap then ID, select at most retrieval_limit, and extract the highest-overlap sentence, earliest on ties. No match yields no_findings.",
+    "journey": "Actions require at least one retrieved configured passage and all prerequisites. Completed actions are excluded. Enumerate complete distinct two-step plans using completed actions and earlier steps to satisfy prerequisites; select lexicographically by action-ID pair. Return immediately available supported actions separately. Fewer than two valid steps explicitly abstains.",
+    "faq": "For each planned action, rank sentences from KB documents explicitly mapped to that action by overlap with its FAQ question, then document ID and offset. Return the exact best extract and citation. No positive overlap explicitly abstains; mixed outcomes are partial.",
+    "determinism": "No random state, time dependence, network, external dependency, provider, or optional LLM hook.",
+    "input_mutation": "Public pipeline and stage transitions use deep copies; supplied input is not mutated."
+  },
+  "scope": {
+    "included": [
+      "Integrated deterministic four-stage pipeline and shared validation",
+      "Clearly labeled synthetic fixture input",
+      "Transparent lexical scoring and severity-first prioritization",
+      "Extractive research and action-scoped support evidence",
+      "Prerequisite-aware validated two-step journeys",
+      "Exact source citations, explicit abstentions, CLI and unittest coverage"
+    ],
+    "excluded": [
+      "Enterprise delivery, persistence, authentication, production integrations",
+      "Network retrieval, live providers, LLM generation, embeddings or training",
+      "Clinical or psychological sentiment interpretation",
+      "Multilingual tokenization, stemming, semantic inference or contradiction resolution",
+      "Proving semantic relevance beyond configured passage/action mappings and lexical overlap",
+      "Synthesizing unsupported instructions or single-step substitutes for the required two-step journey"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "test_cases": 36,
+    "failures": 0,
+    "errors": 0,
+    "cli_example_exit_code": 0,
+    "cli_example_status": "ok",
+    "cli_example_final_stage_status": "answered",
+    "validation_errors_exit_code": 2,
+    "coverage": "Each stage; exact citations and Unicode/newline offsets; severity and negation; prerequisite chains and cycles; completed actions; cross-stage focus/evidence propagation; abstention and partial answers; invalid inputs and references; tamper rejection; determinism; real subprocess CLI success, missing-file, schema, and argument errors; in-memory malformed JSON and encoding errors"
+  }
+}

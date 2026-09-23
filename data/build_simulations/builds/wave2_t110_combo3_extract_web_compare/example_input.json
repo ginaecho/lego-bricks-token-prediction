@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "fields": [
+    {"name": "name", "label": "Name", "type": "string", "required": true},
+    {"name": "price", "label": "Price", "type": "number", "required": true, "unit": "usd", "unit_factors": {"usd": 1}},
+    {"name": "mass", "label": "Mass", "type": "number", "required": true, "unit": "kg", "unit_factors": {"kg": 1, "g": 0.001}},
+    {"name": "color", "label": "Color", "type": "string", "required": false}
+  ],
+  "documents": [
+    {"product_id": "alpha", "text": "SYNTHETIC product brief\nName: Alpha Pack\nPrice: 80 USD\nColor: Blue\n", "research_urls": ["https://catalog.example/alpha"]},
+    {"product_id": "beta", "text": "SYNTHETIC product brief\nName: Beta Pack\nPrice: 100 usd\nMass: 0.8 kg\n", "research_urls": ["https://catalog.example/beta"]}
+  ],
+  "allowed_hosts": ["catalog.example"],
+  "pages": [
+    {"url": "https://catalog.example/alpha", "title": "Synthetic Alpha specification", "text": "SYNTHETIC offline page fixture\nMass: 1200 g\nPrice: 85 usd\nColor: blue\n"},
+    {"url": "https://catalog.example/beta", "title": "Synthetic Beta specification", "text": "SYNTHETIC offline page fixture\nMass: 800 g\nColor: Red\n"}
+  ],
+  "preferences": [
+    {"field": "price", "direction": "min", "weight": 3},
+    {"field": "mass", "direction": "min", "weight": 2},
+    {"field": "color", "direction": "target", "target": "blue", "weight": 1}
+  ]
+}

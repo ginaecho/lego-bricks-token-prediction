@@ -1,0 +1,660 @@
+{
+  "id": "wave2_t120_combo4_journey_adaptive_triage_sentiment",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "recommend",
+      "onboard",
+      "support",
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Personalized discovery",
+      "Guided onboarding",
+      "AI customer support",
+      "Customer insights"
+    ],
+    "types": [
+      "journey",
+      "adaptive",
+      "triage",
+      "sentiment"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 1,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 1,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 1,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 6,
+    "planned_operation_score": 3,
+    "planned_operation_plan": 4,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Prerequisite-aware next actions and a validated two-step journey.",
+    "Experience/preference-aware onboarding with prerequisites and explanations.",
+    "Configurable ticket categorization, priority and accountable routing.",
+    "Transparent sentiment scoring and severity-aware issue prioritization."
+  ],
+  "integration": {
+    "ordered_types": [
+      "journey",
+      "adaptive",
+      "triage",
+      "sentiment"
+    ],
+    "edges": [
+      {
+        "from": "journey",
+        "to": "adaptive",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "adaptive",
+        "to": "triage",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "triage",
+        "to": "sentiment",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "2a213e41d10661901d324389f2844411027ec049eb4c509680fdec4d056e391e",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "a12245b0eae75846c92b90859811519ec312bae2ec2a3b755e9b74d32336afa2",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t120_combo4_journey_adaptive_triage_sentiment",
+  "membership_point_id": "combo4_journey_adaptive_triage_sentiment",
+  "trial_kind": "repeat_of_wave2",
+  "repeat_of": "combo4_journey_adaptive_triage_sentiment",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "48da4bf58eca92c8f62951d34d3c6baebd88246b015db02273566ca24f9e397a",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "5a92967c-0d22-45d4-814d-67c31fa32aee",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 155797,
+    "output_tokens": 9969,
+    "cache_read_tokens": 142574,
+    "cache_write_tokens": 13202,
+    "total_tokens": 165766,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34935,
+        "agent_id": "5a92967c-0d22-45d4-814d-67c31fa32aee",
+        "model": "gpt-6-astra",
+        "input_tokens": 14896,
+        "output_tokens": 522,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 838,
+        "reasoning_tokens": 338,
+        "duration_ms": 14006,
+        "created_at": "2026-09-23T11:17:48.227Z"
+      },
+      {
+        "id": 34941,
+        "agent_id": "5a92967c-0d22-45d4-814d-67c31fa32aee",
+        "model": "gpt-6-astra",
+        "input_tokens": 15450,
+        "output_tokens": 4379,
+        "cache_read_tokens": 14893,
+        "cache_write_tokens": 554,
+        "reasoning_tokens": 81,
+        "duration_ms": 70570,
+        "created_at": "2026-09-23T11:19:04.742Z"
+      },
+      {
+        "id": 34949,
+        "agent_id": "5a92967c-0d22-45d4-814d-67c31fa32aee",
+        "model": "gpt-6-astra",
+        "input_tokens": 20002,
+        "output_tokens": 4331,
+        "cache_read_tokens": 15447,
+        "cache_write_tokens": 4552,
+        "reasoning_tokens": 206,
+        "duration_ms": 66077,
+        "created_at": "2026-09-23T11:20:08.342Z"
+      },
+      {
+        "id": 34951,
+        "agent_id": "5a92967c-0d22-45d4-814d-67c31fa32aee",
+        "model": "gpt-6-astra",
+        "input_tokens": 24508,
+        "output_tokens": 140,
+        "cache_read_tokens": 19999,
+        "cache_write_tokens": 4506,
+        "reasoning_tokens": 0,
+        "duration_ms": 4368,
+        "created_at": "2026-09-23T11:20:16.355Z"
+      },
+      {
+        "id": 34953,
+        "agent_id": "5a92967c-0d22-45d4-814d-67c31fa32aee",
+        "model": "gpt-6-astra",
+        "input_tokens": 26637,
+        "output_tokens": 312,
+        "cache_read_tokens": 24505,
+        "cache_write_tokens": 2129,
+        "reasoning_tokens": 43,
+        "duration_ms": 8054,
+        "created_at": "2026-09-23T11:20:23.592Z"
+      },
+      {
+        "id": 34955,
+        "agent_id": "5a92967c-0d22-45d4-814d-67c31fa32aee",
+        "model": "gpt-6-astra",
+        "input_tokens": 27044,
+        "output_tokens": 182,
+        "cache_read_tokens": 26634,
+        "cache_write_tokens": 407,
+        "reasoning_tokens": 0,
+        "duration_ms": 4049,
+        "created_at": "2026-09-23T11:20:25.980Z"
+      },
+      {
+        "id": 34957,
+        "agent_id": "5a92967c-0d22-45d4-814d-67c31fa32aee",
+        "model": "gpt-6-astra",
+        "input_tokens": 27260,
+        "output_tokens": 103,
+        "cache_read_tokens": 27041,
+        "cache_write_tokens": 216,
+        "reasoning_tokens": 0,
+        "duration_ms": 3500,
+        "created_at": "2026-09-23T11:20:33.423Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5390275,
+      "observed_cache_profile_estimate_usd": 0.21823599999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.46833,
+      "observed_cache_profile_estimate_usd": 6.46833,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 1,
+      "roi_satisfaction": 0,
+      "future_impact_potential": 1,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.19,
+    "pseudo_annual_cost_usd": 85000,
+    "pseudo_annual_ai_value_usd": 65000,
+    "pseudo_net_impact_usd": -20000,
+    "pseudo_roi_pct": -23.529411764705884,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".....................................\n----------------------------------------------------------------------\nRan 37 tests in 0.511s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "stage": "sentiment",
+      "input": {
+        "schema_version": 1,
+        "synthetic": true,
+        "profile": {
+          "experience": "beginner",
+          "preferences": [
+            "interactive",
+            "selling"
+          ],
+          "completed": []
+        },
+        "actions": [
+          {
+            "id": "account",
+            "title": "Synthetic account setup",
+            "prerequisites": [],
+            "tags": [
+              "selling"
+            ],
+            "format": "interactive",
+            "difficulty": 1
+          },
+          {
+            "id": "listing",
+            "title": "Synthetic first listing",
+            "prerequisites": [
+              "account"
+            ],
+            "tags": [
+              "selling"
+            ],
+            "format": "text",
+            "difficulty": 1
+          },
+          {
+            "id": "analytics",
+            "title": "Synthetic analytics tour",
+            "prerequisites": [
+              "listing"
+            ],
+            "tags": [
+              "analytics"
+            ],
+            "format": "video",
+            "difficulty": 3
+          },
+          {
+            "id": "browse",
+            "title": "Synthetic browsing tour",
+            "prerequisites": [],
+            "tags": [
+              "buying"
+            ],
+            "format": "video",
+            "difficulty": 1
+          }
+        ],
+        "tickets": [
+          {
+            "id": "SYN-1",
+            "text": "The listing upload is broken and confusing.",
+            "action_id": "listing",
+            "severity": "high"
+          },
+          {
+            "id": "SYN-2",
+            "text": "Great payment guide, but I have a question.",
+            "action_id": "account",
+            "severity": "low"
+          },
+          {
+            "id": "SYN-3",
+            "text": "Please explain these metrics.",
+            "action_id": "analytics",
+            "severity": "low"
+          }
+        ],
+        "routing": {
+          "rules": [
+            {
+              "category": "technical",
+              "keywords": [
+                "upload",
+                "broken"
+              ],
+              "priority": "medium",
+              "owner": "synthetic-platform-team"
+            },
+            {
+              "category": "billing",
+              "keywords": [
+                "payment",
+                "invoice"
+              ],
+              "priority": "low",
+              "owner": "synthetic-billing-team"
+            }
+          ],
+          "fallback": {
+            "category": "general",
+            "priority": "low",
+            "owner": "synthetic-support-team"
+          }
+        }
+      },
+      "results": {
+        "journey": {
+          "next_actions": [
+            {
+              "action_id": "account",
+              "score": 6,
+              "satisfied_prerequisites": [],
+              "explanation": "Preference matches: interactive, selling; experience target: 1; difficulty: 1."
+            },
+            {
+              "action_id": "browse",
+              "score": 0,
+              "satisfied_prerequisites": [],
+              "explanation": "Preference matches: none; experience target: 1; difficulty: 1."
+            }
+          ],
+          "steps": [
+            {
+              "action_id": "account",
+              "score": 6,
+              "satisfied_prerequisites": [],
+              "explanation": "Preference matches: interactive, selling; experience target: 1; difficulty: 1."
+            },
+            {
+              "action_id": "listing",
+              "score": 3,
+              "satisfied_prerequisites": [
+                "account"
+              ],
+              "explanation": "Preference matches: selling; experience target: 1; difficulty: 1."
+            }
+          ]
+        },
+        "adaptive": {
+          "modules": [
+            {
+              "action_id": "account",
+              "title": "Synthetic account setup",
+              "depth": "guided",
+              "format": "interactive",
+              "prerequisites": [],
+              "explanation": "guided for beginner; format interactive from preference; prerequisites satisfied by completed actions or earlier modules."
+            },
+            {
+              "action_id": "listing",
+              "title": "Synthetic first listing",
+              "depth": "guided",
+              "format": "interactive",
+              "prerequisites": [
+                "account"
+              ],
+              "explanation": "guided for beginner; format interactive from preference; prerequisites satisfied by completed actions or earlier modules."
+            }
+          ],
+          "experience": "beginner"
+        },
+        "triage": {
+          "tickets": [
+            {
+              "ticket_id": "SYN-1",
+              "text": "The listing upload is broken and confusing.",
+              "action_id": "listing",
+              "severity": "high",
+              "category": "technical",
+              "owner": "synthetic-platform-team",
+              "priority": "high",
+              "matched_keywords": [
+                "broken",
+                "upload"
+              ],
+              "onboarding": {
+                "action_id": "listing",
+                "title": "Synthetic first listing",
+                "depth": "guided",
+                "format": "interactive",
+                "prerequisites": [
+                  "account"
+                ],
+                "explanation": "guided for beginner; format interactive from preference; prerequisites satisfied by completed actions or earlier modules."
+              },
+              "explanation": "Matched keywords: broken, upload; priority is maximum of routing, severity and active onboarding floor; owner is accountable."
+            },
+            {
+              "ticket_id": "SYN-2",
+              "text": "Great payment guide, but I have a question.",
+              "action_id": "account",
+              "severity": "low",
+              "category": "billing",
+              "owner": "synthetic-billing-team",
+              "priority": "medium",
+              "matched_keywords": [
+                "payment"
+              ],
+              "onboarding": {
+                "action_id": "account",
+                "title": "Synthetic account setup",
+                "depth": "guided",
+                "format": "interactive",
+                "prerequisites": [],
+                "explanation": "guided for beginner; format interactive from preference; prerequisites satisfied by completed actions or earlier modules."
+              },
+              "explanation": "Matched keywords: payment; priority is maximum of routing, severity and active onboarding floor; owner is accountable."
+            },
+            {
+              "ticket_id": "SYN-3",
+              "text": "Please explain these metrics.",
+              "action_id": "analytics",
+              "severity": "low",
+              "category": "general",
+              "owner": "synthetic-support-team",
+              "priority": "low",
+              "matched_keywords": [],
+              "onboarding": null,
+              "explanation": "Matched keywords: fallback; priority is maximum of routing, severity and active onboarding floor; owner is accountable."
+            }
+          ]
+        },
+        "sentiment": {
+          "issues": [
+            {
+              "ticket_id": "SYN-1",
+              "text": "The listing upload is broken and confusing.",
+              "action_id": "listing",
+              "severity": "high",
+              "category": "technical",
+              "owner": "synthetic-platform-team",
+              "priority": "high",
+              "matched_keywords": [
+                "broken",
+                "upload"
+              ],
+              "onboarding": {
+                "action_id": "listing",
+                "title": "Synthetic first listing",
+                "depth": "guided",
+                "format": "interactive",
+                "prerequisites": [
+                  "account"
+                ],
+                "explanation": "guided for beginner; format interactive from preference; prerequisites satisfied by completed actions or earlier modules."
+              },
+              "explanation": "Matched keywords: broken, upload; priority is maximum of routing, severity and active onboarding floor; owner is accountable.",
+              "sentiment": {
+                "score": -3,
+                "label": "negative",
+                "contributions": [
+                  {
+                    "word": "broken",
+                    "position": 4,
+                    "value": -2,
+                    "negated": false
+                  },
+                  {
+                    "word": "confusing",
+                    "position": 6,
+                    "value": -1,
+                    "negated": false
+                  }
+                ]
+              },
+              "final_priority": "critical",
+              "priority_rank": 3,
+              "priority_explanation": "Baseline rank 2; negative sentiment boost 1; capped at critical."
+            },
+            {
+              "ticket_id": "SYN-2",
+              "text": "Great payment guide, but I have a question.",
+              "action_id": "account",
+              "severity": "low",
+              "category": "billing",
+              "owner": "synthetic-billing-team",
+              "priority": "medium",
+              "matched_keywords": [
+                "payment"
+              ],
+              "onboarding": {
+                "action_id": "account",
+                "title": "Synthetic account setup",
+                "depth": "guided",
+                "format": "interactive",
+                "prerequisites": [],
+                "explanation": "guided for beginner; format interactive from preference; prerequisites satisfied by completed actions or earlier modules."
+              },
+              "explanation": "Matched keywords: payment; priority is maximum of routing, severity and active onboarding floor; owner is accountable.",
+              "sentiment": {
+                "score": 2,
+                "label": "positive",
+                "contributions": [
+                  {
+                    "word": "great",
+                    "position": 0,
+                    "value": 2,
+                    "negated": false
+                  }
+                ]
+              },
+              "final_priority": "medium",
+              "priority_rank": 1,
+              "priority_explanation": "Baseline rank 1; negative sentiment boost 0; capped at critical."
+            },
+            {
+              "ticket_id": "SYN-3",
+              "text": "Please explain these metrics.",
+              "action_id": "analytics",
+              "severity": "low",
+              "category": "general",
+              "owner": "synthetic-support-team",
+              "priority": "low",
+              "matched_keywords": [],
+              "onboarding": null,
+              "explanation": "Matched keywords: fallback; priority is maximum of routing, severity and active onboarding floor; owner is accountable.",
+              "sentiment": {
+                "score": 0,
+                "label": "neutral",
+                "contributions": []
+              },
+              "final_priority": "low",
+              "priority_rank": 0,
+              "priority_explanation": "Baseline rank 0; negative sentiment boost 0; capped at critical."
+            }
+          ],
+          "scoring_policy": {
+            "positive": {
+              "good": 1,
+              "great": 2,
+              "love": 2,
+              "helpful": 1,
+              "excellent": 2
+            },
+            "negative": {
+              "bad": -1,
+              "broken": -2,
+              "hate": -2,
+              "frustrated": -2,
+              "terrible": -2,
+              "slow": -1,
+              "confusing": -1
+            },
+            "negation": "Immediately preceding not/never/no reverses one scored word.",
+            "escalation": "Score <= -2 raises priority one level; severity is a floor.",
+            "limitations": "English token lexicon only; no sarcasm or semantic inference."
+          }
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t120_combo4_journey_adaptive_triage_sentiment",
+    "artifact_sha256": {
+      "implementation.py": "0cb6d114fd50ee8a423f62f6050453d5b688ae7743962a1443d4e385adf72f48",
+      "test_implementation.py": "8ca846980d69f7f9d2c8bb034526183528aee026517651bef0c56da10b648962",
+      "example_input.json": "d8c58a574db2bf029c1817e4a8b23064a842c911013fc79e53c8ef09fd7ae5df",
+      "build_manifest.json": "bde03673dd207677f06e33adc500b573d5c791aa3dc1c096bb4ae96fc14f5462"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

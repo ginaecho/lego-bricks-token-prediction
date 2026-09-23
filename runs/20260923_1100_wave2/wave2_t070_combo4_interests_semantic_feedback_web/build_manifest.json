@@ -1,0 +1,96 @@
+{
+  "build_id": "wave2_t070_combo4_interests_semantic_feedback_web",
+  "composition_label": "interests -> semantic -> feedback -> web",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch inside the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "One strict JSON object: schema_version, fixture_label, catalog, preferences, search, feedback, research. All fields shown in example_input.json are required; max_price alone may be null. Unknown fields, duplicate IDs, nonfinite numbers, booleans as numbers, unknown feedback product references and invalid bounds are rejected.",
+    "output": "One JSON object: schema_version, fixture_label, status, stages. stages contains interests, semantic, feedback, web in pipeline order. Each stage carries a stage discriminator and shares product_id, feedback_id and source_id references.",
+    "validation": "validate is the shared validator for input, each stage handoff and the final envelope. Evidence is checked against supplied catalog, feedback and snapshots. Output validation never reinvokes the embedding callable.",
+    "errors": "CLI validation, argument, JSON, UTF-8 and filesystem errors print one JSON object with status error and exit 2. Successful execution prints one JSON object and exits 0.",
+    "bounds": "At most 1000 entries per input array, 10000 characters per text field, prices 0..1000000000, feedback integer ratings 1..5, limits 1..1000, research findings per theme 1..20."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "interests",
+      "to": "semantic",
+      "contract": "Only validated ranked recommendations enter the search index. Explicit exclusions and budget remain absolute. Preference evidence propagates into each match."
+    },
+    {
+      "from": "semantic",
+      "to": "feedback",
+      "contract": "Only matched product IDs select feedback. Search top_k and minimum relevance narrow downstream insights."
+    },
+    {
+      "from": "feedback",
+      "to": "web",
+      "contract": "Validated themes, product IDs and every supporting original feedback ID create research queries and traceable findings. No feedback means no queries or findings."
+    }
+  ],
+  "behavior": {
+    "interests": "Case-insensitive exact interest/tag matches, matched-interest fraction ranking, ID tie-breaks. Unmatched products are omitted unless interests are empty. Excluded IDs are exact; excluded tags are case-insensitive. Budget is inclusive; max_results limits the handoff.",
+    "semantic": "Deterministic Unicode-normalized token inverted index plus a small explicit synonym dictionary. Default relevance is query-term coverage; ties use preference score then product ID. Zero scores never match, even when min_score is zero.",
+    "embedding": "Optional run_pipeline(data, embedder=callable), called on the query and each eligible product text. Callable returns a finite nonzero list or tuple with fixed dimension, maximum 4096 components and absolute component value <= 1e100. Scores are 70% token coverage plus 30% nonnegative cosine similarity, rounded to eight decimals. Tests inject local fixtures; there is no live provider.",
+    "feedback": "Deduplication uses product ID plus NFKC/casefold/punctuation-and-whitespace-normalized text. First occurrence supplies verbatim text and rating; all original IDs are retained. Same text across different products stays separate. Fixed themes may overlap; unknown content becomes other. Counts are deduplicated; sentiment is rating-derived.",
+    "web": "Offline allowlisted URL snapshot ingestion only. Exact case-insensitive DNS-host allowlist, HTTPS only, no credentials, IP literals, nondefault ports, backslashes or whitespace. Fragments and default port are canonicalized away. First canonical URL wins; rejected snapshots carry reasons. Theme-keyword sentence retrieval yields verbatim excerpts and source-content SHA-256 provenance. Findings rank by theme-term coverage then source ID; quotes require text evidence, not title-only matches.",
+    "research_interpretation": "Research provides general theme context, explicitly not product verification or causal claims. Original product/feedback links indicate why a finding was retrieved, not that the source discusses that specific product. Other themes produce a traceable query but no inferred findings.",
+    "synthetic_data": "All supplied products, feedback, snapshots and example domains are clearly labeled synthetic.",
+    "determinism": "No clocks, randomness, network calls or writes in implementation. Input and source order decide documented deduplication ties; ranking ties are stable."
+  },
+  "scope": {
+    "included": [
+      "Single integrated CLI and importable pipeline",
+      "Shared boundary validation and provenance",
+      "Preference filtering and ranking",
+      "Small synonym-based search and optional injected embeddings",
+      "Feedback deduplication, fixed themes and verbatim supporting excerpts",
+      "Offline allowlisted research ingestion, retrieval and findings",
+      "Synthetic fixtures and standard-library unittest suite"
+    ],
+    "excluded": [
+      "Network fetching, redirects, crawling and live web research",
+      "LLM or model-provider calls",
+      "General-purpose semantic understanding or learned sentiment",
+      "Enterprise persistence, authentication, scheduling or production deployment",
+      "Truth verification of supplied research snapshots"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 37,
+    "tests_failed": 0,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_exit_code": 0,
+    "cli_command": "python -B implementation.py example_input.json",
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "cli_stdout": "Exactly one JSON object, containing all four validated stage outputs",
+    "coverage": [
+      "All four stages and end-to-end deterministic execution",
+      "Exclusions, budget, ranking, synonyms, limits and provenance propagation",
+      "Injected embedding fixtures, dimensionality, finiteness, zero and tiny vectors",
+      "Feedback deduplication, sentiment, themes, cross-product distinction and excerpts",
+      "Allowlist URL tricks, canonical duplicates, empty inputs and unrelated sources",
+      "Tampered handoffs and final provenance rejection",
+      "CLI success, arguments, file errors, malformed JSON, invalid schema and encoding"
+    ]
+  }
+}

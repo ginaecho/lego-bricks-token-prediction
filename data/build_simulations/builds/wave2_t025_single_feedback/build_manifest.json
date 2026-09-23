@@ -1,0 +1,125 @@
+{
+  "build_id": "wave2_t025_single_feedback",
+  "composition_label": "Feedback analysis (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1; booleans are rejected",
+      "dataset_label": "Required literal synthetic",
+      "feedback": "List of zero to 10000 objects, each with exactly id and text",
+      "id": "Unique trimmed nonempty string of at most 128 characters",
+      "text": "String of 1 to 4000 characters, containing a word character after normalization",
+      "unknown_fields": "Rejected at every input object boundary",
+      "json": "UTF-8; duplicate object keys and nonstandard numeric constants are rejected"
+    },
+    "output": {
+      "schema_version": 1,
+      "dataset_label": "synthetic",
+      "status": "ok",
+      "summary": "input_count, unique_count, duplicate_count",
+      "groups": "canonical_id, member_ids, normalized_text, themes",
+      "themes": "name, unique_count, original_count, evidence",
+      "evidence": "feedback_id, start, end, excerpt; offsets are zero-based Python Unicode character offsets, end-exclusive"
+    },
+    "error": {
+      "schema_version": 1,
+      "status": "error",
+      "error": "Human-readable validation or file error; exit code 2"
+    },
+    "validation": "One validate function enforces input constraints, output partitioning, group normalization, theme membership/counts, and excerpt equality against the original input. analyze validates both boundaries."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "Validated feedback",
+      "to": "Deduplicated groups",
+      "contract": "NFKC Unicode normalization, casefolding and word-token whitespace joining produce the grouping key; first input occurrence supplies canonical_id; all original IDs remain in member_ids."
+    },
+    {
+      "from": "Deduplicated groups",
+      "to": "Themes and supporting excerpts",
+      "contract": "Whole-token keyword matches assign zero or more named themes; unmatched groups receive other. Each theme includes exactly one original canonical-text excerpt per unique group."
+    }
+  ],
+  "behavior": {
+    "ordering": "Groups and members follow input occurrence order; themes use delivery, price, quality, support, usability, other order.",
+    "deduplication": "Normalized exact matching only; punctuation, compatibility variants and case differences can collapse. Semantic paraphrases remain distinct.",
+    "themes": {
+      "delivery": ["delivery", "shipping", "shipment", "arrived", "late"],
+      "price": ["price", "expensive", "cheap", "cost", "affordable"],
+      "quality": ["quality", "broken", "durable", "defective", "damaged"],
+      "support": ["support", "service", "refund", "helpful", "response"],
+      "usability": ["easy", "difficult", "confusing", "usable", "usability"],
+      "other": "Fallback when no named theme matches"
+    },
+    "counts": "Theme unique_count counts groups; original_count counts group members. Multi-theme membership means totals across themes may exceed feedback totals.",
+    "excerpts": "Full bounded canonical feedback text, not generated paraphrases; source IDs and offsets permit direct verification. Duplicate source IDs are traceable through groups.",
+    "empty_input": "Success with zero counts and empty groups/themes",
+    "cli": "Exactly one JSON object on stdout. Success exits 0; malformed JSON, validation errors, missing files, invalid UTF-8 and usage errors exit 2.",
+    "synthetic_fixtures": "All fixture IDs and dataset labels explicitly identify synthetic data."
+  },
+  "scope": {
+    "included": [
+      "Bounded deterministic feedback deduplication",
+      "English keyword topic assignment",
+      "Traceable original excerpts",
+      "Shared schema and validation",
+      "Runnable CLI and standard-library tests"
+    ],
+    "excluded": [
+      "Semantic or fuzzy deduplication",
+      "Sentiment, negation interpretation and statistical confidence",
+      "Multilingual semantic theme analysis",
+      "LLM or provider integrations",
+      "Persistence, networking and enterprise deployment"
+    ],
+    "administrative_artifact": "docs\\My_prompt.txt is an additional mandatory prompt log, separate from the four implementation deliverables."
+  },
+  "test_outcomes": {
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 12,
+    "passed": 12,
+    "failed": 0,
+    "exit_code": 0,
+    "coverage": [
+      "Synthetic example",
+      "Unicode and punctuation deduplication",
+      "Exact excerpt traceability",
+      "Empty input",
+      "Multiple themes and fallback",
+      "Distinct paraphrases",
+      "Determinism and no input mutation",
+      "Invalid schemas and duplicate IDs",
+      "Length and record limits",
+      "Fabricated output evidence rejection",
+      "CLI success, usage, file and parse errors",
+      "Duplicate JSON keys, NaN and encoding errors"
+    ],
+    "example_cli": {
+      "exit_code": 0,
+      "status": "ok",
+      "input_count": 5,
+      "unique_count": 4,
+      "duplicate_count": 1,
+      "themes": 6
+    }
+  }
+}

@@ -1,0 +1,592 @@
+{
+  "id": "wave2_t024_combo4_sentiment_normal_journey_faq",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights",
+      "research",
+      "recommend",
+      "support"
+    ],
+    "basic_functionalities": [
+      "Customer insights",
+      "Research",
+      "Personalized discovery",
+      "AI customer support"
+    ],
+    "types": [
+      "sentiment",
+      "normal",
+      "journey",
+      "faq"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 1,
+    "has_type_normal": 1,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 1,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 4,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 2,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Transparent sentiment scoring and severity-aware issue prioritization.",
+    "Passage retrieval and extractive findings with exact source citations.",
+    "Prerequisite-aware next actions and a validated two-step journey.",
+    "Knowledge-base retrieval, grounded answers and explicit abstention."
+  ],
+  "integration": {
+    "ordered_types": [
+      "sentiment",
+      "normal",
+      "journey",
+      "faq"
+    ],
+    "edges": [
+      {
+        "from": "sentiment",
+        "to": "normal",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "normal",
+        "to": "journey",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "journey",
+        "to": "faq",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "93f306ba752a2b370eb82ad18a44ad70121e4a3990d41d1eafc603435da5ce4a",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "f34a9bdd6e8df2e4b250eb5d2c211820d66236030974f4194caa20712a18d2d6",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t024_combo4_sentiment_normal_journey_faq",
+  "membership_point_id": "combo4_sentiment_normal_journey_faq",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "8e9269322ab580865ddebb99b7f9deeda983cab6e6dee623b7790e365394b537",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "dbb5f532-50dd-493c-90c9-4592b8232c92",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 147947,
+    "output_tokens": 13948,
+    "cache_read_tokens": 131035,
+    "cache_write_tokens": 16894,
+    "total_tokens": 161895,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34038,
+        "agent_id": "dbb5f532-50dd-493c-90c9-4592b8232c92",
+        "model": "gpt-6-astra",
+        "input_tokens": 14792,
+        "output_tokens": 612,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 831,
+        "reasoning_tokens": 446,
+        "duration_ms": 16822,
+        "created_at": "2026-09-23T09:41:14.646Z"
+      },
+      {
+        "id": 34075,
+        "agent_id": "dbb5f532-50dd-493c-90c9-4592b8232c92",
+        "model": "gpt-6-astra",
+        "input_tokens": 15434,
+        "output_tokens": 11614,
+        "cache_read_tokens": 14789,
+        "cache_write_tokens": 642,
+        "reasoning_tokens": 1552,
+        "duration_ms": 219987,
+        "created_at": "2026-09-23T09:44:57.599Z"
+      },
+      {
+        "id": 34078,
+        "agent_id": "dbb5f532-50dd-493c-90c9-4592b8232c92",
+        "model": "gpt-6-astra",
+        "input_tokens": 27376,
+        "output_tokens": 137,
+        "cache_read_tokens": 15431,
+        "cache_write_tokens": 11942,
+        "reasoning_tokens": 0,
+        "duration_ms": 6244,
+        "created_at": "2026-09-23T09:45:02.318Z"
+      },
+      {
+        "id": 34082,
+        "agent_id": "dbb5f532-50dd-493c-90c9-4592b8232c92",
+        "model": "gpt-6-astra",
+        "input_tokens": 29065,
+        "output_tokens": 1110,
+        "cache_read_tokens": 27373,
+        "cache_write_tokens": 1689,
+        "reasoning_tokens": 450,
+        "duration_ms": 24230,
+        "created_at": "2026-09-23T09:45:28.782Z"
+      },
+      {
+        "id": 34084,
+        "agent_id": "dbb5f532-50dd-493c-90c9-4592b8232c92",
+        "model": "gpt-6-astra",
+        "input_tokens": 30425,
+        "output_tokens": 369,
+        "cache_read_tokens": 29062,
+        "cache_write_tokens": 1360,
+        "reasoning_tokens": 0,
+        "duration_ms": 9442,
+        "created_at": "2026-09-23T09:45:38.303Z"
+      },
+      {
+        "id": 34085,
+        "agent_id": "dbb5f532-50dd-493c-90c9-4592b8232c92",
+        "model": "gpt-6-astra",
+        "input_tokens": 30855,
+        "output_tokens": 106,
+        "cache_read_tokens": 30422,
+        "cache_write_tokens": 430,
+        "reasoning_tokens": 0,
+        "duration_ms": 4273,
+        "created_at": "2026-09-23T09:45:47.331Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5790875,
+      "observed_cache_profile_estimate_usd": 0.28425875,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.94905,
+      "observed_cache_profile_estimate_usd": 6.94905,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 0,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 2,
+      "delivery_quality": 5
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.41,
+    "pseudo_annual_cost_usd": 35000,
+    "pseudo_annual_ai_value_usd": 85000,
+    "pseudo_net_impact_usd": 50000,
+    "pseudo_roi_pct": 142.85714285714286,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................................\n----------------------------------------------------------------------\nRan 36 tests in 0.549s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "input": {
+        "schema_version": "1.0",
+        "synthetic": true,
+        "fixture_label": "SYNTHETIC marketplace checkout support; invented people-free data",
+        "retrieval_limit": 3,
+        "feedback": [
+          {
+            "id": "checkout-issue",
+            "text": "Checkout is broken and payment is blocked. I am frustrated.",
+            "severity": "critical"
+          },
+          {
+            "id": "catalog-praise",
+            "text": "The catalog is great and helpful.",
+            "severity": "normal"
+          }
+        ],
+        "research_passages": [
+          {
+            "id": "payment-guide",
+            "source": "synthetic:research/payment-guide",
+            "text": "Checkout payment failures require checking payment details before retrying checkout. Keep the original order reference."
+          },
+          {
+            "id": "catalog-guide",
+            "source": "synthetic:research/catalog-guide",
+            "text": "The catalog provides helpful product filters."
+          }
+        ],
+        "actions": [
+          {
+            "id": "check-payment",
+            "title": "Check payment details",
+            "prerequisites": [],
+            "passage_ids": [
+              "payment-guide"
+            ],
+            "faq_question": "How do I check payment details?"
+          },
+          {
+            "id": "retry-checkout",
+            "title": "Retry checkout",
+            "prerequisites": [
+              "check-payment"
+            ],
+            "passage_ids": [
+              "payment-guide"
+            ],
+            "faq_question": "How do I retry checkout?"
+          },
+          {
+            "id": "filter-catalog",
+            "title": "Filter the catalog",
+            "prerequisites": [],
+            "passage_ids": [
+              "catalog-guide"
+            ],
+            "faq_question": "How do I filter the catalog?"
+          }
+        ],
+        "completed_action_ids": [],
+        "knowledge_base": [
+          {
+            "id": "kb-payment",
+            "source": "synthetic:kb/payment",
+            "text": "Check payment details in the synthetic billing screen and confirm the expiry date.",
+            "action_ids": [
+              "check-payment"
+            ]
+          },
+          {
+            "id": "kb-retry",
+            "source": "synthetic:kb/retry",
+            "text": "Retry checkout once after checking payment details; retain the original order reference.",
+            "action_ids": [
+              "retry-checkout"
+            ]
+          }
+        ]
+      },
+      "stages": {
+        "sentiment": {
+          "method": "lexicon; odd negators in preceding 3 words; punctuation resets scope",
+          "priority_rule": "severity descending, sentiment score ascending, feedback id ascending",
+          "issues": [
+            {
+              "feedback_id": "checkout-issue",
+              "text": "Checkout is broken and payment is blocked. I am frustrated.",
+              "severity": "critical",
+              "severity_rank": 3,
+              "score": -5,
+              "label": "negative",
+              "evidence": [
+                {
+                  "term": "broken",
+                  "start": 12,
+                  "end": 18,
+                  "base_weight": -2,
+                  "negated": false,
+                  "contribution": -2
+                },
+                {
+                  "term": "blocked",
+                  "start": 34,
+                  "end": 41,
+                  "base_weight": -2,
+                  "negated": false,
+                  "contribution": -2
+                },
+                {
+                  "term": "frustrated",
+                  "start": 48,
+                  "end": 58,
+                  "base_weight": -1,
+                  "negated": false,
+                  "contribution": -1
+                }
+              ],
+              "priority_rank": 1
+            },
+            {
+              "feedback_id": "catalog-praise",
+              "text": "The catalog is great and helpful.",
+              "severity": "normal",
+              "severity_rank": 1,
+              "score": 3,
+              "label": "positive",
+              "evidence": [
+                {
+                  "term": "great",
+                  "start": 15,
+                  "end": 20,
+                  "base_weight": 2,
+                  "negated": false,
+                  "contribution": 2
+                },
+                {
+                  "term": "helpful",
+                  "start": 25,
+                  "end": 32,
+                  "base_weight": 1,
+                  "negated": false,
+                  "contribution": 1
+                }
+              ],
+              "priority_rank": 2
+            }
+          ]
+        },
+        "normal": {
+          "status": "found",
+          "focus": {
+            "feedback_id": "checkout-issue",
+            "severity": "critical",
+            "score": -5,
+            "label": "negative",
+            "priority_rank": 1
+          },
+          "query_terms": [
+            "am",
+            "blocked",
+            "broken",
+            "checkout",
+            "frustrated",
+            "payment"
+          ],
+          "findings": [
+            {
+              "finding_id": "finding:payment-guide",
+              "retrieval_score": 2,
+              "matched_terms": [
+                "checkout",
+                "payment"
+              ],
+              "text": "Checkout payment failures require checking payment details before retrying checkout.",
+              "citation": {
+                "document_id": "payment-guide",
+                "source": "synthetic:research/payment-guide",
+                "start": 0,
+                "end": 84,
+                "quote": "Checkout payment failures require checking payment details before retrying checkout."
+              }
+            }
+          ]
+        },
+        "journey": {
+          "status": "ready",
+          "focus": {
+            "feedback_id": "checkout-issue",
+            "severity": "critical",
+            "score": -5,
+            "label": "negative",
+            "priority_rank": 1
+          },
+          "next_action_ids": [
+            "check-payment"
+          ],
+          "validated_two_step": true,
+          "steps": [
+            {
+              "step": 1,
+              "action_id": "check-payment",
+              "title": "Check payment details",
+              "prerequisites": [],
+              "satisfied_prerequisites": [],
+              "finding_ids": [
+                "finding:payment-guide"
+              ],
+              "citations": [
+                {
+                  "document_id": "payment-guide",
+                  "source": "synthetic:research/payment-guide",
+                  "start": 0,
+                  "end": 84,
+                  "quote": "Checkout payment failures require checking payment details before retrying checkout."
+                }
+              ]
+            },
+            {
+              "step": 2,
+              "action_id": "retry-checkout",
+              "title": "Retry checkout",
+              "prerequisites": [
+                "check-payment"
+              ],
+              "satisfied_prerequisites": [
+                "check-payment"
+              ],
+              "finding_ids": [
+                "finding:payment-guide"
+              ],
+              "citations": [
+                {
+                  "document_id": "payment-guide",
+                  "source": "synthetic:research/payment-guide",
+                  "start": 0,
+                  "end": 84,
+                  "quote": "Checkout payment failures require checking payment details before retrying checkout."
+                }
+              ]
+            }
+          ],
+          "reason": null
+        },
+        "faq": {
+          "status": "answered",
+          "focus": {
+            "feedback_id": "checkout-issue",
+            "severity": "critical",
+            "score": -5,
+            "label": "negative",
+            "priority_rank": 1
+          },
+          "journey_action_ids": [
+            "check-payment",
+            "retry-checkout"
+          ],
+          "answers": [
+            {
+              "action_id": "check-payment",
+              "question": "How do I check payment details?",
+              "status": "answered",
+              "answer": "Check payment details in the synthetic billing screen and confirm the expiry date.",
+              "citations": [
+                {
+                  "document_id": "kb-payment",
+                  "source": "synthetic:kb/payment",
+                  "start": 0,
+                  "end": 82,
+                  "quote": "Check payment details in the synthetic billing screen and confirm the expiry date."
+                }
+              ],
+              "reason": null
+            },
+            {
+              "action_id": "retry-checkout",
+              "question": "How do I retry checkout?",
+              "status": "answered",
+              "answer": "Retry checkout once after checking payment details; retain the original order reference.",
+              "citations": [
+                {
+                  "document_id": "kb-retry",
+                  "source": "synthetic:kb/retry",
+                  "start": 0,
+                  "end": 88,
+                  "quote": "Retry checkout once after checking payment details; retain the original order reference."
+                }
+              ],
+              "reason": null
+            }
+          ],
+          "reason": null
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t024_combo4_sentiment_normal_journey_faq",
+    "artifact_sha256": {
+      "implementation.py": "10e855599fd47ae89f4b970461a8cca50058404d9764553bf9f6de8270935232",
+      "test_implementation.py": "47662e589f74471bc5176f30c4623f8f1d5082f309aadfba59a03892f45431fd",
+      "example_input.json": "88ea907afe7cba9d30bddb6c7d76f8a81c9a57d084c40b46a310b88cab78d287",
+      "build_manifest.json": "fd3849e477544210967f14dcec3e6a29a654f1b041786e68f1981a96951b19d6"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

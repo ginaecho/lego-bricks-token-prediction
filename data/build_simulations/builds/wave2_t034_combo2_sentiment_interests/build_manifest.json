@@ -1,0 +1,70 @@
+{
+  "build_id": "wave2_t034_combo2_sentiment_interests",
+  "composition_label": "Sentiment & prioritization -> Interest-based recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this build using clearly labeled synthetic data",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "true; synthetic-only reference",
+      "customer": "id, interests mapping lowercase tags to integer weights 1..5, excluded_tags, excluded_item_ids",
+      "feedback": "array of unique id, nonblank text, severity low|medium|high|critical, unique tags",
+      "catalog": "array of unique id, title, unique tags",
+      "top_k": "integer 1..20"
+    },
+    "intermediate": "schema_version, status=sentiment_ready, validated input snapshot, insights {issues, concerns}",
+    "output": "same envelope with status=ok and discovery {recommendations, exclusions}",
+    "error": "status=error and error message; exit 2",
+    "validation": "One shared validate entry point checks exact keys, types, ranges, IDs, tags, and derived evidence, scores, grounding, exclusions and ordering. Unknown keys, duplicate JSON keys, nonstandard JSON constants and booleans in integer fields are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "sentiment_stage",
+      "to": "interests_stage",
+      "payload": "Validated envelope carrying source input, ordered sentiment issues, and tag-specific negative-feedback concerns.",
+      "propagation": "Each negative-feedback tag creates a severity-weighted penalty with its feedback ID. Discovery applies matching penalties to eligible item scores; severity and sentiment can therefore change recommendation order.",
+      "guard": "Interests stage validates the full handoff before use; final output is validated again."
+    }
+  ],
+  "behavior": {
+    "sentiment": "Lowercased word lexicon: love/excellent/great +2; good/happy/helpful +1; bad/disappointed/poor -1; broken/hate -2; unsafe -3. Immediately preceding not/never/no reverses a matched word. Sentence punctuation creates boundaries. Token-level contributions are returned; sum sign determines label.",
+    "priority": "All feedback is retained as issues, sorted by descending severity*100 + min(max(-sentiment_score,0),9)*5, then ascending feedback ID. Severity low/medium/high/critical maps to 1/2/3/4 and always dominates sentiment.",
+    "preferences": "Each matching explicit interest contributes weight*10. Each matching tag on each negative-feedback record subtracts severity*3, once per record/tag. No positive-feedback bonus or inferred interests.",
+    "exclusions": "Explicit item-ID or tag exclusions are hard filters applied before ranking; excluded items are audited separately and cannot be reintroduced.",
+    "ranking": "Only items matching at least one explicit interest qualify. Sort score descending, item ID ascending, then take top_k. Negative scores remain eligible; no filler recommendations.",
+    "grounding": "Structured explanations give exact preference weights, contributions, concern penalties and source feedback IDs. They claim relevance, not safety or remediation of the complained-about issue.",
+    "empty": "Empty feedback/catalog/interests arrays or mappings are valid; no eligible matches returns an empty recommendation list.",
+    "determinism": "No random values, clocks, persistent state, network or provider calls. Input is not mutated."
+  },
+  "scope": {
+    "included": ["Single integrated CLI pipeline", "Strict shared validation", "Transparent sentiment evidence", "Severity-aware ordering", "Preference ranking and hard exclusions", "Grounded structured explanations", "Synthetic fixtures", "Standard-library unittest coverage"],
+    "excluded": ["Live data or model providers", "Optional LLM callable (not needed)", "Semantic NLP, sarcasm and general negation understanding", "Learned preference inference", "Product safety certification", "Enterprise scale, authentication, persistence, UI"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 18,
+    "tests_failed": 0,
+    "tests_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status ok; validated complete pipeline output.",
+    "coverage": ["Sentiment evidence and negation", "Severity dominance", "Cross-stage ranking changes", "Hard exclusions", "Empty and unmatched data", "Stable ties and top_k", "Grounded score reconciliation", "Tampered intermediate and final rejection", "Invalid input and duplicates", "Determinism and input immutability", "CLI success, file, argument, JSON, schema and encoding errors"]
+  }
+}

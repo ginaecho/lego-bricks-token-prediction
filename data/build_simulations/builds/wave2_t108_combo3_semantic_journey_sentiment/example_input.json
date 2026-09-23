@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC marketplace demonstration; no real customers",
+  "query": "beginner photography",
+  "limit": 2,
+  "products": [
+    {"id": "camera", "name": "Starter camera", "description": "Portable camera starter kit", "tags": ["camera", "starter"]},
+    {"id": "garden", "name": "Garden toolkit", "description": "Tools for growing flowers", "tags": ["garden"]}
+  ],
+  "actions": [
+    {"id": "setup", "product_id": "camera", "title": "Set up camera", "requires": [], "interest": "photography"},
+    {"id": "shoot", "product_id": "camera", "title": "Take first pictures", "requires": ["setup"], "interest": "photography"},
+    {"id": "edit", "product_id": "camera", "title": "Edit pictures", "requires": ["shoot"], "interest": "photography"},
+    {"id": "plant", "product_id": "garden", "title": "Plant seeds", "requires": [], "interest": "gardening"}
+  ],
+  "profile": {"completed_actions": [], "interests": ["photography"]},
+  "feedback": [
+    {"id": "f1", "product_id": "camera", "action_id": "setup", "text": "Setup is confusing and slow", "severity": "high"},
+    {"id": "f2", "product_id": "camera", "action_id": "shoot", "text": "Great photos but broken shutter", "severity": "critical"},
+    {"id": "f3", "product_id": "camera", "action_id": null, "text": "Not bad, helpful guide", "severity": "low"},
+    {"id": "f4", "product_id": "camera", "action_id": "edit", "text": "Bad editor", "severity": "medium"},
+    {"id": "f5", "product_id": "garden", "action_id": "plant", "text": "Love flowers", "severity": "low"}
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC marketplace reference data; not real products or claims",
+  "stage": "input",
+  "status": "ok",
+  "data": {
+    "as_of": "2026-09-23T12:00:00+00:00",
+    "user_id": "synthetic-user",
+    "query": "recycled waterproof backpack",
+    "top_k": 3,
+    "half_life_days": 7,
+    "products": [
+      {"id": "bag", "title": "Synthetic Trail Backpack", "description": "A recycled hiking backpack.", "popularity": 10},
+      {"id": "coat", "title": "Synthetic Rain Coat", "description": "A waterproof coat.", "popularity": 8},
+      {"id": "mug", "title": "Synthetic Camp Mug", "description": "A steel camping cup.", "popularity": 12}
+    ],
+    "events": [
+      {"user_id": "synthetic-user", "product_id": "bag", "kind": "purchase", "timestamp": "2026-09-23T12:00:00Z"},
+      {"user_id": "synthetic-user", "product_id": "coat", "kind": "view", "timestamp": "2026-09-16T12:00:00Z"},
+      {"user_id": "someone-else", "product_id": "mug", "kind": "purchase", "timestamp": "2026-09-23T12:00:00Z"}
+    ],
+    "documents": [
+      {"id": "bag-sheet", "product_id": "bag", "text": "  The backpack uses recycled fabric. Waterproof performance is not tested.\nSynthetic example only."},
+      {"id": "coat-sheet", "product_id": "coat", "text": "Waterproof coating is described in this synthetic sheet. No recycled content data is supplied."}
+    ],
+    "requirements": [
+      {"id": "material", "description": "Locate recycled fabric wording, not verification of a claim.", "keywords": ["recycled", "fabric"]},
+      {"id": "test-report", "description": "Locate a waterproof test report reference.", "keywords": ["waterproof", "test", "report"]}
+    ]
+  },
+  "results": {}
+}

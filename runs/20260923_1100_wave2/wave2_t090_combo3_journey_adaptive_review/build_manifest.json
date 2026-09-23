@@ -1,0 +1,124 @@
+{
+  "build_id": "wave2_t090_combo3_journey_adaptive_review",
+  "composition_label": "Journey recommendations -> Adaptive onboarding -> Document review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Newly authored in the isolated build directory; no repository or other build files read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false,
+    "auxiliary_prompt_log": "docs\\My_prompt.txt records the received prompts."
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py",
+    "working_directory": "Run both commands from this build directory."
+  },
+  "shared_schema": {
+    "version": 1,
+    "model": "One JSON envelope is extended with validated stage fields; every stage preserves the original input.",
+    "input_fields": {
+      "schema_version": "Integer 1, not a boolean.",
+      "fixture_label": "Nonempty string starting with SYNTHETIC:.",
+      "profile": {
+        "experience": "beginner or experienced",
+        "interests": "Unique topic strings; an empty list permits deterministic discovery.",
+        "preferred_formats": "Nonempty ordered unique list drawn from text, video, exercise.",
+        "completed_actions": "Unique known action IDs whose prerequisites are also completed."
+      },
+      "actions": "Objects with unique id, title, topic, prerequisites (known action IDs), requirement_ids (known requirement IDs). Cycles are rejected.",
+      "requirements": "Objects with unique id, description, required_terms (nonempty single-word strings, unique ignoring case).",
+      "documents": "Objects with unique id, locator, requirement_ids (known requirement IDs), nonempty text."
+    },
+    "output_fields": {
+      "status": "ok indicates successful execution, not evidence sufficiency or certification.",
+      "journey": "state, ordered next_actions, exactly two prerequisite-safe steps when feasible, completion_policy.",
+      "adaptive": "state, steps referencing journey steps, review_requirement_ids.",
+      "review": "state, findings, gaps, explicit non-certification disclaimer."
+    },
+    "validation": "validate(envelope, through) checks exact envelope and input record keys, types, IDs, references, prerequisite graph, and completed-action consistency. Stage outputs are re-derived and compared before each handoff and after each stage, rejecting stale or modified data.",
+    "bounds": "Each list has at most 100 entries. Typical strings are at most 200 characters; requirement descriptions 2000, document locators 1000, document texts 100000.",
+    "errors": "Invalid JSON, duplicate JSON keys, non-finite constants, schema errors, decoding errors, recursion-limit errors and file errors produce one JSON object with status error and process exit 2. Success emits one JSON object and exit 0."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "journey",
+      "to": "adaptive",
+      "consumes": "Validated selected action IDs, journey step IDs, prerequisites and requirement IDs.",
+      "invariant": "Adaptive onboarding cannot substitute or bypass a selected journey action. Planning never completes an action; later steps with unfinished prerequisites remain conditional."
+    },
+    {
+      "from": "adaptive",
+      "to": "review",
+      "consumes": "Validated onboarding steps and deduplicated review_requirement_ids.",
+      "invariant": "Only requirements associated with selected onboarding steps are reviewed. Findings and gaps trace back to requirement, action, onboarding step, journey step, and any submitted evidence document and locator."
+    }
+  ],
+  "behavior": {
+    "journey": "Rank available next actions by topic-interest match then ID. Enumerate feasible distinct two-step paths, rank by total interest matches, prefer dependent sequential paths on ties, then use stable first/second action ranks.",
+    "adaptive": "Use the first preferred format. Beginner instructions are guided with explanation/practice/confirmation; experienced instructions are concise with summary/confirmation. Explain both selections and prerequisite readiness.",
+    "review": "Require all required terms to occur as case-insensitive whole words in at least one explicitly assigned document. Terms split across documents do not satisfy a requirement. Preserve all assigned-document observations; distinguish missing evidence from insufficient terms.",
+    "no_path": "Return no_two_step_path, blocked_no_journey and not_applicable, without inventing steps. Available single next actions remain visible.",
+    "no_requirements": "Return review state not_applicable, not a successful certification.",
+    "determinism": "No randomness, clocks, external services, provider calls or LLM steps. No mutation of caller-owned input.",
+    "example": "Select seller-profile then publish-listing; guide a beginner using exercise format. Seller identity evidence is found; returns policy has a traceable missing refund-term gap."
+  },
+  "scope": {
+    "included": [
+      "Bounded synthetic JSON fixtures",
+      "Integrated prerequisite-aware two-step planning",
+      "Experience and preferred-format adaptation",
+      "Shared validation and checked stage provenance",
+      "Traceable lexical document-evidence review",
+      "CLI and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Enterprise production deployment",
+      "Live models, networks and provider calls",
+      "PDF parsing, OCR, file uploads or document retrieval",
+      "Semantic inference, negation detection and factual verification",
+      "Authenticity checking, compliance determination and certification",
+      "Executing actions or persisting real-world completion",
+      "Actual text, video or exercise content generation",
+      "Authentication, databases and external dependencies"
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 31,
+      "passed": 31,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "journey_state": "ready",
+      "adaptive_state": "ready",
+      "review_state": "gaps_found"
+    },
+    "coverage": [
+      "Journey selection, interest personalization, prerequisites and stable tie-breaking",
+      "Beginner/experienced adaptation, preferred format and conditional readiness",
+      "Cross-stage requirement and source-step propagation",
+      "Evidence matching, missing evidence, incomplete evidence and document locators",
+      "Case-insensitive whole-word matching and no cross-document term aggregation",
+      "No path, empty catalog, empty interests and no input mutation",
+      "Unknown references, cycles, inconsistent completion, duplicates and invalid schema",
+      "Tampered/stale handoffs, stage skipping and final-output validation",
+      "CLI success, missing files, usage, malformed JSON, duplicate keys, non-finite numbers and invalid encoding"
+    ]
+  }
+}

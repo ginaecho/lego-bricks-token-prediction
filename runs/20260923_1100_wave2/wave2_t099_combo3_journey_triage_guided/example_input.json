@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "fixture_label": "synthetic: marketplace seller onboarding",
+  "request": {
+    "user": {"id": "synthetic-seller-01", "goals": ["selling"], "completed": ["register"]},
+    "actions": [
+      {"id": "register", "title": "Register seller", "goals": [], "prerequisites": [], "weight": 0},
+      {"id": "verify", "title": "Verify seller identity", "goals": ["selling"], "prerequisites": ["register"], "weight": 20},
+      {"id": "list", "title": "Create a marketplace listing", "goals": ["selling"], "prerequisites": ["verify"], "weight": 10},
+      {"id": "billing", "title": "Configure billing", "goals": ["payments"], "prerequisites": ["register"], "weight": 5},
+      {"id": "payout", "title": "Configure payout", "goals": ["payments"], "prerequisites": ["billing"], "weight": 1}
+    ],
+    "ticket": {"id": "synthetic-ticket-01", "text": "I need help with payout setup."},
+    "routing": {
+      "rules": [
+        {"keywords": ["payout"], "source": "ticket", "category": "payments", "priority": "high", "team": "synthetic-payments-team", "owner": "synthetic-case-owner", "setup_actions": ["payout"]},
+        {"keywords": ["identity"], "source": "journey", "category": "verification", "priority": "normal", "team": "synthetic-identity-team", "owner": "synthetic-identity-owner", "setup_actions": []}
+      ],
+      "default": {"category": "general", "priority": "low", "team": "synthetic-support", "owner": "synthetic-support-owner", "setup_actions": []}
+    },
+    "setup_events": ["verify"]
+  }
+}

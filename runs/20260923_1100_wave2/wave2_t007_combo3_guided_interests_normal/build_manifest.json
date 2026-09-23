@@ -1,0 +1,87 @@
+{
+  "build_id": "wave2_t007_combo3_guided_interests_normal",
+  "composition_label": "guided -> interests -> normal",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1",
+      "fixture_label": "Literal SYNTHETIC FIXTURE",
+      "guided": "completed_steps: ordered prefix of consent/profile/preferences; responses keyed by step",
+      "profile": "Nonblank display_name and region; metadata only",
+      "preferences": "Unique case-insensitive topic/positive finite weight interests; exclude_topics; exact exclude_ids; max_recommendations 1..50",
+      "catalog": "At most 100 uniquely identified items with title, unique case-insensitive topics, and 1..100 passages each",
+      "passage": "Item-local unique id, synthetic:// source, nonblank text of at most 10000 characters",
+      "research": "Nonblank searchable query and integer max_findings 1..100"
+    },
+    "output": "schema_version, fixture_label, status, guided, interests, normal; incomplete onboarding uses needs_setup and null downstream stages",
+    "errors": "One stdout JSON object with schema_version, status:error and error message; exit 2",
+    "validation": "One shared validation layer enforces input types, field sets, bounds, duplicates, prerequisites and deterministic grounded stage handoffs; bool is not accepted as numeric input"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "guided",
+      "to": "interests",
+      "data": "Validated readiness, copied profile, weighted preferences, explicit exclusions and recommendation limit",
+      "gate": "Consent accepted and all three prerequisite-ordered steps completed; partial valid setup returns progress without running discovery"
+    },
+    {
+      "from": "interests",
+      "to": "normal",
+      "data": "Validated ordered recommendation IDs, constrained by preference scores and exclusions",
+      "gate": "Retrieval searches only the recommended items, never the full catalog"
+    }
+  ],
+  "behavior": {
+    "guided": "Tracks completed/remaining steps, fraction and next required step; validates supplied responses even if not yet marked complete",
+    "interests": "Case-insensitive topic equality, summed declared weights, exclusions before ranking, positive matches only; score descending then item ID ascending",
+    "explanations": "Explicit matching topic/weight evidence and deterministic explanations, grounded solely in declared preferences and item topics",
+    "research": "Unicode word-token overlap with query; score is count of distinct matching query terms; ties follow recommendation rank then passage ID",
+    "citations": "Entire retrieved passages are extractive findings with exact source, item ID, passage ID and half-open Python Unicode character offsets",
+    "no_evidence": "Empty findings and no_evidence:true; no invented content or fallback outside recommendations",
+    "cli": "UTF-8 input, duplicate JSON keys rejected, one ASCII-safe JSON output object; valid partial onboarding exits 0",
+    "determinism": "No randomness, live inference, external retrieval or mutation of caller input"
+  },
+  "scope": {
+    "included": [
+      "Integrated prerequisite-driven onboarding, personalized discovery and extractive research",
+      "Clearly labeled synthetic fixture data",
+      "Strict shared input and stage-boundary validation",
+      "Replayable progress through input completed_steps",
+      "Exact traceable citations and exclusion propagation",
+      "Standard-library unit and subprocess CLI tests"
+    ],
+    "excluded": [
+      "Live LLMs and optional model hooks",
+      "Networks, external research and source verification",
+      "Persistent accounts, databases and authentication",
+      "Semantic search, stemming, stop-word removal and abstractive summaries",
+      "Production-scale optimization and enterprise deployment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 28, "passed": 28, "failed": 0},
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "coverage": "All stages, prerequisite gating, grounded rankings, exclusion propagation, exact citations, deterministic ties, Unicode offsets, empty results, bounds and type errors, tampered handoffs, CLI usage/file/decoding/JSON errors and excessive nesting"
+  }
+}

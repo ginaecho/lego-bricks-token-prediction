@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "config": {
+    "categories": ["incident", "billing", "general"],
+    "teams": {
+      "technical": "synthetic-tech-oncall",
+      "finance": "synthetic-billing-owner",
+      "support": "synthetic-support-owner"
+    },
+    "rules": [
+      {
+        "id": "service-outage",
+        "keywords": ["outage", "service unavailable"],
+        "decision": {"category": "incident", "priority": "urgent", "team": "technical"}
+      },
+      {
+        "id": "billing-request",
+        "keywords": ["refund", "invoice"],
+        "channels": ["email", "chat"],
+        "decision": {"category": "billing", "priority": "normal", "team": "finance"}
+      }
+    ],
+    "default": {"category": "general", "priority": "low", "team": "support"}
+  },
+  "tickets": [
+    {"id": "synthetic-001", "subject": "OUTAGE on demo service", "body": "Synthetic fixture: cannot connect.", "channel": "chat"},
+    {"id": "synthetic-002", "subject": "Invoice question", "body": "Synthetic fixture: request a refund.", "channel": "email"},
+    {"id": "synthetic-003", "subject": "How do I update my profile?", "body": "Synthetic fixture only.", "channel": "web"}
+  ]
+}

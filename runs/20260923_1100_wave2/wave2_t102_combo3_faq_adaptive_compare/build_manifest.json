@@ -1,0 +1,101 @@
+{
+  "build_id": "wave2_t102_combo3_faq_adaptive_compare",
+  "composition_label": "Knowledge-base answers -> Adaptive onboarding -> Product comparison",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in this isolated build directory; synthetic fixtures only.",
+    "runtime": "Python 3 standard library; verified on Python 3.13.15",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "envelope": ["schema_version", "fixture_label", "status", "request", "stages"],
+    "states": ["ready", "faq_complete", "adaptive_complete", "ok"],
+    "request": ["question", "profile", "knowledge_base", "onboarding_steps", "products"],
+    "profile": {
+      "experience": ["beginner", "intermediate", "expert"],
+      "onboarding_mode": ["guided", "self_service"],
+      "completed_steps": "Unique known onboarding IDs; declared completion is trusted.",
+      "priorities": "Optional entries for price, weight, battery, rating; each strictly positive finite numeric weight.",
+      "max_price_usd": "Nonnegative USD budget, or null to disable budget filtering."
+    },
+    "knowledge_document": ["id", "question", "answer", "keywords", "topics", "attribute_hints"],
+    "onboarding_step": ["id", "title", "explanation", "prerequisites", "topics", "audiences"],
+    "product": "id, name, attributes. Each attribute has value and unit; missing attributes are allowed.",
+    "validation": "One validate() contract handles input and all stage outputs. Exact keys, bounded collections, unique IDs, finite numeric ranges, known units, acyclic prerequisites and deterministic stage integrity are enforced. Handoffs are validated before and after each transition. Request remains intact; callers are not mutated.",
+    "limits": "100 records per collection, 1000-character question, 2 MB CLI input.",
+    "error": "JSON object containing schema_version, status=error and error.type/error.message; exit code 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq",
+      "to": "adaptive",
+      "fields": ["status", "topics", "attribute_hints"],
+      "effect": "Grounded topics select experience-appropriate onboarding roots; FAQ hints receive raw priority 2 unless overridden by the user. Abstention propagates explicitly with no inferred topics."
+    },
+    {
+      "from": "adaptive",
+      "to": "compare",
+      "fields": ["weights", "max_price_usd"],
+      "effect": "Normalized onboarding preference weights determine ranking contributions; the validated budget determines eligible products."
+    }
+  ],
+  "behavior": {
+    "faq": "English ASCII lexical token retrieval over document question and keywords. Ignore common stopwords. Require at least min(2, query-token-count) matching tokens and coverage >=0.34. Return the exact source answer with document citation. Conflicting highest-score answer/topic/hint signatures cause explicit abstention; equivalent ties break by document ID.",
+    "adaptive": "Select generic or FAQ-topic roots for the user's experience. Recursively include prerequisites, even outside audience/topic; skip declared completed steps. Deterministic prerequisite-first order. Explain every step and adapt delivery wording to guided/self-service. Explicit priorities override FAQ hints; other attributes default to raw weight 1, then normalize all four weights.",
+    "normalization": "price/cost -> USD ($ or USD); weight/mass -> grams (g, kg, lb, oz); battery/battery_life -> hours (h, hours, min); rating/review_score -> five-point scale (/5, /10, %). Attribute names and units are case-insensitive with whitespace normalization. Reject duplicate aliases, unsupported currencies and invalid ranges.",
+    "comparison": "Side-by-side canonical values plus eligible-catalog min-max weighted utility. Prefer lower price/weight and higher battery/rating. Missing values have zero utility; tied known values have utility one. Missing price is excluded when a budget applies. Six-decimal ranking scores tie-break by product ID. Empty or fully excluded catalogs return empty rankings.",
+    "grounding_limit": "Grounded means copied from the supplied synthetic knowledge base, not externally fact-checked. Lexical retrieval does not entail arbitrary questions or understand negation.",
+    "stage_integrity": "Bounded deterministic projections are recomputed by validation to reject tampered intermediate data. This intentionally favors clarity over large-scale performance.",
+    "llm": "No LLM step, hook, live provider or network is required or used."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic CLI with one versioned envelope and shared validation",
+      "Synthetic fixtures, explicit retrieval abstention and exact-source grounded answers",
+      "Experience/preferences, prerequisite ordering, explanations and completion-aware onboarding",
+      "Canonical normalization, missing-value handling, budget filtering, side-by-side display data and explainable preference ranking",
+      "Standard-library unit and CLI tests"
+    ],
+    "excluded": [
+      "Live providers, external data or networks",
+      "Enterprise delivery, authentication, persistence and interactive onboarding execution",
+      "Semantic retrieval, multilingual retrieval, generative paraphrasing and truth verification",
+      "Currency conversion, inventory availability and real commercial claims"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 38,
+    "failures": 0,
+    "errors": 0,
+    "unit_test_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "cli_stdout": "Exactly one JSON object; stages occur in faq, adaptive, compare order.",
+    "exact_deliverable_count_verified": 4,
+    "coverage": [
+      "Grounding, abstention, ambiguous/equivalent evidence, stopword and single-token queries",
+      "Topic and experience selection, completion, prerequisites and delivery preference",
+      "Cross-stage topic, weight, budget and ranking propagation",
+      "Unit normalization, alias collisions, missing values, budget exclusions and ranking ties",
+      "Invalid schemas, numeric bounds, units, cycles, IDs and tampered handoffs",
+      "CLI success, missing files, malformed JSON, invalid schema, usage and read errors"
+    ],
+    "unit_test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_command": "python -B implementation.py example_input.json"
+  }
+}

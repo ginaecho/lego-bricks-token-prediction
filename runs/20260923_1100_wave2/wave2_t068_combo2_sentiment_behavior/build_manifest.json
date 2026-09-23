@@ -1,0 +1,101 @@
+{
+  "build_id": "wave2_t068_combo2_sentiment_behavior",
+  "composition_label": "Sentiment & prioritization -> Behavioral personalization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original reference implementation authored within this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Exactly 1.0",
+      "synthetic": "Must be true; all example identifiers and data are synthetic",
+      "as_of": "Timezone-aware ISO 8601 reference date; no wall-clock dependency",
+      "top_k": "Integer 1..100, booleans rejected",
+      "customers": "Array of unique {id}",
+      "products": "Array of unique {id, category, popularity}; popularity finite in [0,1]",
+      "feedback": "Array of unique {id, customer_id, product_id, text, severity}; severity low/medium/high/critical",
+      "events": "Array of unique {id, customer_id, product_id, kind, timestamp}; kind view/purchase; timestamps no later than as_of"
+    },
+    "pipeline_envelope": "{schema_version, status, input, sentiment, personalization}; both results initially null, then sentiment filled, then personalization filled",
+    "sentiment": "One provenance-preserving record per feedback, including category, score, label, matches, is_issue and priority",
+    "personalization": "One {id, cold_start, recommendations} per customer; recommendation has id, category, score, base_score, issue_penalty, issue_ids, item_affinity, category_affinity, popularity",
+    "validation": "One shared validate(envelope, phase) boundary called before and after stages; exact field sets, references, unique IDs, date constraints, finite ranges, evidence arithmetic, provenance, handoff penalties and stable ordering checked",
+    "errors": "CLI prints one JSON object {status: error, error: message} and returns 2 on file, JSON, schema or validation errors; success prints one complete envelope and returns 0",
+    "json": "Duplicate object keys and NaN/Infinity rejected"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "sentiment_stage",
+      "to": "behavior_stage",
+      "validated_output": "Shared envelope with validated source data and completed sentiment records",
+      "consumed_fields": ["customer_id", "category", "is_issue", "priority", "id"],
+      "effect": "Every candidate in a customer's issue category receives maximum issue priority / 200 as a penalty, capped by construction at 0.5. Other customers and categories are unaffected. Explanations carry originating feedback IDs."
+    }
+  ],
+  "behavior": {
+    "sentiment": "Lowercase ASCII word tokens; positive lexicon good/great/love/excellent/helpful/happy, negative bad/broken/hate/poor/terrible/slow. Immediately preceding not/never/no flips contribution. Average matched contributions, rounded to six places; no matches means neutral.",
+    "issues": "An issue is negative sentiment or high/critical declared severity. Nonissues have priority zero. Issue priority = severity ordinal * 20 + max(0, -sentiment) * 20; ordinal low=1 through critical=4. Sort descending priority, then feedback ID.",
+    "recency": "Event weight = (view:1, purchase:3) * 2^(-age_days/30). Sum by product and category, normalize each by its maximum for the customer.",
+    "ranking": "With history, base = 0.7*item_affinity + 0.3*category_affinity. Without positive effective history, base = supplied catalog popularity. Final = max(0, rounded base - rounded issue penalty), rounded to six places.",
+    "cold_start": "Explicit flag when no positive effective event weight exists, including numerically underflowed ancient histories. Feedback-derived penalties still apply.",
+    "ties": "Descending final score, descending catalog popularity, then ascending product ID",
+    "edge_cases": "Empty catalog/customers/feedback/events accepted when references remain valid. At most top_k products. Previously purchased products remain eligible. Repeated issues use max severity-aware priority, not a cumulative penalty.",
+    "determinism": "Explicit as_of; deterministic event summation and sorting; no input mutation; no randomness or external service"
+  },
+  "scope": {
+    "included": [
+      "Integrated deterministic two-stage CLI",
+      "Shared schemas and validation boundaries",
+      "Transparent sentiment and severity scoring",
+      "Recency-weighted purchase/browsing and category preferences",
+      "Cold-start popularity fallback",
+      "Feedback-to-ranking evidence propagation",
+      "Synthetic fixtures and standard-library unit/CLI tests"
+    ],
+    "excluded": [
+      "LLM or injected model step; neither is needed",
+      "Live providers, network access and external dependencies",
+      "Trained sentiment model, sarcasm, multilingual analysis and long negation scope",
+      "Production infrastructure, persistence, authentication and real customer data",
+      "Diversity optimization, exploration, stock availability and purchase exclusion"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 15,
+    "failures": 0,
+    "errors": 0,
+    "unittest_exit_code": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "example_cli_stdout": "One JSON object with validated sentiment and personalization outputs",
+    "coverage": [
+      "Sentiment evidence and negation",
+      "Severity override and neutral/empty feedback",
+      "Purchase weights and recency decay",
+      "Cross-stage category penalties, ranking changes and customer isolation",
+      "Cold-start fallback, tie breaking, empty collections and top_k",
+      "Invalid schema, references, dates, enums, numeric ranges and duplicate IDs",
+      "Rejected invalid handoff records",
+      "Determinism and input immutability",
+      "CLI success, missing files, usage, malformed JSON and duplicate JSON keys"
+    ]
+  }
+}

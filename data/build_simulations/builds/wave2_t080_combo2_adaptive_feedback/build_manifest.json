@@ -1,0 +1,76 @@
+{
+  "build_id": "wave2_t080_combo2_adaptive_feedback",
+  "composition_label": "Adaptive onboarding (Guided onboarding) -> Feedback analysis (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict object: schema_version=1, synthetic=true, profile, feedback. Profile: experience beginner/intermediate/advanced, preference guided/concise, nonempty unique goals start/sell/track, unique completed_steps account/listings/analytics. Feedback records: unique nonblank id, selected step_id, nonblank text with word characters.",
+    "output": "Strict object: schema_version=1, status=ok, synthetic=true, onboarding, feedback. Onboarding carries profile, ordered steps and exact source_feedback. Feedback carries counts, deduplicated groups and traceable themes.",
+    "validation": "One recursive validator handles all structural schemas; shared semantic checks enforce profile constraints, completed prerequisites, handoff order/status, selected feedback targets and unique source IDs. Unknown fields, wrong types, boolean versions, duplicate JSON keys and nonfinite JSON constants are rejected.",
+    "errors": "File, encoding, JSON and validation errors print one JSON object with status=error and exit 2; success prints one JSON object and exits 0."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "adaptive_onboarding",
+      "to": "analyze_feedback",
+      "contract": "Validated ONBOARDING object is the only feedback-stage input. It includes exact feedback records, adapted profile and prerequisite-ordered steps.",
+      "propagation": "Groups inherit the onboarding step's completion status. Recommendations inherit experience/preference and reference the relevant selected steps in prerequisite order. Exact source IDs and excerpts survive normalization and grouping."
+    }
+  ],
+  "behavior": {
+    "onboarding": "Resolve goal dependency closure account -> listings -> analytics. Include completed steps without repeat tasks. Guided beginners receive three instructions, guided intermediates two, advanced or concise users one. Explain prerequisites, experience and preference choices.",
+    "deduplication": "NFKC normalization, case folding, word extraction and whitespace collapse; key includes step_id so identical text about different steps is not merged. Preserve first-seen group order and every exact source excerpt.",
+    "themes": "Deterministic exact-word keyword matching, multiple themes allowed, otherwise other. Themes sort by name and cite all supporting group IDs and source records. No inferred sentiment or statistical significance.",
+    "empty_feedback": "Valid; zero counts and empty groups/themes.",
+    "fixtures": "All example and test records are explicitly synthetic.",
+    "determinism": "No randomness, timestamps, providers, environment-driven decisions or mutation of input documents."
+  },
+  "scope": {
+    "included": [
+      "Single integrated CLI pipeline",
+      "Strict shared schemas and validation",
+      "Prerequisites and experience/preference-aware explanations",
+      "Deduplication, keyword themes, exact excerpt traceability",
+      "Synthetic fixture and standard-library unittest suite"
+    ],
+    "excluded": [
+      "Live LLM calls or injected LLM steps",
+      "Fuzzy or semantic deduplication",
+      "Sentiment inference",
+      "Persistent storage, web UI, authentication or production deployment",
+      "Multilingual theme dictionaries and statistical analysis"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 15,
+    "tests_passed": 15,
+    "tests_failed": 0,
+    "unittest_exit_code": 0,
+    "cli_status": "passed; printed one valid JSON object with status=ok",
+    "cli_exit_code": 0,
+    "example_counts": {
+      "source_count": 4,
+      "unique_count": 3,
+      "duplicate_count": 1
+    }
+  }
+}

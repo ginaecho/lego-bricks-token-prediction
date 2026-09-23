@@ -1,0 +1,71 @@
+{
+  "build_id": "wave2_t001_single_adaptive",
+  "composition_label": "Adaptive onboarding (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated implementation authored for this build; no source files copied or inspected outside the build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1; booleans rejected.",
+      "synthetic": "Required literal true. All examples and actions are synthetic.",
+      "profile": {
+        "experience": "Required: beginner | intermediate | advanced",
+        "preference": "Required: guided | concise"
+      },
+      "goal": "Required: first_sale | manage_catalog",
+      "completed_steps": "Optional unique array of known step IDs, default []; completed steps must include their prerequisites.",
+      "unknown_fields": "Rejected at root and profile."
+    },
+    "output": {
+      "success": "schema_version=1, status=ok, synthetic=true, onboarding object",
+      "onboarding": "goal, profile, presentation(mode/detail/explanation), completed_steps, progress(completed/total), complete, next_step (ID or null), ready_steps, steps",
+      "step": "id, title, prerequisites, unmet_prerequisites, state (ready|blocked), explanation, instructions",
+      "error": "schema_version=1, status=error, error(code/path/message); process exit 2",
+      "success_exit": 0
+    },
+    "validation": "validate_input is the shared CLI/Python API validation boundary. JSON parsing also rejects duplicate keys and non-finite numbers. Python API raises ValidationError; CLI renders it as one JSON object."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality only: JSON reader -> shared validated normalized request -> deterministic onboarding planner -> JSON response. No external handoff."
+  ],
+  "behavior": {
+    "step_order": ["account", "seller_profile", "payout", "catalog", "listing", "publish"],
+    "goal_targets": {"first_sale": "publish", "manage_catalog": "catalog"},
+    "prerequisites": "Select the goal's transitive prerequisite closure and emit pending steps in fixed topological order. Completed steps are never silently inferred.",
+    "adaptation": "Guided preference yields a walkthrough with contextual help; concise preference yields a checklist. Beginners always receive help and receive additional sequencing instructions in guided mode. Experience determines expanded/standard/brief detail metadata. Every step retains its explanation regardless of experience.",
+    "resume": "Caller resubmits completed_steps with prerequisites on each invocation. No local state is written; ready/blocked states reflect submitted completion, not hypothetical execution of the returned plan.",
+    "progress": "Only completed steps within the selected goal's prerequisite closure are counted. Valid historical steps outside that closure are preserved.",
+    "completion": "An empty pending plan yields complete=true, next_step=null, and ready_steps=[].",
+    "synthetic": "This CLI plans onboarding; it does not create accounts, collect money, publish products, or verify external completion.",
+    "determinism": "No time, randomness, network, model provider, or injected LLM is used."
+  },
+  "scope": {
+    "included": ["Experience/preference-aware instructions", "Goal-aware prerequisite planning", "Completion/resume handling", "Explanations", "Strict shared validation", "JSON CLI", "Synthetic fixtures and unittest suite"],
+    "excluded": ["Real marketplace integration", "Authentication", "Financial information collection", "Persistent storage", "Interactive UI", "LLM/provider calls", "Enterprise production delivery"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 13,
+    "tests_failed": 0,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_result": "One JSON object with status=ok; next_step=seller_profile.",
+    "coverage": ["Normal onboarding", "Experience and preference combinations", "Prerequisite ordering", "Resume", "Goal-specific plans", "Already complete", "Other-goal history", "Invalid input", "Determinism and no mutation", "CLI success", "CLI usage and file errors", "Malformed JSON and duplicate keys", "Non-UTF-8 input"]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "attributes": [
+    {
+      "id": "price",
+      "aliases": ["Price USD", "Cost"],
+      "kind": "number",
+      "unit": "USD",
+      "units": {"USD": 1}
+    },
+    {
+      "id": "battery",
+      "aliases": ["Battery life", "Runtime"],
+      "kind": "number",
+      "unit": "h",
+      "units": {"h": 1, "hours": 1, "min": 0.016666666666666666}
+    },
+    {
+      "id": "finish",
+      "aliases": ["Color"],
+      "kind": "text",
+      "unit": null,
+      "units": {}
+    },
+    {
+      "id": "mass",
+      "aliases": ["Weight"],
+      "kind": "number",
+      "unit": "g",
+      "units": {"g": 1, "kg": 1000}
+    }
+  ],
+  "products": [
+    {
+      "id": "synthetic-a",
+      "name": "Synthetic Comet Speaker",
+      "attributes": {
+        "Cost": "80 USD",
+        "Battery life": {"value": 600, "unit": "min"},
+        "Color": " BLUE ",
+        "Weight": "0.5 kg"
+      }
+    },
+    {
+      "id": "synthetic-b",
+      "name": "Synthetic Orbit Speaker",
+      "attributes": {
+        "price": 100,
+        "Runtime": "12 h",
+        "finish": "Red",
+        "mass": "450 g"
+      }
+    }
+  ],
+  "preferences": [
+    {"attribute": "price", "direction": "min", "weight": 3},
+    {"attribute": "battery", "direction": "max", "weight": 1},
+    {"attribute": "finish", "direction": "match", "weight": 1, "target": "blue"}
+  ],
+  "documents": [
+    {
+      "id": "synthetic-a-lab",
+      "product_id": "synthetic-a",
+      "text": "SYNTHETIC lab fixture, not a real product review.\nCost: 80 USD\nBattery life: 10 hours\nColor: Blue\n"
+    },
+    {
+      "id": "synthetic-a-review",
+      "product_id": "synthetic-a",
+      "text": "SYNTHETIC review fixture; measurements intentionally conflict.\nPrice USD: 80 USD\nRuntime: 9 h\nColor: blue\n"
+    },
+    {
+      "id": "synthetic-b-lab",
+      "product_id": "synthetic-b",
+      "text": "SYNTHETIC comparison fixture.\nprice: 100 USD\nbattery: 12 h\nfinish: red\nmass: 450 g\n"
+    }
+  ],
+  "extraction_schema": [
+    {"id": "recommended_product", "type": "string", "required": true, "source": "name"},
+    {"id": "preference_score", "type": "number", "required": true, "source": "score"},
+    {"id": "verified_price", "type": "number", "required": true, "source": "attribute", "attribute": "price"},
+    {"id": "battery_hours", "type": "number", "required": true, "source": "attribute", "attribute": "battery"},
+    {"id": "mass_grams", "type": "number", "required": false, "source": "attribute", "attribute": "mass"},
+    {"id": "research_summary", "type": "string", "required": true, "source": "summary"},
+    {"id": "has_conflicts", "type": "boolean", "required": true, "source": "has_disagreement"},
+    {"id": "evidence_count", "type": "integer", "required": true, "source": "evidence_count"},
+    {"id": "open_questions", "type": "integer", "required": true, "source": "unresolved_count"},
+    {"id": "alternative_battery", "type": "number", "required": false, "source": "attribute", "attribute": "battery", "product_id": "synthetic-b"}
+  ]
+}

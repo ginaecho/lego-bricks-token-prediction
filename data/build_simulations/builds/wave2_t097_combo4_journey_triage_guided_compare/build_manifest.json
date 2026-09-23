@@ -1,0 +1,116 @@
+{
+  "build_id": "wave2_t097_combo4_journey_triage_guided_compare",
+  "composition_label": "Journey recommendations -> Ticket triage & routing -> Guided setup -> Product comparison",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created for this build; no source copied or other builds inspected.",
+    "runtime": "Python 3.13.15 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "literal true",
+      "profile": "interests, completed_actions, completed_steps: unique nonblank string arrays",
+      "actions": "unique id, tags, requires: prerequisite action ids; acyclic graph",
+      "ticket": "nonblank text and impact low|medium|high",
+      "triage": "ordered rules {category, keywords, priority, owner}, default {category, priority, owner}, impact_priorities {low, medium, high}; priorities low|normal|high|urgent",
+      "steps": "unique id, action_id, categories (configured categories or *), requires step ids; acyclic graph",
+      "products": "unique id, name, requires_steps, attributes {price, capacity, warranty}; each measurement has finite nonnegative value and supported unit",
+      "preferences": "price, capacity, warranty: each {weight: finite nonnegative number, direction: min|max}; total weight finite and positive"
+    },
+    "stage_envelope": "{schema_version: 1, status: in_progress|ok, input: validated source document, stages: ordered accumulated journey/triage/guided/compare results}",
+    "error_envelope": "{status: error, error: message}; stdout is one JSON object; exit 2",
+    "validation": "One shared validation layer rejects unknown/missing fields, duplicate ids and JSON keys, malformed values, unknown references, cycles, and prerequisite-inconsistent completions. Each transition revalidates the envelope and recomputes canonical preceding stage results to reject tampered handoffs. Final serialization rejects nonfinite numbers."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "journey",
+      "to": "triage",
+      "data": "validated ordered two-step action ids become ticket journey context"
+    },
+    {
+      "from": "triage",
+      "to": "guided",
+      "data": "journey ids and routed category select setup steps; owner and priority remain accountable context"
+    },
+    {
+      "from": "guided",
+      "to": "compare",
+      "data": "validated completed_step_ids gate product eligibility; setup progress and accountable owner are retained"
+    }
+  ],
+  "behavior": {
+    "journey": "Enumerate all feasible two-action sequences under sequential prerequisite completion, maximize summed unique interest-tag overlaps, break ties lexicographically by action ids. List currently feasible actions ordered by interest score then id. Reject input when no complete two-step journey remains.",
+    "triage": "Case-insensitive substring keyword matching; first matching configured rule wins, otherwise default. Priority is the maximum of rule priority and configured ticket-impact priority. Nonblank owner is mandatory.",
+    "guided": "Choose steps for journey actions and triage category, include transitive prerequisites, produce deterministic topological ordering. Completed evidence comes only from validated input. Steps are completed, available, or blocked. Progress counts selected steps including prerequisite closure. Empty plan has fraction 1.",
+    "compare": "Normalize USD/cent to USD, GB/TB (decimal 1000 GB) to GB, month/year to months. Show all products side by side with blockers. Rank eligible products using weighted min-max utilities in [0,1], equal-valued attributes receive utility 1; normalize weights. Ties use product id. Empty or fully blocked catalog returns no ranking and null selection.",
+    "progress_updates": "Rerun with updated prerequisite-consistent profile.completed_steps; the pipeline does not auto-complete recommended work.",
+    "determinism": "No randomness, network, providers, timestamps, or input mutation in pipeline output.",
+    "synthetic_data": "Example explicitly sets synthetic=true and labels ticket/product/team fixture data synthetic."
+  },
+  "scope": {
+    "included": [
+      "single integrated CLI",
+      "strict shared versioned schema",
+      "prerequisite-aware personalized two-step journey",
+      "configurable accountable ticket routing",
+      "setup dependency closure and progress",
+      "normalized comparison and preference ranking",
+      "validated handoffs",
+      "standard-library tests and CLI error handling"
+    ],
+    "excluded": [
+      "enterprise production guarantees",
+      "live LLM or optional callable integration (not needed by deterministic implementation)",
+      "external services",
+      "currency exchange",
+      "authentication",
+      "persistent databases",
+      "ticket dispatch side effects",
+      "automatic onboarding execution",
+      "large-scale optimization"
+    ]
+  },
+  "test_outcomes": {
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 41,
+    "failures": 0,
+    "errors": 0,
+    "result": "passed",
+    "cli_example": {
+      "exit_code": 0,
+      "status": "ok",
+      "selected_product_id": "basic"
+    },
+    "coverage": [
+      "all four stages",
+      "all three handoffs",
+      "changed completion propagation",
+      "tampered output",
+      "out-of-order execution",
+      "DAG cycles",
+      "unknown references",
+      "invalid completion",
+      "normalization",
+      "ranking preferences and ties",
+      "empty and blocked catalog",
+      "malformed numbers/schema",
+      "CLI success and usage/file/JSON/Unicode errors"
+    ]
+  }
+}

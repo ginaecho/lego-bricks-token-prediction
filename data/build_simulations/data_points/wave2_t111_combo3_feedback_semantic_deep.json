@@ -1,0 +1,1161 @@
+{
+  "id": "wave2_t111_combo3_feedback_semantic_deep",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights",
+      "search",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Customer insights",
+      "Smart product search",
+      "Research"
+    ],
+    "types": [
+      "feedback",
+      "semantic",
+      "deep"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 4,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 4,
+    "planned_operation_verify": 4,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Feedback deduplication, themes and traceable supporting excerpts.",
+    "Search index, relevance ranking and optional injected embedding interface.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions."
+  ],
+  "integration": {
+    "ordered_types": [
+      "feedback",
+      "semantic",
+      "deep"
+    ],
+    "edges": [
+      {
+        "from": "feedback",
+        "to": "semantic",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "semantic",
+        "to": "deep",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "test",
+  "split_group": "cd91374598fb0b65daac3008106063c79722e423d6dccd17a37c0375f5a15581",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "54be4201e6d8b340e2075612b61e60590ddeb0c5a2bcfa9c1aba702eca0947a5",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t111_combo3_feedback_semantic_deep",
+  "membership_point_id": "combo3_feedback_semantic_deep",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "cac68b7c523cbd2982b713c4f0255a346f64bbe40051265cbfcb7d08c6f9484e",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "78663cbb-7dc0-4472-927d-57b435b25d0d",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 135572,
+    "output_tokens": 12953,
+    "cache_read_tokens": 121253,
+    "cache_write_tokens": 14301,
+    "total_tokens": 148525,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34863,
+        "agent_id": "78663cbb-7dc0-4472-927d-57b435b25d0d",
+        "model": "gpt-6-astra",
+        "input_tokens": 14854,
+        "output_tokens": 734,
+        "cache_read_tokens": 14055,
+        "cache_write_tokens": 796,
+        "reasoning_tokens": 516,
+        "duration_ms": 15857,
+        "created_at": "2026-09-23T11:10:48.765Z"
+      },
+      {
+        "id": 34874,
+        "agent_id": "78663cbb-7dc0-4472-927d-57b435b25d0d",
+        "model": "gpt-6-astra",
+        "input_tokens": 15618,
+        "output_tokens": 8419,
+        "cache_read_tokens": 14851,
+        "cache_write_tokens": 764,
+        "reasoning_tokens": 516,
+        "duration_ms": 84932,
+        "created_at": "2026-09-23T11:12:14.706Z"
+      },
+      {
+        "id": 34875,
+        "agent_id": "78663cbb-7dc0-4472-927d-57b435b25d0d",
+        "model": "gpt-6-astra",
+        "input_tokens": 24281,
+        "output_tokens": 252,
+        "cache_read_tokens": 15615,
+        "cache_write_tokens": 8663,
+        "reasoning_tokens": 15,
+        "duration_ms": 3908,
+        "created_at": "2026-09-23T11:12:18.729Z"
+      },
+      {
+        "id": 34881,
+        "agent_id": "78663cbb-7dc0-4472-927d-57b435b25d0d",
+        "model": "gpt-6-astra",
+        "input_tokens": 24594,
+        "output_tokens": 3022,
+        "cache_read_tokens": 24278,
+        "cache_write_tokens": 313,
+        "reasoning_tokens": 516,
+        "duration_ms": 40334,
+        "created_at": "2026-09-23T11:13:02.240Z"
+      },
+      {
+        "id": 34884,
+        "agent_id": "78663cbb-7dc0-4472-927d-57b435b25d0d",
+        "model": "gpt-6-astra",
+        "input_tokens": 27866,
+        "output_tokens": 432,
+        "cache_read_tokens": 24591,
+        "cache_write_tokens": 3272,
+        "reasoning_tokens": 15,
+        "duration_ms": 5259,
+        "created_at": "2026-09-23T11:13:07.611Z"
+      },
+      {
+        "id": 34885,
+        "agent_id": "78663cbb-7dc0-4472-927d-57b435b25d0d",
+        "model": "gpt-6-astra",
+        "input_tokens": 28359,
+        "output_tokens": 94,
+        "cache_read_tokens": 27863,
+        "cache_write_tokens": 493,
+        "reasoning_tokens": 0,
+        "duration_ms": 2317,
+        "created_at": "2026-09-23T11:13:16.019Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.533225,
+      "observed_cache_profile_estimate_usd": 0.26040575,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.398699999999999,
+      "observed_cache_profile_estimate_usd": 6.398699999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 4,
+      "impact_recognized": 3,
+      "roi_satisfaction": 3,
+      "future_impact_potential": 0,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.51,
+    "pseudo_annual_cost_usd": 30000,
+    "pseudo_annual_ai_value_usd": 85000,
+    "pseudo_net_impact_usd": 55000,
+    "pseudo_roi_pct": 183.33333333333334,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.454s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "deep_research": {
+        "disagreements": [
+          {
+            "cross_document": true,
+            "opposing_evidence_ids": [
+              "evidence-3"
+            ],
+            "supporting_evidence_ids": [
+              "evidence-1"
+            ],
+            "topic": "durable quality"
+          },
+          {
+            "cross_document": true,
+            "opposing_evidence_ids": [
+              "evidence-4"
+            ],
+            "supporting_evidence_ids": [
+              "evidence-2"
+            ],
+            "topic": "easy setup"
+          }
+        ],
+        "evidence": [
+          {
+            "claim_number": 1,
+            "document_id": "d1",
+            "evidence_id": "evidence-1",
+            "excerpt": "The shell is durable and sturdy in indoor tests.",
+            "feedback_theme_ids": [
+              "quality",
+              "usability"
+            ],
+            "position": "support",
+            "search_rank": 1,
+            "topic": "durable quality"
+          },
+          {
+            "claim_number": 2,
+            "document_id": "d1",
+            "evidence_id": "evidence-2",
+            "excerpt": "Setup is easy with illustrated instructions.",
+            "feedback_theme_ids": [
+              "quality",
+              "usability"
+            ],
+            "position": "support",
+            "search_rank": 1,
+            "topic": "easy setup"
+          },
+          {
+            "claim_number": 1,
+            "document_id": "d2",
+            "evidence_id": "evidence-3",
+            "excerpt": "The shell is fragile and broken after outdoor drops.",
+            "feedback_theme_ids": [
+              "quality",
+              "usability"
+            ],
+            "position": "oppose",
+            "search_rank": 2,
+            "topic": "durable quality"
+          },
+          {
+            "claim_number": 2,
+            "document_id": "d2",
+            "evidence_id": "evidence-4",
+            "excerpt": "Setup is difficult with missing instructions.",
+            "feedback_theme_ids": [
+              "quality",
+              "usability"
+            ],
+            "position": "oppose",
+            "search_rank": 2,
+            "topic": "easy setup"
+          },
+          {
+            "claim_number": 1,
+            "document_id": "d3",
+            "evidence_id": "evidence-5",
+            "excerpt": "Shipping arrived late in two regions.",
+            "feedback_theme_ids": [
+              "delivery",
+              "price"
+            ],
+            "position": "oppose",
+            "search_rank": 3,
+            "topic": "reliable delivery"
+          },
+          {
+            "claim_number": 2,
+            "document_id": "d3",
+            "evidence_id": "evidence-6",
+            "excerpt": "The price may offer value, but long-term cost is uncertain.",
+            "feedback_theme_ids": [
+              "delivery",
+              "price"
+            ],
+            "position": "uncertain",
+            "search_rank": 3,
+            "topic": "price value"
+          }
+        ],
+        "findings": [
+          {
+            "assessment": "disputed",
+            "document_ids": [
+              "d1",
+              "d2"
+            ],
+            "evidence_ids": [
+              "evidence-1",
+              "evidence-3"
+            ],
+            "positions": [
+              "oppose",
+              "support"
+            ],
+            "topic": "durable quality"
+          },
+          {
+            "assessment": "disputed",
+            "document_ids": [
+              "d1",
+              "d2"
+            ],
+            "evidence_ids": [
+              "evidence-2",
+              "evidence-4"
+            ],
+            "positions": [
+              "oppose",
+              "support"
+            ],
+            "topic": "easy setup"
+          },
+          {
+            "assessment": "descriptive",
+            "document_ids": [
+              "d3"
+            ],
+            "evidence_ids": [
+              "evidence-6"
+            ],
+            "positions": [
+              "uncertain"
+            ],
+            "topic": "price value"
+          },
+          {
+            "assessment": "opposition-only",
+            "document_ids": [
+              "d3"
+            ],
+            "evidence_ids": [
+              "evidence-5"
+            ],
+            "positions": [
+              "oppose"
+            ],
+            "topic": "reliable delivery"
+          }
+        ],
+        "summary": {
+          "disputed_topic_count": 2,
+          "evidence_count": 6,
+          "interpretation": "Positions are synthetic source annotations, not verified facts.",
+          "retrieved_document_count": 3,
+          "topic_count": 4
+        },
+        "unresolved_questions": [
+          {
+            "code": "conflicting_evidence",
+            "evidence_ids": [
+              "evidence-1",
+              "evidence-3"
+            ],
+            "question": "What conditions explain the conflicting positions?",
+            "topic": "durable quality"
+          },
+          {
+            "code": "conflicting_evidence",
+            "evidence_ids": [
+              "evidence-2",
+              "evidence-4"
+            ],
+            "question": "What conditions explain the conflicting positions?",
+            "topic": "easy setup"
+          },
+          {
+            "code": "single_source",
+            "evidence_ids": [
+              "evidence-6"
+            ],
+            "question": "Can an independent document corroborate this topic?",
+            "topic": "price value"
+          },
+          {
+            "code": "explicit_uncertainty",
+            "evidence_ids": [
+              "evidence-6"
+            ],
+            "question": "What additional evidence resolves the stated uncertainty?",
+            "topic": "price value"
+          },
+          {
+            "code": "single_source",
+            "evidence_ids": [
+              "evidence-5"
+            ],
+            "question": "Can an independent document corroborate this topic?",
+            "topic": "reliable delivery"
+          }
+        ]
+      },
+      "feedback_analysis": {
+        "duplicate_count": 1,
+        "groups": [
+          {
+            "canonical_text": "The quality is sturdy and setup is easy.",
+            "excerpts": [
+              {
+                "source_id": "f1",
+                "text": "The quality is sturdy and setup is easy."
+              },
+              {
+                "source_id": "f2",
+                "text": "THE QUALITY IS STURDY AND SETUP IS EASY!"
+              }
+            ],
+            "group_id": "feedback-1",
+            "source_ids": [
+              "f1",
+              "f2"
+            ]
+          },
+          {
+            "canonical_text": "The quality is fragile. Instructions are difficult.",
+            "excerpts": [
+              {
+                "source_id": "f3",
+                "text": "The quality is fragile. Instructions are difficult."
+              }
+            ],
+            "group_id": "feedback-2",
+            "source_ids": [
+              "f3"
+            ]
+          },
+          {
+            "canonical_text": "Shipping arrived late; price is expensive.",
+            "excerpts": [
+              {
+                "source_id": "f4",
+                "text": "Shipping arrived late; price is expensive."
+              }
+            ],
+            "group_id": "feedback-3",
+            "source_ids": [
+              "f4"
+            ]
+          }
+        ],
+        "raw_count": 4,
+        "themes": [
+          {
+            "group_ids": [
+              "feedback-3"
+            ],
+            "raw_feedback_count": 1,
+            "supporting_excerpts": [
+              {
+                "source_id": "f4",
+                "text": "Shipping arrived late; price is expensive."
+              }
+            ],
+            "theme_id": "delivery",
+            "unique_feedback_count": 1
+          },
+          {
+            "group_ids": [
+              "feedback-3"
+            ],
+            "raw_feedback_count": 1,
+            "supporting_excerpts": [
+              {
+                "source_id": "f4",
+                "text": "Shipping arrived late; price is expensive."
+              }
+            ],
+            "theme_id": "price",
+            "unique_feedback_count": 1
+          },
+          {
+            "group_ids": [
+              "feedback-1",
+              "feedback-2"
+            ],
+            "raw_feedback_count": 3,
+            "supporting_excerpts": [
+              {
+                "source_id": "f1",
+                "text": "The quality is sturdy and setup is easy."
+              },
+              {
+                "source_id": "f2",
+                "text": "THE QUALITY IS STURDY AND SETUP IS EASY!"
+              },
+              {
+                "source_id": "f3",
+                "text": "The quality is fragile. Instructions are difficult."
+              }
+            ],
+            "theme_id": "quality",
+            "unique_feedback_count": 2
+          },
+          {
+            "group_ids": [
+              "feedback-1",
+              "feedback-2"
+            ],
+            "raw_feedback_count": 3,
+            "supporting_excerpts": [
+              {
+                "source_id": "f1",
+                "text": "The quality is sturdy and setup is easy."
+              },
+              {
+                "source_id": "f2",
+                "text": "THE QUALITY IS STURDY AND SETUP IS EASY!"
+              },
+              {
+                "source_id": "f3",
+                "text": "The quality is fragile. Instructions are difficult."
+              }
+            ],
+            "theme_id": "usability",
+            "unique_feedback_count": 2
+          }
+        ],
+        "unique_count": 3
+      },
+      "request": {
+        "documents": [
+          {
+            "claims": [
+              {
+                "excerpt": "The shell is durable and sturdy in indoor tests.",
+                "position": "support",
+                "topic": "durable quality"
+              },
+              {
+                "excerpt": "Setup is easy with illustrated instructions.",
+                "position": "support",
+                "topic": "easy setup"
+              }
+            ],
+            "id": "d1",
+            "text": "The shell is durable and sturdy in indoor tests. Setup is easy with illustrated instructions.",
+            "title": "Synthetic lab A: durable quality and setup"
+          },
+          {
+            "claims": [
+              {
+                "excerpt": "The shell is fragile and broken after outdoor drops.",
+                "position": "oppose",
+                "topic": "durable quality"
+              },
+              {
+                "excerpt": "Setup is difficult with missing instructions.",
+                "position": "oppose",
+                "topic": "easy setup"
+              }
+            ],
+            "id": "d2",
+            "text": "The shell is fragile and broken after outdoor drops. Setup is difficult with missing instructions.",
+            "title": "Synthetic field B: quality and setup"
+          },
+          {
+            "claims": [
+              {
+                "excerpt": "Shipping arrived late in two regions.",
+                "position": "oppose",
+                "topic": "reliable delivery"
+              },
+              {
+                "excerpt": "The price may offer value, but long-term cost is uncertain.",
+                "position": "uncertain",
+                "topic": "price value"
+              }
+            ],
+            "id": "d3",
+            "text": "Shipping arrived late in two regions. The price may offer value, but long-term cost is uncertain.",
+            "title": "Synthetic shipping and price audit"
+          },
+          {
+            "claims": [],
+            "id": "d4",
+            "text": "Distant galaxies emit radiation.",
+            "title": "Synthetic unrelated astronomy note"
+          }
+        ],
+        "feedback": [
+          {
+            "id": "f1",
+            "text": "The quality is sturdy and setup is easy."
+          },
+          {
+            "id": "f2",
+            "text": "THE QUALITY IS STURDY AND SETUP IS EASY!"
+          },
+          {
+            "id": "f3",
+            "text": "The quality is fragile. Instructions are difficult."
+          },
+          {
+            "id": "f4",
+            "text": "Shipping arrived late; price is expensive."
+          }
+        ],
+        "limit": 5,
+        "query": "durable quality setup",
+        "schema_version": "1.0",
+        "synthetic": true
+      },
+      "schema_version": "1.0",
+      "semantic_search": {
+        "candidate_count": 3,
+        "effective_query": {
+          "feedback_terms": [
+            "arrived",
+            "difficult",
+            "easy",
+            "expensive",
+            "fragile",
+            "instructions",
+            "late",
+            "price",
+            "quality",
+            "setup",
+            "shipping",
+            "sturdy"
+          ],
+          "query_terms": [
+            "durable",
+            "quality",
+            "setup"
+          ]
+        },
+        "index": {
+          "a": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            }
+          ],
+          "after": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "and": [
+            {
+              "document_id": "d1",
+              "term_frequency": 2
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 2
+            },
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "arrived": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "astronomy": [
+            {
+              "document_id": "d4",
+              "term_frequency": 1
+            }
+          ],
+          "audit": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "b": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "broken": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "but": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "cost": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "difficult": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "distant": [
+            {
+              "document_id": "d4",
+              "term_frequency": 1
+            }
+          ],
+          "drops": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "durable": [
+            {
+              "document_id": "d1",
+              "term_frequency": 2
+            }
+          ],
+          "easy": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            }
+          ],
+          "emit": [
+            {
+              "document_id": "d4",
+              "term_frequency": 1
+            }
+          ],
+          "field": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "fragile": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "galaxies": [
+            {
+              "document_id": "d4",
+              "term_frequency": 1
+            }
+          ],
+          "illustrated": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            }
+          ],
+          "in": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "indoor": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            }
+          ],
+          "instructions": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "is": [
+            {
+              "document_id": "d1",
+              "term_frequency": 2
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 2
+            },
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "lab": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            }
+          ],
+          "late": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "long": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "may": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "missing": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "note": [
+            {
+              "document_id": "d4",
+              "term_frequency": 1
+            }
+          ],
+          "offer": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "outdoor": [
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "price": [
+            {
+              "document_id": "d3",
+              "term_frequency": 2
+            }
+          ],
+          "quality": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "radiation": [
+            {
+              "document_id": "d4",
+              "term_frequency": 1
+            }
+          ],
+          "regions": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "setup": [
+            {
+              "document_id": "d1",
+              "term_frequency": 2
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 2
+            }
+          ],
+          "shell": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ],
+          "shipping": [
+            {
+              "document_id": "d3",
+              "term_frequency": 2
+            }
+          ],
+          "sturdy": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            }
+          ],
+          "synthetic": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d4",
+              "term_frequency": 1
+            }
+          ],
+          "term": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "tests": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            }
+          ],
+          "the": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "two": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "uncertain": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "unrelated": [
+            {
+              "document_id": "d4",
+              "term_frequency": 1
+            }
+          ],
+          "value": [
+            {
+              "document_id": "d3",
+              "term_frequency": 1
+            }
+          ],
+          "with": [
+            {
+              "document_id": "d1",
+              "term_frequency": 1
+            },
+            {
+              "document_id": "d2",
+              "term_frequency": 1
+            }
+          ]
+        },
+        "method": "lexical",
+        "results": [
+          {
+            "document_id": "d1",
+            "embedding_similarity": null,
+            "feedback_theme_ids": [
+              "quality",
+              "usability"
+            ],
+            "lexical_score": 0.854167,
+            "matched_feedback_terms": [
+              "easy",
+              "instructions",
+              "quality",
+              "setup",
+              "sturdy"
+            ],
+            "matched_query_terms": [
+              "durable",
+              "quality",
+              "setup"
+            ],
+            "rank": 1,
+            "score": 0.854167
+          },
+          {
+            "document_id": "d2",
+            "embedding_similarity": null,
+            "feedback_theme_ids": [
+              "quality",
+              "usability"
+            ],
+            "lexical_score": 0.604167,
+            "matched_feedback_terms": [
+              "difficult",
+              "fragile",
+              "instructions",
+              "quality",
+              "setup"
+            ],
+            "matched_query_terms": [
+              "quality",
+              "setup"
+            ],
+            "rank": 2,
+            "score": 0.604167
+          },
+          {
+            "document_id": "d3",
+            "embedding_similarity": null,
+            "feedback_theme_ids": [
+              "delivery",
+              "price"
+            ],
+            "lexical_score": 0.083333,
+            "matched_feedback_terms": [
+              "arrived",
+              "late",
+              "price",
+              "shipping"
+            ],
+            "matched_query_terms": [],
+            "rank": 3,
+            "score": 0.083333
+          }
+        ],
+        "semantic_scores": null
+      },
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t111_combo3_feedback_semantic_deep",
+    "artifact_sha256": {
+      "implementation.py": "4774a4ead3b236e886e157cc96bd3b55fae57721cff094fc9087709b944a4a85",
+      "test_implementation.py": "ee10006a3941fe2ddd4843f724012b8ab4b46ab461d40665627c6671f9005d62",
+      "example_input.json": "94708b18c8814b0c3a75557c4f81f052cd46902370c8b71323ca8d1ea81e9d3b",
+      "build_manifest.json": "7ae2f676361bfc07fd1f9a638d5a01f13566ce40d48d1f00944e1192e14462fc"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "fixture_label": "SYNTHETIC: fictional marketplace planning notes; not real evidence",
+  "documents": [
+    {
+      "id": "synthetic-plan",
+      "text": "SYNTHETIC PLANNING NOTE\nProject: Aurora\nOwner: Mira Chen\nBudget: 2400 credits\nAurora delivery is planned for October.\nThe Aurora pilot uses reusable shipping crates.\n"
+    },
+    {
+      "id": "synthetic-review",
+      "text": "SYNTHETIC REVIEW NOTE\nProject: Aurora\nOwner: Theo Lane\nAurora delivery depends on a packaging review.\nThe review does not authorize spending.\n"
+    }
+  ],
+  "fields": [
+    {"name": "project", "label": "Project", "required": true},
+    {"name": "owner", "label": "Owner", "required": true},
+    {"name": "budget", "label": "Budget", "required": false}
+  ],
+  "queries": [
+    {"id": "delivery", "text": "delivery packaging review", "fields": ["project"]},
+    {"id": "ownership", "text": "owner", "fields": ["owner"]}
+  ],
+  "top_k": 3
+}

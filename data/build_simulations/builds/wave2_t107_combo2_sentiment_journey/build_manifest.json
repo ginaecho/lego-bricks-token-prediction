@@ -1,0 +1,51 @@
+{
+  "build_id": "wave2_t107_combo2_sentiment_journey",
+  "composition_label": "Sentiment & prioritization -> Journey recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact fields: schema_version integer 1, synthetic true, feedback array of unique {id,text,severity}; completed_actions array of unique known action names",
+    "constraints": "At most 1000 entries; trimmed nonempty ids up to 100 characters; nonblank text up to 10000 characters; severity integer 1..5 (booleans rejected). Completed actions describe the top-ranked issue and must be a prerequisite-complete prefix of its path.",
+    "output": "schema_version, status ok, synthetic true, sentiment {schema_version,issues}, journey {schema_version,status,reason,issue_id,source_priority,next_actions,steps}",
+    "errors": "One JSON object with schema_version 1, status error, error string; exit 2",
+    "validation": "One shared validate function validates input, deterministic sentiment evidence/ranking, journey constraints and final envelope. JSON duplicates and non-finite constants rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validated feedback becomes ranked issues with issue_id, severity, sentiment, label, evidence and priority.",
+    "Journey consumes the validated sentiment object, selects its first issue, propagates issue_id and source_priority, and uses its severity to choose the prerequisite chain.",
+    "Final output is revalidated against the shared source."
+  ],
+  "behavior": {
+    "sentiment": "Transparent English word lexicon: good/helpful +1, great/love/excellent +2, bad/slow -1, broken/hate/awful -2. Immediately preceding not/never/no negates; punctuation blocks that adjacency. Score is weight sum divided by absolute weight sum, rounded to 6 decimals; zero without matches. Each matched token reports index, effective weight and negation.",
+    "priority": "severity*100 + round(max(0,-sentiment)*20), descending; ties by ascending issue id. Caller-supplied severity always dominates sentiment.",
+    "journey": "High severity (4..5): acknowledge -> triage -> investigate -> resolve -> confirm -> monitor. Lower severity omits triage. Every action requires its immediate predecessor. Ready journeys contain exactly two distinct sequentially feasible steps. next_actions contains only the currently feasible first remaining action.",
+    "edge_cases": "Empty feedback yields unavailable/no_issues. Fewer than two remaining actions yields unavailable/fewer_than_two_remaining with no fabricated steps, retaining a final next action if present. Even positive feedback can represent a severe issue; explicit severity controls ranking."
+  },
+  "scope": {
+    "included": ["Synthetic fixtures", "Deterministic transparent scoring", "Severity-aware ranking", "Prerequisite-aware next action", "Validated two-step journeys", "CLI JSON errors", "Unit and subprocess tests"],
+    "excluded": ["Live providers or optional model integration", "Machine-learned sentiment", "Multilingual understanding", "Sarcasm inference", "External data access", "Persistence", "Enterprise production delivery", "Multi-issue completion histories"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 17,
+    "cli_exit_code": 0
+  }
+}

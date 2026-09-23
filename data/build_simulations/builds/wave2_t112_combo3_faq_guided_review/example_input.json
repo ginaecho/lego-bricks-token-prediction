@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "query": "How do I enable synthetic seller payouts?",
+  "knowledge_base": [
+    {
+      "id": "faq_payouts",
+      "text": "SYNTHETIC FAQ: Verify the seller account before configuring payouts. Record account verification and a payout schedule in your setup document.",
+      "match_terms": ["seller", "payouts"],
+      "step_ids": ["configure_payouts"]
+    }
+  ],
+  "setup": [
+    {
+      "id": "verify_account",
+      "title": "SYNTHETIC: Verify seller account",
+      "prerequisites": [],
+      "completed": true,
+      "requirement_ids": ["account_record"]
+    },
+    {
+      "id": "configure_payouts",
+      "title": "SYNTHETIC: Configure payout schedule",
+      "prerequisites": ["verify_account"],
+      "completed": false,
+      "requirement_ids": ["payout_record"]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "account_record",
+      "description": "SYNTHETIC: Record account verification.",
+      "required_terms": ["account", "verified"]
+    },
+    {
+      "id": "payout_record",
+      "description": "SYNTHETIC: Record a weekly payout schedule.",
+      "required_terms": ["payout", "weekly"]
+    }
+  ],
+  "documents": [
+    {
+      "id": "setup_notes",
+      "text": "SYNTHETIC FIXTURE: Account verified. Payout pending."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "account_quote",
+      "requirement_id": "account_record",
+      "document_id": "setup_notes",
+      "quote": "Account verified.",
+      "start": 19
+    }
+  ]
+}

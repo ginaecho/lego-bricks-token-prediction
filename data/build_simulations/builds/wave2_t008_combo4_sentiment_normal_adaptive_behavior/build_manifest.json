@@ -1,0 +1,51 @@
+{
+  "build_id": "wave2_t008_combo4_sentiment_normal_adaptive_behavior",
+  "composition_label": "sentiment -> normal research -> adaptive onboarding -> behavioral personalization",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory using synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact root fields: schema_version, synthetic=true, timezone-aware now, customer, issues, sources, steps, products, events. See example_input.json for the complete nested schema.",
+    "output": "schema_version, synthetic=true, status=ok, stages containing sentiment, research, onboarding, behavior in execution order",
+    "errors": "One JSON object with status=error and error message; CLI exit 2. Success exits 0.",
+    "validation": "Shared require/fields/text/strings/number/records validators; validate_input checks uniqueness, enums, finite numbers, references, timezone-aware timestamps and acyclic prerequisites. validate_stage validates each handoff before the next stage executes, including exact citation offsets and dependency order."
+  },
+  "cross_stage_handoffs": [
+    {"from": "sentiment", "to": "research", "payload": "Severity-first ordered issues and tokenized query_terms drive passage retrieval and issue provenance."},
+    {"from": "research", "to": "onboarding", "payload": "Cited source topics become focus_categories; matched issue IDs carry forward. With no findings, explicit customer interests are the fallback."},
+    {"from": "onboarding", "to": "behavior", "payload": "Validated focus_categories supply an explicit ranking boost, combined with browsing/purchase history and customer interests."}
+  ],
+  "behavior": {
+    "sentiment": "Case-insensitive ASCII word lexicon; not/no/never within two preceding tokens reverses polarity. Score is mean matched contribution, or zero. Priority is descending severity, ascending sentiment score, then issue ID; severity is caller-supplied.",
+    "research": "Split source text at sentence punctuation/newlines; rank by distinct non-stopword query overlap, tie-break by source ID and start offset. Extract at most two passages per issue. Citations contain source_id, exact quote and zero-based half-open Unicode character offsets. No overlap means unanswered, never fabricated.",
+    "onboarding": "Choose matching-category steps at or below experience level; include transitive prerequisites even above that level; omit completed steps. Topological scheduling prefers requested format among ready steps, then level and ID. Every step explains selection and format fallback.",
+    "personalization": "Category affinity sums browse=1 and purchase=3, decayed with a 30-day half-life. Product score = category affinity + 0.5 onboarding focus + 0.25 explicit interest + 0.1 popularity. Ties use product ID. Cold-start omits history and uses remaining components; no interests or research yields popularity-only ranking.",
+    "determinism": "No random state, current-clock dependency, external providers, or LLM calls; all time calculations use input now. Input is not mutated.",
+    "empty_data": "Empty collections accepted if references remain valid; empty catalog produces an empty ranking."
+  },
+  "scope": {
+    "included": ["One integrated CLI pipeline", "Synthetic fixtures", "Shared schema and boundary validation", "Transparent scoring", "Exact extractive citations", "Prerequisite-aware onboarding", "Recency ranking", "CLI and unit tests"],
+    "excluded": ["Live providers or networks", "LLM integration", "Learned sentiment or semantic retrieval", "Enterprise deployment", "Persistence", "Multilingual NLP", "Real customer data", "Authentication"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 40,
+    "unittest_failures": 0,
+    "unittest_errors": 0,
+    "cli_example_exit_code": 0,
+    "cli_example_status": "ok",
+    "coverage": ["All four stages", "Exact citations including newline boundaries", "End-to-end input-change propagation", "Boundary rejection", "Prerequisite ordering", "Experience and format", "Cold start", "Recency and purchase weights", "Determinism", "Empty inputs", "Invalid schemas and references", "CLI success and error contracts"]
+  }
+}

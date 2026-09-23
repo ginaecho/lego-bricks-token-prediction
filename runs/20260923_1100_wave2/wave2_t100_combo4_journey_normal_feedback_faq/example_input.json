@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "profile": {
+    "completed": ["account_created"],
+    "goals": ["setup", "shipping"]
+  },
+  "actions": [
+    {
+      "id": "a_setup",
+      "title": "Set up the synthetic shop",
+      "prerequisites": ["account_created"],
+      "tags": ["setup"],
+      "research_query": "shop setup checklist"
+    },
+    {
+      "id": "b_shipping",
+      "title": "Configure synthetic shipping",
+      "prerequisites": ["a_setup"],
+      "tags": ["shipping"],
+      "research_query": "shipping delivery tracking"
+    },
+    {
+      "id": "c_ads",
+      "title": "Explore synthetic advertising",
+      "prerequisites": ["account_created"],
+      "tags": ["advertising"],
+      "research_query": "advertising campaign"
+    }
+  ],
+  "passages": [
+    {
+      "id": "p_setup",
+      "source": "synthetic://research/setup",
+      "text": "Synthetic study notes. The shop setup checklist includes address and billing details."
+    },
+    {
+      "id": "p_shipping",
+      "source": "synthetic://research/shipping",
+      "text": "Shipping delivery tracking helps shoppers understand order progress. This is a synthetic finding."
+    },
+    {
+      "id": "p_ads",
+      "source": "synthetic://research/ads",
+      "text": "Advertising campaign experiments use a small synthetic budget."
+    }
+  ],
+  "feedback": [
+    {"id": "f1", "text": "Shipping delivery was late!", "passage_ids": ["p_shipping"]},
+    {"id": "f2", "text": "  SHIPPING delivery was late. ", "passage_ids": ["p_shipping"]},
+    {"id": "f3", "text": "Billing refund requests are confusing.", "passage_ids": ["p_setup"]},
+    {"id": "f4", "text": "The shop setup was easy.", "passage_ids": ["p_setup"]},
+    {"id": "f5", "text": "Advertising was expensive.", "passage_ids": ["p_ads"]},
+    {"id": "f6", "text": "Purple looks lovely.", "passage_ids": ["p_setup"]}
+  ],
+  "themes": [
+    {"id": "billing", "keywords": ["billing", "refund"], "question": "How are billing refund requests handled?"},
+    {"id": "setup", "keywords": ["setup", "easy"], "question": "What does the shop setup checklist require?"},
+    {"id": "shipping", "keywords": ["shipping", "delivery", "late"], "question": "What are shipping delivery times?"}
+  ],
+  "knowledge_base": [
+    {
+      "id": "kb_shipping",
+      "source": "synthetic://kb/shipping",
+      "text": "Shipping delivery usually takes three business days. Tracking is available in the order view."
+    },
+    {
+      "id": "kb_setup",
+      "source": "synthetic://kb/setup",
+      "text": "The shop setup checklist requires a shop address and a contact email."
+    }
+  ]
+}

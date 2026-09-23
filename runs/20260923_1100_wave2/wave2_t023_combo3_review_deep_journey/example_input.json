@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "requirements": [
+    {"id": "consent", "text": "Synthetic participants have consent records", "min_sources": 2},
+    {"id": "retention", "text": "Synthetic records follow the retention schedule", "min_sources": 1},
+    {"id": "training", "text": "Synthetic operators have training evidence", "min_sources": 1}
+  ],
+  "documents": [
+    {
+      "id": "policy",
+      "title": "SYNTHETIC policy inspection",
+      "content": "Consent records are present. Retention schedule is followed.",
+      "evidence": [
+        {"id": "e1", "requirement_id": "consent", "stance": "supports", "quote": "Consent records are present."},
+        {"id": "e2", "requirement_id": "retention", "stance": "supports", "quote": "Retention schedule is followed."}
+      ]
+    },
+    {
+      "id": "sample",
+      "title": "SYNTHETIC sample inspection",
+      "content": "Consent records are present. Expired records were retained.",
+      "evidence": [
+        {"id": "e3", "requirement_id": "consent", "stance": "supports", "quote": "Consent records are present."},
+        {"id": "e4", "requirement_id": "retention", "stance": "contradicts", "quote": "Expired records were retained."}
+      ]
+    }
+  ],
+  "actions": [
+    {"id": "orient", "title": "Read the synthetic case overview", "requirement_ids": [], "prerequisites": []},
+    {"id": "inspect", "title": "Compare the retention observations", "requirement_ids": ["retention"], "prerequisites": ["orient"]},
+    {"id": "reconcile", "title": "Collect evidence resolving the retention disagreement", "requirement_ids": ["retention"], "prerequisites": ["inspect"]},
+    {"id": "train", "title": "Collect operator training evidence", "requirement_ids": ["training"], "prerequisites": ["orient"]}
+  ],
+  "completed_actions": ["orient"]
+}

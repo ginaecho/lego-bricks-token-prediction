@@ -1,0 +1,86 @@
+{
+  "build_id": "wave2_t113_combo3_sentiment_deep_interests",
+  "composition_label": "Sentiment & prioritization -> Deep research -> Interest-based recommendations",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated construction using synthetic fixtures.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "definition": "SCHEMAS in implementation.py; one validate() layer checks exact shape, types, constraints and deterministic derivation/provenance at every handoff.",
+    "input": {
+      "schema_version": "Integer 1; booleans are not integers.",
+      "fixture_label": "Nonblank label; the example explicitly identifies synthetic data.",
+      "feedback": "Array of {id, topic, text, severity}; severity is low|medium|high|critical.",
+      "documents": "Array of {id,title,text,evidence:[{topic,claim,stance,quote}]}; stance is support|refute|uncertain. quote must be an exact substring of document text.",
+      "preferences": "{interests:[{tag,weight:1..5}],excluded_tags:[string],excluded_item_ids:[string],limit:0..100}",
+      "catalog": "Array of {id,title,tags:[string],topics:[string]}; tag and topic joins are exact and case-sensitive."
+    },
+    "output": "One object: {status:ok,schema_version,fixture_label,sentiment:{issues},research:{topics},recommendations:{ranked,excluded_item_ids}}. Each stage exposes structured provenance.",
+    "errors": "File, decoding, JSON and validation errors emit one {status:error,error:string} object to stdout and exit 2; success exits 0.",
+    "bounds": "Each array at most 1000 entries; nonblank strings at most 100000 characters; CLI input file at most 2000000 bytes. Duplicate IDs, repeated interests/tags and exact duplicate evidence within a document are rejected. Missing and unknown object fields are rejected.",
+    "empty_policy": "Empty collections accepted. No feedback yields no research topics; missing evidence yields unresolved questions and no recommendations for that topic. No interests, no eligible matches, or limit 0 yields an empty ranking.",
+    "identifiers": "IDs unique within their entity collection. Unknown exclusion IDs are permitted for forward-compatible blocking. Documents and catalog topics outside feedback are allowed but cannot produce research or recommendations."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "sentiment",
+      "to": "research",
+      "contract": "Validated issues carry ID, topic, severity, score, label, token contributions and priority. Research groups only these issues, preserves ordered issue IDs, inherits maximum priority and counts negative issues."
+    },
+    {
+      "from": "research",
+      "to": "interests",
+      "contract": "Validated research carries topics, priorities, issue IDs, document IDs, findings with verbatim evidence, disagreement and unresolved questions. Recommendations require both an interest match and a researched topic with evidence; carry issue/document IDs and uncertainty cautions."
+    }
+  ],
+  "behavior": {
+    "sentiment": "Lowercase ASCII word lexicon with exposed weights and contributions; odd count of not/never/no within preceding three words negates a match, punctuation resets scope. Sum clipped to [-10,10]. Priority is severity base (10,30,60,90) plus max(0,-score). Sort descending priority then ID.",
+    "research": "Group structured claims by exact topic and claim string across documents, with no inferred semantic equivalence. Opposed stances mark contested; uncertain stance prevents consensus. Single-document claims request corroboration. Unsupported topics, disagreement and uncertainty produce unresolved questions. Quotes are retained verbatim; status represents supplied annotations, not independently verified truth.",
+    "recommendations": "Exclude by item ID or any excluded tag before ranking. Require a preferred tag and a topic with research findings. Score = 100 * sum matched interest weights + floor(max matched topic priority / 2). Research bonus is at most 50, so a unit of expressed interest dominates. Rank descending score then item ID; truncate only after exclusions. Explanations cite interests, topics, issues and documents; propagate unresolved questions and refuted-claim cautions. A match indicates topical relevance, not item effectiveness.",
+    "determinism": "No randomness, clocks, network calls or model providers in the pipeline; stable tie-breaks and sorted evidence.",
+    "fixture": "All example customer feedback, research and catalog entries are fictional synthetic data."
+  },
+  "scope": {
+    "included": [
+      "Integrated three-stage pipeline with strict validated boundaries",
+      "Transparent rule-based sentiment and severity prioritization",
+      "Multi-document structured evidence synthesis and provenance",
+      "Conflicts, evidence gaps, uncertainty and corroboration questions",
+      "Explicit preference ranking and hard exclusions",
+      "Runnable CLI and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live research, web scraping, provider or LLM calls",
+      "Semantic claim extraction, embeddings and learned sentiment",
+      "Independent source authenticity or factuality verification",
+      "Sarcasm, multilingual sentiment and full natural-language negation parsing",
+      "Production scalability, databases, user identity and enterprise delivery",
+      "Product effectiveness or safety guarantees"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_passed": 29,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One valid JSON object with status ok; two grounded recommendations and two enforced catalog exclusions.",
+    "coverage": "All three stages, sentiment scoring/negation/clamping, severity, multi-document agreement and conflict, uncertainty and missing evidence, provenance, preference ranking/exclusions, both validated handoffs, forged intermediate/output rejection, empty inputs, determinism, strict invalid-input handling, subprocess CLI success/file/usage errors and fixture-injected parsing/decoding errors."
+  }
+}

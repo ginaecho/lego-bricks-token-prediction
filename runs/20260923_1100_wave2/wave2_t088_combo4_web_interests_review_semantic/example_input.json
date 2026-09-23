@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "allowlisted_hosts": ["catalog.example"],
+  "sources": [
+    {"id": "solar", "url": "https://catalog.example/solar", "product_id": "solar-lamp", "title": "Synthetic Solar Lamp", "tags": ["outdoors", "lighting"]},
+    {"id": "desk", "url": "https://catalog.example/desk", "product_id": "desk-lamp", "title": "Synthetic Desk Lamp", "tags": ["lighting"]},
+    {"id": "fuel", "url": "https://catalog.example/fuel", "product_id": "fuel-lamp", "title": "Synthetic Fuel Lamp", "tags": ["fuel"]}
+  ],
+  "fixture_pages": {
+    "https://catalog.example/solar": "SYNTHETIC fixture: Solar rechargeable lamp for camping. Repairable housing. Warranty two years.",
+    "https://catalog.example/desk": "SYNTHETIC fixture: Repairable desk lamp with adjustable brightness.",
+    "https://catalog.example/fuel": "SYNTHETIC fixture: Fuel lamp for camping. Warranty two years."
+  },
+  "preferences": {
+    "interests": ["camping", "repairable", "solar"],
+    "exclude_tags": ["fuel"],
+    "exclude_product_ids": [],
+    "limit": 5
+  },
+  "requirements": [
+    {"id": "warranty", "description": "Source mentions a two-year warranty", "keywords": ["warranty", "two years"], "applies_to_tags": []},
+    {"id": "weather", "description": "Outdoor source mentions waterproof housing", "keywords": ["waterproof"], "applies_to_tags": ["outdoors"]}
+  ],
+  "search": {"query": "repairable camping lamp", "limit": 5, "min_score": 0.0}
+}

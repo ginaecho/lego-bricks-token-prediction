@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional marketplace seller setup handbook",
+  "research": {
+    "keywords": ["account", "catalog", "verification"],
+    "max_findings": 5,
+    "sources": [
+      {
+        "id": "seller-handbook",
+        "title": "Synthetic Seller Handbook",
+        "passages": [
+          {
+            "id": "account",
+            "text": "Create a seller account and choose a display name before adding a catalog."
+          },
+          {
+            "id": "catalog",
+            "text": "A catalog requires an account. Supply a catalog title before verification."
+          },
+          {
+            "id": "verification",
+            "text": "Verification follows catalog creation. Record the reviewer name."
+          }
+        ]
+      }
+    ]
+  },
+  "guided": {
+    "steps": [
+      {
+        "id": "create-account",
+        "title": "Create a synthetic seller account",
+        "prerequisites": [],
+        "evidence_keywords": ["account"],
+        "required_fields": ["display_name"]
+      },
+      {
+        "id": "create-catalog",
+        "title": "Create the first synthetic catalog",
+        "prerequisites": ["create-account"],
+        "evidence_keywords": ["catalog"],
+        "required_fields": ["catalog_title"]
+      },
+      {
+        "id": "verify-catalog",
+        "title": "Record synthetic review completion",
+        "prerequisites": ["create-catalog"],
+        "evidence_keywords": ["verification"],
+        "required_fields": ["reviewer_name"]
+      }
+    ],
+    "progress": {
+      "completed_step_ids": ["create-account"],
+      "responses": {
+        "create-account": {"display_name": "Synthetic Brick Shop"}
+      }
+    }
+  }
+}

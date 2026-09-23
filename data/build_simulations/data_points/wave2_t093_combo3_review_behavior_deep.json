@@ -1,0 +1,657 @@
+{
+  "id": "wave2_t093_combo3_review_behavior_deep",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "documents",
+      "recommend",
+      "research"
+    ],
+    "basic_functionalities": [
+      "Document automation",
+      "Personalized discovery",
+      "Research"
+    ],
+    "types": [
+      "review",
+      "behavior",
+      "deep"
+    ],
+    "functionality_count": 3,
+    "integration_edge_count": 2,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 12,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.0,
+    "staff_data_scientist": 0.3,
+    "staff_architect": 0.15,
+    "staff_consultant": 0.15,
+    "staff_software_engineer": 0.75,
+    "has_type_interests": 0,
+    "has_type_behavior": 1,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 1,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 1,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 5,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 2,
+    "planned_operation_retrieve": 3,
+    "planned_operation_verify": 6,
+    "planned_operation_write": 3
+  },
+  "requirements": [
+    "Requirement/evidence checking and traceable gaps without certification claims.",
+    "Recency-weighted browsing/purchase ranking with cold-start handling.",
+    "Multi-document evidence synthesis, disagreement and unresolved questions."
+  ],
+  "integration": {
+    "ordered_types": [
+      "review",
+      "behavior",
+      "deep"
+    ],
+    "edges": [
+      {
+        "from": "review",
+        "to": "behavior",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "behavior",
+        "to": "deep",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "1d5cfa6fa3e2f92babbf72d9ce9030162489008e083c7a1098268fbea6fe1360",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "ae88ec62757d789eb2d5ce63d69dcfe46c3ea167ca2bcb405665f44d6996068f",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t093_combo3_review_behavior_deep",
+  "membership_point_id": "combo3_review_behavior_deep",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "ba3cb761060098ace8c0a288ba91d656be55c15e07ef890c2397135862bf818f",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "e434908d-68db-4b60-8b1a-2554e6e32ea1",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 136812,
+    "output_tokens": 10644,
+    "cache_read_tokens": 108611,
+    "cache_write_tokens": 28183,
+    "total_tokens": 147456,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34701,
+        "agent_id": "e434908d-68db-4b60-8b1a-2554e6e32ea1",
+        "model": "gpt-6-astra",
+        "input_tokens": 14854,
+        "output_tokens": 170,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 14851,
+        "reasoning_tokens": 0,
+        "duration_ms": 7820,
+        "created_at": "2026-09-23T10:51:21.143Z"
+      },
+      {
+        "id": 34726,
+        "agent_id": "e434908d-68db-4b60-8b1a-2554e6e32ea1",
+        "model": "gpt-6-astra",
+        "input_tokens": 15050,
+        "output_tokens": 8912,
+        "cache_read_tokens": 14851,
+        "cache_write_tokens": 196,
+        "reasoning_tokens": 516,
+        "duration_ms": 96136,
+        "created_at": "2026-09-23T10:52:57.186Z"
+      },
+      {
+        "id": 34727,
+        "agent_id": "e434908d-68db-4b60-8b1a-2554e6e32ea1",
+        "model": "gpt-6-astra",
+        "input_tokens": 24278,
+        "output_tokens": 274,
+        "cache_read_tokens": 15047,
+        "cache_write_tokens": 9228,
+        "reasoning_tokens": 119,
+        "duration_ms": 5962,
+        "created_at": "2026-09-23T10:53:03.269Z"
+      },
+      {
+        "id": 34728,
+        "agent_id": "e434908d-68db-4b60-8b1a-2554e6e32ea1",
+        "model": "gpt-6-astra",
+        "input_tokens": 26685,
+        "output_tokens": 833,
+        "cache_read_tokens": 24275,
+        "cache_write_tokens": 2407,
+        "reasoning_tokens": 70,
+        "duration_ms": 9360,
+        "created_at": "2026-09-23T10:53:15.415Z"
+      },
+      {
+        "id": 34729,
+        "agent_id": "e434908d-68db-4b60-8b1a-2554e6e32ea1",
+        "model": "gpt-6-astra",
+        "input_tokens": 27759,
+        "output_tokens": 361,
+        "cache_read_tokens": 26682,
+        "cache_write_tokens": 1074,
+        "reasoning_tokens": 0,
+        "duration_ms": 6160,
+        "created_at": "2026-09-23T10:53:21.778Z"
+      },
+      {
+        "id": 34730,
+        "agent_id": "e434908d-68db-4b60-8b1a-2554e6e32ea1",
+        "model": "gpt-6-astra",
+        "input_tokens": 28186,
+        "output_tokens": 94,
+        "cache_read_tokens": 27756,
+        "cache_write_tokens": 427,
+        "reasoning_tokens": 0,
+        "duration_ms": 4462,
+        "created_at": "2026-09-23T10:53:31.434Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.50169,
+      "observed_cache_profile_estimate_usd": 0.25731525,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.0202800000000005,
+      "observed_cache_profile_estimate_usd": 6.0202800000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 1,
+      "impact_recognized": 3,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 5,
+      "delivery_quality": 1
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.38,
+    "pseudo_annual_cost_usd": 80000,
+    "pseudo_annual_ai_value_usd": 50000,
+    "pseudo_net_impact_usd": -30000,
+    "pseudo_roi_pct": -37.5,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................................\n----------------------------------------------------------------------\nRan 33 tests in 0.583s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "behavior": {
+        "cold_start": false,
+        "event_weights": {
+          "browse": 1.0,
+          "purchase": 3.0
+        },
+        "half_life_days": 30.0,
+        "notice": "Ranking prioritizes reading, not evidentiary truth; all reviewed documents are retained.",
+        "ranking": [
+          {
+            "activity_score": 1.0,
+            "cold_start": false,
+            "coverage_prior": 0.6666666666666666,
+            "document_id": "doc-report",
+            "evidence_ids": [
+              "e-report-delivery",
+              "e-report-reuse"
+            ],
+            "rank": 1,
+            "score": 1.6666666666666665,
+            "signals": [
+              {
+                "age_days": 0.0,
+                "contribution": 1.0,
+                "event_id": "event-recent",
+                "kind": "browse"
+              }
+            ]
+          },
+          {
+            "activity_score": 0.75,
+            "cold_start": false,
+            "coverage_prior": 0.6666666666666666,
+            "document_id": "doc-guide",
+            "evidence_ids": [
+              "e-guide-delivery",
+              "e-guide-reuse"
+            ],
+            "rank": 2,
+            "score": 1.4166666666666665,
+            "signals": [
+              {
+                "age_days": 60.0,
+                "contribution": 0.75,
+                "event_id": "event-old",
+                "kind": "purchase"
+              }
+            ]
+          },
+          {
+            "activity_score": 0.0,
+            "cold_start": true,
+            "coverage_prior": 0.0,
+            "document_id": "doc-notes",
+            "evidence_ids": [],
+            "rank": 3,
+            "score": 0.0,
+            "signals": []
+          }
+        ],
+        "review_gaps": [
+          {
+            "evidence_ids": [
+              "e-guide-delivery",
+              "e-report-delivery"
+            ],
+            "reason": "contradictory_evidence",
+            "requirement_id": "r-delivery"
+          },
+          {
+            "evidence_ids": [],
+            "reason": "no_supporting_evidence",
+            "requirement_id": "r-warranty"
+          }
+        ]
+      },
+      "data": {
+        "as_of": "2026-09-23T12:00:00Z",
+        "documents": [
+          {
+            "evidence": [
+              {
+                "id": "e-guide-delivery",
+                "quote": "Delivery takes two days.",
+                "requirement_id": "r-delivery",
+                "stance": "supports"
+              },
+              {
+                "id": "e-guide-reuse",
+                "quote": "Packaging is reusable.",
+                "requirement_id": "r-reuse",
+                "stance": "supports"
+              }
+            ],
+            "id": "doc-guide",
+            "text": "Delivery takes two days. Packaging is reusable.",
+            "title": "SYNTHETIC product guide"
+          },
+          {
+            "evidence": [
+              {
+                "id": "e-report-delivery",
+                "quote": "Delivery took five days.",
+                "requirement_id": "r-delivery",
+                "stance": "contradicts"
+              },
+              {
+                "id": "e-report-reuse",
+                "quote": "Packaging was reused.",
+                "requirement_id": "r-reuse",
+                "stance": "supports"
+              }
+            ],
+            "id": "doc-report",
+            "text": "Delivery took five days. Packaging was reused.",
+            "title": "SYNTHETIC independent shipping report"
+          },
+          {
+            "evidence": [],
+            "id": "doc-notes",
+            "text": "A blue product appears in the catalog.",
+            "title": "SYNTHETIC catalog notes"
+          }
+        ],
+        "events": [
+          {
+            "at": "2026-07-25T12:00:00Z",
+            "document_id": "doc-guide",
+            "id": "event-old",
+            "kind": "purchase"
+          },
+          {
+            "at": "2026-09-23T12:00:00Z",
+            "document_id": "doc-report",
+            "id": "event-recent",
+            "kind": "browse"
+          }
+        ],
+        "requirements": [
+          {
+            "id": "r-delivery",
+            "question": "Does the synthetic product arrive within two days?"
+          },
+          {
+            "id": "r-reuse",
+            "question": "Is the synthetic packaging reusable?"
+          },
+          {
+            "id": "r-warranty",
+            "question": "Is a synthetic warranty documented?"
+          }
+        ]
+      },
+      "deep": {
+        "disagreements": [
+          {
+            "contradicting_evidence_ids": [
+              "e-report-delivery"
+            ],
+            "question": "What explains the conflicting sources for: Does the synthetic product arrive within two days?",
+            "requirement_id": "r-delivery",
+            "supporting_evidence_ids": [
+              "e-guide-delivery"
+            ]
+          }
+        ],
+        "findings": [
+          {
+            "citations": [
+              {
+                "document_id": "doc-report",
+                "id": "e-report-delivery",
+                "personalization_score": 1.6666666666666665,
+                "quote": "Delivery took five days.",
+                "quote_end": 24,
+                "quote_start": 0,
+                "reading_rank": 1,
+                "requirement_id": "r-delivery",
+                "source_title": "SYNTHETIC independent shipping report",
+                "stance": "contradicts"
+              },
+              {
+                "document_id": "doc-guide",
+                "id": "e-guide-delivery",
+                "personalization_score": 1.4166666666666665,
+                "quote": "Delivery takes two days.",
+                "quote_end": 24,
+                "quote_start": 0,
+                "reading_rank": 2,
+                "requirement_id": "r-delivery",
+                "source_title": "SYNTHETIC product guide",
+                "stance": "supports"
+              }
+            ],
+            "conclusion": "conflicting_evidence",
+            "question": "Does the synthetic product arrive within two days?",
+            "requirement_id": "r-delivery",
+            "review_gaps": [
+              {
+                "evidence_ids": [
+                  "e-guide-delivery",
+                  "e-report-delivery"
+                ],
+                "reason": "contradictory_evidence",
+                "requirement_id": "r-delivery"
+              }
+            ],
+            "source_document_ids": [
+              "doc-report",
+              "doc-guide"
+            ]
+          },
+          {
+            "citations": [
+              {
+                "document_id": "doc-report",
+                "id": "e-report-reuse",
+                "personalization_score": 1.6666666666666665,
+                "quote": "Packaging was reused.",
+                "quote_end": 46,
+                "quote_start": 25,
+                "reading_rank": 1,
+                "requirement_id": "r-reuse",
+                "source_title": "SYNTHETIC independent shipping report",
+                "stance": "supports"
+              },
+              {
+                "document_id": "doc-guide",
+                "id": "e-guide-reuse",
+                "personalization_score": 1.4166666666666665,
+                "quote": "Packaging is reusable.",
+                "quote_end": 47,
+                "quote_start": 25,
+                "reading_rank": 2,
+                "requirement_id": "r-reuse",
+                "source_title": "SYNTHETIC product guide",
+                "stance": "supports"
+              }
+            ],
+            "conclusion": "supporting_evidence_only",
+            "question": "Is the synthetic packaging reusable?",
+            "requirement_id": "r-reuse",
+            "review_gaps": [],
+            "source_document_ids": [
+              "doc-report",
+              "doc-guide"
+            ]
+          },
+          {
+            "citations": [],
+            "conclusion": "no_evidence",
+            "question": "Is a synthetic warranty documented?",
+            "requirement_id": "r-warranty",
+            "review_gaps": [
+              {
+                "evidence_ids": [],
+                "reason": "no_supporting_evidence",
+                "requirement_id": "r-warranty"
+              }
+            ],
+            "source_document_ids": []
+          }
+        ],
+        "notice": "Synthetic, extractive synthesis; source agreement is not proof or certification.",
+        "reading_order": [
+          "doc-report",
+          "doc-guide",
+          "doc-notes"
+        ],
+        "unresolved_questions": [
+          {
+            "evidence_ids": [
+              "e-report-delivery",
+              "e-guide-delivery"
+            ],
+            "question": "Does the synthetic product arrive within two days?",
+            "reason": "conflicting_evidence",
+            "requirement_id": "r-delivery"
+          },
+          {
+            "evidence_ids": [],
+            "question": "Is a synthetic warranty documented?",
+            "reason": "no_evidence",
+            "requirement_id": "r-warranty"
+          }
+        ]
+      },
+      "review": {
+        "checked_evidence": [
+          {
+            "document_id": "doc-guide",
+            "id": "e-guide-delivery",
+            "quote": "Delivery takes two days.",
+            "quote_end": 24,
+            "quote_start": 0,
+            "requirement_id": "r-delivery",
+            "source_title": "SYNTHETIC product guide",
+            "stance": "supports"
+          },
+          {
+            "document_id": "doc-guide",
+            "id": "e-guide-reuse",
+            "quote": "Packaging is reusable.",
+            "quote_end": 47,
+            "quote_start": 25,
+            "requirement_id": "r-reuse",
+            "source_title": "SYNTHETIC product guide",
+            "stance": "supports"
+          },
+          {
+            "document_id": "doc-report",
+            "id": "e-report-delivery",
+            "quote": "Delivery took five days.",
+            "quote_end": 24,
+            "quote_start": 0,
+            "requirement_id": "r-delivery",
+            "source_title": "SYNTHETIC independent shipping report",
+            "stance": "contradicts"
+          },
+          {
+            "document_id": "doc-report",
+            "id": "e-report-reuse",
+            "quote": "Packaging was reused.",
+            "quote_end": 46,
+            "quote_start": 25,
+            "requirement_id": "r-reuse",
+            "source_title": "SYNTHETIC independent shipping report",
+            "stance": "supports"
+          }
+        ],
+        "document_checks": [
+          {
+            "document_id": "doc-guide",
+            "evidence_ids": [
+              "e-guide-delivery",
+              "e-guide-reuse"
+            ]
+          },
+          {
+            "document_id": "doc-notes",
+            "evidence_ids": []
+          },
+          {
+            "document_id": "doc-report",
+            "evidence_ids": [
+              "e-report-delivery",
+              "e-report-reuse"
+            ]
+          }
+        ],
+        "gaps": [
+          {
+            "evidence_ids": [
+              "e-guide-delivery",
+              "e-report-delivery"
+            ],
+            "reason": "contradictory_evidence",
+            "requirement_id": "r-delivery"
+          },
+          {
+            "evidence_ids": [],
+            "reason": "no_supporting_evidence",
+            "requirement_id": "r-warranty"
+          }
+        ],
+        "notice": "Evidence presence and exact quotation checks only; not certification or verification of truth."
+      },
+      "schema_version": 1,
+      "stage": "deep",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t093_combo3_review_behavior_deep",
+    "artifact_sha256": {
+      "implementation.py": "ec33a185b651e07ffda59560c8ab8f1cad6bd76c61edb9a7c901d3d23932deac",
+      "test_implementation.py": "19e6d7a6ed08e8ef9d2e29ebed712300d17ef39ecfd76f374135592a2498f25c",
+      "example_input.json": "86c108fcdd4127c1644b18d9e54b29ff97680ec2c36c32e11663f1e71dc06abe",
+      "build_manifest.json": "398154df5271cf2668c1b33ab541ad79b005204e94b206063d9fa5711eccc804"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

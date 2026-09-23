@@ -1,0 +1,2077 @@
+{
+  "protocol": "agent-software-build-v1",
+  "wave": "wave2",
+  "parent_session_id": "3d54db02-1bce-4637-9621-8c312d0c0439",
+  "status": "frozen_before_dispatch",
+  "selection_seed": 20260923,
+  "quotas": {
+    "2_train": 20,
+    "2_validation": 5,
+    "2_test": 5,
+    "3_train": 23,
+    "3_validation": 6,
+    "3_test": 6,
+    "4_train": 18,
+    "4_validation": 6,
+    "4_test": 6,
+    "repeat_2_train": 1,
+    "repeat_2_validation": 1,
+    "repeat_3_train": 1,
+    "repeat_3_validation": 1,
+    "repeat_4_train": 1,
+    "repeat_4_validation": 1
+  },
+  "selection_inputs": "Memberships, split groups and wave-1 build IDs only; no token labels were read.",
+  "builder_model_requested": "gpt-6-astra",
+  "concurrency_plan": 5,
+  "direct_paid_api_calls_authorized_for_this_wave": false,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_template": "You are an isolated software builder for a token-measurement experiment.\nYour entire session is measured as ONE construction label, so work normally and completely,\nbut do not do unrelated exploration.\n\nBuild ID: {trial_id}\nWorking directory (create it if missing; write ONLY here): {directory}\n\nIsolation rules (mandatory):\n- Start from an empty directory. Do not read, list, search or copy any other file or folder\n  in the repository or on this machine. Do not look at other builds.\n- Do not spawn sub-agents, do not use git, do not call networks, web tools or model providers.\n- Use Python 3 standard library only.\n\nBuild ONE integrated, runnable Python CLI reference implementation of this composition\n({count} basic functionalit{plural}, executed in this order):\n{steps}\n{integration}\nScope: bounded reference implementation with one shared input/output schema and one shared\nvalidation layer; deterministic logic; any LLM step is an optional injected Python callable\nvalidated with test fixtures (never a live provider). Not enterprise production delivery.\nUse clearly labeled synthetic fixture data.\n\nDeliverables, exactly these four files in the working directory:\n1. implementation.py - `python -B implementation.py example_input.json` must print one JSON\n   object to stdout and exit 0. Validation/file errors print JSON with status \"error\", exit 2.\n2. test_implementation.py - unittest suite with at least {acceptance} test cases covering\n   {coverage}; `python -B -m unittest discover -s . -p test_implementation.py` must pass.\n3. example_input.json - synthetic example input accepted by the CLI.\n4. build_manifest.json - JSON with keys: build_id, composition_label, construction\n   (started_with_empty_directory, implementation_origin, runtime, external_dependencies,\n   networks_or_providers_called, agents_spawned, git_used), deliverables, commands,\n   shared_schema, cross_stage_handoffs, behavior, scope (included/excluded), test_outcomes.\n   Do not include token counts, cost, staffing or client scores.\n\nRun the tests and the CLI yourself and repair until both pass. Finish with a short report\n(under 120 words) stating the file list and test result.\n",
+  "builder_instructions_template_sha256": "867370602f2792a24876adf27791766a4a4558fdff3d379db104cd21f9e2427e",
+  "staging_root": "runs/20260923_1100_wave2",
+  "evaluation_rules": {
+    "targets": "Fit input and output construction tokens separately; derive total and cost afterward.",
+    "features": "Pre-build input_features only; no observed sizes, test counts, usage, prices or pseudo outcomes.",
+    "baseline": "Training-mean per target; candidates are regularized linear models chosen by grouped CV on train+validation groups.",
+    "acceptance_gates": {
+      "validation_total_mape_max": 0.2,
+      "must_beat_baseline_mae_on_validation": true,
+      "interval_coverage_target": 0.8
+    },
+    "test_policy": "Test groups are evaluated once with the frozen candidate; failure does not redefine the test set."
+  },
+  "trials": [
+    {
+      "types": [
+        "adaptive"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_adaptive",
+      "trial_id": "wave2_t001_single_adaptive",
+      "membership_point_id": "single_adaptive",
+      "split": "train",
+      "split_group": "ffcc3ef5fe0b307894c624c8a5a0006350af75478bd69390708c41404dcfd5fc",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t001_single_adaptive",
+      "builder_instructions_sha256": "efd64cfe6cb48ca1d1916c6ccbe21cf9f19412553ea1d5ece132912f3a3118aa"
+    },
+    {
+      "types": [
+        "interests",
+        "compare"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "combo2_interests_compare",
+      "trial_id": "wave2_t002_combo2_interests_compare",
+      "membership_point_id": "combo2_interests_compare",
+      "split": "test",
+      "split_group": "39fa6155a90947d15252e8f78b48041bf8580e558b50372c65a78649d0fa7783",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t002_combo2_interests_compare",
+      "builder_instructions_sha256": "4d12efe64be82f3fa547662f6c280887a3aa6ac1b1bd9bec8935415071b8b07e"
+    },
+    {
+      "types": [
+        "extract",
+        "feedback",
+        "journey"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "combo3_extract_feedback_journey",
+      "trial_id": "wave2_t003_combo3_extract_feedback_journey",
+      "membership_point_id": "combo3_extract_feedback_journey",
+      "split": "train",
+      "split_group": "f3b27a08270b28ee7e9c82a154574af5708b308db050e8d66b42a4f10a23c59f",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t003_combo3_extract_feedback_journey",
+      "builder_instructions_sha256": "3bb9c99ebfba96b6c9895413942cc7054193b3e44fe0d36f59009eab5908bbc3"
+    },
+    {
+      "types": [
+        "deep",
+        "semantic",
+        "triage",
+        "adaptive"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "combo4_deep_semantic_triage_adaptive",
+      "trial_id": "wave2_t004_combo4_deep_semantic_triage_adaptive",
+      "membership_point_id": "combo4_deep_semantic_triage_adaptive",
+      "split": "test",
+      "split_group": "3c9e94a36a39856eb80e64f11dbc1f24a8e47d71a8e293fc132ae923c93fede3",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t004_combo4_deep_semantic_triage_adaptive",
+      "builder_instructions_sha256": "ba0158d4b29c3a2938bb40dba87a65e7bc0d8ec73442b996008dc65499513558"
+    },
+    {
+      "types": [
+        "behavior"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_behavior",
+      "trial_id": "wave2_t005_single_behavior",
+      "membership_point_id": "single_behavior",
+      "split": "test",
+      "split_group": "c0e904c3593c04756b65a134701eaa0774373dcdb60755313c29160ee626d347",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t005_single_behavior",
+      "builder_instructions_sha256": "8cf3cf242e097d2242486454c24689d9f7e6a599a70ac79bad1dace33132c059"
+    },
+    {
+      "types": [
+        "web",
+        "sentiment"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t006_combo2_web_sentiment",
+      "membership_point_id": "combo2_web_sentiment",
+      "split": "train",
+      "split_group": "f0e3ae19c34219caacf8b31eea2172aac1731046ffb92d19c54abd8e94d2738c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t006_combo2_web_sentiment",
+      "builder_instructions_sha256": "b76c932df005174fb32e1be98c40eac1911755427be48e34daaf423e62499109"
+    },
+    {
+      "types": [
+        "guided",
+        "interests",
+        "normal"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t007_combo3_guided_interests_normal",
+      "membership_point_id": "combo3_guided_interests_normal",
+      "split": "train",
+      "split_group": "bd5226807a1aaeb7d74f9bf305ab82cbc836065e2df44918f25218d3d247d3ee",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t007_combo3_guided_interests_normal",
+      "builder_instructions_sha256": "a007c65bc4d9d7fbf3c853895ae4f834adde46b84e7137e9718bcb4d3cbc8b4d"
+    },
+    {
+      "types": [
+        "sentiment",
+        "normal",
+        "adaptive",
+        "behavior"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t008_combo4_sentiment_normal_adaptive_behavior",
+      "membership_point_id": "combo4_sentiment_normal_adaptive_behavior",
+      "split": "train",
+      "split_group": "cd4d2148992d0dc5724c97569fb756130ddeefc7541d4d82a6b275693c25ea5f",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t008_combo4_sentiment_normal_adaptive_behavior",
+      "builder_instructions_sha256": "c9b5eaee1a385506bb65f3535e4e840a3c2b568a5d61d41c1d6c8d46522ffffd"
+    },
+    {
+      "types": [
+        "compare"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_compare",
+      "trial_id": "wave2_t009_single_compare",
+      "membership_point_id": "single_compare",
+      "split": "train",
+      "split_group": "f9f25d7a558b5d49660cb080b8ea9f890d2fafe283e087f38483616355ee19b8",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t009_single_compare",
+      "builder_instructions_sha256": "4f52ef9a3bb55d8e2bee9f52684e556da8872da8fd2c835494d9620bb66b005f"
+    },
+    {
+      "types": [
+        "review",
+        "faq"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t010_combo2_review_faq",
+      "membership_point_id": "combo2_review_faq",
+      "split": "train",
+      "split_group": "622c17dc7e4804ef65bd6048517d5c7970357ec02ca76d05c679becae2462eb6",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t010_combo2_review_faq",
+      "builder_instructions_sha256": "549a23f6e61fd725ab376c0802a408331a13065fe01df938e37b790692fa9722"
+    },
+    {
+      "types": [
+        "triage",
+        "adaptive",
+        "web"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t011_combo3_triage_adaptive_web",
+      "membership_point_id": "combo3_triage_adaptive_web",
+      "split": "train",
+      "split_group": "8ab330a3709d39b7c7c246b427f1da4117e7dae077c4d33983e50e9369af7f67",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t011_combo3_triage_adaptive_web",
+      "builder_instructions_sha256": "a39b9f4712a271e20fb54571eabf0430c2ce6f5944cc59e905fd7026f3ae631b"
+    },
+    {
+      "types": [
+        "interests",
+        "adaptive",
+        "web",
+        "review"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t012_combo4_interests_adaptive_web_review",
+      "membership_point_id": "combo4_interests_adaptive_web_review",
+      "split": "train",
+      "split_group": "0c47944bfdced9b8c774cf0907b2b4a1bed114a1fed94552c454884889327765",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t012_combo4_interests_adaptive_web_review",
+      "builder_instructions_sha256": "dc302a49eb8b456f3a563cb21735a01919210a81deecd881d7fe042619e62cbc"
+    },
+    {
+      "types": [
+        "deep"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_deep",
+      "trial_id": "wave2_t013_single_deep",
+      "membership_point_id": "single_deep",
+      "split": "train",
+      "split_group": "3bcbdbfeabe66919ef169526ed028d2172dda37348ee1e2e7ea3a45e7727d1b3",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t013_single_deep",
+      "builder_instructions_sha256": "61460596e552d92d4da2cf97c239d8394680ec31b3e9d4543376bc5f6dbd3f1d"
+    },
+    {
+      "types": [
+        "behavior",
+        "guided"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t014_combo2_behavior_guided",
+      "membership_point_id": "combo2_behavior_guided",
+      "split": "train",
+      "split_group": "8018e48c5a89cae9a54a344258fdc39764d94c6ff98180a7506ba6d2dc9c2c2a",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t014_combo2_behavior_guided",
+      "builder_instructions_sha256": "6c3c68e106bd04a27f77c7227301690254e9c097b23f303ef918c3319ddfb347"
+    },
+    {
+      "types": [
+        "feedback",
+        "behavior",
+        "semantic"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t015_combo3_feedback_behavior_semantic",
+      "membership_point_id": "combo3_feedback_behavior_semantic",
+      "split": "train",
+      "split_group": "ffe7c9cb9b202ccf8f8cd452f58c5ffa7490be2dcb26fbd8349842239b3e5406",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t015_combo3_feedback_behavior_semantic",
+      "builder_instructions_sha256": "ed1fd6071e17d5cb41118d4073d848f6c4cc4edc63e95823017e4b6839f72a75"
+    },
+    {
+      "types": [
+        "guided",
+        "triage",
+        "compare",
+        "feedback"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t016_combo4_guided_triage_compare_feedback",
+      "membership_point_id": "combo4_guided_triage_compare_feedback",
+      "split": "train",
+      "split_group": "cc1b7b4ebc059406ba10b32cd2059bd456d1ba411cd6124bde580b6e4d635bc3",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t016_combo4_guided_triage_compare_feedback",
+      "builder_instructions_sha256": "eb2c2f6c672c41d7357fa806ac5e67771e1c62f7defb4443928e8920f7d5d9c2"
+    },
+    {
+      "types": [
+        "extract"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_extract",
+      "trial_id": "wave2_t017_single_extract",
+      "membership_point_id": "single_extract",
+      "split": "test",
+      "split_group": "c2a9fa14e70282f3a9365be8dd6fa818e75b0fe5c34aef60cb06c074738f84d0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t017_single_extract",
+      "builder_instructions_sha256": "ef66d62d271eeed66b30e0db6c2690b75fd6d6c52b8485c353e361659c6a9685"
+    },
+    {
+      "types": [
+        "normal",
+        "guided"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t018_combo2_normal_guided",
+      "membership_point_id": "combo2_normal_guided",
+      "split": "train",
+      "split_group": "04b90b9a67830a9683a4310d779c89d56d3051985e5db52c82145207d7be4742",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t018_combo2_normal_guided",
+      "builder_instructions_sha256": "1722c3cec7e98ee605d7f57305ccc0c0848104780de52b0bd3717ac60267cbc2"
+    },
+    {
+      "types": [
+        "compare",
+        "deep",
+        "extract"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t019_combo3_compare_deep_extract",
+      "membership_point_id": "combo3_compare_deep_extract",
+      "split": "train",
+      "split_group": "06f9d1398e473f6508025cb41a16ebd64d67f2117c58b705fde3b2fe3a23a196",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t019_combo3_compare_deep_extract",
+      "builder_instructions_sha256": "d02f9e3b6966adc56a1e5d83076ee1c4071c4e77711d4e817b446b59f631cd3d"
+    },
+    {
+      "types": [
+        "extract",
+        "faq",
+        "journey",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t020_combo4_extract_faq_journey_deep",
+      "membership_point_id": "combo4_extract_faq_journey_deep",
+      "split": "train",
+      "split_group": "9d1d7de1190b5df095676358f9b22e31f7ce742c7aa8c9c1b596ded3de02a435",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t020_combo4_extract_faq_journey_deep",
+      "builder_instructions_sha256": "3290339329bcecd1809cd8edf3ca68b4a4dd762ba30e3f146fdd399f48778792"
+    },
+    {
+      "types": [
+        "faq"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_faq",
+      "trial_id": "wave2_t021_single_faq",
+      "membership_point_id": "single_faq",
+      "split": "train",
+      "split_group": "43ee353474691df1377a140188c922c5bd808df4fff6eb335c4abb90cb841ea1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t021_single_faq",
+      "builder_instructions_sha256": "b200353ae985e5ab11bde8581cc1c7ca45083dc0b32f4f980a8fbb4d71332c77"
+    },
+    {
+      "types": [
+        "normal",
+        "journey"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t022_combo2_normal_journey",
+      "membership_point_id": "combo2_normal_journey",
+      "split": "train",
+      "split_group": "2cc16dec29358202ad97c3068420abf7db02609673476bc3162fb429e3423f7d",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t022_combo2_normal_journey",
+      "builder_instructions_sha256": "b4f15411c87738afbad8753f70a77cfe4c950a3aa174a12925006510db839fca"
+    },
+    {
+      "types": [
+        "review",
+        "deep",
+        "journey"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t023_combo3_review_deep_journey",
+      "membership_point_id": "combo3_review_deep_journey",
+      "split": "train",
+      "split_group": "92a5a436e86ebe5ed0444825f50338498678111421da1da78837dd791d1626c5",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t023_combo3_review_deep_journey",
+      "builder_instructions_sha256": "6b2bb53bce76ed44f7baa908ca53d03af85b0bcb051b5f9f771e7dd7fbf08e69"
+    },
+    {
+      "types": [
+        "sentiment",
+        "normal",
+        "journey",
+        "faq"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t024_combo4_sentiment_normal_journey_faq",
+      "membership_point_id": "combo4_sentiment_normal_journey_faq",
+      "split": "train",
+      "split_group": "93f306ba752a2b370eb82ad18a44ad70121e4a3990d41d1eafc603435da5ce4a",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t024_combo4_sentiment_normal_journey_faq",
+      "builder_instructions_sha256": "8e9269322ab580865ddebb99b7f9deeda983cab6e6dee623b7790e365394b537"
+    },
+    {
+      "types": [
+        "feedback"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_feedback",
+      "trial_id": "wave2_t025_single_feedback",
+      "membership_point_id": "single_feedback",
+      "split": "train",
+      "split_group": "8d372d111bab3e58274ee9b86f65e19d0d0206605074fc3365713e894c033ceb",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t025_single_feedback",
+      "builder_instructions_sha256": "88c8a11940f33d7810f53b1846b3f718586b037b65830960bc323465bfb9f503"
+    },
+    {
+      "types": [
+        "extract",
+        "feedback"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t026_combo2_extract_feedback",
+      "membership_point_id": "combo2_extract_feedback",
+      "split": "train",
+      "split_group": "ed317f487598f45e0b108bcc1e83eac6ab972a19f6069974b68e19ac6e630edc",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t026_combo2_extract_feedback",
+      "builder_instructions_sha256": "0e0fd871a0ca986c44ea2e85deceb4a91c1e3f418d212f8954d01f6fcb1a71b0"
+    },
+    {
+      "types": [
+        "sentiment",
+        "behavior",
+        "normal"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t027_combo3_sentiment_behavior_normal",
+      "membership_point_id": "combo3_sentiment_behavior_normal",
+      "split": "train",
+      "split_group": "3b1f285ca7cf3b38c66c0b9b5c0b16e7832184f07c4fe0e69a3cbb6d2d8ef454",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t027_combo3_sentiment_behavior_normal",
+      "builder_instructions_sha256": "b23a6feb5478ad6ae54c28bbc40587233f9c59baee79b561030953d7b42d2fbf"
+    },
+    {
+      "types": [
+        "semantic",
+        "web",
+        "review",
+        "behavior"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t028_combo4_semantic_web_review_behavior",
+      "membership_point_id": "combo4_semantic_web_review_behavior",
+      "split": "train",
+      "split_group": "be436bc8c2e3717c5370748fb506d41b4daa208315a8ae6bd69364df288561ce",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t028_combo4_semantic_web_review_behavior",
+      "builder_instructions_sha256": "b24ab38e6b43a3c1af8287adf47028bc12b6ca7eaf31adfebcca875fbf225cf4"
+    },
+    {
+      "types": [
+        "guided"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_guided",
+      "trial_id": "wave2_t029_single_guided",
+      "membership_point_id": "single_guided",
+      "split": "train",
+      "split_group": "b8584edfd6156d9f5889ba6ca821b0e860874a17ae3c1024b5f4cf50a44c0737",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t029_single_guided",
+      "builder_instructions_sha256": "2bb46a6a9675744853a8596e50da1193ce8165fc83738aec25207c5ed60d995d"
+    },
+    {
+      "types": [
+        "web",
+        "review"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t030_combo2_web_review",
+      "membership_point_id": "combo2_web_review",
+      "split": "train",
+      "split_group": "1e71ef5275166a393ab99812f51fa85ab3f36a6c9cad85ea2eab2ed83d7860df",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t030_combo2_web_review",
+      "builder_instructions_sha256": "2e4053b4e864a0a45c7880960e52cdd9bfbc2debcc7a27db8a0f2af45ea9b44c"
+    },
+    {
+      "types": [
+        "guided",
+        "faq",
+        "web"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t031_combo3_guided_faq_web",
+      "membership_point_id": "combo3_guided_faq_web",
+      "split": "train",
+      "split_group": "c9e32b44b542e2fa2087219bf735797629974647cd7bc637f708197d73db8b94",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t031_combo3_guided_faq_web",
+      "builder_instructions_sha256": "cdc3bbe0c3adaffef7955a91b5d6672b856ff1393dfb3fb6c160591d6b505d26"
+    },
+    {
+      "types": [
+        "compare",
+        "extract",
+        "adaptive",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t032_combo4_compare_extract_adaptive_deep",
+      "membership_point_id": "combo4_compare_extract_adaptive_deep",
+      "split": "train",
+      "split_group": "3c06b0a9dacc542f62ad159aa7d106c334cda54f3e2e25325815e782080d8124",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t032_combo4_compare_extract_adaptive_deep",
+      "builder_instructions_sha256": "8241a9305f8717e35feb8d798edebced8c1b7b7a5453db88b5b577b34be3a50e"
+    },
+    {
+      "types": [
+        "interests"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_interests",
+      "trial_id": "wave2_t033_single_interests",
+      "membership_point_id": "single_interests",
+      "split": "train",
+      "split_group": "94fcdb07322666da997f553e417458975b688c194db0cf4394b23e81660c90d5",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t033_single_interests",
+      "builder_instructions_sha256": "800dae9268533e05601c77c12e7c059c5991bbfa13061dea6b6b5804ccbf0aaa"
+    },
+    {
+      "types": [
+        "sentiment",
+        "interests"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t034_combo2_sentiment_interests",
+      "membership_point_id": "combo2_sentiment_interests",
+      "split": "train",
+      "split_group": "4abd15321d288cb187f54daa1ea64a659861d89a9da3d4fb5e2b2b3e89fa7ed1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t034_combo2_sentiment_interests",
+      "builder_instructions_sha256": "b1f93d9499e69bbac16677759f4b168fb210db941340d30f268a5a11249cf866"
+    },
+    {
+      "types": [
+        "adaptive",
+        "triage",
+        "interests"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t035_combo3_adaptive_triage_interests",
+      "membership_point_id": "combo3_adaptive_triage_interests",
+      "split": "train",
+      "split_group": "bafab0c68f8ffea64aadd5a3f2500ae10b97fec17c965545349d0702ef4ccf8c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t035_combo3_adaptive_triage_interests",
+      "builder_instructions_sha256": "3386d335b228971a2b1b187c84fa1ed964ea50cf06262c89af55707197ae9e9d"
+    },
+    {
+      "types": [
+        "guided",
+        "web",
+        "triage",
+        "interests"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t036_combo4_guided_web_triage_interests",
+      "membership_point_id": "combo4_guided_web_triage_interests",
+      "split": "train",
+      "split_group": "6fb0673f1776007f4182721c9d97a0c2c90a1824c9e388937bb7c6197fdf60f8",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t036_combo4_guided_web_triage_interests",
+      "builder_instructions_sha256": "a51abc34affd956573810a2b179ac991842298511582f0fb92482aa74f45e41a"
+    },
+    {
+      "types": [
+        "journey"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_journey",
+      "trial_id": "wave2_t037_single_journey",
+      "membership_point_id": "single_journey",
+      "split": "train",
+      "split_group": "aadb5d94f4cb1e6a0941c9f5064beb86cc0abdfc680e07998641d27115c795b7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t037_single_journey",
+      "builder_instructions_sha256": "8a258fd0fcbdb7f14b0435029fab4eb39ededf5afe5b8d28675c5364c1365c16"
+    },
+    {
+      "types": [
+        "faq",
+        "semantic"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t038_combo2_faq_semantic",
+      "membership_point_id": "combo2_faq_semantic",
+      "split": "train",
+      "split_group": "08636aece471b256814c16d45f3fc51278a51287365f83f050fe524c50a7619e",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t038_combo2_faq_semantic",
+      "builder_instructions_sha256": "fce9bcdd7d30f20b3d2216dca12142e47f0b0d8121b3e0604de5e91795430c0a"
+    },
+    {
+      "types": [
+        "normal",
+        "compare",
+        "feedback"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t039_combo3_normal_compare_feedback",
+      "membership_point_id": "combo3_normal_compare_feedback",
+      "split": "train",
+      "split_group": "962d1d92edf900a58f36ce1d4c71bb335aa1756bbc5cb7a805fca7519b4a25f5",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t039_combo3_normal_compare_feedback",
+      "builder_instructions_sha256": "be356855b4b071214fb9a88317b6dda9d39586c248acefc1a87a18066445bd09"
+    },
+    {
+      "types": [
+        "feedback",
+        "faq",
+        "guided",
+        "normal"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t040_combo4_feedback_faq_guided_normal",
+      "membership_point_id": "combo4_feedback_faq_guided_normal",
+      "split": "train",
+      "split_group": "403ec0a406925313c4f7f9f1a8340b74ae66e7ca9e6a9849b5249cf9976bc4f0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t040_combo4_feedback_faq_guided_normal",
+      "builder_instructions_sha256": "0cca48d139f361851f8f7dafa75ab9f6ad627496d65c85462eaaabe3eb7a0c7b"
+    },
+    {
+      "types": [
+        "normal"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_normal",
+      "trial_id": "wave2_t041_single_normal",
+      "membership_point_id": "single_normal",
+      "split": "train",
+      "split_group": "794e0d6f28eea81700713b48bbe5cae57ea0a0be1f6da57811f457ad1bd86876",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t041_single_normal",
+      "builder_instructions_sha256": "6332484035009b78d7582dd5bc5647c047cc2d74d0c18c6881236b935f3a6a18"
+    },
+    {
+      "types": [
+        "behavior",
+        "adaptive"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t042_combo2_behavior_adaptive",
+      "membership_point_id": "combo2_behavior_adaptive",
+      "split": "train",
+      "split_group": "265f9f139bdf9cea1d61d76b90d7cdf2af4761539e55f58938af576360bfc4a2",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t042_combo2_behavior_adaptive",
+      "builder_instructions_sha256": "f36ff64eb231fd1c99694167c3a3583f44822d1edc76ea4a4cf9eb7ac5eaceb4"
+    },
+    {
+      "types": [
+        "adaptive",
+        "semantic",
+        "interests"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t043_combo3_adaptive_semantic_interests",
+      "membership_point_id": "combo3_adaptive_semantic_interests",
+      "split": "train",
+      "split_group": "4bc0bc33e59173c6366a8e871e1156f43fb99185729560adf935953f2ae0a897",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t043_combo3_adaptive_semantic_interests",
+      "builder_instructions_sha256": "768aaa587b99ec71749862ca49adede11d93fa0fa2926d3006b5d77ab96d406f"
+    },
+    {
+      "types": [
+        "behavior",
+        "review",
+        "normal",
+        "semantic"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t044_combo4_behavior_review_normal_semantic",
+      "membership_point_id": "combo4_behavior_review_normal_semantic",
+      "split": "train",
+      "split_group": "dc3cf2fd1a055fcc100f6582f4442a96207af7bfea4749904ce247c254ea5944",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t044_combo4_behavior_review_normal_semantic",
+      "builder_instructions_sha256": "46be8386c610fe3aec8ba8d2ca29d9614aee8b3e2b2bdba303c60c04cc4568ba"
+    },
+    {
+      "types": [
+        "review"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_review",
+      "trial_id": "wave2_t045_single_review",
+      "membership_point_id": "single_review",
+      "split": "train",
+      "split_group": "a96884a032c81cf1c81370de64f329159a5f5b2eaaccc5ae0df3ea1bec5d1cca",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t045_single_review",
+      "builder_instructions_sha256": "a14b339fbdc4098f7b87474efae89ac992aeb297afa978f59f9286e84db4030f"
+    },
+    {
+      "types": [
+        "compare",
+        "triage"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t046_combo2_compare_triage",
+      "membership_point_id": "combo2_compare_triage",
+      "split": "train",
+      "split_group": "817a8192180a4bba765d1545d30caff7811f82487ce01af5105d2138de77de75",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t046_combo2_compare_triage",
+      "builder_instructions_sha256": "ecd735853aedc44d4f92aa434a049cd7669a508fcd49c8a2eeb55f0e0859648c"
+    },
+    {
+      "types": [
+        "extract",
+        "behavior",
+        "faq"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t047_combo3_extract_behavior_faq",
+      "membership_point_id": "combo3_extract_behavior_faq",
+      "split": "train",
+      "split_group": "64c2bad7a9d4fe9de735b9beb28c0a049330a552f2858bdc9f44638ae90f2450",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t047_combo3_extract_behavior_faq",
+      "builder_instructions_sha256": "1e2b47b1acb8f41d6611c4e3cff3b6af7c70d82651bcc6f9c8af528895d4fd5b"
+    },
+    {
+      "types": [
+        "interests",
+        "compare",
+        "adaptive",
+        "feedback"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t048_combo4_interests_compare_adaptive_feedback",
+      "membership_point_id": "combo4_interests_compare_adaptive_feedback",
+      "split": "train",
+      "split_group": "02d043f19f5e95fe7fce7038e60551a7406ad908130700a197fa3b8ab3f640df",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t048_combo4_interests_compare_adaptive_feedback",
+      "builder_instructions_sha256": "b888a1adf1b322192317e713500bae91644557d7264ae64c80130e18cdfc42ee"
+    },
+    {
+      "types": [
+        "semantic"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_semantic",
+      "trial_id": "wave2_t049_single_semantic",
+      "membership_point_id": "single_semantic",
+      "split": "train",
+      "split_group": "9e9e81cc52f490feb3a37a5937c72ead75f682a895f7ba2218431f4f2b1b4927",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t049_single_semantic",
+      "builder_instructions_sha256": "d801931466d13571bbead85a555df74e23471cdeab2e7fa63154a677d8850152"
+    },
+    {
+      "types": [
+        "deep",
+        "journey"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t050_combo2_deep_journey",
+      "membership_point_id": "combo2_deep_journey",
+      "split": "train",
+      "split_group": "8218dea483c9dfc871b9e42a500997f487f6ef2ee0786d5e8346e198be3c6d44",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t050_combo2_deep_journey",
+      "builder_instructions_sha256": "72f95d228b10f2eecf5dc4d7dbb9496030446891e4d67dee8128df26ea7521f2"
+    },
+    {
+      "types": [
+        "compare",
+        "feedback",
+        "guided"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t051_combo3_compare_feedback_guided",
+      "membership_point_id": "combo3_compare_feedback_guided",
+      "split": "train",
+      "split_group": "f59db4513c555ca3daa317531e3c82dd4c444304cc70b4ad3a5594f02ae7a824",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t051_combo3_compare_feedback_guided",
+      "builder_instructions_sha256": "bb385f5a71b66d0013c2090b25d15af848ffb9471c2df9e203b48619820161da"
+    },
+    {
+      "types": [
+        "sentiment",
+        "deep",
+        "journey",
+        "extract"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t052_combo4_sentiment_deep_journey_extract",
+      "membership_point_id": "combo4_sentiment_deep_journey_extract",
+      "split": "train",
+      "split_group": "4095ccf08704ffed54bbbcdefef94755125b069eb07d83868c5d15cb21aa57ad",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t052_combo4_sentiment_deep_journey_extract",
+      "builder_instructions_sha256": "1ec73f4919669b362e58e72e8b0846db603c9e9e79718bfabc28cfc176a0123c"
+    },
+    {
+      "types": [
+        "sentiment"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_sentiment",
+      "trial_id": "wave2_t053_single_sentiment",
+      "membership_point_id": "single_sentiment",
+      "split": "train",
+      "split_group": "f79ba67cb9b1aea28c16e543097153c76126e892d90dfdddf40bf8ff4509e034",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t053_single_sentiment",
+      "builder_instructions_sha256": "90a6cacab224fd59a7f96acbe1b4c553715e3b8e40434b594ec9155e1b89e4a6"
+    },
+    {
+      "types": [
+        "interests",
+        "extract"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t054_combo2_interests_extract",
+      "membership_point_id": "combo2_interests_extract",
+      "split": "train",
+      "split_group": "aa623b228fa24982439b682791475b5409d8418e8a5e798e93850c623ba31a36",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t054_combo2_interests_extract",
+      "builder_instructions_sha256": "86f989d32014c9c67baa8190c11cf3b680d7f8f8796ac07e7b2d042ed2eaa1ec"
+    },
+    {
+      "types": [
+        "semantic",
+        "sentiment",
+        "review"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t055_combo3_semantic_sentiment_review",
+      "membership_point_id": "combo3_semantic_sentiment_review",
+      "split": "train",
+      "split_group": "45e065512fd9e82427758f96ddbe5f5372bebd74aad223029fa8aa85458de5f1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t055_combo3_semantic_sentiment_review",
+      "builder_instructions_sha256": "d03f0af4e78f044d3ebce7298066c443b9d21af54c75d048ee6884ca315cf5e0"
+    },
+    {
+      "types": [
+        "triage",
+        "web",
+        "feedback",
+        "behavior"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t056_combo4_triage_web_feedback_behavior",
+      "membership_point_id": "combo4_triage_web_feedback_behavior",
+      "split": "train",
+      "split_group": "347ae9e80f4266830221dd3ba1f1996c86236066c6e314320d1eb60e67d1ae3b",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t056_combo4_triage_web_feedback_behavior",
+      "builder_instructions_sha256": "f3feed207d9235982e13b85a1ca0818c38fd44476a94a6135e785b552c707bee"
+    },
+    {
+      "types": [
+        "triage"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_triage",
+      "trial_id": "wave2_t057_single_triage",
+      "membership_point_id": "single_triage",
+      "split": "test",
+      "split_group": "3d07c4ffddbad0a81e087a52ba3cc79db852cd52ca3f6056b194b1d745401b11",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t057_single_triage",
+      "builder_instructions_sha256": "633f1e117d521c0c2de32a02e076ae05e5303333bb2dbb05aa481aa5f20d76e8"
+    },
+    {
+      "types": [
+        "compare",
+        "feedback"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t058_combo2_compare_feedback",
+      "membership_point_id": "combo2_compare_feedback",
+      "split": "train",
+      "split_group": "53806f2726dd520182b9284583cb103b69ee9fab486d7d09ee5125509cdac482",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t058_combo2_compare_feedback",
+      "builder_instructions_sha256": "ef9d5e8745c40ac4aa8c86dc59d2270c059f1e316d72c5ccda33fef13de15bab"
+    },
+    {
+      "types": [
+        "journey",
+        "deep",
+        "triage"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t059_combo3_journey_deep_triage",
+      "membership_point_id": "combo3_journey_deep_triage",
+      "split": "train",
+      "split_group": "b4531e687c2bb5ee28ec5268a4bb1cf6f20e4481b8748c156ee68a366f49d01e",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t059_combo3_journey_deep_triage",
+      "builder_instructions_sha256": "f2c102248b8ec79292d17952d13986928fb9150b6a720e5645a46874ce2dd93b"
+    },
+    {
+      "types": [
+        "semantic",
+        "triage",
+        "review",
+        "normal"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t060_combo4_semantic_triage_review_normal",
+      "membership_point_id": "combo4_semantic_triage_review_normal",
+      "split": "train",
+      "split_group": "967ec586f01e878a5ca9392b53d41a21d1974fdfe58f855166846b2106a2c8c1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t060_combo4_semantic_triage_review_normal",
+      "builder_instructions_sha256": "7f9df03f08e798086b4ca00195c99f83870cbb7407be544fd6f5c42b1f0a1177"
+    },
+    {
+      "types": [
+        "web"
+      ],
+      "kind": "repeat_of_wave1",
+      "repeat_of": "single_web",
+      "trial_id": "wave2_t061_single_web",
+      "membership_point_id": "single_web",
+      "split": "train",
+      "split_group": "2a0d5e566c38f5a1eb7d71dd391184dd8a95f48d3f2b99f7f78bfbf340d6bf25",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t061_single_web",
+      "builder_instructions_sha256": "42ab1f756caee567e8f2a19156a0233d289ca283eeeab24530c198e197e8cec2"
+    },
+    {
+      "types": [
+        "faq",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t062_combo2_faq_deep",
+      "membership_point_id": "combo2_faq_deep",
+      "split": "train",
+      "split_group": "9846aefaee31950a52173e78fdd81faa845916204c53dff7068f5465e2d7f1a9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t062_combo2_faq_deep",
+      "builder_instructions_sha256": "4cc558d6c64099f6f452f44a97435cd1fbf40ca7ce49b40eda2ba7a642403dce"
+    },
+    {
+      "types": [
+        "faq",
+        "journey",
+        "web"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t063_combo3_faq_journey_web",
+      "membership_point_id": "combo3_faq_journey_web",
+      "split": "train",
+      "split_group": "25ec81e5970e4b7f35c1460aafc3c1ea71ae2fcbd148f2604769f61dabc9164a",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t063_combo3_faq_journey_web",
+      "builder_instructions_sha256": "1bd4d3ee979db556f73f43219875c58594ac589e365fb4d8f1b8ca1c1b1d0998"
+    },
+    {
+      "types": [
+        "faq",
+        "compare",
+        "journey",
+        "adaptive"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t064_combo4_faq_compare_journey_adaptive",
+      "membership_point_id": "combo4_faq_compare_journey_adaptive",
+      "split": "train",
+      "split_group": "4e6232c5018cdb952fc7258ce804d848543d06b014cc3966a9209c8db4c598b7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t064_combo4_faq_compare_journey_adaptive",
+      "builder_instructions_sha256": "e5d3e4b326e660cd856c0afbb05112a16713adf16d539c5eb788d515f12b5104"
+    },
+    {
+      "types": [
+        "web",
+        "triage"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t065_combo2_web_triage",
+      "membership_point_id": "combo2_web_triage",
+      "split": "train",
+      "split_group": "4f2f95bfdf2dac9956fd87ff7dac010ad3b6b10c6e655fd8900c208051fd3fe5",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t065_combo2_web_triage",
+      "builder_instructions_sha256": "dc5ab6ab97283f74dd83b64669912303e04656c239ca86f0f77d567b93527b94"
+    },
+    {
+      "types": [
+        "web",
+        "extract",
+        "behavior"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t066_combo3_web_extract_behavior",
+      "membership_point_id": "combo3_web_extract_behavior",
+      "split": "train",
+      "split_group": "8877b0b93b3f6b073ffb0a9f22fcebd92dc363f2f10bdb97859b35529f134ee7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t066_combo3_web_extract_behavior",
+      "builder_instructions_sha256": "13048dc8752b06f176f0768a11abbbce3f7babb72ecc6d9a763ff459904e160d"
+    },
+    {
+      "types": [
+        "extract",
+        "deep",
+        "guided",
+        "sentiment"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t067_combo4_extract_deep_guided_sentiment",
+      "membership_point_id": "combo4_extract_deep_guided_sentiment",
+      "split": "train",
+      "split_group": "447a61ca797ac322c74bc61bbcbef635a57fdadef4d40a6663552b9562f6ccab",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t067_combo4_extract_deep_guided_sentiment",
+      "builder_instructions_sha256": "53a198b027a4e5300cad0ce17b2765b4b22b998f9fb9eadc27508f3140a533d8"
+    },
+    {
+      "types": [
+        "sentiment",
+        "behavior"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t068_combo2_sentiment_behavior",
+      "membership_point_id": "combo2_sentiment_behavior",
+      "split": "train",
+      "split_group": "6614c00c7b3d99da469004f7c056d5cd61c42e4bdb1df081e328c33c1ee5d1f7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t068_combo2_sentiment_behavior",
+      "builder_instructions_sha256": "e5d80a1a8d11f6ca2392e9b4a8daccba23daedf28f8f0151a8be40ec80225060"
+    },
+    {
+      "types": [
+        "review",
+        "semantic",
+        "feedback"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t069_combo3_review_semantic_feedback",
+      "membership_point_id": "combo3_review_semantic_feedback",
+      "split": "train",
+      "split_group": "05a44e510278687fb64aa4dd1890833503fa26a48273dbb2309abc854e34dc3b",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t069_combo3_review_semantic_feedback",
+      "builder_instructions_sha256": "a3dabdd12692cbca6cd32ba89dfe960e93d41142b39152d9bb75f8679e9d5c01"
+    },
+    {
+      "types": [
+        "interests",
+        "semantic",
+        "feedback",
+        "web"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t070_combo4_interests_semantic_feedback_web",
+      "membership_point_id": "combo4_interests_semantic_feedback_web",
+      "split": "train",
+      "split_group": "33d06f0d333799d1a1447947f3084197df87f155dadc8b36029b1196b7ee8164",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t070_combo4_interests_semantic_feedback_web",
+      "builder_instructions_sha256": "cef8567fed316b58dcfda9b21b25d0fe83dce2c83f295a05f69cee478131957e"
+    },
+    {
+      "types": [
+        "normal",
+        "semantic"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t071_combo2_normal_semantic",
+      "membership_point_id": "combo2_normal_semantic",
+      "split": "train",
+      "split_group": "85b9a1089227f37314af444661f6c918df12d589301e212b261828330cc29109",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t071_combo2_normal_semantic",
+      "builder_instructions_sha256": "07412b2a5b27eb1b375df56cd479f53bd05ba98d11474367115af1d480283ab8"
+    },
+    {
+      "types": [
+        "triage",
+        "interests",
+        "compare"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t072_combo3_triage_interests_compare",
+      "membership_point_id": "combo3_triage_interests_compare",
+      "split": "train",
+      "split_group": "1da83a1ef7420e3f17c7a4019ac8e132cd2ce6ce11233e5ed6ef6166d7a59d95",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t072_combo3_triage_interests_compare",
+      "builder_instructions_sha256": "9ac36db987e3447220ca2b28de22448465ef878a6b9e2f0ef064c01401576f58"
+    },
+    {
+      "types": [
+        "extract",
+        "faq",
+        "sentiment",
+        "compare"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t073_combo4_extract_faq_sentiment_compare",
+      "membership_point_id": "combo4_extract_faq_sentiment_compare",
+      "split": "train",
+      "split_group": "e05c3f9f4290ef2627e600de0bb5dc747a376d02cb8839336b0594cf11a5e48e",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t073_combo4_extract_faq_sentiment_compare",
+      "builder_instructions_sha256": "6e41bc5a79c27eea1eddaa56a0c4355b91a9426ae87471d13c79b904447dc154"
+    },
+    {
+      "types": [
+        "review",
+        "triage"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t074_combo2_review_triage",
+      "membership_point_id": "combo2_review_triage",
+      "split": "train",
+      "split_group": "50322a361380c929c121d3512a90a304a1aeac18cf1cb3ddd6f6909fe808aeb0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t074_combo2_review_triage",
+      "builder_instructions_sha256": "f6c4cd368e2a9da2514b72337b0d45625e1c23efaa409f1f803aa23654870641"
+    },
+    {
+      "types": [
+        "guided",
+        "sentiment",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t075_combo3_guided_sentiment_deep",
+      "membership_point_id": "combo3_guided_sentiment_deep",
+      "split": "train",
+      "split_group": "c3f3ad1007d604f3d5d9b6e2bac796b7831ba983ffeeb05c8ae11bdde38743c0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t075_combo3_guided_sentiment_deep",
+      "builder_instructions_sha256": "31e220d4a8b94c594a937ac819706f0efe4758970c361701db41bca97d1083ac"
+    },
+    {
+      "types": [
+        "behavior",
+        "review",
+        "guided",
+        "web"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t076_combo4_behavior_review_guided_web",
+      "membership_point_id": "combo4_behavior_review_guided_web",
+      "split": "validation",
+      "split_group": "c5ea6be5f6febcc30b1cacad6aef785e7f98bf80643dbd81a0ac20ddb35274e7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t076_combo4_behavior_review_guided_web",
+      "builder_instructions_sha256": "f4dc6328dbb5191ec5abc278488a466eeda691e9a8a0dc11eded2bd13ce02773"
+    },
+    {
+      "types": [
+        "guided",
+        "interests"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t077_combo2_guided_interests",
+      "membership_point_id": "combo2_guided_interests",
+      "split": "train",
+      "split_group": "8627511c477ae3629610b1dd7bf39d2fe9b18372fa8dccd05b4ce8d1776acfa6",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t077_combo2_guided_interests",
+      "builder_instructions_sha256": "908b991b73334eaf44b95fe9ffcda80acd0f343b15073a512b3e8016be318f57"
+    },
+    {
+      "types": [
+        "triage",
+        "normal",
+        "adaptive"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t078_combo3_triage_normal_adaptive",
+      "membership_point_id": "combo3_triage_normal_adaptive",
+      "split": "train",
+      "split_group": "64fd4a8ac7af2ca4ca4bba43291ac9a625ec2f0dd01e6d6595af74c887cc4874",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t078_combo3_triage_normal_adaptive",
+      "builder_instructions_sha256": "de712d6853f9011f0171ad3d43eedb6e167a957e75b6ccc3bf003799933919a0"
+    },
+    {
+      "types": [
+        "normal",
+        "triage",
+        "adaptive",
+        "extract"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t079_combo4_normal_triage_adaptive_extract",
+      "membership_point_id": "combo4_normal_triage_adaptive_extract",
+      "split": "validation",
+      "split_group": "c2f82b759c1b3e6e22f41f2779ee7c54aa2ee574fc7874bea458cbf5fcc9de19",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t079_combo4_normal_triage_adaptive_extract",
+      "builder_instructions_sha256": "b2f13dda13ffa230a59d65d84cc428a19d4967ce1e8e37f311b5ac0ed19422a5"
+    },
+    {
+      "types": [
+        "adaptive",
+        "feedback"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t080_combo2_adaptive_feedback",
+      "membership_point_id": "combo2_adaptive_feedback",
+      "split": "validation",
+      "split_group": "5c8c52533763a0961a2e0e5441e3f5d852d0c58a27eb292868ac7ae97b8fee29",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t080_combo2_adaptive_feedback",
+      "builder_instructions_sha256": "83f2668cd948b5f47a7dd17f859632c8d482900d66aafc761a95f2d50d4a889f"
+    },
+    {
+      "types": [
+        "feedback",
+        "interests",
+        "semantic"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t081_combo3_feedback_interests_semantic",
+      "membership_point_id": "combo3_feedback_interests_semantic",
+      "split": "train",
+      "split_group": "1b5409df46c15402ab635c9244d90b237cc5ff072a8085e728c4c5cafd0c238d",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t081_combo3_feedback_interests_semantic",
+      "builder_instructions_sha256": "fb88a0503839bd6b954d187564ba89787e5cb2b25a24cc44eaf3a6d955a40621"
+    },
+    {
+      "types": [
+        "interests",
+        "faq",
+        "feedback",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t082_combo4_interests_faq_feedback_deep",
+      "membership_point_id": "combo4_interests_faq_feedback_deep",
+      "split": "validation",
+      "split_group": "b37cc2af610b315fa8482b882adf194f64f7803d684008c949aaae572a5b8a6f",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t082_combo4_interests_faq_feedback_deep",
+      "builder_instructions_sha256": "f97f1d605125ca9799b5df59bcad51ef9b1d3e2956755decda4e80fbf3e16f90"
+    },
+    {
+      "types": [
+        "adaptive",
+        "web"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t083_combo2_adaptive_web",
+      "membership_point_id": "combo2_adaptive_web",
+      "split": "validation",
+      "split_group": "d7a8a31f77edd471e2cb908498691a235e375809182f1d54cee5ee12b22775ec",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t083_combo2_adaptive_web",
+      "builder_instructions_sha256": "8bda6cac6396ac4f521519b76e7cd30c75ea69c9d1500e920230723d870b9200"
+    },
+    {
+      "types": [
+        "sentiment",
+        "faq",
+        "normal"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t084_combo3_sentiment_faq_normal",
+      "membership_point_id": "combo3_sentiment_faq_normal",
+      "split": "train",
+      "split_group": "bd69774ce32cd66fdfabadfa079a9e669391ee067a5d84ac5fbfd0a6586024e9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t084_combo3_sentiment_faq_normal",
+      "builder_instructions_sha256": "330e0ff9be6a0a066922d7d9b6125bad5b6928f5a36b672759c009075398bcf0"
+    },
+    {
+      "types": [
+        "journey",
+        "adaptive",
+        "triage",
+        "sentiment"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t085_combo4_journey_adaptive_triage_sentiment",
+      "membership_point_id": "combo4_journey_adaptive_triage_sentiment",
+      "split": "validation",
+      "split_group": "2a213e41d10661901d324389f2844411027ec049eb4c509680fdec4d056e391e",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t085_combo4_journey_adaptive_triage_sentiment",
+      "builder_instructions_sha256": "29f5f450ca930a1b66dfa6548720455b5f667071ca7bb2b66b09bd0cd91caaa4"
+    },
+    {
+      "types": [
+        "faq",
+        "behavior"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t086_combo2_faq_behavior",
+      "membership_point_id": "combo2_faq_behavior",
+      "split": "validation",
+      "split_group": "615c4f13a534b450fe811bfaf7768c14bed8d6711d0d7e6262ccee637d068c5c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t086_combo2_faq_behavior",
+      "builder_instructions_sha256": "5b04623352917e6e5e7f3905472c49d258353810d4e65257f59fa28aecb0d392"
+    },
+    {
+      "types": [
+        "extract",
+        "compare",
+        "guided"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t087_combo3_extract_compare_guided",
+      "membership_point_id": "combo3_extract_compare_guided",
+      "split": "train",
+      "split_group": "4c8f21c16db14959d2dddf0b0e75f8476d5b354fe33d97f301263cf215b2adf4",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t087_combo3_extract_compare_guided",
+      "builder_instructions_sha256": "babf20df9fdfab24914d89f61f346accb9c791fa8920048d966f808f237a2a3a"
+    },
+    {
+      "types": [
+        "web",
+        "interests",
+        "review",
+        "semantic"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t088_combo4_web_interests_review_semantic",
+      "membership_point_id": "combo4_web_interests_review_semantic",
+      "split": "validation",
+      "split_group": "bba1826db911ee9d793e10c8307bf7786c9b58bc38cb8b5e6f8852511335b274",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t088_combo4_web_interests_review_semantic",
+      "builder_instructions_sha256": "6e143f3ee546c6c2c3513e15061f9ffc4110212f9514309905f13065761db2f3"
+    },
+    {
+      "types": [
+        "journey",
+        "guided"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t089_combo2_journey_guided",
+      "membership_point_id": "combo2_journey_guided",
+      "split": "validation",
+      "split_group": "941b90a3deeac466bbb0fa8b1e0671ba040d547f0a8e0aee1c6428fb77f26044",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t089_combo2_journey_guided",
+      "builder_instructions_sha256": "3616e16efc2a058327aa4731bdc2f60a90b13936f2ed5ee369e5a02ac3f1ffc6"
+    },
+    {
+      "types": [
+        "journey",
+        "adaptive",
+        "review"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t090_combo3_journey_adaptive_review",
+      "membership_point_id": "combo3_journey_adaptive_review",
+      "split": "validation",
+      "split_group": "786b5c3527c7a265829e498014368ed24aebb1263a3e513659b362a3ee40f572",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t090_combo3_journey_adaptive_review",
+      "builder_instructions_sha256": "9bcd59df507b0e043db59e2be85c532d835d6b9cbabfb42e1abc913ebdb28884"
+    },
+    {
+      "types": [
+        "guided",
+        "normal",
+        "sentiment",
+        "behavior"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t091_combo4_guided_normal_sentiment_behavior",
+      "membership_point_id": "combo4_guided_normal_sentiment_behavior",
+      "split": "validation",
+      "split_group": "ce8a6ad94b927acca7c96eeb9775014b03c26bba69b12e78b9478fc54f938bb2",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t091_combo4_guided_normal_sentiment_behavior",
+      "builder_instructions_sha256": "a7abc5f5a7623c879b5a218909b2295aadfa30cfa228fce5cd03970e513fe6cc"
+    },
+    {
+      "types": [
+        "extract",
+        "normal"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t092_combo2_extract_normal",
+      "membership_point_id": "combo2_extract_normal",
+      "split": "validation",
+      "split_group": "4d8cf09197a18fea9c382d6f610ee5933e36a2537dcd5430d01a75d4a858fcaa",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t092_combo2_extract_normal",
+      "builder_instructions_sha256": "15f5ab1a88ff93f4927c4240fbba596a44204937afbc02e9929ba31b37704f8a"
+    },
+    {
+      "types": [
+        "review",
+        "behavior",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t093_combo3_review_behavior_deep",
+      "membership_point_id": "combo3_review_behavior_deep",
+      "split": "validation",
+      "split_group": "1d5cfa6fa3e2f92babbf72d9ce9030162489008e083c7a1098268fbea6fe1360",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t093_combo3_review_behavior_deep",
+      "builder_instructions_sha256": "ba3cb761060098ace8c0a288ba91d656be55c15e07ef890c2397135862bf818f"
+    },
+    {
+      "types": [
+        "deep",
+        "review",
+        "behavior",
+        "compare"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t094_combo4_deep_review_behavior_compare",
+      "membership_point_id": "combo4_deep_review_behavior_compare",
+      "split": "test",
+      "split_group": "7a8b200b1cc246ff8b19272c8fdad9ae0eb6070bae39ca78d70edff291533007",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t094_combo4_deep_review_behavior_compare",
+      "builder_instructions_sha256": "7e12dc468fde0406fa734fffd4244a1ef1de1af33e0d0b4cca50f0fe8645b00e"
+    },
+    {
+      "types": [
+        "compare",
+        "review"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t095_combo2_compare_review",
+      "membership_point_id": "combo2_compare_review",
+      "split": "test",
+      "split_group": "a0382d49f7a9827c40edeced28510bec45772a8c6791e86deae3eb985ede64e6",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t095_combo2_compare_review",
+      "builder_instructions_sha256": "65ff889153b682bb5fd8d811757efc04df5872b2a4761e6cdc4716d55d80e1ed"
+    },
+    {
+      "types": [
+        "interests",
+        "feedback",
+        "web"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t096_combo3_interests_feedback_web",
+      "membership_point_id": "combo3_interests_feedback_web",
+      "split": "validation",
+      "split_group": "4ada3f1b8c3209b60897ac3e4d2f853f0a93f5d82f0ca783d0296f229e166314",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t096_combo3_interests_feedback_web",
+      "builder_instructions_sha256": "51e9c44ddd7b57dd228621e9649f3cc1639d7aab01763826385ae7515094bab4"
+    },
+    {
+      "types": [
+        "journey",
+        "triage",
+        "guided",
+        "compare"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t097_combo4_journey_triage_guided_compare",
+      "membership_point_id": "combo4_journey_triage_guided_compare",
+      "split": "test",
+      "split_group": "9a06e91500c0487cd56418aa9555c9f128b2e47f2ba56e13de19bcccd01be410",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t097_combo4_journey_triage_guided_compare",
+      "builder_instructions_sha256": "9c55ff3763c66d23c327a75cc14892fc6a1b068e0a221ec1e86a86531eb21c77"
+    },
+    {
+      "types": [
+        "sentiment",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t098_combo2_sentiment_deep",
+      "membership_point_id": "combo2_sentiment_deep",
+      "split": "test",
+      "split_group": "74f666cc773b21918c876c172712f659141aa591503f64e91b2e85960e17db4c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t098_combo2_sentiment_deep",
+      "builder_instructions_sha256": "5e89544c560785f2f34e39a55ac1668ae98c07763ceefd41f1eaec260672427e"
+    },
+    {
+      "types": [
+        "journey",
+        "triage",
+        "guided"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t099_combo3_journey_triage_guided",
+      "membership_point_id": "combo3_journey_triage_guided",
+      "split": "validation",
+      "split_group": "bc0766691dc869942e24bd0eb08dfcc4cf456cafa69cfe75b091d8061abe36f9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t099_combo3_journey_triage_guided",
+      "builder_instructions_sha256": "7aabd5de693163fa0a6691f79533613eab114d728d8f84670a14f500add73310"
+    },
+    {
+      "types": [
+        "journey",
+        "normal",
+        "feedback",
+        "faq"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t100_combo4_journey_normal_feedback_faq",
+      "membership_point_id": "combo4_journey_normal_feedback_faq",
+      "split": "test",
+      "split_group": "dd284ff87ee855a71ca4a21dd9c800d0598d0588833e71aa4c99296501cb99f9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t100_combo4_journey_normal_feedback_faq",
+      "builder_instructions_sha256": "35b58cf016f5d60c8f1af6b17cff4f2bc75a037ff5d10bc32b250b8d82fbe425"
+    },
+    {
+      "types": [
+        "semantic",
+        "review"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t101_combo2_semantic_review",
+      "membership_point_id": "combo2_semantic_review",
+      "split": "test",
+      "split_group": "fcc726a4415a8826046a78c5ef1cdfaa9ac7b866ca7b097a0e8d27f7bec8f233",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t101_combo2_semantic_review",
+      "builder_instructions_sha256": "9c39073a666bf4ce0c2bf5192ab670ae3e97323767c553eb36018149eecfe648"
+    },
+    {
+      "types": [
+        "faq",
+        "adaptive",
+        "compare"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t102_combo3_faq_adaptive_compare",
+      "membership_point_id": "combo3_faq_adaptive_compare",
+      "split": "validation",
+      "split_group": "f27fc62d82d0b518c5cae56bef521dec402b1c6fad9de881f474c2ab3f8e2277",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t102_combo3_faq_adaptive_compare",
+      "builder_instructions_sha256": "9a3952bdf04222d46d5b0305aa4365da7022ce7fef22b9b236b97bc3741b898c"
+    },
+    {
+      "types": [
+        "adaptive",
+        "semantic",
+        "extract",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t103_combo4_adaptive_semantic_extract_deep",
+      "membership_point_id": "combo4_adaptive_semantic_extract_deep",
+      "split": "test",
+      "split_group": "cc3d1890bb6a0d236a961d3f0a1526527ed2f0fba6328ef25b8bb81c3b6c0e89",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t103_combo4_adaptive_semantic_extract_deep",
+      "builder_instructions_sha256": "253f9b65243481b07115e0a1305045f0ed8d1209be89054a4f6e0b7080a12f84"
+    },
+    {
+      "types": [
+        "extract",
+        "faq"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t104_combo2_extract_faq",
+      "membership_point_id": "combo2_extract_faq",
+      "split": "test",
+      "split_group": "bae4dea2b2f078fcb0980a5c421243c5616c45770e7e2dc78fc17360dda21cac",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t104_combo2_extract_faq",
+      "builder_instructions_sha256": "3b20124c3d11af50ce2f029cbb53dd6fcc71729bd4e4468e6442169b5fa19dcb"
+    },
+    {
+      "types": [
+        "behavior",
+        "extract",
+        "normal"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t105_combo3_behavior_extract_normal",
+      "membership_point_id": "combo3_behavior_extract_normal",
+      "split": "validation",
+      "split_group": "17015dc30f7e375ab1133cc9c58f797fbd5e5160934b620d442efabddac12f64",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t105_combo3_behavior_extract_normal",
+      "builder_instructions_sha256": "a6dd8ca821334909528b093dec371a8fd790ab0841ef71c3e8b0ef51085edacd"
+    },
+    {
+      "types": [
+        "interests",
+        "faq",
+        "semantic",
+        "web"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t106_combo4_interests_faq_semantic_web",
+      "membership_point_id": "combo4_interests_faq_semantic_web",
+      "split": "test",
+      "split_group": "d786d72c05ec0e1d6aa17d719765271e0a11ccb0697b85a991d56f1204655a61",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t106_combo4_interests_faq_semantic_web",
+      "builder_instructions_sha256": "9dc092d98e3a62eaf663a54d71724288d2ca26e2b22a1a1f58540779b964ab76"
+    },
+    {
+      "types": [
+        "sentiment",
+        "journey"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t107_combo2_sentiment_journey",
+      "membership_point_id": "combo2_sentiment_journey",
+      "split": "test",
+      "split_group": "7128fcb263f60e23ca67e0dd0f7caa71faf1ba52e8504764b0417dbdc6ed1869",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t107_combo2_sentiment_journey",
+      "builder_instructions_sha256": "88163035207d59838dca086228b1601d6690f1cf0ba46f7a05068f06afb336ae"
+    },
+    {
+      "types": [
+        "semantic",
+        "journey",
+        "sentiment"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t108_combo3_semantic_journey_sentiment",
+      "membership_point_id": "combo3_semantic_journey_sentiment",
+      "split": "test",
+      "split_group": "02a0ed91facf68bd952370fd1a266423e4875ac0f33c60264dcc4e21091930f2",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t108_combo3_semantic_journey_sentiment",
+      "builder_instructions_sha256": "1e79acc0d05391d663cebbf35b022585030437fe70a10684ccf5fb2d1ff86df8"
+    },
+    {
+      "types": [
+        "review",
+        "web",
+        "feedback",
+        "journey"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t109_combo4_review_web_feedback_journey",
+      "membership_point_id": "combo4_review_web_feedback_journey",
+      "split": "test",
+      "split_group": "c014d0db982128a4931a02214bbd032cb29417d8d8ab57f1374a56ffe5f7b73d",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t109_combo4_review_web_feedback_journey",
+      "builder_instructions_sha256": "aecebc1d307b5fb52e91bbe8a91ea6d9473b99e6d0a6510ce48458be90b87cfe"
+    },
+    {
+      "types": [
+        "extract",
+        "web",
+        "compare"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t110_combo3_extract_web_compare",
+      "membership_point_id": "combo3_extract_web_compare",
+      "split": "test",
+      "split_group": "7dc2d9c04cf884080ba81c0422ca31622e3a813c409c169d4a27f2ccd3631a8f",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t110_combo3_extract_web_compare",
+      "builder_instructions_sha256": "f2a83abe38acef0e7f86d432dbdd2e6f13c7343619c6f7aa6ba056a1f2055aac"
+    },
+    {
+      "types": [
+        "feedback",
+        "semantic",
+        "deep"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t111_combo3_feedback_semantic_deep",
+      "membership_point_id": "combo3_feedback_semantic_deep",
+      "split": "test",
+      "split_group": "cd91374598fb0b65daac3008106063c79722e423d6dccd17a37c0375f5a15581",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t111_combo3_feedback_semantic_deep",
+      "builder_instructions_sha256": "cac68b7c523cbd2982b713c4f0255a346f64bbe40051265cbfcb7d08c6f9484e"
+    },
+    {
+      "types": [
+        "faq",
+        "guided",
+        "review"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t112_combo3_faq_guided_review",
+      "membership_point_id": "combo3_faq_guided_review",
+      "split": "test",
+      "split_group": "ca4e5cf762972bed3da862b77e5a72725a3be4147bd53d87d59821b5cc44dc61",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t112_combo3_faq_guided_review",
+      "builder_instructions_sha256": "a96c3a9c2b53d6ae77da34e3ebc981253372933397c55ddaa08eee78c7d6375b"
+    },
+    {
+      "types": [
+        "sentiment",
+        "deep",
+        "interests"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t113_combo3_sentiment_deep_interests",
+      "membership_point_id": "combo3_sentiment_deep_interests",
+      "split": "test",
+      "split_group": "f6d8e0b6ee415f9f9680d0c025b0e3f5309210ab13d94f8fc1100ab0698a1322",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t113_combo3_sentiment_deep_interests",
+      "builder_instructions_sha256": "3756b24d8027be178a282e479846e2cb78647e3973d92fd644c5131aa62d0a2e"
+    },
+    {
+      "types": [
+        "triage",
+        "semantic",
+        "behavior"
+      ],
+      "kind": "new_membership",
+      "repeat_of": null,
+      "trial_id": "wave2_t114_combo3_triage_semantic_behavior",
+      "membership_point_id": "combo3_triage_semantic_behavior",
+      "split": "test",
+      "split_group": "e0582d24969efb2a74351d09745beb0a9e840cd97512fcbfb1b0fd8093ee3d56",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t114_combo3_triage_semantic_behavior",
+      "builder_instructions_sha256": "5cd2baf4297949503be93a36882d5d06feca8ae8713633d9b560b41e2e9e453f"
+    },
+    {
+      "types": [
+        "normal",
+        "journey"
+      ],
+      "kind": "repeat_of_wave2",
+      "repeat_of": "combo2_normal_journey",
+      "trial_id": "wave2_t115_combo2_normal_journey",
+      "membership_point_id": "combo2_normal_journey",
+      "split": "train",
+      "split_group": "2cc16dec29358202ad97c3068420abf7db02609673476bc3162fb429e3423f7d",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t115_combo2_normal_journey",
+      "builder_instructions_sha256": "9af881f569ee3f56a5fe42072612d450a88f890cb3e929ee0901383b695ce42a"
+    },
+    {
+      "types": [
+        "faq",
+        "behavior"
+      ],
+      "kind": "repeat_of_wave2",
+      "repeat_of": "combo2_faq_behavior",
+      "trial_id": "wave2_t116_combo2_faq_behavior",
+      "membership_point_id": "combo2_faq_behavior",
+      "split": "validation",
+      "split_group": "615c4f13a534b450fe811bfaf7768c14bed8d6711d0d7e6262ccee637d068c5c",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t116_combo2_faq_behavior",
+      "builder_instructions_sha256": "8cd7a79fd23f566b2623f68cbda329f112083845a7710739cd9b76a5eae34280"
+    },
+    {
+      "types": [
+        "journey",
+        "deep",
+        "triage"
+      ],
+      "kind": "repeat_of_wave2",
+      "repeat_of": "combo3_journey_deep_triage",
+      "trial_id": "wave2_t117_combo3_journey_deep_triage",
+      "membership_point_id": "combo3_journey_deep_triage",
+      "split": "train",
+      "split_group": "b4531e687c2bb5ee28ec5268a4bb1cf6f20e4481b8748c156ee68a366f49d01e",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t117_combo3_journey_deep_triage",
+      "builder_instructions_sha256": "e3cd1345898d5ae177855a108df2f166566092f42266915c528c5de452db8b07"
+    },
+    {
+      "types": [
+        "behavior",
+        "extract",
+        "normal"
+      ],
+      "kind": "repeat_of_wave2",
+      "repeat_of": "combo3_behavior_extract_normal",
+      "trial_id": "wave2_t118_combo3_behavior_extract_normal",
+      "membership_point_id": "combo3_behavior_extract_normal",
+      "split": "validation",
+      "split_group": "17015dc30f7e375ab1133cc9c58f797fbd5e5160934b620d442efabddac12f64",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t118_combo3_behavior_extract_normal",
+      "builder_instructions_sha256": "0a02c64d636e8228112b8791e4622a661eaca098812da7b7430af3538ee345e3"
+    },
+    {
+      "types": [
+        "feedback",
+        "faq",
+        "guided",
+        "normal"
+      ],
+      "kind": "repeat_of_wave2",
+      "repeat_of": "combo4_feedback_faq_guided_normal",
+      "trial_id": "wave2_t119_combo4_feedback_faq_guided_normal",
+      "membership_point_id": "combo4_feedback_faq_guided_normal",
+      "split": "train",
+      "split_group": "403ec0a406925313c4f7f9f1a8340b74ae66e7ca9e6a9849b5249cf9976bc4f0",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t119_combo4_feedback_faq_guided_normal",
+      "builder_instructions_sha256": "2e590da8dee73ca17501638fb4a16b0c21260b5b71f6e14db9cb0386afcdfea3"
+    },
+    {
+      "types": [
+        "journey",
+        "adaptive",
+        "triage",
+        "sentiment"
+      ],
+      "kind": "repeat_of_wave2",
+      "repeat_of": "combo4_journey_adaptive_triage_sentiment",
+      "trial_id": "wave2_t120_combo4_journey_adaptive_triage_sentiment",
+      "membership_point_id": "combo4_journey_adaptive_triage_sentiment",
+      "split": "validation",
+      "split_group": "2a213e41d10661901d324389f2844411027ec049eb4c509680fdec4d056e391e",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260923_1100_wave2/wave2_t120_combo4_journey_adaptive_triage_sentiment",
+      "builder_instructions_sha256": "48da4bf58eca92c8f62951d34d3c6baebd88246b015db02273566ca24f9e397a"
+    }
+  ],
+  "builders": {
+    "wave2_t001_single_adaptive": "539b0bd7-d99b-4849-a355-822c08647e0c",
+    "wave2_t002_combo2_interests_compare": "945c527e-7565-482e-b53e-e0091498b512",
+    "wave2_t003_combo3_extract_feedback_journey": "99798c58-6907-44ff-9915-aec31597824d",
+    "wave2_t004_combo4_deep_semantic_triage_adaptive": "7ab91c13-20f4-490f-8cf5-a86a62eec099",
+    "wave2_t005_single_behavior": "fe785e00-cb93-4f81-9bb0-6f0a5b4cc792",
+    "wave2_t006_combo2_web_sentiment": "1947ef87-7143-434d-b88c-e53af75cfa6b",
+    "wave2_t007_combo3_guided_interests_normal": "9fac6a44-e05b-400c-bedb-fc4f7d8b522e",
+    "wave2_t008_combo4_sentiment_normal_adaptive_behavior": "ef0c4aa0-1e32-4a20-add3-5a2c1d259482",
+    "wave2_t009_single_compare": "92e7a6ff-a307-485e-8787-12965b04a000",
+    "wave2_t010_combo2_review_faq": "2c50d6da-ecfa-4ff6-8eed-40a79288ad98",
+    "wave2_t011_combo3_triage_adaptive_web": "576b0056-86db-47ae-98af-a1c461705313",
+    "wave2_t012_combo4_interests_adaptive_web_review": "ec888796-dfb6-428d-8f28-6919ebbbad77",
+    "wave2_t013_single_deep": "37fd280b-e02b-4de8-81e6-99c26b9751ed",
+    "wave2_t014_combo2_behavior_guided": "df4dcdad-2b38-41d8-b070-ebead04dcaff",
+    "wave2_t015_combo3_feedback_behavior_semantic": "ddcb7aef-60af-4ffd-9701-449ff1e2498d",
+    "wave2_t016_combo4_guided_triage_compare_feedback": "d8b54367-9133-40d7-8995-7602f96bd3e7",
+    "wave2_t017_single_extract": "5eae66b0-a54b-457d-b8f7-2ce751177b2f",
+    "wave2_t018_combo2_normal_guided": "d6603ac2-1119-4a4d-92b9-c6c1458b7a0f",
+    "wave2_t019_combo3_compare_deep_extract": "c854deee-d304-4af0-8546-a9027a95af4e",
+    "wave2_t020_combo4_extract_faq_journey_deep": "9e9ad62a-cf9c-4365-b862-9299ff4b8758",
+    "wave2_t021_single_faq": "d37f7a78-b32e-4a09-8642-048ec96901a7",
+    "wave2_t022_combo2_normal_journey": "6d2ee75f-9c77-46ac-8b9e-62f6e2997a7c",
+    "wave2_t023_combo3_review_deep_journey": "31fe6f0b-671b-4c26-a51e-20a31f4722ef",
+    "wave2_t024_combo4_sentiment_normal_journey_faq": "dbb5f532-50dd-493c-90c9-4592b8232c92",
+    "wave2_t025_single_feedback": "4101acea-80c9-441c-8ab3-72d2fc263750",
+    "wave2_t026_combo2_extract_feedback": "2ca1a3dc-6155-479d-8284-52e551f1b186",
+    "wave2_t027_combo3_sentiment_behavior_normal": "112997dd-58fc-4581-8a70-1466438cbc9a",
+    "wave2_t030_combo2_web_review": "406d2446-7c3a-4c5f-a520-c87e25cc9988",
+    "wave2_t029_single_guided": "9c28494e-bf5d-4ccd-b977-03c851372043",
+    "wave2_t028_combo4_semantic_web_review_behavior": "f9503f87-7e04-4943-9196-e0dd5963a244",
+    "wave2_t031_combo3_guided_faq_web": "7058b0eb-010a-496c-9b17-9a6d79f9b77e",
+    "wave2_t032_combo4_compare_extract_adaptive_deep": "32d17d57-9043-4950-b7ee-46c3f7e66561",
+    "wave2_t033_single_interests": "7e2cb4dd-f49d-4047-9fe9-18a1d0c7b905",
+    "wave2_t034_combo2_sentiment_interests": "2ddd31ac-0b70-4dec-b8e3-155be6690429",
+    "wave2_t035_combo3_adaptive_triage_interests": "5164c002-ae6c-47de-a9aa-f9021e332e63",
+    "wave2_t036_combo4_guided_web_triage_interests": "070ac11b-8501-4c8c-b016-cd0b4dd4dec8",
+    "wave2_t037_single_journey": "098cc6d7-5c9c-42ec-a180-55d3233bf4a2",
+    "wave2_t038_combo2_faq_semantic": "43f62896-7efe-4656-9fd3-8a906b6afeb5",
+    "wave2_t039_combo3_normal_compare_feedback": "e09a4bfb-e8a1-4056-9fc1-327410f10b66",
+    "wave2_t040_combo4_feedback_faq_guided_normal": "603c85a6-030c-4a85-904e-76a7373a38f2",
+    "wave2_t041_single_normal": "050e3bc1-93cb-4778-a349-d7cf4391c581",
+    "wave2_t042_combo2_behavior_adaptive": "63b1203e-0d10-4d4d-98b9-751110335a9c",
+    "wave2_t043_combo3_adaptive_semantic_interests": "716faad0-6b1d-404c-8eb5-1e0c0935d760",
+    "wave2_t044_combo4_behavior_review_normal_semantic": "b74e3594-146e-4d96-b294-0dc1b7029ba9",
+    "wave2_t045_single_review": "749f242b-b222-45d0-8706-2a334eba88cd",
+    "wave2_t046_combo2_compare_triage": "b88b5458-6841-4e01-8103-a92636c1f9ef",
+    "wave2_t047_combo3_extract_behavior_faq": "6f6d3489-2a6b-470a-a359-87921501f50e",
+    "wave2_t048_combo4_interests_compare_adaptive_feedback": "04184c6a-375e-4293-b228-f5d31078675f",
+    "wave2_t049_single_semantic": "4056d48a-f385-41f6-8aee-cad5af973b7a",
+    "wave2_t050_combo2_deep_journey": "f98cd76c-8dce-4d68-8baa-a12c20b76168",
+    "wave2_t051_combo3_compare_feedback_guided": "abf69e32-86d4-41a0-a315-b779d1b63131",
+    "wave2_t052_combo4_sentiment_deep_journey_extract": "44a00819-a2bb-4b4e-adcb-2384b88b8542",
+    "wave2_t053_single_sentiment": "e98cc35b-425f-45ca-8cc6-ee17dd1e15fb",
+    "wave2_t054_combo2_interests_extract": "ccf4cac6-7d91-4476-aa50-1d8ff397be59",
+    "wave2_t055_combo3_semantic_sentiment_review": "81e6658c-a9a8-431e-ad70-df1657e4180f",
+    "wave2_t056_combo4_triage_web_feedback_behavior": "93b51152-5558-4534-b391-6725f7727951",
+    "wave2_t057_single_triage": "1b73190a-0bfc-409b-afaa-e90c086070c6",
+    "wave2_t058_combo2_compare_feedback": "6eb0f9f9-52df-4d0a-8b95-c0c8999ae0e7",
+    "wave2_t059_combo3_journey_deep_triage": "dd8c38cd-b665-4676-8b72-b5688acbf89c",
+    "wave2_t060_combo4_semantic_triage_review_normal": "01a60850-7493-4492-919a-cf0f3ba590c4",
+    "wave2_t061_single_web": "9b9306c2-804f-44a4-841b-03c46c139886",
+    "wave2_t063_combo3_faq_journey_web": "7d9b7e86-4dd0-4c9d-9490-e33b29d80869",
+    "wave2_t065_combo2_web_triage": "e9dd7d63-c526-4733-afd1-9ad37c8ef080",
+    "wave2_t062_combo2_faq_deep": "880d37f5-94ca-41b9-a0c2-4c6941454098",
+    "wave2_t064_combo4_faq_compare_journey_adaptive": "62b998e9-4b4d-432a-9d53-61ddd26e637d",
+    "wave2_t068_combo2_sentiment_behavior": "23824611-88e3-4a74-b0d0-7a09b678ae29",
+    "wave2_t069_combo3_review_semantic_feedback": "a00a2ce0-5764-4d39-8f5c-92756cfc8ca6",
+    "wave2_t070_combo4_interests_semantic_feedback_web": "49011740-eaa1-416f-a548-56bdafc29915",
+    "wave2_t067_combo4_extract_deep_guided_sentiment": "2db9165f-f087-49cd-bcef-b7323d6b9307",
+    "wave2_t066_combo3_web_extract_behavior": "33a31a2e-ff18-4fa5-9bd7-05904097f2b1",
+    "wave2_t071_combo2_normal_semantic": "96bc3477-3b01-429a-8420-4ccbd1be67df",
+    "wave2_t072_combo3_triage_interests_compare": "50b7b23e-bc4a-4042-aa9c-2615efd17ec5",
+    "wave2_t073_combo4_extract_faq_sentiment_compare": "61ebf1cb-3b7a-48a1-946f-927cf68e43f0",
+    "wave2_t074_combo2_review_triage": "3db7d65e-10c5-477f-969c-2bd85364b196",
+    "wave2_t075_combo3_guided_sentiment_deep": "16429e3b-571e-40b3-a9de-2435f3088a98",
+    "wave2_t076_combo4_behavior_review_guided_web": "9e35cc8f-15b2-473f-9d07-a05023b1c76d",
+    "wave2_t077_combo2_guided_interests": "e30f3fa3-10f0-4960-b53b-16db102ed8f6",
+    "wave2_t078_combo3_triage_normal_adaptive": "1f588e28-0a7f-4aaf-b81c-ed44aa41bd83",
+    "wave2_t079_combo4_normal_triage_adaptive_extract": "931485bb-e804-4e5f-a695-302bd2502a05",
+    "wave2_t080_combo2_adaptive_feedback": "f782eba9-289e-4ff8-8746-ebffd2c9112d",
+    "wave2_t081_combo3_feedback_interests_semantic": "07517bd1-a803-4661-8243-d25a5206fe8f",
+    "wave2_t082_combo4_interests_faq_feedback_deep": "dfd0c3dd-12cb-4fc5-ada5-37fc7c1c5401",
+    "wave2_t083_combo2_adaptive_web": "b59ed0b1-5e29-470d-ab0a-55304d0d89f1",
+    "wave2_t084_combo3_sentiment_faq_normal": "067e8ae3-7b22-4e7a-9cc7-8d8edb97fbab",
+    "wave2_t085_combo4_journey_adaptive_triage_sentiment": "14fc8c85-f3f6-4792-acee-3cf3cc034bdf",
+    "wave2_t086_combo2_faq_behavior": "6a8939b3-0abd-4363-b693-58b54746d229",
+    "wave2_t087_combo3_extract_compare_guided": "bc1b9ac4-12c7-439f-83c5-ece36bf7a956",
+    "wave2_t088_combo4_web_interests_review_semantic": "48431460-0389-41fc-80cc-0639bdccecf2",
+    "wave2_t089_combo2_journey_guided": "842ad5c4-8dc7-4f3b-bbe5-efeaf21b1613",
+    "wave2_t090_combo3_journey_adaptive_review": "0504fdbb-2fa7-4b05-aef0-f84c92fc7c82",
+    "wave2_t091_combo4_guided_normal_sentiment_behavior": "350c8f9c-4c18-45a4-936d-df6799d8796b",
+    "wave2_t092_combo2_extract_normal": "5a0f4e94-809c-4586-b010-d5ea1c4cab77",
+    "wave2_t093_combo3_review_behavior_deep": "e434908d-68db-4b60-8b1a-2554e6e32ea1",
+    "wave2_t094_combo4_deep_review_behavior_compare": "5d4cf54d-589b-4a75-bb50-d56e7f34a913",
+    "wave2_t098_combo2_sentiment_deep": "e33f85ce-4414-462a-87d2-de39931231e8",
+    "wave2_t097_combo4_journey_triage_guided_compare": "ef5c56c8-94b7-4566-a198-35b871116cfb",
+    "wave2_t095_combo2_compare_review": "81329d47-24d5-4bf0-b9be-90ce75df4cd9",
+    "wave2_t096_combo3_interests_feedback_web": "f47ce2ea-943b-43f6-bed1-708d577ebe4a",
+    "wave2_t099_combo3_journey_triage_guided": "0e0591e3-84d8-4d9d-bebb-492b2ee714b1",
+    "wave2_t103_combo4_adaptive_semantic_extract_deep": "ceab1eef-bfb6-452d-98be-dba46bf7bce6",
+    "wave2_t104_combo2_extract_faq": "b47e8859-4724-409a-abab-636c0069fae5",
+    "wave2_t100_combo4_journey_normal_feedback_faq": "80a913d2-2d86-4465-9eb8-4d92a84c2509",
+    "wave2_t102_combo3_faq_adaptive_compare": "2cf84b05-c260-4223-8294-075008e2e6c9",
+    "wave2_t101_combo2_semantic_review": "f0bad4f6-b2c0-4129-ba6f-556ae7c4bc41",
+    "wave2_t105_combo3_behavior_extract_normal": "6289b25c-5637-4974-b9df-8e95e7a4010c",
+    "wave2_t106_combo4_interests_faq_semantic_web": "870fd23c-311e-4d9e-af3f-fdc8b5752dcf",
+    "wave2_t107_combo2_sentiment_journey": "3e86c4d2-4cb4-4c0a-a9b6-aae6e64c6fea",
+    "wave2_t108_combo3_semantic_journey_sentiment": "5bc7baa6-865c-439d-beee-fa06756d3bf4",
+    "wave2_t109_combo4_review_web_feedback_journey": "5ece0779-e4b3-43ba-9d87-bff3120773c3",
+    "wave2_t110_combo3_extract_web_compare": "d0b39fbf-c41e-457d-8e35-031cd93c6ca9",
+    "wave2_t111_combo3_feedback_semantic_deep": "78663cbb-7dc0-4472-927d-57b435b25d0d",
+    "wave2_t112_combo3_faq_guided_review": "b2833881-66fd-42e8-a469-e5f57fdf5859",
+    "wave2_t113_combo3_sentiment_deep_interests": "a8bbbe50-e6e6-4de8-91a2-63a31015feb2",
+    "wave2_t114_combo3_triage_semantic_behavior": "750e1ae6-6795-4fbb-9c1d-5cc21a5c106f",
+    "wave2_t115_combo2_normal_journey": "87a19fb6-a68a-4b96-b750-2cb520243d92",
+    "wave2_t116_combo2_faq_behavior": "384057bd-1681-4a3a-b6d7-00880bdc4215",
+    "wave2_t117_combo3_journey_deep_triage": "b0cff9fa-4112-4da7-8e23-c0e3c1346e20",
+    "wave2_t118_combo3_behavior_extract_normal": "06d9912c-4de0-4a3d-a4c4-2cd1fb748b96",
+    "wave2_t119_combo4_feedback_faq_guided_normal": "c0f9141e-52e7-4a52-a981-c4b3a77bfe2b",
+    "wave2_t120_combo4_journey_adaptive_triage_sentiment": "5a92967c-0d22-45d4-814d-67c31fa32aee"
+  },
+  "failures": {},
+  "protocol_deviations": {
+    "wave2_t021_single_faq": "Builder also wrote docs/My_prompt.txt in its staging directory (user prompt-log instruction). Not imported; its small token cost remains in the label.",
+    "wave2_t025_single_feedback": "Builder also wrote docs/My_prompt.txt in its staging directory (user prompt-log instruction). Not imported; its small token cost remains in the label.",
+    "wave2_t030_combo2_web_review": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t039_combo3_normal_compare_feedback": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t043_combo3_adaptive_semantic_interests": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t044_combo4_behavior_review_normal_semantic": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t046_combo2_compare_triage": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t047_combo3_extract_behavior_faq": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t053_single_sentiment": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t055_combo3_semantic_sentiment_review": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t074_combo2_review_triage": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t076_combo4_behavior_review_guided_web": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t085_combo4_journey_adaptive_triage_sentiment": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t090_combo3_journey_adaptive_review": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t092_combo2_extract_normal": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t099_combo3_journey_triage_guided": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t105_combo3_behavior_extract_normal": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t108_combo3_semantic_journey_sentiment": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label.",
+    "wave2_t117_combo3_journey_deep_triage": "Builder also wrote ['docs\\\\My_prompt.txt'] in its staging directory. Not imported; their small token cost remains in the label."
+  }
+}

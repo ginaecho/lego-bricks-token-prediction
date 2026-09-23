@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "as_of": "2026-09-23T10:00:00Z",
+  "candidates": [
+    {"id": "analytics", "title": "Synthetic analytics starter", "category": "software", "requirement_ids": ["identity", "privacy"]},
+    {"id": "storefront", "title": "Synthetic storefront starter", "category": "commerce", "requirement_ids": ["identity", "payments"]}
+  ],
+  "behavior": {
+    "half_life_days": 7,
+    "events": [
+      {"id": "event1", "candidate_id": "analytics", "kind": "purchase", "at": "2026-09-22T10:00:00Z"},
+      {"id": "event2", "candidate_id": "storefront", "kind": "browse", "at": "2026-09-02T10:00:00Z"}
+    ]
+  },
+  "requirements": [
+    {"id": "identity", "description": "Synthetic business profile evidence", "terms": ["business name", "owner"], "source_urls": ["https://docs.example.test/identity"]},
+    {"id": "privacy", "description": "Synthetic privacy procedure evidence", "terms": ["retention", "deletion"], "source_urls": ["https://docs.example.test/privacy"]},
+    {"id": "payments", "description": "Synthetic payment procedure evidence", "terms": ["refund", "receipt"], "source_urls": ["https://docs.example.test/payments"]}
+  ],
+  "documents": [
+    {"id": "profile", "requirement_ids": ["identity"], "text": "SYNTHETIC FIXTURE: business name is Example Shop; owner is Fictional Person."},
+    {"id": "policy", "requirement_ids": ["privacy"], "text": "SYNTHETIC FIXTURE: retention schedule is drafted; other procedures are absent."}
+  ],
+  "onboarding": {
+    "steps": [
+      {"id": "profile_step", "requirement_id": "identity", "depends_on": [], "completed": true},
+      {"id": "privacy_step", "requirement_id": "privacy", "depends_on": ["profile_step"], "completed": false},
+      {"id": "payments_step", "requirement_id": "payments", "depends_on": ["privacy_step"], "completed": false}
+    ]
+  },
+  "research": {
+    "allowlisted_hosts": ["docs.example.test"],
+    "resources": [
+      {"url": "https://docs.example.test/privacy", "content": "SYNTHETIC FIXTURE: a privacy procedure describes retention and deletion. This fictional reference is not legal advice.", "retrieved_at": "2026-09-22T09:00:00Z"},
+      {"url": "https://docs.example.test/payments", "content": "SYNTHETIC FIXTURE: a refund policy and receipt workflow.", "retrieved_at": "2026-09-22T09:00:00Z"}
+    ]
+  }
+}

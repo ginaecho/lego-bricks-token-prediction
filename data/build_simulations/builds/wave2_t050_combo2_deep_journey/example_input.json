@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "questions": [
+    {"id": "q-basics", "text": "Does an introductory accessibility exercise improve readiness?"},
+    {"id": "q-format", "text": "Is a video-first learning format preferable?"},
+    {"id": "q-retention", "text": "Does this learning sequence improve long-term retention?"}
+  ],
+  "documents": [
+    {
+      "id": "synthetic-study-a",
+      "title": "SYNTHETIC pilot A",
+      "claims": [
+        {"question_id": "q-basics", "stance": "support", "quote": "The fictional introductory group completed more readiness checks."},
+        {"question_id": "q-format", "stance": "support", "quote": "The fictional pilot A participants preferred video."}
+      ]
+    },
+    {
+      "id": "synthetic-study-b",
+      "title": "SYNTHETIC pilot B",
+      "claims": [
+        {"question_id": "q-basics", "stance": "support", "quote": "The fictional second cohort also benefited from the introductory exercise."},
+        {"question_id": "q-format", "stance": "oppose", "quote": "The fictional pilot B participants preferred interactive text."}
+      ]
+    }
+  ],
+  "actions": [
+    {"id": "intro", "title": "Complete the introductory accessibility exercise", "kind": "apply", "question_ids": ["q-basics"], "prerequisites": []},
+    {"id": "compare-formats", "title": "Compare text and video on the same exercise", "kind": "research", "question_ids": ["q-format"], "prerequisites": ["intro"]},
+    {"id": "commit-video", "title": "Adopt video-only learning", "kind": "apply", "question_ids": ["q-format"], "prerequisites": ["intro"]},
+    {"id": "retention-check", "title": "Design a delayed retention check", "kind": "research", "question_ids": ["q-retention"], "prerequisites": ["compare-formats"]}
+  ],
+  "user": {"completed_actions": [], "interests": ["q-format"]}
+}

@@ -1,0 +1,693 @@
+{
+  "id": "wave2_t088_combo4_web_interests_review_semantic",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "research",
+      "recommend",
+      "documents",
+      "search"
+    ],
+    "basic_functionalities": [
+      "Research",
+      "Personalized discovery",
+      "Document automation",
+      "Smart product search"
+    ],
+    "types": [
+      "web",
+      "interests",
+      "review",
+      "semantic"
+    ],
+    "functionality_count": 4,
+    "integration_edge_count": 3,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 15,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 1.25,
+    "staff_data_scientist": 0.35,
+    "staff_architect": 0.175,
+    "staff_consultant": 0.175,
+    "staff_software_engineer": 0.875,
+    "has_type_interests": 1,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 1,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 1,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 1,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 3,
+    "planned_operation_classify": 3,
+    "planned_operation_score": 2,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 5,
+    "planned_operation_verify": 6,
+    "planned_operation_write": 4
+  },
+  "requirements": [
+    "Allowlisted URL ingestion, retrieval and provenance-preserving findings.",
+    "Preference ranking, exclusion enforcement and grounded explanations.",
+    "Requirement/evidence checking and traceable gaps without certification claims.",
+    "Search index, relevance ranking and optional injected embedding interface."
+  ],
+  "integration": {
+    "ordered_types": [
+      "web",
+      "interests",
+      "review",
+      "semantic"
+    ],
+    "edges": [
+      {
+        "from": "web",
+        "to": "interests",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "interests",
+        "to": "review",
+        "kind": "data_handoff"
+      },
+      {
+        "from": "review",
+        "to": "semantic",
+        "kind": "data_handoff"
+      }
+    ],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "validation",
+  "split_group": "bba1826db911ee9d793e10c8307bf7786c9b58bc38cb8b5e6f8852511335b274",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "3b516cef386ed791fa779e8b4b2315e1ce1a24c6d86113fbc6e9fccba19d72ac",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t088_combo4_web_interests_review_semantic",
+  "membership_point_id": "combo4_web_interests_review_semantic",
+  "trial_kind": "new_membership",
+  "repeat_of": null,
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "6e143f3ee546c6c2c3513e15061f9ffc4110212f9514309905f13065761db2f3",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "48431460-0389-41fc-80cc-0639bdccecf2",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 143987,
+    "output_tokens": 12189,
+    "cache_read_tokens": 128441,
+    "cache_write_tokens": 15528,
+    "total_tokens": 156176,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34648,
+        "agent_id": "48431460-0389-41fc-80cc-0639bdccecf2",
+        "model": "gpt-6-astra",
+        "input_tokens": 14862,
+        "output_tokens": 405,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 825,
+        "reasoning_tokens": 240,
+        "duration_ms": 12627,
+        "created_at": "2026-09-23T10:44:24.374Z"
+      },
+      {
+        "id": 34672,
+        "agent_id": "48431460-0389-41fc-80cc-0639bdccecf2",
+        "model": "gpt-6-astra",
+        "input_tokens": 15297,
+        "output_tokens": 10753,
+        "cache_read_tokens": 14859,
+        "cache_write_tokens": 435,
+        "reasoning_tokens": 516,
+        "duration_ms": 171288,
+        "created_at": "2026-09-23T10:47:31.249Z"
+      },
+      {
+        "id": 34673,
+        "agent_id": "48431460-0389-41fc-80cc-0639bdccecf2",
+        "model": "gpt-6-astra",
+        "input_tokens": 26374,
+        "output_tokens": 163,
+        "cache_read_tokens": 15294,
+        "cache_write_tokens": 11077,
+        "reasoning_tokens": 9,
+        "duration_ms": 4253,
+        "created_at": "2026-09-23T10:47:33.224Z"
+      },
+      {
+        "id": 34677,
+        "agent_id": "48431460-0389-41fc-80cc-0639bdccecf2",
+        "model": "gpt-6-astra",
+        "input_tokens": 28651,
+        "output_tokens": 494,
+        "cache_read_tokens": 26371,
+        "cache_write_tokens": 2277,
+        "reasoning_tokens": 203,
+        "duration_ms": 10265,
+        "created_at": "2026-09-23T10:48:11.652Z"
+      },
+      {
+        "id": 34684,
+        "agent_id": "48431460-0389-41fc-80cc-0639bdccecf2",
+        "model": "gpt-6-astra",
+        "input_tokens": 29238,
+        "output_tokens": 283,
+        "cache_read_tokens": 28648,
+        "cache_write_tokens": 587,
+        "reasoning_tokens": 48,
+        "duration_ms": 7141,
+        "created_at": "2026-09-23T10:49:07.857Z"
+      },
+      {
+        "id": 34686,
+        "agent_id": "48431460-0389-41fc-80cc-0639bdccecf2",
+        "model": "gpt-6-astra",
+        "input_tokens": 29565,
+        "output_tokens": 91,
+        "cache_read_tokens": 29235,
+        "cache_write_tokens": 327,
+        "reasoning_tokens": 0,
+        "duration_ms": 3093,
+        "created_at": "2026-09-23T10:49:26.037Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5428025000000001,
+      "observed_cache_profile_estimate_usd": 0.25381025,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.513630000000001,
+      "observed_cache_profile_estimate_usd": 6.513630000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 4,
+      "roi_satisfaction": 4,
+      "future_impact_potential": 1,
+      "delivery_quality": 2
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.44,
+    "pseudo_annual_cost_usd": 15000,
+    "pseudo_annual_ai_value_usd": 20000,
+    "pseudo_net_impact_usd": 5000,
+    "pseudo_roi_pct": 33.333333333333336,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............................\n----------------------------------------------------------------------\nRan 29 tests in 0.690s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "findings": [
+        {
+          "id": "finding:solar",
+          "product_id": "solar-lamp",
+          "quote": "SYNTHETIC fixture: Solar rechargeable lamp for camping. Repairable housing. Warranty two years.",
+          "sha256": "f7df1a608570271af0167dc35b65146c69d3ef8cb41f3ae86fd74c61ff077f0d",
+          "source_id": "solar",
+          "span": [
+            0,
+            95
+          ],
+          "url": "https://catalog.example/solar"
+        },
+        {
+          "id": "finding:desk",
+          "product_id": "desk-lamp",
+          "quote": "SYNTHETIC fixture: Repairable desk lamp with adjustable brightness.",
+          "sha256": "3f6c88e46473f8c0f7fbce28704b64c7807a86429c0aa2e88d775ceaafb97f8f",
+          "source_id": "desk",
+          "span": [
+            0,
+            67
+          ],
+          "url": "https://catalog.example/desk"
+        },
+        {
+          "id": "finding:fuel",
+          "product_id": "fuel-lamp",
+          "quote": "SYNTHETIC fixture: Fuel lamp for camping. Warranty two years.",
+          "sha256": "d87e090edca9e30c410323bdbf7716960a4278426c862715a03db1532a4ffbfb",
+          "source_id": "fuel",
+          "span": [
+            0,
+            61
+          ],
+          "url": "https://catalog.example/fuel"
+        }
+      ],
+      "recommendations": [
+        {
+          "explanations": [
+            {
+              "finding_ids": [
+                "finding:solar"
+              ],
+              "interest": "camping",
+              "reason": "Interest words occur in the cited synthetic source text."
+            },
+            {
+              "finding_ids": [
+                "finding:solar"
+              ],
+              "interest": "repairable",
+              "reason": "Interest words occur in the cited synthetic source text."
+            },
+            {
+              "finding_ids": [
+                "finding:solar"
+              ],
+              "interest": "solar",
+              "reason": "Interest words occur in the cited synthetic source text."
+            }
+          ],
+          "finding_ids": [
+            "finding:solar"
+          ],
+          "matched_interests": [
+            "camping",
+            "repairable",
+            "solar"
+          ],
+          "product_id": "solar-lamp",
+          "rank": 1,
+          "score": 3,
+          "tags": [
+            "outdoors",
+            "lighting"
+          ],
+          "title": "Synthetic Solar Lamp"
+        },
+        {
+          "explanations": [
+            {
+              "finding_ids": [
+                "finding:desk"
+              ],
+              "interest": "repairable",
+              "reason": "Interest words occur in the cited synthetic source text."
+            }
+          ],
+          "finding_ids": [
+            "finding:desk"
+          ],
+          "matched_interests": [
+            "repairable"
+          ],
+          "product_id": "desk-lamp",
+          "rank": 2,
+          "score": 1,
+          "tags": [
+            "lighting"
+          ],
+          "title": "Synthetic Desk Lamp"
+        }
+      ],
+      "request": {
+        "allowlisted_hosts": [
+          "catalog.example"
+        ],
+        "fixture_pages": {
+          "https://catalog.example/desk": "SYNTHETIC fixture: Repairable desk lamp with adjustable brightness.",
+          "https://catalog.example/fuel": "SYNTHETIC fixture: Fuel lamp for camping. Warranty two years.",
+          "https://catalog.example/solar": "SYNTHETIC fixture: Solar rechargeable lamp for camping. Repairable housing. Warranty two years."
+        },
+        "preferences": {
+          "exclude_product_ids": [],
+          "exclude_tags": [
+            "fuel"
+          ],
+          "interests": [
+            "camping",
+            "repairable",
+            "solar"
+          ],
+          "limit": 5
+        },
+        "requirements": [
+          {
+            "applies_to_tags": [],
+            "description": "Source mentions a two-year warranty",
+            "id": "warranty",
+            "keywords": [
+              "warranty",
+              "two years"
+            ]
+          },
+          {
+            "applies_to_tags": [
+              "outdoors"
+            ],
+            "description": "Outdoor source mentions waterproof housing",
+            "id": "weather",
+            "keywords": [
+              "waterproof"
+            ]
+          }
+        ],
+        "schema_version": "1.0",
+        "search": {
+          "limit": 5,
+          "min_score": 0.0,
+          "query": "repairable camping lamp"
+        },
+        "sources": [
+          {
+            "id": "solar",
+            "product_id": "solar-lamp",
+            "tags": [
+              "outdoors",
+              "lighting"
+            ],
+            "title": "Synthetic Solar Lamp",
+            "url": "https://catalog.example/solar"
+          },
+          {
+            "id": "desk",
+            "product_id": "desk-lamp",
+            "tags": [
+              "lighting"
+            ],
+            "title": "Synthetic Desk Lamp",
+            "url": "https://catalog.example/desk"
+          },
+          {
+            "id": "fuel",
+            "product_id": "fuel-lamp",
+            "tags": [
+              "fuel"
+            ],
+            "title": "Synthetic Fuel Lamp",
+            "url": "https://catalog.example/fuel"
+          }
+        ],
+        "synthetic": true
+      },
+      "reviews": [
+        {
+          "checks": [
+            {
+              "checked_finding_ids": [
+                "finding:solar"
+              ],
+              "description": "Source mentions a two-year warranty",
+              "evidence_finding_ids": [
+                "finding:solar"
+              ],
+              "gap_reason": null,
+              "missing_keywords": [],
+              "requirement_id": "warranty",
+              "status": "keyword_evidence_found"
+            },
+            {
+              "checked_finding_ids": [
+                "finding:solar"
+              ],
+              "description": "Outdoor source mentions waterproof housing",
+              "evidence_finding_ids": [],
+              "gap_reason": "Required words were not found together in one cited source.",
+              "missing_keywords": [
+                "waterproof"
+              ],
+              "requirement_id": "weather",
+              "status": "gap"
+            }
+          ],
+          "gap_count": 1,
+          "notice": "Synthetic keyword-evidence review only; not certification or factual verification.",
+          "product_id": "solar-lamp"
+        },
+        {
+          "checks": [
+            {
+              "checked_finding_ids": [
+                "finding:desk"
+              ],
+              "description": "Source mentions a two-year warranty",
+              "evidence_finding_ids": [],
+              "gap_reason": "Required words were not found together in one cited source.",
+              "missing_keywords": [
+                "warranty",
+                "two years"
+              ],
+              "requirement_id": "warranty",
+              "status": "gap"
+            },
+            {
+              "checked_finding_ids": [],
+              "description": "Outdoor source mentions waterproof housing",
+              "evidence_finding_ids": [],
+              "gap_reason": null,
+              "missing_keywords": [],
+              "requirement_id": "weather",
+              "status": "not_applicable"
+            }
+          ],
+          "gap_count": 1,
+          "notice": "Synthetic keyword-evidence review only; not certification or factual verification.",
+          "product_id": "desk-lamp"
+        }
+      ],
+      "schema_version": "1.0",
+      "search": {
+        "documents": [
+          {
+            "finding_ids": [
+              "finding:solar"
+            ],
+            "gap_count": 1,
+            "product_id": "solar-lamp",
+            "review_status": "gaps_present",
+            "text": "Synthetic Solar Lamp\nSYNTHETIC fixture: Solar rechargeable lamp for camping. Repairable housing. Warranty two years."
+          },
+          {
+            "finding_ids": [
+              "finding:desk"
+            ],
+            "gap_count": 1,
+            "product_id": "desk-lamp",
+            "review_status": "gaps_present",
+            "text": "Synthetic Desk Lamp\nSYNTHETIC fixture: Repairable desk lamp with adjustable brightness."
+          }
+        ],
+        "hits": [
+          {
+            "finding_ids": [
+              "finding:solar"
+            ],
+            "gap_count": 1,
+            "matched_terms": [
+              "camping",
+              "lamp",
+              "repairable"
+            ],
+            "product_id": "solar-lamp",
+            "review_status": "gaps_present",
+            "score": 0.5039526306789697
+          },
+          {
+            "finding_ids": [
+              "finding:desk"
+            ],
+            "gap_count": 1,
+            "matched_terms": [
+              "lamp",
+              "repairable"
+            ],
+            "product_id": "desk-lamp",
+            "review_status": "gaps_present",
+            "score": 0.420084025208403
+          }
+        ],
+        "index": {
+          "adjustable": [
+            "desk-lamp"
+          ],
+          "brightness": [
+            "desk-lamp"
+          ],
+          "camping": [
+            "solar-lamp"
+          ],
+          "desk": [
+            "desk-lamp"
+          ],
+          "fixture": [
+            "solar-lamp",
+            "desk-lamp"
+          ],
+          "for": [
+            "solar-lamp"
+          ],
+          "housing": [
+            "solar-lamp"
+          ],
+          "lamp": [
+            "solar-lamp",
+            "desk-lamp"
+          ],
+          "rechargeable": [
+            "solar-lamp"
+          ],
+          "repairable": [
+            "solar-lamp",
+            "desk-lamp"
+          ],
+          "solar": [
+            "solar-lamp"
+          ],
+          "synthetic": [
+            "solar-lamp",
+            "desk-lamp"
+          ],
+          "two": [
+            "solar-lamp"
+          ],
+          "warranty": [
+            "solar-lamp"
+          ],
+          "with": [
+            "desk-lamp"
+          ],
+          "years": [
+            "solar-lamp"
+          ]
+        },
+        "mode": "lexical_cosine",
+        "query": "repairable camping lamp"
+      },
+      "sources": [
+        {
+          "id": "solar",
+          "product_id": "solar-lamp",
+          "sha256": "f7df1a608570271af0167dc35b65146c69d3ef8cb41f3ae86fd74c61ff077f0d",
+          "tags": [
+            "outdoors",
+            "lighting"
+          ],
+          "text": "SYNTHETIC fixture: Solar rechargeable lamp for camping. Repairable housing. Warranty two years.",
+          "title": "Synthetic Solar Lamp",
+          "url": "https://catalog.example/solar"
+        },
+        {
+          "id": "desk",
+          "product_id": "desk-lamp",
+          "sha256": "3f6c88e46473f8c0f7fbce28704b64c7807a86429c0aa2e88d775ceaafb97f8f",
+          "tags": [
+            "lighting"
+          ],
+          "text": "SYNTHETIC fixture: Repairable desk lamp with adjustable brightness.",
+          "title": "Synthetic Desk Lamp",
+          "url": "https://catalog.example/desk"
+        },
+        {
+          "id": "fuel",
+          "product_id": "fuel-lamp",
+          "sha256": "d87e090edca9e30c410323bdbf7716960a4278426c862715a03db1532a4ffbfb",
+          "tags": [
+            "fuel"
+          ],
+          "text": "SYNTHETIC fixture: Fuel lamp for camping. Warranty two years.",
+          "title": "Synthetic Fuel Lamp",
+          "url": "https://catalog.example/fuel"
+        }
+      ],
+      "stage": "semantic",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t088_combo4_web_interests_review_semantic",
+    "artifact_sha256": {
+      "implementation.py": "06781ab0a7c7d5d2279c18fb1500eec8ed801c3b1153d0f93dea0ffe4e1fac81",
+      "test_implementation.py": "7f8e768c89fb1ce380ed1542529570c8e0ae5537d6ac9339e8b8e575a0f13459",
+      "example_input.json": "fa112734a585a565cb54973615116bad6d38a475f1c75786fb752ff71d9301cf",
+      "build_manifest.json": "b1df0f0c465644ae5ffdfef09a7d3d0dd1f241f969e8e73e985db020b45e6e9b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

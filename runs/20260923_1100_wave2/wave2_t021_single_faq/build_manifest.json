@@ -1,0 +1,65 @@
+{
+  "build_id": "wave2_t021_single_faq",
+  "composition_label": "Knowledge-base answers (AI customer support)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created within the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "integer 1",
+      "question": "nonblank string, maximum 2000 characters",
+      "knowledge_base": "0..1000 documents; each has exactly id, title, content; unique unpadded ids",
+      "document_limits": {"id": 128, "title": 500, "content": 20000},
+      "min_coverage": "optional finite number in (0,1], default 0.6",
+      "unknown_fields": "rejected"
+    },
+    "output": {
+      "schema_version": 1,
+      "status": "answered | abstained | error",
+      "answer": "verbatim document content or null",
+      "citations": "list of {id, title, quote}",
+      "retrieval": "up to 5 ranked {id, coverage, matched_terms}",
+      "reason": "machine-readable reason",
+      "errors": "list of error strings"
+    },
+    "validation": "One validate function is shared by library and CLI; strict JSON parsing rejects duplicate keys and nonstandard constants."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: validated request -> content-term retrieval -> threshold and ambiguity gates -> cited extractive answer or explicit abstention"
+  ],
+  "behavior": {
+    "retrieval": "Unicode case-folded alphanumeric term sets, English stop words removed; coverage is matched distinct query terms divided by distinct query terms; rank by descending coverage then ascending id.",
+    "grounding": "Returned answer and citation quote exactly equal source content. Titles cannot contribute retrieval evidence.",
+    "abstention": "No searchable terms, no source meeting threshold, or top-score tied documents with different content.",
+    "exit_codes": {"answered_or_abstained": 0, "validation_file_or_json_error": 2},
+    "fixtures": "All supplied fixture knowledge and questions are synthetic.",
+    "limitations": "Lexical overlap cannot prove relevance, truth, or entailment. No synonym matching or semantic contradiction detection. The threshold is not calibrated confidence."
+  },
+  "scope": {
+    "included": ["Bounded local KB retrieval", "Verbatim grounded answers", "Explicit abstention", "Deterministic CLI and library", "Shared schema and validation", "Standard-library tests"],
+    "excluded": ["LLM calls or injection hooks", "Network access", "Persistent indexing", "Enterprise service deployment", "Semantic reasoning", "Source truth verification"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 15,
+    "cli_example": "passed: one JSON object with status answered, exit 0",
+    "unittest_exit_code": 0,
+    "coverage": ["Grounded normal answer", "Unrelated question", "Empty knowledge base", "No searchable terms", "Ambiguous evidence", "Stable identical ties", "Title-only match", "Threshold boundary", "Invalid input matrix", "Invalid documents", "Determinism and nonmutation", "CLI success", "CLI usage and missing file", "Invalid JSON and schema", "Encoding errors"]
+  }
+}

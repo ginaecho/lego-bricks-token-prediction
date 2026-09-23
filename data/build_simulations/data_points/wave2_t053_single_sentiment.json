@@ -1,0 +1,458 @@
+{
+  "id": "wave2_t053_single_sentiment",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Customer insights"
+    ],
+    "types": [
+      "sentiment"
+    ],
+    "functionality_count": 1,
+    "integration_edge_count": 0,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 6,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.5,
+    "staff_data_scientist": 0.2,
+    "staff_architect": 0.1,
+    "staff_consultant": 0.1,
+    "staff_software_engineer": 0.5,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 0,
+    "has_type_sentiment": 1,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 1,
+    "planned_operation_classify": 2,
+    "planned_operation_score": 1,
+    "planned_operation_plan": 1,
+    "planned_operation_retrieve": 0,
+    "planned_operation_verify": 1,
+    "planned_operation_write": 1
+  },
+  "requirements": [
+    "Transparent sentiment scoring and severity-aware issue prioritization."
+  ],
+  "integration": {
+    "ordered_types": [
+      "sentiment"
+    ],
+    "edges": [],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "f79ba67cb9b1aea28c16e543097153c76126e892d90dfdddf40bf8ff4509e034",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "d94e23b5cb4bf4a997fc6aee8d3772aa99db297e01f4eb88b7ab142ed7c43f8b",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t053_single_sentiment",
+  "membership_point_id": "single_sentiment",
+  "trial_kind": "repeat_of_wave1",
+  "repeat_of": "single_sentiment",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "90a6cacab224fd59a7f96acbe1b4c553715e3b8e40434b594ec9155e1b89e4a6",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "e98cc35b-425f-45ca-8cc6-ee17dd1e15fb",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 121497,
+    "output_tokens": 7151,
+    "cache_read_tokens": 112124,
+    "cache_write_tokens": 9355,
+    "total_tokens": 128648,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34304,
+        "agent_id": "e98cc35b-425f-45ca-8cc6-ee17dd1e15fb",
+        "model": "gpt-6-astra",
+        "input_tokens": 14737,
+        "output_tokens": 1189,
+        "cache_read_tokens": 14034,
+        "cache_write_tokens": 700,
+        "reasoning_tokens": 206,
+        "duration_ms": 19990,
+        "created_at": "2026-09-23T10:07:43.465Z"
+      },
+      {
+        "id": 34321,
+        "agent_id": "e98cc35b-425f-45ca-8cc6-ee17dd1e15fb",
+        "model": "gpt-6-astra",
+        "input_tokens": 15956,
+        "output_tokens": 5250,
+        "cache_read_tokens": 14734,
+        "cache_write_tokens": 1219,
+        "reasoning_tokens": 260,
+        "duration_ms": 88859,
+        "created_at": "2026-09-23T10:09:12.925Z"
+      },
+      {
+        "id": 34325,
+        "agent_id": "e98cc35b-425f-45ca-8cc6-ee17dd1e15fb",
+        "model": "gpt-6-astra",
+        "input_tokens": 21510,
+        "output_tokens": 133,
+        "cache_read_tokens": 15953,
+        "cache_write_tokens": 5554,
+        "reasoning_tokens": 0,
+        "duration_ms": 5166,
+        "created_at": "2026-09-23T10:09:22.398Z"
+      },
+      {
+        "id": 34328,
+        "agent_id": "e98cc35b-425f-45ca-8cc6-ee17dd1e15fb",
+        "model": "gpt-6-astra",
+        "input_tokens": 22773,
+        "output_tokens": 268,
+        "cache_read_tokens": 21507,
+        "cache_write_tokens": 1263,
+        "reasoning_tokens": 0,
+        "duration_ms": 4961,
+        "created_at": "2026-09-23T10:09:25.579Z"
+      },
+      {
+        "id": 34329,
+        "agent_id": "e98cc35b-425f-45ca-8cc6-ee17dd1e15fb",
+        "model": "gpt-6-astra",
+        "input_tokens": 23129,
+        "output_tokens": 215,
+        "cache_read_tokens": 22770,
+        "cache_write_tokens": 356,
+        "reasoning_tokens": 24,
+        "duration_ms": 4283,
+        "created_at": "2026-09-23T10:09:29.914Z"
+      },
+      {
+        "id": 34330,
+        "agent_id": "e98cc35b-425f-45ca-8cc6-ee17dd1e15fb",
+        "model": "gpt-6-astra",
+        "input_tokens": 23392,
+        "output_tokens": 96,
+        "cache_read_tokens": 23126,
+        "cache_write_tokens": 263,
+        "reasoning_tokens": 0,
+        "duration_ms": 4080,
+        "created_at": "2026-09-23T10:09:36.002Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.41100749999999997,
+      "observed_cache_profile_estimate_usd": 0.1587285,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.93209,
+      "observed_cache_profile_estimate_usd": 4.93209,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 0,
+      "impact_recognized": 2,
+      "roi_satisfaction": 5,
+      "future_impact_potential": 4,
+      "delivery_quality": 0
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.38,
+    "pseudo_annual_cost_usd": 80000,
+    "pseudo_annual_ai_value_usd": 80000,
+    "pseudo_net_impact_usd": 0,
+    "pseudo_roi_pct": 0.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............\n----------------------------------------------------------------------\nRan 13 tests in 0.732s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "dataset_label": "SYNTHETIC customer insights demonstration; no real customer data",
+      "issues": [
+        {
+          "affected_customers": 1,
+          "id": "SYN-002",
+          "priority": {
+            "components": {
+              "affected_customers": 1,
+              "negative_sentiment": 0,
+              "severity": 300
+            },
+            "rank": 1,
+            "score": 301,
+            "severity_band": "critical"
+          },
+          "sentiment": {
+            "evidence": [
+              {
+                "base_weight": 3,
+                "contribution": 3,
+                "negated": false,
+                "token": "excellent",
+                "token_index": 0
+              }
+            ],
+            "label": "positive",
+            "matched_terms": 1,
+            "normalization_denominator": 3,
+            "raw_score": 3,
+            "score": 1.0
+          },
+          "severity": "critical",
+          "text": "Excellent response, but the reported security issue still needs review."
+        },
+        {
+          "affected_customers": 18,
+          "id": "SYN-001",
+          "priority": {
+            "components": {
+              "affected_customers": 18,
+              "negative_sentiment": 40.0,
+              "severity": 200
+            },
+            "rank": 2,
+            "score": 258.0,
+            "severity_band": "high"
+          },
+          "sentiment": {
+            "evidence": [
+              {
+                "base_weight": -2,
+                "contribution": -2,
+                "negated": false,
+                "token": "broken",
+                "token_index": 2
+              },
+              {
+                "base_weight": -3,
+                "contribution": -3,
+                "negated": false,
+                "token": "unusable",
+                "token_index": 4
+              },
+              {
+                "base_weight": -2,
+                "contribution": -2,
+                "negated": false,
+                "token": "frustrated",
+                "token_index": 8
+              }
+            ],
+            "label": "negative",
+            "matched_terms": 3,
+            "normalization_denominator": 7,
+            "raw_score": -7,
+            "score": -1.0
+          },
+          "severity": "high",
+          "text": "Checkout is broken and unusable. I am frustrated."
+        },
+        {
+          "affected_customers": 3,
+          "id": "SYN-003",
+          "priority": {
+            "components": {
+              "affected_customers": 3,
+              "negative_sentiment": 0,
+              "severity": 100
+            },
+            "rank": 3,
+            "score": 103,
+            "severity_band": "medium"
+          },
+          "sentiment": {
+            "evidence": [
+              {
+                "base_weight": 1,
+                "contribution": -1,
+                "negated": true,
+                "token": "good",
+                "token_index": 3
+              },
+              {
+                "base_weight": 2,
+                "contribution": 2,
+                "negated": false,
+                "token": "helpful",
+                "token_index": 7
+              }
+            ],
+            "label": "positive",
+            "matched_terms": 2,
+            "normalization_denominator": 3,
+            "raw_score": 1,
+            "score": 0.333333
+          },
+          "severity": "medium",
+          "text": "Delivery was not good. Support was helpful."
+        },
+        {
+          "affected_customers": 2,
+          "id": "SYN-004",
+          "priority": {
+            "components": {
+              "affected_customers": 2,
+              "negative_sentiment": 0,
+              "severity": 0
+            },
+            "rank": 4,
+            "score": 2,
+            "severity_band": "low"
+          },
+          "sentiment": {
+            "evidence": [],
+            "label": "neutral",
+            "matched_terms": 0,
+            "normalization_denominator": 0,
+            "raw_score": 0,
+            "score": 0.0
+          },
+          "severity": "low",
+          "text": "Please add another invoice export format."
+        }
+      ],
+      "method": {
+        "labels": "positive >= 0.2; negative <= -0.2; otherwise neutral",
+        "lexicon": {
+          "amazing": 3,
+          "awful": -3,
+          "bad": -1,
+          "broken": -2,
+          "disappointed": -2,
+          "excellent": 3,
+          "failed": -2,
+          "fast": 1,
+          "frustrated": -2,
+          "good": 1,
+          "great": 2,
+          "happy": 2,
+          "hate": -3,
+          "helpful": 2,
+          "love": 3,
+          "resolved": 2,
+          "slow": -1,
+          "terrible": -3,
+          "unusable": -3
+        },
+        "limitations": "English lexical heuristic; no sarcasm, semantic context, or severity inference",
+        "name": "english_lexicon_v1",
+        "negation": "Odd count of negators in preceding three words, reset by .!?,;:",
+        "negators": [
+          "doesn't",
+          "don't",
+          "isn't",
+          "never",
+          "no",
+          "not",
+          "wasn't"
+        ],
+        "priority": "severity_index * 100 + max(0, -sentiment_score) * 40 + min(affected_customers, 20)",
+        "sentiment": "sum(contributions) / sum(abs(base_weights)); zero when no matches",
+        "ties": "ascending case-sensitive issue id"
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "summary": {
+        "issue_count": 4,
+        "sentiment_counts": {
+          "negative": 1,
+          "neutral": 1,
+          "positive": 2
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t053_single_sentiment",
+    "artifact_sha256": {
+      "implementation.py": "5e44ebb714d36a38ccb94499f79012dffe43e1381b83446f081ece28a96ee9c8",
+      "test_implementation.py": "0d1928866677084fc953c9ef9363114ba9588dcaf72e0e2f38a7775b1da070e1",
+      "example_input.json": "bfdc9f52c2003d3436b621e71b97d4c687327013ab4d3eb1bd009c8a2b79f644",
+      "build_manifest.json": "54276336a7a2330937d96dfd367093f81e1a52d8db3d9f370e0f37b44d98d34b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "build_id": "wave2_t099_combo3_journey_triage_guided",
+  "composition_label": "Journey recommendations -> Ticket triage & routing -> Guided setup",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written in the isolated build directory; no repository or other build content read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "ancillary_files": [
+    "docs\\My_prompt.txt"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "validation_entrypoint": "implementation.validate(envelope, through='input')",
+    "input_envelope": {
+      "schema_version": "Exactly integer 1; booleans are not integers for validation.",
+      "fixture_label": "Nonblank string beginning with synthetic:.",
+      "request": {
+        "user": "{id: string, goals: unique string array, completed: unique action-ID array}",
+        "actions": "1..200 objects {id, title, goals, prerequisites, weight}; ID and title are strings; goals and prerequisites are unique string arrays; weight is an integer 0..1000.",
+        "ticket": "{id: string, text: string}",
+        "routing": "{rules: ordered array of at most 100 rule objects, default: route object}",
+        "setup_events": "Ordered array of unique action IDs to complete during this run."
+      }
+    },
+    "route_schema": {
+      "category": "Nonblank string",
+      "priority": "low | normal | high | urgent",
+      "team": "Nonblank accountable team",
+      "owner": "Nonblank accountable owner",
+      "setup_actions": "Unique known action-ID array"
+    },
+    "rule_schema": "All route fields plus keywords (1..50 unique strings) and source (ticket | journey | either).",
+    "output_envelope": "The unchanged input envelope plus status=ok and stages={journey, triage, guided}. Partial internal envelopes have status=processing and only completed stages.",
+    "stage_outputs": {
+      "journey": "user_id, eligible_next_actions, two steps with action_id/score/matched_goals, second_step_condition",
+      "triage": "ticket_id, user_id, journey_action_ids, matched_rule (zero-based index or null), route",
+      "guided": "ticket_id, user_id, category, priority, journey_action_ids, steps (action_id/state/missing_prerequisites/owner/team), next_actions, progress (completed/total/percent), status"
+    },
+    "errors": "{status: error, error: human-readable string}; stdout is one JSON object and CLI exits 2.",
+    "invariants": [
+      "Unknown and missing object fields are rejected.",
+      "Strings must be nonblank and no longer than 2000 characters; ordinary string arrays contain at most 200 items.",
+      "Action IDs are unique; prerequisite references exist; the graph is acyclic.",
+      "Initially completed actions must include their complete prerequisite closure.",
+      "Each stage output is compared with canonical deterministic output before the next handoff; forged IDs, routing and progress are rejected.",
+      "Duplicate JSON object keys and non-finite JSON numbers are rejected by the CLI parser.",
+      "A request without two feasible unfinished actions is a validation error rather than a partial journey."
+    ]
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "journey",
+      "to": "triage",
+      "data": "Validated user ID and two selected action IDs; selected action titles and goal tags supply the journey text used by configurable routing rules."
+    },
+    {
+      "from": "triage",
+      "to": "guided",
+      "data": "Validated ticket/user IDs, journey action IDs, category, priority, accountable team/owner and route-specific setup actions."
+    }
+  ],
+  "behavior": {
+    "journey": "Rank actions by descending 1001 * exact shared goal count + configured weight, then lexicographic action ID. Select the first feasible pair in ranked order: first prerequisites must already be complete, second prerequisites must be complete after first. Return all currently eligible next actions.",
+    "triage": "Case-insensitive substring keyword matching against configured ticket, selected journey, or combined context. The highest-priority matching rule wins; equal priorities use configuration order. Use the accountable default route if no rules match.",
+    "guided": "Build the dependency closure of the recommended journey and routed setup actions. Topologically order the plan in lexicographic ready batches. Replay completion events in supplied order, rejecting incomplete prerequisites, outside-plan events or repeated completions. Report complete/ready/blocked steps and plan-local completion percentage rounded to two decimals.",
+    "progress_tracking": "Initial completions plus validated request events determine progress. The full request and results are returned for the caller to persist; the CLI has no hidden state and does not write progress files.",
+    "determinism": "No clock, randomness, external services or model calls affect results. Input is deep-copied and remains unchanged.",
+    "synthetic_fixture": "Synthetic seller selects verify then list; payout ticket routes to synthetic payments support, adding billing/payout prerequisites. Completed register and verify yield 2/5 steps complete, or 40 percent."
+  },
+  "scope": {
+    "included": [
+      "Integrated single-process three-stage pipeline",
+      "Shared strict schema and semantic validation",
+      "Prerequisite-aware personalized two-step recommendations",
+      "Configurable deterministic support categorization and priority",
+      "Explicit owner/team accountability",
+      "Routed dependency-driven setup and event-based progress",
+      "Synthetic input fixture and standard-library unittest suite",
+      "JSON CLI success and file/validation error contracts"
+    ],
+    "excluded": [
+      "Live providers, LLM steps or injected model hooks",
+      "Production identity, payment or helpdesk integrations",
+      "Persistent database, authentication, authorization and multi-user state",
+      "Probabilistic language understanding and trained classifiers",
+      "Enterprise operations, retries, SLAs and deployment",
+      "Human notification delivery and external task execution"
+    ]
+  },
+  "test_outcomes": {
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 36,
+    "failures": 0,
+    "errors": 0,
+    "result": "passed",
+    "cli_example": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One JSON object with status ok and all three validated stages.",
+      "guided_completed": 2,
+      "guided_total": 5,
+      "guided_percent": 40.0
+    },
+    "coverage": [
+      "Each individual stage",
+      "Both cross-stage handoffs and accountability",
+      "Personalization, no-goal fallback and priority ties",
+      "Dependency closure, completion ordering and progress",
+      "Cyclic/unknown dependencies and incomplete initial closure",
+      "Unknown routed actions, outside-plan and duplicate completion events",
+      "All-completed and insufficient-two-step edge cases",
+      "Malformed shapes, boolean weights, blank owners and invalid priorities",
+      "Forged intermediate handoffs and final progress",
+      "Repeatability and non-mutation",
+      "CLI success, usage errors, missing files, malformed JSON, duplicate JSON keys, non-finite numbers and encoding errors"
+    ]
+  }
+}

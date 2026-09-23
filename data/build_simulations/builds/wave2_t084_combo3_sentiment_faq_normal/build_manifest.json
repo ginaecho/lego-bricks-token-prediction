@@ -1,0 +1,69 @@
+{
+  "build_id": "wave2_t084_combo3_sentiment_faq_normal",
+  "composition_label": "sentiment_faq_normal",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "envelope_fields": ["schema_version", "synthetic", "status", "stage", "feedback", "knowledge_base", "research_sources", "results"],
+    "input_stage": "input",
+    "stage_sequence": ["input", "sentiment", "faq", "normal"],
+    "feedback": "List of unique {id, text, severity}; severity is low, medium, high, critical",
+    "sources": "knowledge_base and research_sources each contain unique {id, title, text} records",
+    "results": "Cumulative stage-keyed arrays in severity-aware priority order, linked by feedback_id",
+    "validation": "Strict fields and types; synthetic=true; bounded lists/text; duplicate JSON keys and non-finite numbers rejected; derived records recomputed to verify exact lineage and evidence at every transition",
+    "citation": "{source_id, title, start, end, quote}; Unicode character offsets, zero-based start and exclusive end; quote exactly equals source text slice",
+    "errors": "One JSON object with status=error and error text; CLI exit 2"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "sentiment",
+      "to": "faq",
+      "validated_fields": ["feedback_id", "text", "priority", "severity", "sentiment"],
+      "consumption": "FAQ retrieves from the sentiment record text and preserves severity-aware record order and priority"
+    },
+    {
+      "from": "faq",
+      "to": "normal",
+      "validated_fields": ["feedback_id", "priority", "status", "research_query", "answer", "evidence"],
+      "consumption": "Research uses original query plus grounded FAQ answer; explicit FAQ abstention falls back to original query and remains visible as faq_status"
+    }
+  ],
+  "behavior": {
+    "sentiment": "Published weighted lexicon, casefolded Unicode tokens, immediate preceding not/never/no flips contribution; score sum and all token contributions exposed",
+    "priority": "P0 critical; P1 high severity or score<=-3; P2 medium severity or negative score; otherwise P3. Sort by priority, severity descending, score ascending, feedback ID.",
+    "retrieval": "Sentence/newline chunks; lexical set overlap after stopwords; requires >=2 matched terms and >=20% query-term coverage. Rank by overlap, coverage, source ID and start offset.",
+    "faq": "Top one qualifying KB passage returned verbatim; otherwise null answer and explicit abstention reason",
+    "normal": "Top three qualifying research passages returned verbatim with exact citations; otherwise explicit abstention reason",
+    "synthetic_fixtures": "All input/example/test material is clearly labeled synthetic and makes no real-world claims",
+    "determinism": "No randomness, time-dependent decisions, models, or network calls"
+  },
+  "scope": {
+    "included": ["Integrated three-stage CLI", "Shared envelope and validator", "Transparent sentiment evidence", "Severity-aware priorities", "Grounded extractive FAQ", "Extractive research findings", "Exact source citations", "Explicit abstention", "Unit and subprocess CLI tests"],
+    "excluded": ["Live providers", "LLM generation", "Internet research", "Embeddings", "Semantic entailment checking", "Sarcasm detection", "Advanced linguistic negation", "Real-world safety advice", "Enterprise persistence/authentication", "Production-scale retrieval"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 26, "passed": 26, "failed": 0},
+    "cli_exit_code": 0,
+    "cli_result": "Exactly one valid JSON object; status ok; stage normal",
+    "coverage": ["Sentiment scoring and negation", "Severity and ordering", "Grounded FAQ and abstention", "Both validated stage handoffs", "Research exact citations and Unicode offsets", "Retrieval thresholds and tie ordering", "Empty and invalid inputs", "Tampered intermediate records", "CLI success, usage, file, parsing and schema errors"]
+  }
+}

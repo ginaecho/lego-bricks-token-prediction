@@ -1,0 +1,73 @@
+{
+  "build_id": "wave2_t071_combo2_normal_semantic",
+  "composition_label": "Normal research (Research) -> Semantic search (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Object: schema_version=1, synthetic=true, query, products[{product_id,name,category}], sources[{source_id,product_id,title,text}], optional research_limit/search_limit (1..100), optional embedding_weight (0..1). IDs unique within their collection; source product references must resolve. Empty collections allowed.",
+    "output": "Object: schema_version=1, synthetic=true, status=ok, research{query,findings}, semantic{query,indexed_products,ranking_mode,results}. Error object: status=error,error; CLI exits 2.",
+    "finding": "finding_id, product_id, text (verbatim extraction), score (query-term coverage), citation",
+    "citation": "source_id,title,start,end,quote. Zero-based Python Unicode character offsets; end exclusive; quote exactly equals source text[start:end].",
+    "result": "product_id,name,score,lexical_score,embedding_score,finding_ids,citations",
+    "validation": "Shared validate function checks input references and types, exact research citations and extractive findings, and final result provenance against the research handoff."
+  },
+  "cross_stage_handoffs": [
+    "Research emits validated ranked extractive findings with product IDs and exact source spans.",
+    "Search accepts only validated research findings, groups those findings by product, and builds an inverted index from product name/category plus extracted passages. It does not index unretrieved source text or products.",
+    "Final results retain all finding IDs and exact citations for each indexed product. The shared output validator checks this provenance."
+  ],
+  "behavior": {
+    "research": "Split sentences/lines; case-fold Unicode word tokens; require at least one exact query-token match; rank by distinct query-token coverage, then source ID and character offset. Apply research_limit, default 20.",
+    "search": "In-memory inverted index and BM25 (k1=1.2,b=0.75); normalize lexical scores as s/(1+s). Rank descending score, then product ID. Apply search_limit, default 10.",
+    "optional_embedding": "run_pipeline(request, embedder=callable). Callable receives [query, indexed document texts in product-ID order] once and returns equal-dimension nonempty numeric vectors. Validate shape, count, finite components bounded to +/-1e100. Clamp cosine similarity to [0,1]; zero vectors yield zero. Blend lexical and embedding scores using embedding_weight (default .35). Exceptions become ValidationError. No provider implementation or CLI plugin loading.",
+    "determinism": "Deterministic default behavior and tie-breaking. An injected callable must itself be deterministic for reproducible hybrid scores.",
+    "empty": "No passage matches, punctuation-only queries, or an empty catalog return successful empty findings/results without calling an embedder."
+  },
+  "scope": {
+    "included": [
+      "One integrated validated research-to-search pipeline",
+      "Clearly labeled synthetic local fixtures",
+      "Exact source citation offsets and cross-stage provenance",
+      "Deterministic lexical retrieval and product relevance ranking",
+      "Optional injected embedding interface tested with local fixtures",
+      "Runnable JSON CLI and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live research, networks, model providers or generated claims",
+      "Enterprise persistence, web services or authentication",
+      "Semantic recall outside the lexical research candidate set",
+      "Negation understanding or factual verification; excerpts preserve original wording",
+      "Advanced sentence boundary detection, stemming, synonym expansion or learned embeddings",
+      "LLM summarization; findings are exact extracts"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 23,
+    "failures": 0,
+    "errors": 0,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_command": "python -B implementation.py example_input.json"
+  }
+}

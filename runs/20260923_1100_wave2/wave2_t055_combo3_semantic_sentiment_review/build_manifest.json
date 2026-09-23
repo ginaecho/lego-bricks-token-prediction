@@ -1,0 +1,158 @@
+{
+  "build_id": "wave2_t055_combo3_semantic_sentiment_review",
+  "composition_label": "semantic_search -> sentiment_and_prioritization -> document_review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Authored from scratch in this isolated build directory; no source files or other builds consulted.",
+    "runtime": "Python 3.8+; standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py",
+    "working_directory": "Run both commands from this build directory.",
+    "optional_injection": "From Python: run_pipeline(input_envelope, embedder=local_callable). The CLI intentionally has no provider configuration or dynamic plugin import."
+  },
+  "shared_schema": {
+    "version": 1,
+    "envelope": {
+      "schema_version": "Integer 1, never boolean.",
+      "fixture_label": "Nonblank string starting with SYNTHETIC:.",
+      "status": "input -> searched -> scored -> ok.",
+      "data": "Unchanged, validated request object retained throughout every stage.",
+      "results": "Exactly {} at input; then search; then search and sentiment; finally search, sentiment and review."
+    },
+    "data": {
+      "query": "Nonblank text containing at least one word or number, at most 1000 characters.",
+      "options": {
+        "top_k": "Integer from 1 through 100.",
+        "min_relevance": "Finite number in [0,1]; zero-scoring products are always excluded."
+      },
+      "products": "Array of {id, name, description}.",
+      "feedback": "Array of {id, product_id, text, severity}; severity is low, medium, high or critical.",
+      "requirements": "Array of {id, product_id, description, required_terms}; 1 to 50 distinct normalized phrases per requirement.",
+      "documents": "Array of {id, product_id, title, text}."
+    },
+    "search_result": {
+      "method": "concept_tfidf or hybrid_injected.",
+      "index_stats": "{product_count, concept_count}.",
+      "hits": "Ranked array of {product_id, rank, score, lexical_score, embedding_score, matched_concepts, feedback_ids}."
+    },
+    "sentiment_result": {
+      "items": "Priority-ordered array of {feedback_id, product_id, search_rank, relevance, sentiment_score, sentiment_label, cues, severity, priority_score, priority}.",
+      "cue": "{term, position, base_weight, multiplier, contribution}; position is the zero-based index in the word/punctuation token stream."
+    },
+    "review_result": {
+      "checks": "Array of {requirement_id, product_id, status, evidence, missing_terms, feedback_ids, priority_score, priority}.",
+      "evidence": "{term, document_id, start, end, quote}; offsets are zero-based Python character offsets into original document text, end-exclusive.",
+      "gaps": "Gap-only projections preserving requirement_id, product_id, missing_terms, feedback_ids, priority_score and priority.",
+      "unreviewed_requirement_ids": "Requirements belonging to products not selected by search; these are explicitly not assessed.",
+      "disclaimer": "Always states the textual, non-certifying nature of the check."
+    },
+    "validation": [
+      "One shared validate_envelope layer is called before and after every public stage.",
+      "Exact fields, collection types, bounded values, unique record IDs, and product foreign keys are required.",
+      "IDs are 1 to 80 ASCII letters, digits, underscores, periods or hyphens, starting with a letter or digit.",
+      "Each collection allows at most 1000 records; ordinary text fields allow at most 20000 characters; names and titles allow at most 200.",
+      "CLI input is UTF-8 with optional BOM, at most 2 MB; duplicate JSON keys and nonfinite constants are rejected.",
+      "Lexical-only search is independently recomputed at validation. Hybrid hits are checked for references, lexical scores, fusion, ordering, threshold and metadata.",
+      "Sentiment and review handoffs are compared with their deterministic recomputation, rejecting fabricated cues, priorities and evidence.",
+      "An error emits one JSON object {status: error, error: {type: validation_or_file_error, message: ...}} and exits 2. Success emits one envelope JSON object and exits 0."
+    ]
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "semantic",
+      "to": "sentiment",
+      "contract": "Only feedback IDs carried by validated search hits are scored. Product ID, rank and relevance propagate to each insight; unrelated feedback is excluded."
+    },
+    {
+      "from": "sentiment",
+      "to": "review",
+      "contract": "Only requirements for selected products are reviewed. Validated per-product insight IDs and maximum issue priority propagate to every requirement check and gap. With no feedback, review still runs with score 0 and low priority."
+    }
+  ],
+  "behavior": {
+    "semantic": [
+      "Build an in-memory inverted index using Unicode word tokenization, case folding and an explicit small synonym map.",
+      "Use raw term frequencies weighted by 1 + log((1 + product_count)/(1 + document_frequency)); unseen query terms receive 1 + log(1 + product_count).",
+      "Compute cosine relevance, round to six decimals, filter by min_relevance, sort descending then by product ID, and apply top_k.",
+      "Optional injected embedder receives a single batch: query followed by product name plus description in product-ID order.",
+      "Validate one nonzero, finite, consistent-dimensional numeric vector per text; vectors have 1 to 4096 dimensions and coordinates within +/-1e100, excluding booleans.",
+      "Use numerically scaled vector normalization. Hybrid relevance is round(0.65 * lexical_cosine + 0.35 * max(0, embedding_cosine), 6). The caller is responsible for embedding quality and repeatability."
+    ],
+    "sentiment": [
+      "Use the explicit positive/negative word lexicon in implementation.py and expose every matched contribution.",
+      "An odd number of not/no/never tokens in the previous three tokens reverses a cue. Punctuation and but/however reset the negation window.",
+      "Score is sum(contributions)/max(1,sum(abs(contributions))), rounded to six decimals. Labels use thresholds above 0.15 and below -0.15; otherwise neutral.",
+      "Priority score is severity baseline (low 10, medium 40, high 70, critical 100) plus round(max(0,-sentiment_score)*20), using Python rounding.",
+      "Severity dominates sentiment: positive critical feedback still outranks negative high feedback. No severity is inferred automatically.",
+      "Sort insights by descending priority, descending search relevance, then feedback ID."
+    ],
+    "review": [
+      "Match required phrases as contiguous case-insensitive word-token sequences in document text, not titles. Punctuation and whitespace do not distinguish phrases.",
+      "Evidence must come from the same product; each term may be supported by a different document. Record the first occurrence per matching document with exact quote and source offsets.",
+      "Missing phrases produce traceable gaps; matches produce evidence_found, never certified or compliant.",
+      "Sort checks and gaps by descending propagated priority, then requirement ID. Report unselected requirement IDs separately.",
+      "Text that negates a requirement may still contain its required phrase: this is explicitly a mention checker, not factual entailment, legal interpretation or certification."
+    ]
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI pipeline with an immutable-style shared envelope and validated sequential stage handoffs.",
+      "Clearly labeled synthetic sample with three products, four feedback records, three requirements and three documents.",
+      "Deterministic semantic approximation, transparent sentiment and severity-aware ranking.",
+      "Fixture-tested optional local embedding interface, without live provider access.",
+      "Requirement phrase evidence, missing terms, source offsets and traceable prioritized gaps.",
+      "Offline unittest coverage, CLI error contracts and bounded input validation."
+    ],
+    "excluded": [
+      "External dependencies, networks, model providers, agent delegation and git operations.",
+      "Enterprise production delivery, service hosting, databases, authentication and persistent search infrastructure.",
+      "Learned sentiment models, sarcasm interpretation, general semantic understanding and multilingual sentiment coverage.",
+      "LLM-generated reviews, document parsing/OCR, factual verification, legal advice or certification claims.",
+      "Cryptographic handoff authentication or proof that an injected embedding provider is honest; injection is a trusted local extension.",
+      "Automatic source-document remediation or live marketplace operations."
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 36,
+      "failures": 0,
+      "errors": 0,
+      "result": "passed"
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "selected_products": ["fan-1", "fan-2"],
+      "sentiment_items": 3,
+      "review_checks": 2,
+      "gaps": 1,
+      "highest_priority": "critical",
+      "missing_evidence": ["recall procedure"]
+    },
+    "coverage": [
+      "Synonyms, index statistics, tie-breaking, thresholding, top_k and empty/no-match searches.",
+      "Local embedding success, negative cosine, numeric stability, malformed vectors and callable failure.",
+      "Positive, negative, neutral and negated cues; severity dominance and explicit contribution arithmetic.",
+      "Search-to-feedback propagation, feedback-to-gap prioritization and severity-change propagation.",
+      "Product-scoped evidence, exact offsets, Unicode, word boundaries, missing documents and empty feedback.",
+      "Out-of-order stages, tampered search, sentiment and review handoffs, duplicate IDs and malformed input.",
+      "Actual subprocess CLI success, missing files, invalid file contents, directories and usage errors.",
+      "In-memory CLI fixtures for malformed JSON, duplicate keys, nonfinite values, invalid UTF-8, BOM and size limits."
+    ]
+  }
+}

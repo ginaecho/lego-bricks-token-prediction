@@ -21,6 +21,8 @@ relabeled as one another.
 | `data_points.csv` | Readable overview: staffing, duration, measured tokens, estimated cost and pseudo scores |
 | `builds/<point>/` | Actual implementation, tests, example input and build manifest |
 | `campaign.json` | Exact builder agent IDs, measurement protocol and selected wave |
+| `waves/wave2.json` | Frozen wave-2 manifest: selected trials, instruction fingerprints, builders, failures, protocol deviations and evaluation gates |
+| `models/` | Construction-token model artifact and its validation/test report |
 | `azure_rate_cards.json` | Versioned, sourced reference price assumptions |
 | `real_use_cases.json` | Fourteen user-supplied case references and unverified post-hoc mappings |
 | `coverage.json` | Measured versus unmeasured coverage; no hidden claims of exhaustive training |
@@ -32,15 +34,52 @@ combination design is not a table of invented token labels. Memberships use
 distinct basic functionalities. Multiple types from the same family and every
 possible execution-order permutation are not claimed as exhaustively measured.
 
-The saved wave contains **19 measured builds and 2,921,703 consumed tokens**.
-Its split is 14 training, zero validation and five test records; no
-construction-token model has been trained or promoted. See the
+The first saved wave contains **19 measured builds and 2,921,703 consumed tokens**.
+Its split is 14 training, zero validation and five test records; wave 1 alone
+did not train or promote a construction-token model. See the
 [remaining-work plan](TODO.md) for dependencies and acceptance requirements.
 Per-request usage traces are embedded in each measured record's
 `build_token_usage.events`; verification outputs and hashes are in
 `build_evidence`. These exports are not full conversations or the raw session
 database. Git preserves the exact bytes of `builds/` artifacts so their recorded
 hashes remain reproducible across platforms.
+
+## Wave 2 and the first construction-token model
+
+Wave 2 froze **120 trials** before dispatch (seed 20260923, builder model
+`gpt-6-astra`, instructions `builder-instructions-v2`): 16 singles, 33 pairs,
+38 triples and 33 quadruples, including six repeated memberships. All 120
+builders passed independent runtime verification of their tests and CLI; none
+failed. They consumed **18,247,910 tokens** (mean 152,066 per build).
+
+| Functionalities | Builds | Mean tokens | Median | Range |
+| ---: | ---: | ---: | ---: | --- |
+| 1 | 16 | 125,407 | 121,160 | 114,902-160,476 |
+| 2 | 33 | 133,225 | 133,170 | 123,748-157,764 |
+| 3 | 38 | 157,479 | 146,649 | 132,202-243,236 |
+| 4 | 33 | 177,599 | 172,329 | 117,187-231,283 |
+
+Repeated memberships varied by a mean coefficient of variation of 5.6%. In 19
+trials the builder also wrote an auxiliary `docs\My_prompt.txt` in its staging
+directory; these are recorded under `protocol_deviations` and were not imported
+into `builds/`. Staging copies are kept in `runs/20260923_1100_wave2/`.
+
+`examples/train_construction_model.py` fits ridge regressions on log input and
+log output tokens from pre-build features only (staffing and months excluded),
+selecting the penalty by grouped cross-validation over membership groups.
+Combined with wave 1: 92 training, 20 validation and 27 test records.
+
+| Split | n | MAE (tokens) | MAPE | Training-mean baseline MAE | Interval coverage (80% target) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Validation | 20 | 19,961 | 11.1% | 25,597 | 90.0% |
+| Test (evaluated once) | 27 | 16,567 | 11.7% | 18,032 | 92.6% |
+
+The validation gates (MAPE at most 20% and beating the baseline MAE) passed.
+Test MAPE by size: 8.4% (1), 10.6% (2), 9.2% (3), 16.9% (4). The test gain over
+the training mean is modest (about 8% lower MAE) and the model overpredicted on
+average (+10,188 tokens). The selected penalty (alpha 100) is the largest value
+in the fixed grid, indicating weak per-feature signal. These results hold only
+for bounded Python CLI builds by one builder model.
 
 ## Input features
 
@@ -176,6 +215,7 @@ python -B -m examples.build_simulation_corpus import `
   --copilot-db <path-to-your-local-session-store.db> `
   --ids single_interests
 python -B -m examples.build_simulation_corpus summarize
+python -B -m examples.train_construction_model --wave wave2
 python -B -m pytest tests\test_build_simulations.py -q
 ```
 

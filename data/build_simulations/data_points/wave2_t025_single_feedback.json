@@ -1,0 +1,398 @@
+{
+  "id": "wave2_t025_single_feedback",
+  "protocol": "agent-software-build-v1",
+  "origin": "catalog_designed_simulation",
+  "catalog_origin": "independent_functionality_taxonomy",
+  "source_case_ids": [],
+  "input_features": {
+    "basic_functionality_ids": [
+      "insights"
+    ],
+    "basic_functionalities": [
+      "Customer insights"
+    ],
+    "types": [
+      "feedback"
+    ],
+    "functionality_count": 1,
+    "integration_edge_count": 0,
+    "shared_schema_count": 1,
+    "shared_validation_layer_count": 1,
+    "planned_acceptance_case_count": 6,
+    "artifact_kind": "python_cli_reference_implementation",
+    "llm_integration": "injected_callable_validated_with_test_fixtures",
+    "estimated_months_to_finish": 0.5,
+    "staff_data_scientist": 0.2,
+    "staff_architect": 0.1,
+    "staff_consultant": 0.1,
+    "staff_software_engineer": 0.5,
+    "has_type_interests": 0,
+    "has_type_behavior": 0,
+    "has_type_journey": 0,
+    "has_type_normal": 0,
+    "has_type_web": 0,
+    "has_type_deep": 0,
+    "has_type_faq": 0,
+    "has_type_triage": 0,
+    "has_type_semantic": 0,
+    "has_type_compare": 0,
+    "has_type_feedback": 1,
+    "has_type_sentiment": 0,
+    "has_type_extract": 0,
+    "has_type_review": 0,
+    "has_type_guided": 0,
+    "has_type_adaptive": 0,
+    "planned_operation_extract": 2,
+    "planned_operation_classify": 1,
+    "planned_operation_score": 0,
+    "planned_operation_plan": 0,
+    "planned_operation_retrieve": 0,
+    "planned_operation_verify": 1,
+    "planned_operation_write": 1
+  },
+  "requirements": [
+    "Feedback deduplication, themes and traceable supporting excerpts."
+  ],
+  "integration": {
+    "ordered_types": [
+      "feedback"
+    ],
+    "edges": [],
+    "instruction": "Build one integrated implementation, not a sum or concatenation of standalone token estimates."
+  },
+  "planning_assumptions": {
+    "source": "declared_scenario_not_observed_staffing",
+    "staff_unit": "FTE",
+    "working_hours_per_fte_month": 160,
+    "staff_headcounts": {
+      "staff_data_scientist": 1,
+      "staff_architect": 1,
+      "staff_consultant": 1,
+      "staff_software_engineer": 1
+    },
+    "duration_rule": "0.5 + 0.25 * (functionality_count - 1) months; not measured delivery duration",
+    "causal_status": "These staffing/duration values were not experimental interventions on the builders."
+  },
+  "split": "train",
+  "split_group": "8d372d111bab3e58274ee9b86f65e19d0d0206605074fc3365713e894c033ceb",
+  "split_rule": "Keep repeated/reordered builds of the same membership in one partition.",
+  "spec_sha256": "02585113ed14c519d9555652c0e5f4ab53ddfcd1788c6af6b4e43aae458aee7f",
+  "status": "measured_build_passed",
+  "wave": "wave2",
+  "trial_id": "wave2_t025_single_feedback",
+  "membership_point_id": "single_feedback",
+  "trial_kind": "repeat_of_wave1",
+  "repeat_of": "single_feedback",
+  "builder_instructions_version": "builder-instructions-v2",
+  "builder_instructions_sha256": "88c8a11940f33d7810f53b1846b3f718586b037b65830960bc323465bfb9f503",
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "4101acea-80c9-441c-8ab3-72d2fc263750",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 116816,
+    "output_tokens": 7331,
+    "cache_read_tokens": 107854,
+    "cache_write_tokens": 8944,
+    "total_tokens": 124147,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 34049,
+        "agent_id": "4101acea-80c9-441c-8ab3-72d2fc263750",
+        "model": "gpt-6-astra",
+        "input_tokens": 14658,
+        "output_tokens": 823,
+        "cache_read_tokens": 13958,
+        "cache_write_tokens": 697,
+        "reasoning_tokens": 0,
+        "duration_ms": 15490,
+        "created_at": "2026-09-23T09:42:27.388Z"
+      },
+      {
+        "id": 34058,
+        "agent_id": "4101acea-80c9-441c-8ab3-72d2fc263750",
+        "model": "gpt-6-astra",
+        "input_tokens": 15507,
+        "output_tokens": 4303,
+        "cache_read_tokens": 14655,
+        "cache_write_tokens": 849,
+        "reasoning_tokens": 249,
+        "duration_ms": 76617,
+        "created_at": "2026-09-23T09:43:39.886Z"
+      },
+      {
+        "id": 34059,
+        "agent_id": "4101acea-80c9-441c-8ab3-72d2fc263750",
+        "model": "gpt-6-astra",
+        "input_tokens": 20039,
+        "output_tokens": 386,
+        "cache_read_tokens": 15504,
+        "cache_write_tokens": 4532,
+        "reasoning_tokens": 71,
+        "duration_ms": 13530,
+        "created_at": "2026-09-23T09:43:47.134Z"
+      },
+      {
+        "id": 34064,
+        "agent_id": "4101acea-80c9-441c-8ab3-72d2fc263750",
+        "model": "gpt-6-astra",
+        "input_tokens": 21052,
+        "output_tokens": 1516,
+        "cache_read_tokens": 20036,
+        "cache_write_tokens": 1013,
+        "reasoning_tokens": 0,
+        "duration_ms": 27213,
+        "created_at": "2026-09-23T09:44:13.899Z"
+      },
+      {
+        "id": 34066,
+        "agent_id": "4101acea-80c9-441c-8ab3-72d2fc263750",
+        "model": "gpt-6-astra",
+        "input_tokens": 22655,
+        "output_tokens": 217,
+        "cache_read_tokens": 21049,
+        "cache_write_tokens": 1603,
+        "reasoning_tokens": 17,
+        "duration_ms": 4573,
+        "created_at": "2026-09-23T09:44:24.520Z"
+      },
+      {
+        "id": 34068,
+        "agent_id": "4101acea-80c9-441c-8ab3-72d2fc263750",
+        "model": "gpt-6-astra",
+        "input_tokens": 22905,
+        "output_tokens": 86,
+        "cache_read_tokens": 22652,
+        "cache_write_tokens": 250,
+        "reasoning_tokens": 0,
+        "duration_ms": 3287,
+        "created_at": "2026-09-23T09:44:28.670Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.40200500000000006,
+      "observed_cache_profile_estimate_usd": 0.15933350000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.82406,
+      "observed_cache_profile_estimate_usd": 4.82406,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
+  "pseudo_outcomes": {
+    "source": "synthetic_client_feedback",
+    "is_pseudo": true,
+    "feedback_schema": "build-outcomes-0to5-v1",
+    "scores_0_to_5": {
+      "client_satisfaction": 3,
+      "impact_recognized": 4,
+      "roi_satisfaction": 1,
+      "future_impact_potential": 0,
+      "delivery_quality": 4
+    },
+    "reward_weights": {
+      "client_satisfaction": 0.3,
+      "impact_recognized": 0.25,
+      "roi_satisfaction": 0.2,
+      "future_impact_potential": 0.1,
+      "delivery_quality": 0.15
+    },
+    "reward_0_to_1": 0.54,
+    "pseudo_annual_cost_usd": 40000,
+    "pseudo_annual_ai_value_usd": 100000,
+    "pseudo_net_impact_usd": 60000,
+    "pseudo_roi_pct": 150.0,
+    "verified_client_roi_pct": null,
+    "evidence": "Deterministic fictional scenario; no client delivery or financial verification.",
+    "training_use": "Synthetic reward-policy experiments only; excluded from token-regression inputs and real-outcome policies.",
+    "policy_promoted": false,
+    "logged_action_propensity": null,
+    "off_policy_evaluation_eligible": false
+  },
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.599s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "dataset_label": "synthetic",
+      "status": "ok",
+      "summary": {
+        "input_count": 5,
+        "unique_count": 4,
+        "duplicate_count": 1
+      },
+      "groups": [
+        {
+          "canonical_id": "synthetic-001",
+          "member_ids": [
+            "synthetic-001",
+            "synthetic-002"
+          ],
+          "normalized_text": "shipping was late but quality is durable",
+          "themes": [
+            "delivery",
+            "quality"
+          ]
+        },
+        {
+          "canonical_id": "synthetic-003",
+          "member_ids": [
+            "synthetic-003"
+          ],
+          "normalized_text": "support was helpful with my refund",
+          "themes": [
+            "support"
+          ]
+        },
+        {
+          "canonical_id": "synthetic-004",
+          "member_ids": [
+            "synthetic-004"
+          ],
+          "normalized_text": "the price is affordable and setup is easy",
+          "themes": [
+            "price",
+            "usability"
+          ]
+        },
+        {
+          "canonical_id": "synthetic-005",
+          "member_ids": [
+            "synthetic-005"
+          ],
+          "normalized_text": "i love the purple packaging",
+          "themes": [
+            "other"
+          ]
+        }
+      ],
+      "themes": [
+        {
+          "name": "delivery",
+          "unique_count": 1,
+          "original_count": 2,
+          "evidence": [
+            {
+              "feedback_id": "synthetic-001",
+              "start": 0,
+              "end": 42,
+              "excerpt": "Shipping was late, but quality is durable."
+            }
+          ]
+        },
+        {
+          "name": "price",
+          "unique_count": 1,
+          "original_count": 1,
+          "evidence": [
+            {
+              "feedback_id": "synthetic-004",
+              "start": 0,
+              "end": 42,
+              "excerpt": "The price is affordable and setup is easy."
+            }
+          ]
+        },
+        {
+          "name": "quality",
+          "unique_count": 1,
+          "original_count": 2,
+          "evidence": [
+            {
+              "feedback_id": "synthetic-001",
+              "start": 0,
+              "end": 42,
+              "excerpt": "Shipping was late, but quality is durable."
+            }
+          ]
+        },
+        {
+          "name": "support",
+          "unique_count": 1,
+          "original_count": 1,
+          "evidence": [
+            {
+              "feedback_id": "synthetic-003",
+              "start": 0,
+              "end": 35,
+              "excerpt": "Support was helpful with my refund."
+            }
+          ]
+        },
+        {
+          "name": "usability",
+          "unique_count": 1,
+          "original_count": 1,
+          "evidence": [
+            {
+              "feedback_id": "synthetic-004",
+              "start": 0,
+              "end": 42,
+              "excerpt": "The price is affordable and setup is easy."
+            }
+          ]
+        },
+        {
+          "name": "other",
+          "unique_count": 1,
+          "original_count": 1,
+          "evidence": [
+            {
+              "feedback_id": "synthetic-005",
+              "start": 0,
+              "end": 28,
+              "excerpt": "I love the purple packaging."
+            }
+          ]
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave2_t025_single_feedback",
+    "artifact_sha256": {
+      "implementation.py": "44f5b7bb7fee4818bbb6cbfd95ae54955416610e560103b327e016dbe1354c06",
+      "test_implementation.py": "f98265b4f82b2520e9eaf8ebec2e97cfc43136231ec4c7d71d8cce7a5dac9c87",
+      "example_input.json": "9070727aad8d1ecb870c9f656281974ee090e6ebea8c03b0ef98c7c87cbec76a",
+      "build_manifest.json": "00bb393813a48f76c3d5c79f7530ab1fc83b876101c30f3b942353d16298c0ef"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
+}

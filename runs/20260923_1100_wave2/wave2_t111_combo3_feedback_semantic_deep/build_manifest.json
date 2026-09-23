@@ -1,0 +1,102 @@
+{
+  "build_id": "wave2_t111_combo3_feedback_semantic_deep",
+  "composition_label": "Feedback analysis (Customer insights) -> Semantic search (Smart product search) -> Deep research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written directly in the isolated build directory; no other build or repository files read or copied.",
+    "runtime": "Python 3, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Required string: 1.0.",
+      "synthetic": "Required literal true; example data and test fixtures are synthetic.",
+      "query": "Required nonblank string containing non-stopword searchable terms.",
+      "feedback": "1..1000 records with unique nonblank id and text.",
+      "documents": "1..1000 records with unique nonblank id, title, text, and optional claims array.",
+      "claims": "0..100 per document: topic, position (support/oppose/uncertain), and verbatim excerpt contained in that document.",
+      "limit": "Optional integer 1..20, default 5; booleans are not accepted."
+    },
+    "success_output": "Cumulative envelope containing schema_version, status=ok, synthetic=true, original request, feedback_analysis, semantic_search, and deep_research.",
+    "error_output": "One JSON object with schema_version, status=error, and error message; exit code 2.",
+    "validation": "Shared validate_request and validate_state boundaries enforce stage order, closed input fields, exact deterministic output shape and scalar types, original-source excerpts, full index and ranking integrity, theme references and research citations. Stage functions copy inputs and never mutate upstream state.",
+    "bounds": "Strings are limited to 20000 characters. Embedding vectors are limited to 4096 components. Feedback and document IDs are unique within their respective collections."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "feedback_analysis",
+      "to": "semantic_search",
+      "consumed": "Validated deduplicated feedback groups provide feedback expansion terms; validated themes label matching results. The optional embedding query includes the same feedback terms."
+    },
+    {
+      "from": "semantic_search",
+      "to": "deep_research",
+      "consumed": "Validated ranked document IDs exclusively select research sources. Search ranks and feedback theme IDs propagate to evidence; candidate_count identifies truncated retrieval."
+    }
+  ],
+  "behavior": {
+    "feedback": "Case-folded Unicode word sequences deduplicate punctuation/case variants. All original IDs and exact text excerpts remain available. Multi-label keyword themes report unique-group and raw-record counts; unmatched feedback gets other.",
+    "search": "In-memory inverted term-frequency index. Query and deduplicated feedback term matches are retrieved through postings. Lexical score is 0.75 query-term coverage plus 0.25 feedback-term coverage. Scores are rounded to six decimals; positive candidates sort by descending score then document ID.",
+    "optional_embedding": "Library run_pipeline(request, embedding=callable) accepts an injected text-to-vector Python callable. Vectors must be numeric, finite, nonzero and dimension-consistent. Stable cosine normalization supports large finite components. Combined score is 0.8 lexical plus 0.2 max(0, cosine). Fixture-only callables were tested; no live provider is configured.",
+    "research": "Groups explicitly annotated claims by normalized topic, retains exact evidence and source IDs, reports support/oppose disagreements without deciding truth, and distinguishes within-document from cross-document opposition. Unannotated documents yield a verbatim first-sentence excerpt, capped at 240 characters, labeled observation rather than an invented claim.",
+    "unresolved_questions": "Conflicting evidence, single-source topics, explicit uncertainty, unstructured evidence, empty retrieval and retrieval truncation are reported deterministically.",
+    "cli": "Exactly one JSON object on stdout. Success exits 0. File, decoding, malformed JSON, duplicate JSON keys, nonfinite JSON constants, usage and validation failures exit 2 with status error."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic pipeline with validated cumulative handoffs",
+      "Traceable feedback deduplication and keyword themes",
+      "Search index, deterministic ranking and optional fixture-tested embedding injection",
+      "Multi-document claim grouping, disagreement detection and unresolved questions",
+      "Synthetic example, direct library tests and CLI subprocess tests"
+    ],
+    "excluded": [
+      "Live providers, network access and third-party packages",
+      "Learned semantic model, stemming, synonym inference or fuzzy deduplication",
+      "Automatic factual claim extraction, source reliability verification or causal inference",
+      "Document independence verification beyond distinct document IDs",
+      "Enterprise persistence, authentication, production scaling and deployment",
+      "Separate standalone stage programs"
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 25,
+      "failures": 0,
+      "errors": 0,
+      "result": "passed"
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "status": "ok",
+      "unique_feedback_count": 3,
+      "retrieved_document_count": 3,
+      "disputed_topic_count": 2
+    },
+    "coverage": [
+      "Each pipeline stage and both cross-stage propagation boundaries",
+      "Exact provenance, deduplication, themes, index, ranking and tie breaking",
+      "Disagreement, within-document conflicts, uncertainty and unstructured evidence",
+      "No matches, top-k truncation, Unicode and immutability",
+      "Invalid input, closed fields, duplicate IDs, false excerpts and stage tampering",
+      "Embedding success, feedback injection, negative cosine, large finite vectors, malformed vectors, dimensions and callable failure",
+      "CLI success, usage, missing file, malformed JSON, invalid schema and duplicate keys"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC: fictional marketplace onboarding feedback",
+  "documents": [
+    {
+      "id": "synthetic-001",
+      "text": "Customer: Synthetic Ada\nGoal: Publish a first listing\nFeedback: Setup is confusing; I need an onboarding guide.\nRating: 2\n"
+    },
+    {
+      "id": "synthetic-002",
+      "text": "Customer: Synthetic Ben\nGoal: Publish a first listing\nFeedback: SETUP is confusing, I need an onboarding guide!\nRating: 2\n"
+    },
+    {
+      "id": "synthetic-003",
+      "text": "Customer: Synthetic Cy\nGoal: Track weekly sales\nFeedback: The sales report is difficult to find.\nRating: 3\n"
+    },
+    {
+      "id": "synthetic-004",
+      "text": "Customer: Synthetic Dee\nGoal: Explore the marketplace\n"
+    }
+  ],
+  "field_schema": [
+    {"name": "customer", "label": "Customer", "type": "string", "required": true},
+    {"name": "feedback", "label": "Feedback", "type": "string", "required": true},
+    {"name": "goal", "label": "Goal", "type": "string", "required": false},
+    {"name": "rating", "label": "Rating", "type": "integer", "required": false}
+  ],
+  "themes": [
+    {"id": "onboarding", "keywords": ["setup", "onboarding guide"]},
+    {"id": "reporting", "keywords": ["sales report", "analytics"]}
+  ],
+  "actions": [
+    {"id": "01-profile", "title": "Complete the seller profile", "prerequisites": [], "theme_ids": []},
+    {"id": "02-guide", "title": "Follow the first-listing guide", "prerequisites": ["01-profile"], "theme_ids": ["onboarding"]},
+    {"id": "03-report", "title": "Open the sales report tutorial", "prerequisites": ["01-profile"], "theme_ids": ["reporting"]},
+    {"id": "04-publish", "title": "Publish a practice listing", "prerequisites": ["02-guide"], "theme_ids": ["onboarding"]}
+  ],
+  "profile": {"completed_action_ids": []}
+}
