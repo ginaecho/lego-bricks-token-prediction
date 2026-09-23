@@ -241,6 +241,18 @@ def import_build(root: Path, database: Path, identifier: str, wave: str | None =
                       "provider_calls": completed["build_token_usage"]["provider_call_count"]}))
 
 
+def model_status(root: Path) -> str:
+    reports = sorted((root / "models").glob("construction_model_*_report.json"))
+    if not reports:
+        return "No build-token model has been trained or promoted."
+    report = read(reports[-1])
+    test = report.get("test") or {}
+    promoted = "promoted" if report.get("promoted") else "not promoted"
+    tested = f"single test evaluation MAPE {test['mape']:.1%}" if test else "test not yet evaluated"
+    return (f"Model {report['model_fingerprint'][:12]} ({report['wave']}) {promoted} on validation gates; {tested}. "
+            "Scope is bounded Python CLI builds by one builder model; unseen compositions are extrapolations.")
+
+
 def summarize(root: Path) -> None:
     points = [read(path) for path in sorted((root / "data_points").glob("*.json"))]
     rows = []
@@ -282,12 +294,13 @@ def summarize(root: Path) -> None:
                                   for split in ("train", "validation", "test")},
         "construction_route": "subscription_subagents",
         "direct_foundry_or_deepseek_calls_in_this_wave": 0,
-        "all_16_standalone_types_measured": len([point for point in measured if point["input_features"]["functionality_count"] == 1]) == 16,
+        "all_16_standalone_types_measured": len({tuple(point["input_features"]["types"]) for point in measured
+                                                 if point["input_features"]["functionality_count"] == 1}) == 16,
         "independent_combinatorial_design_points": len(combination_design()),
         "real_use_case_reference_points": sum(point["origin"] == "real_use_case_reference" for point in points),
         "unmeasured_combinations_are_not_predictions": True,
         "ready_for_generalization_claims": False,
-        "reason": "Initial construction wave lacks repeat builds and adequate unseen-combination evaluation. No build-token model has been trained or promoted.",
+        "reason": model_status(root),
     })
     def cell(value):
         return html.escape("unknown" if value is None else f"{value:.6g}" if isinstance(value, float) else str(value))
