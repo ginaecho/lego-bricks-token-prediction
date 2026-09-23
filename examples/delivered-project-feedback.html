@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How did your project do? | Token Yield</title>
+<style>
+:root{--ink:#17362f;--green:#266754;--paper:#f5f4ef;--line:#dce2d9;--muted:#62716a}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,"Segoe UI",sans-serif}
+main{max-width:860px;margin:auto;padding:30px 24px 60px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:32px}
+a{color:var(--green)}.brand{font-weight:800;letter-spacing:-.5px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;color:var(--green)}
+h1{font-size:clamp(30px,5vw,44px);letter-spacing:-1.4px;line-height:1.12;margin:12px 0 16px}h2{font-size:20px;margin:0 0 8px}h3{font-size:17px;margin:0 0 6px}
+p{margin:8px 0 18px}.muted,small{color:var(--muted)}small{display:block;font-size:12px}
+.card{border:1px solid var(--line);background:white;padding:24px;border-radius:14px;margin:18px 0}.scope{padding:16px;background:#eaf0e9;border-radius:10px;margin:16px 0;overflow-wrap:anywhere}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+label{display:block;font-size:14px;font-weight:600}input,select,textarea,button{font:inherit}
+input,select,textarea{display:block;width:100%;padding:10px;border:1px solid #b9c6bc;border-radius:8px;margin-top:6px;background:white;color:var(--ink)}
+textarea{resize:vertical;min-height:75px}button{cursor:pointer;border:1px solid var(--green);border-radius:8px;background:var(--green);color:white;padding:12px 20px;font-weight:650}
+button:disabled{opacity:.5;cursor:wait}button.secondary{background:white;color:var(--green)}
+.check{display:flex;align-items:flex-start;gap:9px;font-weight:400;margin:16px 0}.check input{width:18px;height:18px;margin-top:3px;flex-shrink:0}
+.notice{background:#fff5dd;border:1px solid #e9d8ab;border-radius:8px;padding:12px 16px;font-size:14px}
+#error{background:#fff0ed;color:#8c2721;border:1px solid #e3b8ad;padding:15px;border-radius:8px;white-space:pre-wrap}
+#thanks{background:#e6f1e8;border:1px solid #b4d2bc}details{margin-top:16px}summary{cursor:pointer;color:var(--green);font-size:14px}details .grid{margin-top:16px}
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.function-name{overflow-wrap:anywhere}.function-meta{margin-bottom:18px}
+:focus-visible{outline:3px solid #cc8f48;outline-offset:3px}[hidden]{display:none!important}
+@media(max-width:620px){main{padding:18px 16px 40px}.grid{grid-template-columns:1fr}.card{padding:18px}header{align-items:flex-start;gap:15px;font-size:14px}}
+</style>
+</head>
+<body><main>
+<header><span class="brand">Token Yield / Customer feedback</span><a id="back" href="http://127.0.0.1:8784/marketplace-sales-demo.html">Back to marketplace</a></header>
+<div id="error" role="alert" hidden></div>
+<section id="landing" hidden>
+<span class="eyebrow">After delivery</span><h1>How did your project do?</h1>
+<p class="muted">Your project and purchased functionalities come from the marketplace. No new project to create, no setup to repeat.</p>
+<div id="saved"></div>
+<div class="card"><h2>Open your delivered build</h2><p>In your existing marketplace build, choose <b>Delivered project: give feedback</b>. We bring only its selected functionalities here.</p>
+<a href="http://127.0.0.1:8784/marketplace-sales-demo.html">Go to your marketplace build &rarr;</a></div>
+<p><a href="/learning">Internal team: see what feedback teaches the Studio &rarr;</a></p>
+</section>
+<section id="suggestion" hidden><span class="eyebrow">For your next build</span><h1>A suggestion from the learning loop.</h1>
+<p id="suggested-option"></p><p class="muted">This is a suggestion, not a purchase or delivery. You decide whether to use it.</p>
+<div class="notice" id="suggestion-source"></div><p id="suggestion-status" role="status"></p>
+<button id="use-suggestion" type="button">Use this option in my build</button></section>
+<section id="project" hidden>
+<span class="eyebrow">Your delivered project</span><h1>What worked.<br>What could be better.</h1>
+<p class="muted">A short check-in on the functionalities you selected. Your feedback helps improve future recommendations.</p>
+<div class="scope"><h2 id="project-title"></h2><p id="project-description"></p><small id="selection-summary"></small>
+<details><summary>Original scope and planned team</summary><div id="original-scope"></div></details></div>
+<form id="feedback-form">
+<div class="grid two">
+<label>Your name or role<input id="respondent" required maxlength="200" placeholder="e.g. Project owner"></label>
+<label>Feedback is for<select id="source"><option value="synthetic">Prototype / demo delivery</option><option value="real">An actual client delivery</option></select></label>
+</div>
+<p class="notice" id="source-note">Demo responses stay separate from real customer learning. Token estimates below are forecasts, not actual usage.</p>
+<div id="functions"></div>
+<section class="card"><h2>And the project overall?</h2><div class="grid two">
+<label>Did the scope of work meet your needs?<select id="sow-quality"><option value="">Not ready to say</option><option value="1">1 - Not at all</option><option value="2">2 - Needs improvement</option><option value="3">3 - Acceptable</option><option value="4">4 - Good</option><option value="5">5 - Excellent</option></select></label>
+<label>Was the staffing right for this project?<select id="staffing-fit"><option value="">Not ready to say</option><option value="1">1 - Not at all</option><option value="2">2 - Needs improvement</option><option value="3">3 - Acceptable</option><option value="4">4 - Good</option><option value="5">5 - Excellent</option></select></label>
+</div></section>
+<details><summary>Feedback observation period</summary><label>Number of days covered<input id="observation-days" type="number" min="1" max="3650" value="30" required></label></details>
+<label class="check"><input id="delivered" type="checkbox" required>I confirm this project has been delivered and these are the functionalities it included.</label>
+<label class="check"><input id="consent" type="checkbox" required>You may use this feedback to improve future outcome predictions and recommendations.</label>
+<div class="actions"><button id="submit" type="submit">Send feedback</button><span id="save-status" role="status"></span></div>
+<small>Local prototype. Feedback is customer-reported, not independently verified. Learning runs behind the form; no delivery changes happen automatically.</small>
+</form>
+<div id="thanks" class="card" role="status" hidden><h2>Thank you. Your feedback is saved.</h2><p id="thanks-text"></p><button id="edit" type="button" class="secondary">Update my feedback</button></div>
+</section>
+<template id="function-template"><section class="card function">
+<h2 class="function-name"></h2><small class="function-meta"></small>
+<div class="grid">
+<label>How satisfied are you?<select name="satisfaction" required><option value="">Choose a rating</option><option value="1">1 - Very dissatisfied</option><option value="2">2 - Dissatisfied</option><option value="3">3 - Neutral</option><option value="4">4 - Satisfied</option><option value="5">5 - Very satisfied</option></select></label>
+<label>How much output did you keep?<select name="kept" required><option value="">Choose</option><option value="all">All of it</option><option value="some">Some of it</option><option value="none">None of it</option><option value="unknown">Not sure yet</option></select></label>
+<label>Did it help you?<select name="usefulness" required><option value="">Choose</option><option value="yes">Yes</option><option value="partly">Partly</option><option value="no">No</option><option value="unknown">Too early to tell</option></select></label>
+</div>
+<label style="margin-top:16px">Anything we should know? <span class="muted">(optional)</span><textarea name="comments" maxlength="12000" placeholder="What worked, what did not, or what you would change"></textarea></label>
+<details><summary>Optional: measured impact and delivery details</summary><small>Enter observed values only. Never copy a forecast into actuals. Financial values are in USD for the observation period; do not double-count benefits across functionalities.</small>
+<div class="grid two">
+<label>Customer benefit (USD)<input name="benefit_usd" type="number" min="0" step="any" placeholder="Unknown"></label>
+<label>Customer total cost (USD)<input name="cost_usd" type="number" min="0" step="any" placeholder="Unknown"></label>
+<label>Provider revenue (USD)<input name="revenue_usd" type="number" min="0" step="any" placeholder="Unknown"></label>
+<label>Provider total cost (USD)<input name="provider_cost_usd" type="number" min="0" step="any" placeholder="Unknown"></label>
+<label>Assigned work finished without rescue (%)<input name="autonomy_pct" type="number" min="0" max="100" step="any" placeholder="Unknown"></label>
+<label>Of that autonomous work, kept (%)<input name="kept_pct" type="number" min="0" max="100" step="any" placeholder="Unknown"></label>
+<label>Of the kept autonomous work, useful (%)<input name="useful_pct" type="number" min="0" max="100" step="any" placeholder="Unknown"></label>
+<label>Actual tokens, including failed work and retries<input name="actual_tokens" type="number" min="0" step="1" placeholder="Unknown"></label>
+</div></details></section></template>
+<script>
+"use strict";
+const $=id=>document.getElementById(id), number=x=>new Intl.NumberFormat("en-US").format(x);
+let handoff=null, suggestion=null, suggestionRequest=null;
+const optionalNames=["benefit_usd","cost_usd","revenue_usd","provider_cost_usd","autonomy_pct","kept_pct","useful_pct","actual_tokens"];
+const optional=element=>element.value===""?null:Number(element.value);
+function showError(error){$("error").textContent=error.message;$("error").hidden=false;$("error").scrollIntoView({block:"center"});}
+async function api(path,body){
+  const response=await fetch(path,body===undefined?{}:{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const result=await response.json();if(!response.ok)throw new Error(result.error||"Could not save your feedback. Please retry.");
+  return result;
+}
+function renderProject(record){
+  handoff=record.handoff||record;
+  if(handoff.schema!=="token-yield-delivery-handoff-v1"||!Array.isArray(handoff.functions)||!handoff.functions.length)throw new Error("This link has no purchased functionality. Return to your marketplace build.");
+  $("landing").hidden=true;$("project").hidden=false;
+  $("project-title").textContent=handoff.title;$("project-description").textContent=handoff.description;
+  $("selection-summary").textContent=`${handoff.functions.length} selected functionalities carried from your ${handoff.flow==="custom"?"customized project":"marketplace build"}.`;
+  $("original-scope").textContent=(handoff.staffing||[]).map(r=>`${r.role}: ${r.hours===null?"unknown":number(r.hours)} planned hours`).join(" / ")+
+    ` | Quote basis: ${handoff.quote_basis}. `+(handoff.estimated_project_tokens===null?"No project token forecast.":`${number(handoff.estimated_project_tokens)} forecast tokens per month; not actual delivery usage.`);
+  $("functions").replaceChildren();
+  for(const f of handoff.functions){
+    const fragment=$("function-template").content.cloneNode(true),card=fragment.querySelector(".function");
+    card.dataset.functionId=f.id;card.querySelector(".function-name").textContent=f.name;
+    card.querySelector(".function-meta").textContent=`${f.model_name} / ${f.estimated_tokens===null?"Per-function token allocation unavailable":number(f.estimated_tokens)+" forecast tokens per use"} / already selected`;
+    const saved=record.feedback?.find(item=>item.function_id===f.id);
+    if(saved)for(const input of card.querySelectorAll("[name]"))input.value=saved[input.name]??"";
+    $("functions").append(fragment);
+  }
+  if(record.handoff){
+    $("respondent").value=record.respondent;$("source").value=record.source;$("source").disabled=true;
+    $("sow-quality").value=record.sow_quality??"";$("staffing-fit").value=record.staffing_fit??"";
+    $("observation-days").value=record.observation_days;$("observation-days").disabled=true;
+    $("delivered").checked=true;$("consent").checked=record.consent;
+  }
+  updateSource();
+}
+function updateSource(){
+  $("source-note").textContent=$("source").value==="synthetic"?
+    "Demo responses stay separate from real customer learning. Token estimates are forecasts, not actual usage.":
+    "Record outcomes from the actual delivered project. Your response is customer-reported; forecasts are not proof of delivery or financial benefit.";
+}
+$("source").addEventListener("change",updateSource);
+$("feedback-form").addEventListener("submit",async event=>{
+  event.preventDefault();$("error").hidden=true;$("submit").disabled=true;$("save-status").textContent="Saving your feedback...";
+  try{
+    const feedback=[...document.querySelectorAll("#functions .function")].map(card=>{
+      const get=name=>card.querySelector(`[name="${name}"]`);
+      return {function_id:card.dataset.functionId,satisfaction:optional(get("satisfaction")),kept:get("kept").value,usefulness:get("usefulness").value,comments:get("comments").value,
+        ...Object.fromEntries(optionalNames.map(name=>[name,optional(get(name))]))};
+    });
+    const result=await api("/api/deliveries/feedback",{handoff,source:$("source").value,respondent:$("respondent").value,
+      delivered:$("delivered").checked,consent:$("consent").checked,sow_quality:optional($("sow-quality")),staffing_fit:optional($("staffing-fit")),
+      observation_days:optional($("observation-days")),feedback});
+    history.replaceState(null,"",`?receipt=${encodeURIComponent(result.receipt_id)}`);
+    $("source").disabled=true;$("observation-days").disabled=true;$("feedback-form").hidden=true;$("thanks").hidden=false;
+    const pending=result.signals.some(s=>s.reward_pending);
+    $("thanks-text").textContent="Your feedback is linked to the original selected functionalities. "+
+      (result.learning.status==="protected_validation"?"This delivery is reserved to check future recommendations independently.":"The learning system has updated its candidate models from eligible feedback.")+
+      (pending?" Answers marked 'not sure' or 'too early' remain pending.":"")+" Recommendation changes still require internal review.";
+    $("thanks").scrollIntoView({block:"center"});$("save-status").textContent="";
+  }catch(error){showError(error);$("save-status").textContent="Not saved. Please correct the error and retry.";}
+  finally{$("submit").disabled=false;}
+});
+$("edit").addEventListener("click",()=>{$("thanks").hidden=true;$("feedback-form").hidden=false;});
+$("use-suggestion").addEventListener("click",()=>{
+  try{
+    if(!window.opener||window.opener.closed)throw new Error("The marketplace tab is no longer open. Return to it and request another suggestion.");
+    if(!/^http:\/\/(?:127\.0\.0\.1|localhost):(?:8784|8791)$/.test(suggestionRequest.return_origin))throw new Error("Unsupported marketplace origin.");
+    window.opener.postMessage({type:"token-yield-feedback-suggestion",featureId:suggestionRequest.feature_id,
+      variantId:suggestion.option.variant_id,modelId:suggestion.option.model_id,decisionId:suggestion.id,source:suggestion.source},suggestionRequest.return_origin);
+    $("suggestion-status").textContent="Sent to your marketplace. Review the selected option there before saving your build.";
+    $("use-suggestion").disabled=true;
+  }catch(error){showError(error);}
+});
+(async()=>{
+  try{
+    const hash=new URLSearchParams(location.hash.slice(1));
+    if(hash.has("handoff")){
+      const imported=JSON.parse(hash.get("handoff"));
+      const saved=(await api("/api/deliveries")).deliveries.find(r=>r.receipt_id===imported.receipt_id);
+      renderProject(saved?await api(`/api/deliveries?receipt=${encodeURIComponent(saved.receipt_id)}`):imported);
+      if(saved)$("save-status").textContent="Your previous feedback for this build is loaded.";
+      return;
+    }
+    if(hash.has("suggest")){
+      suggestionRequest=JSON.parse(hash.get("suggest"));$("suggestion").hidden=false;
+      suggestion=await api("/api/delivery-policy/suggest",{source:suggestionRequest.source,feature_id:suggestionRequest.feature_id,
+        options:suggestionRequest.options.map(o=>({variant_id:o.variant_id,model_id:o.model_id}))});
+      const label=suggestionRequest.options.find(o=>o.variant_id===suggestion.option.variant_id&&o.model_id===suggestion.option.model_id);
+      $("suggested-option").textContent=`${suggestionRequest.name}: ${label?.name||suggestion.option.variant_id}`;
+      $("suggestion-source").textContent=(suggestion.source==="synthetic"?"Prototype/demo learning only. ":"Real-feedback policy. ")+
+        (suggestion.policy_version===0?"No approved learned policy yet: this is a baseline exploration suggestion.":"Uses the approved feedback-trained policy.")+" You remain in control.";
+      return;
+    }
+    const receipt=new URLSearchParams(location.search).get("receipt");
+    if(receipt){renderProject(await api(`/api/deliveries?receipt=${encodeURIComponent(receipt)}`));return;}
+    $("landing").hidden=false;
+    for(const project of (await api("/api/deliveries")).deliveries){
+      const card=document.createElement("div");card.className="card";
+      const link=document.createElement("a");link.href=`?receipt=${encodeURIComponent(project.receipt_id)}`;link.textContent=project.title;
+      const meta=document.createElement("small");meta.textContent=`${project.function_count} selected functionalities / ${project.source==="synthetic"?"Demo":"Client-reported delivery"} / feedback saved`;
+      card.append(link,meta);$("saved").append(card);
+    }
+  }catch(error){showError(error);}
+})();
+</script></main></body></html>
