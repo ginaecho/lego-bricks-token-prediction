@@ -1,0 +1,63 @@
+{
+  "build_id": "wave3_t155_single_review__ind-public_sector",
+  "composition_label": "single_review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "root": ["schema_version", "synthetic_fixture", "policy", "documents"],
+      "policy": ["id", "text", "requirements"],
+      "requirement": ["id", "applies_to", "source_phrase", "required_fields", "evidence_terms"],
+      "document": ["id", "entity_type", "case_number", "citizen", "form_fields", "evidence"],
+      "citizen": "null or an object with name, address, email; synthetic data only",
+      "evidence": ["id", "requirement_id", "text"],
+      "entity_types": ["citizen_service_request", "benefits_application", "policy_document"],
+      "form_fields": ["service_description", "household_size", "income_statement", "residency_statement", "public_summary"],
+      "identifiers": "P-, R-, D-, E- followed by three digits; CASE-DEMO- followed by four digits"
+    },
+    "output": "One JSON object with schema_version, status, synthetic_fixture, review_type, summary, privacy, limitations, reviews. Each review has document_id, entity_type, status, checks. Checks carry requirement and policy references, evidence IDs, missing field names, and fixed plain-language explanations.",
+    "error": "One JSON object with schema_version, status=error, and a privacy-safe message; exit code 2",
+    "validation": "One validate function for CLI/API. Exact fields, bounded lists and text, synthetic marker, unique identifiers, known references, applicable evidence, and grounded policy source phrases. CLI additionally limits input to 1000000 bytes and rejects duplicate JSON keys, nonfinite numbers, and invalid UTF-8."
+  },
+  "cross_stage_handoffs": [
+    "Single stage: government form JSON and policy text pass through the shared validation layer into deterministic document review and a shared JSON result."
+  ],
+  "behavior": [
+    "Requirements are explicit structured input grounded to literal source phrases in invented policy text.",
+    "Supported means required form fields exist and one associated evidence item contains all configured phrases, ignoring case and whitespace.",
+    "Missing fields or evidence produce traceable gaps. No applicable rules produces not_assessed.",
+    "Privacy Act/GDPR-inspired minimization: never return citizen PII, case numbers, free-text evidence, policy prose, or arbitrary input values. This does not certify privacy compliance.",
+    "FOIA/open-records-inspired traceability: emit stable synthetic requirement/evidence IDs and policy JSON pointers, not eligibility decisions.",
+    "Section 508 spirit: fixed plain-language explanations and structured text, without color-only signals or accessibility certification.",
+    "Only synthetic fixtures are accepted; the marker cannot prove data provenance. Operators must not provide real PII.",
+    "No LLM step, live provider, persistent storage, or network calls."
+  ],
+  "scope": {
+    "included": ["Bounded document review", "All three public-sector entities", "Synthetic government forms and policy/regulation text", "PII-minimized output", "Traceable gap reporting", "CLI and unittest suite"],
+    "excluded": ["Certification", "Legal advice", "Eligibility decisions", "Semantic or factual evidence verification", "Authenticity checks", "Encryption or access-control infrastructure", "Production deployment", "Automatic extraction of policy requirements"]
+  },
+  "test_outcomes": {
+    "state": "Passed",
+    "tests_run": 16,
+    "failures": 0,
+    "errors": 0,
+    "unittest_exit_code": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "example_documents_reviewed": 3,
+    "example_gaps_found": 1
+  }
+}

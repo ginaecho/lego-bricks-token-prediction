@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t081_single_basic-recommend",
+  "composition_label": "Personalized discovery",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated implementation using explicitly synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1",
+      "catalog": "Required array, maximum 10000 unique products. Required product fields: id/name/category nonblank strings, tags unique string array, price finite 0..1000000000, popularity finite 0..1, in_stock boolean.",
+      "customer": "Required object with nonblank id; optional preferred_categories/preferred_tags/blocked_categories unique string arrays, inclusive budget {min,max}, interactions [{product_id,type}]. Events reference catalog ids; type is view/like/purchase/dislike; maximum 10000.",
+      "options": "Optional object: limit integer 1..100 default 5; exclude_purchased boolean default true; diversity number 0..1 default 0.5."
+    },
+    "output": "status=ok, schema_version=1, customer_id, ranked recommendations (product_id,name,category,price,score,score_components,reasons), summary with counts, exclusive exclusion reasons, mode and deduplicated event count.",
+    "errors": "CLI validation, parsing and file errors produce a single {status:error,error:message} JSON object and exit 2; success exits 0.",
+    "validation": "One validate function shared by recommend and CLI. Reject unknown fields, bool-as-number, nonfinite numbers, duplicate ids/tags, invalid ranges and event references. JSON parser additionally rejects duplicate object keys and nonstandard numeric constants. Strings match exactly and case-sensitively."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: validated input -> deduplicated interaction affinities -> hard-filtered candidates -> explainable scores -> diversity-aware ordered output. No independent inter-service stages."
+  ],
+  "behavior": {
+    "eligibility": "Exclude unavailable, blocked-category, outside-budget, explicitly disliked and optionally purchased products in that precedence. Each product contributes to at most one exclusion count.",
+    "scoring": "Preferred category +3; preferred tag overlap / total preferred tags *2; popularity +0..1. Unique events add view=0.25, like=1, purchase=1.5, dislike=-2 to category and tag affinity. Clamp each affinity to [-2,2]; history score is category affinity plus average candidate-tag affinity.",
+    "ranking": "Greedily maximize base score minus diversity * already-selected count in category. Ties use product id lexicographically; rounds displayed scores to six decimals only after ranking. Default limit 5; no padding or relaxation when candidates are exhausted.",
+    "cold_start": "Popularity ranking with category diversity when explicit positive preferences and interaction history are absent. Empty input catalogs return a successful empty list.",
+    "privacy_and_determinism": "Customer id only labels output; no protected traits, persistent state, randomness, network, live providers or injected LLM required.",
+    "fixtures": "All product names, ids and customer ids in the example are labeled synthetic."
+  },
+  "scope": {
+    "included": ["Personal preferences", "Positive and negative behavioral affinity", "Availability and budget filters", "Purchased-item suppression", "Category variety", "Transparent explanations", "Cold-start fallback", "Strict CLI errors"],
+    "excluded": ["Model training", "Collaborative filtering", "Live inventory", "Currency conversion", "Persistent profiles", "Authentication", "Temporal decay", "Production-scale optimization", "LLM providers"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 13,
+    "cli_example": "passed: exit 0, one valid JSON object, status ok, two recommendations",
+    "unittest_result": "13 tests passed; initial incorrect expected score in test fixture was corrected to match the documented formula",
+    "error_paths": "Verified malformed JSON, invalid schemas, missing files and missing arguments return JSON status error with exit 2"
+  }
+}

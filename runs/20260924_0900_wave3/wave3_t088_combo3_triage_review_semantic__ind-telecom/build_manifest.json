@@ -1,0 +1,89 @@
+{
+  "build_id": "wave3_t088_combo3_triage_review_semantic__ind-telecom",
+  "composition_label": "Ticket triage & routing -> Document review -> Semantic search | Telecommunications",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory; no existing source or other builds read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "transport": "JSON contains schema_version, synthetic=true, policy, accounts, tickets (support chat transcripts), cdr_csv, documents, query, and optional config. Unknown fields are rejected.",
+    "canonical_envelope": "All stages share schema_version, synthetic, status, stage, policy, rules, records, matches. Intake converts transport records into this envelope; canonical_validate validates each stage input and output.",
+    "canonical_record": "ticket_id, account_id, subscriber_ref, residency, signals, urgent, usage (record_ids, call_seconds, data_mb), evidence (requirement -> provenance IDs), billing_adjustment (amount, reason_stated) with validated triage and review enrichments.",
+    "triage": "category, priority (1 most urgent through 4), team, owner",
+    "review": "checks (requirement, source_ids, satisfied), gaps (requirement, ticket_id, owner, reason), status (gaps_found or evidence_present), certification_claim=false",
+    "matches": "ticket_id, residency, score, mode, review_status, gap_requirements",
+    "errors": "One JSON object with status=error; CLI exit 2. Raw private input and exception details are never echoed."
+  },
+  "cross_stage_handoffs": [
+    "Intake validates subscriber accounts, per-record residency, consent, raw transcript shape, CDR CSV, proposed adjustment reason, document links, and query. It removes direct identifiers and source prose before constructing the canonical envelope.",
+    "Triage consumes validated intake signals, deterministically selects a configured category, urgency and accountable team/owner. Its output is revalidated.",
+    "Review consumes validated triage routing, uses that category's evidence requirements, and derives traceable gaps with the same accountable owner. An adjustment always adds a reason requirement. Its output is revalidated.",
+    "Semantic search consumes validated review output, builds a residency-partitioned local index from category, team, requirements and gaps, then emits ranked matches linked to review status and gap requirements. Its output is revalidated."
+  ],
+  "behavior": {
+    "determinism": "Whole-word keyword counts; configuration order breaks category ties; explicit fallback handles no matches; urgent keywords set priority 1; score descending then ticket_id ascending breaks search ties.",
+    "search": "Default local cosine TF-IDF with a fixed telecom synonym map. Unknown query terms may return no matches. query.limit is 1..100. Indexing occurs only within the query residency; all records remain in the full pipeline result for the local caller.",
+    "optional_injection": "run_pipeline(payload, embedder=callable) accepts an optional offline callable returning finite, bounded nonzero vectors. Dimensions must agree. Callback exceptions are sanitized. Test fixtures exercise valid vectors, invalid vectors, mismatched dimensions and failures; no provider is called.",
+    "privacy": "Demonstrative GDPR/CCPA-oriented safeguards: explicit support_resolution purpose, subscriber consent, bounded declared retention (1..365 days), synthetic-only fixtures and data minimization. Raw phone, IMEI, transcript, evidence prose and billing reason text are absent from stage envelopes and stdout.",
+    "residency": "Accounts, tickets, CDRs and documents each require an allowed residency tag; all linked records must match. Search rejects unallowed residency queries and never indexes another residency for that query.",
+    "billing": "Every proposed adjustment, including a zero amount, requires a nonblank stated reason. No financial adjustment is executed.",
+    "evidence": "Evidence presence means a nonblank supplied evidence value or validated linked CDR/reason, not truth verification or regulatory certification. Provenance IDs share an unambiguous namespace.",
+    "synthetic_fixtures": "Invented subscribers and support chats; explicitly fictitious +999 phone numbers and all-zero-prefix IMEIs. Example usage volumes are synthetic. Tests additionally generate randomized volumes with fixed seed 88."
+  },
+  "scope": {
+    "included": [
+      "Single integrated CLI and shared canonical schema/validation layer",
+      "Configurable category, priority, accountable routing and evidence requirements",
+      "Strict CDR CSV import and account-level usage aggregation",
+      "Traceable document evidence gaps without certification claims",
+      "Privacy-minimized residency-filtered semantic retrieval",
+      "Validated optional offline embedding callable",
+      "Deterministic synthetic fixtures and unittest/CLI coverage"
+    ],
+    "excluded": [
+      "Production deployment, persistent storage and persistent search index",
+      "Live LLMs, live providers, external dependencies and network calls",
+      "Authentication, authorization, encryption and operational residency enforcement",
+      "Automated retention deletion, data-subject rights workflows and legal advice",
+      "Evidence authenticity verification, regulatory compliance and certification claims",
+      "Actual billing changes, telecom integration and full natural-language semantic models"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 36,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli_example": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "stage": "semantic",
+      "records": 2,
+      "matches": 1
+    },
+    "cli_error_contract": "Verified missing arguments, extra arguments, missing file, invalid JSON, duplicate JSON keys and invalid payload: one JSON error object and exit 2.",
+    "embedding_validation": "Offline fixture callables passed; invalid, nonfinite, zero and mismatched vectors rejected; tiny finite vectors normalized safely."
+  }
+}

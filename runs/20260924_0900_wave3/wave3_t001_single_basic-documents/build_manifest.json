@@ -1,0 +1,66 @@
+{
+  "build_id": "wave3_t001_single_basic-documents",
+  "composition_label": "Document automation (basic functionality, Operations)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "schema_version": 1,
+      "documents": "Array of unique {id, format: csv|json, content: inline text}. JSON content is an array of objects; CSV starts with unique nonblank headers.",
+      "fields": "Nonempty array of {source, target, type: string|integer|number|boolean, required?: boolean, transforms?: [strip|lower|upper], min?: number, max?: number, pattern?: regex, choices?: array}. Targets must be unique; unknown configuration keys are rejected."
+    },
+    "output": {
+      "schema_version": 1,
+      "status": "ok or error",
+      "records": "Array of {document_id, row: 1-based logical data row, data: renamed and converted fields}",
+      "issues": "Array of {document_id, row, field, message}; unavailable locations are null",
+      "summary": "{documents, rows_seen, rows_emitted, rows_rejected}"
+    },
+    "validation": "One shared require/ValidationError layer for schema, extraction, conversions and checks. Blank strings, null and absent values are missing; optional missing values become null. Required missing values reject a row. Boolean conversion accepts only booleans or true/false strings. Numeric booleans and nonfinite numbers are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validate shared configuration before extracting documents.",
+    "Extract CSV or JSON to ordered dictionaries.",
+    "Select and rename fields, normalize strings, convert scalar types, and check configured constraints.",
+    "Emit only valid rows with provenance, aggregated issues and counters."
+  ],
+  "behavior": {
+    "deterministic": true,
+    "ordering": "Input document order, then logical row order, then field rule order",
+    "error_policy": "Any validation or file error produces status error and CLI exit 2. Successful rows remain available when other rows fail. Structural document errors reject that whole document and allow other documents to continue. rows_seen/rows_rejected count only structurally extracted rows.",
+    "exit_success": 0,
+    "fixture_data": "Clearly labeled synthetic customer order fixtures; no real customer data",
+    "side_effects": "CLI reads one input file and writes one JSON object to stdout; no generated files"
+  },
+  "scope": {
+    "included": ["Inline CSV and JSON document extraction", "General-purpose field mapping", "String normalization", "Typed scalar conversion", "Required fields, numeric bounds, full-match regex and choices", "Provenance and validation reports", "CLI and standard-library unittest suite"],
+    "excluded": ["PDF, office documents and OCR", "Live LLMs or external services", "Enterprise-scale streaming and untrusted regex resource isolation", "Nested field paths", "Document rendering", "Persistent storage", "Cross-document joins"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 12,
+    "failures": 0,
+    "errors": 0,
+    "test_exit_code": 0,
+    "example_cli": {
+      "exit_code": 0,
+      "status": "ok",
+      "documents": 2,
+      "rows_emitted": 3,
+      "issues": 0
+    }
+  }
+}

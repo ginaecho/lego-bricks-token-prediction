@@ -1,0 +1,45 @@
+{
+  "build_id": "wave3_t158_single_adaptive__ind-healthcare",
+  "composition_label": "single_adaptive",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original standalone implementation in this isolated directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact fields: schema_version, synthetic=true, onboarding, records. Onboarding: experience novice/experienced, detail guided/concise, format text/checklist, completed prerequisite IDs. Records: patient_record (Patient), clinical_note (DocumentReference), prior_authorization_request (draft preauthorization Claim).",
+    "output": "schema_version, status, synthetic, human_review_required, onboarding with ordered steps, records with workflow metadata, audit_trail, limitations.",
+    "errors": "One JSON object with status=error and a sanitized message; CLI exit 2.",
+    "validation": "One validate() function for library and CLI; exact-field allowlists, synthetic identifiers, bounded finite lab numbers, cross-resource references, canonical clinical note template, draft-only request.",
+    "fixtures": "Clearly marked fictional Synthea-style patient with D001 diagnosis and L001 lab; codes have no clinical interpretation. No names, birth dates or real MRNs."
+  },
+  "cross_stage_handoffs": [
+    "Single stage: validated shared input -> deterministic preference-aware onboarding plan -> mandatory review metadata on all three records -> per-record audit events and shared output."
+  ],
+  "behavior": {
+    "prerequisites": "synthetic-data and human-review must both be explicitly completed before record-handling steps become available. They can be acknowledged in either order.",
+    "adaptation": "Novices or users preferring guided detail receive extra guidance; experienced concise users receive short explanations. Selected presentation format is carried on each structured step for a renderer.",
+    "constraints": "Always flags human review. Never diagnoses, interprets lab values, recommends treatment, approves or denies a request. Every added workflow field has an audit event including before/after values; original records are otherwise preserved.",
+    "de_identification": "Demonstrative HIPAA-oriented identifier exclusion by rejecting unsupported fields and unrestricted narrative, not by claiming a general-purpose PHI scrubber or certification.",
+    "determinism": "No network, randomness, clock, provider or model. Audit sequence numbers provide deterministic event ordering."
+  },
+  "scope": {
+    "included": ["Adaptive guided onboarding", "Synthetic FHIR-style JSON", "Constrained clinical note text", "Shared validation", "Audit change set", "CLI and unit tests"],
+    "excluded": ["Real patient data", "Complete HL7 FHIR conformance", "HIPAA certification", "Clinical decision making", "Live providers", "Persistent database", "Authentication", "Tamper-proof auditing", "Arbitrary narrative de-identification", "LLM integration"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "15 unittest cases passed",
+    "cli": "Example printed one JSON object with status=ok and exited 0; error paths returned status=error and exit 2."
+  }
+}

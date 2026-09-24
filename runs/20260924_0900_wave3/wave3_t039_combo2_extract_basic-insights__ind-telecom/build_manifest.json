@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t039_combo2_extract_basic-insights__ind-telecom",
+  "composition_label": "extract -> basic:insights",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Synthetic envelope with one processing residency, support_analytics purpose and records of subscriber_account, network_fault_ticket or call_data_usage_record.",
+    "records": "Every input record carries subscriber_id, residency, privacy lawful_basis/opt_out, and document format/text. Account and ticket documents are labeled transcripts; each CDR document has CSV header and exactly one row.",
+    "extraction": "Shared SCHEMAS describe field labels, types and requiredness. Fields contain privacy-filtered value, original half-open Unicode source span and protection marker. Missing required fields are explicitly reported.",
+    "output": "One status/schema_version/synthetic envelope containing validated extraction and derived insights.",
+    "validation": "validate(value, stage) is the shared input, extraction handoff and output boundary. Unknown keys, malformed fields, invalid spans and inconsistent derived outputs are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Input validation -> schema-driven extraction -> extraction validation -> insights(extraction) -> final shared validation.",
+    "Insights consume only privacy-filtered extracted fields, preserving record identifiers, residency tags and source spans in evidence. No raw document or subscriber identifier is emitted."
+  ],
+  "behavior": {
+    "extraction": "Case-insensitive labeled account/support fields; strict CSV parsing, quoted-cell spans, numeric coercion, duplicate-field rejection and missing-field reporting.",
+    "insights": "Deterministic multi-label keyword themes for network, billing, support and plan feedback; other fallback; high_usage at data_mb >= 10000; record counts, source evidence and suggested actions.",
+    "privacy": "Demonstrative GDPR/CCPA-inspired purpose, lawful-basis, opt-out and minimization checks. Explicit phone/IMEI fields redacted; phone-like numeric strings and emails filtered in text. Correlation uses deterministic subscriber pseudonyms. No compliance certification claim.",
+    "residency": "All records including opt-outs must match EU or US processing residency. Extracted records, exclusion records and theme evidence retain the tag. This is tag validation, not infrastructure geolocation.",
+    "billing": "Every extracted billing adjustment, including zero, requires a nonempty stated reason. Adjustments are not executed.",
+    "fixtures": "Clearly labeled synthetic envelope, fictitious phone/IMEI and invented tickets. Synthetic usage volumes include pseudo-randomized values, with repeatable seeded random-volume fixtures exercised by tests.",
+    "errors": "File and validation errors emit one non-sensitive JSON status:error response and exit 2. Successful CLI emits one JSON object and exits 0."
+  },
+  "scope": {
+    "included": ["Integrated deterministic pipeline", "Shared schemas and validation", "Source spans", "Missing-field reports", "Privacy-filtered actionable theme evidence", "CLI and unittest coverage"],
+    "excluded": ["Production or compliance certification", "Live networks or model providers", "General natural-language field recognition", "Full PII detection for arbitrary names and addresses", "Infrastructure residency enforcement", "Database persistence", "Real billing changes", "Sentiment or causal inference", "Multi-row CDR documents"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 23,
+    "failures": 0,
+    "errors": 0,
+    "cli_example_exit_code": 0,
+    "cli_example_status": "ok",
+    "cli_example_processed_records": 4,
+    "cli_example_privacy_exclusions": 1
+  }
+}

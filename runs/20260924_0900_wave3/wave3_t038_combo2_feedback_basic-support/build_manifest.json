@@ -1,0 +1,71 @@
+{
+  "build_id": "wave3_t038_combo2_feedback_basic-support",
+  "composition_label": "Feedback analysis -> AI customer support (basic)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "1.0",
+      "data_label": "synthetic",
+      "team_online": "boolean",
+      "feedback": "array of {id: unique nonblank string, text: nonblank string}",
+      "knowledge_base": "array of {id: unique nonblank string, title: nonblank string, text: nonblank string, keywords: string array}",
+      "questions": "array of {id: unique nonblank string, text: nonblank string}"
+    },
+    "output": {
+      "schema_version": "1.0",
+      "data_label": "synthetic",
+      "status": "ok",
+      "feedback_analysis": "source_count, unique_count, duplicate_count, canonical groups, themes with exact source excerpts",
+      "support": "team_online and responses with question IDs, status, grounded answer, citations, related themes, supporting feedback and optional human handoff"
+    },
+    "errors": "One JSON object with status=error and error description; CLI exit 2",
+    "validation": "Single validate(stage, value, context) layer; strict input keys/types, unique IDs per collection, <=1000 records per collection, <=100 keywords/article, <=10000 characters/string. Empty collections allowed. Validates deduplication coverage, counts, classification, exact evidence and deterministic support grounding. JSON duplicate keys and nonfinite constants rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "feedback_analysis",
+      "to": "support",
+      "payload": "Validated canonical groups, thematic summaries, original source IDs and exact-prefix supporting excerpts",
+      "consumption": "Support associates questions with feedback themes or shared meaningful terms, preserving deduplicated source provenance. These insights enrich each response but never substitute for authoritative knowledge-base guidance."
+    }
+  ],
+  "behavior": {
+    "deduplication": "NFKC Unicode normalization, case folding and word-token whitespace/punctuation normalization; first source is canonical. No fuzzy semantic deduplication.",
+    "themes": "Deterministic English keyword categories delivery/refunds/product/support, with general fallback; multi-label counts may overlap.",
+    "excerpts": "First 240 characters verbatim from canonical source; all duplicate source IDs retained.",
+    "support": "General-purpose keyword-based knowledge-base retrieval; up to two exact published passages ranked by keyword overlap then article ID. No live AI or optional injected callable is needed.",
+    "offline": "Guidance remains available offline. Unmatched questions request human assistance without fabricating a ticket, action or response time.",
+    "trust_boundary": "Knowledge base is trusted published guidance; customer feedback is unverified evidence only. Grounded guidance is not a claim that an account action was performed.",
+    "determinism": "Stable for identical input; no randomness, time dependence, network, model or external service."
+  },
+  "scope": {
+    "included": ["Integrated two-stage pipeline", "Shared validation", "Synthetic fixtures", "CLI JSON errors", "Offline support", "Traceable citations", "Deterministic tests"],
+    "excluded": ["Live providers", "Ticket creation", "Account modifications", "Semantic reasoning or answer completeness guarantees", "Multilingual theme classification", "Sentiment modeling", "Persistent storage", "Enterprise production deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 18, "passed": 18, "failures": 0, "errors": 0},
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "verified": "Unit suite and example CLI executed successfully; tests include subprocess success, usage and missing-file errors, plus in-memory malformed JSON fixtures."
+  }
+}

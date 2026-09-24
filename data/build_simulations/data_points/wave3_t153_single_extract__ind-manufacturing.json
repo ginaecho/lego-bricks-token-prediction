@@ -97,7 +97,7 @@
   "split_group": "b827db7d360a4e1385ffe898b67dadc615f294a5825637bdeeae5710120a107e",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "ef71a044963fe1405b6880a0614ec98d0e009391e3b81bb79eeb9184ca5b355b",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t153_single_extract__ind-manufacturing",
   "membership_point_id": "single_extract__ind-manufacturing",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "818eab6e2c37a6952ec6e4b16cbff17d6c37f7a8afe50f487554bebe061d7abe",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "81b8c76e-4e3c-4b4f-b1c4-596f008429fd",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 128056,
+    "output_tokens": 8170,
+    "cache_read_tokens": 116894,
+    "cache_write_tokens": 11144,
+    "total_tokens": 136226,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38106,
+        "agent_id": "81b8c76e-4e3c-4b4f-b1c4-596f008429fd",
+        "model": "gpt-6-astra",
+        "input_tokens": 14991,
+        "output_tokens": 643,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 845,
+        "reasoning_tokens": 464,
+        "duration_ms": 19069,
+        "created_at": "2026-09-24T12:53:47.842Z"
+      },
+      {
+        "id": 38152,
+        "agent_id": "81b8c76e-4e3c-4b4f-b1c4-596f008429fd",
+        "model": "gpt-6-astra",
+        "input_tokens": 15665,
+        "output_tokens": 6614,
+        "cache_read_tokens": 14988,
+        "cache_write_tokens": 674,
+        "reasoning_tokens": 0,
+        "duration_ms": 99917,
+        "created_at": "2026-09-24T13:03:44.878Z"
+      },
+      {
+        "id": 38154,
+        "agent_id": "81b8c76e-4e3c-4b4f-b1c4-596f008429fd",
+        "model": "gpt-6-astra",
+        "input_tokens": 22599,
+        "output_tokens": 246,
+        "cache_read_tokens": 15662,
+        "cache_write_tokens": 6934,
+        "reasoning_tokens": 95,
+        "duration_ms": 6345,
+        "created_at": "2026-09-24T13:04:17.389Z"
+      },
+      {
+        "id": 38158,
+        "agent_id": "81b8c76e-4e3c-4b4f-b1c4-596f008429fd",
+        "model": "gpt-6-astra",
+        "input_tokens": 24509,
+        "output_tokens": 326,
+        "cache_read_tokens": 22596,
+        "cache_write_tokens": 1910,
+        "reasoning_tokens": 41,
+        "duration_ms": 7183,
+        "created_at": "2026-09-24T13:04:58.028Z"
+      },
+      {
+        "id": 38160,
+        "agent_id": "81b8c76e-4e3c-4b4f-b1c4-596f008429fd",
+        "model": "gpt-6-astra",
+        "input_tokens": 25002,
+        "output_tokens": 236,
+        "cache_read_tokens": 24506,
+        "cache_write_tokens": 493,
+        "reasoning_tokens": 0,
+        "duration_ms": 4739,
+        "created_at": "2026-09-24T13:05:18.038Z"
+      },
+      {
+        "id": 38162,
+        "agent_id": "81b8c76e-4e3c-4b4f-b1c4-596f008429fd",
+        "model": "gpt-6-astra",
+        "input_tokens": 25290,
+        "output_tokens": 105,
+        "cache_read_tokens": 24999,
+        "cache_write_tokens": 288,
+        "reasoning_tokens": 0,
+        "duration_ms": 3843,
+        "created_at": "2026-09-24T13:06:19.761Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.44269000000000003,
+      "observed_cache_profile_estimate_usd": 0.1796785,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.3122799999999994,
+      "observed_cache_profile_estimate_usd": 5.3122799999999994,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,362 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................\n----------------------------------------------------------------------\nRan 16 tests in 2.536s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "synthetic": true,
+      "entities": {
+        "work_order": [
+          {
+            "work_order_id": {
+              "value": "SYN-WO-153",
+              "source_span": {
+                "document": "work_order",
+                "start": 17,
+                "end": 29
+              }
+            },
+            "asset_id": {
+              "value": "SYN-MILL-42",
+              "source_span": {
+                "document": "work_order",
+                "start": 41,
+                "end": 54
+              }
+            },
+            "part_id": {
+              "value": "SYN-SHAFT-7",
+              "source_span": {
+                "document": "work_order",
+                "start": 65,
+                "end": 78
+              }
+            },
+            "unit": {
+              "value": "mm",
+              "source_span": {
+                "document": "work_order",
+                "start": 86,
+                "end": 90
+              }
+            },
+            "target": {
+              "value": 25.0,
+              "source_span": {
+                "document": "work_order",
+                "start": 100,
+                "end": 104
+              }
+            },
+            "tolerance": {
+              "value": 0.1,
+              "source_span": {
+                "document": "work_order",
+                "start": 117,
+                "end": 120
+              }
+            },
+            "maintenance_log": {
+              "value": "Invented maintenance log: synthetic spindle lubrication completed 2026-09-23 by SYN-TECH-8.",
+              "source_span": {
+                "document": "work_order",
+                "start": 139,
+                "end": 232
+              }
+            }
+          }
+        ],
+        "telemetry": [
+          {
+            "timestamp": {
+              "value": "2026-09-24T08:00:00Z",
+              "source_span": {
+                "document": "telemetry",
+                "start": 73,
+                "end": 93
+              }
+            },
+            "asset_id": {
+              "value": "SYN-MILL-42",
+              "source_span": {
+                "document": "telemetry",
+                "start": 94,
+                "end": 105
+              }
+            },
+            "temperature": {
+              "value": 66.21,
+              "source_span": {
+                "document": "telemetry",
+                "start": 106,
+                "end": 111
+              }
+            },
+            "temperature_unit": {
+              "value": "degC",
+              "source_span": {
+                "document": "telemetry",
+                "start": 112,
+                "end": 116
+              }
+            },
+            "vibration": {
+              "value": 2.14,
+              "source_span": {
+                "document": "telemetry",
+                "start": 117,
+                "end": 121
+              }
+            },
+            "vibration_unit": {
+              "value": "mm/s",
+              "source_span": {
+                "document": "telemetry",
+                "start": 122,
+                "end": 126
+              }
+            }
+          },
+          {
+            "timestamp": {
+              "value": "2026-09-24T08:01:00Z",
+              "source_span": {
+                "document": "telemetry",
+                "start": 127,
+                "end": 147
+              }
+            },
+            "asset_id": {
+              "value": "SYN-MILL-42",
+              "source_span": {
+                "document": "telemetry",
+                "start": 148,
+                "end": 159
+              }
+            },
+            "temperature": {
+              "value": 67.83,
+              "source_span": {
+                "document": "telemetry",
+                "start": 160,
+                "end": 165
+              }
+            },
+            "temperature_unit": {
+              "value": "degC",
+              "source_span": {
+                "document": "telemetry",
+                "start": 166,
+                "end": 170
+              }
+            },
+            "vibration": {
+              "value": 2.38,
+              "source_span": {
+                "document": "telemetry",
+                "start": 171,
+                "end": 175
+              }
+            },
+            "vibration_unit": {
+              "value": "mm/s",
+              "source_span": {
+                "document": "telemetry",
+                "start": 176,
+                "end": 180
+              }
+            }
+          },
+          {
+            "timestamp": {
+              "value": "2026-09-24T08:02:00Z",
+              "source_span": {
+                "document": "telemetry",
+                "start": 181,
+                "end": 201
+              }
+            },
+            "asset_id": {
+              "value": "SYN-MILL-42",
+              "source_span": {
+                "document": "telemetry",
+                "start": 202,
+                "end": 213
+              }
+            },
+            "temperature": {
+              "value": 90.12,
+              "source_span": {
+                "document": "telemetry",
+                "start": 214,
+                "end": 219
+              }
+            },
+            "temperature_unit": {
+              "value": "degC",
+              "source_span": {
+                "document": "telemetry",
+                "start": 220,
+                "end": 224
+              }
+            },
+            "vibration": {
+              "value": 3.02,
+              "source_span": {
+                "document": "telemetry",
+                "start": 225,
+                "end": 229
+              }
+            },
+            "vibration_unit": {
+              "value": "mm/s",
+              "source_span": {
+                "document": "telemetry",
+                "start": 230,
+                "end": 234
+              }
+            }
+          }
+        ],
+        "inspection": [
+          {
+            "inspection_id": {
+              "value": "SYN-QI-91",
+              "source_span": {
+                "document": "inspection",
+                "start": 15,
+                "end": 24
+              }
+            },
+            "work_order_id": {
+              "value": "SYN-WO-153",
+              "source_span": {
+                "document": "inspection",
+                "start": 40,
+                "end": 50
+              }
+            },
+            "asset_id": {
+              "value": "SYN-MILL-42",
+              "source_span": {
+                "document": "inspection",
+                "start": 61,
+                "end": 72
+              }
+            },
+            "part_id": {
+              "value": "SYN-SHAFT-7",
+              "source_span": {
+                "document": "inspection",
+                "start": 82,
+                "end": 93
+              }
+            },
+            "timestamp": {
+              "value": "2026-09-24T08:03:00Z",
+              "source_span": {
+                "document": "inspection",
+                "start": 105,
+                "end": 125
+              }
+            },
+            "inspector_id": {
+              "value": "SYN-INSPECTOR-3",
+              "source_span": {
+                "document": "inspection",
+                "start": 140,
+                "end": 155
+              }
+            },
+            "measured": {
+              "value": 25.06,
+              "source_span": {
+                "document": "inspection",
+                "start": 166,
+                "end": 171
+              }
+            },
+            "unit": {
+              "value": "mm",
+              "source_span": {
+                "document": "inspection",
+                "start": 178,
+                "end": 180
+              }
+            },
+            "decision": {
+              "value": "pass",
+              "source_span": {
+                "document": "inspection",
+                "start": 191,
+                "end": 195
+              }
+            },
+            "decision_reason": {
+              "value": "Synthetic micrometer reading within specified tolerance; safety alert requires separate human review.",
+              "source_span": {
+                "document": "inspection",
+                "start": 213,
+                "end": 314
+              }
+            }
+          }
+        ]
+      },
+      "missing_fields": [],
+      "alerts": [
+        {
+          "severity": "safety-critical",
+          "record": 2,
+          "reasons": [
+            "temperature_at_or_above_90_degC"
+          ],
+          "action": "escalate_to_human",
+          "human_review_required": true,
+          "recipient": "plant_safety_operator",
+          "delivery_status": "pending_external_delivery",
+          "source_fields": [
+            "telemetry[2].temperature",
+            "telemetry[2].vibration"
+          ]
+        }
+      ],
+      "quality_trace": {
+        "complete": true,
+        "expected_decision": "pass",
+        "decision": "pass",
+        "inspection_id": "SYN-QI-91",
+        "work_order_id": "SYN-WO-153",
+        "asset_id": "SYN-MILL-42",
+        "part_id": "SYN-SHAFT-7",
+        "inspector_id": "SYN-INSPECTOR-3",
+        "timestamp": "2026-09-24T08:03:00Z",
+        "decision_reason": "Synthetic micrometer reading within specified tolerance; safety alert requires separate human review.",
+        "evidence": [
+          "work_order[0].target",
+          "work_order[0].tolerance",
+          "inspection[0].measured"
+        ],
+        "release_authorized": false
+      },
+      "validation_note": "Demonstrative traceability rules; not ISO 9001 certification."
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t153_single_extract__ind-manufacturing",
+    "artifact_sha256": {
+      "implementation.py": "b077154985ba8a9b6049be9162520b81fa7a594e68a06e6ea8fd83e1b7d2567c",
+      "test_implementation.py": "11f4af631ac23401f28bf770350e0b305f6f0ebb345f75b8b71270361979166a",
+      "example_input.json": "ac87508a59ec424b970bde550e24a65f8ba8806355bf11993b13a8f638a22c48",
+      "build_manifest.json": "de55f90c038cfe9f59d9884186658894eee454dd2a93e4bc5e59075b94b74c6f"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

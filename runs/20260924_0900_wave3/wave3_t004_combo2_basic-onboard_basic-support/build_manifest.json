@@ -1,0 +1,61 @@
+{
+  "build_id": "wave3_t004_combo2_basic-onboard_basic-support",
+  "composition_label": "basic:onboard -> basic:support",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "fixture_label": "nonempty text labeling synthetic data",
+      "customer": "id, name, role (individual/team_admin), goal, completed_steps",
+      "support": "question (nonblank text), team_online (boolean)",
+      "knowledge": "array of unique-id articles: id, title, body, keywords, step_ids"
+    },
+    "output": "schema_version, fixture_label, status=ok, onboarding, support",
+    "error": "status=error and error text; CLI exit 2",
+    "validation": "Shared validate(kind, value) enforces exact fields, types, nonblank bounded text, unique identifiers, valid steps, stage invariants and cross-stage consistency. JSON duplicate fields and nonfinite numbers are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "onboarding",
+      "to": "support",
+      "fields": ["customer_id", "goal", "next_step", "remaining_steps", "status"],
+      "consumption": "Support validates the onboarding output and checks it against the request. Current step breaks retrieval ties and is preserved in the answer; customer, goal and step inform escalation summaries."
+    }
+  ],
+  "behavior": {
+    "onboarding": "Select first incomplete applicable step in order: verify email, set goal, invite team (admins only), start project. Personalize using name and goal; completed customers have no next step.",
+    "support": "Case-insensitive token overlap on article titles and keywords. Rank by overlap, then onboarding-step relevance, then original article order. Return the selected body verbatim with its article ID as citation. No match produces an explicit knowledge-gap answer and a live/offline handoff proposal.",
+    "offline": "Grounded answers work offline; unresolved requests produce an offline_queue proposal, not an actual submitted ticket.",
+    "determinism": "No clock, randomness, persistent state, provider or LLM is used.",
+    "fixtures": "All example customer details and knowledge policies are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["One integrated CLI pipeline", "Role-aware guided onboarding", "Grounded deterministic support retrieval", "Shared validation", "JSON errors", "Offline fallback", "Unittest coverage"],
+    "excluded": ["Live AI providers", "Semantic understanding or generation", "Production retrieval quality", "Authentication", "External ticket submission", "Database persistence", "GUI", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 18,
+    "cli": "passed: example prints one JSON object with status ok and exits 0",
+    "validation_errors": "Verified missing file, missing argument, malformed JSON, duplicate JSON fields, nonfinite JSON values and invalid schema return status error and exit 2"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "build_id": "wave3_t096_combo4_deep_interests_feedback_extract__ind-energy",
+  "composition_label": "deep -> interests -> feedback -> extract | Energy and utilities",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "energy-reference/1",
+    "input": "Synthetic source object: assets, topology, documents with explicit claims and exact quotes, preferences, safety_rules, outages, feedback, meter_csv, telemetry and extraction_schema.",
+    "envelope": "schema_version, status, stage, data; data retains the protected source and accumulates validated stage results.",
+    "validation": "validate(envelope, expected) is called before and after each stage; it checks source entities, safety rules, evidence provenance, exclusions, feedback support and extraction coverage/types/spans/missing reports.",
+    "source_spans": "Zero-based start-inclusive/end-exclusive character offsets into the protected source retained in data.source. They are not byte offsets into unprotected input.",
+    "extraction_schema": "List of unique name/label/type/required fields; type is string or number; optional unit and semantic (generic, emissions, priority). Labels are literal and match semicolon/newline-delimited Label: value segments.",
+    "meter_format": "CSV columns in order: meter_id,asset_id,timestamp,consumption_kwh. Timezones required, interval keys unique, consumption finite and nonnegative.",
+    "telemetry_format": "JSON synthetic-scada-v1 with devices: device_id, asset_id, timestamp, voltage_kv, state (energized or isolated)."
+  },
+  "cross_stage_handoffs": [
+    {"from": "input", "to": "deep", "data": "Validated source with consistently pseudonymized asset, meter and device identifiers"},
+    {"from": "deep", "to": "interests", "data": "Evidence IDs, asset-topic claims, disagreements and exact document spans"},
+    {"from": "interests", "to": "feedback", "data": "Ranked eligible asset IDs determine the feedback subset"},
+    {"from": "feedback", "to": "extract", "data": "Canonical deduplicated feedback records, original protected text and supporting response IDs"}
+  ],
+  "behavior": {
+    "research": "Synthesize structured claims across multiple documents, group disagreements by asset/topic, retain competing evidence, and report absent evidence/unresolved preference topics. Emissions unit conversion avoids false disagreements between kgCO2e and tCO2e.",
+    "ranking": "Sum nonnegative preference weights once per distinct evidenced topic; suppress zero-score and excluded assets; break ties by protected asset identifier; expose grounded evidence and uncertainty.",
+    "feedback": "Deduplicate case/whitespace-normalized text within asset/outage context, preserve every response span, and count keyword-based themes over unique records.",
+    "extraction": "Literal label extraction from deduplicated feedback according to schema, typed values, exact spans, source response IDs, null missing fields and separate required-missing reports. Repeated labels are rejected as ambiguous.",
+    "industry_rules": "Demonstrative NERC CIP-style identifier minimization through deterministic pseudonyms; no reverse identifier mapping is returned. Fire/live_wire/medical_dependency imply critical; sustained_loss implies high; otherwise routine; highest declared severity wins. Declared rules cannot weaken these constraints. Emissions carry supported units, nonnegative numeric values and provenance.",
+    "errors": "CLI validation, JSON and file errors produce one non-sensitive JSON error object and exit 2; success produces one JSON object and exit 0.",
+    "synthetic_fixtures": "Explicitly synthetic fictitious substations/devices/topology with plausible winter/summer smart-meter intervals and SCADA-style telemetry."
+  },
+  "scope": {
+    "included": [
+      "One deterministic integrated pipeline",
+      "Shared validation and accumulated schema",
+      "Pure Python standard library",
+      "Source-grounded explanations and excerpts",
+      "Industry demonstration constraints",
+      "CLI and unit tests"
+    ],
+    "excluded": [
+      "Live providers, network access and LLM calls",
+      "Enterprise delivery and regulatory certification",
+      "Cryptographic access control, authentication and secret management",
+      "Reidentification-resistant anonymization (stable hashes are pseudonyms only)",
+      "Arbitrary natural-language research or extraction",
+      "General-purpose SCADA protocols or physical grid operation",
+      "Temporal emissions accounting and sophisticated semantic deduplication"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 45,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "coverage": "All four stages, stage-order validation, every handoff, provenance tampering, exclusions, deduplication, missing fields, invalid inputs, meter/SCADA rules, identifier protection, safety/emissions rules, deterministic behavior and CLI success/error cases"
+    },
+    "cli_example": {
+      "exit_code": 0,
+      "stdout": "One valid JSON object",
+      "status": "ok",
+      "final_stage": "extract",
+      "recommendations": 2,
+      "extracted_records": 2
+    },
+    "deliverable_check": "Exactly the four requested files; no generated cache files"
+  }
+}

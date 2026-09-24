@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "customer": {
+    "customer_id": "SYN-C001",
+    "name": "Synthetic Avery Example",
+    "account": "FAKE-ACCOUNT-001",
+    "kyc_status": "pending",
+    "aml_flags": ["unusual_activity"]
+  },
+  "loan_application": {
+    "loan_id": "SYN-L001",
+    "amount": "180000.00",
+    "annual_income": "50000.00",
+    "currency": "EUR"
+  },
+  "question": "What documents verify identity?",
+  "knowledge_base": [
+    {
+      "id": "SYN-KYC-FAQ",
+      "question": "What documents verify identity?",
+      "answer": "For this synthetic workflow, provide a fabricated identity record and a fabricated address record. Pending KYC requires manual review."
+    },
+    {
+      "id": "SYN-LOAN-FAQ",
+      "question": "How is a loan application reviewed?",
+      "answer": "This demonstration uses explained rule-based flags, not an automated lending decision."
+    }
+  ],
+  "transaction_source": {
+    "format": "json",
+    "data": [
+      {"transaction_id": "SYN-T001", "date": "2026-09-01", "amount": "857.26", "currency": "EUR", "account": "FAKE-IBAN-ZZ00-ALPHA", "card_number": "4111111111111111"},
+      {"transaction_id": "SYN-T002", "date": "2026-09-02", "amount": "12851.39", "currency": "EUR", "account": "FAKE-IBAN-ZZ00-BETA", "card_number": ""},
+      {"transaction_id": "SYN-T003", "date": "2026-09-03", "amount": "63.47", "currency": "USD", "account": "FAKE-ACCOUNT-003", "card_number": "5555-5555-5555-4444"}
+    ]
+  }
+}

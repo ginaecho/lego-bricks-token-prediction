@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC",
+  "stage": "source",
+  "privacy": {
+    "processing_permitted": true,
+    "do_not_sell": true,
+    "purpose": "service_improvement",
+    "pseudonymization_key": "synthetic-demo-key-not-production"
+  },
+  "records": [
+    {"type": "subscriber_account", "subscriber_id": "SYN-ALPHA", "residency": "EU", "phone": "+12025550101", "imei": "000000123456789", "erasure_requested": false},
+    {"type": "subscriber_account", "subscriber_id": "SYN-BETA", "residency": "US", "phone": "+12025550102", "imei": "000000987654321", "erasure_requested": false},
+    {"type": "network_fault_ticket", "ticket_id": "FAULT-INVENTED-101", "subscriber_id": "SYN-ALPHA", "residency": "EU", "category": "connectivity"},
+    {"type": "network_fault_ticket", "ticket_id": "FAULT-INVENTED-102", "subscriber_id": "SYN-BETA", "residency": "US", "category": "billing"},
+    {"type": "support_chat", "chat_id": "CHAT-INVENTED-1", "ticket_id": "FAULT-INVENTED-101", "subscriber_id": "SYN-ALPHA", "residency": "EU", "text": "Subscriber: An outage dropped my call. Agent: We will investigate the signal. My fictitious number is +12025550101."},
+    {"type": "support_chat", "chat_id": "CHAT-INVENTED-2", "ticket_id": "FAULT-INVENTED-102", "subscriber_id": "SYN-BETA", "residency": "US", "text": "Subscriber: Please explain this bill and refund the duplicate charge. Agent: Opening an invented review ticket."}
+  ],
+  "cdr_csv": "usage_id,subscriber_id,residency,call_minutes,data_mb,billing_adjustment,adjustment_reason\nCDR-SYN-1,SYN-ALPHA,EU,152,5263,-3.25,service_outage\nCDR-SYN-2,SYN-ALPHA,EU,115,4277,0.00,\nCDR-SYN-3,SYN-BETA,US,95,4189,-1.10,billing_correction\n"
+}

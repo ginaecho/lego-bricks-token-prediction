@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "query": "borrow personal loan",
+  "top_k": 3,
+  "customer": {
+    "id": "SYN-CUSTOMER-001",
+    "name": "Synthetic Customer Avery",
+    "kyc_status": "verified",
+    "kyc_flags": [],
+    "aml_flags": []
+  },
+  "loan_application": {
+    "id": "SYN-LOAN-001",
+    "customer_id": "SYN-CUSTOMER-001",
+    "amount": "12000.00",
+    "currency": "EUR",
+    "term_months": 36,
+    "purpose": "Synthetic home improvement"
+  },
+  "ledger": {
+    "format": "json",
+    "data": [
+      {
+        "id": "SYN-TX-001",
+        "customer_id": "SYN-CUSTOMER-001",
+        "amount": "2764.13",
+        "currency": "EUR",
+        "account": "FAKE-IBAN-EU-00000001",
+        "description": "Synthetic salary fixture",
+        "card_number": "4242424242424242"
+      },
+      {
+        "id": "SYN-TX-002",
+        "customer_id": "SYN-CUSTOMER-001",
+        "amount": "-118.44",
+        "currency": "EUR",
+        "account": "FAKE-IBAN-EU-00000001",
+        "description": "Synthetic grocery fixture",
+        "card_number": "4242424242424242"
+      },
+      {
+        "id": "SYN-TX-003",
+        "customer_id": "SYN-CUSTOMER-001",
+        "amount": "-803.27",
+        "currency": "EUR",
+        "account": "FAKE-ACCOUNT-00000001",
+        "description": "Synthetic housing fixture",
+        "card_number": null
+      }
+    ]
+  },
+  "products": [
+    {
+      "id": "SYN-PRODUCT-LOAN",
+      "kind": "loan",
+      "name": "Synthetic personal loan",
+      "description": "Borrow for home improvements with a personal installment loan",
+      "currency": "EUR"
+    },
+    {
+      "id": "SYN-PRODUCT-PAYMENT",
+      "kind": "payment",
+      "name": "Synthetic payments account",
+      "description": "Transfer funds and manage domestic payments",
+      "currency": "EUR"
+    },
+    {
+      "id": "SYN-PRODUCT-SAVINGS",
+      "kind": "savings",
+      "name": "Synthetic savings account",
+      "description": "Deposit funds for future savings goals",
+      "currency": "EUR"
+    }
+  ],
+  "completed_steps": []
+}

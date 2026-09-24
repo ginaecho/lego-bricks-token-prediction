@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "now": "2026-09-24T12:00:00+00:00",
+  "citizen_id": "SYN-C-001",
+  "personas": [
+    {"id": "SYN-C-001", "pii": {"name": "Invented Mira Example", "email": "mira@example.invalid", "address": "SYNTHETIC 000 Imaginary Lane, Nowhere"}},
+    {"id": "SYN-C-002", "pii": {"name": "Invented Tomas Example", "email": "tomas@example.invalid", "address": "SYNTHETIC 000 Fiction Road, Nowhere"}}
+  ],
+  "service_requests": [
+    {"case_id": "SYN-REQ-001", "citizen_id": "SYN-C-001", "feedback": "I am Invented Mira Example. The wait is long and the form needs screen reader access. Contact mira@example.invalid."}
+  ],
+  "benefits_applications": [
+    {"case_id": "SYN-APP-002", "citizen_id": "SYN-C-002", "feedback": "Which documents are needed? Please explain the paperwork in plain language."}
+  ],
+  "policy_documents": [
+    {"id": "SYN-P-001", "title": "Synthetic benefits form guide", "tags": ["paperwork", "access"], "text": "Synthetic policy; not a real regulation.\nService: Example support application\nResponse days: 14\nEffective date: 2026-10-01\nHelp: Ask the invented service desk."},
+    {"id": "SYN-P-002", "title": "Synthetic request waiting guide", "tags": ["waiting"], "text": "Synthetic policy; not a real regulation.\nService: Example citizen request\nResponse days: 30\nHelp: Ask for a status update."}
+  ],
+  "events": [
+    {"citizen_id": "SYN-C-001", "document_id": "SYN-P-002", "kind": "browse", "at": "2026-09-24T12:00:00Z"},
+    {"citizen_id": "SYN-C-001", "document_id": "SYN-P-002", "kind": "purchase", "at": "2026-08-25T12:00:00Z"},
+    {"citizen_id": "SYN-C-002", "document_id": "SYN-P-001", "kind": "browse", "at": "2026-09-24T12:00:00Z"}
+  ],
+  "extraction_schema": [
+    {"name": "service", "label": "Service", "type": "string", "required": true},
+    {"name": "response_days", "label": "Response days", "type": "integer", "required": true},
+    {"name": "effective_date", "label": "Effective date", "type": "date", "required": true},
+    {"name": "appeal", "label": "Appeal", "type": "string", "required": false}
+  ]
+}

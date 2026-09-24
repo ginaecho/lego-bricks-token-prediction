@@ -1,0 +1,98 @@
+{
+  "build_id": "wave3_t061_combo3_basic-documents_basic-onboard_basic-insights__ind-manufacturing",
+  "composition_label": "basic:documents -> basic:onboard -> basic:insights; Manufacturing",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original integrated reference implementation built within the isolated directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict JSON envelope: schema_version, synthetic=true, fixture_label, industry=Manufacturing, work_orders, telemetry_csv, quality_inspections, maintenance_logs, feedback.",
+    "normalization": "ERP/MES-style work-order JSON remains structured. Exact-header time-series CSV is normalized into typed telemetry records. Header-only CSV and empty optional record arrays are valid; at least one work order is required.",
+    "common_output": "Same canonical envelope with telemetry replacing telemetry_csv, status=ok, stage, and cumulatively appended documents/onboarding/insights sections.",
+    "identity": "Unique IDs per collection; cross-references resolve to work orders, customer names are consistent, inspection lots and machine assets match.",
+    "validation": "One validate gateway and validate_common layer at every stage; deterministic recomputation validates derived sections and preserves provenance. Finite non-boolean numbers, timezone-qualified timestamps, chronological sensor streams, strict units and physical/tolerance bounds.",
+    "units": {
+      "temperature": "C; physical range -50 through 300",
+      "vibration": "mm/s; physical range 0 through 100",
+      "diameter": "mm; physical range 0.001 through 1000"
+    },
+    "tolerance_semantics": "Inclusive min/max normal range, critical if value > safety_max; min <= max <= safety_max. Values outside operating tolerance but inside physical limits create alerts, not invalid input. Physical limits and thresholds are illustrative, not universal equipment rules.",
+    "quality_traceability": "Inspection ID, work-order ID, lot, asset, customer, named decision maker, decision timestamp, rationale, measured value/unit and exact tolerance are retained. Accept/reject must agree with measured tolerance.",
+    "errors": "CLI validation, JSON, encoding and file errors emit one JSON object with status=error and exit 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:documents",
+      "to": "basic:onboard",
+      "data": "Validated normalized records, quality decision register and source-linked telemetry/inspection/maintenance alerts.",
+      "consumption": "Onboarding validates the entire documents state before creating personalized prioritized tasks, blocked customer states and one explicit next-step ID per customer."
+    },
+    {
+      "from": "basic:onboard",
+      "to": "basic:insights",
+      "data": "Validated onboarding tasks/customer statuses plus preserved feedback, source alerts, orders and quality evidence.",
+      "consumption": "Insights validates the full onboarding state and groups feedback together with actionable task references, reporting negative feedback, affected customers/orders, blocked customers and human escalation counts."
+    }
+  ],
+  "behavior": {
+    "documents": "Extract CSV, reshape normalized records, enforce shared schema and traceability, produce alert evidence and quality-decision register.",
+    "onboarding": "Prioritize critical safety then rejected quality then operational warnings then orientation; personalize instructions using customer, order, asset, operator and lot context.",
+    "insights": "Deterministic multi-label keyword matching for safety, quality, maintenance and training, with other fallback; combine validated onboarding task signals into recommended human actions.",
+    "human_safety": "Every critical alert produces a blocking awaiting_human task assigned to human_safety_lead. No automatic machine actions or production clearance. Resolved maintenance records remain in provenance but do not generate open alerts.",
+    "fixtures": "Clearly marked synthetic telemetry, fictitious machines/customers/operators, and invented maintenance logs. Example nominal readings were generated with random.Random(61), temperature uniform(54,64) C and vibration uniform(1.8,3.3) mm/s; injected anomalies are 5.4 mm/s and 96.2 C. Tests also generate 40 seed-61 plausible samples.",
+    "determinism": "No time-dependent logic, provider calls, randomness in the pipeline or persistent mutations. Sorted priorities and theme lists. Input and prior-stage objects are not mutated.",
+    "feedback_limits": "Themes may overlap; unique feedback count remains separate from per-theme counts. Keyword matching is descriptive and cannot diagnose causality or infer actual customer sentiment beyond supplied labels."
+  },
+  "scope": {
+    "included": [
+      "Single integrated runnable CLI with versioned shared schema",
+      "Manufacturing document extraction, guided onboarding and customer insights",
+      "Demonstrative ISO 9001-style quality decision traceability",
+      "Human escalation for safety-critical sensor, inspection and open maintenance alerts",
+      "Input and cross-stage validation; JSON-only CLI success/error protocol",
+      "Synthetic unit, cross-stage, industry, edge and CLI test coverage"
+    ],
+    "excluded": [
+      "Compliance certification or complete ISO 9001 quality-management system",
+      "Actual equipment control, safety authorization, message delivery or human acknowledgement",
+      "Live ERP/MES integration, PDF/OCR ingestion, network or model providers",
+      "Production authentication, multi-user persistence, tamper-proof audit storage or scale guarantees",
+      "Statistical learning, causal analytics or automatic remediation"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 39,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "coverage": "All stages, cross-stage provenance and tamper rejection, deterministic immutability, seed-generated telemetry, empty collections, identifiers, units, tolerance boundaries, physical limits, timestamps, quality traceability, safety escalation, feedback grouping, CLI success and errors."
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status=ok and stage=insights",
+      "theme_count": 4,
+      "human_safety_escalations": 2,
+      "file_and_validation_error_exit_code": 2
+    }
+  }
+}

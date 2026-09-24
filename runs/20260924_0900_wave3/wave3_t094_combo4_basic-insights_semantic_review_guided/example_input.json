@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "feedback": [
+    {"id": "f1", "text": "Delivery tracking is confusing and slow."},
+    {"id": "f2", "text": "Delivery tracking is clear and helpful."},
+    {"id": "f3", "text": "Refund policy is missing."}
+  ],
+  "documents": [
+    {"id": "delivery-guide", "title": "Synthetic delivery guide", "text": "Delivery tracking provides shipment updates. This is synthetic evidence."},
+    {"id": "refund-guide", "title": "Synthetic refund guide", "text": "Refund policy describes return eligibility. This is synthetic evidence."},
+    {"id": "unrelated", "title": "Synthetic catalog", "text": "Furniture dimensions and material colors."}
+  ],
+  "requirements": [
+    {"id": "r-delivery", "description": "Synthetic requirement: document delivery tracking.", "required_terms": ["delivery", "tracking"]},
+    {"id": "r-refund", "description": "Synthetic requirement: publish a refund deadline.", "required_terms": ["refund", "deadline"]}
+  ],
+  "steps": [
+    {"id": "register", "title": "Register synthetic workspace", "prerequisites": [], "requirement_ids": []},
+    {"id": "delivery", "title": "Enable delivery guidance", "prerequisites": ["register"], "requirement_ids": ["r-delivery"]},
+    {"id": "refund", "title": "Enable refund guidance", "prerequisites": ["delivery"], "requirement_ids": ["r-refund"]}
+  ],
+  "completed_step_ids": ["register"],
+  "search": {"max_themes": 8, "top_k": 3, "min_score": 0.05, "embedding_weight": 0.35}
+}

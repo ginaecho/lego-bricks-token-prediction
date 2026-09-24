@@ -1,0 +1,86 @@
+{
+  "build_id": "wave3_t017_single_basic-onboard",
+  "composition_label": "Guided onboarding (basic functionality, Operations)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1 (boolean rejected)",
+      "synthetic_fixture": "Required boolean indicating synthetic fixture data",
+      "customer": {
+        "id": "Required nonblank string, maximum 120 characters",
+        "name": "Required nonblank string, maximum 120 characters",
+        "experience": "beginner | experienced"
+      },
+      "goal": "launch_project | collaborate | explore_product",
+      "completed_steps": "Unique array of IDs forming a completed prerequisite prefix of the selected plan; array order does not matter"
+    },
+    "output": {
+      "schema_version": "1",
+      "synthetic_fixture": "Input fixture label preserved",
+      "status": "ready | completed",
+      "customer_id": "Normalized customer ID",
+      "goal": "Selected goal",
+      "progress": "completed, total, percent (rounded integer)",
+      "plan": "Ordered objects containing id, title, completed",
+      "next_step": "Object with id, title, instructions, guidance, estimated_minutes, reason; null when complete",
+      "message": "Personalized next step or completion message"
+    },
+    "errors": "Single JSON object with schema_version=1, status=error, error=description; CLI exits 2",
+    "validation": "validate_input is shared by the Python API and CLI. Unknown/missing fields, incorrect types, invalid goals, invalid progress, duplicate JSON keys and nonstandard numeric constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: validated normalized input feeds deterministic plan selection, progress calculation and personalized next-step output."
+  ],
+  "behavior": [
+    "Every goal begins with verify_email and complete_profile.",
+    "The final goal-specific task is create_project, invite_teammate or take_tour.",
+    "Recommend exactly the first incomplete task; completed onboarding returns no artificial pending task.",
+    "Personalize instructions with customer name and guidance with experience.",
+    "No live side effects: action instructions are reference navigation paths, not integrations.",
+    "Identical inputs produce identical outputs without mutating caller data.",
+    "Example and all test customers are clearly labeled synthetic."
+  ],
+  "scope": {
+    "included": [
+      "One integrated general-purpose onboarding CLI",
+      "Goal-based sequencing and prerequisite validation",
+      "Beginner and experienced guidance",
+      "Progress and completion states",
+      "UTF-8 JSON input and machine-readable errors",
+      "Standard-library unittest and subprocess CLI coverage"
+    ],
+    "excluded": [
+      "Persistence and real customer accounts",
+      "Email delivery, actual verification or authentication",
+      "Product UI and actual project creation or invitations",
+      "Live providers and LLM calls",
+      "Enterprise production delivery"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 13,
+    "failures": 0,
+    "errors": 0,
+    "cli_example": "Passed: exit 0, one JSON object, status ready, next_step complete_profile",
+    "cli_error_behavior": "Passed: invalid input, missing file, directory, malformed JSON and usage errors return status error and exit 2"
+  }
+}

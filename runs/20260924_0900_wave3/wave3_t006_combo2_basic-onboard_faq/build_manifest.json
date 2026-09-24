@@ -1,0 +1,48 @@
+{
+  "build_id": "wave3_t006_combo2_basic-onboard_faq",
+  "composition_label": "Guided onboarding -> Knowledge-base answers",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict envelope: schema_version=1, fixture_label=synthetic, customer{id,name,goal,completed_steps,question}, workflow{goal,steps:[{id,instruction,help_question}],completion_question}, knowledge_base:[{id,goal,step_id,question,answer}]",
+    "output": "Input envelope plus onboarding{customer_id,goal,completed,next_step,message,support_question}, support{customer_id,goal,step_id,question,status,answer,citations,reason}, status=ok",
+    "validation": "One validate function gates input, onboarding handoff, and final FAQ output; rejects unknown fields, duplicate identifiers, unknown completion steps, goal mismatches, malformed types, and tampered outputs.",
+    "errors": "CLI prints one JSON object with status=error and exits 2 for input, decoding, validation, usage, and file errors."
+  },
+  "cross_stage_handoffs": [
+    "onboard validates the input and selects the first uncompleted workflow step in configured order.",
+    "faq consumes only a validated onboarding envelope; its retrieval query, customer identity, goal and step scope come from onboarding.",
+    "Final validation checks onboarding derivation and exact extractive FAQ provenance."
+  ],
+  "behavior": {
+    "onboarding": "Name/goal-personalized instruction; explicit completion if all steps are done. Uses customer question if nonblank, otherwise the selected step help question or completion question.",
+    "retrieval": "ASCII alphanumeric token sets with small stopword set. Articles must match goal and current step or be global (step_id=null). Requires at least 60 percent query and article-question coverage, ranks by Jaccard overlap.",
+    "grounding": "Returns exact stored article answer and its identifier as citation. No generation or external callable is needed.",
+    "abstention": "No eligible lexical match or tied best scores yields status=abstained, answer=null, empty citations, and explicit reason.",
+    "synthetic_data": "All fixture customers, workflows, articles and answers are clearly labeled synthetic."
+  },
+  "scope": {
+    "included": ["Configurable linear goal workflow", "Validated integrated pipeline", "Deterministic scoped retrieval", "Extractive citations", "Explicit abstention", "JSON CLI", "Standard-library unit and subprocess tests"],
+    "excluded": ["Live models or providers", "Semantic or multilingual search", "Persistent accounts", "Authentication", "External knowledge fetching", "Workflow branching", "Enterprise production guarantees"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "17 unittest cases passed",
+    "cli": "Example command exited 0 and printed one JSON object with status=ok and a grounded answer.",
+    "error_cli": "Subprocess checks for missing file and usage errors exited 2 with JSON status=error.",
+    "validated_properties": ["Both stages", "Cross-stage propagation", "Exact-answer grounding", "Abstention", "Completion", "Ambiguity", "Step scope", "Invalid input", "Tampered output", "Determinism", "Input immutability", "CLI behavior"]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "residency": "EU",
+  "privacy": {"purpose": "product_comparison", "consent": true, "do_not_sell": true},
+  "subscriber": {"id": "SYNTH-SUB-1", "phone": "+1-202-555-0107", "imei": "000000000000001", "residency": "EU", "synthetic": true},
+  "usage_csv": "record_id,subscriber_id,residency,synthetic,period,voice_minutes,data_mb\nCDR-1,SYNTH-SUB-1,EU,true,2026-09,83,6247\nCDR-2,SYNTH-SUB-1,EU,true,2026-09,119,8123\n",
+  "fault_tickets": [
+    {"id": "SYNTH-FAULT-1", "subscriber_id": "SYNTH-SUB-1", "residency": "EU", "synthetic": true, "status": "resolved", "summary": "Invented brief outage at fictional relay", "billing_adjustment_cents": -200, "billing_reason": "Synthetic outage goodwill credit"}
+  ],
+  "support_chats": [
+    {"id": "SYNTH-CHAT-1", "subscriber_id": "SYNTH-SUB-1", "residency": "EU", "synthetic": true, "messages": [{"speaker": "subscriber", "text": "Synthetic transcript: my fictional phone +1-202-555-0107 had no signal."}, {"speaker": "agent", "text": "Invented fault resolved; comparison may help select an allowance."}]}
+  ],
+  "products": [
+    {"id": "PLAN-BASIC", "residency": "EU", "synthetic": true, "monthly_price": {"value": 1800, "unit": "cents"}, "monthly_data": {"value": 10000, "unit": "MB"}, "monthly_voice": {"value": 5, "unit": "hours"}, "reliability_percent": 98},
+    {"id": "PLAN-PLUS", "residency": "EU", "synthetic": true, "monthly_price": {"value": 30, "unit": "USD"}, "monthly_data": {"value": 25, "unit": "GB"}, "monthly_voice": {"value": 500, "unit": "minutes"}, "reliability_percent": 99.5},
+    {"id": "PLAN-PREMIUM", "residency": "EU", "synthetic": true, "monthly_price": {"value": 50, "unit": "USD"}, "monthly_data": {"value": 0.1, "unit": "TB"}, "monthly_voice": {"value": 1000, "unit": "minutes"}, "reliability_percent": 99.9}
+  ],
+  "preferences": {"max_monthly_price_usd": 35, "minimum_data_gb": 15, "minimum_voice_minutes": 200, "weights": {"price": 3, "data": 4, "voice": 1, "reliability": 2}}
+}

@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t159_single_sentiment__ind-energy",
+  "composition_label": "Sentiment & prioritization (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored for this build; no copied code or external files read",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope": "schema_version=1, synthetic=true, grid_assets, outage_reports, emissions",
+    "input": "Envelope plus safety_rules, meter_interval_csv, scada_telemetry. Exact object keys are checked. Grid assets contain asset_id, kind, critical, upstream_id. Asset IDs must match SYN-[A-Z0-9-]+. Outage reports contain report_id, asset_id, description, customers_affected, outage_active, safety_flags.",
+    "output": "Envelope plus status, meter_readings, telemetry, method. Identifiers become request-local asset_ref/upstream_ref/report_ref aliases. Reports include sentiment score, label, matched lexicon contributions and safety priority/reason.",
+    "meter_csv": "timestamp,device_id,consumption_kwh,season; timezone-aware half-hour boundaries; nonnegative finite interval kWh; unique device/timestamp pairs",
+    "telemetry_json": "List of asset_id, timestamp, voltage_v, state; timezone-aware timestamp; nonnegative finite voltage; normal/alarm/offline; unique asset/timestamp pairs",
+    "emissions": "Each figure must include finite nonnegative value, kgCO2e or tCO2e unit, and nonempty source. Figures are supplied estimates, not calculated or independently verified.",
+    "validation": "validate(document, direction) is the shared boundary; validates input before transformation and checks emitted output safety and score invariants."
+  },
+  "cross_stage_handoffs": ["Single integrated stage: validated entity graph and CSV rows feed lexicon sentiment, then safety-first ranking, then identifier-protected output validation."],
+  "behavior": {
+    "sentiment": "Fixed lexicon integer sum. Immediate preceding not/never/no reverses contribution. Positive/negative/zero determines label. Matching vocabulary and contributions are shown, not original text.",
+    "safety_rules": "fire, downed_line, medical_dependency => priority 1 regardless of tone or active status; other active outage => 2; otherwise => 3. Declared rules cannot weaken these tiers.",
+    "ranking": "Priority ascending, customers_affected descending, sentiment score ascending, generated report_ref ascending.",
+    "protection": "All asset identifiers, including critical ones, become request-local aliases. Report descriptions and original report IDs are omitted; known asset IDs in emissions provenance are replaced. Errors are generic and never echo input values.",
+    "fixtures": "Explicitly synthetic topology, fictitious IDs, winter/summer 30-minute consumption and SCADA-style telemetry.",
+    "cli": "Exactly one JSON object on stdout; status ok and exit 0 on success; status error and exit 2 on validation/file errors."
+  },
+  "scope": {
+    "included": ["Deterministic sentiment", "Severity-aware ranking", "CSV/JSON ingestion", "Topology and reference validation", "Demonstrative critical-identifier minimization", "Unit/provenance validation", "CLI and unittest fixtures"],
+    "excluded": ["NERC CIP certification", "Enterprise production controls", "Authentication", "Encryption at rest", "Live providers or LLMs", "External data", "Automatic safety detection from prose", "Full linguistic sentiment understanding", "Emissions measurement", "Grid dispatch or operational control"],
+    "limitations": ["Safety flags must be supplied by a responsible upstream process.", "Aliases are request-local, not encrypted identifiers.", "Protection minimizes known identifiers; this is not a general-purpose sensitive-data detector.", "Input files themselves contain synthetic raw identifiers and require appropriate storage controls outside this reference.", "An additional prompt log was recorded at docs/My_prompt.txt."]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 15,
+    "failures": 0,
+    "errors": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_example": {"exit_code": 0, "stdout_json_objects": 1, "status": "ok"},
+    "coverage": ["Normal deterministic behavior", "Negation and neutral edge cases", "Empty datasets", "Safety-first priority", "Rule tampering", "Identifier protection", "Emission units and provenance", "Topology validation", "CSV validation", "Telemetry validation", "Output safety invariants", "CLI success and errors"]
+  }
+}

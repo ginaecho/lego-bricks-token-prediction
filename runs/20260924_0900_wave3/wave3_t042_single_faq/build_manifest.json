@@ -1,0 +1,77 @@
+{
+  "build_id": "wave3_t042_single_faq",
+  "composition_label": "Knowledge-base answers (AI customer support)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New standalone implementation using explicitly synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "question": "Required nonblank string, at most 2000 characters",
+      "knowledge_base": "Required array, 0-100 articles with exactly unique id, title, content strings; maximum lengths 100, 500, 10000",
+      "min_score": "Optional finite number in (0,1], default 0.5",
+      "max_results": "Optional integer in [1,10], default 3",
+      "unknown_fields": "Rejected; duplicate JSON fields and nonfinite JSON constants rejected"
+    },
+    "output": {
+      "status": "answered | abstained | error",
+      "question": "Normalized question or null on error",
+      "answer": "Exact concatenated cited content separated by two newlines, or null",
+      "citations": "Ordered article id array",
+      "evidence": "Array of id, title, quote, score, matched_terms",
+      "reason": "null | no_supported_match | validation_or_execution_error",
+      "error": "Error description or null"
+    },
+    "validation": "Shared validate function checks request and answer boundaries"
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: validated request -> content-only lexical retrieval -> ranked evidence -> validated extractive answer or abstention"
+  ],
+  "behavior": {
+    "retrieval": "Casefolded Unicode alphanumeric token sets minus fixed English stopwords. Score is matched unique question tokens divided by unique question tokens. Positive overlap and threshold required. Sort by descending score then ascending id; take max_results.",
+    "grounding": "Answers exactly reproduce cited article contents. Titles never contribute to scores. Citations must be unique retrieved ids. Optional callable receives copied evidence and must pass the same exact-extraction validation.",
+    "abstention": "No qualifying evidence, empty knowledge base, or no searchable question terms returns abstained with null answer and empty citations.",
+    "cli": "Exactly one JSON object to stdout. answered/abstained exit 0; validation, file, parsing and injected callable errors exit 2.",
+    "synthetic_data": "All example and test articles are synthetic, not actual customer policies."
+  },
+  "scope": {
+    "included": [
+      "Bounded deterministic lexical retrieval",
+      "Explicit source quotes and citations",
+      "Strict extractive grounding",
+      "Explicit abstention",
+      "Optional locally injected callable with fixture validation",
+      "Runnable CLI and standard-library unit tests"
+    ],
+    "excluded": [
+      "Live providers, network access, embeddings and vector databases",
+      "Semantic entailment or factual verification of source articles",
+      "Paraphrased or generative answers",
+      "Conflict resolution between source policies",
+      "Enterprise authentication, persistent indexing and production operations"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": 14,
+    "unit_tests_passed": 14,
+    "unit_tests_exit_code": 0,
+    "cli_example": "answered; one JSON object with synthetic-returns citation",
+    "cli_exit_code": 0
+  }
+}

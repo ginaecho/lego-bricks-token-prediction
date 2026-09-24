@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "resources": [
+    {"resourceType": "Patient", "id": "anon-p001", "synthetic": true, "human_review_required": true},
+    {"resourceType": "ClinicalNote", "id": "note-001", "subject": "Patient/anon-p001", "synthetic": true, "human_review_required": true, "text": "SYNTHETIC Synthea-style fixture. Fictitious diagnosis: type 2 diabetes. Illustrative lab HbA1c 7.4 percent. Frustrated with delayed coverage authorization. Requests clear insurance information. No treatment recommendation."},
+    {"resourceType": "PriorAuthorizationRequest", "id": "request-001", "subject": "Patient/anon-p001", "synthetic": true, "human_review_required": true, "status": "pending", "reason": "SYNTHETIC urgent administrative review: preauthorization denied; worried about waiting for coverage information."}
+  ],
+  "catalog": [
+    {"id": "authorization-guide", "title": "Insurance authorization information", "description": "Administrative support for denied or delayed insurance authorization.", "keywords": ["coverage", "appeal", "authorization"], "source_ids": ["admin-handbook"]},
+    {"id": "appointment-help", "title": "Appointment scheduling help", "description": "Information about scheduling appointments.", "keywords": ["appointment", "schedule"], "source_ids": ["scheduling-handbook"]}
+  ],
+  "sources": [
+    {"id": "admin-handbook", "title": "SYNTHETIC authorization handbook", "passages": [
+      {"id": "authorization-process", "text": "Insurance authorization requests with denied coverage or delay may be routed to a human administrative reviewer."},
+      {"id": "review-boundary", "text": "Urgent authorization inquiries require human review; this information does not approve coverage or recommend treatment."}
+    ]},
+    {"id": "scheduling-handbook", "title": "SYNTHETIC scheduling handbook", "passages": [
+      {"id": "scheduling-process", "text": "Appointment scheduling information is available from a human scheduling coordinator."}
+    ]}
+  ]
+}

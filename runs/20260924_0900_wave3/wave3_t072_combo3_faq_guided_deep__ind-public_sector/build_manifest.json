@@ -1,0 +1,89 @@
+{
+  "build_id": "wave3_t072_combo3_faq_guided_deep__ind-public_sector",
+  "composition_label": "faq_guided_deep",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict government-form JSON: schema_version, synthetic, service_request, benefits_application, policy_documents. Service request and application must share the case number.",
+    "output": "Every stage uses schema_version, synthetic, stage, status, context, data, evidence, explanation, unresolved_questions. Data accumulates validated faq, guided and deep records.",
+    "validation": "One validate function handles all boundaries. Stage handoffs are checked against deterministic evidence-derived records. Unknown fields, invalid numbers, duplicate JSON fields, duplicate policy IDs and malformed rules are rejected.",
+    "privacy": "Only synthetic records accepted. Identity names and non-traceable addresses are stripped before all stages and any optional callback. Public text rejects common email, SSN and phone patterns and copies of identity fields. These bounded checks are demonstrative, not a general PII detector.",
+    "policy_text_grammar": "Synthetic policy text may include introductory prose. Recognized case-sensitive lines: income_limit: INTEGER; residency_months: INTEGER; required_documents: comma-separated identity,residency,income. Other prose is not interpreted as a rule. Duplicate recognized rules are rejected. All supplied policies for the requested program are compared; no hidden precedence or effective-date inference.",
+    "supported_questions": [
+      "What are the eligibility rules?",
+      "What documents do I need?"
+    ]
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq",
+      "to": "guided",
+      "consumes": "Validated sanitized context, FAQ status/facts and policy evidence. Abstention blocks onboarding; all three rules must be unambiguous before document collection can complete."
+    },
+    {
+      "from": "guided",
+      "to": "deep",
+      "consumes": "Validated cumulative FAQ and guided records, missing documents, screening checks, progress and evidence. Research reports missing items, screening concerns and original unanswered questions."
+    }
+  ],
+  "behavior": {
+    "faq": "Deterministic exact-topic retrieval; every factual answer cites policy evidence. Missing, conflicting or unsupported answers explicitly abstain.",
+    "guided": "Prerequisite-driven policy, documents and human-review steps. Tracks completed steps and rule checks, never makes benefit approvals or denials.",
+    "deep": "Compares all supplied relevant policy documents, retains each alternative and its citations, reports missing rules and unresolved questions. Agreement is not proof of source independence.",
+    "optional_callable": "faq_stage and run_pipeline accept answer_callable. It receives only a sanitized request and evidence. Its answer and citations must exactly match the deterministic grounded fixture contract; exceptions and unsupported responses are rejected.",
+    "public_sector_constraints": "Demonstrative Privacy Act/GDPR-inspired minimization, explainable citations for FOIA/open-records review, and plain-language textual messages in the spirit of Section 508. No compliance certification claims.",
+    "errors": "Validation and file errors print one JSON object with status error and exit 2. Successful execution prints one JSON object and exits 0. Stage abstention or human review is a successful pipeline outcome, not a file/validation error."
+  },
+  "scope": {
+    "included": [
+      "Clearly labeled fabricated citizen personas, invented case numbers and non-traceable addresses",
+      "Integrated sequential pipeline with shared schema and validation",
+      "Deterministic evidence synthesis and prerequisite tracking",
+      "Optional offline callable tested with fixtures",
+      "CLI and standard-library unittest suite"
+    ],
+    "excluded": [
+      "Real citizen records or comprehensive PII detection",
+      "Live models, networks, external dependencies",
+      "Legal advice, compliance certification or benefits decisions",
+      "Arbitrary natural-language regulation interpretation",
+      "Persistence across runs, authentication, production security and user interface accessibility certification",
+      "Automatic policy precedence, date resolution or source authenticity verification"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 31,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One JSON object with status ok and final stage deep.",
+      "example_result": "FAQ answered, onboarding in_progress with income document missing, research compared two policies and preserved unresolved human-review questions.",
+      "error_cases": "Missing path, missing arguments, malformed JSON, duplicate JSON fields, non-finite numbers and invalid schema verified to return JSON status error and exit 2."
+    }
+  }
+}

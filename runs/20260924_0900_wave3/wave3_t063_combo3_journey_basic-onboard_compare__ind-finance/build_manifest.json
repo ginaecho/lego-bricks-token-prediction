@@ -1,0 +1,109 @@
+{
+  "build_id": "wave3_t063_combo3_journey_basic-onboard_compare__ind-finance",
+  "composition_label": "Journey recommendations -> Guided onboarding (general-purpose basic) -> Product comparison; financial services",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated implementation written from scratch, with no other build or repository files read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "required": ["schema_version", "synthetic", "customer", "loan_application", "transaction_ledger", "payment_payload", "products"],
+      "customer": "Identity, synthetic account, KYC status and screening flags, AML flags, and nonnegative cost/affordability/term weights with positive total.",
+      "loan_application": "Linked customer ID, positive amount and monthly budget, EUR/USD/GBP currency, desired whole term in months.",
+      "transaction_ledger": "format=json with record list, or format=csv with inline CSV text. Columns: id,date,amount,currency,direction,account; optional card_number.",
+      "payment_payload": "Demonstrative Document.CstmrCdtTrfInitn.MsgId and CdtTrfTxInf list containing PmtId, ReqdExctnDt, Amt.InstdAmt/Ccy, DbtrAcct.IBAN and CdtrAcct.IBAN.",
+      "products": "ID/name, matching currency, APR percent/basis_points, monthly fee currency_per_month/cents_per_month, term months/years, positive minimum and maximum amounts."
+    },
+    "output": {
+      "envelope": ["schema_version", "synthetic", "status", "stage", "context", "journey", "onboarding", "comparison"],
+      "context": "Canonical customer, application, masked normalized transactions, reconciled ledger summary and normalized products.",
+      "error": {"status": "error", "error": "Input validation or file access failed."}
+    },
+    "validation": "Validator.input and Validator.envelope share all schema and financial validation. Every stage validates its input handoff and output; expected journey, onboarding gate, comparison request and scores are recomputed to reject tampering. Unknown external fields and duplicate JSON keys are rejected.",
+    "limits": "Maximum 2,000,000 input characters, 1,000 combined transactions, 100 products, 20 flags per screen, 600 term months. Money has at most two decimals. No nonfinite or boolean numeric values."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "journey",
+      "to": "basic:onboard",
+      "validated_data": "Customer/application IDs, prerequisite-aware two-step plan, next action, screening blockers, amount, desired term and preferences.",
+      "behavior": "Onboarding consumes the recommended action, personalizes instructions, completes preparation only when screening is clear, and otherwise requests human review without pretending checks were completed."
+    },
+    {
+      "from": "basic:onboard",
+      "to": "compare",
+      "validated_data": "Comparison-ready gate, screening blockers, linked application ID, amount, currency, budget, term and preferences.",
+      "behavior": "Comparison consumes only the validated request. Blocked profiles produce no product scores. Ready profiles get normalized side-by-side attributes, amount-eligibility exclusions and explained preference ranking."
+    }
+  ],
+  "behavior": {
+    "journey": "Exactly two validated projected steps: prepare_comparison or clear_profile, followed by compare_products. Projected prerequisite satisfaction is explicitly not real completion.",
+    "onboarding": "General-purpose personalized next action with ready/requires_review state and validated downstream request. Screening flags are never automatically cleared.",
+    "comparison": "Preference components for cost, affordability and term are weighted by normalized preferences. Ties break by product ID. Empty catalogs and no eligible products return explicit outcomes.",
+    "explainability": "Every component score includes formula, inputs, raw weight, total weight, normalized weight and weighted contribution. Final score is the sum of six-decimal rounded contributions. Payments disclose the flat-interest approximation and unrounded estimate.",
+    "industry_constraints": [
+      "Pending/rejected KYC, KYC screening flags or AML flags block comparison; flags remain intact.",
+      "Demonstrative PCI DSS-style masking exposes only the last four card digits in all stage outputs; errors never echo inputs or file paths.",
+      "Not a compliance certification, credit approval, creditworthiness model, or financial advice."
+    ],
+    "synthetic_fixture": "All customers, products and account/IBAN identifiers are fabricated and labeled SYNTH. IBANs intentionally cannot route real payments. The fake card is demonstrative. Six ledger amounts were generated using random.Random(63), randint(1500,45000)/100, then frozen in the fixture. Runtime remains deterministic.",
+    "formats": "JSON and inline CSV transaction ledgers normalize identically. ISO 20022-style JSON is a deliberately small illustrative subset, not a standards-conformant message.",
+    "cli": "One JSON object to stdout, exit 0 on valid requests including blocked business outcomes; JSON status=error and exit 2 for file/validation errors. No diagnostic input echo."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic pipeline and shared validation layer",
+      "Personalized discovery and general-purpose guided onboarding",
+      "Financial attribute normalization, side-by-side comparison and preference ranking",
+      "Synthetic customer/KYC, randomized transaction history and loan application",
+      "Prerequisite and stage-handoff integrity checks",
+      "Unit tests and subprocess CLI validation"
+    ],
+    "excluded": [
+      "External dependencies, network calls, model providers and agents",
+      "Real KYC/AML screening, identity verification or sanctions databases",
+      "PCI DSS certification, real account validation, real card processing",
+      "Production ISO 20022 validation or payment execution",
+      "Credit underwriting, loan approval, amortized lender quotes or investment advice",
+      "Persistent customer databases, interactive UI and enterprise operations",
+      "LLM integration; no model is needed for this bounded deterministic implementation"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 27,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "coverage": "Each stage, projected prerequisites, personalization, both handoffs, tampering, deterministic nonmutation, unit normalization, score reconciliation and independent formula check, empty inputs, budget/range edges, JSON/CSV parity, ISO-style ingestion, screening flags, card masking, invalid values, and CLI success/errors."
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status=ok and stage=comparison.",
+      "comparison_status": "compared",
+      "recommended_product_id": "SYNTH-P01",
+      "normalized_transaction_count": 7,
+      "ranked_product_count": 3,
+      "error_contract": "Subprocess tests confirmed missing file and usage failures exit 2 with status=error JSON. In-memory CLI tests confirmed malformed JSON and invalid schemas also exit 2 without sensitive input echo."
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "human_review_required": true,
+  "research_questions": [
+    "Does the supplied packet contain the requested lab documentation?",
+    "Is the duration of prior therapy documented?"
+  ],
+  "records": [
+    {
+      "record_id": "synthetic-patient-001",
+      "kind": "patient_record",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "synthetic-patient-001",
+        "synthetic": true,
+        "diagnoses": ["E11.9"],
+        "labs": [{"code": "4548-4", "value": 7.2, "unit": "%"}]
+      },
+      "evidence": []
+    },
+    {
+      "record_id": "synthetic-note-001",
+      "kind": "clinical_note",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "synthetic-note-001",
+        "synthetic": true,
+        "subject": {"reference": "Patient/synthetic-patient-001"},
+        "text": "SYNTHETIC FIXTURE: Fictitious Synthea-style clinical note. The requested lab documentation is attached. The duration of prior therapy is not established."
+      },
+      "evidence": [
+        {
+          "question": "Does the supplied packet contain the requested lab documentation?",
+          "stance": "support",
+          "quote": "The requested lab documentation is attached."
+        },
+        {
+          "question": "Is the duration of prior therapy documented?",
+          "stance": "uncertain",
+          "quote": "The duration of prior therapy is not established."
+        }
+      ]
+    },
+    {
+      "record_id": "synthetic-auth-001",
+      "kind": "prior_authorization_request",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "synthetic-auth-001",
+        "synthetic": true,
+        "patient": {"reference": "Patient/synthetic-patient-001"},
+        "status": "draft",
+        "purpose": "prior-authorization",
+        "request_text": "SYNTHETIC FIXTURE: Fictitious documentation packet. The requested lab documentation is missing. Route the conflicting source statements to a human reviewer."
+      },
+      "evidence": [
+        {
+          "question": "Does the supplied packet contain the requested lab documentation?",
+          "stance": "oppose",
+          "quote": "The requested lab documentation is missing."
+        }
+      ]
+    }
+  ]
+}

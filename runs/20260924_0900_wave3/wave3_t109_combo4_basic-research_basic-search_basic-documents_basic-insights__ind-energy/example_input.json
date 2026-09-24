@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "question": "How can we restore power after an outage and monitor winter meter consumption?",
+  "sources": [
+    {
+      "id": "source-winter",
+      "text": "SYNTHETIC winter analysis: electricity consumption increases during cold evenings. Meter monitoring helps identify demand at FICT-SUB-ALPHA.",
+      "emissions": {"value": 4.5, "unit": "kgCO2e", "source": "synthetic seasonal model"}
+    },
+    {
+      "id": "source-response",
+      "text": "SYNTHETIC response guide: restore power using compatible grid recovery equipment. Outage communication and safety checks precede restoration."
+    }
+  ],
+  "products": [
+    {
+      "id": "recovery-kit",
+      "name": "Grid recovery and metering kit",
+      "description": "Power outage restoration and meter consumption monitoring",
+      "tags": ["electricity", "repair", "winter"],
+      "asset_kinds": ["substation", "feeder"],
+      "priorities": ["P1", "P2", "P3"]
+    },
+    {
+      "id": "meter-monitor",
+      "name": "Meter demand monitor",
+      "description": "Consumption and energy analysis",
+      "tags": ["metering"],
+      "asset_kinds": ["feeder"],
+      "priorities": ["P2", "P3"]
+    }
+  ],
+  "meter_csv": "timestamp,meter_id,asset_id,kwh\n2026-01-15T18:00:00Z,FICT-METER-1,FICT-FEEDER-BETA,2.4\n2026-01-15T18:30:00Z,FICT-METER-1,FICT-FEEDER-BETA,2.8\n2026-07-15T18:00:00Z,FICT-METER-1,FICT-FEEDER-BETA,1.2\n",
+  "telemetry": {
+    "assets": [
+      {"asset_id": "FICT-SUB-ALPHA", "parent_id": null, "kind": "substation", "critical": true},
+      {"asset_id": "FICT-FEEDER-BETA", "parent_id": "FICT-SUB-ALPHA", "kind": "feeder", "critical": false}
+    ],
+    "samples": [
+      {
+        "timestamp": "2026-01-15T18:00:00Z",
+        "asset_id": "FICT-SUB-ALPHA",
+        "voltage_v": 11000,
+        "load_kw": 725,
+        "emissions": {"value": 35.2, "unit": "kgCO2e", "source": "synthetic SCADA emissions estimate"}
+      }
+    ]
+  },
+  "outages": [
+    {
+      "id": "outage-1",
+      "asset_id": "FICT-SUB-ALPHA",
+      "description": "SYNTHETIC damaged enclosure near public access",
+      "life_safety": true,
+      "critical_service": false,
+      "customers_affected": 80,
+      "declared_priority": "P1"
+    },
+    {
+      "id": "outage-2",
+      "asset_id": "FICT-FEEDER-BETA",
+      "description": "SYNTHETIC winter feeder interruption",
+      "life_safety": false,
+      "critical_service": true,
+      "customers_affected": 120,
+      "declared_priority": "P2"
+    }
+  ],
+  "feedback": [
+    {"id": "feedback-1", "outage_id": "outage-1", "text": "Unsafe enclosure at FICT-SUB-ALPHA and poor outage updates"},
+    {"id": "feedback-2", "outage_id": "outage-2", "text": "Thanks for fast restoration, but the winter bill is expensive"},
+    {"id": "feedback-3", "outage_id": null, "text": "Great helpful meter information"}
+  ]
+}

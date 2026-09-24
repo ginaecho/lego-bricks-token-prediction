@@ -1,0 +1,86 @@
+{
+  "build_id": "wave3_t074_single_journey",
+  "composition_label": "Journey recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written directly for this isolated build.",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "Integer 1, not a boolean",
+      "synthetic": "Boolean true; fixture-only reference implementation",
+      "profile": "Object with unique string arrays interests and completed_actions",
+      "actions": "Up to 100 objects: id, title, topics string array, prerequisites action-ID array"
+    },
+    "output": {
+      "status": "ok for valid input, including when a journey is unavailable",
+      "schema_version": 1,
+      "synthetic": true,
+      "recommendations": "All immediately eligible uncompleted actions: action_id, title, score, matched_interests",
+      "journey": "status ready or unavailable; steps array; reason null when ready, explanatory string otherwise",
+      "step": "Recommendation metadata plus one-based position and sorted prerequisites"
+    },
+    "errors": "Single JSON object with status error and error text; exit code 2",
+    "validation": "Shared ValidationError, require and field/type helpers; strict unknown-field rejection, unique arrays and IDs, valid references, acyclic graph and prerequisite-closed completed history. Output validated against input before serialization."
+  },
+  "cross_stage_handoffs": [
+    "Validated profile and catalog feed immediate eligibility and interest scoring.",
+    "Each possible first action is provisionally added to completed history to compute valid second actions.",
+    "The selected pair passes output validation, rechecking both steps sequentially against the same catalog. No completion state is persisted."
+  ],
+  "behavior": {
+    "personalization": "Score equals count of exact, case-sensitive matching interest topics.",
+    "recommendations_order": "Descending score then ascending action ID.",
+    "journey_selection": "Maximize sum of two step scores, then first-step score, then ascending first and second action IDs.",
+    "prerequisites": "All prerequisites are mandatory. Steps are distinct and cannot already be completed.",
+    "unavailable": "Return empty steps, never a partial journey, if no valid two-step pair exists.",
+    "determinism": "Catalog input ordering does not affect output; topics and prerequisites in output are sorted.",
+    "json": "Duplicate JSON keys, nonstandard constants, malformed JSON, invalid encoding and file errors are rejected.",
+    "fixtures": "All example titles explicitly labeled Synthetic; no real users or products."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic personalized discovery CLI",
+      "Prerequisite-aware immediate next actions",
+      "Exhaustive bounded two-step selection and validation",
+      "Standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live providers and LLM calls",
+      "Persistent profile state",
+      "Real product catalogs",
+      "Enterprise service hosting, authentication, recommendation training",
+      "Journeys longer than two steps"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "run": 14,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status ok and journey status ready",
+      "selected_steps": ["choose-planters", "plant-herbs"],
+      "error_cases": "Missing file and incorrect arguments verified in subprocesses: JSON status error, exit 2."
+    }
+  }
+}

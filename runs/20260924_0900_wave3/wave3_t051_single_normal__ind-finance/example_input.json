@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "fixture_label": "All names, accounts, policies and transactions are fabricated.",
+  "query": "KYC transaction loan review",
+  "max_findings": 5,
+  "customers": [
+    {"id": "C1", "name": "Synthetic Ada Finch", "iban": "SYNTH-ZZ-ACCOUNT-A", "kyc_status": "verified", "screening_flags": [], "card_number": "4111111111111111"},
+    {"id": "C2", "name": "Synthetic Ben Vale", "iban": "SYNTH-ZZ-ACCOUNT-B", "kyc_status": "pending", "screening_flags": ["sanctions_match", "pep"]}
+  ],
+  "transactions": [
+    {"id": "T1", "customer_id": "C1", "amount": 231.54, "currency": "USD", "date": "2026-01-01"},
+    {"id": "T2", "customer_id": "C2", "amount": 860.75, "currency": "EUR", "date": "2026-01-02"}
+  ],
+  "payments": [
+    {"CdtTrfTxInf": {"PmtId": {"EndToEndId": "P1"}, "Dbtr": {"CustomerId": "C2"}, "Amt": {"InstdAmt": {"value": 15000, "Ccy": "USD"}}, "ReqdExctnDt": "2026-01-03"}}
+  ],
+  "loan_applications": [
+    {"id": "L1", "customer_id": "C1", "amount": 150000, "annual_income": 40000, "currency": "USD"}
+  ],
+  "sources": [
+    {"id": "S1", "title": "Synthetic onboarding policy", "text": "KYC pending profiles require manual review. A sanctions match is a screening flag, not proof of wrongdoing."},
+    {"id": "S2", "title": "Synthetic transaction guidance", "text": "A USD transaction at or above 10000 receives a demonstration AML review flag. Other currencies are not converted."},
+    {"id": "S3", "title": "Synthetic lending guidance", "text": "A loan above three times annual income receives a review flag. Every score must disclose the contributing rules."}
+  ]
+}

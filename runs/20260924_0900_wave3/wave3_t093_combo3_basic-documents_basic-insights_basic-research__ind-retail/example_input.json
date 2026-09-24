@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "catalog": {
+    "currency": "USD",
+    "products": [
+      {"sku": "FICT-MUG-101", "name": "Imaginary Trail Mug", "price_cents": 1250, "stock": 8},
+      {"sku": "FICT-BAG-202", "name": "Imaginary Canvas Bag", "price_cents": 2400, "stock": 0}
+    ]
+  },
+  "customers": [
+    {"id": "persona-01", "persona": "Synthetic budget-conscious shopper", "consent": {"personalization": true, "withdrawn": false}},
+    {"id": "persona-02", "persona": "Synthetic occasional gift shopper", "consent": {"personalization": false, "withdrawn": false}}
+  ],
+  "orders": [
+    {"id": "order-01", "customer_id": "persona-01", "status": "completed", "items": [{"sku": "FICT-MUG-101", "quantity": 2, "unit_price_cents": 1250}]},
+    {"id": "basket-02", "customer_id": "persona-02", "status": "basket", "items": [{"sku": "FICT-MUG-101", "quantity": 1, "unit_price_cents": 1250}]}
+  ],
+  "clickstream": [
+    {"id": "evt-01", "customer_id": "persona-01", "sku": "FICT-MUG-101", "event": "view", "timestamp": "2026-09-24T09:00:00Z", "shown_price_cents": 1250, "shown_stock": 8},
+    {"id": "evt-02", "customer_id": "persona-02", "sku": "FICT-MUG-101", "event": "add_to_basket", "timestamp": "2026-09-24T09:01:00Z", "shown_price_cents": 1250, "shown_stock": 8},
+    {"id": "evt-03", "customer_id": "persona-01", "sku": "FICT-BAG-202", "event": "view", "timestamp": "2026-09-24T09:02:00Z", "shown_price_cents": 2400, "shown_stock": 0}
+  ],
+  "feedback": [
+    {"id": "fb-01", "customer_id": "persona-01", "sku": "FICT-MUG-101", "order_id": "order-01", "kind": "review", "text": "  The mug is durable but delivery arrived late.  ", "synthetic": true},
+    {"id": "fb-02", "customer_id": "persona-02", "sku": "FICT-BAG-202", "order_id": null, "kind": "service", "text": "The bag is unavailable; stock information is confusing.", "synthetic": true},
+    {"id": "fb-03", "customer_id": "persona-01", "sku": "FICT-MUG-101", "order_id": "order-01", "kind": "service", "text": "The price is affordable.", "synthetic": true}
+  ],
+  "sources": [
+    {"id": "src-01", "title": "Synthetic delivery operations note", "text": "Delivery updates are sent after dispatch; this synthetic note does not establish why a shipment was late.", "synthetic": true, "catalog_claims": []},
+    {"id": "src-02", "title": "Synthetic stock planning note", "text": "Stock availability should be checked before basket confirmation.", "synthetic": true, "catalog_claims": [{"sku": "FICT-BAG-202", "price_cents": 2400, "stock": 0}]}
+  ],
+  "questions": [
+    {"id": "q-01", "text": "What should we do about delivery?"},
+    {"id": "q-02", "text": "What stock availability evidence do we have?"},
+    {"id": "q-03", "text": "What is the Imaginary Trail Mug price?"},
+    {"id": "q-04", "text": "What is the competitor market share?"}
+  ]
+}

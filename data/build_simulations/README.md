@@ -22,6 +22,9 @@ relabeled as one another.
 | `builds/<point>/` | Actual implementation, tests, example input and build manifest |
 | `campaign.json` | Exact builder agent IDs, measurement protocol and selected wave |
 | `waves/wave2.json` | Frozen wave-2 manifest: selected trials, instruction fingerprints, builders, failures, protocol deviations and evaluation gates |
+| `waves/wave3.json` | Frozen wave-3 manifest (composition levels B/BT/BI/BTI, industries, builders, protocol deviations) |
+| `industry_profiles.json` | Eight industry contexts (entities, demonstrative constraints, data formats, synthetic fixtures) used by wave 3 |
+| `industry_use_cases.json` | User-supplied and researched industry AI use cases behind the profiles; not construction labels |
 | `models/` | Construction-token model artifact and its validation/test report |
 | `azure_rate_cards.json` | Versioned, sourced reference price assumptions |
 | `real_use_cases.json` | Fourteen user-supplied case references and unverified post-hoc mappings |
@@ -81,6 +84,59 @@ average (+10,188 tokens). The selected penalty (alpha 100) is the largest value
 in the fixed grid, indicating weak per-feature signal. These results hold only
 for bounded Python CLI builds by one builder model.
 
+## Wave 3: composition levels and industries
+
+Wave 3 froze **160 trials** before dispatch (seed 20260924, builder model
+`gpt-6-astra`, instructions `builder-instructions-v3`, spec
+`composition-levels-v3`). Each trial is one directly built composition at one
+level:
+
+| Level | Meaning | Builds | Mean tokens | Median | Range |
+| --- | --- | ---: | ---: | ---: | --- |
+| B | Generic Studio basic functionality, no variant prescribed | 31 | 138,419 | 129,230 | 104,712-224,809 |
+| BT | Basic functionality with a Studio catalog type | 32 | 140,187 | 130,569 | 116,775-202,794 |
+| BI | Generic basic functionalities plus an industry context | 17 | 170,419 | 157,707 | 110,778-330,664 |
+| BTI | Parts including at least one catalog type, plus an industry context | 80 | 162,271 | 140,300 | 102,702-302,421 |
+
+Sizes: 78 singles, 30 pairs, 27 triples and 25 quadruples. Industries (8, about
+12 builds each plus 63 without industry): financial services, telecommunications,
+healthcare, energy and utilities, insurance, manufacturing, public sector and
+retail. Each industry context declares entities, demonstrative validation rules
+(no compliance certification claims), data formats and synthetic fixtures.
+All 160 builders passed independent runtime verification; none failed. They
+consumed **24,655,767 tokens** (mean 154,099 per build).
+
+| Functionalities | Builds | Mean tokens | Median | Range |
+| ---: | ---: | ---: | ---: | --- |
+| 1 | 78 | 137,116 | 131,452 | 102,702-237,692 |
+| 2 | 30 | 152,929 | 138,842 | 120,835-290,908 |
+| 3 | 27 | 173,667 | 150,125 | 104,712-330,664 |
+| 4 | 25 | 187,354 | 182,228 | 110,778-302,421 |
+
+Fourteen protocol deviations are recorded in `waves/wave3.json`. In five trials
+the builder wrote an auxiliary `docs\My_prompt.txt` in its staging directory
+(not imported). In nine trials the builder appended its own prompt to the
+operator's external prompt log, apparently following an inherited global
+prompt-logging instruction; those entries were removed and no build artifact
+depended on them. Their small token cost remains in the labels. Staging copies
+are kept in `runs/20260924_0900_wave3/`.
+
+The model was retrained with union features over waves 1-3 (299 measured
+records; 200 training, 42 validation, 57 test; membership groups never cross
+splits). Grouped cross-validation again selected alpha 100.
+
+| Split | n | MAE (tokens) | MAPE | Training-mean baseline MAE | Interval coverage (80% target) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Validation | 42 | 25,400 | 14.2% | 29,297 | 78.6% |
+| Test (evaluated once) | 57 | 20,113 | 13.0% | 24,993 (train+validation mean) | 82.5% |
+
+Validation gates passed. Test MAPE by size: 8.8% (1), 11.8% (2), 19.5% (3),
+15.6% (4); by level: B 17.3% (n=5), BI 21.4% (n=3), BT 11.7% (n=33), BTI 12.9%
+(n=16). Per-industry test subsets have one to five records and are too small
+for industry-specific accuracy claims. Industry builds cost more on average,
+but their spread is wide (for example, a 3-part energy build used 330,664
+tokens). Mean test bias is +5,948 tokens (overprediction).
+
 ## Input features
 
 | Group | Fields / meaning |
@@ -91,6 +147,12 @@ for bounded Python CLI builds by one builder model.
 | Integration | `integration_edge_count`, `shared_schema_count`, `shared_validation_layer_count`, plus the ordered handoff graph |
 | Scope | `planned_acceptance_case_count`, `artifact_kind`, `llm_integration` |
 | Catalog encoding | Sixteen `has_type_*` indicators and seven `planned_operation_*` counts |
+| Composition level (wave 3) | `composition_level` (B/BT/BI/BTI), `generic_basic_part_count`, seven `has_generic_*` indicators |
+| Industry (wave 3) | `industry_context`, eight `industry_*` indicators, `industry_constraint_count` |
+
+The wave-3 model uses 46 numeric pre-build features (count, catalog,
+integration, scope, generic-part and industry encodings); staffing and months
+are excluded.
 
 Staffing and delivery months are scenario assumptions, **not observed staffing,
 agent wall-clock duration, or demonstrated causal drivers of token use**. The

@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t157_single_compare__ind-finance",
+  "composition_label": "Product comparison (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "synthetic": "Required true; all fixtures fabricated",
+      "customer": "id, kyc_status (verified/pending/rejected), aml_flags list, positive monthly_income, nonnegative monthly_debt; optional fabricated identity/account fields",
+      "loan_application": "currency USD/EUR/GBP, positive amount in major units, term_months integer 1..600",
+      "ledger": "format json/csv/iso20022; data is a transaction array, CSV text, or ISO-style object",
+      "transaction": "unique id, ISO calendar date, finite nonnegative amount, matching currency, direction credit/debit, optional card_number",
+      "iso20022_style": "Document.CstmrCdtTrfInitn.PmtInf array: EndToEndId, ReqdExctnDt, InstdAmt {value,Ccy}, Direction, optional DbtrAcct and CardNumber",
+      "products": "1..100 products; unique id/name, apr {value,unit percent/fraction/basis_points}, fee/min_amount/max_amount {value,currency,optional unit major/minor}, min/max_term_months",
+      "preferences": "Exactly apr, fee, payment nonnegative finite weights with positive sum"
+    },
+    "output": "One JSON object: schema_version, status, synthetic notice, customer_id, application, screening, masked normalized transactions, summary, comparison columns/rows/units, ranking, explainable model details",
+    "error": "schema_version, status error, privacy-preserving error text; CLI exit 2",
+    "validation": "One normalize layer applies common object, text, finite numeric, currency, date, range and uniqueness validators to all formats"
+  },
+  "cross_stage_handoffs": [
+    "Format adapters -> validated canonical transactions and normalized APR/major-unit attributes",
+    "KYC/AML, amount/term and affordability eligibility -> side-by-side rows",
+    "Eligible rows -> preference normalization -> explained scores -> deterministic ranking -> recursive PAN-like text masking"
+  ],
+  "behavior": {
+    "comparison": "Fixed-rate monthly amortization with zero-interest branch; fee upfront, not financed",
+    "ranking": "Min-max lower-is-better utilities over eligible rows, equal values get utility 1; score 100 times weighted utility sum; ties ordered by id",
+    "explainability": "Every score includes input values, population bounds, normalized weights, utility and additive contribution. Excluded products have null score and explicit exclusion reasons.",
+    "screening": "Nonverified KYC or any supplied AML flag excludes all products pending review; demo rule, not actual screening",
+    "affordability": "Exclude debt-to-income ratio above 40 percent; supplied monthly income/debt are not inferred from ledger",
+    "privacy": "PAN fields allow only final four digits in output; accounts/IBANs are not echoed; defense-in-depth PAN-like text redaction",
+    "fixtures": "Fabricated customer and fake IBAN/accounts; random.Random(157) histories exercised across JSON/CSV/ISO adapters",
+    "determinism": "No providers, clock-dependent logic or external services"
+  },
+  "scope": {
+    "included": ["Loan-product comparison", "Normalized attributes", "Side-by-side rows", "Preference ranking", "Synthetic KYC/AML and affordability gates", "Card masking", "JSON/CSV and ISO 20022-style transactions", "CLI and unittest coverage"],
+    "excluded": ["Real AML/KYC lookup", "Compliance certification", "Credit decisions or advice", "Full ISO 20022 standard conformance", "Real payment processing", "Currency conversion", "External search", "LLM calls", "Production deployment"]
+  },
+  "test_outcomes": {"status": "passed", "tests": 16, "cli": "Example prints one valid JSON object with status ok and exits 0; missing files and arguments exit 2 with JSON error", "coverage": "Normal ranking, normalization, weights, ties, zero APR, empty histories, KYC/AML gates, masking, affordability, malformed inputs, currencies, duplicates, dates, randomized format parity, CLI success and errors"}
+}

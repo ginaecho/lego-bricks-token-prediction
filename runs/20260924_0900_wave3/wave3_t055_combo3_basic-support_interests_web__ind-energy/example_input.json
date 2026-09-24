@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "status": "ok",
+  "stage": "input",
+  "support": null,
+  "interests": null,
+  "web": null,
+  "context": {
+    "request": {
+      "question": "How can I understand winter consumption and get outage updates for SYN-SUB-NORTH-01?",
+      "team_online": false
+    },
+    "preferences": {
+      "weights": {"efficiency": 5, "winter": 3, "outage": 4, "emissions": 1},
+      "excluded_ids": ["solar-offer"],
+      "excluded_tags": ["marketing"],
+      "limit": 3
+    },
+    "knowledge_base": [
+      {
+        "id": "kb-winter",
+        "title": "Synthetic winter meter guide",
+        "text": "Synthetic guidance: winter heating can raise consumption. Compare smart-meter intervals in kWh over equal durations before changing a schedule.",
+        "tags": ["winter", "efficiency", "meter"],
+        "url": "https://utility.example.test/winter"
+      },
+      {
+        "id": "kb-outage",
+        "title": "Synthetic outage updates",
+        "text": "Synthetic guidance: outage updates are available through the status service. Restoration estimates are not guaranteed. Do not approach damaged grid equipment.",
+        "tags": ["outage", "safety"],
+        "url": "https://utility.example.test/outages"
+      },
+      {
+        "id": "kb-emissions",
+        "title": "Synthetic emissions accounting",
+        "text": "Synthetic fixture factor: electricity emissions intensity is 180 gCO2e/kWh. This illustrative value is not an actual utility disclosure.",
+        "tags": ["emissions", "efficiency"],
+        "url": "https://utility.example.test/emissions"
+      }
+    ],
+    "catalog": [
+      {
+        "id": "winter-check",
+        "title": "Synthetic interval consumption review",
+        "tags": ["winter", "efficiency", "meter"],
+        "knowledge_ids": ["kb-winter"],
+        "url": "https://utility.example.test/winter"
+      },
+      {
+        "id": "outage-alerts",
+        "title": "Synthetic outage status guide",
+        "tags": ["outage", "safety"],
+        "knowledge_ids": ["kb-outage"],
+        "url": "https://utility.example.test/outages"
+      },
+      {
+        "id": "emissions-guide",
+        "title": "Synthetic emissions information",
+        "tags": ["emissions", "efficiency"],
+        "knowledge_ids": ["kb-emissions"],
+        "url": "https://utility.example.test/emissions"
+      },
+      {
+        "id": "solar-offer",
+        "title": "Synthetic marketing offer",
+        "tags": ["marketing", "efficiency"],
+        "knowledge_ids": ["kb-winter"],
+        "url": "https://utility.example.test/winter"
+      }
+    ],
+    "sources": {
+      "allowlisted_urls": [
+        "https://utility.example.test/winter",
+        "https://utility.example.test/outages",
+        "https://utility.example.test/emissions"
+      ],
+      "documents": [
+        {
+          "url": "https://utility.example.test/winter",
+          "title": "Synthetic winter consumption snapshot",
+          "source_sha256": null,
+          "content": "Synthetic page snapshot: winter consumption often rises with electric heating. Compare smart-meter interval kWh over equal durations. Efficiency recommendations should preserve safe indoor temperatures."
+        },
+        {
+          "url": "https://utility.example.test/outages",
+          "title": "Synthetic outage snapshot",
+          "source_sha256": null,
+          "content": "Synthetic page snapshot: outage alerts provide status updates, not guaranteed restoration times. Safety first: remain away from damaged grid assets and report immediate danger to local emergency services."
+        },
+        {
+          "url": "https://utility.example.test/emissions",
+          "title": "Synthetic emissions snapshot",
+          "source_sha256": null,
+          "content": "Synthetic page snapshot: the illustrative electricity emissions factor is 180 gCO2e/kWh, sourced to kb-emissions. This is not a measured figure or a compliance claim."
+        }
+      ]
+    },
+    "energy": {
+      "meter_interval_csv": "meter_id,timestamp,interval_minutes,consumption_kwh,season,asset_id\nSYN-METER-001,2026-01-15T17:00:00+00:00,30,1.4,winter,SYN-DEV-FEEDER-01\nSYN-METER-001,2026-01-15T17:30:00+00:00,30,1.6,winter,SYN-DEV-FEEDER-01\nSYN-METER-001,2026-07-15T17:00:00+00:00,30,0.6,summer,SYN-DEV-FEEDER-01\n",
+      "meter_readings": [],
+      "grid_assets": [
+        {"id": "SYN-SUB-NORTH-01", "kind": "substation", "critical": true, "connected_to": ["SYN-DEV-FEEDER-01"]},
+        {"id": "SYN-DEV-FEEDER-01", "kind": "feeder", "critical": false, "connected_to": ["SYN-SUB-NORTH-01"]}
+      ],
+      "scada_telemetry": {
+        "protocol": "SCADA-SYNTHETIC-1",
+        "sampled_at": "2026-01-15T17:30:00+00:00",
+        "points": [
+          {"asset_id": "SYN-SUB-NORTH-01", "metric": "voltage", "value": 33.0, "unit": "kV", "quality": "good"},
+          {"asset_id": "SYN-DEV-FEEDER-01", "metric": "load", "value": 2.8, "unit": "MW", "quality": "good"},
+          {"asset_id": "SYN-SUB-NORTH-01", "metric": "frequency", "value": 50.0, "unit": "Hz", "quality": "good"}
+        ]
+      },
+      "outage_reports": [
+        {
+          "id": "SYN-OUTAGE-001",
+          "asset_id": "SYN-DEV-FEEDER-01",
+          "reported_at": "2026-01-15T17:31:00+00:00",
+          "life_safety": false,
+          "critical_service": false,
+          "customers_affected": 140,
+          "priority": "P2",
+          "description": "Synthetic feeder outage affecting a fictitious neighborhood."
+        },
+        {
+          "id": "SYN-OUTAGE-002",
+          "asset_id": "SYN-SUB-NORTH-01",
+          "reported_at": "2026-01-15T17:32:00+00:00",
+          "life_safety": true,
+          "critical_service": false,
+          "customers_affected": 2,
+          "priority": "P1",
+          "description": "Synthetic damaged equipment report near SYN-SUB-NORTH-01; fictitious safety scenario."
+        }
+      ],
+      "emissions": [
+        {"id": "SYN-EMISSIONS-001", "value": 180, "unit": "gCO2e/kWh", "source": "kb-emissions"}
+      ],
+      "safety_rules": {
+        "P1": "life_safety or critical_service",
+        "P2": "otherwise customers_affected >= 100",
+        "P3": "otherwise"
+      }
+    }
+  }
+}

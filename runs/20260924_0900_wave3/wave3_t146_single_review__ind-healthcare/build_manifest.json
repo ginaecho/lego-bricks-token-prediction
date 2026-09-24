@@ -1,0 +1,50 @@
+{
+  "build_id": "wave3_t146_single_review__ind-healthcare",
+  "composition_label": "single_review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original bounded implementation created from scratch",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact envelope: schema_version=1, synthetic_data=true, records (1..100). Each record has record_id, patient_record, clinical_note, prior_authorization_request.",
+    "patient_record": "FHIR-style Patient with SYN-PAT-nnnn id, synthetic=true, diagnoses [{code: SYN-DX-token}], labs [{code: SYN-LAB-token, value: finite number in [-1e9,1e9], unit: arb}]. Collections have at most 100 unique codes.",
+    "clinical_note": "FHIR-style DocumentReference with SYN-NOTE-nnnn id, matching subject.reference and text up to 4000 characters. Empty text is valid missing evidence. Closed lines: Diagnosis: SYN-DX-token; Lab: SYN-LAB-token = decimal arb; Documentation: synthetic encounter recorded.",
+    "prior_authorization_request": "FHIR-style Claim with SYN-PA-nnnn id, use=preauthorization, matching patient.reference, SYN-SVC-token service_code, 1..100 unique requirements {id: REQ-nnn, source: diagnosis|lab|clinical_note, code: matching synthetic code or documentation}. Tokens contain 1..12 uppercase letters/digits.",
+    "output": "Shared versioned envelope retaining validated synthetic records, adding review to each, status=reviewed, mandatory human_review_required=true and one audit_trail change event per record. Error envelope: status=error, error=safe message.",
+    "validation": "Single validate function used by library and CLI before any changes. Exact fields and types, synthetic-only identifiers, bounded arrays, matching patient references, duplicate code/identifier rejection, finite lab values. CLI rejects duplicate JSON keys, non-finite constants and files over 1 MB."
+  },
+  "cross_stage_handoffs": [
+    "One stage only: validated immutable input snapshot -> deterministic document review -> copied records with traceable checks and audit events."
+  ],
+  "behavior": {
+    "requirement_checking": "Exact code presence for diagnosis/lab requirements and exact synthetic documentation line for clinical-note requirements; values are never interpreted medically.",
+    "gaps": "Each check includes requirement id/path, expected code, source, evidence path (with 1-based note line when relevant), status and explanation.",
+    "human_review": "Always required even when all evidence is present. No clinical or authorization decisions are performed.",
+    "de_identification": "Demonstrative HIPAA-oriented identifier exclusion: reject patient name, birthDate, identifier/MRN, addresses, contact fields and all other unsupported fields. Reject unrestricted clinical prose rather than attempting unsafe automatic redaction. Accept only clearly labeled fictitious synthetic identifiers and closed note grammar; not a HIPAA certification or complete real-world de-identification system.",
+    "audit": "Every internal record change is a single review-field addition with deterministic sequence, actor, record id, exact path, added value and canonical before/after SHA-256 hashes. Source records are never mutated. Sequence substitutes for wall-clock time for deterministic runs; trail is not a signed, tamper-proof or persisted audit service.",
+    "fixture": "Clearly labeled fictitious Synthea-style patient, invented diagnosis codes and arbitrary-unit lab values; no actual Synthea export, real MRNs, names or birth dates.",
+    "determinism": "No randomness, clock use, network calls, providers or LLM steps."
+  },
+  "scope": {
+    "included": ["Synthetic requirement/evidence review", "Traceable gaps", "Shared validation", "Human review flag", "Audit event for every review-field addition", "JSON CLI", "FHIR-style JSON and constrained clinical note text"],
+    "excluded": ["FHIR specification conformance", "Real patient data", "General-purpose PHI detection/redaction", "Clinical diagnosis or treatment selection", "Authorization approval/denial", "Compliance certification", "Production security and audit persistence", "External providers", "Prior record-history reconstruction"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 16,
+    "cli": "Passed: example input printed one JSON object with status reviewed and exited 0. Missing-file and usage errors printed JSON with status error and exited 2.",
+    "unittest_result": "Ran 16 tests; all passed.",
+    "example_result": "Three requirements have evidence; one missing lab is a traceable gap; human review is mandatory; one record-change audit event."
+  }
+}

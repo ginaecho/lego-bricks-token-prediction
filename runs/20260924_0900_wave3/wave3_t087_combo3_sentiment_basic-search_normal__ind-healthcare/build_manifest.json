@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t087_combo3_sentiment_basic-search_normal__ind-healthcare",
+  "composition_label": "sentiment -> basic:search -> normal | healthcare",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Explicitly synthetic resources, catalog entries and source passages; strict allowlisted fields, unique IDs, validated patient/source references.",
+    "resources": "FHIR-style Patient anonymous alias, ClinicalNote text, PriorAuthorizationRequest reason/status. Every resource explicitly requires human review.",
+    "output": "Shared envelope carries immutable validated input, records enriched through sentiment/search/research, stage, human review flag, null clinical decision and ordered before/after audit.",
+    "validation": "validate_input and validate_envelope protect every stage boundary; deterministic recomputation validates each output and exact audit replay."
+  },
+  "cross_stage_handoffs": [
+    {"from": "sentiment", "to": "basic:search", "data": "Validated normalized query terms and severity-aware priority drive catalog retrieval."},
+    {"from": "basic:search", "to": "normal", "data": "Validated top catalog results limit research to their source IDs; query terms retrieve passages and priority is retained."}
+  ],
+  "behavior": {
+    "sentiment": "Transparent word weights with two-token negation; severity cues conservatively retained even if negated. Priority = severity*100 + capped negative score magnitude; review triage only, not medical urgency assessment.",
+    "search": "General-purpose token overlap with a small synonym dictionary; top three products, deterministic ID tie-breaking, matched-term explanations.",
+    "research": "Top three matching passages from retrieved sources only; full passage extraction with exact source ID, passage ID, quote and character offsets. Empty retrieval explicitly reports no_matching_evidence.",
+    "healthcare": "Strict anonymous patient aliases and field allowlists reject names, birth dates and structured identifiers. Conservative free-text patterns reject common identifier forms. Original clinical resources and authorization status never change.",
+    "audit": "Every record enrichment has a sequence, actor, stage, path, before/after value and human-review flag. Read-only original resources need no change event.",
+    "errors": "CLI emits one JSON error object and exits 2 on invalid input or file failure; unsafe input content and paths are not echoed."
+  },
+  "scope": {
+    "included": ["Synthetic Synthea-style fixture with fictitious diagnosis and lab value", "Deterministic integrated CLI", "Human-reviewed informational retrieval", "Demonstrative HIPAA identifier exclusion rules", "Unit and subprocess CLI tests"],
+    "excluded": ["Actual HIPAA certification or comprehensive free-text de-identification", "Real patient data", "Clinical decision-making, diagnosis or treatment recommendations", "Autonomous prior authorization decisions", "FHIR conformance certification", "Live search or providers", "Persistent clinical record editing", "LLM integration"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 30,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "cli_records": 3,
+    "cli_audit_events": 9,
+    "validation_commands_run": [
+      "python -B -m unittest discover -s . -p test_implementation.py",
+      "python -B implementation.py example_input.json"
+    ]
+  }
+}

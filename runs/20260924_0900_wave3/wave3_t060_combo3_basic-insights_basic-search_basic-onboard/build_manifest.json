@@ -1,0 +1,47 @@
+{
+  "build_id": "wave3_t060_combo3_basic-insights_basic-search_basic-onboard",
+  "composition_label": "Customer insights -> Smart product search -> Guided onboarding (basic)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict object: schema_version=1, synthetic=true, fixture_label, customer{id,goal,experience,completed_steps}, feedback[{id,customer_id,text}], products[{id,name,description,tags}], query, limit.",
+    "output": "One envelope: status=ok, schema_version=1, input (unchanged validated snapshot), insights{feedback_count,themes}, search{query_terms,theme_ids,results}, onboarding{customer_id,recommended_product_id,theme_ids,steps,next_step,status}.",
+    "validation": "Shared validate() at each input and output boundary. Strict field sets, bounded strings/arrays, unique IDs, references, count consistency, finite positive ranked scores, top-result handoff, valid pending steps.",
+    "errors": "CLI file, JSON and validation errors print one JSON object with status=error and exit 2; success exits 0."
+  },
+  "cross_stage_handoffs": [
+    {"from": "insights", "to": "search", "data": "Validated evidence-backed themes and occurrence counts provide bounded product-ranking bonuses; the input snapshot supplies catalog and query."},
+    {"from": "search", "to": "onboarding", "data": "Validated ranked results select the recommended product; all theme IDs propagate; customer goal, experience and completed steps personalize the pending sequence."}
+  ],
+  "behavior": {
+    "insights": "Multi-label English keyword themes, deterministic priority by negative-feedback count then frequency then ID, feedback evidence, actionable guidance, and an uncategorized fallback.",
+    "search": "Casefolded Unicode tokenization, intent synonyms, conservative typo matching, query-to-goal fallback, bounded theme bonus, stable ID tie-breaking and explicit no-match handling. Themes alone recommend only when both query and goal have no searchable terms.",
+    "onboarding": "Beginners receive a tutorial, missing goals get a goal step, matched products receive configuration/task/review steps, unmatched searches receive refinement guidance. Completed steps are omitted; no pending steps means complete.",
+    "synthetic_data": "All provided customers, feedback and products are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["Single deterministic integrated CLI pipeline", "Shared strict validation", "Evidence and explanation fields", "In-memory fixture tests and subprocess CLI tests"],
+    "excluded": ["Live LLMs or providers", "Network calls", "External dependencies", "Persistence or account provisioning", "Enterprise security and operations", "Semantic embeddings", "Multilingual semantic understanding", "Reliable negation or sarcasm detection", "Individual-customer sentiment modeling"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 24,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "coverage": ["Each stage", "Cross-stage ranking and recommendation propagation", "Empty data and no matches", "Synonyms and typos", "Goal and experience personalization", "Completed steps", "Determinism and input immutability", "Invalid schemas and references", "Malformed JSON and file errors", "CLI success and exit codes"]
+  }
+}

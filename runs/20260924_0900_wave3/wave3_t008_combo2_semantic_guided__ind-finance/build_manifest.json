@@ -1,0 +1,75 @@
+{
+  "build_id": "wave3_t008_combo2_semantic_guided__ind-finance",
+  "composition_label": "Semantic search (Smart product search) -> Guided setup (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3.13.15, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "synthetic=true, customer{id,name,kyc_status,kyc_flags,aml_flags}, ledger{format,data}, loan_application{id,customer_id,amount,currency,term_months,purpose}, products[{id,kind,name,description,currency}], query, optional top_k and completed_steps",
+    "canonical_entities": "Customer/KYC profile; transactions with decimal amounts, fake accounts and masked cards; validated loan application. SYN- identifiers and FAKE- account/IBAN values are required.",
+    "ledger_formats": {
+      "json": "data is a transaction object array",
+      "csv": "data is CSV text with id,customer_id,amount,currency,account,description and optional card_number columns",
+      "iso20022": "data.CstmrCdtTrfInitn.CdtTrfTxInf array with EndToEndId, CustomerId, InstdAmt{Value,Ccy}, DbtrAcct, RmtInf and optional CardNumber; illustrative JSON shape, not the complete ISO standard"
+    },
+    "output": "schema_version, synthetic, status, normalized customer/transactions/loan_application, semantic handoff, guided progress",
+    "validation": "Shared ValidationError/require helpers; validate_input before search; validate_handoff before guided setup. Invalid input/file errors yield a single sanitized JSON error and exit 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "semantic_search",
+      "to": "guided_setup",
+      "payload": "schema version, customer id, loan id, transaction ids, query, ranked products with explained scores, selected product id",
+      "validation": "Entity linkage, catalog membership, currency, bounded scores, lexical explanation recomputation, embedding bounds, scoring formula, deterministic rank order and top selection are validated.",
+      "effect": "Selected product determines the onboarding step graph; linked transaction evidence and KYC/AML profile gate progression."
+    }
+  ],
+  "behavior": {
+    "search": "Inverted token index with deterministic synonym expansion. Default relevance is query-token coverage; optional local embedding callable uses 70% coverage plus 30% positive cosine. Stable ties sort by product id. Currency compatibility is a hard filter.",
+    "explainability": "Every relevance score includes matched/query tokens, lexical coverage, optional cosine and exact formula. No credit-risk or approval score is generated.",
+    "onboarding": "KYC -> AML -> transaction review -> loan application for loan products; other products omit the loan step. Completion claims require evidence and completed prerequisites. Returns blocked/ready/completed steps, next steps and progress.",
+    "resume": "Copy guided.resume.completed_steps into input.completed_steps with the same selected product/query context. Each rerun revalidates evidence; output is returned for caller-managed persistence.",
+    "privacy": "Card fields are masked before output. Free-text fields reject apparent unmasked PAN sequences; error messages do not echo payloads. This is demonstrative masking, not PCI DSS certification.",
+    "synthetic": "Fabricated customer, explicitly fake accounts/IBANs, test-only card values, fixed example history and seeded randomized transaction histories in tests.",
+    "no_matches": "Returns an empty ranking and guided status not_started with zero progress."
+  },
+  "scope": {
+    "included": [
+      "Single integrated deterministic CLI pipeline",
+      "JSON/CSV and ISO 20022-style JSON payment ingestion",
+      "Local fixture-tested embedding injection",
+      "Screening gates and explainable search relevance",
+      "Caller-managed onboarding progress"
+    ],
+    "excluded": [
+      "Live providers, networks, databases and external dependencies",
+      "Real KYC/AML checks, credit decisions or regulatory certification",
+      "Full ISO 20022 schema support or real IBAN validation",
+      "Authentication, encrypted storage and enterprise workflow execution",
+      "Automatic approvals or live financial transactions"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 22,
+    "cli_exit_code": 0,
+    "coverage": "Both stages, synonym ranking, score explanations, injected embeddings, cross-stage tampering, prerequisites, progress/resume, KYC/AML gates, PAN masking, all three ledger formats, seeded histories, invalid values/shapes, extreme amounts, no matches and CLI success/error behavior."
+  }
+}

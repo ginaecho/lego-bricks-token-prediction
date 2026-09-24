@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "synthetic-orders-csv",
+      "format": "csv",
+      "content": "Customer,Units,Amount,Approved\n  SYNTHETIC ALPHA  ,3,42.50,true\nSynthetic Beta,0,0,false\n"
+    },
+    {
+      "id": "synthetic-orders-json",
+      "format": "json",
+      "content": "[{\"Customer\":\" Synthetic Gamma \",\"Units\":2,\"Amount\":19.25,\"Approved\":true}]"
+    }
+  ],
+  "fields": [
+    {"source": "Customer", "target": "customer", "type": "string", "required": true, "transforms": ["strip", "lower"]},
+    {"source": "Units", "target": "units", "type": "integer", "required": true, "min": 0},
+    {"source": "Amount", "target": "amount", "type": "number", "required": true, "min": 0},
+    {"source": "Approved", "target": "approved", "type": "boolean", "required": true}
+  ]
+}

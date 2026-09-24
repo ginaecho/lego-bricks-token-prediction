@@ -1,0 +1,53 @@
+{
+  "build_id": "wave3_t132_single_compare__ind-telecom",
+  "composition_label": "Product comparison (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "One JSON envelope: schema_version, synthetic, residency, privacy, subscriber, usage_csv, fault_tickets, support_chats, products, preferences. All entity records carry residency and synthetic tags. Tickets, chats and CDRs reference the subscriber id.",
+    "usage_csv": "Exact columns: record_id,subscriber_id,residency,synthetic,period,voice_minutes,data_mb. One monthly period YYYY-MM; empty body permitted. Decimal MB/GB/TB conversions.",
+    "support_chats": "Structured transcripts with speaker (subscriber or agent) and text; raw transcript content never echoed.",
+    "products": "Nonpersonal PLAN identifiers; numeric value/unit attributes; prices USD or cents, data MB/GB/TB, voice minutes/hours, reliability 0..100.",
+    "output": "status, schema_version, synthetic, residency, privacy, usage_summary, required_allowances, support_summary, ranked comparison, recommended_product_id, notice. Errors: status=error with generic nonpersonal error, exit 2.",
+    "validation": "Single validate_and_normalize layer: strict object fields, types, finite nonnegative quantities, duplicate IDs, CSV shape, shared residency, synthetic labels, subscriber references, explicit consent, purpose limitation, do_not_sell, billing reasons. CLI also rejects duplicate JSON keys and nonfinite constants."
+  },
+  "cross_stage_handoffs": [
+    "Validated CSV usage aggregates and normalized plan attributes feed comparison in memory.",
+    "Monthly needs = maximum of stated minimum and observed monthly usage.",
+    "Comparison feeds deterministic weighted preference ranking and privacy-minimized JSON output."
+  ],
+  "behavior": {
+    "normalization": "Decimal data units normalized to GB, voice to minutes, monthly price to USD.",
+    "ranking": "Price utility=min(1,budget/price), free=1. Data/voice utility=min(1,allowance/need), zero need=1. Reliability utility=percent/100. Weighted mean times 100, rounded to six decimals. Ties: lower price then product ID. Budget and allowance gaps are reported, not hard filters.",
+    "support_context": "Fault tickets and chats are validated and counted; no inference of product network reliability from historical faults. Billing adjustment records are validated, never executed or subtracted from recurring prices.",
+    "privacy": "Demonstrative GDPR/CCPA-oriented consent, purpose and no-sale gates; identifiers, chat text and billing reasons omitted from output. No compliance certification.",
+    "residency": "EU or US envelope tag must match every record, including products and CDRs; output record summaries preserve it. Tag validation is not physical deployment residency enforcement.",
+    "fixtures": "Clearly synthetic subscriber, fictional reserved phone number, intentionally synthetic zero-prefix IMEI, invented fault and chat. Seeded Random(132) randomized usage exercised by tests; example uses fixed synthetic volumes."
+  },
+  "scope": {
+    "included": ["Local CLI", "Shared JSON schema and validation", "CSV call/data usage", "Support transcripts", "Side-by-side normalized attributes", "Deterministic preference ranking", "Privacy-minimized output"],
+    "excluded": ["Production compliance certification", "Physical residency guarantees", "Live billing", "Live providers or LLM calls", "Subscriber databases", "Unlimited plans", "Currency exchange", "Multiple monthly periods", "Network reliability prediction"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 15,
+    "unittest_exit_code": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "example_recommended_product_id": "PLAN-PLUS",
+    "coverage": ["Normalization", "Ranking", "Determinism", "Privacy minimization and consent", "Every entity residency", "Billing reasons", "Zero needs and free plans", "Invalid numbers and units", "Malformed CSV and subscriber linkage", "Empty products and weights", "Tie breaking", "Seeded randomized synthetic usage", "Synthetic flags and chat structure", "CLI success", "CLI file and JSON errors"]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "catalog": [
+    {"sku": "SYN-SHOE-001", "name": "Nimbus Running Shoe", "description": "Invented lightweight running footwear", "category": "shoes", "price_cents": 6499, "currency": "USD", "stock": 8},
+    {"sku": "SYN-SHOE-002", "name": "Comet Running Shoe", "description": "Invented cushioned running footwear", "category": "shoes", "price_cents": 7999, "currency": "USD", "stock": 0},
+    {"sku": "SYN-PACK-001", "name": "Moss Trail Backpack", "description": "Invented green daypack for walks", "category": "backpacks", "price_cents": 3599, "currency": "USD", "stock": 15}
+  ],
+  "customer": {"id": "SYN-SHOPPER-001", "consent": {"personalization": true}, "preferred_categories": ["shoes"]},
+  "basket": [{"sku": "SYN-SHOE-001", "quantity": 1}],
+  "issues": [
+    {"id": "SYN-ISSUE-001", "sku": "SYN-SHOE-002", "text": "The shoe is broken and unsafe. I am disappointed.", "severity": "high"},
+    {"id": "SYN-ISSUE-002", "sku": "SYN-PACK-001", "text": "I love the backpack. It is not bad.", "severity": "low"}
+  ],
+  "query": "jogging trainers",
+  "clickstream": [
+    {"sequence": 1, "customer_id": "SYN-SHOPPER-001", "action": "view", "sku": "SYN-SHOE-002"},
+    {"sequence": 2, "customer_id": "SYN-SHOPPER-001", "action": "click", "sku": "SYN-SHOE-001"}
+  ]
+}

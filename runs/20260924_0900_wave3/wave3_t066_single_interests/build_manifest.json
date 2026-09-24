@@ -1,0 +1,57 @@
+{
+  "build_id": "wave3_t066_single_interests",
+  "composition_label": "Interest-based recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New self-contained reference implementation authored for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1",
+      "fixture_label": "Required literal synthetic",
+      "preferences": {
+        "interests": "Object mapping case-sensitive category/tag labels to finite numeric weights in [0,5]",
+        "exclusions": "Object with required unique string arrays item_ids, categories, tags; any match excludes"
+      },
+      "catalog": "Array of objects: unique id, title, category (nonempty trimmed strings), tags (unique string array), popularity (finite number in [0,1])",
+      "limit": "Required integer in [0,100], excluding booleans"
+    },
+    "validation": "Shared validate function for API and CLI. Unknown/missing fields, duplicate IDs and tags, booleans as numbers and nonfinite values are rejected. CLI also rejects duplicate JSON keys and invalid JSON constants. Empty catalog, interests and exclusion arrays are supported.",
+    "success_output": "Object with status=ok, schema_version=1, fixture_label=synthetic, mode, recommendations and audit. Each recommendation includes item_id, title, score, rank and explanation. Explanation includes matched_interests with input weights and category/tags sources, popularity and a fixed grounded reason. Audit includes catalog_count, eligible_count, excluded item IDs with reasons, unmatched_item_ids and omitted_by_limit.",
+    "error_output": "Object with status=error and error containing type and message; CLI exits 2. Success exits 0."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: validated shared input -> exclusion filtering -> weighted interest ranking -> grounded explanations -> shared JSON output. No external or multi-stage handoff."
+  ],
+  "behavior": [
+    "Category and tag interest matches contribute once per interest, even if both match.",
+    "Score is the sum of positive matched weights divided by all positive preference weights.",
+    "Positive preferences exclude nonmatching items from recommendations rather than silently broadening discovery.",
+    "Ranking uses score descending, then popularity descending, then item ID ascending; limit applies after exclusions and ranking.",
+    "No positive weights triggers an explicitly labeled popularity fallback with zero preference scores; exclusions still apply.",
+    "Labels and IDs use exact case-sensitive comparison. Unknown exclusion values are harmless.",
+    "Explanations use only catalog fields and declared preference weights, without generated factual claims.",
+    "Input is not mutated; output ordering is independent of catalog order."
+  ],
+  "scope": {
+    "included": ["Bounded CLI and callable API", "Synthetic fixtures", "Preference ranking", "Hard exclusions", "Grounded evidence", "Deterministic audit", "Shared validation"],
+    "excluded": ["Live providers and LLMs", "Networks", "Persistence", "Learned user profiling", "Semantic matching", "Production scalability", "Authentication"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 11,
+    "unittest_result": "11 tests passed; runner exit code 0",
+    "example_cli_result": "Exit code 0; one JSON object with status ok and two grounded recommendations",
+    "coverage": ["Normal ranking", "Grounding and deduplication", "All exclusion types", "Fallback", "Empty catalog and zero limit", "No matches", "Deterministic ties", "Input immutability", "Invalid input", "CLI success", "CLI errors"]
+  }
+}

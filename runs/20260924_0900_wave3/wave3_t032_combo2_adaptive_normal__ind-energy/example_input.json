@@ -1,0 +1,40 @@
+{
+  "schema_version": "synthetic-energy/v1",
+  "synthetic": true,
+  "profile": {
+    "experience": "novice",
+    "detail": "guided",
+    "topics": ["consumption", "outages", "emissions"],
+    "completed": ["energy_basics", "asset_protection", "safety_rules", "emissions_units"]
+  },
+  "safety_rules": {"life_safety": "P1", "essential_service": "P2", "routine": "P3"},
+  "grid_assets": [
+    {"internal_id": "SYN-SUBSTATION-001", "alias": "asset-1", "critical": true},
+    {"internal_id": "SYN-METER-002", "alias": "asset-2", "critical": false}
+  ],
+  "topology": [["SYN-SUBSTATION-001", "SYN-METER-002"]],
+  "meter_csv": "meter_id,timestamp,interval_minutes,consumption,unit\nSYN-METER-002,2026-01-15T18:00:00+00:00,30,2.4,kWh\nSYN-METER-002,2026-01-15T18:30:00+00:00,30,2.6,kWh\nSYN-METER-002,2026-07-15T18:00:00+00:00,30,1.2,kWh\n",
+  "telemetry": {
+    "format": "SCADA-synthetic",
+    "samples": [
+      {"device_id": "SYN-SUBSTATION-001", "timestamp": "2026-01-15T18:00:00Z",
+       "load": 42.0, "load_unit": "kW",
+       "emissions": {"value": 1.5, "unit": "kgCO2e", "source_id": "synthetic-emissions"}}
+    ]
+  },
+  "outage_reports": [
+    {"report_id": "outage-1", "asset_id": "SYN-SUBSTATION-001",
+     "life_safety": true, "essential_service": true, "priority": "P1"}
+  ],
+  "passages": [
+    {"source_id": "synthetic-consumption", "title": "Synthetic seasonal meter observations",
+     "topics": ["consumption"],
+     "text": "Synthetic asset-2 consumed 2.4 kWh and 2.6 kWh in winter half-hour intervals, compared with 1.2 kWh in a summer half-hour interval."},
+    {"source_id": "synthetic-outages", "title": "Synthetic safety dispatch policy",
+     "topics": ["outages"],
+     "text": "Synthetic outage-1 threatens life safety and is P1. Essential-service outages without life-safety impact are P2; routine outages are P3."},
+    {"source_id": "synthetic-emissions", "title": "Synthetic emissions ledger",
+     "topics": ["emissions"],
+     "text": "Synthetic asset-1 emissions are 1.5 kgCO2e for the observed interval, from this fictitious emissions ledger, not an audited inventory."}
+  ]
+}

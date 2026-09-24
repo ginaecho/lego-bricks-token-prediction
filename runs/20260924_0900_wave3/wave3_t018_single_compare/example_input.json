@@ -1,0 +1,27 @@
+{
+  "fixture_label": "SYNTHETIC portable drive comparison; not real products or prices",
+  "attributes": [
+    {"key": "price", "label": "Price", "kind": "number", "unit": "USD", "aliases": ["cost"]},
+    {"key": "weight", "label": "Weight", "kind": "number", "unit": "g"},
+    {"key": "capacity", "label": "Capacity (decimal)", "kind": "number", "unit": "GB"},
+    {"key": "finish", "label": "Finish", "kind": "category"}
+  ],
+  "products": [
+    {"id": "a", "name": "Synthetic Pocket Drive", "attributes": {
+      " COST ": 80, "weight": {"value": 0.12, "unit": "kg"},
+      "capacity": {"value": 1, "unit": "TB"}, "finish": " Matte "
+    }},
+    {"id": "b", "name": "Synthetic Desk Drive", "attributes": {
+      "price": 100, "weight": 200, "capacity": 2000, "finish": "GLOSS"
+    }},
+    {"id": "c", "name": "Synthetic Mini Drive", "attributes": {
+      "price": 60, "capacity": 500, "finish": "matte"
+    }}
+  ],
+  "preferences": [
+    {"attribute": "price", "weight": 3, "direction": "lower"},
+    {"attribute": "weight", "weight": 1, "direction": "lower"},
+    {"attribute": "capacity", "weight": 2, "direction": "higher"},
+    {"attribute": "finish", "weight": 1, "order": ["matte", "gloss"]}
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "build_id": "wave3_t085_combo3_basic-support_basic-onboard_basic-recommend__ind-telecom",
+  "composition_label": "basic:support -> basic:onboard -> basic:recommend",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch inside the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Synthetic, residency-tagged subscriber account, network/billing/general tickets, CSV call/data records, support transcript messages, and plan catalog.",
+    "pipeline": "One evolving envelope: schema_version, synthetic, residency, stage, safe subscriber, usage_summary, facts, catalog; support, onboarding, recommendations added in order.",
+    "validation": "validate is the common boundary for input and each stage. Strict record fields, account linkage, finite nonnegative usage/pricing, unique IDs, aware timestamps, and deterministic stage-output verification.",
+    "output": "One JSON object: status ok with result envelope, or status error with generic privacy-preserving message and exit 2."
+  },
+  "cross_stage_handoffs": [
+    "support consumes validated prepared facts and produces grounded answer, action, network blocking state, and ticket references.",
+    "onboard consumes validated support action and blocking state, then selects a goal/completion-aware next step.",
+    "recommend consumes validated onboarding goal, blocking state and next step with consent, aggregated usage, and local catalog."
+  ],
+  "behavior": {
+    "support": "Deterministic grounded templates for general help, activation, connection faults, and billing; no unsupported repair promises or automatic credits.",
+    "onboarding": "Prioritizes billing review for cost goals, defers open faults, skips completed steps, and handles completion.",
+    "discovery": "Consent-gated alternatives meeting observed usage and goal, stably ranked by cost, allowance, ID; no recommendations before activation or during an open fault.",
+    "privacy": "Demonstrative GDPR/CCPA-oriented consent and minimization rules, not certification. Raw phone, IMEI, transcripts, adjustment reasons and individual call records are discarded before stage processing. Pseudonymous account IDs remain personal data and require appropriate downstream protection.",
+    "residency": "EU or US tag required on every input entity including CSV rows and adjustment records; mixed-residency records rejected. Derived records inherit the tag. No network or persistent subscriber storage.",
+    "billing": "Every adjustment request needs a nonblank reason; adjustments are never executed.",
+    "fixtures": "Clearly synthetic accounts, reserved invalid numbering-prefix phone/IMEI values, invented tickets and chat; seeded randomized usage test fixture.",
+    "usage_interpretation": "CSV rows represent one caller-supplied observation window, not necessarily a full billing cycle; recommendations are illustrative, not forecasts."
+  },
+  "scope": {
+    "included": ["Integrated CLI pipeline", "Shared validation", "Deterministic local plan discovery", "Synthetic fixtures", "Unit and CLI tests"],
+    "excluded": ["Live providers or LLM calls", "Production telecom provisioning", "Actual credits", "Network residency enforcement", "Legal compliance certification", "Identity verification", "Persistent data retention", "Usage forecasting"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 36,
+    "cli": "Passed: example prints one JSON object with status ok and exits 0. Missing-file, malformed JSON, invalid schema and malformed CSV cases return status error and exit 2.",
+    "verified_commands": [
+      "python -B -m unittest discover -s . -p test_implementation.py: 36 tests passed",
+      "python -B implementation.py example_input.json: exit 0"
+    ]
+  }
+}

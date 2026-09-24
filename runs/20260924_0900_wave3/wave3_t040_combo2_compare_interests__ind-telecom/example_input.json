@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "synthetic_fixture": true,
+  "residency_tag": "EU",
+  "subscriber": {
+    "subscriber_id": "SUB_SYNTH_01",
+    "residency_tag": "EU",
+    "consent_personalization": true,
+    "purpose": "plan_recommendation",
+    "preferences": {
+      "budget_cents": 3500,
+      "minimum_data_mb": 10000,
+      "interests": ["work", "travel"],
+      "excluded_offer_ids": ["OFFER_TRAVEL"],
+      "top_n": 3
+    }
+  },
+  "offers": [
+    {"offer_id": "OFFER_BASIC", "residency_tag": "EU", "currency": "USD", "monthly_price": "20.00", "data_allowance": 10000, "data_unit": "MB", "network_quality": 80, "tags": ["budget"]},
+    {"offer_id": "OFFER_WORK", "residency_tag": "EU", "currency": "USD", "monthly_price": "35.00", "data_allowance": 25, "data_unit": "GB", "network_quality": 95, "tags": ["work", "streaming"]},
+    {"offer_id": "OFFER_TRAVEL", "residency_tag": "EU", "currency": "USD", "monthly_price": "30.00", "data_allowance": 20, "data_unit": "GB", "network_quality": 90, "tags": ["travel", "work"]}
+  ],
+  "call_detail_records_csv": "record_id,subscriber_id,residency_tag,phone_number,imei,call_minutes,data_mb\nCDR_SYNTH_01,SUB_SYNTH_01,EU,+1-202-555-0101,SYNTH-IMEI-000001,83,6174\nCDR_SYNTH_02,SUB_SYNTH_01,EU,+1-202-555-0101,SYNTH-IMEI-000001,127,8492\n",
+  "network_fault_tickets": [
+    {"ticket_id": "FAULT_SYNTH_01", "subscriber_id": "SUB_SYNTH_01", "residency_tag": "EU", "status": "open", "summary": "Invented synthetic ticket: intermittent data service near fictional station."}
+  ],
+  "support_chat_transcripts": [
+    {"chat_id": "CHAT_SYNTH_01", "subscriber_id": "SUB_SYNTH_01", "ticket_id": "FAULT_SYNTH_01", "residency_tag": "EU", "transcript": "SYNTHETIC subscriber: My fictional device drops calls. SYNTHETIC agent: Invented fault FAULT_SYNTH_01 recorded; no real subscriber information."}
+  ],
+  "billing_adjustments": [
+    {"adjustment_id": "ADJ_SYNTH_01", "subscriber_id": "SUB_SYNTH_01", "residency_tag": "EU", "amount_cents": -500, "reason": "Synthetic service-interruption goodwill credit for invented fault."}
+  ]
+}

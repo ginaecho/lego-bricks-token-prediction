@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC",
+  "query": "travel bottle",
+  "limit": 3,
+  "as_of": "2026-09-24T09:00:00Z",
+  "catalog": [
+    {"sku": "FABLE-B01", "name": "Fable travel bottle", "description": "Steel bottle with screw cap for travel.", "category": "outdoors", "price": 24.5, "currency": "USD", "stock": 12},
+    {"sku": "FABLE-B02", "name": "Fable compact bottle", "description": "Small reusable bottle for travel.", "category": "outdoors", "price": 16.0, "currency": "USD", "stock": 0},
+    {"sku": "FABLE-T01", "name": "Fable travel tote", "description": "Cotton travel bag with carry handles.", "category": "bags", "price": 18.25, "currency": "USD", "stock": 7}
+  ],
+  "customer": {"id": "synthetic-shopper-river", "interests": ["bags"], "consent": {"gdpr": true, "ccpa": true}},
+  "basket": {"id": "synthetic-basket-001", "customer_id": "synthetic-shopper-river", "items": [{"sku": "FABLE-T01", "quantity": 1}]},
+  "events": [
+    {"id": "synthetic-click-01", "customer_id": "synthetic-shopper-river", "sku": "FABLE-B01", "type": "click", "timestamp": "2026-09-20T09:00:00Z"},
+    {"id": "synthetic-purchase-01", "customer_id": "synthetic-shopper-river", "sku": "FABLE-T01", "type": "purchase", "timestamp": "2026-09-23T09:00:00Z"}
+  ],
+  "personalization": {"enabled": true},
+  "research": {
+    "allowlisted_domains": ["specs.example.test"],
+    "max_findings_per_product": 2,
+    "documents": [
+      {"url": "https://specs.example.test/b01", "sku": "FABLE-B01", "kind": "product_specification", "title": "Synthetic travel bottle specification", "text": "The invented travel bottle has a steel body and screw cap.", "captured_at": "2026-09-22T12:00:00Z"},
+      {"url": "https://specs.example.test/b02", "sku": "FABLE-B02", "kind": "product_specification", "title": "Synthetic compact bottle specification", "text": "The invented compact bottle has a small reusable body.", "captured_at": "2026-09-22T12:00:00Z"},
+      {"url": "https://specs.example.test/t01", "sku": "FABLE-T01", "kind": "product_specification", "title": "Synthetic travel tote specification", "text": "The invented travel tote has cotton fabric and two carry handles.", "captured_at": "2026-09-22T12:00:00Z"}
+    ]
+  }
+}

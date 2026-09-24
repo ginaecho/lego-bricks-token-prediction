@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "settings": {
+    "requirements": [
+      {"id": "diagnosis", "description": "Document diagnosis evidence", "evidence_terms": ["E11.9"]},
+      {"id": "lab", "description": "Document lab evidence", "evidence_terms": ["A1c"]},
+      {"id": "referral", "description": "Prior authorization requires referral evidence", "evidence_terms": ["referral attached"]}
+    ],
+    "routing": {
+      "rules": [
+        {"category": "authorization", "owner": "authorization-review-team", "keywords": ["authorization", "referral"]},
+        {"category": "documentation", "owner": "records-review-team", "keywords": ["document"]}
+      ],
+      "fallback": {"category": "general", "owner": "intake-review-team"},
+      "urgent_keywords": ["deadline", "expedited"]
+    }
+  },
+  "records": [
+    {
+      "id": "record-one",
+      "patient": {
+        "resourceType": "Patient",
+        "id": "syn-patient-1001",
+        "synthetic": true,
+        "diagnoses": [{"code": "E11.9", "label": "Synthetic type two diabetes fixture"}],
+        "labs": [{"code": "A1c", "value": 7.2, "unit": "percent"}]
+      },
+      "clinical_note": {
+        "resourceType": "DocumentReference",
+        "id": "note-one",
+        "synthetic": true,
+        "text": "SYNTHETIC Synthea-style fixture. Authorization delayed; frustrated with confusing paperwork. Expedited administrative deadline. Staff were helpful."
+      },
+      "prior_authorization": {
+        "resourceType": "Claim",
+        "id": "request-one",
+        "status": "draft",
+        "procedure_code": "synthetic-procedure",
+        "evidence": ["Synthetic supporting documentation attached"]
+      }
+    }
+  ]
+}

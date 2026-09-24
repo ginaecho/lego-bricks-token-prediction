@@ -1,0 +1,48 @@
+{
+  "build_id": "wave3_t031_combo2_sentiment_basic-search__ind-retail",
+  "composition_label": "sentiment -> basic:search / Retail",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version, synthetic=true, catalog[], customer{id,consent{personalization},preferred_categories[]}, basket[{sku,quantity}], issues[{id,sku,text,severity}], query, clickstream[{sequence,customer_id,action,sku}]",
+    "catalog_product": "sku,name,description,category,price_cents(integer),currency(USD/EUR/GBP),stock(nonnegative integer)",
+    "pipeline_envelope": "schema_version,status,input; sentiment adds insights; search adds search",
+    "validation": "Shared validate entry point revalidates input and deterministic stage outputs at every boundary. Unknown fields, duplicate identifiers, invalid references and malformed types are rejected. CLI rejects duplicate JSON keys and non-finite numbers.",
+    "errors": "One JSON object with status=error and message; exit code 2 for validation or file errors."
+  },
+  "cross_stage_handoffs": [
+    "Sentiment returns validated issue scores, lexical evidence, severity-aware priority, aggregate score, urgency and negative product categories.",
+    "Search must consume the validated sentiment envelope. With personalization consent, urgency excludes out-of-stock matches and negative issue categories boost otherwise query-matching catalog products. Source issue IDs follow priority order.",
+    "Without personalization consent, profile, basket, clickstream and issue-derived search signals are ignored; explicit query and catalog alone determine search."
+  ],
+  "behavior": [
+    "Clearly labeled fictitious SKU catalog and synthetic shopper; no real customer data.",
+    "Sentiment weights are transparent and inverted for no/not/never within the preceding two tokens. Priority is severity band plus bounded negative sentiment. Stable issue-ID tie breaking.",
+    "General-purpose deterministic product search tokenizes case-insensitively, expands a small explicit synonym dictionary, matches SKU/title/category/description, and explains ranking components. It does not invent products.",
+    "Results copy exact catalog records, including currency, price and stock. No reviews or endorsements are accepted or generated.",
+    "Clickstream uses ordered sequence numbers and same-customer catalog references. Basket represents intended quantities, not an inventory reservation.",
+    "Consent is a demonstrative GDPR/CCPA-inspired gate, not a compliance certification. Sentiment analysis of explicitly supplied issues remains nonpersonalized analysis when consent is false."
+  ],
+  "scope": {
+    "included": ["CLI", "catalog JSON feed", "clickstream event array", "customer profile", "basket", "transparent sentiment", "severity-aware prioritization", "consent-aware search", "shared strict validation", "deterministic tests"],
+    "excluded": ["live providers", "LLM calls", "networks", "external packages", "enterprise deployment", "legal compliance certification", "review generation", "payments", "inventory reservations", "semantic embeddings", "multilingual sentiment", "sarcasm detection", "full natural-language negation parsing"]
+  },
+  "test_outcomes": {
+    "status": "passed: unittest discovery completed successfully",
+    "test_count": 20,
+    "cli": "passed: example invocation exited 0 and printed one JSON object with status=ok; error-path tests verified status=error and exit 2"
+  }
+}

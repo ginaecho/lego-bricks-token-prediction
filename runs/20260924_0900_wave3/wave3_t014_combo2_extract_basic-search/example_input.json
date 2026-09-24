@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "fixture_label": "SYNTHETIC catalog and customer request",
+  "document": "Synthetic customer request\nLooking for: jogging sneakers\nBudget: 90\nDepartment: footwear\nAvailable: yes\n",
+  "fields": [
+    {"name": "query", "type": "string", "required": true, "aliases": ["Looking for"]},
+    {"name": "budget", "type": "number", "required": false, "aliases": ["Budget"]},
+    {"name": "category", "type": "string", "required": false, "aliases": ["Department"]},
+    {"name": "stock", "type": "boolean", "required": false, "aliases": ["Available"]},
+    {"name": "color", "type": "string", "required": false, "aliases": ["Colour"]}
+  ],
+  "catalog": [
+    {"id": "syn-1", "name": "Running shoes", "description": "Lightweight everyday exercise footwear", "category": "footwear", "tags": ["run", "comfort"], "price": 75, "in_stock": true},
+    {"id": "syn-2", "name": "Running shoes deluxe", "description": "Cushioned exercise footwear", "category": "footwear", "tags": ["run"], "price": 125, "in_stock": true},
+    {"id": "syn-3", "name": "Walking shoes", "description": "Relaxed everyday footwear", "category": "footwear", "tags": ["comfort"], "price": 55, "in_stock": false},
+    {"id": "syn-4", "name": "Cordless headphones", "description": "Audio for exercise", "category": "electronics", "tags": ["music"], "price": 65, "in_stock": true}
+  ],
+  "search": {"query_field": "query", "max_price_field": "budget", "category_field": "category", "in_stock_field": "stock", "limit": 5, "min_score": 0.3}
+}

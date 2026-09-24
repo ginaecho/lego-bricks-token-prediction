@@ -1,0 +1,55 @@
+{
+  "build_id": "wave3_t103_combo4_semantic_journey_basic-documents_feedback__ind-telecom",
+  "composition_label": "semantic -> journey -> basic:documents -> feedback",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact top-level fields: schema_version, synthetic, processing_residency, account_id, query, completed_actions, records, cdr_csv. records are discriminated subscriber/ticket/usage/chat/adjustment objects. CSV is converted into usage records before the same validation layer runs.",
+    "envelope": "All stages consume and return the same schema_version/synthetic/status/stage/account_id/residency/query/completed_actions/records/search/journey/documents/feedback envelope. Each stage validates its predecessor and its own output.",
+    "record_identity": "Globally unique uppercase record IDs; pseudonymous ACC account references; synthetic=true; EU or US residency equal to processing residency on every source record.",
+    "privacy": "Consent=true and purpose=service_support required for every subscriber. Fictitious reserved phone range and synthetic IMEI markers only. Subscriber details are minimized, and phone/device/email patterns are removed before search, optional embeddings, documents, feedback and stdout. Unexpected structured fields rejected.",
+    "billing": "Integer cent adjustments must be nonzero and contain a nonblank stated reason. Documents are proposals, never execution of credits.",
+    "errors": "Validation or file errors produce one JSON object with status=error and process exit code 2. Success emits one JSON object with status=ok and exit code 0."
+  },
+  "cross_stage_handoffs": [
+    {"from": "semantic", "to": "journey", "data": "Ranked positive-score source references with validated residency; references become the journey evidence set."},
+    {"from": "journey", "to": "basic:documents", "data": "Exactly two unfinished, prerequisite-validated actions and their source IDs; each generates one checked document."},
+    {"from": "basic:documents", "to": "feedback", "data": "Checked document source IDs define eligible support transcripts. Evidence links both original chat IDs and supporting document IDs."}
+  ],
+  "behavior": {
+    "semantic": "Rebuilt deterministic in-memory term-frequency cosine index with telecom synonym normalization; tie-break by record ID. Optional run(data, embedding=callable) receives only redacted text strings and returns a validated finite rectangular numeric vector batch. No implicit provider or fallback call.",
+    "journey": "Topic-weighted action priorities, stable tie-breaking, completed prerequisite closure, no repeated action and exactly two eligible steps. No hits or fewer than two remaining actions is an explicit validation error.",
+    "documents": "General typed-record extraction, reshape into counts by kind, exact integer usage totals, ticket references and reasoned adjustment proposals; recompute to check totals and validate all source links.",
+    "feedback": "Document-scoped transcript deduplication after redaction and whitespace normalization. Multi-label network/usage/billing themes, or other. Counts measure unique messages, not subscribers. Excerpts are whitespace-normalized original words truncated to 240 characters; duplicate source IDs retained.",
+    "fixtures": "Clearly synthetic fictional subscriber, invented network ticket and support chat transcripts, reserved fictional phone number and non-real IMEI marker. Example usage volumes were generated with random.Random(103), drawing seconds from 1..4000 and megabytes from 1..2000 per row. Tests verify those seeded values and exercise zero/randomized volumes.",
+    "mutation": "run does not mutate caller input. Individual stages advance their supplied validated envelope in place."
+  },
+  "scope": {
+    "included": ["Bounded integrated CLI reference", "Shared schema and validation layer", "CSV CDR parsing", "Synthetic support transcripts", "Deterministic ranking and recommendations", "Extract/reshape/check documents", "Deduplicated traceable feedback", "Local injected embedding fixture tests", "Demonstrative subscriber protection and record residency rules"],
+    "excluded": ["Production deployment", "GDPR or CCPA compliance certification", "Comprehensive free-text PII detection including personal names or addresses", "Live LLM/model/provider calls", "Real subscriber data", "External search databases", "Actual network repairs or billing execution", "Authentication, encryption, retention/deletion infrastructure", "Unbounded files or adversarial resource exhaustion defenses"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 40,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "cli_final_stage": "feedback",
+    "cli_stdout_single_json_object": true,
+    "deliverable_count_verified": 4,
+    "coverage": ["All four stages", "Cross-stage source and residency propagation", "Determinism", "Seeded randomized fixtures", "Injected embeddings and invalid outputs", "Prerequisites and exhausted journeys", "CSV invalid data", "Zero usage", "Consent and purpose", "Fictitious identifiers", "PII redaction", "Billing reasons", "Account isolation", "Deduplication with complete provenance", "Tamper rejection", "CLI success, file errors, malformed JSON and validation errors"]
+  }
+}

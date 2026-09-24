@@ -1,0 +1,63 @@
+{
+  "build_id": "wave3_t121_single_guided__ind-energy",
+  "composition_label": "Guided setup (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "true",
+      "protection": "critical_identifier_policy=pseudonymize; boolean acknowledged",
+      "safety_rules": "danger_to_life=critical, essential_service=high, ordinary_interruption=normal",
+      "grid_assets": "list of asset_id, kind, critical, parent_id; fictitious SUB-SYN-NNN or DEV-SYN-NNN",
+      "meter_interval_csv": "CSV string: meter_id,asset_id,timestamp,interval_minutes,energy_kwh",
+      "telemetry": "SCADA-style JSON list: asset_id, timestamp, voltage_kv, emissions {value,unit,source}",
+      "outage_reports": "list: report_id,asset_id,danger_to_life,essential_service,priority",
+      "completed_steps": "ordered prefix of onboarding steps from previous progress output",
+      "actions": "ordered steps to complete in this invocation"
+    },
+    "output": "JSON object: schema_version,status,synthetic,notice,protection,safety_rules,progress,entities",
+    "error": "JSON object with status=error and sanitized error; exit 2",
+    "validation": "validate() is shared by Python run() and CLI; strict fields, types, entity references, safety and emissions checks"
+  },
+  "cross_stage_handoffs": [
+    "Validated normalized entities feed one guided onboarding state machine.",
+    "protect_identifiers -> register_grid -> import_meter_readings -> import_telemetry -> review_outages -> finish",
+    "Each step requires all preceding steps and its validated data. Empty outage lists are a valid no-outages review.",
+    "Copy progress.completed_steps into the next request with original entity inputs to resume; public aliases are not input identifiers."
+  ],
+  "behavior": {
+    "deterministic": true,
+    "progress": "Completed count, percentage, ordered transitions, prerequisite lists, next step and readiness",
+    "identifier_protection": "All asset IDs and parent references are replaced by stable sorted ordinal aliases in output; input remains local plaintext. Errors omit identifiers.",
+    "safety": "Danger to life overrides essential service, which overrides ordinary interruption; declared mapping cannot weaken rules.",
+    "emissions": "Finite nonnegative values, kgCO2e or tCO2e, and explicit synthetic-seasonal-model source required.",
+    "fixtures": "Clearly synthetic two-node topology and fictitious IDs; 30-minute winter consumption 2.4 kWh and summer consumption 1.2 kWh.",
+    "input_bound": "CLI reads at most 1000001 bytes and rejects inputs over 1000000 bytes; rejects duplicate JSON keys and nonfinite JSON constants.",
+    "persistence": "Caller retains completed_steps; no hidden files or database writes."
+  },
+  "scope": {
+    "included": ["Guided prerequisite-driven onboarding", "Resume and progress tracking", "Smart-meter CSV", "SCADA-style JSON", "Synthetic grid topology", "Demonstrative energy safety and identifier protection rules"],
+    "excluded": ["NERC CIP certification", "Production security or authentication", "Live grid control", "Real assets or customer data", "Network access", "External dependencies", "LLM calls", "Emissions accounting certification", "Automatic seasonal forecasting", "Durable service-side storage"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": 19,
+    "unit_test_exit_code": 0,
+    "cli": "Example emitted one JSON object with status=complete and 100 percent progress.",
+    "cli_exit_code": 0
+  }
+}

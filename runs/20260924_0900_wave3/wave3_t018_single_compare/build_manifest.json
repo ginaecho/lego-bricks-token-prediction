@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t018_single_compare",
+  "composition_label": "Product comparison (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored within the isolated build directory",
+    "runtime": "Python 3.13.15; Python 3 standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "fixture_label": "Required nonempty string beginning with synthetic, case-insensitive",
+      "attributes": "1..30 definitions: key, kind (number/category), optional label/unit/aliases",
+      "products": "1..100 objects: unique id, name, attributes map keyed by canonical names or aliases",
+      "preferences": "1..30 unique attribute references with positive weight; numbers require lower/higher direction; categories require ordered distinct strings"
+    },
+    "validation": "One normalize function and shared validators reject unknown fields, unknown attributes, ambiguous aliases, duplicate IDs/preferences, invalid shapes, nonfinite numbers, booleans as numbers and incompatible units. CLI additionally rejects duplicate JSON keys, invalid UTF-8, invalid JSON and input exceeding 1 MB.",
+    "output": "Success object: status=ok, fixture_label, canonical attributes/products/preferences, comparison rows containing product-id value maps, ranked products with score and per-preference contributions. Failure: status=error and message; exit 2.",
+    "numeric_limits": "Raw values, converted values and weights finite within +/-1e12; weights strictly positive",
+    "normalization": "Names trimmed, casefolded, whitespace replaced with underscores. Categories trimmed, casefolded and whitespace collapsed. Product IDs trimmed and case-sensitive. Bare numbers use the declared canonical unit; value/unit objects convert compatible units. Null and omitted attribute values remain null."
+  },
+  "cross_stage_handoffs": [
+    "Shared validation and normalization produce canonical product attribute maps.",
+    "Canonical maps feed both side-by-side comparison and deterministic preference ranking.",
+    "Comparison, normalized input and ranking are returned together as one JSON object."
+  ],
+  "behavior": {
+    "units": "Mass g/kg; decimal storage GB/TB (1000); length mm/cm/m; USD only; empty unit for dimensionless numbers. Units are case-sensitive; no currency conversion.",
+    "numeric_utility": "Observed min-max utility in [0,1], inverted for lower-is-better. Equal observed values have utility 1. Missing values have utility 0, including when all values are missing.",
+    "category_utility": "For n ordered values, position i (zero-based) has utility (n-i)/n. Unlisted or missing values have utility 0.",
+    "score": "Sum of utilities weighted by weight divided by total preference weight. Missing data retains its weight and is not renormalized away.",
+    "ties": "Sort descending by unrounded score, then ascending case-sensitive product ID; assign sequential ranks. Display scores/contributions rounded to six decimal places.",
+    "candidate_dependence": "Min-max scores are relative to the supplied candidate set; this is not a global quality score.",
+    "fixtures": "All example products, prices and specifications are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["Attribute normalization", "Side-by-side comparison", "Explainable preference ranking", "Bounded shared validation", "Runnable JSON CLI", "Synthetic unit and CLI fixtures"],
+    "excluded": ["Live catalog search", "Network or model calls", "LLM integration", "Persistence", "Currency exchange", "Enterprise deployment", "Semantic category inference"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "15 unittest cases passed; exit 0",
+    "cli": "Example emitted one JSON object with status ok; exit 0; ranking a, c, b",
+    "error_cli": "Missing file and invalid argument counts emitted JSON status error and exit 2"
+  }
+}

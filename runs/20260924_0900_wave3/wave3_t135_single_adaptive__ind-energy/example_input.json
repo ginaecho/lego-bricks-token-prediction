@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "profile": {
+    "experience": "novice",
+    "preference": "detailed",
+    "completed": ["protection"]
+  },
+  "meter_readings": {
+    "format": "smart-meter interval CSV",
+    "interval_minutes": 15,
+    "csv": "timestamp,meter_id,asset_id,consumption_kwh,season\n2026-01-15T08:00:00Z,SYN-METER-001,SYN-DEVICE-001,1.4,winter\n2026-01-15T08:15:00Z,SYN-METER-001,SYN-DEVICE-001,1.6,winter\n"
+  },
+  "grid_assets": {
+    "format": "SCADA-style telemetry JSON",
+    "synthetic": true,
+    "assets": [
+      {
+        "asset_id": "SYN-SUBSTATION-001",
+        "critical": true,
+        "neighbors": ["SYN-DEVICE-001"],
+        "timestamp": "2026-01-15T08:15:00Z",
+        "voltage_kv": 110,
+        "emissions": {"value": 0.002, "unit": "tCO2e", "source": "Synthetic seasonal generation model, not measured"}
+      },
+      {
+        "asset_id": "SYN-DEVICE-001",
+        "critical": false,
+        "neighbors": ["SYN-SUBSTATION-001"],
+        "timestamp": "2026-01-15T08:15:00Z",
+        "voltage_kv": 11,
+        "emissions": {"value": 0.6, "unit": "kgCO2e", "source": "Synthetic illustrative interval factor"}
+      }
+    ]
+  },
+  "outage_reports": [
+    {
+      "outage_id": "SYN-OUTAGE-001",
+      "asset_id": "SYN-DEVICE-001",
+      "life_threat": false,
+      "critical_service": true,
+      "customers_affected": 25,
+      "priority": "P2"
+    }
+  ]
+}

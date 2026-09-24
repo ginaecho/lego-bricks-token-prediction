@@ -1,0 +1,62 @@
+{
+  "build_id": "wave3_t133_single_behavior__ind-manufacturing",
+  "composition_label": "single_behavior",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Required string 1.0",
+      "synthetic": "Required true; all assets, users and maintenance logs are fictitious",
+      "as_of": "Timezone-aware ISO 8601 reference time",
+      "user_id": "Nonempty discovery user identifier",
+      "half_life_days": "Optional finite number in (0,3650], default 14",
+      "limit": "Optional integer 1..100, default 10",
+      "work_orders": "ERP/MES-style objects: id, asset_id, title, metric, unit, tolerance_min/max, safety_min/max, created_at, due_at, invented maintenance_log",
+      "telemetry_csv": "Embedded time-series CSV with exact header reading_id,work_order_id,asset_id,timestamp,metric,value,unit",
+      "quality_inspections": "Objects: id, work_order_id, decision pass/fail, decision_by, reason, timestamp, nonempty source_reading_ids",
+      "events": "Objects: id, user_id, work_order_id, action browse/purchase, timestamp; purchase is synthetic work-order-associated procurement activity"
+    },
+    "output": "JSON envelope with schema_version, status, synthetic, as_of, user_id, mode, rankings, alerts, total_candidates and disclaimer; errors contain schema_version, status:error and error",
+    "validation": "Single validate function handles all entities, uniqueness, links, chronology, supported units, finite physical ranges, ordered nested tolerances and evidence-consistent decisions",
+    "supported_metrics": {"temperature": "C [-40,250]", "vibration": "mm/s [0,100]", "pressure": "bar [0,300]"},
+    "traceability": "Each quality decision retains responsible person, rationale, timestamp, work-order link and source reading IDs. This is a demonstrative ISO 9001-oriented traceability rule, not certification."
+  },
+  "cross_stage_handoffs": [
+    "One stage only: validated orders, readings, inspections and events feed behavioral discovery.",
+    "Discovery produces ranked work-order references, quality audit traces and independent complete safety escalation records."
+  ],
+  "behavior": {
+    "scoring": "Sum action_weight * affinity * 2^(-age_days/half_life_days); browse=1, purchase=3; affinity exact order=1, otherwise same asset=0.4, otherwise same metric=0.2, otherwise=0",
+    "ordering": "Safety-flagged orders first, then descending unrounded score, ascending due date, lexical order ID; display scores rounded to 8 decimals",
+    "cold_start": "No events for requested user: all scores zero, safety first then earliest due date then ID; other users' events do not personalize",
+    "quality": "Inclusive operating tolerances; pass iff every linked reading is within tolerance. Uninspected orders explicitly labeled. All quality decisions preserved; latest timestamp then ID determines displayed status.",
+    "safety": "Every reading outside inclusive safety bounds creates pending human-review alert; no automated machine actuation or actual notification. Historical unsafe readings remain flagged. Alerts are not truncated by ranking limit.",
+    "fixtures": "Explicitly synthetic example; test uses random.Random(133) for 25 reproducible physically plausible temperature, pressure and vibration telemetry samples",
+    "determinism": "No wall-clock access in ranking, no stochastic production logic, no provider, no LLM"
+  },
+  "scope": {
+    "included": ["Personalized discovery", "Cold start", "Embedded CSV and ERP/MES-style JSON", "Input validation", "Decision traceability", "Human safety escalation records", "JSON CLI errors"],
+    "excluded": ["Enterprise deployment", "Certification", "Real asset control", "Actual human notifications", "Live ERP/MES ingestion", "Persistent browsing collection", "Authentication", "Machine learning training", "LLM steps"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 18,
+    "test_command_exit_code": 0,
+    "cli_example": "passed: one JSON object with status ok, personalized ranking and human escalation",
+    "cli_example_exit_code": 0,
+    "coverage": ["Normal ranking", "Recency decay", "Cold start and user isolation", "Empty catalog", "Safety escalation", "Units and tolerances", "Quality traceability", "Invalid CSV", "Invalid events and configuration", "Duplicate identifiers", "Determinism", "Seeded randomized telemetry", "Asset affinity", "CLI success, file, schema and usage errors", "Duplicate JSON keys"]
+  }
+}

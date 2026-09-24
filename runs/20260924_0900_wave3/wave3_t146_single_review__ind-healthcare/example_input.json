@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "synthetic_data": true,
+  "records": [
+    {
+      "record_id": "REC-0001",
+      "patient_record": {
+        "resourceType": "Patient",
+        "id": "SYN-PAT-0001",
+        "synthetic": true,
+        "diagnoses": [{"code": "SYN-DX-A1"}],
+        "labs": [{"code": "SYN-LAB-A1", "value": 7.2, "unit": "arb"}]
+      },
+      "clinical_note": {
+        "resourceType": "DocumentReference",
+        "id": "SYN-NOTE-0001",
+        "subject": {"reference": "Patient/SYN-PAT-0001"},
+        "text": "Diagnosis: SYN-DX-A1\nLab: SYN-LAB-A1 = 7.2 arb\nDocumentation: synthetic encounter recorded."
+      },
+      "prior_authorization_request": {
+        "resourceType": "Claim",
+        "id": "SYN-PA-0001",
+        "use": "preauthorization",
+        "patient": {"reference": "Patient/SYN-PAT-0001"},
+        "service_code": "SYN-SVC-A1",
+        "requirements": [
+          {"id": "REQ-001", "source": "diagnosis", "code": "SYN-DX-A1"},
+          {"id": "REQ-002", "source": "lab", "code": "SYN-LAB-A1"},
+          {"id": "REQ-003", "source": "clinical_note", "code": "documentation"},
+          {"id": "REQ-004", "source": "lab", "code": "SYN-LAB-B2"}
+        ]
+      }
+    }
+  ]
+}

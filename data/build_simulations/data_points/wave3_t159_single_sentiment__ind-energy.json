@@ -97,7 +97,7 @@
   "split_group": "e944d5d561a345d287c6e0e42413e1e03f332d6dd3d80043dcfce5459f1b2be9",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "1ca0551537cbdc3029027367c395d1a32fbba33dcce796a3c9692743f705740a",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t159_single_sentiment__ind-energy",
   "membership_point_id": "single_sentiment__ind-energy",
@@ -105,8 +105,145 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "66bbeda1f8b61058a0034954795589c4e6eaad54de2b05fd285b37c65fdbb410",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "a6027f64-509f-4f67-930d-002a55e6625f",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 159698,
+    "output_tokens": 10679,
+    "cache_read_tokens": 146472,
+    "cache_write_tokens": 13205,
+    "total_tokens": 170377,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38161,
+        "agent_id": "a6027f64-509f-4f67-930d-002a55e6625f",
+        "model": "gpt-6-astra",
+        "input_tokens": 14985,
+        "output_tokens": 695,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 839,
+        "reasoning_tokens": 516,
+        "duration_ms": 25502,
+        "created_at": "2026-09-24T13:05:25.112Z"
+      },
+      {
+        "id": 38191,
+        "agent_id": "a6027f64-509f-4f67-930d-002a55e6625f",
+        "model": "gpt-6-astra",
+        "input_tokens": 15711,
+        "output_tokens": 7903,
+        "cache_read_tokens": 14982,
+        "cache_write_tokens": 726,
+        "reasoning_tokens": 118,
+        "duration_ms": 128232,
+        "created_at": "2026-09-24T13:11:26.423Z"
+      },
+      {
+        "id": 38192,
+        "agent_id": "a6027f64-509f-4f67-930d-002a55e6625f",
+        "model": "gpt-6-astra",
+        "input_tokens": 24007,
+        "output_tokens": 564,
+        "cache_read_tokens": 15708,
+        "cache_write_tokens": 8296,
+        "reasoning_tokens": 212,
+        "duration_ms": 12660,
+        "created_at": "2026-09-24T13:11:29.127Z"
+      },
+      {
+        "id": 38193,
+        "agent_id": "a6027f64-509f-4f67-930d-002a55e6625f",
+        "model": "gpt-6-astra",
+        "input_tokens": 24737,
+        "output_tokens": 153,
+        "cache_read_tokens": 24004,
+        "cache_write_tokens": 730,
+        "reasoning_tokens": 0,
+        "duration_ms": 4575,
+        "created_at": "2026-09-24T13:11:30.740Z"
+      },
+      {
+        "id": 38194,
+        "agent_id": "a6027f64-509f-4f67-930d-002a55e6625f",
+        "model": "gpt-6-astra",
+        "input_tokens": 25870,
+        "output_tokens": 1001,
+        "cache_read_tokens": 24734,
+        "cache_write_tokens": 1133,
+        "reasoning_tokens": 227,
+        "duration_ms": 19522,
+        "created_at": "2026-09-24T13:11:35.890Z"
+      },
+      {
+        "id": 38195,
+        "agent_id": "a6027f64-509f-4f67-930d-002a55e6625f",
+        "model": "gpt-6-astra",
+        "input_tokens": 27037,
+        "output_tokens": 259,
+        "cache_read_tokens": 25867,
+        "cache_write_tokens": 1167,
+        "reasoning_tokens": 0,
+        "duration_ms": 5756,
+        "created_at": "2026-09-24T13:11:38.169Z"
+      },
+      {
+        "id": 38196,
+        "agent_id": "a6027f64-509f-4f67-930d-002a55e6625f",
+        "model": "gpt-6-astra",
+        "input_tokens": 27351,
+        "output_tokens": 104,
+        "cache_read_tokens": 27034,
+        "cache_write_tokens": 314,
+        "reasoning_tokens": 0,
+        "duration_ms": 3391,
+        "created_at": "2026-09-24T13:11:44.793Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.55943,
+      "observed_cache_profile_estimate_usd": 0.229868,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.71316,
+      "observed_cache_profile_estimate_usd": 6.71316,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +274,211 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 0.443s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "emissions": [
+        {
+          "source": "Synthetic winter interval estimate, fictitious factor 0.30 kgCO2e/kWh; not measured",
+          "unit": "kgCO2e",
+          "value": 0.78
+        }
+      ],
+      "grid_assets": [
+        {
+          "asset_ref": "asset-0001",
+          "critical": true,
+          "kind": "feeder",
+          "upstream_ref": "asset-0003"
+        },
+        {
+          "asset_ref": "asset-0002",
+          "critical": false,
+          "kind": "meter",
+          "upstream_ref": "asset-0001"
+        },
+        {
+          "asset_ref": "asset-0003",
+          "critical": true,
+          "kind": "substation",
+          "upstream_ref": null
+        }
+      ],
+      "meter_readings": [
+        {
+          "asset_ref": "asset-0002",
+          "consumption": {
+            "unit": "kWh",
+            "value": 1.2
+          },
+          "interval_minutes": 30,
+          "season": "winter",
+          "timestamp": "2026-01-15T06:00:00Z"
+        },
+        {
+          "asset_ref": "asset-0002",
+          "consumption": {
+            "unit": "kWh",
+            "value": 1.4
+          },
+          "interval_minutes": 30,
+          "season": "winter",
+          "timestamp": "2026-01-15T06:30:00Z"
+        },
+        {
+          "asset_ref": "asset-0002",
+          "consumption": {
+            "unit": "kWh",
+            "value": 0.4
+          },
+          "interval_minutes": 30,
+          "season": "summer",
+          "timestamp": "2026-07-15T06:00:00Z"
+        }
+      ],
+      "method": {
+        "identifier_protection": "request-local aliases; descriptions omitted",
+        "notice": "Synthetic demonstration only; no NERC CIP certification",
+        "ranking": "safety tier, affected customers descending, sentiment ascending, report_ref",
+        "sentiment": "fixed lexicon sum; immediate-token negation"
+      },
+      "outage_reports": [
+        {
+          "asset_ref": "asset-0001",
+          "customers_affected": 1,
+          "outage_active": true,
+          "priority": 1,
+          "priority_reason": "declared_safety_flag",
+          "report_ref": "report-0001",
+          "safety_flags": [
+            "downed_line"
+          ],
+          "sentiment": {
+            "label": "neutral",
+            "matches": [
+              {
+                "negated": false,
+                "term": "thanks",
+                "weight": 1
+              },
+              {
+                "negated": false,
+                "term": "good",
+                "weight": 1
+              },
+              {
+                "negated": false,
+                "term": "unsafe",
+                "weight": -2
+              }
+            ],
+            "score": 0
+          }
+        },
+        {
+          "asset_ref": "asset-0002",
+          "customers_affected": 120,
+          "outage_active": true,
+          "priority": 2,
+          "priority_reason": "active_outage",
+          "report_ref": "report-0002",
+          "safety_flags": [],
+          "sentiment": {
+            "label": "negative",
+            "matches": [
+              {
+                "negated": false,
+                "term": "angry",
+                "weight": -2
+              },
+              {
+                "negated": false,
+                "term": "bad",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "outage",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "slow",
+                "weight": -1
+              }
+            ],
+            "score": -5
+          }
+        },
+        {
+          "asset_ref": "asset-0002",
+          "customers_affected": 0,
+          "outage_active": false,
+          "priority": 3,
+          "priority_reason": "other",
+          "report_ref": "report-0003",
+          "safety_flags": [],
+          "sentiment": {
+            "label": "positive",
+            "matches": [
+              {
+                "negated": false,
+                "term": "great",
+                "weight": 2
+              },
+              {
+                "negated": false,
+                "term": "reliable",
+                "weight": 1
+              },
+              {
+                "negated": false,
+                "term": "thanks",
+                "weight": 1
+              }
+            ],
+            "score": 4
+          }
+        }
+      ],
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true,
+      "telemetry": [
+        {
+          "asset_ref": "asset-0001",
+          "state": "normal",
+          "timestamp": "2026-01-15T06:00:00Z",
+          "voltage": {
+            "unit": "V",
+            "value": 11000
+          }
+        },
+        {
+          "asset_ref": "asset-0002",
+          "state": "offline",
+          "timestamp": "2026-01-15T06:30:00Z",
+          "voltage": {
+            "unit": "V",
+            "value": 0
+          }
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t159_single_sentiment__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "f9b0d54afaec38560d8e68d9eaa28d53309638371a5e32e49971e7fc8ffbbd3e",
+      "test_implementation.py": "bfd8f6a2f3d38b2ac4e3293b44600d7c6ef436730bb6f09b4c49c7025f5bca22",
+      "example_input.json": "f8050b12354fd4473ace5366b32b7c918862bd04254e7f440a8c68536357a646",
+      "build_manifest.json": "994b7e3de981291f84198d89166d82cfdd985194845e04cde01ea6adee114059"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

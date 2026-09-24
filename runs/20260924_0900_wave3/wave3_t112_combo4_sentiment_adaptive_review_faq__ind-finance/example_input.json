@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "status": "ok",
+  "stage": "input",
+  "results": {},
+  "data": {
+    "fixture_label": "SYNTHETIC - NOT REAL CUSTOMER DATA",
+    "as_of": "2026-09-24",
+    "customer": {
+      "id": "cust_fictional_01",
+      "name": "Avery Fictional",
+      "experience": "beginner",
+      "preferences": {"format": "checklist", "pace": "guided"},
+      "kyc": {"identity_verified": true, "address_verified": true, "screening_flags": ["pep_review"]}
+    },
+    "ledger": {
+      "format": "json",
+      "data": [
+        {"id": "tx_01", "amount": "186.72", "currency": "EUR", "account": "SYN-ACC-000001", "counterparty_iban": "ZZ00SYNTHETIC000001", "card_number": "4111111111111111", "screening_flags": []},
+        {"id": "tx_02", "amount": "4927.13", "currency": "EUR", "account": "SYN-ACC-000001", "counterparty_iban": "ZZ00SYNTHETIC000002", "card_number": "5555555555554444", "screening_flags": ["aml_alert"]},
+        {"id": "tx_03", "amount": "54.89", "currency": "EUR", "account": "SYN-ACC-000001", "counterparty_iban": "ZZ00SYNTHETIC000003", "card_number": "", "screening_flags": []}
+      ]
+    },
+    "loan_application": {"id": "loan_fake_01", "customer_id": "cust_fictional_01", "requested_amount": "12000.00", "currency": "EUR", "purpose": "Synthetic home improvement"},
+    "issues": [
+      {"id": "issue_fraud", "text": "I am angry about an unauthorized transaction on 4111 1111 1111 1111.", "severity": "low"},
+      {"id": "issue_help", "text": "The onboarding guide was excellent and helpful.", "severity": "low"}
+    ],
+    "documents": [
+      {"id": "doc_identity", "type": "identity_document", "customer_id": "cust_fictional_01", "loan_id": "loan_fake_01", "status": "final", "issued_on": "2026-01-01", "expires_on": "2027-01-01", "fields": {"legal_name": "Avery Fictional", "document_reference": "SYN-ID-0001"}},
+      {"id": "doc_address", "type": "address_proof", "customer_id": "cust_fictional_01", "loan_id": "loan_fake_01", "status": "final", "issued_on": "2026-09-01", "expires_on": null, "fields": {"address": "1 Fictional Lane, Example City"}},
+      {"id": "doc_loan", "type": "loan_application", "customer_id": "cust_fictional_01", "loan_id": "loan_fake_01", "status": "final", "issued_on": "2026-09-01", "expires_on": null, "fields": {"requested_amount": "12000.00", "currency": "EUR", "purpose": "Synthetic home improvement"}}
+    ],
+    "knowledge_base": [
+      {"id": "kb_income", "title": "Loan income evidence", "text": "For this synthetic loan workflow, provide a final income proof with annual income and matching customer and loan identifiers.", "tags": ["income_proof", "missing evidence"], "applies_to": ["general", "review_gap"]},
+      {"id": "kb_screening", "title": "Screening review and source of funds", "text": "Synthetic screening flags require human review and source-of-funds evidence. Uploaded documents do not automatically clear screening holds.", "tags": ["aml_alert", "pep_review", "source_of_funds"], "applies_to": ["screening_hold"]},
+      {"id": "kb_complete", "title": "Evidence complete", "text": "Complete evidence is not a loan approval or a compliance certification.", "tags": ["complete"], "applies_to": ["ready"]}
+    ],
+    "question": "What income evidence is missing for my loan?"
+  }
+}

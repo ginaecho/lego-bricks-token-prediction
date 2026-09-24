@@ -1,0 +1,53 @@
+{
+  "build_id": "wave3_t134_single_review__ind-finance",
+  "composition_label": "single_review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict JSON object: schema_version, synthetic=true, as_of ISO date, customers[], transaction_ledger{format:json|csv,data}, loans[], payments[], documents[]. JSON ledger data is a list; CSV data is an inline string.",
+    "customer": "id, name, account FAKE-IBAN-prefixed, kyc_status complete|pending|rejected, screening{sanctions:boolean,pep:boolean}",
+    "transaction": "id, customer_id, amount positive decimal, currency three uppercase letters, date, card_number digit string",
+    "loan": "id, customer_id, amount, currency, monthly_income, monthly_payment; income and payment assumed in loan currency",
+    "payment": "ISO 20022-style subset: MsgId, transaction_id, PmtInf{Dbtr{Nm,IBAN},Cdtr{Nm,IBAN},InstdAmt{Ccy,Value}}",
+    "document": "id, entity_type customer|transaction|loan, entity_id, kind, verified boolean, issued_on, expires_on ISO date or null",
+    "output": "schema_version, status, synthetic, as_of, stage, notice, results[], gaps[]. Results contain entity references, evidence checks, screening flags, explainable risk_score, disposition and masked transaction card numbers.",
+    "validation": "Shared validate() gate normalizes CSV/JSON and validates references, uniqueness, dates, financial amounts, booleans, synthetic account markers and payment consistency. Strict CLI JSON parsing rejects duplicate fields and nonfinite numbers. Errors return a non-echoing JSON error object and exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Single document-review stage only: validated normalized entity maps and document index feed deterministic evidence checks; checks feed traceable gaps and explained review-priority scores."
+  ],
+  "behavior": {
+    "evidence": "Customer identity/address/AML review, transaction payment authorization, loan income/affordability. At least one verified document issued on or before as_of and not expired satisfies each requirement. Expiry on as_of is accepted. Rejected evidence retains explicit reasons.",
+    "screening": "Incomplete KYC +20, sanctions flag +40, PEP flag +15 inherited by linked transactions and loans; transaction amount >=10000 currency units +15; missing payment payload +10; zero income or loan payment >40% income +25.",
+    "explainability": "Each evidence gap +10. Score=min(100,sum(contribution.points)), baseline 0, all contributions include rule and basis. Scores are demonstrative review priorities, not approval predictions.",
+    "masking": "Output shows only final four PAN digits; CLI error messages never echo input. Demonstrates PCI DSS-style masking, not PCI DSS certification.",
+    "fixtures": "Clearly labeled fabricated customer, fake accounts and zero-prefixed fake PANs. Tests generate 25 reproducible randomized synthetic transactions with random.Random(134). No live data.",
+    "determinism": "Explicit as_of date, deterministic ordering, no clock-based decisions and no LLM dependency."
+  },
+  "scope": {
+    "included": ["Document requirement/evidence checking", "Traceable gaps", "JSON and inline CSV transaction ledgers", "ISO 20022-style payment subset", "KYC/AML screening flags", "Masked output", "Model-risk explanation of every score"],
+    "excluded": ["Compliance certification", "Actual identity verification or sanctions screening", "Real PCI processing", "Credit decisions", "Full ISO 20022 XML/XSD support", "Currency conversion", "Production persistence, access control or enterprise operation", "External providers and LLM calls"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 17,
+    "failures": 0,
+    "errors": 0,
+    "cli_example": {"exit_code": 0, "status": "ok", "result_count": 4, "traceable_gap_count": 5},
+    "coverage": ["normal deterministic review", "empty edge case", "invalid schema and amounts", "CSV normalization", "payment consistency", "reference integrity", "KYC and AML flags", "PAN masking", "score explanations", "expiry boundary", "zero income", "seeded randomized history", "CLI success and errors"]
+  }
+}

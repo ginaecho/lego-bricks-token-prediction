@@ -1,0 +1,36 @@
+{
+  "synthetic": true,
+  "schema": [
+    {"entity": "policy", "name": "policy_id", "required": true},
+    {"entity": "policy", "name": "policyholder_id", "required": true},
+    {"entity": "policy", "name": "coverage_limit", "required": true},
+    {"entity": "claim", "name": "claim_id", "required": true},
+    {"entity": "claim", "name": "loss_amount", "required": true},
+    {"entity": "claim", "name": "loss_date", "required": true},
+    {"entity": "claim", "name": "decision", "required": true},
+    {"entity": "claim", "name": "decision_reason", "required": true},
+    {"entity": "underwriting_submission", "name": "submission_id", "required": true},
+    {"entity": "underwriting_submission", "name": "risk_factors", "required": true},
+    {"entity": "underwriting_submission", "name": "disclosed_factors", "required": true}
+  ],
+  "documents": [
+    {
+      "id": "synthetic-policy",
+      "entity": "policy",
+      "format": "json",
+      "content": "{\"ACORD\":{\"policy\":{\"fixture_label\":\"SYNTHETIC - invented identities, not real records\",\"policy_id\":\"SYN-P100\",\"policyholder_id\":\"SYN-H044\",\"policyholder_name\":\"Mira Examplewood\",\"vin\":\"SYNTHETICVIN004417\",\"property_address\":\"417 Imaginary Orchard Lane, Fictionville\",\"coverage_limit\":250000,\"effective_date\":\"2026-01-01\"}}}"
+    },
+    {
+      "id": "synthetic-claim",
+      "entity": "claim",
+      "format": "text",
+      "content": "SYNTHETIC CLAIM FORM - invented and fabricated fixture\nclaim_id: SYN-C044\npolicy_id: SYN-P100\nloss_amount: 17684.23\nloss_date: 2026-06-18\ndecision: pending\ndecision_reason: Additional loss documentation required\n"
+    },
+    {
+      "id": "synthetic-underwriting",
+      "entity": "underwriting_submission",
+      "format": "xml",
+      "content": "<ACORD><underwriting_submission><fixture_label>SYNTHETIC</fixture_label><submission_id>SYN-U044</submission_id><policy_id>SYN-P100</policy_id><risk_factors>roof_age,building_material</risk_factors><disclosed_factors>roof_age,building_material</disclosed_factors></underwriting_submission></ACORD>"
+    }
+  ]
+}

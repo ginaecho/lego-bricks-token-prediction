@@ -1,0 +1,27 @@
+{
+  "schema_version": "1",
+  "synthetic": true,
+  "fixture_label": "SYNTHETIC: invented tickets and subscriber; usage sampled with seed 19",
+  "processing_residency": "EU",
+  "accounts": [
+    {"id": "acct_demo", "residency": "EU", "jurisdiction": "GDPR", "subscriber_data_protected": true, "purpose": "Synthetic fault investigation", "lawful_basis": "contract", "phone": "+1-202-555-0100", "imei": "000000000000000"}
+  ],
+  "tickets": [
+    {"id": "ticket_demo", "residency": "EU", "account_id": "acct_demo", "state": "open", "summary": "SYNTHETIC: intermittent data outage"}
+  ],
+  "usage_records": [
+    {"id": "usage_demo", "residency": "EU", "account_id": "acct_demo", "call_seconds": 2773, "data_mb": 21.63}
+  ],
+  "billing_adjustments": [
+    {"id": "adjust_demo", "residency": "EU", "account_id": "acct_demo", "amount": -5.0, "reason": "SYNTHETIC: invented outage credit"}
+  ],
+  "documents": [
+    {"id": "chat_demo", "residency": "EU", "kind": "support_chat", "entity_ids": ["acct_demo", "ticket_demo"], "content": "SYNTHETIC support transcript\nSubscriber: My data connection stopped.\nAgent: Invented ticket ticket_demo opened for outage investigation."},
+    {"id": "cdr_demo", "residency": "EU", "kind": "cdr_csv", "entity_ids": ["usage_demo"], "content": "id,account_id,residency,call_seconds,data_mb\nusage_demo,acct_demo,EU,2773,21.63\n"}
+  ],
+  "requirements": [
+    {"id": "req_fault", "residency": "EU", "entity_type": "ticket", "entity_id": "ticket_demo", "document_ids": ["chat_demo"], "required_terms": ["outage", "investigation"]},
+    {"id": "req_resolution", "residency": "EU", "entity_type": "ticket", "entity_id": "ticket_demo", "document_ids": ["chat_demo"], "required_terms": ["resolution confirmed"]},
+    {"id": "req_usage", "residency": "EU", "entity_type": "usage", "entity_id": "usage_demo", "document_ids": ["cdr_demo"], "required_terms": ["usage_demo"]}
+  ]
+}

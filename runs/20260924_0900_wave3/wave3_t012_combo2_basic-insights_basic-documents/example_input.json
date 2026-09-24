@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC: fictional customer feedback for pipeline demonstration",
+  "feedback": [
+    {"id": "SYN-001", "customer": "Synthetic Ada", "text": "The app crash makes navigation confusing.", "rating": 1},
+    {"id": "SYN-002", "customer": "Synthetic Ben", "text": "Support was helpful and the response was excellent.", "rating": 5},
+    {"id": "SYN-003", "customer": "Synthetic Ada", "text": "The price is expensive.", "rating": 2},
+    {"id": "SYN-004", "customer": "Synthetic Cleo", "text": "Navigation is easy now.", "rating": 4},
+    {"id": "SYN-005", "customer": "Synthetic Dee", "text": "Please offer a dark theme."}
+  ],
+  "document": {
+    "title": "SYNTHETIC customer feedback action report",
+    "format": "csv",
+    "min_mentions": 1,
+    "columns": [
+      {"label": "Theme", "source": "theme"},
+      {"label": "Mentions", "source": "mentions"},
+      {"label": "Customers", "source": "customer_count"},
+      {"label": "Negative", "source": "negative"},
+      {"label": "Priority", "source": "priority", "transform": "upper"},
+      {"label": "Recommended action", "source": "action"},
+      {"label": "Evidence IDs", "source": "evidence_ids"}
+    ]
+  }
+}

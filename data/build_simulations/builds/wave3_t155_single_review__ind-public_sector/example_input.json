@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "synthetic_fixture": true,
+  "policy": {
+    "id": "P-001",
+    "text": "INVENTED POLICY FOR SYNTHETIC TESTS ONLY. Service requests need a service description and a recorded request. Benefit applications need household size and income evidence. Policy documents need a public summary and a plain language review.",
+    "requirements": [
+      {
+        "id": "R-001",
+        "applies_to": ["citizen_service_request"],
+        "source_phrase": "Service requests need a service description and a recorded request.",
+        "required_fields": ["service_description"],
+        "evidence_terms": ["request recorded"]
+      },
+      {
+        "id": "R-002",
+        "applies_to": ["benefits_application"],
+        "source_phrase": "Benefit applications need household size and income evidence.",
+        "required_fields": ["household_size", "income_statement"],
+        "evidence_terms": ["income statement received"]
+      },
+      {
+        "id": "R-003",
+        "applies_to": ["policy_document"],
+        "source_phrase": "Policy documents need a public summary and a plain language review.",
+        "required_fields": ["public_summary"],
+        "evidence_terms": ["plain language review recorded"]
+      }
+    ]
+  },
+  "documents": [
+    {
+      "id": "D-001",
+      "entity_type": "citizen_service_request",
+      "case_number": "CASE-DEMO-0001",
+      "citizen": {
+        "name": "Synthetic Persona Alder",
+        "address": "Unit ZERO, Imaginary Civic Lane, Fictional District, NO REAL ADDRESS",
+        "email": "alder@example.invalid"
+      },
+      "form_fields": {"service_description": "Synthetic request for an accessible public notice."},
+      "evidence": [{"id": "E-001", "requirement_id": "R-001", "text": "SYNTHETIC: request recorded by the demonstration intake desk."}]
+    },
+    {
+      "id": "D-002",
+      "entity_type": "benefits_application",
+      "case_number": "CASE-DEMO-0002",
+      "citizen": {
+        "name": "Synthetic Persona Birch",
+        "address": "Unit NONE, Invented Square, Fictional District, NO REAL ADDRESS",
+        "email": "birch@example.invalid"
+      },
+      "form_fields": {"household_size": "2"},
+      "evidence": []
+    },
+    {
+      "id": "D-003",
+      "entity_type": "policy_document",
+      "case_number": "CASE-DEMO-0003",
+      "citizen": null,
+      "form_fields": {"public_summary": "This invented policy explains how to submit a request."},
+      "evidence": [{"id": "E-002", "requirement_id": "R-003", "text": "SYNTHETIC: plain language review recorded. This is an invented regulation draft."}]
+    }
+  ]
+}

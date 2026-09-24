@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "records": [
+    {
+      "record_id": "REC-POLICY-01",
+      "entity": "policy",
+      "severity": "low",
+      "submission": {
+        "format": "acord_json",
+        "content": {
+          "ACORD": {
+            "policyholder_ref": "SYN-HOLDER-01",
+            "policyholder_name": "Invented Mira Example",
+            "feedback": "Thanks, the policy explanation was clear and helpful.",
+            "vin": "1SYNTHET1C0000001",
+            "loss_amount": 10354.81,
+            "loss_date": "2025-11-18"
+          }
+        }
+      }
+    },
+    {
+      "record_id": "REC-CLAIM-01",
+      "entity": "claim",
+      "severity": "critical",
+      "submission": {
+        "format": "claim_text",
+        "content": "PolicyholderRef: SYN-HOLDER-02\nPolicyholderName: Invented Leon Fiction\nPropertyAddress: 42 Imaginary Lane, Fictionville\nLossAmount: 27805.26\nLossDate: 2025-04-06\nFeedback: The claim is delayed and I feel confused and unsafe."
+      },
+      "claim_handling": {
+        "decision": "pending",
+        "reasons": ["Synthetic inspection report has not yet arrived; request the missing evidence."]
+      }
+    },
+    {
+      "record_id": "REC-UW-01",
+      "entity": "underwriting_submission",
+      "severity": "medium",
+      "submission": {
+        "format": "acord_xml",
+        "content": "<ACORD><PolicyholderRef>SYN-HOLDER-03</PolicyholderRef><PolicyholderName>Invented Nora Sample</PolicyholderName><PropertyAddress>17 Fabricated Court, Nowhereville</PropertyAddress><LossAmount>35615.23</LossAmount><LossDate>2025-11-07</LossDate><Feedback>The submission explanation was not clear.</Feedback></ACORD>"
+      },
+      "underwriting_factors": [
+        {"name": "property_age", "value": 12, "disclosed": true},
+        {"name": "prior_claims", "value": 1, "disclosed": true}
+      ]
+    }
+  ]
+}

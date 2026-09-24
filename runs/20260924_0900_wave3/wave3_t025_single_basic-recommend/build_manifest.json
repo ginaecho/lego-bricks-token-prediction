@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t025_single_basic-recommend",
+  "composition_label": "Personalized discovery (basic functionality, Customer experience)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "products": "Required array, 0..10000 products. Each requires unique trimmed id, title, category (nonblank strings <=500 characters) and finite nonnegative price. Optional tags array defaults [], popularity number in [0,1] defaults 0, in_stock boolean defaults true.",
+      "customer": "Optional object defaults {}. preferred_categories, preferred_tags, excluded_categories, viewed_product_ids, purchased_product_ids are optional string arrays defaulting []. History ids must reference catalog ids. max_price, when supplied, is a finite nonnegative number.",
+      "limit": "Optional integer 1..50, default 5; booleans rejected.",
+      "validation": "Unknown object fields, duplicate JSON keys, nonfinite numbers, malformed JSON and invalid field types rejected. String arrays limited to 1000 entries and deduplicated. Category/tag matching trims and casefolds; ids trim but remain case-sensitive. Explicit null is not equivalent to omission. Prices share one caller-defined currency."
+    },
+    "output": {
+      "success": "status=ok, mode=personalized|cold_start, recommendations=[{product_id,title,category,price,score,reasons}], summary={catalog_count,eligible_count,returned_count,filtered}",
+      "error": "status=error, error=human-readable message; CLI exits 2",
+      "filtered": "Exclusive first-match counts in order: out_of_stock, already_purchased, excluded_category, over_budget"
+    },
+    "validation_layer": "validate(payload) is used by recommend(payload), which is also the only CLI recommendation entry point. API validation raises ValidationError; CLI translates errors to JSON."
+  },
+  "cross_stage_handoffs": [
+    "Single stage: validated catalog/customer -> eligibility filters -> deterministic scoring -> ordered recommendations in shared output schema."
+  ],
+  "behavior": {
+    "fixture_data": "All products and customer preferences in the example and tests are clearly labeled synthetic.",
+    "scoring": "Start with popularity. Add 5 for preferred category and 2 per distinct preferred tag. Union viewed history contributes 1 for category affinity and 0.5 per matching tag. Union purchased history contributes 2 for category affinity and 1 per matching tag. History duplicates do not amplify scores.",
+    "ranking": "Descending raw score, descending popularity, ascending price, then ascending case-sensitive product id. Display scores rounded to six decimals. No input mutation, time dependence, randomness or persistent state.",
+    "fallback": "No preference or history signals yields cold_start popularity ranking. Candidates without matching signals receive popularity_fallback reason even in personalized mode. Empty eligible catalogs return successful empty arrays.",
+    "history_policy": "Purchased products excluded; viewed products remain eligible. History-derived affinities can originate from otherwise filtered products.",
+    "explanations": "Each result lists the matching scoring factors, or popularity_fallback. Mode indicates profile signal presence, not guaranteed relevance.",
+    "llm": "None; all logic is deterministic and local."
+  },
+  "scope": {
+    "included": ["Content and behavior affinity", "Cold-start discovery", "Availability and budget filtering", "Purchased and category exclusions", "Stable ranking and explanations", "Shared validation", "JSON CLI", "Synthetic unit and subprocess CLI fixtures"],
+    "excluded": ["Live providers", "Network calls", "Persistent customer profiles", "Learned collaborative filtering", "Currency conversion", "Production-scale serving", "Authentication", "Inventory reservation", "Diversity optimization"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 12, "passed": 12, "failed": 0, "exit_code": 0},
+    "cli": {"exit_code": 0, "status": "ok", "recommendations_returned": 3},
+    "coverage": ["Personalized example", "Cold start and tie ordering", "Purchase history", "Empty catalogs", "All filtered", "Zero budget and limit", "Normalization and immutability", "Invalid structures and history references", "Invalid numeric values and field types", "Duplicate ids", "Subprocess CLI success and errors", "Duplicate JSON keys and nonfinite JSON"]
+  }
+}

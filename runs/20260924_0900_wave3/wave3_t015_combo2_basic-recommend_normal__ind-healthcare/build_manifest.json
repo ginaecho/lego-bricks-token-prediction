@@ -1,0 +1,50 @@
+{
+  "build_id": "wave3_t015_combo2_basic-recommend_normal__ind-healthcare",
+  "composition_label": "basic:recommend -> normal; Healthcare",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "healthcare-discovery-research/1",
+    "input": "Strict JSON envelope: schema_version, synthetic=true, patient_record, clinical_notes, prior_authorization_requests, catalog, preferences. See example_input.json for the complete field contract.",
+    "resources": "FHIR-style Patient, DocumentReference clinical note text, and draft Claim with use=preauthorization. Synthetic pseudonym IDs only; no real names, birth dates or MRNs.",
+    "output": "CLI status=ok and data retaining the complete input envelope plus discovery, research and audit_trail. Errors are one status=error JSON object, exit 2, without echoing sensitive input.",
+    "validation": "One validate(document, phase) layer validates input, discovery handoff and final output. Unknown fields, PHI keys/patterns, malformed values, duplicate resource IDs, foreign patient references and unsafe categories/statuses are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:recommend",
+      "to": "normal",
+      "contract": "Validated discovery records carry product ID, patient reference, score, matched tags and query terms. Research consumes only those selected recommendations and the shared clinical-note/authorization sources. Tampered discovery output is rejected."
+    }
+  ],
+  "behavior": {
+    "personalized_discovery": "Reusable tag matching: interest=3, otherwise diagnosis=2, otherwise lab-code=1; an authorization tag adds 2 when draft requests exist. Rank descending score, then ascending product ID; return at most preferences.limit (1..10). Zero-match products provide deterministic fallback, not a clinical recommendation.",
+    "normal_research": "Rank source passages by number of distinct overlapping query tokens; ties use source ID then source character offset. Return up to two positive-match passages per recommendation. Findings equal exact quotes with source_id and end-exclusive Python Unicode start/end offsets. Missing evidence yields no findings.",
+    "safety": "Only administrative-support and education products. Human review required on clinical resources and all generated records; autonomous_clinical_decision=false. Authorization remains draft. No treatment, eligibility or coverage decisions.",
+    "audit": "Inputs are immutable and returned unchanged. Every newly created recommendation and finding has an ordered create event with stage, actor, record ID, null prior hash and SHA-256 of canonical output record. No update/delete API exists. Deterministic sequence numbers replace wall-clock timestamps.",
+    "synthetic_fixture": "Clearly labeled fictitious Synthea-style condition and lab data; not an actual Synthea export.",
+    "deidentification": "Demonstrative strict synthetic-data admission with direct identifier field rejection and selected free-text identifier pattern checks. Does not implement all HIPAA Safe Harbor categories or certify arbitrary text as deidentified."
+  },
+  "scope": {
+    "included": ["Integrated deterministic pipeline", "Shared validation", "Exact passage citations", "Synthetic FHIR-style resources", "Human-review guards", "Audit events", "CLI and tests"],
+    "excluded": ["Real patient data", "HIPAA certification", "Full FHIR conformance", "Clinical decisions", "Treatment recommendations", "Authorization submission or approval", "Live providers or networks", "LLM invocation", "Persistent audit database", "Enterprise production delivery"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 22,
+    "cli": "passed: exit 0, one JSON object with status=ok",
+    "validation_errors": "Covered: exit 2, one JSON object with status=error"
+  }
+}

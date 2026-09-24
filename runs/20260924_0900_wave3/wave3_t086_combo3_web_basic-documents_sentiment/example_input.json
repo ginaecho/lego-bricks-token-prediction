@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "allowed_hosts": ["feedback.example"],
+  "urls": ["https://feedback.example/tickets", "https://feedback.example/survey"],
+  "fixture_pages": {
+    "https://feedback.example/tickets": {
+      "title": "SYNTHETIC support ticket export",
+      "media_type": "application/json",
+      "body": "[{\"id\":\"SYN-001\",\"message\":\"Great support but a security breach caused data loss.\",\"account\":\"Synthetic Acme\",\"urgency\":\"medium\"},{\"id\":\"SYN-002\",\"message\":\"The dashboard is slow and frustrating.\",\"account\":\"Synthetic Beta\",\"urgency\":\"high\"}]"
+    },
+    "https://feedback.example/survey": {
+      "title": "SYNTHETIC customer survey",
+      "media_type": "text/csv",
+      "body": "id,message,account,urgency\nSYN-003,Not bad. Helpful team and resolved issue.,Synthetic Gamma,low\n"
+    }
+  },
+  "document_rules": {
+    "field_mapping": {"issue_id": "id", "text": "message", "customer": "account", "severity": "urgency"}
+  }
+}

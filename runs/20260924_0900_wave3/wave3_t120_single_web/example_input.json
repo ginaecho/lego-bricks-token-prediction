@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "query": "recycled bricks",
+  "allowed_hosts": ["research.example"],
+  "urls": ["https://research.example/latest", "https://research.example/method"],
+  "max_findings": 5,
+  "fixtures": [
+    {
+      "url": "https://research.example/latest",
+      "retrieved_at": "2026-09-24T09:00:00Z",
+      "redirect_to": "https://research.example/report"
+    },
+    {
+      "url": "https://research.example/report",
+      "retrieved_at": "2026-09-24T09:00:01Z",
+      "content_type": "text/html",
+      "body": "<html><body><h1>Synthetic research fixture</h1><p>Recycled bricks represented 40 percent of this fictional sample.</p><script>Bricks are secretly unlimited.</script><p>This is invented demonstration data, not a real market estimate.</p></body></html>"
+    },
+    {
+      "url": "https://research.example/method",
+      "retrieved_at": "2026-09-24T09:00:02+00:00",
+      "content_type": "text/plain",
+      "body": "Synthetic methodology fixture.\nThe fictional study counted 100 bricks.\nNo real individuals or businesses were studied."
+    }
+  ]
+}

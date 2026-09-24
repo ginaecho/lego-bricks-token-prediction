@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "customer": {
+    "id": "SYNTH-CUSTOMER-01",
+    "name": "Synthetic Avery Finch",
+    "account": "SYNTH-IBAN-DEMO0001",
+    "kyc": {"status": "verified", "screening_flags": []},
+    "aml_flags": [],
+    "preferences": {"cost": 5, "affordability": 3, "term": 2}
+  },
+  "loan_application": {
+    "id": "SYNTH-LOAN-01",
+    "customer_id": "SYNTH-CUSTOMER-01",
+    "amount": "6000",
+    "currency": "EUR",
+    "desired_term_months": 24,
+    "monthly_budget": "310"
+  },
+  "transaction_ledger": {
+    "format": "json",
+    "data": [
+      {"id": "SYNTH-T01", "date": "2026-09-01", "amount": "306.72", "currency": "EUR", "direction": "credit", "account": "SYNTH-IBAN-DEMO0001"},
+      {"id": "SYNTH-T02", "date": "2026-09-03", "amount": "306.13", "currency": "EUR", "direction": "debit", "account": "SYNTH-IBAN-DEMO0001", "card_number": "9999888877776666"},
+      {"id": "SYNTH-T03", "date": "2026-09-06", "amount": "207.73", "currency": "EUR", "direction": "debit", "account": "SYNTH-IBAN-DEMO0001"},
+      {"id": "SYNTH-T04", "date": "2026-09-09", "amount": "180.76", "currency": "EUR", "direction": "credit", "account": "SYNTH-IBAN-DEMO0001"},
+      {"id": "SYNTH-T05", "date": "2026-09-12", "amount": "332.39", "currency": "EUR", "direction": "debit", "account": "SYNTH-IBAN-DEMO0001"},
+      {"id": "SYNTH-T06", "date": "2026-09-15", "amount": "447.41", "currency": "EUR", "direction": "credit", "account": "SYNTH-IBAN-DEMO0001"}
+    ]
+  },
+  "payment_payload": {
+    "Document": {
+      "CstmrCdtTrfInitn": {
+        "MsgId": "SYNTH-PAYMENT-MESSAGE-01",
+        "CdtTrfTxInf": [
+          {
+            "PmtId": "SYNTH-PAYMENT-01",
+            "ReqdExctnDt": "2026-09-17",
+            "Amt": {"InstdAmt": "125.50", "Ccy": "EUR"},
+            "DbtrAcct": {"IBAN": "SYNTH-IBAN-DEMO0001"},
+            "CdtrAcct": {"IBAN": "SYNTH-IBAN-DEMO0002"}
+          }
+        ]
+      }
+    }
+  },
+  "products": [
+    {
+      "id": "SYNTH-P01", "name": "Synthetic Steady Loan", "currency": "EUR",
+      "apr": {"value": 6, "unit": "percent"},
+      "monthly_fee": {"value": 2, "unit": "currency_per_month"},
+      "term": {"value": 24, "unit": "months"},
+      "minimum_amount": "1000", "maximum_amount": "20000"
+    },
+    {
+      "id": "SYNTH-P02", "name": "Synthetic Flexible Loan", "currency": "EUR",
+      "apr": {"value": 450, "unit": "basis_points"},
+      "monthly_fee": {"value": 350, "unit": "cents_per_month"},
+      "term": {"value": 3, "unit": "years"},
+      "minimum_amount": "1000", "maximum_amount": "15000"
+    },
+    {
+      "id": "SYNTH-P03", "name": "Synthetic Short Loan", "currency": "EUR",
+      "apr": {"value": 5, "unit": "percent"},
+      "monthly_fee": {"value": 0, "unit": "currency_per_month"},
+      "term": {"value": 12, "unit": "months"},
+      "minimum_amount": "500", "maximum_amount": "10000"
+    }
+  ]
+}

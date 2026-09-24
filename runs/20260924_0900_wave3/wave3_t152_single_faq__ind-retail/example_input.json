@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "catalog": {
+    "currency": "USD",
+    "products": [
+      {"sku": "SYN-MUG-01", "name": "Fictitious Cloud Mug", "price_minor": 1299, "stock": 8},
+      {"sku": "SYN-TOTE-02", "name": "Fictitious Meadow Tote", "price_minor": 2400, "stock": 0}
+    ]
+  },
+  "customer": {
+    "customer_id": "synthetic-shopper-alex",
+    "consent_personalization": false,
+    "preferred_sku": "SYN-TOTE-02"
+  },
+  "basket": {
+    "basket_id": "synthetic-basket-001",
+    "items": [{"sku": "SYN-MUG-01", "quantity": 2}]
+  },
+  "clickstream": [
+    {"timestamp": "2026-09-24T10:00:00Z", "customer_id": "synthetic-shopper-alex", "event": "view", "sku": "SYN-MUG-01"},
+    {"timestamp": "2026-09-24T10:02:00Z", "customer_id": "synthetic-shopper-alex", "event": "add_to_basket", "sku": "SYN-MUG-01"}
+  ],
+  "knowledge_base": [
+    {"id": "synthetic-returns-default", "topic": "returns", "sku": null, "days": 30},
+    {"id": "synthetic-returns-tote", "topic": "returns", "sku": "SYN-TOTE-02", "days": 14},
+    {"id": "synthetic-shipping-default", "topic": "shipping", "sku": null, "days": 4}
+  ],
+  "request": {"question": "What is the return window?", "sku": "SYN-MUG-01", "personalize": false}
+}

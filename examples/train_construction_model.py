@@ -107,7 +107,7 @@ def coverage(prediction_total, actual_total, predictions, bounds):
 
 def run(root: Path, wave: str, evaluate_test: bool) -> dict:
     gates = json.loads((root / "waves" / f"{wave}.json").read_text(encoding="utf-8"))["evaluation_rules"]
-    level = gates["acceptance_gates"]["interval_coverage_target"]
+    interval_level = gates["acceptance_gates"]["interval_coverage_target"]
     points = load(root)
     names = feature_names(points)
     split = {key: [point for point in points if point["split"] == key] for key in ("train", "validation", "test")}
@@ -122,7 +122,7 @@ def run(root: Path, wave: str, evaluate_test: bool) -> dict:
         search.append({"alpha": alpha, **metrics(total_dev, totals)})
     best = min(search, key=lambda row: row["mae"])["alpha"]
     _, cv_residuals = grouped_cv(x_dev, y_dev, groups, best, folds)
-    bounds = interval_bounds(cv_residuals, level)
+    bounds = interval_bounds(cv_residuals, interval_level)
 
     x_train, y_train = matrix(split["train"], names), targets(split["train"])
     x_val, y_val = matrix(split["validation"], names), targets(split["validation"])
@@ -147,7 +147,7 @@ def run(root: Path, wave: str, evaluate_test: bool) -> dict:
     final, _ = fit_predict(x_dev, y_dev, x_dev[:1], best)
     artifact = {
         "model_family": "ridge_log_tokens_v1", "alpha": best, "feature_names": names,
-        "interval_level": level, "log_residual_bounds": bounds,
+        "interval_level": interval_level, "log_residual_bounds": bounds,
         "trained_on": sorted(point["id"] for point in development),
         "targets": {name: {"scaler_mean": final[name][0].mean_.tolist(), "scaler_scale": final[name][0].scale_.tolist(),
                            "coef": final[name][1].coef_.tolist(), "intercept": float(final[name][1].intercept_)}

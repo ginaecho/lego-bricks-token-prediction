@@ -1,0 +1,62 @@
+{
+  "build_id": "wave3_t127_single_extract__ind-insurance",
+  "composition_label": "single_extract",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "synthetic": "Required true",
+      "schema": "Nonempty list of {entity, name, required}; allowlisted field names and boolean required",
+      "documents": "Nonempty list of {id, entity, format, content}; content is always original source text",
+      "entity": ["policy", "claim", "underwriting_submission"],
+      "format": ["json", "xml", "text"]
+    },
+    "output": {
+      "status": "ok, incomplete, or error",
+      "records": "Each contains document_id, entity, fields, missing_fields",
+      "fields": "Requested, present field names map to {value, source:{document_id,start,end}}",
+      "missing_fields": "Every absent/null/blank requested field has {field,required}",
+      "validation": "Shared demonstrative industry validation notices",
+      "errors": "One JSON object with status error and sanitized message; exit 2"
+    },
+    "source_offsets": "Zero-based end-exclusive Unicode character offsets in document content. JSON includes value literal quotes; XML includes escaped text; text includes original value whitespace.",
+    "types": "Identifier, text, ISO calendar date, finite nonnegative bounded amount, and allowlisted underwriting factor list",
+    "validation_layer": "All source allowlisted fields are normalized and validated, including safety-relevant fields omitted from the requested output schema"
+  },
+  "cross_stage_handoffs": [
+    "Single structured extraction functionality: request validation -> format parsing with exact spans -> shared value/industry validation -> minimized records and missing-field reporting"
+  ],
+  "behavior": [
+    "Deterministic extraction without external providers, LLMs, or injected callables",
+    "Nested object-based ACORD-style JSON; unqualified attribute-free ACORD-style XML; snake_case label: value claim-form text",
+    "Ambiguous fields and duplicate JSON keys fail rather than silently choosing values",
+    "Required missing fields produce incomplete status and exit 0; optional missing fields are reported without marking incomplete",
+    "No automatic claim adjudication. Extracted decisions require an exact compatible policy/evidence-based stated reason from the built-in demonstrative mapping",
+    "Underwriting permits roof_age, building_material, annual_mileage and prior_claim_count only; used factors must be disclosed",
+    "Output minimization omits names, raw addresses, VINs, raw source documents and all unrequested fields",
+    "Clearly labeled synthetic example with invented policyholder, fabricated VIN/address; seed-127 randomized loss dates and amounts exercised by tests"
+  ],
+  "scope": {
+    "included": ["Schema-driven extraction", "Source spans", "Missing-field reporting", "Shared validation", "CLI JSON errors", "All three insurance entities and document formats"],
+    "excluded": ["Real policyholder data", "Official ACORD schema conformance", "XML namespaces/attributes/declarations/entities/CDATA", "JSON object arrays", "OCR", "Arbitrary prose understanding", "Decision generation", "Automated fairness proof", "GDPR certification", "Production underwriting", "Cross-document policy coverage verification", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "18 unittest cases including seeded randomized fixtures and subprocess CLI behavior",
+    "unittest_exit_code": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok"
+  }
+}

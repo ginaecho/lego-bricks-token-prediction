@@ -33,6 +33,19 @@ enterprise delivery.
 - [ ] Not yet reported: learning curves and residuals by type. The selected
   penalty sits at the grid edge; richer order/handoff features remain open.
 
+## Wave 3 status (2026-09-24)
+
+- [x] 160 frozen trials across levels B (31), BT (32), BI (17) and BTI (80)
+  and eight industries, built by `gpt-6-astra`; all passed runtime
+  verification; 24,655,767 tokens. 14 protocol deviations (5 staging prompt-log
+  files, 9 external prompt-log appends that were removed) in `waves/wave3.json`.
+- [x] Retrained on 299 records (waves 1-3): validation MAPE 14.2% (gates
+  passed); single test evaluation MAPE 13.0%, MAE 20,113 vs 24,993 mean
+  baseline, 82.5% interval coverage.
+- [ ] Per-industry test subsets (1-5 records) are too small for
+  industry-specific accuracy claims; 3- and 4-part builds remain the weakest
+  (19.5% and 15.6% test MAPE).
+
 ## 1. Freeze the next measurement protocol
 
 - [x] Select an initial 100-200 additional independent builds, balanced across

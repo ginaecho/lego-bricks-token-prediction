@@ -1,0 +1,59 @@
+{
+  "build_id": "wave3_t082_single_normal",
+  "composition_label": "Normal research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "research.v1",
+    "input": {
+      "required": ["schema_version", "dataset_label", "query", "sources"],
+      "optional": {"top_k": "Integer 1..50, default 5; booleans rejected"},
+      "sources": "1..100 objects with exactly id, title, text; ids unique; blank text allowed",
+      "bounds": "Query <=2000 characters, label <=200, id <=200, title <=500, each text <=100000, combined text <=1000000; CLI input <=2000000 bytes",
+      "validation": "Shared validate_input for CLI and Python API; required and unknown fields checked; JSON loader rejects duplicate keys and nonstandard numeric constants"
+    },
+    "success": "status ok, schema_version, dataset_label, query, findings, retrieval",
+    "finding": "rank, exact extractive text, score, matched_terms, citation",
+    "citation": "source_id, source_title, start (inclusive), end (exclusive), quote; offsets are Unicode Python-string indices into the unmodified source text",
+    "error": "status error, schema_version, error message; CLI exit 2"
+  },
+  "cross_stage_handoffs": [
+    "Validated request -> physical-line passage retrieval -> ranked exact extractive findings -> shared JSON output; one research functionality, no external stages"
+  ],
+  "behavior": {
+    "retrieval": "Nonblank physical lines are passages, with surrounding whitespace excluded from citation spans. Unique Unicode word tokens are casefolded; any exact query-token overlap qualifies.",
+    "ranking": "Descending number of distinct matched query terms, then original source order, then passage offset. Score is matched distinct terms divided by total distinct query terms, rounded to six decimals.",
+    "extraction": "Finding text equals the complete retrieved passage and citation quote; no generated claims or implied factual verification.",
+    "no_matches": "Successful empty findings with retrieval.no_matches true",
+    "fixture_label": "All supplied example content and test fixtures are synthetic."
+  },
+  "scope": {
+    "included": ["Local source retrieval", "Deterministic ranking", "Exact source spans", "Shared schema validation", "JSON CLI", "Standard-library tests"],
+    "excluded": ["Network search", "Model providers", "LLM generation", "Semantic embeddings", "Factual verification", "Enterprise delivery", "Multi-stage orchestration"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_cases": 10,
+    "tests_passed": 10,
+    "unittest_exit_code": 0,
+    "cli": "passed: one JSON object, status ok, three exactly cited findings",
+    "cli_exit_code": 0
+  }
+}

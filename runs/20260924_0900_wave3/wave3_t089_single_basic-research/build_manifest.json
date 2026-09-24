@@ -1,0 +1,47 @@
+{
+  "build_id": "wave3_t089_single_basic-research",
+  "composition_label": "Research (basic functionality, Intelligence)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "schema_version=1; questions[{id,text}]; sources[{id,title,content, optional reliability (default 0.5), published (YYYY-MM-DD), origin (defaults to id), claims[{question_id,stance,quote}]}]; optional synthetic_fixture=false, min_sources=2, max_evidence=5",
+    "output": "schema_version=1; status=ok; synthetic_fixture; results[{question_id,question,direction,recommended_next_step,evidence_strength,counts,evidence,limitations}]",
+    "error": "schema_version=1; status=error; error message; CLI exit 2",
+    "validation": "One validate function for Python and CLI: strict fields, bounded nonempty strings and collections, unique IDs, valid dates, numeric ranges, known references, exact quoted evidence. CLI additionally rejects duplicate JSON fields and non-finite JSON constants."
+  },
+  "cross_stage_handoffs": [
+    "Single research stage: validated questions and supplied sources -> exact passage extraction -> relevance ranking -> origin-aware evidence aggregation -> decision-ready findings"
+  ],
+  "behavior": {
+    "retrieval": "Explicit claims link verbatim passages to questions. Otherwise case-insensitive lexical overlap retrieves sentences with neutral stance.",
+    "ranking": "0.7 lexical relevance + 0.3 supplied reliability; deterministic tie-breaking",
+    "decision": "Qualified reliability >= 0.5; conflicting qualified directions produce mixed; a single direction requires min_sources evidence origins; otherwise insufficient. All matches inform conclusions before presentation cap.",
+    "deduplication": "Repeated passages within a source are deduplicated; shared origins or normalized duplicate full source texts do not independently corroborate.",
+    "caveats": "Source annotations are not verified facts. Evidence strength describes corroboration, not probabilistic confidence. Dates are reported without freshness scoring.",
+    "cli": "One UTF-8 JSON input file or '-' for stdin; one JSON object on stdout; success exit 0; file or validation failures exit 2.",
+    "fixture": "Example sources are clearly labeled synthetic; no live provider or LLM step."
+  },
+  "scope": {
+    "included": ["General-purpose supplied-source research", "Multi-question extraction", "Traceable quotes and offsets", "Conflict visibility", "Evidence gaps", "Deterministic recommendations", "Shared validation", "CLI"],
+    "excluded": ["Web crawling", "Live models", "Semantic inference", "Independent fact checking", "Statistical confidence", "Enterprise persistence", "Automatic decision execution"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 12, "passed": 12, "failed": 0},
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "coverage": ["Conflicting evidence", "Corroboration", "Empty and irrelevant sources", "Quality thresholds", "Duplicate text and origins", "Transitive origin deduplication", "Presentation cap", "Determinism and input immutability", "Invalid input", "CLI success", "CLI file, parsing and usage errors"]
+  }
+}

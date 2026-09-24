@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "customer": {
+    "id": "SYNTH-CUSTOMER-001",
+    "kyc_status": "verified",
+    "aml_flags": [],
+    "preferences": ["saving", "travel"],
+    "risk_tolerance": 2,
+    "account_iban": "SYNTH-FAKEIBAN00000001"
+  },
+  "ledger": {
+    "format": "json",
+    "data": [
+      {"id": "SYNTH-TX-001", "date": "2026-09-01", "amount": -82.31, "currency": "EUR", "category": "travel", "card_number": "0000000000001234"},
+      {"id": "SYNTH-TX-002", "date": "2026-09-03", "amount": -24.89, "currency": "EUR", "category": "groceries"},
+      {"id": "SYNTH-TX-003", "date": "2026-09-05", "amount": 2150.42, "currency": "EUR", "category": "salary"}
+    ]
+  },
+  "loan_application": {"id": "SYNTH-LOAN-001", "amount": 4000, "purpose": "car", "currency": "EUR", "status": "draft"},
+  "products": [
+    {"id": "saving-1", "name": "Synthetic Flexible Savings", "category": "saving", "tags": ["flexible", "deposit"], "risk": 0, "kind": "account", "currency": "EUR", "max_amount": 0},
+    {"id": "travel-1", "name": "Synthetic Travel Rewards", "category": "travel", "tags": ["reward"], "risk": 1, "kind": "card", "currency": "EUR", "max_amount": 0},
+    {"id": "loan-1", "name": "Synthetic Car Loan", "category": "car", "tags": ["loan"], "risk": 2, "kind": "loan", "currency": "EUR", "max_amount": 10000},
+    {"id": "invest-1", "name": "Synthetic Growth Fund", "category": "investment", "tags": ["growth"], "risk": 5, "kind": "investment", "currency": "EUR", "max_amount": 0}
+  ],
+  "query": "save"
+}

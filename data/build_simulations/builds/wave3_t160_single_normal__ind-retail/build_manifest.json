@@ -1,0 +1,68 @@
+{
+  "build_id": "wave3_t160_single_normal__ind-retail",
+  "composition_label": "Normal research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated implementation using clearly labeled synthetic fixtures.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact root keys: schema_version, synthetic=true, catalog[], customer, basket, clickstream[], research.",
+    "catalog": "Products: unique sku, name, description, nonnegative fixed-point price string, USD/EUR/GBP currency, nonnegative integer stock. Names/descriptions exclude numeric/price/stock claims and review/endorsement vocabulary; unknown fields rejected.",
+    "customer": "Synthetic id, persona and boolean consent.personalization/consent.ccpa_opt_out.",
+    "basket": "id and unique SKU/positive integer quantity items; quantities cannot exceed catalog stock; no mixed currencies.",
+    "clickstream": "Unique id, current customer_id, catalog sku, view/add_to_basket event, ISO timezone-aware timestamp.",
+    "research": "Nonempty query, max_findings 1..20, boolean personalize.",
+    "output": "schema_version, status, synthetic, query, personalized, findings[], sources[], priced basket, notice, no_matches. Error envelope contains schema_version, status=error, error.",
+    "citation": "source_id references emitted source text; start/end are exact Unicode character offsets, end exclusive. input_pointer identifies source catalog record."
+  },
+  "cross_stage_handoffs": [
+    "Shared validation produces SKU lookup.",
+    "Catalog records become deterministic source passages preserving exact description strings and structured catalog prices/stock.",
+    "Token-overlap retrieval ranks passages by matched query-token count, then consent-gated click counts, then SKU.",
+    "Extractive findings quote complete selected passages, attach exact citations and catalog values; output evidence invariants are checked."
+  ],
+  "behavior": {
+    "retrieval": "Case-insensitive ASCII alphanumeric token intersection; no matches produces successful empty findings. No paraphrasing or factual generation.",
+    "personalization": "Disabled by default in fixture; uses only supplied clickstream counts to break retrieval ties when affirmative consent exists and CCPA opt-out is false. Otherwise explicit requests fail. Persona text is not used for ranking.",
+    "catalog_fidelity": "Price and stock in findings, source passages and basket are read directly from the validated feed. Basket sums use integer cents.",
+    "endorsements": "Review fields and conservative review/endorsement vocabulary are rejected. Findings never synthesize user reviews. This lexical demonstration does not verify truth of arbitrary input prose.",
+    "cli": "One JSON object on stdout, success exit 0; input/file errors produce JSON status=error and exit 2."
+  },
+  "scope": {
+    "included": [
+      "Single-stage bounded deterministic research over synthetic retail catalog",
+      "Synthetic customer and clickstream event log with consent-gated ranking",
+      "Basket reference validation and exact monetary totals",
+      "Shared validation and exact source citations"
+    ],
+    "excluded": [
+      "Live providers, networks, external dependencies and LLM calls",
+      "External corpus ingestion, semantic search and production-scale indexing",
+      "Checkout, inventory mutation, tax, shipping and currency conversion",
+      "Authenticity verification of arbitrary prose",
+      "Legal compliance certification, consent lifecycle management and production deployment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 19,
+    "cli_example": "passed: exit 0, one JSON object with status=ok",
+    "unittest_result": "19 tests passed, including subprocess CLI success and missing-file errors."
+  }
+}

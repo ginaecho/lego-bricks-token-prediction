@@ -1,0 +1,78 @@
+{
+  "build_id": "wave3_t002_single_adaptive",
+  "composition_label": "Adaptive onboarding (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored within this isolated build directory.",
+    "runtime": "Python 3, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1; booleans rejected.",
+      "fixture": "Exact object: kind='synthetic', id='synthetic-' plus nonempty suffix, maximum 100 characters.",
+      "experience": "novice | intermediate | expert",
+      "preferences": {
+        "format": "explanation | practice",
+        "pace": "focused | batch"
+      },
+      "goals": "Nonempty unique array: launch_store and/or improve_sales.",
+      "completed_steps": "Unique known step IDs with all experience-specific prerequisites completed."
+    },
+    "output": {
+      "status": "ok | error",
+      "data": "On success: schema_version, fixture, experience, preferences, goals, steps, next_actions, progress, onboarding_complete, adaptation_explanation. Null on error.",
+      "errors": "Empty on success; otherwise array of field/message objects.",
+      "step": "id, title, state (complete|ready|blocked), prerequisites, blocked_by, serves_goals, explanation, guidance, guidance_level",
+      "progress": "completed and total count required steps only; percent rounded to two decimals."
+    },
+    "validation": "One validate_input boundary shared by direct calls and CLI. Unknown/missing keys, unsupported values, duplicate selections and inconsistent completion are rejected. CLI additionally rejects invalid files, encodings, malformed JSON, non-finite JSON constants and duplicate object keys.",
+    "error_contract": "CLI prints exactly one JSON object; success exits 0, validation/file errors exit 2. response(payload) returns the same envelope; onboarding(payload) raises ValidationError for invalid input."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality only: validated input -> experience-specific prerequisite closure -> topologically ordered guided plan -> shared response envelope."
+  ],
+  "behavior": {
+    "goals": "launch_store ends at publish; improve_sales adds analytics and optimization. Multiple goals share steps without duplication.",
+    "adaptation": "Novices require orientation and guided explanations. Intermediate users receive standard explanations, experts concise guidance. All users retain operational prerequisites.",
+    "preferences": "Practice adds synthetic exercises; explanation adds rationale review. Focused pace recommends one ready action; batch recommends at most three.",
+    "progression": "Re-run with updated completed_steps; ready recommendations never include blocked or completed steps. All-required-complete produces an empty next_actions array.",
+    "determinism": "Fixed catalog order, sorted goals and reasons, no random values, timestamps, external services or input mutation.",
+    "synthetic_fixture": "example_input.json is a fictional new seller; no real customer information or real marketplace activity."
+  },
+  "scope": {
+    "included": [
+      "Experience and preference-aware guidance",
+      "Prerequisite validation and readiness",
+      "Explanations, goal deduplication and progress",
+      "CLI and direct Python API",
+      "Synthetic fixtures and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Persistence, accounts, authentication and user interface",
+      "Real checkout, listing publication or sales analysis",
+      "Network calls and model providers; no LLM step is needed",
+      "Enterprise production operation and arbitrary user-defined prerequisite graphs"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 12,
+    "cli_example": "Passed: exactly one JSON object with status ok, exit code 0.",
+    "coverage": "Normal novice/intermediate/expert plans; preference and pace adaptation; prerequisites; partial/full completion; goal order and topological order; deterministic nonmutation; invalid schema; CLI success, usage, missing files, malformed JSON, duplicate keys, non-finite constants and invalid encoding.",
+    "test_command_exit_code": 0
+  }
+}

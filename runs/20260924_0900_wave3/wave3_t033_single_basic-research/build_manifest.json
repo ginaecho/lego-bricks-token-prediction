@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t033_single_basic-research",
+  "composition_label": "Research (basic functionality, Intelligence)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Required literal 1.0",
+      "fixture_label": "Required nonempty string; example clearly labeled synthetic",
+      "questions": "1..20 objects: unique id, text, optional 1..30 keywords",
+      "sources": "0..100 objects: unique id, title, text, reliability [0,1]; optional origin, locator, positions mapping question ids to support/oppose/neutral"
+    },
+    "output": "schema_version, status, fixture_label, method, briefs; each brief contains question, search terms, attributed evidence, source/origin counts, directional weights, assessment, limitations and recommended next step",
+    "error": "schema_version, status=error, error; stdout JSON and exit 2",
+    "validation": "One validate function for API and CLI; strict fields, unique ids, bounded strings and collections, finite reliability, known question references. CLI rejects malformed UTF-8/JSON, duplicate fields, non-finite constants and inputs larger than 1000000 bytes."
+  },
+  "cross_stage_handoffs": [
+    "Single Research functionality: validated input -> lexical passage retrieval -> origin-deduplicated evidence aggregation -> decision brief in the shared output envelope"
+  ],
+  "behavior": {
+    "retrieval": "Unicode case-folded token overlap after fixed stop-word removal. Optional keywords replace question terms. Keep top three matching passages per source, preserving exact quote text apart from surrounding whitespace.",
+    "weighting": "Term coverage times caller-supplied reliability. Each origin contributes its maximum weight per stance, not a sum across copies or passages.",
+    "assessment": "Positive support and oppose weights yield mixed regardless of majority; one directional weight yields that direction; neutral-only positive weight yields informational; no positive weight yields insufficient_evidence.",
+    "decision_support": "Cited quotes, explicit uncertainties, directional evidence assessment and actionable verification/gathering steps, rather than invented factual answers.",
+    "determinism": "Stable evidence ordering; no clocks, randomness, network, model calls or mutable input changes"
+  },
+  "scope": {
+    "included": ["Offline source analysis", "Multiple research questions", "Traceable quotations", "Conflict visibility", "Known-origin deduplication", "JSON CLI", "Synthetic fixtures"],
+    "excluded": ["Web discovery", "Live providers", "LLM integration", "Semantic entailment", "Automatic source credibility verification", "Automatic stance inference", "Statistical confidence", "Enterprise persistence", "Production-scale processing"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 13,
+    "unit_test_exit_code": 0,
+    "cli": "passed: one JSON object, status ok, exit 0; synthetic questions assessed mixed and informational",
+    "coverage": ["Normal research", "Source attribution", "Conflict detection", "Origin deduplication", "Neutral evidence", "Empty and unrelated sources", "Zero reliability", "Directional assessments", "Determinism and immutability", "Invalid schema and quality", "Passage limits", "CLI success, usage, missing file, malformed JSON and encoding, duplicate keys, non-finite values, oversized input"]
+  }
+}

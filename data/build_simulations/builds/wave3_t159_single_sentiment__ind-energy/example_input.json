@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "safety_rules": {"fire": 1, "downed_line": 1, "medical_dependency": 1, "active_outage": 2, "other": 3},
+  "grid_assets": [
+    {"asset_id": "SYN-SUBSTATION-WINTER-01", "kind": "substation", "critical": true, "upstream_id": null},
+    {"asset_id": "SYN-FEEDER-01", "kind": "feeder", "critical": true, "upstream_id": "SYN-SUBSTATION-WINTER-01"},
+    {"asset_id": "SYN-METER-101", "kind": "meter", "critical": false, "upstream_id": "SYN-FEEDER-01"}
+  ],
+  "meter_interval_csv": "timestamp,device_id,consumption_kwh,season\n2026-01-15T06:00:00Z,SYN-METER-101,1.2,winter\n2026-01-15T06:30:00Z,SYN-METER-101,1.4,winter\n2026-07-15T06:00:00Z,SYN-METER-101,0.4,summer\n",
+  "scada_telemetry": [
+    {"asset_id": "SYN-FEEDER-01", "timestamp": "2026-01-15T06:00:00Z", "voltage_v": 11000, "state": "normal"},
+    {"asset_id": "SYN-METER-101", "timestamp": "2026-01-15T06:30:00Z", "voltage_v": 0, "state": "offline"}
+  ],
+  "outage_reports": [
+    {"report_id": "SYN-REPORT-01", "asset_id": "SYN-FEEDER-01", "description": "Thanks for the good update, but a downed line is unsafe near SYN-FEEDER-01.", "customers_affected": 1, "outage_active": true, "safety_flags": ["downed_line"]},
+    {"report_id": "SYN-REPORT-02", "asset_id": "SYN-METER-101", "description": "Angry about the bad outage and slow response.", "customers_affected": 120, "outage_active": true, "safety_flags": []},
+    {"report_id": "SYN-REPORT-03", "asset_id": "SYN-METER-101", "description": "Great reliable service; thanks.", "customers_affected": 0, "outage_active": false, "safety_flags": []}
+  ],
+  "emissions": [{"value": 0.78, "unit": "kgCO2e", "source": "Synthetic winter interval estimate, fictitious factor 0.30 kgCO2e/kWh; not measured"}]
+}

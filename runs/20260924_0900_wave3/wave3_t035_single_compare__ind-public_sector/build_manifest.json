@@ -1,0 +1,98 @@
+{
+  "build_id": "wave3_t035_single_compare__ind-public_sector",
+  "composition_label": "Product comparison (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in this isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Literal 1.0",
+      "synthetic": "Must be true",
+      "citizen_service_request": "Government form JSON: SYN-REQ case_number, SYN-PERSONA persona_id, NOT-A-REAL-ADDRESS plus three digits, and enumerated service.",
+      "preferences": "Exactly turnaround, fee, accessibility, online: finite weights from 0 through 100, positive total.",
+      "options": "One through thirty options; unique SYN-OPT identifiers and SYN-APP application case numbers, label, benefits_application, policy_document, attributes.",
+      "benefits_application": "Government form JSON: case_number, request_case_number matching shared request, status illustrative.",
+      "policy_document": "SYN-POL identifier and at most 4000 characters of invented policy/regulation text prefixed SYNTHETIC POLICY: .",
+      "attributes": "Exactly turnaround, fee, accessibility, online. Each is null or an object with value and unit. No unrecognized fields."
+    },
+    "output": {
+      "success": "schema_version, status ok, synthetic, minimized citizen_service_request, side-by-side comparison, normalized options with linked application and policy identifiers, ranking, summary, review.",
+      "error": "schema_version, status error, static or sanitized message; exit code 2.",
+      "units": {
+        "turnaround": "hours/days/weeks converted to days",
+        "fee": "USD/cents converted to USD",
+        "accessibility": "percent/rating5 converted to percent",
+        "online": "boolean true/false or yes/no converted to boolean"
+      }
+    },
+    "validation": "One shared validate boundary rejects unknown fields, broken links, duplicate identifiers, invalid numeric values, unsupported units and non-synthetic records. CLI additionally rejects malformed UTF-8/JSON, duplicate JSON fields, nonfinite constants, and inputs above 256000 bytes."
+  },
+  "cross_stage_handoffs": [
+    "Shared validation produces minimized request, normalized attribute values, and normalized preference weights.",
+    "The same normalized options supply both side-by-side rows and deterministic preference scoring.",
+    "Ranking and its per-attribute explanations use identical contributions and preserve synthetic application/policy references."
+  ],
+  "behavior": {
+    "normalization": "Turnaround and fee prefer lower values; accessibility and online prefer higher values. Numeric input values are bounded at 1000000, accessibility additionally at 100 percent or rating 5.",
+    "ranking": "Numeric points use comparison-local min/max scaling; equal available numeric values get 1. Online true gets 1, false gets 0. Weighted sum uses normalized weights. Sort by descending score, then option identifier.",
+    "missing_data": "Explicit null means unknown and scores zero without redistribution. All-null attribute ranges are null. Entirely missing evidence can produce zero-score ties, not a benefits decision.",
+    "review": "Each option exposes normalized facts, point calculation direction, weights, weighted contributions, total score, missing values, and policy identifier. Policy prose is context only and is not used to infer eligibility.",
+    "industry_constraints": [
+      "Synthetic-only government form fixtures use invented case numbers, fabricated persona identifiers, and non-traceable address markers.",
+      "Strict input field allowlists and illustrative email/phone/identity-pattern screening limit PII; outputs omit persona, address, and policy prose. Errors do not echo rejected data.",
+      "Explainable advisory rankings support review in the spirit of FOIA/open records, without making legal determinations.",
+      "Plain-language summaries, explicit units and text explanations do not depend on color or images, in the spirit of Section 508.",
+      "No compliance certification is asserted."
+    ]
+  },
+  "scope": {
+    "included": [
+      "Bounded deterministic comparison of supplied public-sector service alternatives",
+      "Single shared JSON input/output contract and validation layer",
+      "Synthetic government forms and invented policy/regulation text",
+      "CLI and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live search, network requests, model providers, and LLM steps",
+      "Real citizen PII processing or comprehensive free-text PII detection",
+      "Benefits eligibility decisions, legal interpretation, and compliance certification",
+      "Automatic extraction or verification of attributes from policy prose",
+      "Production identity, persistence, authorization, audit storage, and accessible web UI"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "runner": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 17,
+      "failures": 0,
+      "errors": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "first_ranked_option": "SYN-OPT-A",
+      "first_score": 0.9,
+      "error_exit_code_verified": 2
+    }
+  }
+}

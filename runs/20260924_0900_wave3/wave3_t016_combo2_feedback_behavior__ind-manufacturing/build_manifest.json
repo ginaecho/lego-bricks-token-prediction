@@ -1,0 +1,94 @@
+{
+  "build_id": "wave3_t016_combo2_feedback_behavior__ind-manufacturing",
+  "composition_label": "Feedback analysis (Customer insights) -> Behavioral personalization (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated standard-library Python reference implementation",
+    "runtime": "Python 3",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Object: schema_version=1, synthetic=true, timezone-aware as_of, user_id, ERP/MES work_orders[], quality_inspections[], sensor_csv string, feedback[], events[]. Each entity list has unique nonempty ids.",
+    "work_order": "id, asset_id, description, status=open|closed, known theme tags[], tolerances keyed by metric with unit,min,max,safety_max",
+    "inspection": "id, work_order_id, asset_id, timestamp, inspector_id, metric,value,unit,decision=pass|fail,decision_reason",
+    "feedback": "id, work_order_id, inspection_id, timestamp,text,safety_critical boolean",
+    "event": "id,user_id,work_order_id,type=browse|purchase,timestamp. Purchase represents procurement engagement associated with an order, not a production action.",
+    "sensor_csv": "Exact headers id,work_order_id,asset_id,timestamp,metric,value,unit",
+    "output": "Versioned envelope containing validated input, deduplicated feedback with evidence and inspection decision trace, human escalations and personalized behavior rankings; status=ok. Errors return status=error and message, exit 2.",
+    "validation": "validate() is the shared stage boundary. Feedback and final output are checked against deterministic reconstruction. Foreign keys, asset matching, finite numeric values, timestamps not in future, explicit units and ordered tolerances enforced.",
+    "physical_ranges": {
+      "temperature": "-40..250 C",
+      "vibration": "0..100 mm/s",
+      "pressure": "0..2000 kPa"
+    }
+  },
+  "cross_stage_handoffs": [
+    "feedback_stage validates input and returns a validated shared envelope.",
+    "behavior_stage accepts only the validated feedback envelope, not independent raw feedback.",
+    "Deduplicated feedback themes augment order tags for behavior affinity; unique feedback groups contribute priority, while duplicate evidence does not multiply priority.",
+    "Feedback group and supporting source ids propagate into ranked explanations; safety escalations propagate unchanged even for closed orders."
+  ],
+  "behavior": {
+    "deduplication": "Per work order, Unicode word normalization and case folding; deterministic smallest-id representative; retain all exact source excerpts and inspection references; safety flags ORed.",
+    "themes": "Fixed keyword vocabulary: thermal,vibration,quality,maintenance,safety; unmatched text becomes general. No model or LLM needed.",
+    "recency": "Event weight = browse 1 or purchase 3 multiplied by 2^(-age_days/30), using explicit as_of; only current user's events.",
+    "ranking": "Score = direct weighted order engagement + sum of matching theme profile weights + 0.25 per unique feedback group. Order-id tie break, scores rounded to eight decimals; only open orders ranked.",
+    "cold_start": "No current-user events: feedback-priority ranking; without feedback, stable work-order-id order. No invented personal history or cross-user profiling.",
+    "quality_trace": "Every recorded quality decision exposes inspector, timestamp, asset, work order, metric, value, unit, reason and applied tolerance. Decision must match measured bounds. Demonstrates ISO 9001-style traceability, not certification.",
+    "safety": "Explicit safety-critical feedback, safety vocabulary, or sensor/inspection value >= safety_max produces a human_review_required alert. Advisory only; automatic_execution_allowed is always false. High readings never revise earlier inspection decisions.",
+    "fixtures": "Clearly synthetic invented assets, orders, quality records and maintenance logs. Seed 16 Gaussian randomized physically plausible telemetry with a deliberate bounded safety excursion."
+  },
+  "scope": {
+    "included": [
+      "Integrated deterministic CLI",
+      "Shared schema and validation",
+      "Feedback deduplication, themes, source provenance",
+      "Recency-weighted browsing/purchase discovery",
+      "Cold-start behavior",
+      "Manufacturing tolerance validation and human escalation",
+      "Unit tests and CLI subprocess tests"
+    ],
+    "excluded": [
+      "Enterprise delivery or ISO certification",
+      "Live MES/ERP integration",
+      "Equipment actuation or automatic quality release",
+      "Live providers, LLMs or network calls",
+      "Authentication, storage, large-scale streaming",
+      "Fuzzy semantic deduplication or trained machine learning",
+      "Lower-bound safety alarms: this demonstrator models explicit safety flags and upper-limit alarms only"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 26,
+    "unittest_failures": 0,
+    "unittest_errors": 0,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_stdout": "One JSON object with status=ok",
+    "verified": [
+      "Both stages and exact validated handoff",
+      "Deduplication and supporting excerpts",
+      "Feedback-to-ranking theme propagation",
+      "Thirty-day half-life and purchase weighting",
+      "Cold start, user isolation and deterministic ties",
+      "Human escalation and decision provenance",
+      "Invalid units, tolerances, decisions, references, times and numbers",
+      "CLI success, validation, missing-file and usage failures"
+    ]
+  }
+}

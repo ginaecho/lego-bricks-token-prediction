@@ -1,0 +1,55 @@
+{
+  "build_id": "wave3_t023_combo2_faq_basic-documents__ind-finance",
+  "composition_label": "faq -> basic:documents; financial services",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation constructed in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "schema_version, synthetic=true, customer{customer_id,name,account,kyc_status,aml_flags}, loan_application{loan_id,amount,annual_income,currency}, question, knowledge_base[{id,question,answer}], transaction_source{format,data}",
+    "transaction": "transaction_id,date(YYYY-MM-DD),amount(positive decimal, max two fraction digits),currency(three uppercase letters),account,card_number(empty or 13-19 digits, spaces/hyphens accepted on input)",
+    "formats": "JSON array or encoded array; CSV with exact shared transaction field order; ISO 20022-style pain.001.001.09 Document/CstmrCdtTrfInitn/PmtInf with ReqdExctnDt/Dt and CdtTrfTxInf fields PmtId/EndToEndId, Amt/InstdAmt@Ccy, CdtrAcct/Id/IBAN",
+    "output": "status plus normalized envelope, transactions with masked PANs, faq and documents; error returns status=error and generic message",
+    "validation": "Single validate(envelope, phase) boundary applied at input, normalized, FAQ and document stages; decimal arithmetic; unique identifiers; valid dates; positive income; explained risk factors"
+  },
+  "cross_stage_handoffs": [
+    "Raw format adapter -> shared validated normalized envelope",
+    "Knowledge retrieval -> validated FAQ evidence/answer or explicit abstention in the envelope",
+    "Document automation consumes that FAQ envelope, propagates support_response unchanged, extracts rows, renders CSV, aggregates by currency and performs screening/risk checks",
+    "Final document envelope is validated before serialization"
+  ],
+  "behavior": {
+    "retrieval": "Case-insensitive unique lexical overlap excluding stopwords, at least one matching term; ties broken by knowledge id; answer is exact cited KB text",
+    "abstention": "No lexical match or empty KB returns null answer, no citations and an explicit reason, also embedded in the document",
+    "optional_callable": "run(payload, answerer=None); injected callable receives question and copied evidence and must return the exact evidence answer; fixtures test acceptance and hallucination rejection",
+    "screening": "KYC pending/rejected or any AML flag requires manual review; allowed AML flags are sanctions_match, unusual_activity, pep",
+    "risk": "Baseline 0; nonverified KYC +40; each AML flag +30; loan principal over 3x income +25; transaction amount >=10000 in its stated currency +20; capped at 100 with all factor points and reasons shown",
+    "masking": "PAN fields expose last four digits only; PAN-like digit runs in textual input values are also masked; generic CLI errors do not echo input; spreadsheet formulas escaped",
+    "fixtures": "Explicitly synthetic customer, loan, fake accounts and fake IBANs; test generates 50 randomized transactions with seed 23; example uses fabricated transaction amounts",
+    "determinism": "No time-dependent behavior, live inference or external lookups"
+  },
+  "scope": {
+    "included": ["Grounded FAQ retrieval", "Abstention", "Validated injected answer callable", "JSON/CSV/payment XML extraction", "Reshaping and CSV rendering", "Exact currency-separated totals", "KYC/AML illustrative flags", "Card masking", "Explainable synthetic scores", "CLI error contract"],
+    "excluded": ["Compliance certification", "Real sanctions screening", "Real card processing", "Credit approvals", "Production security guarantees", "Full ISO 20022/XSD support", "Currency conversion", "OCR/PDF ingestion", "Live model providers", "Negative/refund ledger entries"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 26,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_example_status": "ok",
+    "cli_example_exit_code": 0,
+    "cli_error_exit_code": 2,
+    "coverage": ["FAQ grounding and abstention", "Injected callable fixtures", "Cross-stage propagation and tamper rejection", "JSON/CSV/ISO-style XML", "KYC/AML and score explanations", "PAN masking", "Input errors and edge cases", "Randomized synthetic histories", "CLI success and failures"]
+  }
+}

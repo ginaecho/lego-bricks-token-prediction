@@ -1,0 +1,45 @@
+{
+  "build_id": "wave3_t142_single_web__ind-finance",
+  "composition_label": "Web research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original bounded implementation created in isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "synthetic=true; customers[id,name,iban,kyc_status,aml_flag]; ledger{format:json|csv,data}; loan_applications[id,customer_id,amount,annual_income]; optional payment_payloads XML strings; research{allowlist,sources[url,title,retrieved_at,content],keywords}",
+    "output": "status,schema_version,synthetic,notice,customers,transactions,loan_applications,payments,research{sources,findings,redaction}",
+    "validation": "Single validate boundary normalizes CSV/JSON ledgers, checks identity references, finite positive monetary values, explicit screening flags, synthetic IBANs, card shape, exact HTTPS allowlisting, source timestamps and payment consistency. Every score has named contributions, scale, rule version and aggregation.",
+    "errors": "CLI file or validation failures emit one generic JSON status:error and exit 2 without echoing sensitive data."
+  },
+  "cross_stage_handoffs": [
+    "Shared validation -> normalized customer, transaction, loan, payment and research records",
+    "Exact URL allowlist -> supplied offline document snapshots -> deterministic keyword sentence retrieval",
+    "Original text evidence offsets and SHA-256 -> validated findings -> recursively masked JSON output"
+  ],
+  "behavior": {
+    "retrieval": "Offline supplied snapshots only. No HTTP requests, redirects, crawling or live providers; provenance timestamps and URLs are fixture assertions, not authenticated web captures.",
+    "findings": "Sentence extraction by case-insensitive keyword matches; each finding includes source URL, original content SHA-256, supplied retrieval timestamp and Unicode character offsets.",
+    "optional_callable": "run(data, extractor=callable); receives text and keyword tuple; must return a bounded list of exact quote/start/end spans. Tests cover valid and fabricated evidence.",
+    "screening": "Pending/failed KYC and explicit AML flags generate review signals. Transaction amount threshold is demonstrative and not jurisdiction- or currency-calibrated.",
+    "masking": "PAN-like runs of 13-19 digits, including spaces/hyphens, are masked across all output strings. Non-card identifiers may also be conservatively masked. Provenance hashes/offsets describe original evidence; displayed quotes may be redacted.",
+    "scores": "Deterministic illustrative risk contributions capped at 100; not predictions, approvals, or compliance certification.",
+    "fixtures": "Clearly synthetic customers, reserved ZZ fake IBANs, fake card values, and 50 seeded randomized transactions in tests.",
+    "payments": "ISO 20022-style XML subset with exactly one EndToEndId, InstdAmt and IBAN per Document; optional namespace accepted; DTD/entity declarations rejected."
+  },
+  "scope": {
+    "included": ["Offline allowlisted URL ingestion and retrieval", "Provenance-preserving findings", "Shared input/output schema and validation", "KYC/AML flags", "Conservative PCI-style PAN masking", "Explainable illustrative scores", "JSON/CSV ledgers", "ISO 20022-style payment subset", "Optional fixture-tested callable", "CLI and unittest coverage"],
+    "excluded": ["Live network retrieval", "Real customer data", "AML/sanctions databases", "PCI DSS or regulatory certification", "Full ISO 20022 schema validation", "Production underwriting", "External dependencies", "Live LLM providers"]
+  },
+  "test_outcomes": {"status": "passed", "test_count": 15, "cli": "passed; one JSON object with status ok; exit 0", "error_cli": "passed; missing arguments, missing file and invalid schema emit JSON status error and exit 2"}
+}

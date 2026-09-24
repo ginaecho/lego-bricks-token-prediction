@@ -97,7 +97,7 @@
   "split_group": "b68eac64c5538f0029b8057b8b4dd8eeca0dd48e46d2a3fafc95a68ad86b7856",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "cbd966783cd258b97dd84da57327bf246addc2c7994d0f37a6cf90e0168c3ac3",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t154_single_feedback__ind-telecom",
   "membership_point_id": "single_feedback__ind-telecom",
@@ -105,8 +105,121 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "b7471b7e0da91098c28cf239a50063663cab8873bcc5a2b109a8c7b8e66a8df6",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "9452b5a0-bf1c-4318-9ccd-71412b13f1df",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 5,
+    "input_tokens": 96151,
+    "output_tokens": 6551,
+    "cache_read_tokens": 87908,
+    "cache_write_tokens": 8228,
+    "total_tokens": 102702,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38100,
+        "agent_id": "9452b5a0-bf1c-4318-9ccd-71412b13f1df",
+        "model": "gpt-6-astra",
+        "input_tokens": 14988,
+        "output_tokens": 524,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 842,
+        "reasoning_tokens": 351,
+        "duration_ms": 15735,
+        "created_at": "2026-09-24T12:53:25.879Z"
+      },
+      {
+        "id": 38138,
+        "agent_id": "9452b5a0-bf1c-4318-9ccd-71412b13f1df",
+        "model": "gpt-6-astra",
+        "input_tokens": 15539,
+        "output_tokens": 5442,
+        "cache_read_tokens": 14985,
+        "cache_write_tokens": 551,
+        "reasoning_tokens": 0,
+        "duration_ms": 82836,
+        "created_at": "2026-09-24T13:00:33.487Z"
+      },
+      {
+        "id": 38139,
+        "agent_id": "9452b5a0-bf1c-4318-9ccd-71412b13f1df",
+        "model": "gpt-6-astra",
+        "input_tokens": 21301,
+        "output_tokens": 146,
+        "cache_read_tokens": 15536,
+        "cache_write_tokens": 5762,
+        "reasoning_tokens": 7,
+        "duration_ms": 2996,
+        "created_at": "2026-09-24T13:00:40.788Z"
+      },
+      {
+        "id": 38146,
+        "agent_id": "9452b5a0-bf1c-4318-9ccd-71412b13f1df",
+        "model": "gpt-6-astra",
+        "input_tokens": 21949,
+        "output_tokens": 333,
+        "cache_read_tokens": 21298,
+        "cache_write_tokens": 648,
+        "reasoning_tokens": 58,
+        "duration_ms": 6671,
+        "created_at": "2026-09-24T13:02:00.062Z"
+      },
+      {
+        "id": 38148,
+        "agent_id": "9452b5a0-bf1c-4318-9ccd-71412b13f1df",
+        "model": "gpt-6-astra",
+        "input_tokens": 22374,
+        "output_tokens": 106,
+        "cache_read_tokens": 21946,
+        "cache_write_tokens": 425,
+        "reasoning_tokens": 0,
+        "duration_ms": 3662,
+        "created_at": "2026-09-24T13:02:43.825Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.3386425,
+      "observed_cache_profile_estimate_usd": 0.14084950000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.0637099999999995,
+      "observed_cache_profile_estimate_usd": 4.0637099999999995,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +250,111 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 1.655s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "synthetic": true,
+      "residency": "EU",
+      "summary": {
+        "feedback_records": 3,
+        "unique_feedback": 2,
+        "duplicates_removed": 1
+      },
+      "themes": [
+        {
+          "theme": "billing",
+          "residency": "EU",
+          "count": 1,
+          "evidence": [
+            {
+              "residency": "EU",
+              "subscriber_id": "sub_001",
+              "ticket_id": "tkt_002",
+              "source_feedback_ids": [
+                "fb_003"
+              ],
+              "usage_record_ids": [
+                "cdr_002"
+              ],
+              "excerpt": "Customer: The billing charge is wrong. Agent: Support resolved the data allowance issue; contact [REDACTED]."
+            }
+          ]
+        },
+        {
+          "theme": "connectivity",
+          "residency": "EU",
+          "count": 1,
+          "evidence": [
+            {
+              "residency": "EU",
+              "subscriber_id": "sub_001",
+              "ticket_id": "tkt_001",
+              "source_feedback_ids": [
+                "fb_001",
+                "fb_002"
+              ],
+              "usage_record_ids": [
+                "cdr_001"
+              ],
+              "excerpt": "[REDACTED]: My signal dropped. Please call [REDACTED]. IMEI [REDACTED]."
+            }
+          ]
+        },
+        {
+          "theme": "support",
+          "residency": "EU",
+          "count": 1,
+          "evidence": [
+            {
+              "residency": "EU",
+              "subscriber_id": "sub_001",
+              "ticket_id": "tkt_002",
+              "source_feedback_ids": [
+                "fb_003"
+              ],
+              "usage_record_ids": [
+                "cdr_002"
+              ],
+              "excerpt": "Customer: The billing charge is wrong. Agent: Support resolved the data allowance issue; contact [REDACTED]."
+            }
+          ]
+        },
+        {
+          "theme": "usage",
+          "residency": "EU",
+          "count": 1,
+          "evidence": [
+            {
+              "residency": "EU",
+              "subscriber_id": "sub_001",
+              "ticket_id": "tkt_002",
+              "source_feedback_ids": [
+                "fb_003"
+              ],
+              "usage_record_ids": [
+                "cdr_002"
+              ],
+              "excerpt": "Customer: The billing charge is wrong. Agent: Support resolved the data allowance issue; contact [REDACTED]."
+            }
+          ]
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t154_single_feedback__ind-telecom",
+    "artifact_sha256": {
+      "implementation.py": "7d1a5002477213424db74e49861651923d1647999b55bb063eb2e4f6a938ae5a",
+      "test_implementation.py": "9ba28c68e598e993a4aff5f97fb186f9d96ef02169ab99ecdd3328d2f93929c2",
+      "example_input.json": "389e4c21610eb77d140705b2ee5e79b9eab1e8d2dcd87fee7f2b3fdfcd5438d7",
+      "build_manifest.json": "8952f8114e7ab59a2db352d0b9396f94efaea3a74d8f12d440a6b2be9dd63f26"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

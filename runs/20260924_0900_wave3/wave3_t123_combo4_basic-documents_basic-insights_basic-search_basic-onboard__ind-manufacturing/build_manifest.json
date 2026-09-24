@@ -1,0 +1,94 @@
+{
+  "build_id": "wave3_t123_combo4_basic-documents_basic-insights_basic-search_basic-onboard__ind-manufacturing",
+  "composition_label": "basic:documents -> basic:insights -> basic:search -> basic:onboard",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Authored from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Synthetic marker, ERP/MES work_orders with metric specifications, sensor_csv, inspections, feedback, products, customer",
+    "output": "One JSON envelope containing schema_version, status, stage, synthetic, source, readings, quality_decisions, alerts, themes, search_results, onboarding",
+    "validation": "Shared validate_input and validate_state layer rechecks provenance and deterministic derived output at every stage boundary. Strict units, finite numbers, timezone timestamps, unique IDs, references, tolerances and safety bounds. CSV requires timestamp,asset_id,work_order_id,metric,value,unit in that order.",
+    "units": {
+      "temperature": "degC",
+      "vibration": "mm/s",
+      "pressure": "bar"
+    },
+    "errors": "File, JSON and validation errors produce a single JSON object with status error and exit code 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "documents",
+      "to": "insights",
+      "data": "Validated normalized readings, attributable inspection decisions, human safety alerts and linked feedback"
+    },
+    {
+      "from": "insights",
+      "to": "search",
+      "data": "Work-order-scoped themes with explicit source evidence and counts augment customer query ranking"
+    },
+    {
+      "from": "search",
+      "to": "onboard",
+      "data": "Compatible ranked products and theme references determine recommended product and personalized next steps; quality and safety records preserved"
+    }
+  ],
+  "behavior": {
+    "documents": "Parse and normalize time-series CSV; reshape inspection measurements into inclusive-tolerance decisions with inspector, timestamp, work order, asset, units and rule version. Escalate safety-critical telemetry and inspection readings.",
+    "insights": "Deterministic keyword/synonym theme aggregation over customer feedback, invented maintenance logs, quality failures and out-of-tolerance telemetry.",
+    "search": "Deterministic synonym-expanded lexical ranking plus theme evidence; strict asset compatibility; stable product-ID tie breaks; top five positive matches.",
+    "onboard": "Safety review first, then failed-quality disposition, experience-based orientation, and specialist product review or no-match clarification. No machine actuation.",
+    "fixtures": "Explicitly synthetic, fictitious IDs and logs; random.Random(123) telemetry with injected plausible overtemperature anomaly.",
+    "traceability": "Demonstrative ISO 9001-style quality-decision traceability; not a compliance certification."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic pipeline",
+      "Shared schema and boundary validators",
+      "Local CLI and unittest tests",
+      "Human escalation records and operational review gates"
+    ],
+    "excluded": [
+      "Live ERP/MES integrations",
+      "Real alert delivery or human approval workflow",
+      "Machine control",
+      "Certification",
+      "LLMs and external providers",
+      "Persistent database",
+      "Enterprise production delivery"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 31,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "final_stage": "onboard",
+      "safety_next_step": "human_safety_supervisor"
+    },
+    "verified_deliverables": 4
+  }
+}

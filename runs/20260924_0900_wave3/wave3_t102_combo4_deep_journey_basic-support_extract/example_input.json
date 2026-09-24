@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "documents": [
+    {
+      "id": "synthetic-policy-a",
+      "text": "Return window days: 30. Receipt needed: true. Contact: help@example.invalid. Shipping days: 3.",
+      "claims": [
+        {"topic": "return_days", "value": "30", "quote": "Return window days: 30."},
+        {"topic": "receipt_needed", "value": "true", "quote": "Receipt needed: true."},
+        {"topic": "contact", "value": "help@example.invalid", "quote": "Contact: help@example.invalid."},
+        {"topic": "shipping_days", "value": "3", "quote": "Shipping days: 3."}
+      ]
+    },
+    {
+      "id": "synthetic-policy-b",
+      "text": "Return window days: 30. Shipping days: 5.",
+      "claims": [
+        {"topic": "return_days", "value": "30", "quote": "Return window days: 30."},
+        {"topic": "shipping_days", "value": "5", "quote": "Shipping days: 5."}
+      ]
+    }
+  ],
+  "research_questions": ["Does the return window differ for international orders?"],
+  "request": {
+    "query": "How do I start a return, and how long does shipping take?",
+    "topics": ["return_days", "receipt_needed", "shipping_days", "refund_days"],
+    "team_online": false
+  },
+  "completed_actions": [],
+  "actions": [
+    {"id": "gather", "title": "Gather your receipt and check the return window", "requires_topics": ["receipt_needed", "return_days"], "prerequisites": []},
+    {"id": "contact", "title": "Contact the documented support address with your receipt", "requires_topics": ["contact"], "prerequisites": ["gather"]},
+    {"id": "shipping", "title": "Plan shipping", "requires_topics": ["shipping_days"], "prerequisites": []}
+  ],
+  "extraction_schema": [
+    {"name": "return_window", "topic": "return_days", "type": "integer", "required": true},
+    {"name": "needs_receipt", "topic": "receipt_needed", "type": "boolean", "required": true},
+    {"name": "support_address", "topic": "contact", "type": "string", "required": true},
+    {"name": "shipping_estimate", "topic": "shipping_days", "type": "integer", "required": false},
+    {"name": "refund_estimate", "topic": "refund_days", "type": "integer", "required": true}
+  ]
+}

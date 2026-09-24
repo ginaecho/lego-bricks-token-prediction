@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "as_of": "2026-09-24T12:00:00Z",
+  "user_id": "synthetic-planner-7",
+  "half_life_days": 14,
+  "limit": 10,
+  "work_orders": [
+    {
+      "id": "SYN-WO-101", "asset_id": "FICT-PRESS-01",
+      "title": "Synthetic press bearing inspection",
+      "metric": "temperature", "unit": "C",
+      "tolerance_min": 60, "tolerance_max": 85, "safety_min": 20, "safety_max": 100,
+      "created_at": "2026-08-01T08:00:00Z", "due_at": "2026-09-26T08:00:00Z",
+      "maintenance_log": "Invented log: bearing lubricated by fictitious technician River."
+    },
+    {
+      "id": "SYN-WO-102", "asset_id": "FICT-PUMP-02",
+      "title": "Synthetic coolant pressure inspection",
+      "metric": "pressure", "unit": "bar",
+      "tolerance_min": 3, "tolerance_max": 6, "safety_min": 1, "safety_max": 8,
+      "created_at": "2026-08-01T08:00:00Z", "due_at": "2026-09-25T08:00:00Z",
+      "maintenance_log": "Invented log: fictitious coolant filter replaced after planned stop."
+    },
+    {
+      "id": "SYN-WO-103", "asset_id": "FICT-MILL-03",
+      "title": "Synthetic spindle vibration follow-up",
+      "metric": "vibration", "unit": "mm/s",
+      "tolerance_min": 0, "tolerance_max": 4.5, "safety_min": 0, "safety_max": 7.1,
+      "created_at": "2026-08-01T08:00:00Z", "due_at": "2026-09-27T08:00:00Z",
+      "maintenance_log": "Invented log: simulated imbalance detected after tool change."
+    }
+  ],
+  "telemetry_csv": "reading_id,work_order_id,asset_id,timestamp,metric,value,unit\nSYN-R1,SYN-WO-101,FICT-PRESS-01,2026-09-24T09:00:00Z,temperature,74.31,C\nSYN-R2,SYN-WO-102,FICT-PUMP-02,2026-09-24T09:01:00Z,pressure,4.82,bar\nSYN-R3,SYN-WO-103,FICT-MILL-03,2026-09-24T09:02:00Z,vibration,8.13,mm/s\n",
+  "quality_inspections": [
+    {"id": "SYN-Q1", "work_order_id": "SYN-WO-101", "decision": "pass", "decision_by": "Fictitious inspector Rowan", "reason": "Synthetic bearing temperature within configured tolerance.", "timestamp": "2026-09-24T10:00:00Z", "source_reading_ids": ["SYN-R1"]},
+    {"id": "SYN-Q2", "work_order_id": "SYN-WO-102", "decision": "pass", "decision_by": "Fictitious inspector Rowan", "reason": "Synthetic pressure within configured tolerance.", "timestamp": "2026-09-24T10:00:00Z", "source_reading_ids": ["SYN-R2"]},
+    {"id": "SYN-Q3", "work_order_id": "SYN-WO-103", "decision": "fail", "decision_by": "Fictitious inspector Sage", "reason": "Synthetic spindle vibration exceeds tolerance; human review required.", "timestamp": "2026-09-24T10:00:00Z", "source_reading_ids": ["SYN-R3"]}
+  ],
+  "events": [
+    {"id": "SYN-E1", "user_id": "synthetic-planner-7", "work_order_id": "SYN-WO-101", "action": "purchase", "timestamp": "2026-09-23T12:00:00Z"},
+    {"id": "SYN-E2", "user_id": "synthetic-planner-7", "work_order_id": "SYN-WO-102", "action": "browse", "timestamp": "2026-09-10T12:00:00Z"}
+  ]
+}

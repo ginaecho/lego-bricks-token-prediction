@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "policies": [
+    {
+      "policy_id": "SYN-P01",
+      "holder_ref": "SYN-HOLDER-ALPHA",
+      "name": "Synthetic home water protection",
+      "description": "Water and fire protection with clear explanation and quick response",
+      "perils": ["water", "fire"],
+      "start_date": "2025-01-01",
+      "end_date": "2025-12-31",
+      "limit": 25000
+    },
+    {
+      "policy_id": "SYN-P02",
+      "holder_ref": "SYN-HOLDER-BETA",
+      "name": "Synthetic motor protection",
+      "description": "Vehicle collision and theft protection",
+      "perils": ["motor", "theft"],
+      "start_date": "2025-01-01",
+      "end_date": "2025-12-31",
+      "limit": 15000
+    }
+  ],
+  "claim_forms": [
+    "Claim-ID: SYN-C01\nPolicy-ID: SYN-P01\nLoss-Date: 2025-05-10\nLoss-Amount: 3607.25\nPeril: water",
+    "Claim-ID: SYN-C02\nPolicy-ID: SYN-P02\nLoss-Date: 2025-05-04\nLoss-Amount: 17738.17\nPeril: theft"
+  ],
+  "submissions": [
+    {
+      "format": "json",
+      "data": {
+        "submission_id": "SYN-U01",
+        "policy_id": "SYN-P01",
+        "fixture_address": "SYNTHETIC-42 Imaginary Harbor, Fictionville",
+        "factors": [
+          {"name": "property_type", "value": "detached dwelling", "disclosed": true},
+          {"name": "construction", "value": "masonry", "disclosed": true}
+        ]
+      }
+    },
+    {
+      "format": "xml",
+      "data": "<ACORDSubmission><SubmissionID>SYN-U02</SubmissionID><PolicyID>SYN-P02</PolicyID><FixtureVIN>SYNTHETIC-VIN-1SYNTHETIC00000077</FixtureVIN><Factor name=\"property_type\" disclosed=\"true\">synthetic private vehicle</Factor></ACORDSubmission>"
+    }
+  ],
+  "feedback": [
+    {"feedback_id": "SYN-F01", "claim_id": "SYN-C01", "text": "The burst pipe claim was delayed and the explanation confusing."},
+    {"feedback_id": "SYN-F02", "claim_id": "SYN-C02", "text": "My invented car was stolen. Please explain the limit."}
+  ],
+  "queries": [
+    {"claim_id": "SYN-C01", "text": "leaking home"},
+    {"claim_id": "SYN-C02", "text": "stolen auto"}
+  ]
+}

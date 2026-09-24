@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t029_combo2_basic-documents_basic-research__ind-healthcare",
+  "composition_label": "basic:documents -> basic:research; healthcare",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "synthetic=true, resources and research; strict allowlisted resource fields",
+    "resources": "FHIR-style Patient, ClinicalNote and PriorAuthorizationRequest; not formal FHIR conformance",
+    "output": "Single envelope with stage, deidentified records, typed facts, evidence, human review, clinical_decision=not_performed, audit snapshots and limitations",
+    "validation": "One shared validation module validates input, normalized facts, both stage envelopes, patient links, evidence-to-fact links and audit chain",
+    "note_grammar": ["Diagnosis: CODE", "Lab: CODE NUMBER UNIT", "Request: CODE"],
+    "identifiers": "Only SYN-P<number>, SYN-N<number>, SYN-A<number> input IDs. Direct identifier fields prohibited. Stable SHA-256-derived pseudonyms replace IDs and references; raw notes, questions and source text never copied to output."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:documents",
+      "to": "basic:research",
+      "validated_payload": "Shared record envelope containing patient links and normalized, deduplicated diagnosis, laboratory and requested-service facts",
+      "semantics": "Research consumes only validated document facts and separately validated synthetic source assertions; deep copy preserves first-stage output. Evidence is joined by exact code."
+    }
+  ],
+  "behavior": {
+    "documents": "Allowlist and validate resources; exclude identifying fields, normalize structured records and restricted note text, reshape and deduplicate note facts, pseudonymize links and record creation snapshots.",
+    "research": "Question retained only as fingerprint; explicit focus_codes control scope, empty focus selects all observed codes. Validate exact source quote membership and code boundaries. Classify support-only, contradiction-only, conflicting, no-evidence or not-in-documents. Emit provenance source IDs and quote hashes rather than raw text.",
+    "audit": "Ordered before/after snapshots for each created and research-enriched record. Validation detects missing audit events and unrecorded changes. No persistent external ledger or wall-clock dependency.",
+    "safety": "All records and findings require human review; no diagnosis, treatment or authorization decisions are made.",
+    "errors": "One JSON status=error object and exit 2 for file, encoding, malformed JSON and schema errors. Diagnostics never echo input or file paths.",
+    "synthetic_fixture": "Clearly labeled fictitious Synthea-style clinical concepts and lab values; no real names, MRNs or birth dates."
+  },
+  "scope": {
+    "included": ["Deterministic integrated CLI", "Document extraction and reshaping", "Grounded source-assertion matching", "Shared schema validation", "Demonstrative HIPAA-oriented identifier exclusion", "Human review", "Audit trail for every pipeline record change"],
+    "excluded": ["Real patient data", "HIPAA certification or formal de-identification determination", "Full HL7 FHIR compliance", "Clinical or authorization decisions", "Unrestricted note prose", "Medical truth verification", "Semantic interpretation of questions", "Live search", "LLMs", "External dependencies", "Production authentication, encryption, persistence or tamper-proof auditing"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_count": 23,
+    "cli": "passed: one JSON object with status=ok, exit 0",
+    "unittest_exit_code": 0,
+    "coverage": ["Both stages", "Cross-stage propagation", "Conflicting and missing evidence", "Invalid inputs", "Identifier exclusion", "Human review", "Audit integrity", "Determinism", "CLI success and errors"]
+  }
+}

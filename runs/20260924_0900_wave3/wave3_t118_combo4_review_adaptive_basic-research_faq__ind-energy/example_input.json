@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "ok",
+  "stage": "input",
+  "context": {
+    "synthetic": true,
+    "identifier_policy": "redact",
+    "safety_rules": {"life_safety": "P1", "essential_service": "P2", "routine": "P3"},
+    "grid_assets": [
+      {"id": "FICT-SUB-001", "device_id": "FICT-RTU-001", "critical": true},
+      {"id": "FICT-FEEDER-002", "device_id": "FICT-MONITOR-002", "critical": false}
+    ],
+    "topology": [["FICT-SUB-001", "FICT-FEEDER-002"]],
+    "meter_csv": "timestamp,meter_id,asset_id,consumption_kwh,season\n2026-01-15T18:00:00Z,SYN-METER-01,FICT-SUB-001,3.8,winter\n2026-01-15T18:30:00Z,SYN-METER-01,FICT-SUB-001,4.1,winter\n2026-07-15T18:00:00Z,SYN-METER-01,FICT-FEEDER-002,2.2,summer\n",
+    "telemetry": {"observations": [
+      {"timestamp": "2026-01-15T18:00:00Z", "asset_id": "FICT-SUB-001", "device_id": "FICT-RTU-001", "signal": "voltage", "value": 230.4, "unit": "V"},
+      {"timestamp": "2026-01-15T18:00:00Z", "asset_id": "FICT-FEEDER-002", "device_id": "FICT-MONITOR-002", "signal": "load", "value": 125.6, "unit": "kW"}
+    ]},
+    "outages": [
+      {"id": "SYN-OUTAGE-01", "asset_id": "FICT-SUB-001", "description": "Synthetic hospital feeder interruption at FICT-SUB-001.", "safety": {"life_safety": true, "essential_service": true}, "priority": "P1"},
+      {"id": "SYN-OUTAGE-02", "asset_id": "FICT-FEEDER-002", "description": "Synthetic nonessential feeder interruption.", "safety": {"life_safety": false, "essential_service": false}, "priority": "P3"}
+    ],
+    "sources": [
+      {"id": "SYN-S1", "title": "Synthetic winter operations note", "kind": "primary", "text": "Winter consumption increases with electric heating. The synthetic FICT-SUB-001 readings total 7.9 kWh across two winter intervals. FICT-RTU-001 measures voltage.", "claims": {"peak_season": "winter"}},
+      {"id": "SYN-S2", "title": "Synthetic safety and protection note", "kind": "primary", "text": "Life safety outages receive P1 priority ahead of essential service P2 and routine P3. Critical asset identifiers must be redacted before sharing.", "claims": {}},
+      {"id": "SYN-S3", "title": "Synthetic emissions estimate", "kind": "secondary", "text": "The synthetic emissions estimate is 3.2 kgCO2e for the winter reading pair, using a fictitious emissions factor. This is not a verified inventory.", "claims": {}}
+    ],
+    "emissions": [{"value": 3.2, "unit": "kgCO2e", "source_id": "SYN-S3"}],
+    "requirements": [
+      {"id": "REQ-SAFETY", "description": "Life safety priority", "source_ids": ["SYN-S2"], "required_terms": ["Life safety", "P1"], "topic": "safety"},
+      {"id": "REQ-PROTECTION", "description": "Critical asset identifiers", "source_ids": ["SYN-S2"], "required_terms": ["redacted"], "topic": "asset_protection"},
+      {"id": "REQ-CALIBRATION", "description": "Meter calibration certificate", "source_ids": ["SYN-S1"], "required_terms": ["calibration certificate"], "topic": "meter_data"}
+    ],
+    "profile": {"experience": "beginner", "preference": "detailed", "completed_topics": []},
+    "questions": [
+      {"id": "Q-WINTER", "text": "Why does winter consumption increase?"},
+      {"id": "Q-SAFETY", "text": "What priority do life safety outages receive?"},
+      {"id": "Q-UNKNOWN", "text": "What is the approved hydrogen tariff?"}
+    ]
+  },
+  "results": {}
+}

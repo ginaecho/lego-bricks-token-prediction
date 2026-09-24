@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "policy": {
+    "residency": "EU",
+    "purpose": "support_research",
+    "lawful_basis": "consent",
+    "role": "researcher"
+  },
+  "query": "network outage data",
+  "limit": 5,
+  "records": [
+    {
+      "kind": "subscriber_account",
+      "id": "acct-demo",
+      "residency": "EU",
+      "phone": "+1-202-555-0142",
+      "imei": "000000123456789",
+      "processing_allowed": true
+    },
+    {
+      "kind": "network_fault_ticket",
+      "id": "ticket-demo",
+      "residency": "EU",
+      "account_id": "acct-demo",
+      "transcript": "Subscriber: The invented North Bay network has a data outage.\nAgent: Synthetic fault ticket identifies an antenna restart.\nAgent: The network outage ended after the restart.",
+      "billing_adjustment": {
+        "amount": -4.5,
+        "reason": "Synthetic service outage credit",
+        "residency": "EU"
+      }
+    },
+    {
+      "kind": "usage_record",
+      "id": "usage-demo",
+      "residency": "EU",
+      "account_id": "acct-demo",
+      "cdr_csv": "id,account_id,residency,phone,imei,service,volume_mb,duration_seconds,note\nusage-demo,acct-demo,EU,+1-202-555-0142,000000123456789,data,639.787,12,Synthetic data usage during the network outage\n"
+    }
+  ]
+}

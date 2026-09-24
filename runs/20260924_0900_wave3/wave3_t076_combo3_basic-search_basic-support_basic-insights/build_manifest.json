@@ -1,0 +1,39 @@
+{
+  "build_id": "wave3_t076_combo3_basic-search_basic-support_basic-insights",
+  "composition_label": "basic:search -> basic:support -> basic:insights",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact fields: schema_version=1, synthetic=true, query, question, catalog, policies, feedback, options. Catalog has id/name/description/tags/price/in_stock. Policies have id/topic/text. Feedback has id/text/product_id (nullable). Options have limit (1..20), max_price (nullable nonnegative), in_stock_only.",
+    "output": "schema_version, synthetic, status, search, support, insights. Errors: status=error and error text, exit 2.",
+    "validation": "One validate function checks input, search and support handoffs, and final output. Rejects duplicate IDs, dangling feedback, unexpected fields, invalid types, nonfinite prices and duplicate JSON keys. Support prose must equal cited source text."
+  },
+  "cross_stage_handoffs": [
+    "Search returns validated query, normalized terms, and ranked catalog products with match evidence. Support consumes and preserves that search result.",
+    "Support returns validated answer, citations, resolution state, search result and feedback. Insights consumes this object only, filters feedback by selected product IDs plus global feedback, and records unanswered-question gaps."
+  ],
+  "behavior": {
+    "search": "Case-insensitive tokenization, small synonym vocabulary, conservative fuzzy matching, price/stock filters, deterministic score/price/ID ranking.",
+    "support": "Policy-topic matching and requested product facts from matched products. Explicit fallback when no evidence exists. Optional injected selector chooses only valid evidence IDs; no live model.",
+    "insights": "Rule-based multi-label themes, source feedback IDs, deterministic actionable suggestions, lexicon sentiment counts, support knowledge gaps.",
+    "fixtures": "All example products, policies, feedback and store statements are synthetic."
+  },
+  "scope": {
+    "included": ["Integrated CLI pipeline", "Shared validation", "Deterministic ranking", "Grounded extractive support", "Feedback themes", "Injected callable fixtures", "CLI and unit tests"],
+    "excluded": ["Live providers", "Network access", "Persistence", "Enterprise deployment", "Semantic embeddings", "Multilingual sentiment", "Full natural-language understanding", "Authentication", "Currency conversion"]
+  },
+  "test_outcomes": {"status": "passed", "test_count": 20, "cli": "passed: example emitted one JSON object with status ok and exit 0; missing file and usage errors emitted status error and exit 2"}
+}

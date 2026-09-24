@@ -1,0 +1,59 @@
+{
+  "build_id": "wave3_t126_combo4_feedback_compare_extract_faq__ind-retail",
+  "composition_label": "feedback_compare_extract_faq",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated implementation with explicitly synthetic retail fixtures",
+    "runtime": "Python 3.13.15; standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict top-level object: schema_version, synthetic, catalog, customer, basket, feedback, clickstream, preferences, documents, extraction_schema, knowledge_base, question.",
+    "catalog": "JSON feed: unique SKU, name, numeric nonnegative price, integer stock, single currency, string attributes.",
+    "customer": "Synthetic id and persona, explicit boolean GDPR and CCPA consent.",
+    "basket": "Order ID, matching customer ID, unique SKU items and positive quantities no larger than catalog stock.",
+    "clickstream": "JSON event-log array: customer_id, SKU, event=view|add_to_basket.",
+    "envelope": "schema_version, status, synthetic, input (source context), stages (ordered feedback, compare, extract, faq). Errors instead return status=error and error text.",
+    "validation": "One shared validate_state/validate_input layer runs before and after every stage; it checks context integrity, consent, catalog facts, handoff order and source provenance.",
+    "extraction": "Fields define name, literal label, string|number|integer type, required boolean. Reserved context field types are fixed. Source spans are zero-based Python Unicode character offsets with exclusive ends.",
+    "knowledge_base": "Source articles: unique id, optional SKU scope, text and structured price/stock claims checked against catalog. Numeric commercial answers use catalog_facts, not generated prose."
+  },
+  "cross_stage_handoffs": [
+    "feedback -> compare: deduplicated theme evidence counts influence consented budget scoring; excerpts remain exact source text.",
+    "compare -> extract: selected SKU chooses the document; extracted commercial and customer/order fields must match shared context.",
+    "extract -> faq: validated extracted SKU gates SKU-scoped retrieval; missing SKU explicitly abstains; catalog facts always use selected catalog row."
+  ],
+  "behavior": {
+    "feedback": "Case, punctuation and whitespace insensitive deduplication within each SKU; all original source IDs retained; fixed whole-word theme dictionaries; full original supporting excerpts.",
+    "comparison": "Capacity L/ml normalization and grey/gray normalization; side-by-side rows sorted by score then SKU. Soft ranking: budget +3 plus capped price-theme count, availability +4, each matching attribute +2, clickstream contribution capped at +3. Not a hard filter.",
+    "consent": "Both explicit GDPR and CCPA consent flags must be true before preferences, clickstream or feedback-derived personalization are scored; otherwise neutral SKU order. Demonstrative rules, not a legal compliance certification.",
+    "extraction": "Literal case-insensitive line-label matching, deterministic type conversion, exact spans; duplicate document labels or context contradictions fail validation. Missing required and optional fields are separately reported.",
+    "faq": "Conservative exact-token coverage after stopword removal; all substantive query tokens must occur in one eligible article. Stable source-ID tie-break; verbatim article answer and citations only. No match or missing extracted SKU yields explicit abstention. Always supplies catalog-authoritative price and stock separately.",
+    "reviews": "No generated reviews or endorsements; every feedback excerpt is traceable to a clearly labeled synthetic source.",
+    "cli": "Exactly one JSON object to stdout; success exit 0, file/JSON/schema errors exit 2. Duplicate JSON keys rejected; no live model or optional provider used."
+  },
+  "scope": {
+    "included": ["Four integrated deterministic stages", "Synthetic catalog, shopper and order fixtures", "Shared schema and stage validation", "Consent gating", "Source spans and explicit abstention", "CLI and unittest coverage"],
+    "excluded": ["Production deployment", "Legal compliance certification", "Live data or customer records", "Network calls", "LLM providers", "Semantic entailment or unrestricted natural-language extraction", "Currency conversion", "Stock reservation or checkout", "Consent storage and revocation infrastructure"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 39,
+    "tests_failed": 0,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_command": "python -B implementation.py example_input.json",
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "verified_error_exit_code": 2,
+    "coverage": ["All four stages", "All three validated handoffs", "Consent gating", "Exact catalog price and stock", "Synthetic review provenance", "Schema-driven extraction with LF/CRLF source spans", "Missing fields", "Explicit FAQ abstention", "Malformed inputs", "CLI success and errors"]
+  }
+}

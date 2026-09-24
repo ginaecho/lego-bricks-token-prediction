@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "catalog": {
+    "currency": "USD",
+    "products": [
+      {"sku": "SYN-TOTE-101", "name": "Fictional Willow Tote", "category": "bags", "price_cents": 2400, "stock": 12},
+      {"sku": "SYN-MUG-202", "name": "Fictional Pebble Mug", "category": "home", "price_cents": 1500, "stock": 8},
+      {"sku": "SYN-PACK-303", "name": "Fictional Cloud Pack", "category": "bags", "price_cents": 5900, "stock": 4},
+      {"sku": "SYN-SCARF-404", "name": "Fictional Dusk Scarf", "category": "accessories", "price_cents": 1800, "stock": 0}
+    ]
+  },
+  "customer": {
+    "customer_id": "synthetic-shopper-01",
+    "experience": "novice",
+    "consent": {"gdpr_personalization": true, "ccpa_personalization": true},
+    "preferences": {"categories": ["bags"], "max_price_cents": 6500}
+  },
+  "basket": {
+    "order_id": "synthetic-basket-01",
+    "customer_id": "synthetic-shopper-01",
+    "items": [{"sku": "SYN-MUG-202", "quantity": 1}]
+  },
+  "clickstream": [
+    {"event_id": "synthetic-event-1", "customer_id": "synthetic-shopper-01", "sku": "SYN-TOTE-101", "event": "view", "timestamp": "2026-09-24T09:00:00Z"},
+    {"event_id": "synthetic-event-2", "customer_id": "synthetic-shopper-01", "sku": "SYN-TOTE-101", "event": "add_to_basket", "timestamp": "2026-09-24T09:01:00Z"},
+    {"event_id": "synthetic-event-3", "customer_id": "synthetic-shopper-01", "sku": "SYN-PACK-303", "event": "view", "timestamp": "2026-09-24T09:02:00Z"}
+  ],
+  "question": "How do returns work?",
+  "knowledge_base": [
+    {"id": "synthetic-kb-returns", "topic": "returns", "keywords": ["return", "returns", "refund"], "answer": "Synthetic store policy: unused products may be returned within 30 days with an order reference.", "synthetic": true},
+    {"id": "synthetic-kb-shipping", "topic": "shipping", "keywords": ["shipping", "delivery"], "answer": "Synthetic store policy: standard shipping takes 3 to 5 business days.", "synthetic": true}
+  ],
+  "documents": [
+    {
+      "id": "synthetic-doc-spec",
+      "title": "Synthetic tote specification",
+      "kind": "specification",
+      "synthetic": true,
+      "text": "SYN-TOTE-101 material: cotton canvas. SYN-TOTE-101 durability: 8 kg load limit. SYN-TOTE-101 care: hand wash.",
+      "claims": [
+        {"sku": "SYN-TOTE-101", "attribute": "material", "value": "cotton canvas", "quote": "SYN-TOTE-101 material: cotton canvas."},
+        {"sku": "SYN-TOTE-101", "attribute": "durability", "value": "8 kg load limit", "quote": "SYN-TOTE-101 durability: 8 kg load limit."},
+        {"sku": "SYN-TOTE-101", "attribute": "care", "value": "hand wash", "quote": "SYN-TOTE-101 care: hand wash."}
+      ]
+    },
+    {
+      "id": "synthetic-doc-test",
+      "title": "Synthetic tote bench notes, not a customer review",
+      "kind": "synthetic_test",
+      "synthetic": true,
+      "text": "SYN-TOTE-101 material: cotton canvas. SYN-TOTE-101 durability: 5 kg load limit.",
+      "claims": [
+        {"sku": "SYN-TOTE-101", "attribute": "material", "value": "cotton canvas", "quote": "SYN-TOTE-101 material: cotton canvas."},
+        {"sku": "SYN-TOTE-101", "attribute": "durability", "value": "5 kg load limit", "quote": "SYN-TOTE-101 durability: 5 kg load limit."}
+      ]
+    },
+    {
+      "id": "synthetic-doc-pack",
+      "title": "Synthetic pack material note",
+      "kind": "technical_note",
+      "synthetic": true,
+      "text": "SYN-PACK-303 material: recycled nylon.",
+      "claims": [
+        {"sku": "SYN-PACK-303", "attribute": "material", "value": "recycled nylon", "quote": "SYN-PACK-303 material: recycled nylon."}
+      ]
+    }
+  ]
+}

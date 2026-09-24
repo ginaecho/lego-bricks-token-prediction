@@ -1,0 +1,76 @@
+{
+  "build_id": "wave3_t120_single_web",
+  "composition_label": "Web research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "required": ["schema_version", "synthetic", "query", "allowed_hosts", "urls", "fixtures"],
+      "optional": {"max_findings": "Integer 1..100; default 10"},
+      "fixtures": "Each URL has retrieved_at and either body/content_type or redirect_to. All data must be synthetic."
+    },
+    "output": {
+      "success": ["schema_version", "synthetic", "status", "query", "sources", "findings", "warnings"],
+      "error": ["schema_version", "status", "error"],
+      "provenance": "Source ID, canonical requested/final URLs, complete redirect chain, supplied timezone-aware retrieval timestamp, SHA-256 of original UTF-8 body, SHA-256 and retained normalized text. Findings cite source ID, final URL, retrieval timestamp, body hash, exact quote and zero-based exclusive-end normalized-text character offsets."
+    },
+    "validation": "Shared Validator handles schema, exact-host URL allowlisting, fixture contracts, retrieval bounds and output citation integrity. Unknown input fields and duplicate JSON fields are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validated URLs and normalized fixture map -> bounded fixture-only retrieval",
+    "Retrieved response and redirect chain -> HTML/plain-text extraction with retained provenance",
+    "Normalized text and query tokens -> exact extractive findings -> output reference validation"
+  ],
+  "behavior": [
+    "No network code or live providers; retrieval resolves solely from supplied synthetic fixtures.",
+    "HTTPS only, exact ASCII DNS host allowlist, default/443 port only; no credentials, fragments, wildcard/subdomain matching, IP literals or control characters.",
+    "All fixture and redirect URLs are validated, including unused fixtures; redirect cycles and more than five redirects fail.",
+    "Duplicate canonical requested URLs collapse in original order; duplicate fixture URLs fail. Different requested URLs ending at the same final URL retain separate provenance.",
+    "HTML scripts, styles, noscript and templates are excluded; basic block boundaries and entities are normalized.",
+    "Case-insensitive exact word matching produces sentence-like excerpts in request/text order, not factual inference or query answering.",
+    "Missing fixtures and validation errors fail atomically. Zero matches succeeds with a warning; max_findings truncates with a warning.",
+    "No wall-clock dependence. Fixture timestamps are supplied claims, and hashes establish content identity, not source authenticity.",
+    "CLI prints one JSON object; success exits 0 and input/file/retrieval errors exit 2."
+  ],
+  "scope": {
+    "included": [
+      "One offline integrated research pipeline",
+      "Synthetic HTML and plain-text retrieval fixtures",
+      "Bounded input size, fixture count, body length, redirect count and findings",
+      "Deterministic evidence extraction and provenance validation",
+      "Standard-library unittest and CLI checks"
+    ],
+    "excluded": [
+      "Live HTTP/DNS, search engines, crawling, robots compliance and retries",
+      "LLM execution or optional provider integration",
+      "Browser rendering, PDF parsing, semantic ranking and fact verification",
+      "Full browser HTML parsing semantics and CSS visibility",
+      "Production hosting, persistence, authentication and enterprise delivery"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 19, "passed": 19, "failed": 0},
+    "cli_exit_code": 0,
+    "cli_result": "One JSON object with status ok, two sources and two provenance-preserving findings",
+    "error_cli_checks": "Usage, missing file, directory input, malformed/duplicate-key JSON, invalid encoding, invalid schema and oversized input returned status error with exit code 2"
+  }
+}

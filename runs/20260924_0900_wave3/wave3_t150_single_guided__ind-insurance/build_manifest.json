@@ -1,0 +1,56 @@
+{
+  "build_id": "wave3_t150_single_guided__ind-insurance",
+  "composition_label": "Guided setup (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated standard-library implementation",
+    "runtime": "Python 3.9+",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Object with schema_version=1, synthetic=true, policy, claim, underwriting_submission, onboarding. Entities can be null for incomplete setup. Unknown fields rejected.",
+    "policy": "policy_id, policyholder containing only synthetic_id, start_date/end_date ISO dates, nonnegative finite limit/deductible, covered_losses; optional explicitly synthetic property_address. All monetary inputs are bounded to one trillion.",
+    "claim": "format=claim-form-text; content has exactly claim_id, policy_id, loss_date, loss_amount, loss_type colon-delimited lines.",
+    "underwriting_submission": "format=acord-json with content.ACORD.Submission, or acord-xml with ACORD/Submission. Submission contains submission_id, policy_id, factors. JSON factors are objects name/value/disclosed; XML Factors contains Factor elements with corresponding attributes.",
+    "onboarding": "completed_steps is a validated prerequisite prefix; requested_steps is an ordered unique list of known step identifiers.",
+    "output": "One JSON object with status, schema_version, synthetic, normalized entities, onboarding progress/events/next step, disclosed underwriting review and reasoned claim decision. Error output has status=error and error message.",
+    "resume": "Retain the input entities and copy output.onboarding.completed_steps into the next input's onboarding.completed_steps. Set requested_steps for the next operation. Output is a normalized result, not itself an input document.",
+    "validation": "validate is the shared boundary for the Python run API and CLI; all provided entities must validate even if their step is not requested."
+  },
+  "cross_stage_handoffs": [
+    "verify_policy requires a validated policy.",
+    "review_underwriting requires verify_policy plus a matching, fully disclosed submission.",
+    "review_claim requires review_underwriting plus a matching validated claim; only coverage, date, loss amount, deductible and limit affect the claims decision.",
+    "finish requires review_claim. Supplied completed steps require current validated evidence. Resume progress is caller-held, not authenticated server state."
+  ],
+  "behavior": {
+    "progress": "Four prerequisite-ordered steps, 25 percent each. Missing prerequisites or entities yield blocked events with reasons. Repeated completed steps are idempotent.",
+    "claims": "Inclusive policy dates and listed coverage; payable amount min(max(loss minus deductible, zero), limit), rounded to two decimal places. Every decision states reasons; no protected or undisclosed factors.",
+    "minimization": "No real names, email, date of birth or other policyholder fields accepted; synthetic ID only. Optional invented insured-property address is explicitly labeled.",
+    "underwriting": "Only disclosed property_type and protection factors from explicit value allowlists; human underwriting review, no automatic premium or eligibility decision.",
+    "fixtures": "Invented policyholder ID and fabricated property address. Example is synthetic; tests randomize 25 loss amounts/dates with fixed seed 150 for reproducibility. VIN omitted because this fixture is property insurance.",
+    "errors": "File, encoding and validation errors produce one JSON error object and exit 2. Success exits 0. No data written by runtime."
+  },
+  "scope": {
+    "included": ["Guided onboarding", "ACORD-style JSON/XML subset", "Structured claim-form text", "Deterministic validation and decisions", "Caller-held resumable progress", "Synthetic randomized fixture tests"],
+    "excluded": ["Compliance certification", "Official ACORD schema conformance", "Real personal data", "Binding insurance decisions", "Authentication and persistence", "Live providers or networks", "LLM processing", "Full actuarial models"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 21,
+    "unittest_command_exit": 0,
+    "example_cli_exit": 0,
+    "example_status": "ok",
+    "example_progress_percent": 100,
+    "example_claim_amount": 7743.52
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t013_combo2_basic-insights_basic-documents__ind-telecom",
+  "composition_label": "basic:insights -> basic:documents; Telecommunications",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "envelope": "schema_version=1, fixture_label=SYNTHETIC, stage=source|insights|documents, records=array",
+    "source": "Tagged subscriber_account, network_fault_ticket, support_chat and call_data_usage records; optional cdr_csv parsed into call_data_usage records; required privacy policy object",
+    "source_identifiers": "Source identifiers are unique within entity type. Every record has a subscriber_id and EU or US residency matching its subscriber account; support chats must reference that account's ticket.",
+    "insight_document_records": "subscriber_ref, residency, themes(name/evidence_count/action), ticket_refs, usage(record_count/call_minutes/data_mb/billing_adjustment_total), adjustments(usage_ref/residency/amount/reason)",
+    "documents": "Validated insight data reshaped as service-review documents with document_id and explicit reconciliation, residency and minimization checks",
+    "validation": "One validate function and common field, reference, integer and money validators enforce all stage boundaries. Monetary strings have exactly two decimal places; Decimal arithmetic reconciles adjustments.",
+    "stdout": "One JSON object with status=ok and the validated insights/documents envelopes; errors return status=error, exit 2, without echoing input."
+  },
+  "cross_stage_handoffs": [
+    "CSV and support-chat input -> validated normalized source envelope",
+    "Customer insights consumes validated source; emits validated, pseudonymized per-subscriber themes, usage and reason-coded adjustments",
+    "Document automation consumes only the validated insights envelope; produces checked service-review documents without access to raw subscriber data"
+  ],
+  "behavior": {
+    "insights": "Configurable-in-code general-purpose keyword taxonomy with deterministic multi-theme matching, one count per theme per feedback record, uncategorized fallback, ranked themes and fixed suggested actions. Tickets and chats count independently, not as distinct incidents.",
+    "documents": "Extracts subscriber summaries, reshapes them into structured JSON review documents and validates references, totals, reason codes and residency. Does not post billing adjustments.",
+    "privacy": "Demonstrative GDPR/CCPA-oriented processing permission, purpose restriction, do-not-sell flag, erasure-request rejection, keyed pseudonymous identifiers and raw text/phone/IMEI suppression. Pseudonymized data is not anonymous. Fixture key is public and unsuitable for production.",
+    "residency": "Residency tags remain attached to each output subscriber document and adjustment; no cross-region subscriber merging. This checks labels only, not physical hosting or execution location.",
+    "billing": "Nonzero adjustments require service_outage, billing_correction or goodwill as the stated reason. Single abstract billing unit; no currency conversion.",
+    "synthetic_data": "Clearly marked synthetic accounts, reserved fictitious +1-202-555-01xx phone numbers, deliberately synthetic IMEIs and invented fault tickets. Usage volumes are frozen draws from Python random.Random(13), alternating randint(20,300) call minutes and randint(500,9000) data MB for three records; tested for reproducibility.",
+    "determinism": "No clock, model, random runtime behavior or external I/O except reading the supplied input and writing JSON to stdout."
+  },
+  "scope": {
+    "included": ["Bounded integrated CLI pipeline", "CSV extraction", "Support transcript themes", "Subscriber service-review JSON documents", "Shared validation", "Privacy and residency demonstrations", "Reasoned billing adjustment reconciliation"],
+    "excluded": ["Compliance certification", "Physical residency guarantees", "Production key management", "Persistent storage", "Live billing or ticket systems", "PDF generation", "Multilingual semantic analysis", "LLMs and external providers", "Enterprise-scale streaming"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 26,
+    "cli": "passed: exit 0 and one valid JSON object with status ok",
+    "coverage": "Both stages, validated handoff and tamper rejection, privacy minimization and permissions, residency, reason requirements, exact decimal reconciliation, empty feedback, deterministic seeded fixtures, invalid CSV and schema, orphan and duplicate records, CLI success and errors"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "build_id": "wave3_t041_single_basic-search",
+  "composition_label": "single_basic-search",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New standalone implementation using clearly labeled synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "required": ["schema_version", "fixture_label", "query", "products"],
+      "optional": ["filters", "limit"],
+      "schema_version": 1,
+      "query": "String up to 500 characters; blank/stop-word-only queries browse",
+      "products": "At most 1000 objects with unique nonempty id, name, description, category, finite nonnegative price <= 1e12, boolean in_stock, and string-array tags",
+      "filters": "Optional case-insensitive exact category, inclusive min_price/max_price, exact boolean in_stock",
+      "limit": "Integer 1..100, default 10",
+      "fixture_label": "Nonempty data provenance label; supplied example explicitly synthetic"
+    },
+    "success_output": ["status", "schema_version", "fixture_label", "query", "interpreted_terms", "total_matches", "results"],
+    "result": "Original product, integer relevance score, per-term match explanations",
+    "error_output": {"status": "error", "schema_version": 1, "error": "Human-readable error"},
+    "validation": "Single validate() boundary shared by search() and CLI; unknown fields, duplicate IDs, invalid types/ranges rejected. JSON decoder additionally rejects duplicate keys and nonfinite constants."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: validated request -> structured filters -> normalized query and catalog -> synonym/typo expansion -> all-term matching -> scored, deterministically sorted results"
+  ],
+  "behavior": {
+    "normalization": "Unicode casefold, accent folding, punctuation tokenization, conservative terminal-s removal and fixed English stop words",
+    "intent_matching": "Fixed general-product synonym groups; one deterministic difflib correction at similarity >= 0.80 for unknown tokens of length >= 4",
+    "ranking": "Best field match per term: name 4, tags 3, category 2, description 1; exact confidence 100, synonym 85, typo 70. Sum scores, break ties by product ID.",
+    "matching": "All meaningful query terms must match; no silent broadening on no results. Blank or stop-word-only queries browse.",
+    "filters": "Applied before typo vocabulary generation and ranking; total_matches counted before limit",
+    "cli": "One JSON object; success exit 0; validation, malformed JSON, usage and file errors exit 2",
+    "providers": "No LLM step; deterministic local logic only"
+  },
+  "scope": {
+    "included": ["Bounded in-memory catalog search", "Explainable relevance", "Synonyms", "Typo tolerance", "Structured filters", "Synthetic fixtures", "CLI and shared validation"],
+    "excluded": ["Live providers", "Network access", "Natural-language price parsing", "Embeddings", "Persistence", "Personalization", "Currency conversion", "Enterprise production service", "Complete multilingual morphology"]
+  },
+  "additional_files": ["docs\\My_prompt.txt"],
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {"tests_run": 14, "failures": 0, "errors": 0, "exit_code": 0},
+    "example_cli": {"status": "ok", "exit_code": 0, "total_matches": 2, "ranked_ids": ["syn-002", "syn-001"]},
+    "coverage": ["Exact and synonym matching", "Typo and plural normalization", "Unicode", "Blank query", "Empty catalog", "No matches", "Inclusive filters", "Stock filters", "Determinism and input immutability", "Invalid schema", "Invalid products", "CLI success", "CLI usage and file errors", "Malformed JSON and duplicate keys"]
+  }
+}

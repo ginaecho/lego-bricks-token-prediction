@@ -1,0 +1,79 @@
+{
+  "build_id": "wave3_t069_combo3_basic-support_basic-research_basic-recommend__ind-insurance",
+  "composition_label": "basic:support -> basic:research -> basic:recommend; insurance",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "required_fields": ["schema_version", "synthetic", "policyholder", "policy", "claim", "submission", "question", "sources", "preferences", "catalog"],
+      "policyholder": "Synthetic ID and invented name; optional fabricated VIN/property address. Dropped before handoff. Other policyholder fields rejected.",
+      "policy": "ID, auto/property type, covered_perils, nonnegative deductible and limit, ISO start_date/end_date.",
+      "claim": "Object with id, policy_id, loss_type, loss_amount and loss_date; or strict ClaimID/PolicyID/LossType/LossAmount/LossDate colon-separated claim-form text.",
+      "submission": "ACORD-style JSON wrapper with SubmissionID, PolicyID and Factors, or the equivalent ACORD XML. Factor attributes: name, numeric value, disclosed boolean.",
+      "sources": "Unique ID, topic (claims/coverage/underwriting/discovery), bounded text. User-supplied sources are explicitly unverified.",
+      "preferences": "Nonnegative max_monthly_premium and desired_perils list.",
+      "catalog": "Unique product ID, name, policy_type, perils, monthly_premium and explicit underwriting_factors list.",
+      "perils": ["collision", "theft", "fire", "water", "wind"],
+      "allowed_underwriting_factors": ["annual_mileage", "property_age", "prior_claims"]
+    },
+    "output": "One schema_version/status/stage/context/results envelope, with cumulative support/research/recommend results. Errors use status:error and a non-sensitive error string.",
+    "validation": "validate() is the shared entry point. Exact fields, types, bounds, dates, linked policy IDs, explicit factors and stage order checked. Each handoff is recomputed against its minimized context to reject inconsistent results. This is consistency validation, not cryptographic authentication."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "support",
+      "to": "research",
+      "consumed": ["validated claim status and reasons", "source IDs", "research topics and questions", "coverage needs"],
+      "validation": "Requires a valid support envelope; preserves prior result without mutation."
+    },
+    {
+      "from": "research",
+      "to": "recommend",
+      "consumed": ["coverage needs and gaps", "policy type", "budget", "evidence source IDs", "evidence sufficiency", "claim ID"],
+      "validation": "Requires a valid research envelope with consistent support and research outputs."
+    }
+  ],
+  "behavior": {
+    "support": "Deterministic intent routing gives grounded guidance, provisional claim assessment, reasons, illustrative deductible/limit calculation, human review and challenge route.",
+    "research": "Compares requested/reported perils with policy facts, collects relevant source statements with provenance and limitations, and produces an actionable discovery request.",
+    "recommend": "Filters policy type and budget; ranks by twice the number of coverage gaps addressed plus matched perils, then price and product ID. Includes reasons, missing needs, underwriting disclosures and evidence links.",
+    "fair_claims_handling": "No automatic approval/denial. Reasons and human review always present. Underwriting factors do not influence claim assessment.",
+    "gdpr_minimization": "Demonstrative minimization only: drops policyholder object and original question, rejects unnecessary fields, redacts known holder values and common contact data in source text/product names. Not comprehensive free-text PII detection or a compliance certification.",
+    "underwriting": "Only explicit allowlisted numeric factors are accepted, with disclosed=true. Protected and hidden factors rejected. Factors shown with reasons, not used for ranking.",
+    "synthetic_fixtures": "All fixtures explicitly synthetic: invented Elara Fictionwell, fabricated VIN/property address, fabricated loss amount/date. Tests generate 30 deterministic randomized loss amounts/dates with random.Random(69).",
+    "model_steps": "None. No injected model or live provider is needed; all behavior is deterministic.",
+    "cli_errors": "File, decoding, malformed JSON, invalid schema and validation failures print one JSON error object and exit 2. Success prints one JSON object and exits 0."
+  },
+  "scope": {
+    "included": ["Integrated three-stage pipeline", "Shared versioned schema and validation", "ACORD-style XML/JSON subset", "Claim-form text subset", "Reasoned claims triage", "Evidence-based coverage gap analysis", "Explainable discovery", "Synthetic fixtures", "Standard-library unittest and CLI validation"],
+    "excluded": ["Official ACORD schema conformance", "Real policyholder data", "Live models/providers/networks", "Legal/compliance certification", "Binding claims decisions", "Premium calculation", "Independent source verification", "Comprehensive PII recognition", "Persistence or production service", "Enterprise operational infrastructure"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "unittest discovery",
+    "tests_passed": 34,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_stdout": "One valid JSON object with status ok and all three integrated stage results",
+    "error_cli_checks": "Missing file, invalid schema, missing arguments, malformed JSON, duplicate keys and non-finite JSON return status error and exit 2",
+    "fixture_cases": "Includes 30 seeded randomized synthetic claims, auto/property coverage, privacy minimization, hidden/protected factors, ACORD XML/JSON equivalence, handoff tampering and deterministic ranking"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "catalog": {
+    "currency": "USD",
+    "products": [
+      {"sku": "SYN-TOTE-01", "name": "Fictitious Cloud Tote", "price_cents": 2400, "stock": 8},
+      {"sku": "SYN-MUG-02", "name": "Fictitious Orbit Mug", "price_cents": 1250, "stock": 0}
+    ]
+  },
+  "customer": {
+    "customer_id": "SYN-SHOPPER-01",
+    "persona": "Synthetic shopper persona: practical commuter",
+    "consent": {"gdpr": false, "ccpa": false},
+    "personalization_requested": false
+  },
+  "basket": {
+    "order_id": "SYN-ORDER-01",
+    "customer_id": "SYN-SHOPPER-01",
+    "items": [{"sku": "SYN-TOTE-01", "quantity": 2}]
+  },
+  "clickstream": [
+    {"event_id": "SYN-EVENT-01", "customer_id": "SYN-SHOPPER-01", "sku": "SYN-TOTE-01", "action": "view", "timestamp": "2026-09-24T10:00:00Z"}
+  ],
+  "documents": [
+    {
+      "document_id": "SYN-DOC-01",
+      "title": "Synthetic invented laboratory observations",
+      "source_id": "SYN-LAB-A",
+      "synthetic": true,
+      "claims": [
+        {"claim_id": "SYN-C1", "sku": "SYN-TOTE-01", "topic": "durability", "value": "positive", "evidence_kind": "analyst_observation"},
+        {"claim_id": "SYN-C2", "sku": "SYN-TOTE-01", "topic": "ease_of_use", "value": "positive", "evidence_kind": "analyst_observation"}
+      ]
+    },
+    {
+      "document_id": "SYN-DOC-02",
+      "title": "Synthetic invented return analysis",
+      "source_id": "SYN-RETURNS-B",
+      "synthetic": true,
+      "claims": [
+        {"claim_id": "SYN-C3", "sku": "SYN-TOTE-01", "topic": "durability", "value": "negative", "evidence_kind": "return_summary"},
+        {"claim_id": "SYN-C4", "sku": "SYN-TOTE-01", "topic": "ease_of_use", "value": "positive", "evidence_kind": "return_summary"}
+      ]
+    }
+  ],
+  "research_questions": [
+    {"question_id": "SYN-Q1", "sku": "SYN-TOTE-01", "topic": "durability"},
+    {"question_id": "SYN-Q2", "sku": "SYN-MUG-02", "topic": "packaging"}
+  ]
+}

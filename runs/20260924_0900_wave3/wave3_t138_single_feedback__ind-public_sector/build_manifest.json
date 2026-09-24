@@ -1,0 +1,57 @@
+{
+  "build_id": "wave3_t138_single_feedback__ind-public_sector",
+  "composition_label": "Feedback analysis (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, independently authored reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "Integer 1",
+      "synthetic": "Boolean true required; fabricated data only",
+      "records": "1..200 objects: entity_type and text required; citizen {name,address} and case_number optional. Unknown fields rejected.",
+      "entity_type": ["citizen_service_request", "benefits_application", "policy_document"],
+      "text": "1..10000 characters; government-form feedback or policy/regulation text"
+    },
+    "output": "One JSON object: status, schema_version, synthetic, summary, sources, deduplication, themes, review. Errors contain status=error and a plain-language message.",
+    "validation": "One validate function for both API and CLI; strict field allowlists and types, synthetic label, size limits, no unsupported controls. CLI also rejects repeated JSON keys and nonfinite numbers."
+  },
+  "cross_stage_handoffs": [
+    "Validated records -> private-value masking and deterministic normalized deduplication -> keyword themes -> minimal supporting excerpts and review explanations. All processing stays in memory."
+  ],
+  "behavior": {
+    "deduplication": "Across entity types, remove declared private values and detected email/phone/SSN spans, case-fold, then compare word sequences. Keep first source and all duplicate references. Do not merge empty masked records.",
+    "themes": "Deterministic whole-word rules; multiple themes may match one item. Counts use unique feedback, not all submissions. Rules and limitations are included in output.",
+    "traceability": "Generated record references use input order; excerpt start/end are exact Python character offsets into original source text. Sources include entity type. No input case identifiers are exposed.",
+    "citizen_privacy": "Never output full source text or private metadata. Excerpts contain only approved service-language terms outside known private spans. This is a synthetic Privacy Act/GDPR-oriented safeguard, not general PII detection or certification.",
+    "open_records_review": "Reasons, rules, duplicate mappings and source offsets support human explanation without automated eligibility decisions. Original inputs must remain in controlled storage.",
+    "accessibility": "Plain-language labels and explanations, structured text, no color or visual-only meaning. Demonstrates Section 508 spirit; no conformance claim.",
+    "fixture": "Clearly synthetic personas, invented case numbers, non-traceable addresses, and an invented policy that explicitly is not law."
+  },
+  "scope": {
+    "included": ["CLI", "shared validation", "deduplication", "themes", "privacy-minimized exact excerpts", "human-review explanations", "synthetic fixtures", "automated tests"],
+    "excluded": ["Live providers or LLMs", "Real citizen data", "Enterprise operations", "Compliance certification", "Eligibility decisions", "Semantic or fuzzy deduplication", "Sentiment inference", "General-purpose PII recognition", "Persistent source storage"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "14 unittest cases covering normal, deterministic, edge, invalid input, privacy, traceability and CLI behavior",
+    "tests_run": 14,
+    "failures": 0,
+    "cli": "Passed: exit 0, one valid JSON object, status ok; 4 source records, 3 unique feedback items, 1 duplicate"
+  }
+}

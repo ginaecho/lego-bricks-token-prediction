@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "status": "ok",
+  "synthetic": true,
+  "human_review_required": true,
+  "records": {
+    "patient": {
+      "resourceType": "Patient",
+      "id": "synthetic-patient-001",
+      "meta": {"tag": [{"system": "urn:synthetic-fixture", "code": "synthetic"}]},
+      "age_band": "adult",
+      "diagnoses": [{"code": "E11.9", "display": "Type 2 diabetes mellitus"}],
+      "labs": [{"code": "4548-4", "display": "Hemoglobin A1c", "value": 7.2, "unit": "%"}],
+      "human_review_required": true
+    },
+    "clinical_note": {
+      "resourceType": "DocumentReference",
+      "id": "synthetic-note-001",
+      "meta": {"tag": [{"system": "urn:synthetic-fixture", "code": "synthetic"}]},
+      "subject": {"reference": "Patient/synthetic-patient-001"},
+      "text": "Synthetic clinical note. Diagnosis codes: E11.9. Labs: 4548-4=7.2 %. Administrative context only; clinician review required.",
+      "human_review_required": true
+    },
+    "prior_authorization_request": {
+      "resourceType": "Claim",
+      "id": "synthetic-authorization-001",
+      "meta": {"tag": [{"system": "urn:synthetic-fixture", "code": "synthetic"}]},
+      "patient": {"reference": "Patient/synthetic-patient-001"},
+      "purpose": "preauthorization",
+      "status": "draft",
+      "service_code": "specialist-visit",
+      "required_documents": ["clinical-note", "insurance-summary", "referral"],
+      "provided_documents": ["clinical-note"],
+      "workflow_status": "new",
+      "suggested_resource_ids": [],
+      "human_review_required": true
+    }
+  },
+  "customer": {
+    "experience": "new",
+    "goal": "authorization",
+    "preferred_format": "audio",
+    "language": "en",
+    "accessibility": "accessible",
+    "interests": ["authorization"]
+  },
+  "request": {
+    "question": "How do I track prior authorization?",
+    "search_query": "insurance approvl",
+    "limit": 3
+  },
+  "stages": {},
+  "audit": []
+}

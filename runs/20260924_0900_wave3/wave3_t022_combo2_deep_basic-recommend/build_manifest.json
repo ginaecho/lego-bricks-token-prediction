@@ -1,0 +1,76 @@
+{
+  "build_id": "wave3_t022_combo2_deep_basic-recommend",
+  "composition_label": "deep -> basic:recommend",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope": "schema_version=1, synthetic=true, documents[], products[], profile, limit (integer 1..100)",
+    "document": "Unique id, title, text, reliability [0,1], claims[]",
+    "claim": "topic, value, stance support|oppose, confidence [0,1], exact quote substring of document.text; unique topic/value/stance per document",
+    "product": "Unique id, name, attributes object mapping topics to nonblank string values",
+    "profile": "preferences[] of unique topic/value/weight (0,1], exclude_product_ids[] referencing catalog IDs",
+    "research_stage": "Original envelope plus status=researched and research {document_count, findings, disagreements, unresolved_questions, limitations}",
+    "completed_output": "Research envelope with status=ok and recommendations[] {product_id, name, score, mode, reasons, unresolved_questions}",
+    "validation": "One validate function used at every boundary; exact fields, types, finite numeric ranges, references, grounded quotes and duplicate checks. Derived stage outputs are recomputed for strict consistency; duplicate JSON keys and nonfinite literals are rejected.",
+    "error_output": "Single JSON object with status=error and message; exit 2 for validation, JSON, encoding, usage and file errors"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "deep research",
+      "to": "personalized discovery",
+      "contract": "recommend receives only the validated research envelope, including profile and catalog. It uses research findings for evidence adjustments and forwards matched unresolved questions and source IDs.",
+      "integrity": "Research fields and citations must exactly match deterministic synthesis from validated source claims before ranking"
+    }
+  ],
+  "behavior": {
+    "research": "Group exact topic/value pairs across documents; claim weight is source reliability times claim confidence. Aggregate support and opposition, preserve quotations and document IDs, report both-sided positive-weight disagreements and zero-weight uncertainty. Missing preference evidence produces unresolved questions.",
+    "personalization": "For each matched preference: weight*(0.75+0.25*evidence_balance), otherwise zero; normalize by total preference weight. Evidence balance is (support-oppose)/(support+oppose), or zero when unknown. Scores measure heuristic fit, not probability. Preferences retain priority even when evidence is opposed.",
+    "cold_start": "With no preferences, average positive evidence balance over catalog attributes; unknown attributes contribute zero. Empty attributes yield zero.",
+    "ordering": "Descending score then ascending unique product ID, after explicit exclusions; limit applied last.",
+    "uncertainty": "Disputed and missing evidence remains explicit in explanations rather than being presented as settled fact.",
+    "matching": "Case-sensitive exact strings; no semantic inference or synonym normalization",
+    "side_effects": "Input is deep-copied, no files are written by the pipeline, and the CLI prints exactly one JSON object"
+  },
+  "scope": {
+    "included": [
+      "Clearly labeled synthetic data",
+      "Structured multi-document evidence synthesis",
+      "Grounded quotation validation and disagreement provenance",
+      "Deterministic domain-independent product discovery",
+      "Personalized and cold-start behavior",
+      "One integrated schema and validation layer",
+      "CLI and standard-library unittest suite"
+    ],
+    "excluded": [
+      "Live research, network access and model providers",
+      "LLM integration and unstructured claim extraction",
+      "Independent fact verification or source-dependence detection",
+      "Enterprise deployment, persistence and collaborative filtering",
+      "Semantic matching, numeric attributes and price constraints"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 14,
+    "cli": "passed: exit 0, one JSON object, status ok",
+    "coverage": "Both stages, disagreement and unresolved evidence, cross-stage provenance and score changes, tampered outputs, determinism, immutability, empty inputs, cold start, tie breaking, exclusions, limits, invalid schema and numeric values, CLI success, usage, missing files and malformed JSON"
+  }
+}

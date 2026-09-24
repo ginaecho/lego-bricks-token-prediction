@@ -1,0 +1,46 @@
+{
+  "build_id": "wave3_t043_single_feedback__ind-retail",
+  "composition_label": "single_feedback",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Strict schema_version=1 object: fixture_label, catalog {currency, products [{sku,name,price,stock}]}, customers [{customer_id,persona,consent {gdpr_personalization,ccpa_personalization}}], orders [{order_id,customer_id,items [{sku,quantity,shown_price,shown_stock}]}], clickstream [{event_id,customer_id,order_id,sku,action,shown_price,shown_stock}], feedback [{feedback_id,customer_id,order_id,sku,text,provenance}], personalize.",
+    "formats": "Catalog JSON feed and clickstream event-log array in one JSON envelope. Prices are nonnegative two-decimal strings; stocks and quantities are integers, not booleans. Purchase events require an order; views may use null order_id.",
+    "output": "status, schema_version, fixture_label, notice, counts, catalog, evidence, themes, personalized_insights. Errors: {status:error,error:message} with exit 2.",
+    "validation": "One shared validate function precedes analysis. Strict fields, identifiers, referential integrity, duplicate IDs, consent, provenance and catalog snapshots. CLI additionally rejects malformed JSON, duplicate object keys and non-finite literals."
+  },
+  "cross_stage_handoffs": [
+    "Single stage only: validated input -> scoped deduplication -> exact evidence table -> keyword themes referencing canonical evidence IDs -> shared JSON output."
+  ],
+  "behavior": {
+    "deduplication": "NFKC normalization, case folding and whitespace collapse; scoped by customer, order and SKU. Lexicographically smallest feedback ID is canonical, all source IDs retained.",
+    "themes": "Deterministic whole-word keyword matching for delivery, packaging, price_value, product_quality and availability; unmatched evidence is other. Multi-label counts may overlap.",
+    "excerpts": "Entire original canonical feedback text copied verbatim, never generated or presented as a real endorsement.",
+    "personalization": "Disabled by default. When requested, all included customers need both GDPR and CCPA demonstrative consent flags. Returns only each customer's observed theme names.",
+    "catalog": "All displayed price and stock snapshots must exactly equal catalog values; output catalog is copied without invention. No inventory reservation or historical-price modeling.",
+    "clickstream": "Validated context only; never converted into review evidence.",
+    "privacy": "Synthetic identifiers and personas only. Consent gates personalization, not aggregate analysis. Demonstrative rules are not compliance certification."
+  },
+  "scope": {
+    "included": ["Synthetic fixtures", "Feedback deduplication", "Traceable excerpts", "Keyword themes", "Retail reference validation", "CLI JSON error handling", "Optional consented per-customer theme summaries"],
+    "excluded": ["Live providers or LLMs", "Network calls", "Real customer ingestion", "Sentiment inference", "Semantic paraphrase deduplication", "Authenticity verification beyond fixture provenance", "Production privacy compliance", "Historical catalog reconciliation", "Inventory fulfillment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "16 unittest cases passed; exit 0",
+    "cli": "Passed; one JSON object with status ok, exit 0; 3 received, 2 unique, 1 duplicate removed",
+    "error_behavior": "Missing file and missing argument subprocess checks returned JSON status error with exit 2; malformed JSON and invalid schemas verified through main"
+  }
+}

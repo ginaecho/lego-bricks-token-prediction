@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "fixture_label": "FABRICATED DATA ONLY; seeded randomized amounts, seed 157",
+  "customer": {
+    "id": "SYN-CUSTOMER-157",
+    "name": "Fictional Morgan Example",
+    "account": "FAKE-ACCOUNT-0157",
+    "iban": "ZZ00SYNTHETIC00000157",
+    "kyc_status": "verified",
+    "aml_flags": [],
+    "monthly_income": 5500,
+    "monthly_debt": 250
+  },
+  "loan_application": {"currency": "EUR", "amount": 12000, "term_months": 36},
+  "preferences": {"apr": 5, "fee": 3, "payment": 2},
+  "ledger": {
+    "format": "json",
+    "data": [
+      {"id": "SYN-T1", "date": "2026-08-01", "amount": 5500, "currency": "EUR", "direction": "credit", "account": "FAKE-ACCOUNT-0157"},
+      {"id": "SYN-T2", "date": "2026-08-03", "amount": 191.26, "currency": "EUR", "direction": "debit", "card_number": "4111 1111 1111 1111"},
+      {"id": "SYN-T3", "date": "2026-08-07", "amount": 82.94, "currency": "EUR", "direction": "debit"},
+      {"id": "SYN-T4", "date": "2026-08-12", "amount": 24.6, "currency": "EUR", "direction": "debit"}
+    ]
+  },
+  "products": [
+    {
+      "id": "SYN-LOW-RATE", "name": "Synthetic low-rate loan",
+      "apr": {"value": 5, "unit": "percent"},
+      "fee": {"value": 15000, "currency": "EUR", "unit": "minor"},
+      "min_amount": {"value": 1000, "currency": "EUR"},
+      "max_amount": {"value": 50000, "currency": "EUR"},
+      "min_term_months": 12, "max_term_months": 60
+    },
+    {
+      "id": "SYN-NO-FEE", "name": "Synthetic fee-free loan",
+      "apr": {"value": 650, "unit": "basis_points"},
+      "fee": {"value": 0, "currency": "EUR"},
+      "min_amount": {"value": 1000, "currency": "EUR"},
+      "max_amount": {"value": 50000, "currency": "EUR"},
+      "min_term_months": 12, "max_term_months": 60
+    }
+  ]
+}

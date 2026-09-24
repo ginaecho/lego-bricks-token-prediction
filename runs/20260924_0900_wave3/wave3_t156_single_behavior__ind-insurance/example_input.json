@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "as_of": "2026-09-24T12:00:00Z",
+  "policyholder_ref": "SYN-HOLDER-001",
+  "half_life_days": 30,
+  "limit": 10,
+  "items": [
+    {
+      "id": "SYN-POLICY-AUTO",
+      "entity": "policy",
+      "source": {
+        "format": "acord_xml",
+        "payload": "<ACORD><line>auto</line><coverage_amount>100000</coverage_amount></ACORD>"
+      }
+    },
+    {
+      "id": "SYN-POLICY-PROPERTY",
+      "entity": "policy",
+      "source": {
+        "format": "acord_json",
+        "payload": {"ACORD": {"line": "property", "coverage_amount": 250000}}
+      }
+    },
+    {
+      "id": "SYN-CLAIM-001",
+      "entity": "claim",
+      "source": {
+        "format": "claim_text",
+        "payload": "line: auto\nloss_amount: 17492.38\nloss_date: 2026-07-19T10:00:00Z\ndocuments_complete: true"
+      }
+    },
+    {
+      "id": "SYN-SUBMISSION-001",
+      "entity": "underwriting_submission",
+      "source": {
+        "format": "acord_json",
+        "payload": {
+          "ACORD": {
+            "line": "property",
+            "factors": [
+              {"name": "coverage_amount", "value": 250000, "disclosed": true},
+              {"name": "property_age_years", "value": 18, "disclosed": true}
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "events": [
+    {"id": "SYN-EVENT-001", "item_id": "SYN-POLICY-AUTO", "action": "browse", "at": "2026-09-23T12:00:00Z"},
+    {"id": "SYN-EVENT-002", "item_id": "SYN-POLICY-PROPERTY", "action": "purchase", "at": "2026-09-15T12:00:00Z"}
+  ]
+}

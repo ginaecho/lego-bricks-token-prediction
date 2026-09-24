@@ -1,0 +1,48 @@
+{
+  "build_id": "wave3_t152_single_faq__ind-retail",
+  "composition_label": "single_faq",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this build using synthetic fixtures.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Version 1 object: synthetic=true; catalog {currency, products [{sku,name,price_minor,stock}]}; customer {customer_id,consent_personalization,preferred_sku}; basket {basket_id,items [{sku,quantity}]}; clickstream [{timestamp,customer_id,event,sku}]; knowledge_base [{id,topic,sku,days}]; request {question,sku,personalize}. All fields required; nullable SKU where applicable.",
+    "output": "Version 1 synthetic object with status answered/abstained, nullable answer/reason, citations, nullable catalog product including currency, customer identity/personalized flag and unchanged basket. Error envelope: schema_version,status=error,error.",
+    "validation": "One Validator class validates input and generated output. Closed field sets, exact booleans, nonnegative bounded integer prices/stock, positive quantities/days, reference integrity, unique SKU/article/scope, timezone-aware event timestamps, explicit consent and exact grounded answer templates.",
+    "money": "Integer minor units in USD/EUR/GBP; formatted with exact integer arithmetic."
+  },
+  "cross_stage_handoffs": [
+    "Validated shared request -> consent gate -> bounded question-topic retrieval -> SKU-specific policy lookup with global fallback or catalog lookup -> grounded template -> shared output validation."
+  ],
+  "behavior": {
+    "retrieval": "Full-question deterministic matching. Supported canonical topics: price, stock, returns, shipping; natural phrasings enumerated in PATTERNS. SKU is supplied separately. SKU policy takes precedence over general policy. Multiple clauses or unsupported topics explicitly abstain.",
+    "abstention": "Consent required, unsupported question, missing product or missing knowledge produce status=abstained, no answer and no citations; CLI exits 0.",
+    "personalization": "Explicit personalize=true requires asserted consent. Preferred synthetic SKU then latest timestamped clickstream SKU is used only with consent; explicit SKU wins. Basket context is echoed, not used implicitly for targeting.",
+    "retail_constraints": "Prices and stock exactly match supplied catalog snapshot. Reviews and endorsements are never generated; free-text knowledge articles and arbitrary generated claims are not accepted. Consent is a demonstrative GDPR/CCPA-oriented validation gate, not compliance certification.",
+    "errors": "Malformed JSON, duplicate keys, nonfinite JSON values, schema and file errors yield one JSON error object and exit 2.",
+    "synthetic_fixtures": "Fictitious Cloud Mug and Meadow Tote; invented SYN-prefixed SKUs, prices and inventory; synthetic shopper Alex, basket and clickstream. Tests exercise opted-in/out persona variants.",
+    "determinism": "No randomness, clock dependence, LLM step, external calls or persistent runtime state."
+  },
+  "scope": {
+    "included": ["CLI", "Structured catalog feed and clickstream log", "Single knowledge-base answer stage", "Grounding citations", "Explicit abstention", "Shared validation", "Synthetic fixtures and unittest coverage"],
+    "excluded": ["Production deployment", "Legal compliance certification", "Consent collection or revocation service", "Live inventory or pricing synchronization", "Checkout or stock reservation", "Real shoppers", "Unrestricted natural language", "Reviews and endorsements", "LLM or provider integrations"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 20,
+    "failures": 0,
+    "errors": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli": "Passed: example input printed one grounded JSON object with status answered and exited 0. Tests also verified JSON error envelopes and exit 2 for invalid input, missing files and incorrect arguments."
+  }
+}

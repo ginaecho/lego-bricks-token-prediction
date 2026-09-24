@@ -1,0 +1,70 @@
+{
+  "build_id": "wave3_t115_combo4_basic-documents_basic-recommend_basic-support_basic-search",
+  "composition_label": "basic:documents -> basic:recommend -> basic:support -> basic:search",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "schema_version, optional fixture_label, documents[], customer{}, policies{}, support{question}, search{}",
+    "document": "id, format (json or csv), content (JSON record list or inline CSV text), optional field_map from canonical product field to source column",
+    "product": "id, name, category, price, stock required; description and tags optional in source. Canonical output adds source{document_id,row}. IDs are unique; tags are lowercased, deduplicated and sorted.",
+    "customer": "Optional liked_categories[], liked_tags[], purchased_ids[], nonnegative budget, limit 1..20 (default 3)",
+    "policies": "Optional shipping and returns text; treated as supplied authoritative facts, not external truth",
+    "search_request": "Optional query, limit 1..50 (default 5), in_stock_only boolean (default true), max_price",
+    "output": "One cumulative envelope: schema_version, status, stage, request, catalog, document_report, recommendations, support, search",
+    "ranked_item": "rank, product_id, nonnegative score, reasons[]",
+    "validation": "Shared validate() layer runs on entry and exit of all four stages. It checks stage order, request shape, canonical product fields, provenance, counts, ranks, catalog references, factual evidence, and handoff consistency. Input failures abort atomically.",
+    "errors": "CLI emits one JSON object with status:error and error text and exits 2 for validation, JSON, encoding, usage, or file errors."
+  },
+  "cross_stage_handoffs": [
+    {"from": "documents", "to": "recommend", "data": "Validated normalized catalog with original document/row provenance; customer request preserved in envelope."},
+    {"from": "recommend", "to": "support", "data": "Validated ranked product IDs and catalog facts; top recommendation supplies support context unless question explicitly names a product."},
+    {"from": "support", "to": "search", "data": "Validated support suggested category query, intent, and recommendation IDs. Explicit search query wins; otherwise support query is used. Recommendation membership supplies a small relevance boost."}
+  ],
+  "behavior": {
+    "documents": "Extract inline JSON and CSV, map source columns, normalize text/tags/prices/stock, reject malformed rows, duplicate IDs/headers and ambiguous mappings. Extra source columns are ignored. All rows must validate; no silent partial ingestion.",
+    "recommend": "Exclude out-of-stock, purchased, over-budget items. Score 1 availability + 5 preferred category + 2 per matching preferred tag. Cold start ranks available products by ID; ties always break by product ID.",
+    "support": "Rule-based shipping/returns policy answers and recommendation/price/stock answers with exact structured evidence. Explicit product IDs or names override top-recommendation context. Missing policies, unknown intents and no eligible product escalate. Supplied text is data, never executable instructions.",
+    "search": "Unicode tokenization, finite synonym dictionary, weighted exact matches, bounded one-edit typo matching for words of length at least five, and +0.5 recommendation boost only after lexical matching. OR-style term matching. Hard stock/price filters. Nonblank stop-word-only queries yield no results; empty query with no support context browses eligible catalog.",
+    "money": "Single unspecified currency/unit across each request, finite nonnegative amounts with at most two decimal places and upper bound 1000000000; no currency conversion.",
+    "determinism": "No randomness, clock values, network, persistence, external services, or model calls. Stable ranking and canonical ordering; input is not mutated.",
+    "synthetic_data": "Example catalog, policies, customer preferences and all test fixtures are synthetic."
+  },
+  "scope": {
+    "included": ["Integrated four-stage CLI", "Shared schema and validation", "Inline CSV/JSON extraction and reshaping", "Preference-based recommendation", "Evidence-grounded deterministic support", "Synonym and typo-aware product search", "Source traceability", "Automated stage, edge, handoff and CLI tests"],
+    "excluded": ["PDF/OCR ingestion", "Live providers or injected LLMs", "Learned embeddings", "Real customer data", "Order/account lookups", "Actual support-ticket creation", "Authentication", "Database", "Production scale or enterprise delivery", "Multicurrency calculations", "Arbitrary natural-language reasoning"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 40,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "Exactly one valid JSON object, status ok, stage search",
+      "products_extracted": 5,
+      "recommendations": 3,
+      "search_results": 2,
+      "first_recommendation_and_result": "SYN-001"
+    },
+    "error_contract": "Tests verify missing file, missing argument, invalid JSON, duplicate JSON key, non-finite JSON number, invalid schema, and encoding failures produce error JSON and exit 2.",
+    "handoff_checks": "Tests verify changed preference and source price propagation, explicit support-product context, stage ordering, invalid ranked product references, altered policy evidence, and broken recommendation handoffs."
+  }
+}

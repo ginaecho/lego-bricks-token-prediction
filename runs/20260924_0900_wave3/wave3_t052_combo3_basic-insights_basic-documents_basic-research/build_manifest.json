@@ -1,0 +1,65 @@
+{
+  "build_id": "wave3_t052_combo3_basic-insights_basic-documents_basic-research",
+  "composition_label": "basic:insights -> basic:documents -> basic:research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "schema_version": "1.0",
+    "input": "fixture_label; feedback[{id,text}]; documents[{id,text,feedback_ids}]; questions[{id,text}]; theme_rules{name:[keywords]}; required_fields[snake_case]",
+    "output": "{schema_version,status,stage,data}; data accumulates context, classified feedback, themes, checked records, and evidence answers",
+    "validation": "One validate function enforces input types, unknown fields, unique IDs, references and deterministic handoff provenance. JSON loading rejects duplicate keys and non-finite constants.",
+    "errors": "CLI emits one JSON object with status error and exits 2 for validation, decoding or file errors. Document quality issues are explicit needs_review records, not fatal input errors."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:insights",
+      "to": "basic:documents",
+      "consumes": "Validated feedback classifications and theme aggregation with source context",
+      "produces": "Normalized key-value fields, quality checks and feedback-linked themes"
+    },
+    {
+      "from": "basic:documents",
+      "to": "basic:research",
+      "consumes": "Validated document records; needs_review records are excluded from evidence",
+      "produces": "Question-specific evidence excerpts, source IDs, propagated themes and suggested actions"
+    }
+  ],
+  "behavior": [
+    "Synthetic fixtures are explicitly labeled; no live data retrieval or provider calls.",
+    "Configurable multi-label theme keyword sets; unmatched feedback becomes other.",
+    "Sentiment uses whole ASCII token polarity counts; mixed equal counts are neutral.",
+    "Theme priority sorts by negative mentions, count and name; counts represent feedback rows, not unique customers.",
+    "Documents extract line-based key: value fields, normalize field names, retain the first duplicate value and flag duplicates or missing required values.",
+    "Research ranks checked source documents by distinct query-token overlap and document ID, preserves exact source excerpts and abstains without matches.",
+    "Each stage validates the prior stage before processing. Final output retains provenance and all intermediate results.",
+    "No LLM step is needed or implemented; no nondeterministic summaries are generated."
+  ],
+  "scope": {
+    "included": ["Configurable keyword insights", "Plain-text document reshaping and checks", "Local question-to-evidence matching", "Shared validation", "CLI and unittest coverage"],
+    "excluded": ["PDF/OCR extraction", "Live research", "Semantic inference", "Fact verification", "Negation-aware or multilingual sentiment", "Production scale or security guarantees", "External providers"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 22, "passed": 22, "failed": 0},
+    "cli_exit_code": 0,
+    "cli_output": "One valid JSON object with status ok, stage research and three answers",
+    "deliverable_check": "Exactly the four specified files; no bytecode or scratch artifacts"
+  }
+}

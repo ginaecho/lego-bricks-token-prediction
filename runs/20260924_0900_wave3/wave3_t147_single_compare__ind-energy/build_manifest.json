@@ -1,0 +1,45 @@
+{
+  "build_id": "wave3_t147_single_compare__ind-energy",
+  "composition_label": "Product comparison (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "synthetic=true; protection_key (16+ characters); interval_minutes (1..1440); fixed safety_rules; preferences (nonnegative metric weights, positive total); nonempty candidates; optional case-insensitive name query",
+    "candidate": "unique name; monthly_cost_usd; grid_assets (asset_id, kind=substation|meter|device, critical boolean); topology (from,to); meter_csv; telemetry_json; outage_reports",
+    "meter_csv": "Exact header device_id,timestamp,consumption,unit. Timezone-aware contiguous intervals; Wh/kWh/MWh. Every meter has the same timeline, also shared across products.",
+    "telemetry_json": "synthetic=true; samples covering each asset exactly once with asset_id, availability_percent (0..100), emissions (nonnegative value, gCO2e|kgCO2e|tCO2e, nonempty source). Values describe the shared observation window.",
+    "outage_report": "asset_id, life_safety boolean, essential_service boolean, priority=emergency|urgent|routine",
+    "output": "status, schema_version, synthetic, normalized products (meter_readings, grid_assets, topology, outage_reports, sourced emissions), side_by_side metric columns, ranking with scores and weighted utilities, safety_rules, method and demonstration notice",
+    "errors": "CLI prints one sanitized JSON status=error object and exits 2 for validation, parsing and file errors; success exits 0",
+    "validation": "One shared deterministic comparison pipeline validates schema, references, units, coverage, finite numeric values and safety rules before searching or ranking. Unknown object fields are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validated candidate entities -> unit-normalized attributes and protected entity references",
+    "Normalized records -> optional name filter -> side-by-side columns -> weighted preference ranking"
+  ],
+  "behavior": {
+    "ranking": "Weighted min-max utility among matched candidates; lower cost, energy, emissions and outage risk preferred; higher arithmetic-mean availability preferred. Constant metrics contribute utility 1. Score rounded to 8 decimals; score ties sorted by case-insensitive name.",
+    "outages": "Life safety overrides essential service: emergency; otherwise essential service: urgent; otherwise routine. Incorrect supplied priority is rejected. Risk is maximum severity 0..3, where 0 means no reports.",
+    "protection": "All asset IDs replaced with keyed HMAC-SHA256 references (24 hex characters). Raw identifiers and the key are prohibited in public output, including free-text fields. Errors never echo inputs. Caller must keep the key secret; fixture key is deliberately public synthetic data.",
+    "fixtures": "Explicitly synthetic fictitious two-node grid alternatives; winter evening heating-load interval consumption; sourced synthetic emissions.",
+    "aggregation": "Consumption and emissions summed over assets; availability is an unweighted asset mean. Monthly cost is a separate comparison attribute, not extrapolated from the short observation window."
+  },
+  "scope": {
+    "included": ["Single integrated CLI", "Synthetic meter CSV and SCADA-style telemetry JSON", "Attribute normalization", "Side-by-side comparison", "Deterministic preference ranking", "Demonstrative critical identifier protection and safety validation"],
+    "excluded": ["Live grid control", "Compliance certification", "Production key management or authentication", "Real SCADA integration", "Seasonal forecasting", "Currency conversion", "Live providers or LLM calls", "Enterprise delivery"]
+  },
+  "test_outcomes": {"status": "passed", "tests": 18, "failures": 0, "errors": 0, "cli": "passed: example input produced one JSON object with status ok and exit code 0; CLI failure cases returned status error and exit code 2"}
+}

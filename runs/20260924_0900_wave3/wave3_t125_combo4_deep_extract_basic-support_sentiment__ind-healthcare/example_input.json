@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "patient": {
+    "resourceType": "Patient",
+    "id": "synthetic-patient-001",
+    "gender": "unknown"
+  },
+  "documents": [
+    {
+      "id": "synthetic-source-condition",
+      "format": "fhir",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "synthetic-condition-001",
+        "subject": {"reference": "Patient/synthetic-patient-001"},
+        "code": {"text": "Fictitious Synthea-style type 2 diabetes"},
+        "clinicalStatus": {"text": "active"}
+      }
+    },
+    {
+      "id": "synthetic-source-lab",
+      "format": "fhir",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "synthetic-lab-001",
+        "subject": {"reference": "Patient/synthetic-patient-001"},
+        "code": {"text": "Synthetic HbA1c"},
+        "valueQuantity": {"value": 8.2, "unit": "%"},
+        "status": "final"
+      }
+    },
+    {
+      "id": "synthetic-source-authorization",
+      "format": "fhir",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "synthetic-authorization-001",
+        "patient": {"reference": "Patient/synthetic-patient-001"},
+        "status": "active",
+        "use": "preauthorization",
+        "type": {"text": "Synthetic outpatient service"},
+        "priority": {"text": "normal"}
+      }
+    },
+    {
+      "id": "synthetic-source-note",
+      "format": "clinical_note",
+      "text": "SYNTHETIC FIXTURE — not a real patient or clinical recommendation.\nDiagnosis: Fictitious Synthea-style type 2 diabetes\nHbA1c: 8.2\nAuthorization status: cancelled\nService: Synthetic outpatient service\nHuman review is required. No real names, birth dates, or medical identifiers."
+    }
+  ],
+  "field_schema": [
+    {
+      "name": "diagnosis",
+      "type": "string",
+      "required": true,
+      "sources": [
+        {"resource_type": "Condition", "path": "code.text"},
+        {"label": "Diagnosis"}
+      ]
+    },
+    {
+      "name": "hba1c",
+      "type": "number",
+      "required": true,
+      "sources": [
+        {"resource_type": "Observation", "path": "valueQuantity.value"},
+        {"label": "HbA1c"}
+      ]
+    },
+    {
+      "name": "authorization_status",
+      "type": "string",
+      "required": true,
+      "sources": [
+        {"resource_type": "Claim", "path": "status"},
+        {"label": "Authorization status"}
+      ]
+    },
+    {
+      "name": "service",
+      "type": "string",
+      "required": true,
+      "sources": [
+        {"resource_type": "Claim", "path": "type.text"},
+        {"label": "Service"}
+      ]
+    },
+    {
+      "name": "decision_reason",
+      "type": "string",
+      "required": true,
+      "sources": [{"label": "Decision reason"}]
+    }
+  ],
+  "request": {
+    "message": "I am frustrated by this delay. Can you explain my prior authorization records? My appeal deadline is approaching.",
+    "team_online": false
+  }
+}

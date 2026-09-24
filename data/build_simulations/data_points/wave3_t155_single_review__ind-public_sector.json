@@ -97,7 +97,7 @@
   "split_group": "b3962f7a3995a74a0c39e1ef66e1608d4583727dbd756a901963d915afa467f0",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "8630b7b23eaff5ad3554bf5df10e7067f586d0e302ebdeff0597069bebfaae75",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t155_single_review__ind-public_sector",
   "membership_point_id": "single_review__ind-public_sector",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "323e63b78c79247bff504e7c419d18d1ed40dccf8bb18334017e0dde8c94787a",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "6bb8b9a7-e85f-473d-aa16-c58d5add4aad",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 120359,
+    "output_tokens": 7084,
+    "cache_read_tokens": 111502,
+    "cache_write_tokens": 8839,
+    "total_tokens": 127443,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38099,
+        "agent_id": "6bb8b9a7-e85f-473d-aa16-c58d5add4aad",
+        "model": "gpt-6-astra",
+        "input_tokens": 14988,
+        "output_tokens": 382,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 842,
+        "reasoning_tokens": 201,
+        "duration_ms": 11369,
+        "created_at": "2026-09-24T12:53:23.462Z"
+      },
+      {
+        "id": 38142,
+        "agent_id": "6bb8b9a7-e85f-473d-aa16-c58d5add4aad",
+        "model": "gpt-6-astra",
+        "input_tokens": 15401,
+        "output_tokens": 6058,
+        "cache_read_tokens": 14985,
+        "cache_write_tokens": 413,
+        "reasoning_tokens": 422,
+        "duration_ms": 101084,
+        "created_at": "2026-09-24T13:01:03.940Z"
+      },
+      {
+        "id": 38144,
+        "agent_id": "6bb8b9a7-e85f-473d-aa16-c58d5add4aad",
+        "model": "gpt-6-astra",
+        "input_tokens": 21775,
+        "output_tokens": 136,
+        "cache_read_tokens": 15398,
+        "cache_write_tokens": 6374,
+        "reasoning_tokens": 0,
+        "duration_ms": 3470,
+        "created_at": "2026-09-24T13:01:31.531Z"
+      },
+      {
+        "id": 38149,
+        "agent_id": "6bb8b9a7-e85f-473d-aa16-c58d5add4aad",
+        "model": "gpt-6-astra",
+        "input_tokens": 22445,
+        "output_tokens": 229,
+        "cache_read_tokens": 21772,
+        "cache_write_tokens": 670,
+        "reasoning_tokens": 10,
+        "duration_ms": 4820,
+        "created_at": "2026-09-24T13:02:50.856Z"
+      },
+      {
+        "id": 38150,
+        "agent_id": "6bb8b9a7-e85f-473d-aa16-c58d5add4aad",
+        "model": "gpt-6-astra",
+        "input_tokens": 22765,
+        "output_tokens": 183,
+        "cache_read_tokens": 22442,
+        "cache_write_tokens": 320,
+        "reasoning_tokens": 0,
+        "duration_ms": 4354,
+        "created_at": "2026-09-24T13:03:04.839Z"
+      },
+      {
+        "id": 38151,
+        "agent_id": "6bb8b9a7-e85f-473d-aa16-c58d5add4aad",
+        "model": "gpt-6-astra",
+        "input_tokens": 22985,
+        "output_tokens": 96,
+        "cache_read_tokens": 22762,
+        "cache_write_tokens": 220,
+        "reasoning_tokens": 0,
+        "duration_ms": 3740,
+        "created_at": "2026-09-24T13:03:31.628Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4071575000000001,
+      "observed_cache_profile_estimate_usd": 0.156278,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.885890000000001,
+      "observed_cache_profile_estimate_usd": 4.885890000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,111 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................\n----------------------------------------------------------------------\nRan 16 tests in 0.934s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "limitations": [
+        "This is a synthetic demonstration, not a legal or compliance certification.",
+        "Phrase matches do not prove facts or decide benefit eligibility.",
+        "A person must review the evidence and any gaps before making a decision.",
+        "Plain-language JSON is provided; Section 508 accessibility is not certified."
+      ],
+      "privacy": {
+        "approach": "Names, addresses, emails, case numbers, and source text are not returned.",
+        "citizen_pii_included": false
+      },
+      "review_type": "document_review",
+      "reviews": [
+        {
+          "checks": [
+            {
+              "explanation": "The form fields are present. One evidence item has all required phrases.",
+              "matched_evidence_ids": [
+                "E-001"
+              ],
+              "missing_fields": [],
+              "policy_reference": {
+                "policy_id": "P-001",
+                "requirement_path": "/policy/requirements/0"
+              },
+              "requirement_id": "R-001",
+              "reviewed_evidence_ids": [
+                "E-001"
+              ],
+              "status": "supported"
+            }
+          ],
+          "document_id": "D-001",
+          "entity_type": "citizen_service_request",
+          "status": "supported"
+        },
+        {
+          "checks": [
+            {
+              "explanation": "Add the missing form fields. Provide one evidence item containing all required phrases.",
+              "matched_evidence_ids": [],
+              "missing_fields": [
+                "income_statement"
+              ],
+              "policy_reference": {
+                "policy_id": "P-001",
+                "requirement_path": "/policy/requirements/1"
+              },
+              "requirement_id": "R-002",
+              "reviewed_evidence_ids": [],
+              "status": "gap"
+            }
+          ],
+          "document_id": "D-002",
+          "entity_type": "benefits_application",
+          "status": "gaps_found"
+        },
+        {
+          "checks": [
+            {
+              "explanation": "The form fields are present. One evidence item has all required phrases.",
+              "matched_evidence_ids": [
+                "E-002"
+              ],
+              "missing_fields": [],
+              "policy_reference": {
+                "policy_id": "P-001",
+                "requirement_path": "/policy/requirements/2"
+              },
+              "requirement_id": "R-003",
+              "reviewed_evidence_ids": [
+                "E-002"
+              ],
+              "status": "supported"
+            }
+          ],
+          "document_id": "D-003",
+          "entity_type": "policy_document",
+          "status": "supported"
+        }
+      ],
+      "schema_version": 1,
+      "status": "ok",
+      "summary": {
+        "documents_reviewed": 3,
+        "gaps_found": 1
+      },
+      "synthetic_fixture": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t155_single_review__ind-public_sector",
+    "artifact_sha256": {
+      "implementation.py": "355687f63d7647942c6911b328e1f6509c13b6c9546a36bb44d5a32c93ad15ab",
+      "test_implementation.py": "247b0be8f287d951591869709e7636102ce3dad4e56f18b20b45f636240376ed",
+      "example_input.json": "f4891ec6e3cc6caad9c56200145b9e57b3508bba74eb78e5860afb171e230b7a",
+      "build_manifest.json": "ff211b59e54786f4e868dd0aaeaf0461db40a67e08caf8aec920f88ca246a6a5"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

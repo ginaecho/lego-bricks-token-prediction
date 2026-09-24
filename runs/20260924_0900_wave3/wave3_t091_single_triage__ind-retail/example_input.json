@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "catalog": {
+    "currency": "USD",
+    "products": [
+      {"sku": "FICTION-MUG-101", "name": "Synthetic Moon Mug", "price": "14.50", "stock": 12},
+      {"sku": "FICTION-TOTE-202", "name": "Synthetic Cloud Tote", "price": "22.00", "stock": 0}
+    ]
+  },
+  "customer": {
+    "id": "synthetic-shopper-01",
+    "persona": "Fictitious budget-conscious gift shopper",
+    "consent": {"gdpr_personalization": true, "ccpa_personalization": true}
+  },
+  "order": {
+    "id": "synthetic-order-01",
+    "customer_id": "synthetic-shopper-01",
+    "status": "shipped",
+    "items": [{"sku": "FICTION-MUG-101", "quantity": 1, "shown_price": "14.50", "shown_stock": 12}]
+  },
+  "clickstream": [
+    {"sequence": 1, "customer_id": "synthetic-shopper-01", "event": "view", "sku": "FICTION-TOTE-202"},
+    {"sequence": 2, "customer_id": "synthetic-shopper-01", "event": "add_to_basket", "sku": "FICTION-MUG-101"}
+  ],
+  "ticket": {
+    "id": "synthetic-ticket-01",
+    "subject": "Delivery is late",
+    "body": "Please check my fictional mug shipment.",
+    "skus": ["FICTION-MUG-101"],
+    "personalize": true,
+    "request_endorsement": false
+  },
+  "config": {
+    "rules": [
+      {"category": "delivery", "keywords": ["delivery", "shipment"], "priority": "high", "team": "fulfillment", "owner": "synthetic-dispatch-lead"},
+      {"category": "returns", "keywords": ["refund", "return"], "priority": "normal", "team": "returns", "owner": "synthetic-returns-lead"}
+    ],
+    "fallback": {"category": "general", "priority": "normal", "team": "support", "owner": "synthetic-support-lead"},
+    "urgent_keywords": ["unsafe", "injury"]
+  }
+}

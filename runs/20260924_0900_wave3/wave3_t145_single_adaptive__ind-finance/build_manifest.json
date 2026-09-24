@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t145_single_adaptive__ind-finance",
+  "composition_label": "Adaptive onboarding (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "envelope": "schema_version=1.0 and synthetic=true required at input and output",
+    "input": "customer, ledger {format: json|csv, data: array|string}, payment; optional loan_application and completed_steps",
+    "customer": "customer_id, name, experience beginner|intermediate|expert, preference guided|concise, kyc_status pending|verified|rejected, aml_flags string array, fake account_iban; optional synthetic card_number",
+    "transaction": "transaction_id, date YYYY-MM-DD, signed cents-precision amount, currency EUR|USD|GBP, description",
+    "payment": "ISO 20022-style subset: MsgId, EndToEndId, InstdAmt {Ccy,Value}, DbtrAcct {IBAN}, CdtrAcct {IBAN}",
+    "loan": "application_id, positive amount, currency, term_months 1..600, purpose",
+    "output": "status ready|in_progress|review_required; normalized customer, transactions, payment, loan_application, onboarding steps, explained scores, disclaimer",
+    "validation": "One shared validate function; strict input fields, bounded monetary values, duplicate checks, account consistency, screening gates and final masking checks",
+    "error": "CLI prints one JSON object with status=error and exits 2 without echoing input"
+  },
+  "cross_stage_handoffs": [
+    "Single onboarding functionality: shared input validation -> normalization -> preference-aware prerequisite planning -> masking -> shared output validation"
+  ],
+  "behavior": [
+    "Beginner or guided preference selects detailed guidance; expert/intermediate concise preference selects short guidance.",
+    "Caller-declared completed_steps are checked against profile -> screening -> ledger -> payment -> optional loan prerequisites.",
+    "Unverified KYC or any AML flag requires human review and blocks screening and dependent completion.",
+    "Onboarding readiness is floor(completed/required*100), always accompanied by its formula and non-creditworthiness explanation.",
+    "PAN-like sequences are recursively masked to last four digits in output, including free-text descriptions and injected guidance.",
+    "Optional Python explanation_hook receives a copied step and may return bounded nonempty guidance only; never invoked by CLI.",
+    "All fixtures are fabricated. Accounts use invalid-country ZZ00 markers. Tests create deterministic randomized histories with seed 145.",
+    "Money is normalized to decimal strings, not binary floating-point totals; different currencies are not aggregated."
+  ],
+  "scope": {
+    "included": ["Deterministic guided onboarding", "JSON/CSV ledger normalization", "ISO 20022-style payment subset", "Synthetic loan review step", "Demonstrative KYC/AML gates and card masking", "Fixture-tested optional injected guidance"],
+    "excluded": ["Real KYC/AML screening", "PCI DSS or regulatory certification", "Full ISO 20022 validation", "Real payment execution", "Credit scoring or loan approval", "Authentication and durable workflow storage", "Live providers or networks"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_cases": 18,
+    "unittest": "18 tests passed",
+    "cli": "Example emitted one JSON object with status=in_progress and exited 0",
+    "error_cli": "Missing arguments, nonexistent file and malformed JSON emitted status=error and exited 2"
+  }
+}

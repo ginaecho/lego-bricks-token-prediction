@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t106_single_sentiment",
+  "composition_label": "Sentiment & prioritization (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "true; fixture-only reference",
+      "issues": "0..1000 objects with unique nonblank id (max 100 characters, no surrounding whitespace), text (max 10000 characters; empty allowed), severity (low|medium|high|critical)"
+    },
+    "validation": "One validate function is shared by analyze and CLI; unknown fields rejected. CLI also rejects duplicate JSON keys and nonstandard constants.",
+    "output": "status, schema_version, synthetic, priority-sorted issues preserving original fields with sentiment and priority objects, summary, method",
+    "sentiment": "label positive|neutral|negative, integer raw_score, evidence containing token, token_index, base_weight, negated, multiplier, contribution",
+    "priority": "score, severity_rank, negative_urgency, reason and one-based rank",
+    "error": "One JSON object with status=error and error message; CLI exits 2"
+  },
+  "cross_stage_handoffs": [
+    "Validated issue text is scored with fixed lexical rules; raw_score is handed to severity-aware ranking within the single integrated functionality."
+  ],
+  "behavior": {
+    "scoring": "Lowercase English word tokenization; curly apostrophes normalized; evidence sums exactly to raw_score. Unknown words contribute zero; sign determines label.",
+    "negation": "Odd count of listed negators in previous three word tokens reverses weight. Punctuation resets context.",
+    "intensification": "Immediately preceding very, extremely or really doubles a matched word weight.",
+    "priority": "Severity rank low=1, medium=2, high=3, critical=4. Score = 100*severity_rank + min(99,max(0,-raw_score)). Severity always dominates sentiment.",
+    "determinism": "Descending priority score, then ascending case-sensitive id; no randomness, time dependency or input mutation.",
+    "fixture": "All example records are synthetic; positive language never lowers a critical issue below lower-severity issues."
+  },
+  "scope": {
+    "included": ["Transparent lexicon scoring", "Supplied severity validation", "Deterministic prioritization", "JSON CLI", "Synthetic fixtures and tests"],
+    "excluded": ["Live providers", "LLM invocation", "Severity inference", "Sarcasm understanding", "Multilingual sentiment", "Persistence", "Enterprise production delivery"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 10,
+    "failures": 0,
+    "errors": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "suite": "10 unittest cases covering normal, edge, invalid input, ordering, determinism and CLI behavior"
+  }
+}

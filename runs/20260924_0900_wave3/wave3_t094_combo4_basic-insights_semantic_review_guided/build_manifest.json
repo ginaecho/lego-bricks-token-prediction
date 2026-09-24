@@ -1,0 +1,71 @@
+{
+  "build_id": "wave3_t094_combo4_basic-insights_semantic_review_guided",
+  "composition_label": "Customer insights -> Semantic search -> Document review -> Guided setup",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, self-contained implementation authored for this isolated build.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "required": ["schema_version", "synthetic", "feedback", "documents", "requirements", "steps"],
+      "optional": ["search", "completed_step_ids"],
+      "feedback": "{id, text}",
+      "documents": "{id, title, text}",
+      "requirements": "{id, description, required_terms: [single-word string], min_evidence?: positive integer}",
+      "steps": "{id, title, prerequisites: [step id], requirement_ids: [requirement id]}",
+      "search_defaults": {"max_themes": 8, "top_k": 5, "min_score": 0.05, "embedding_weight": 0.35}
+    },
+    "output": "{schema_version, status: ok, synthetic, stages: {insights, semantic, review, guided}}",
+    "stage_envelope": "{schema_version, stage, items, summary}",
+    "error": "{schema_version, status: error, error: string}; exit code 2",
+    "validation": "One Validation class checks input shapes, unknown keys, types, finite numbers, unique IDs, references, cycles, vectors, and stage provenance before each downstream handoff.",
+    "bounds": "CLI file limit 2 MB; collections <=500; text <=12000 characters; themes <=30; top_k <=50; embedding dimensions <=4096."
+  },
+  "cross_stage_handoffs": [
+    {"from": "insights", "to": "semantic", "data": "Validated theme keyword queries with original feedback IDs."},
+    {"from": "semantic", "to": "review", "data": "Only retrieved ranked document bodies and query IDs become review candidates; unretrieved documents cannot support requirements."},
+    {"from": "review", "to": "guided", "data": "Validated supported/gap statuses gate requirement-linked setup steps; blockers retain requirement IDs."}
+  ],
+  "behavior": {
+    "insights": "Domain-neutral keyword-frequency themes; document-frequency counting over feedback; explicit ignored feedback and truncation counts; heuristic positive/negative/mixed/neutral sentiment and investigation actions.",
+    "semantic": "In-memory inverted index; deterministic TF-IDF cosine relevance ranking, stable document-ID tie breaks, threshold and top-k limits. Optional injected callable adds weighted cosine similarity. No embedding provider is built in.",
+    "embedding_contract": "run_pipeline(input_dict, embedder=callable): one list of query/document texts -> equal-count list of finite, nonzero, same-dimension numeric vectors. Synthetic fixture callables only.",
+    "review": "All required words must occur in a single retrieved document body. Unique supporting documents count toward min_evidence. Evidence has exact character offsets, quotes, matched terms, document IDs, and query IDs. Gaps include per-candidate missing terms and evidence shortfall.",
+    "guided": "Acyclic prerequisite graph; deterministic topological order; ready/blocked/completed states; supplied completions must satisfy both prerequisites and reviewed evidence. Progress is derived from the input snapshot and returned as JSON. No hidden state.",
+    "empty_input": "Empty arrays accepted. No feedback yields no retrieval; unsatisfied requirements yield gaps. Zero onboarding steps means 100 percent complete.",
+    "cli": "One JSON object on stdout. Success exits 0. File, JSON, encoding, size, and validation errors exit 2. Duplicate JSON keys and non-finite constants rejected."
+  },
+  "scope": {
+    "included": ["Integrated four-stage pipeline", "Shared validation and schema", "Synthetic fixture data", "Optional injected embedding interface", "Evidence provenance", "Prerequisite and progress validation", "Deterministic CLI and unittest coverage"],
+    "excluded": ["Live networks and model providers", "Persistent database or user accounts", "Enterprise production readiness", "Certification or compliance claims", "Semantic entailment, negation reasoning, or truth verification", "Automatic setup side effects", "Multilingual stemming and synonym inference without an injected embedding"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 38,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "coverage": ["All four stages", "Traceable cross-stage propagation", "Determinism and input immutability", "Empty collections", "Unicode and exact-word matching", "Ranking ties and thresholds", "Synthetic injected embeddings and malformed vectors", "Evidence counts and quotes", "Gap repair", "Cycles and references", "Invalid completions", "Tampered stage boundaries", "CLI success and error contracts"]
+    },
+    "cli_example": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout": "One parseable JSON object with status ok and four ordered stages",
+      "review": {"supported": 1, "gaps": 1},
+      "guided": {"total": 3, "completed": 1, "ready": 1, "blocked": 1, "percent_complete": 33.33}
+    }
+  }
+}

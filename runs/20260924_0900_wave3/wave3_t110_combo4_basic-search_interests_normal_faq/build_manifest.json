@@ -1,0 +1,55 @@
+{
+  "build_id": "wave3_t110_combo4_basic-search_interests_normal_faq",
+  "composition_label": "basic:search -> interests -> normal -> faq",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Strict synthetic object: query, products, preferences, research, knowledge_base, question, limits. Product and source IDs are unique; source links reference catalog products.",
+    "stage_envelope": ["schema_version", "stage", "status", "product_ids", "records"],
+    "record": ["id", "product_id", "score", "text", "upstream_ids", "citations"],
+    "citation": ["source_id", "start", "end", "quote"],
+    "offsets": "Zero-based, end-exclusive Unicode character offsets into original source text",
+    "validation": "Shared input and stage validation enforces bounds, finite numbers, stage order, exact citations, parent product identity, exclusions and extractive text.",
+    "output": "One JSON object with status, synthetic, schema_version, stages and answer. Top-level ok means successful execution, not necessarily an answer. FAQ explicitly abstains without adequate evidence.",
+    "errors": "File, JSON, schema and validation errors yield one JSON status:error object and exit code 2."
+  },
+  "cross_stage_handoffs": [
+    {"from": "search", "to": "interests", "contract": "Only validated search candidates may be ranked. Explicit product/tag exclusions and budget are hard constraints."},
+    {"from": "interests", "to": "normal", "contract": "Only validated recommended products are researched. Recommendation order affects retrieval score; each finding references its recommendation."},
+    {"from": "normal", "to": "faq", "contract": "Only products with validated research findings are eligible. Research passage terms influence KB ranking; FAQ records reference findings and cite KB text."}
+  ],
+  "behavior": {
+    "search": "Unicode normalization, case folding, stopword removal, small synonym vocabulary, general catalog token retrieval and bounded typo matching. Positive matches only; deterministic ties.",
+    "interests": "Search relevance plus explicit preferred tag/category boosts. Exclusions and maximum price enforced before ranking. Explanations name only observed attributes and scores.",
+    "normal": "Sentence passage retrieval by query/question and preference overlap, with recommendation-rank contribution. Findings are exact extracts with source offsets.",
+    "faq": "Extractive KB answers require at least 60 percent question-token coverage and upstream research. No research-only answers; unsupported questions abstain explicitly.",
+    "empty_results": "Empty output propagates downstream without fallback to unrelated products.",
+    "synthetic_data": "Example catalog, prices, research and KB are entirely synthetic."
+  },
+  "scope": {
+    "included": ["Four integrated deterministic stages", "Bounded shared schema", "Exact citation validation", "Hard recommendation exclusions", "CLI and unittest coverage"],
+    "excluded": ["Live providers and networks", "External packages", "Embeddings", "Persistence", "Enterprise deployment", "Universal semantic relevance", "Contradiction resolution across sources", "LLM callable (not needed by deterministic implementation)"],
+    "limitations": "Lexical overlap is a reference heuristic, not proof that a passage entails a question's answer. Synonyms are a small extensible English vocabulary. Conflicting KB passages may both be returned; extracts preserve qualifiers and negation. Limits can remove otherwise eligible candidates."
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 33,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object, status ok, all four stages ok, grounded negative waterproof answer.",
+    "error_behavior": "Missing file subprocess exits 2 with JSON error; malformed JSON, duplicate keys, nonfinite constants and invalid schemas also verified.",
+    "deliverable_check": "Exactly the four requested files; no cache or scratch artifacts."
+  }
+}

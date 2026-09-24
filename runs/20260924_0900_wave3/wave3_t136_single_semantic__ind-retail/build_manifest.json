@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t136_single_semantic__ind-retail",
+  "composition_label": "single_semantic",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3.13; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "synthetic": "Required literal true; all fixture entities are fictitious",
+      "catalog": "JSON feed array, 0..1000 products: unique sku, name, description, category, tags[str], price decimal string, currency uppercase three-letter code, stock nonnegative integer",
+      "customer": "Synthetic id, consent {gdpr:bool,ccpa:bool}, preferences[str]",
+      "basket": "Array of unique {sku,quantity}; known SKU and quantity from 1 through catalog stock",
+      "clickstream": "JSON event-log array, 0..10000 {customer_id,sku,event}; same shopper, known SKU, event view/click/add_to_basket",
+      "search": "query nonblank text up to 500 characters with ASCII searchable tokens; optional limit 1..100 default 10, personalize default false, include_out_of_stock default false"
+    },
+    "output": {
+      "success": "status ok, synthetic true, query, personalized, ranking, total_matches before limit, results[{sku,name,price,currency,stock,score,matched_terms}], basket[{sku,quantity,unit_price,currency,stock,line_total}]",
+      "failure": "status error and message; CLI exits 2 for validation, decoding, file or usage errors"
+    },
+    "validation": "Single validate() boundary checks all input entities before indexing or invoking embeddings. Unknown fields, duplicate SKUs/JSON keys, invalid references, nonfinite JSON numbers and unsupported review/endorsement fields rejected. The optional embedding result has its own contract validation.",
+    "embedding_interface": "search_products(data, embedder=None): injected Python callable receives [query, product_text...] in SKU order, returns equal-dimensional finite nonzero numeric vectors. Cosine similarity clamped to [0,1]. Callable failures or invalid vectors raise ValidationError. Never enabled via CLI or connected to a live provider."
+  },
+  "cross_stage_handoffs": [
+    "One functionality only: shared validated input -> canonical-token weighted inverted index -> lexical and optional embedding scores -> consent-gated personalization -> catalog-grounded results and basket projection"
+  ],
+  "behavior": {
+    "ranking": "Bounded English synonym canonicalization plus weighted field overlap and smoothed inverse document frequency; optional 2*cosine embedding contribution. No query match or positive embedding similarity means no result. Stable rounded-score descending and SKU ascending tie break.",
+    "personalization": "Explicit opt-in plus both GDPR and CCPA consent required; preference/category overlap and capped clickstream SKU bonuses only after eligibility. Profile, basket and events cannot influence ranking when personalization is false.",
+    "catalog_fidelity": "Prices, currency and stock copied directly from validated feed, never generated. Basket totals use decimal arithmetic; no cross-currency aggregate.",
+    "endorsements": "No reviews, ratings or endorsements generated or accepted as structured product fields. Descriptions are used only for retrieval, not returned as reviews. Arbitrary text is not semantically certified.",
+    "synthetic_fixture": "Invented Fable and Cloudlet shoe SKUs, imaginary backpack, synthetic shopper Ada, synthetic click event and basket. No real personal data.",
+    "constraints": "Demonstrative validation rules only; not GDPR/CCPA compliance certification."
+  },
+  "scope": {
+    "included": ["Deterministic local search", "In-memory search index", "Optional fixture-injected embeddings", "Catalog JSON and JSON-array clickstream", "Consent gate", "Stock filtering", "Shared schema", "CLI JSON errors", "Unittest coverage"],
+    "excluded": ["Live providers or networking", "Trained semantic model", "Persistent index", "Live inventory synchronization", "Order submission or stock reservation", "Consent persistence or revocation workflow", "Production deployment", "Review generation or factual endorsement verification", "Compliance certification", "Non-ASCII tokenization", "JSONL event ingestion"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "16 unittest cases passed; runner exit 0",
+    "cli": "Example executed successfully; one JSON object with status ok, one matching product, catalog-grounded basket total 77.00; exit 0"
+  }
+}

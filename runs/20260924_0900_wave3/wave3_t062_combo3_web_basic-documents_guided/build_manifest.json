@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t062_combo3_web_basic-documents_guided",
+  "composition_label": "web -> basic:documents -> guided",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored within the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Object with schema_version=1, synthetic=true, research, documents, guided",
+    "research_configuration": "allowed_hosts: exact lowercase DNS hosts; urls: unique HTTPS URLs; fixtures: URL -> {content_type, body}",
+    "document_configuration": "fields: [{name, source, type, required=true, default?, transforms=[]}]; checks: [{field, op, value?}]",
+    "guided_configuration": "steps: [{id, title, requires=[], checks=[]}]; completed_steps: unique step IDs",
+    "record": "{id: unique string, data: nonempty scalar-valued object, provenance: {url, sha256, record_index, retrieval: synthetic_fixture}}",
+    "validation": "Shared object, array, scalar, string, provenance and record validators; shared check specification and execution used by documents and onboarding",
+    "success": "{schema_version: 1, synthetic: true, status: ok, research: {sources, findings}, documents: {fields, rows, checks_passed}, guided: {steps, progress}}",
+    "error": "{status: error, error: message}; exit code 2; one JSON object on stdout"
+  },
+  "cross_stage_handoffs": [
+    {"from": "research", "to": "documents", "payload": "Validated findings with source URL, exact-content SHA-256 and zero-based record index"},
+    {"from": "documents", "to": "guided", "payload": "Validated transformed rows and declared field names; prerequisites inspect these rows; each step carries record IDs and unchanged provenance"}
+  ],
+  "behavior": {
+    "retrieval": "Offline exact-URL synthetic fixture adapter; no network fallback, redirects, providers, or hidden reads",
+    "ingestion": "HTTPS-only exact-host allowlist; reject URL credentials, fragments, nonstandard ports, whitespace, backslashes and IP-literal allowlist entries",
+    "extraction": "JSON arrays of nonempty flat scalar-valued objects, or text/plain key=value records separated by blank lines",
+    "automation": "Configurable key selection/renaming, string/integer/finite-number/boolean conversion, missing-key defaults, nullable optional fields, string strip/lower/upper/title transforms",
+    "checks": "nonempty, type-strict equals, numeric min/max, full-match regex, type-sensitive unique; document failures stop pipeline",
+    "onboarding": "Acyclic prerequisite graph evaluated topologically; completed/ready/blocked states; requested completion rejected when blocked; all-row checks; completed count, total and fraction",
+    "determinism": "Input order and content-derived provenance preserved; no clock, randomness, mutation of caller input or persistence side effects",
+    "bounds": "50 URLs, 1000 aggregate records, 100000 characters per fixture body, 200-character regex patterns"
+  },
+  "scope": {
+    "included": ["Integrated CLI", "Offline synthetic retrieval", "Reusable shared validation", "General-purpose document reshaping", "Prerequisite progress tracking", "Source evidence preservation", "Standard-library unittest coverage"],
+    "excluded": ["Live HTTP or DNS", "LLM providers", "HTML/PDF/Office extraction", "Enterprise security hardening", "Regex execution timeouts", "Database or account provisioning", "Persistent user state; progress is supplied and returned as JSON"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"tests_run": 26, "failures": 0, "errors": 0, "exit_code": 0},
+    "cli_example": {"exit_code": 0, "stdout": "One JSON object with status ok", "document_rows": 2, "onboarding_steps": 3, "completed_steps": 1},
+    "error_contract": "Missing files, invalid argument counts, invalid JSON/schema and invalid encoding return a single JSON error object and exit 2",
+    "verified_commands": ["python -B -m unittest discover -s . -p test_implementation.py", "python -B implementation.py example_input.json"]
+  }
+}

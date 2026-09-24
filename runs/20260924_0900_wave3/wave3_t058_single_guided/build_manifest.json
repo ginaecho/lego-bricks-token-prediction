@@ -1,0 +1,58 @@
+{
+  "build_id": "wave3_t058_single_guided",
+  "composition_label": "Guided setup (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, independently written reference implementation using synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1, not boolean",
+      "fixture_label": "nonblank label; provided fixture explicitly SYNTHETIC",
+      "steps": "ordered array of {id, title, prerequisites: unique step ID array, required_fields: unique field name array}",
+      "actions": "ordered array of {step_id, operation: start|complete, answers?: object}"
+    },
+    "output": {
+      "success": "{schema_version, status: ok, fixture_label, steps, events, progress, next_steps}",
+      "error": "{schema_version, status: error, error: {code: invalid_input, message}}; exit 2"
+    },
+    "validation": "One Validator shared by request, step definitions and actions. Unknown fields, missing fields, duplicate JSON keys, nonfinite JSON literals, invalid types, unknown IDs, duplicate IDs and cyclic prerequisites are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validated request and acyclic prerequisite index feed deterministic action replay.",
+    "Replay state and submitted answers feed ordered step statuses, progress and next-step guidance."
+  ],
+  "behavior": {
+    "transitions": "pending -> in_progress via start; in_progress -> completed via complete. All prerequisites must be completed. Repeated operations are errors.",
+    "answers": "Completion requires exactly the declared required_fields, each with a nonblank string value. Start accepts no answers.",
+    "progress": "Completed/total percentage rounded to two decimals, counts per state, finished flag; empty plan is finished at 100%.",
+    "guidance": "Blocked prerequisite IDs, required fields, start eligibility, and ordered available or active next_steps.",
+    "determinism": "No clock, randomness, external I/O beyond reading the selected CLI input. Input is never mutated; output ordering follows definitions and actions.",
+    "atomicity": "An invalid action rejects the entire request; no partial result or persisted side effects.",
+    "persistence": "Caller retains request/action history or JSON output. Replaying history reconstructs progress.",
+    "parallel_readiness": "Independent steps may be in progress simultaneously."
+  },
+  "scope": {
+    "included": ["Prerequisite graph validation", "Validated onboarding transitions", "Required textual completion evidence", "Progress and readiness tracking", "JSON CLI and synthetic fixtures"],
+    "excluded": ["GUI", "Database or server persistence", "Authentication", "Live providers or LLMs", "Real identity, shipping or business verification", "Arbitrary field-specific validators", "Skip, rollback and reset operations", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_cases": 15,
+    "tests_passed": 15,
+    "tests_failed": 0,
+    "cli": "passed: exit 0, one JSON object, status ok, 33.33% complete",
+    "error_cli": "verified exit 2 and JSON error for missing file, invalid arguments, malformed JSON, invalid schema, duplicate keys, nonfinite literals and Unicode read failure"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "citizen_pii": [
+    {
+      "name": "Invented Citizen Juniper",
+      "address": "000 Imaginary Lane, Nowhere ZZ 00000",
+      "email": "juniper@example.invalid",
+      "phone": "202-555-0100"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "entity": "citizen_service_request",
+      "format": "government_form_json",
+      "content": {
+        "Case number": "SYNTH-SERVICE-0001",
+        "Citizen name": "Invented Citizen Juniper",
+        "Address": "000 Imaginary Lane, Nowhere ZZ 00000",
+        "Feedback": "The wait is long. Please explain the next step to Invented Citizen Juniper.",
+        "Service": "Invented library card"
+      }
+    },
+    {
+      "id": "doc-2",
+      "entity": "citizen_service_request",
+      "format": "government_form_json",
+      "content": {
+        "Case number": "SYNTH-SERVICE-0001",
+        "Citizen name": "Invented Citizen Juniper",
+        "Address": "000 Imaginary Lane, Nowhere ZZ 00000",
+        "Feedback": "The wait is long. Please explain the next step to Invented Citizen Juniper.",
+        "Service": "Invented library card"
+      }
+    },
+    {
+      "id": "doc-3",
+      "entity": "benefits_application",
+      "format": "government_form_json",
+      "content": {
+        "Case number": "SYNTH-BENEFIT-0002",
+        "Program": "Imaginary travel support",
+        "Email": "juniper@example.invalid",
+        "Feedback": "Please provide accessible large print. The form is confusing."
+      }
+    },
+    {
+      "id": "doc-4",
+      "entity": "policy_document",
+      "format": "policy_text",
+      "content": "Synthetic invented policy; not a real regulation.\nPolicy title: Imaginary Service Access Rule\nReview period: 30 invented days\nGuidance: Explain the process in accessible plain language."
+    }
+  ],
+  "fields": [
+    {"name": "service_case", "entity": "citizen_service_request", "label": "Case number", "required": true},
+    {"name": "service", "entity": "citizen_service_request", "label": "Service", "required": true},
+    {"name": "citizen_name", "entity": "citizen_service_request", "label": "Citizen name", "required": false},
+    {"name": "benefit_case", "entity": "benefits_application", "label": "Case number", "required": true},
+    {"name": "program", "entity": "benefits_application", "label": "Program", "required": true},
+    {"name": "application_date", "entity": "benefits_application", "label": "Application date", "required": true},
+    {"name": "policy_title", "entity": "policy_document", "label": "Policy title", "required": true},
+    {"name": "review_period", "entity": "policy_document", "label": "Review period", "required": true}
+  ]
+}

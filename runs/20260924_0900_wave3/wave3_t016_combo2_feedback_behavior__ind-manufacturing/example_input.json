@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "fixture_note": "Entirely invented ERP/MES orders, assets, inspections and maintenance feedback. Telemetry: Python random.Random(16), five gauss(64,2) temperatures then five gauss(2.5,0.2) vibration readings, rounded to three decimals; one deliberately injected 96 C safety excursion.",
+  "as_of": "2026-09-24T10:00:00Z",
+  "user_id": "operator-demo",
+  "work_orders": [
+    {
+      "id": "WO-100",
+      "asset_id": "SYN-PRESS-17",
+      "description": "Synthetic maintenance order: inspect press cooling circuit",
+      "status": "open",
+      "tags": ["thermal"],
+      "tolerances": {
+        "temperature": {"unit": "C", "min": 45, "max": 80, "safety_max": 95}
+      }
+    },
+    {
+      "id": "WO-200",
+      "asset_id": "SYN-MILL-23",
+      "description": "Synthetic maintenance order: lubricate spindle and inspect bearing",
+      "status": "open",
+      "tags": ["vibration", "maintenance"],
+      "tolerances": {
+        "vibration": {"unit": "mm/s", "min": 0, "max": 4.5, "safety_max": 8}
+      }
+    }
+  ],
+  "quality_inspections": [
+    {
+      "id": "QI-100",
+      "work_order_id": "WO-100",
+      "asset_id": "SYN-PRESS-17",
+      "timestamp": "2026-09-24T08:00:00Z",
+      "inspector_id": "SYN-INSPECTOR-01",
+      "metric": "temperature",
+      "value": 65.2,
+      "unit": "C",
+      "decision": "pass",
+      "decision_reason": "Invented inspection: cooling measurement within the recorded 45-80 C limits."
+    },
+    {
+      "id": "QI-200",
+      "work_order_id": "WO-200",
+      "asset_id": "SYN-MILL-23",
+      "timestamp": "2026-09-24T08:00:00Z",
+      "inspector_id": "SYN-INSPECTOR-02",
+      "metric": "vibration",
+      "value": 5.1,
+      "unit": "mm/s",
+      "decision": "fail",
+      "decision_reason": "Invented inspection: spindle vibration exceeds the recorded 4.5 mm/s upper limit."
+    }
+  ],
+  "sensor_csv": "id,work_order_id,asset_id,timestamp,metric,value,unit\nS1,WO-100,SYN-PRESS-17,2026-09-24T09:00:00Z,temperature,62.524,C\nS2,WO-100,SYN-PRESS-17,2026-09-24T09:01:00Z,temperature,65.75,C\nS3,WO-100,SYN-PRESS-17,2026-09-24T09:02:00Z,temperature,62.113,C\nS4,WO-100,SYN-PRESS-17,2026-09-24T09:03:00Z,temperature,65.085,C\nS5,WO-100,SYN-PRESS-17,2026-09-24T09:04:00Z,temperature,61.532,C\nS6,WO-200,SYN-MILL-23,2026-09-24T09:00:00Z,vibration,2.658,mm/s\nS7,WO-200,SYN-MILL-23,2026-09-24T09:01:00Z,vibration,2.484,mm/s\nS8,WO-200,SYN-MILL-23,2026-09-24T09:02:00Z,vibration,2.784,mm/s\nS9,WO-200,SYN-MILL-23,2026-09-24T09:03:00Z,vibration,2.669,mm/s\nS10,WO-200,SYN-MILL-23,2026-09-24T09:04:00Z,vibration,2.511,mm/s\nS11,WO-100,SYN-PRESS-17,2026-09-24T09:30:00Z,temperature,96,C\n",
+  "feedback": [
+    {
+      "id": "F1",
+      "work_order_id": "WO-100",
+      "inspection_id": "QI-100",
+      "timestamp": "2026-09-24T08:05:00Z",
+      "text": "Temperature maintenance needed.",
+      "safety_critical": false
+    },
+    {
+      "id": "F2",
+      "work_order_id": "WO-100",
+      "inspection_id": "QI-100",
+      "timestamp": "2026-09-24T08:06:00Z",
+      "text": "TEMPERATURE maintenance needed!",
+      "safety_critical": false
+    },
+    {
+      "id": "F3",
+      "work_order_id": "WO-100",
+      "inspection_id": "QI-100",
+      "timestamp": "2026-09-24T09:31:00Z",
+      "text": "Synthetic maintenance log: smoke near cooling guard; human safety review requested.",
+      "safety_critical": true
+    },
+    {
+      "id": "F4",
+      "work_order_id": "WO-200",
+      "inspection_id": "QI-200",
+      "timestamp": "2026-09-24T08:10:00Z",
+      "text": "Synthetic maintenance log: vibration after lubrication; quality inspection requested.",
+      "safety_critical": false
+    }
+  ],
+  "events": [
+    {
+      "id": "E1",
+      "user_id": "operator-demo",
+      "work_order_id": "WO-100",
+      "type": "browse",
+      "timestamp": "2026-09-23T10:00:00Z"
+    },
+    {
+      "id": "E2",
+      "user_id": "operator-demo",
+      "work_order_id": "WO-200",
+      "type": "purchase",
+      "timestamp": "2026-08-25T10:00:00Z"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "build_id": "wave3_t102_combo4_deep_journey_basic-support_extract",
+  "composition_label": "deep -> journey -> basic:support -> extract",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Synthetic documents with explicitly annotated topic/value/quote claims and optional start offsets; research_questions; request query/topics/team_online; action catalog and completed_actions; extraction_schema.",
+    "output": "One status-bearing JSON object containing versioned deep, journey, support, extract stage envelopes.",
+    "validation": "One validate function verifies input types, unique identifiers, evidence spans and acyclic action prerequisites. Every stage output is validated against its deterministic contract before the next stage consumes it.",
+    "offsets": "Zero-based, end-exclusive Python Unicode character offsets, not UTF-8 byte offsets."
+  },
+  "cross_stage_handoffs": [
+    {"from": "deep", "to": "journey", "data": "Validated agreed/disputed findings, documentary evidence and unresolved questions; only agreed topics satisfy action requirements."},
+    {"from": "journey", "to": "basic:support", "data": "Validated two-step plan or blocked outcome plus full research evidence; plan topics augment requested support topics."},
+    {"from": "basic:support", "to": "extract", "data": "Validated support answer and grounded fact spans; extracted values cannot bypass the support stage."}
+  ],
+  "behavior": {
+    "research": "Aggregates all supplied documents, exact-string agreement, retained conflicting alternatives, deduplicated evidence and unresolved questions. One-document agreement is not independent corroboration; document_count exposes this.",
+    "journey": "Request-topic overlap then action-id ranking; searches for a feasible ordered pair, verifies completion prerequisites and evidence availability. A blocked result is returned rather than inventing a second step.",
+    "support": "General topic-based grounded informational response, source citations, unresolved-topic disclosure, recommended but never executed actions, honest online/offline escalation language.",
+    "extraction": "Schema-driven string/integer/boolean extraction with optional typed enum constraints, support-answer spans, original document citations, required/optional missing-field reporting.",
+    "errors": "CLI validation and file errors produce one JSON error object and exit 2; successful processing exits 0 even when a journey is blocked or required extraction fields are missing.",
+    "determinism": "No clocks, randomness, network requests, provider calls or optional LLM hooks."
+  },
+  "scope": {
+    "included": ["Clearly labeled synthetic fixtures", "Shared validation and integrated data lineage", "Offline support", "Dependency-aware two-step planning", "Typed extraction with provenance"],
+    "excluded": ["Open-web research", "Automatic natural-language claim discovery", "Semantic equivalence inference", "Authoritative conflict resolution", "Live customer actions or ticket creation", "Provider integrations", "Enterprise production delivery"],
+    "limitations": ["Input requires explicit topic labels and evidence annotations.", "Agreement uses exact strings and does not establish real-world truth.", "Requested free-text query is preserved; explicit request topics drive routing.", "Recomputed validation prioritizes clarity over large-corpus performance."]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 36,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_example": {"exit_code": 0, "stdout": "One JSON object with status ok"},
+    "coverage": ["All four stages", "Cross-stage lineage", "Disagreement and missing evidence", "Prerequisites and cycles", "Offline and online support", "Extraction types, enum, missing fields and Unicode spans", "Invalid inputs and tampered handoffs", "CLI success, invalid schema, invalid JSON, missing file and usage errors"]
+  }
+}

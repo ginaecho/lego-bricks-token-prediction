@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "dataset_label": "SYNTHETIC customer-support fixture; no real customers",
+  "config": {
+    "categories": [
+      {"id": "billing", "keywords": ["invoice", "refund"], "base_priority": "normal", "team": "synthetic-finance", "owner": "synthetic-billing-lead"},
+      {"id": "technical", "keywords": ["error", "outage"], "base_priority": "high", "team": "synthetic-engineering", "owner": "synthetic-oncall"},
+      {"id": "general", "keywords": [], "base_priority": "low", "team": "synthetic-support", "owner": "synthetic-support-lead"}
+    ],
+    "fallback_category": "general",
+    "priority_rules": [
+      {"keywords": ["outage", "data loss"], "priority": "urgent"},
+      {"keywords": ["blocked"], "priority": "high"}
+    ]
+  },
+  "tickets": [
+    {"id": "SYN-001", "subject": "Invoice correction", "body": "A synthetic invoice has an incorrect amount."},
+    {"id": "SYN-002", "subject": "OUTAGE", "body": "The synthetic test service is blocked."},
+    {"id": "SYN-003", "subject": "Hello", "body": "Where can I learn more?"}
+  ]
+}

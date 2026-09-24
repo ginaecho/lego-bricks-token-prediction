@@ -1,0 +1,110 @@
+{
+  "build_id": "wave3_t122_combo4_basic-research_basic-documents_basic-insights_basic-onboard",
+  "composition_label": "basic:research -> basic:documents -> basic:insights -> basic:onboard",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "envelope": {
+      "schema_version": "Integer 1, not a boolean.",
+      "fixture_label": "Nonempty string starting with SYNTHETIC.",
+      "stage": "input, research, documents, insights, or onboard.",
+      "questions": "Nonempty array of {id, text, keywords}; keywords is a unique string array, possibly empty.",
+      "sources": "Array of {id, title, text, kind, customer_id}; kind is reference or feedback. customer_id is null or a known customer ID. References must use null.",
+      "customers": "Array of {id, name, goal, experience}; experience is beginner or experienced.",
+      "results": "Initially empty; contains exactly the completed stage payloads."
+    },
+    "output": "One JSON object: {status: ok, data: validated final envelope}. File, JSON, usage, or validation errors produce {status: error, error: message} and exit 2.",
+    "validation": "One shared validate function checks exact fields, bounded arrays and strings, unique IDs, valid types and references, evidence quotations and matching terms, document evidence coverage and checks, theme classification and coverage, sentiment counts, customer personalization and plan evidence lineage. Each stage validates its predecessor and its new envelope.",
+    "limits": "At most 10000 entries per array and 20000 characters per nonempty string. Source and customer arrays may be empty. Explicit keywords must tokenize to searchable words."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "documents",
+      "contract": "Source-grounded sentence quotations, matched query tokens, source IDs, question IDs and unanswered question IDs. Documents consume only this validated evidence."
+    },
+    {
+      "from": "documents",
+      "to": "insights",
+      "contract": "Normalized rows preserve source title, kind, customer identity, quote, word count, evidence IDs and question IDs. Same-source identical quotations collapse into one row so questions do not inflate feedback counts."
+    },
+    {
+      "from": "insights",
+      "to": "onboard",
+      "contract": "Ranked feedback themes carry row IDs, customer IDs, sentiment counts and actionable recommendations. Plans consume themes and validated document lineage, with customer goal and experience from the shared envelope."
+    }
+  ],
+  "behavior": {
+    "research": "Unicode-aware case-insensitive whole-token matching against explicit keywords or non-stopword question text. Sentence and newline splitting preserves exact source quotations. No match is recorded as an unanswered question, not invented evidence. Input source order is retained; relevance is lexical, not a truth or credibility judgment.",
+    "documents": "Deduplicate by source ID and exact quotation, merge question and evidence lineage, count whitespace-delimited words, and validate evidence coverage and collapse counts. Distinct sources remain distinct.",
+    "insights": "Only research-selected feedback rows contribute. Assign one theme by maximum lexicon overlap, breaking ties alphabetically. Themes: setup, usability, reliability, pricing, support, other. Positive and negative lexicons yield positive, negative, mixed or neutral sentiment. Rank themes by negative-plus-mixed row count, total row count and theme ID.",
+    "onboard": "Create exactly one plan per customer. Select up to two personal themes in global priority order; otherwise use up to two shared themes; otherwise use goal-only steps. Customize introduction or pilot based on experience and preserve goal, name, theme and row provenance. Shared feedback is explicitly labeled and may include anonymous feedback.",
+    "determinism": "No randomness, timestamps, network access or model calls. Input is not mutated; every handoff is deep-copied. Stable IDs and ordering produce identical output for identical input.",
+    "synthetic_data": "All example customers, sources, quotations and goals are explicitly synthetic.",
+    "operation": "The CLI reads one UTF-8 or UTF-8-BOM JSON file, emits JSON on stdout, and creates no files. Use -B to suppress bytecode artifacts."
+  },
+  "scope": {
+    "included": [
+      "Integrated four-stage reference pipeline",
+      "Shared input and accumulated output envelope",
+      "Strict schema and lineage validation",
+      "Evidence retrieval with transparent gaps",
+      "Deduplicated document row extraction and checks",
+      "Deterministic theme and sentiment aggregation",
+      "Personal and fallback onboarding plans",
+      "Standard-library tests and subprocess CLI checks"
+    ],
+    "excluded": [
+      "Live research, web retrieval, providers or optional LLM steps",
+      "PDF, office document or OCR parsing",
+      "Semantic entailment, source credibility scoring or fact verification",
+      "Negation-aware sentiment, sarcasm handling or multilingual theme lexicons",
+      "Feedback not selected by research question matching",
+      "Cross-source duplicate detection",
+      "Enterprise persistence, authentication, scheduling or external notifications"
+    ]
+  },
+  "test_outcomes": {
+    "suite": "test_implementation.py",
+    "test_count": 30,
+    "passed": 30,
+    "failed": 0,
+    "test_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "cli_final_stage": "onboard",
+    "cli_plan_count": 3,
+    "coverage": [
+      "Each stage and stage ordering",
+      "Exact evidence citations and unanswered questions",
+      "Whole-token keyword fallback and Unicode matching",
+      "Multi-question deduplication and document counts",
+      "Feedback-only insights, sentiment cases and unknown themes",
+      "Personal, shared and goal-only onboarding",
+      "Cross-stage customer and evidence lineage",
+      "Empty sources and empty customers",
+      "Determinism and immutability",
+      "Invalid schemas, duplicate IDs and dangling customer references",
+      "Tampered intermediate and final outputs",
+      "CLI success, missing files, malformed JSON, nonfinite numbers and invalid usage"
+    ]
+  }
+}

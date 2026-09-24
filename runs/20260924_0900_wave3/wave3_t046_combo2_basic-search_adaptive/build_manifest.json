@@ -1,0 +1,61 @@
+{
+  "build_id": "wave3_t046_combo2_basic-search_adaptive",
+  "composition_label": "basic:search -> adaptive",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original integrated implementation written for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "fixture_label": "nonempty text; supplied example is clearly synthetic",
+      "query": "nonempty text, maximum 500 characters, at least one searchable term",
+      "filters": "category: nonempty string or null; max_price_usd: finite nonnegative number or null",
+      "profile": "experience: beginner|intermediate|advanced; preferred_format: text|video|interactive",
+      "catalog": "0..1000 unique-id products with id, name, category, description, unique tags, price_usd, requires_setup and safety_review",
+      "limit": "integer 1..20, booleans rejected"
+    },
+    "output": "schema_version, status=ok, fixture_label, search, onboarding; failures: status=error and error message, exit 2",
+    "validation": "Single validate function dispatches request, search and onboarding boundaries using shared helpers. Rejects unknown fields, malformed shapes, invalid numbers, duplicate ids, invalid evidence, altered product provenance, broken prerequisites and mismatched preferences. JSON loader rejects duplicate keys and nonfinite constants."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:search",
+      "to": "adaptive",
+      "payload": "Validated ranked matches containing original catalog product attributes, scores, matched terms and explanations; original validated profile shared across stages.",
+      "consumption": "Adaptive stage revalidates search evidence and selects the first ranked product. Product id, price, setup and safety flags determine guidance and prerequisites; all ranked ids remain visible in onboarding."
+    }
+  ],
+  "behavior": {
+    "search": "Unicode/accent/case normalization, curated general-category synonyms, conservative one-edit typo matching, weighted name/tag/category/description scoring, complete-query bonus, partial-match fallback, strict explicit category/budget filters, deterministic product-id tie breaks and limit.",
+    "onboarding": "Beginner detailed guidance, intermediate concise guidance, advanced explicit basics waiver. Comparison always required; safety and setup steps derive from selected product. Safety precedes setup. Each step explains prerequisites and adaptation; final readiness is not a purchase or safety certification.",
+    "preferences": "Text checklist, text-only video storyboard or self-guided interactive prompts; no video files or interactive state are generated.",
+    "no_matches": "Successful pipeline with no_matches onboarding, no selected product, no steps and a query-refinement explanation.",
+    "determinism": "No randomness, clock dependence, live services, provider calls or LLM steps."
+  },
+  "scope": {
+    "included": ["Integrated CLI pipeline", "Synthetic catalog and customer fixture", "Boundary validation", "Explainable ranked retrieval", "Experience and preference adaptation", "Prerequisite DAG", "CLI and unit tests"],
+    "excluded": ["Enterprise delivery", "Live catalog", "Semantic embeddings", "Automatic natural-language budget extraction", "Comprehensive multilingual synonyms", "Purchases", "Real media generation", "Persistent onboarding progress", "External LLM providers"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "unittest",
+    "test_cases": 20,
+    "cli_example": "Passed: exit 0, one JSON object with status ok, selected SYN-AUDIO-01",
+    "test_command_exit_code": 0,
+    "cli_command_exit_code": 0,
+    "coverage": "20 passing tests cover both stages, synonym/typo combination, filters, category generality, deterministic ordering, all experience levels, preferences, prerequisite ordering, handoff tampering, empty results, invalid inputs, extreme numbers, Unicode and CLI success/error behavior.",
+    "repair_verified": "Preserved original catalog word forms alongside canonical synonyms so a plural-word typo remains discoverable after normalization."
+  }
+}

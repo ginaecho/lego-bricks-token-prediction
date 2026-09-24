@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "question": "How do I report an outage?",
+  "grid_assets": [
+    {"asset_id": "SYN-SUB-WINTER", "kind": "substation", "critical": true, "connected_to": ["SYN-DEVICE-101"]},
+    {"asset_id": "SYN-DEVICE-101", "kind": "device", "critical": false, "connected_to": ["SYN-SUB-WINTER"]}
+  ],
+  "smart_meter_interval_csv": "timestamp,meter_id,asset_id,consumption_kwh\n2026-01-15T18:00:00Z,SYN-METER-01,SYN-DEVICE-101,2.4\n2026-01-15T18:30:00Z,SYN-METER-01,SYN-DEVICE-101,2.7\n2026-07-15T18:00:00Z,SYN-METER-01,SYN-DEVICE-101,1.1\n",
+  "telemetry": [
+    {"timestamp": "2026-01-15T18:30:00Z", "asset_id": "SYN-SUB-WINTER", "voltage_kv": 33.0, "load_mw": 12.8, "status": "alarm", "emissions": {"value": 185.0, "unit": "gCO2e/kWh", "source": "Synthetic seasonal dispatch fixture; not measured emissions"}}
+  ],
+  "outage_reports": [
+    {"report_id": "SYN-OUTAGE-01", "asset_id": "SYN-SUB-WINTER", "timestamp": "2026-01-15T18:30:00Z", "hazard": "life_safety", "priority": "critical"}
+  ],
+  "safety_rules": {"life_safety": "critical", "essential_service": "high", "routine": "normal"},
+  "knowledge_base": [
+    {"id": "SYN-KB-OUTAGE", "title": "Report an outage", "text": "Synthetic support guidance: report an outage through the utility reporting channel. Stay away from fallen wires; contact local emergency services for immediate danger. Life-safety reports receive critical priority. Internal routing uses SYN-SUB-WINTER.", "tags": ["outage", "report", "safety"]},
+    {"id": "SYN-KB-METER", "title": "Meter consumption intervals", "text": "Synthetic meter readings describe energy consumed during each half-hour interval in kWh. Winter heating can increase consumption.", "tags": ["meter", "consumption", "interval", "winter"]}
+  ]
+}

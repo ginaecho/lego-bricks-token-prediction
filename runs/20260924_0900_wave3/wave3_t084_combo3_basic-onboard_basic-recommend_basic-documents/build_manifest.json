@@ -1,0 +1,71 @@
+{
+  "build_id": "wave3_t084_combo3_basic-onboard_basic-recommend_basic-documents",
+  "composition_label": "basic:onboard -> basic:recommend -> basic:documents",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "fixture": "literal synthetic",
+      "customer": "id, name, email (empty when incomplete), unique interests, budget, completed_steps",
+      "catalog": "products: unique id, name, unique tags, price, boolean in_stock",
+      "document": "format csv; content with unique sku, quantity, unit_price columns",
+      "limit": "integer 1..20"
+    },
+    "output": "schema_version, fixture, status, customer_id, onboarding, discovery, documents",
+    "validation": "Shared validate function validates input and all three stage outputs and checks handoffs. Unknown fields rejected. Monetary input values are nonnegative decimal strings of at most nine integer digits and two fractional digits. Output money has two fractional digits.",
+    "errors": "Validation, file, Unicode and malformed JSON errors produce one JSON object with status error and exit 2.",
+    "business_findings": "Successfully processed documents may have valid=false and checks while the pipeline status remains ok."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "onboarding",
+      "to": "discovery",
+      "fields": ["customer_id", "next_step", "interests", "budget"],
+      "effect": "Normalized interests and budget determine eligible products and ranking; personalized next step remains available downstream."
+    },
+    {
+      "from": "discovery",
+      "to": "documents",
+      "fields": ["customer_id", "onboarding_step", "budget", "items"],
+      "effect": "Recommendations determine per-row recommended flags and not_recommended checks; budget checks the extracted document total."
+    }
+  ],
+  "behavior": {
+    "onboarding": "First incomplete step: profile, preferences, verification; otherwise discover. Greeting uses customer name. Guidance is advisory and does not block discovery.",
+    "discovery": "Only in-stock products within individual-item budget; descending case-insensitive interest overlap, ascending price then product ID. Zero-match affordable alternatives allowed. Empty eligible catalog returns explicit no-results reason.",
+    "documents": "Strict CSV extraction, trimmed case-insensitive headers, normalized row objects, bounded positive quantities, exact Decimal totals. Flags unknown products, price mismatch, unavailable stock, unselected products, empty document and over-budget total. Blank rows ignored; repeated SKU rows retained.",
+    "determinism": "No randomness, provider calls, clock-dependent results, persistence or input mutation."
+  },
+  "scope": {
+    "included": ["Guided onboarding", "Deterministic personalized discovery", "CSV extraction and reshaping", "Business document checks", "Shared schema validation", "Runnable JSON CLI", "Clearly labeled synthetic fixtures"],
+    "excluded": ["Live providers or networks", "LLM integration", "OCR or PDF parsing", "Authentication", "Actual email verification", "Inventory reservation", "Taxes and currency conversion", "Database persistence", "Enterprise production guarantees"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "unittest",
+    "tests_run": 22,
+    "failures": 0,
+    "errors": 0,
+    "cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "document_valid": true,
+      "document_total": "61.00"
+    }
+  }
+}

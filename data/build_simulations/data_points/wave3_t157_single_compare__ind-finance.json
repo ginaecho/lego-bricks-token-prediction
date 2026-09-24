@@ -97,7 +97,7 @@
   "split_group": "2986f977488337c3eb64c1c5eda2fa0ac02f9797e1bce4b40764f6ecca8c3295",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "a8c11544a01b6cb11027b826a00574fbce13c9ddc8aa64eb1060eea30e893c21",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t157_single_compare__ind-finance",
   "membership_point_id": "single_compare__ind-finance",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "b3b91a6461f9cb3cf632469cb37791c683f0bc6863db9343949b693760f6a9b6",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "4db56a59-58e8-4879-bce2-6f7c792df896",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 132176,
+    "output_tokens": 9928,
+    "cache_read_tokens": 119432,
+    "cache_write_tokens": 12726,
+    "total_tokens": 142104,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38147,
+        "agent_id": "4db56a59-58e8-4879-bce2-6f7c792df896",
+        "model": "gpt-6-astra",
+        "input_tokens": 14986,
+        "output_tokens": 377,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 840,
+        "reasoning_tokens": 199,
+        "duration_ms": 11214,
+        "created_at": "2026-09-24T13:02:06.490Z"
+      },
+      {
+        "id": 38186,
+        "agent_id": "4db56a59-58e8-4879-bce2-6f7c792df896",
+        "model": "gpt-6-astra",
+        "input_tokens": 15394,
+        "output_tokens": 7703,
+        "cache_read_tokens": 14983,
+        "cache_write_tokens": 408,
+        "reasoning_tokens": 0,
+        "duration_ms": 123181,
+        "created_at": "2026-09-24T13:11:01.621Z"
+      },
+      {
+        "id": 38187,
+        "agent_id": "4db56a59-58e8-4879-bce2-6f7c792df896",
+        "model": "gpt-6-astra",
+        "input_tokens": 23413,
+        "output_tokens": 221,
+        "cache_read_tokens": 15391,
+        "cache_write_tokens": 8019,
+        "reasoning_tokens": 18,
+        "duration_ms": 7514,
+        "created_at": "2026-09-24T13:11:04.720Z"
+      },
+      {
+        "id": 38188,
+        "agent_id": "4db56a59-58e8-4879-bce2-6f7c792df896",
+        "model": "gpt-6-astra",
+        "input_tokens": 24987,
+        "output_tokens": 1221,
+        "cache_read_tokens": 23410,
+        "cache_write_tokens": 1574,
+        "reasoning_tokens": 229,
+        "duration_ms": 21817,
+        "created_at": "2026-09-24T13:11:11.261Z"
+      },
+      {
+        "id": 38189,
+        "agent_id": "4db56a59-58e8-4879-bce2-6f7c792df896",
+        "model": "gpt-6-astra",
+        "input_tokens": 26524,
+        "output_tokens": 282,
+        "cache_read_tokens": 24984,
+        "cache_write_tokens": 1537,
+        "reasoning_tokens": 0,
+        "duration_ms": 6247,
+        "created_at": "2026-09-24T13:11:15.199Z"
+      },
+      {
+        "id": 38190,
+        "agent_id": "4db56a59-58e8-4879-bce2-6f7c792df896",
+        "model": "gpt-6-astra",
+        "input_tokens": 26872,
+        "output_tokens": 124,
+        "cache_read_tokens": 26521,
+        "cache_write_tokens": 348,
+        "reasoning_tokens": 0,
+        "duration_ms": 4205,
+        "created_at": "2026-09-24T13:11:24.552Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.47935999999999995,
+      "observed_cache_profile_estimate_usd": 0.21063800000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.752319999999999,
+      "observed_cache_profile_estimate_usd": 5.752319999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,220 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................\n----------------------------------------------------------------------\nRan 16 tests in 0.647s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true,
+      "notice": "Synthetic demonstration only; not lending advice or compliance certification.",
+      "customer_id": "SYN-CUSTOMER-157",
+      "application": {
+        "currency": "EUR",
+        "principal": 12000.0,
+        "term_months": 36
+      },
+      "screening": {
+        "kyc_status": "verified",
+        "aml_flags": [],
+        "review_required": false
+      },
+      "transactions": [
+        {
+          "id": "SYN-T1",
+          "date": "2026-08-01",
+          "currency": "EUR",
+          "amount": 5500.0,
+          "direction": "credit"
+        },
+        {
+          "id": "SYN-T2",
+          "date": "2026-08-03",
+          "currency": "EUR",
+          "amount": 191.26,
+          "direction": "debit",
+          "masked_card": "************1111"
+        },
+        {
+          "id": "SYN-T3",
+          "date": "2026-08-07",
+          "currency": "EUR",
+          "amount": 82.94,
+          "direction": "debit"
+        },
+        {
+          "id": "SYN-T4",
+          "date": "2026-08-12",
+          "currency": "EUR",
+          "amount": 24.6,
+          "direction": "debit"
+        }
+      ],
+      "transaction_summary": {
+        "count": 4,
+        "credits": 5500.0,
+        "debits": 298.8,
+        "use": "Context only; history is not used to infer creditworthiness"
+      },
+      "comparison": {
+        "columns": [
+          "id",
+          "name",
+          "apr",
+          "fee",
+          "payment",
+          "total_repayment",
+          "debt_to_income",
+          "eligible",
+          "score"
+        ],
+        "units": {
+          "apr": "fraction",
+          "fee": "currency major units",
+          "payment": "currency major units per month",
+          "total_repayment": "currency major units",
+          "score": "0 to 100"
+        },
+        "rows": [
+          {
+            "id": "SYN-LOW-RATE",
+            "name": "Synthetic low-rate loan",
+            "apr": 0.05,
+            "fee": 150.0,
+            "payment": 359.6507652559857,
+            "total_repayment": 13097.427549215485,
+            "debt_to_income": 0.11084559368290649,
+            "eligible": true,
+            "exclusion_reasons": [],
+            "score": 70.0,
+            "explanation": {
+              "rule": "100 * sum(weight * utility); lower attributes are preferred",
+              "utility_formula": "(maximum - value) / (maximum - minimum)",
+              "equal_attribute_rule": "utility = 1 when all eligible values equal",
+              "comparison_population": "eligible products only",
+              "components": [
+                {
+                  "attribute": "apr",
+                  "value": 0.05,
+                  "minimum": 0.05,
+                  "maximum": 0.065,
+                  "weight": 0.5,
+                  "utility": 1.0,
+                  "contribution": 50.0
+                },
+                {
+                  "attribute": "fee",
+                  "value": 150.0,
+                  "minimum": 0.0,
+                  "maximum": 150.0,
+                  "weight": 0.3,
+                  "utility": 0.0,
+                  "contribution": 0.0
+                },
+                {
+                  "attribute": "payment",
+                  "value": 359.6507652559857,
+                  "minimum": 359.6507652559857,
+                  "maximum": 367.78803451811746,
+                  "weight": 0.2,
+                  "utility": 1.0,
+                  "contribution": 20.0
+                }
+              ],
+              "dti_formula": "(monthly debt + loan payment) / monthly income",
+              "dti_limit": 0.4
+            }
+          },
+          {
+            "id": "SYN-NO-FEE",
+            "name": "Synthetic fee-free loan",
+            "apr": 0.065,
+            "fee": 0.0,
+            "payment": 367.78803451811746,
+            "total_repayment": 13240.369242652228,
+            "debt_to_income": 0.11232509718511227,
+            "eligible": true,
+            "exclusion_reasons": [],
+            "score": 30.0,
+            "explanation": {
+              "rule": "100 * sum(weight * utility); lower attributes are preferred",
+              "utility_formula": "(maximum - value) / (maximum - minimum)",
+              "equal_attribute_rule": "utility = 1 when all eligible values equal",
+              "comparison_population": "eligible products only",
+              "components": [
+                {
+                  "attribute": "apr",
+                  "value": 0.065,
+                  "minimum": 0.05,
+                  "maximum": 0.065,
+                  "weight": 0.5,
+                  "utility": 0.0,
+                  "contribution": 0.0
+                },
+                {
+                  "attribute": "fee",
+                  "value": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 150.0,
+                  "weight": 0.3,
+                  "utility": 1.0,
+                  "contribution": 30.0
+                },
+                {
+                  "attribute": "payment",
+                  "value": 367.78803451811746,
+                  "minimum": 359.6507652559857,
+                  "maximum": 367.78803451811746,
+                  "weight": 0.2,
+                  "utility": 0.0,
+                  "contribution": 0.0
+                }
+              ],
+              "dti_formula": "(monthly debt + loan payment) / monthly income",
+              "dti_limit": 0.4
+            }
+          }
+        ]
+      },
+      "ranking": [
+        {
+          "rank": 1,
+          "product_id": "SYN-LOW-RATE",
+          "score": 70.0
+        },
+        {
+          "rank": 2,
+          "product_id": "SYN-NO-FEE",
+          "score": 30.0
+        }
+      ],
+      "model": {
+        "version": "deterministic-preference-v1",
+        "tie_breaker": "product id ascending",
+        "payment": "Fixed-rate amortization; zero APR uses principal / months",
+        "fees": "One-time upfront fee, not financed; no compounding fees",
+        "weights": {
+          "apr": 0.5,
+          "fee": 0.3,
+          "payment": 0.2
+        },
+        "limits": "No credit bureau, real AML checks, FX conversion or live provider"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t157_single_compare__ind-finance",
+    "artifact_sha256": {
+      "implementation.py": "0663f7ac94d8023cfa2c1197cfb364d16944bd17dd37d11e5be37e7b980cdd6e",
+      "test_implementation.py": "b1406e6d899d6813e9985485b106801d46868df0b46d99c0aac9a3f48c7aded0",
+      "example_input.json": "00106ab765079468bfbc8bd3aadb8d33cfdf352797d9f3e591cad740ee2cddf7",
+      "build_manifest.json": "7712460de4ff3035c466163196c4a58a76baeb9382ca460550449243336ad642"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

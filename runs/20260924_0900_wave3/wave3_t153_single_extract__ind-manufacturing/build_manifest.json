@@ -1,0 +1,47 @@
+{
+  "build_id": "wave3_t153_single_extract__ind-manufacturing",
+  "composition_label": "single_extract",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact envelope: schema_version=1, synthetic=true, documents={work_order: JSON text, telemetry: CSV text, inspection: labeled text}. Field definitions and types are centralized in implementation.SCHEMA.",
+    "output": "status, schema_version, synthetic, entities, missing_fields, alerts, quality_trace, validation_note. Error output contains status=error and error.",
+    "spans": "Zero-based end-exclusive Unicode character offsets into original document strings; quotes are included for JSON/CSV tokens.",
+    "missing_fields": "Entity, zero-based record, field. An absent sensor record uses record=null and field=*. Null, omitted, or empty fields are missing.",
+    "validation": "One shared layer checks typed finite numbers, timestamp timezone/order, supported physical ranges, canonical units, tolerances, entity linkage and quality decision consistency."
+  },
+  "cross_stage_handoffs": [
+    "Single extraction stage: source documents -> schema-typed fields plus source spans -> shared semantic validation -> one JSON result."
+  ],
+  "behavior": {
+    "deterministic": true,
+    "missing_data": "Returns incomplete and never invents field values. Empty telemetry requires a header and is incomplete.",
+    "quality_traceability": "Links inspection, work order, asset, part, inspector, timestamp, reason and measured evidence; never authorizes release. Demonstrative rules, not certification.",
+    "safety": "Temperature >=90 degC or vibration >8 mm/s produces mandatory human escalation with pending_external_delivery. No actual notifications or machinery actions.",
+    "fixtures": "Clearly synthetic IDs and invented maintenance log. Seeded random.Random(153) generates physically plausible telemetry in the unittest fixture.",
+    "cli": "Success and incomplete outputs exit 0. File, schema and validation errors produce JSON status=error and exit 2."
+  },
+  "scope": {
+    "included": ["Schema-driven deterministic extraction", "Raw source spans", "Missing-field reporting", "ERP/MES JSON and sensor CSV", "Quality inspection label extraction", "Traceability and safety escalation records"],
+    "excluded": ["Live providers or networks", "Production safety control", "Compliance certification", "Actual human notification delivery", "Arbitrary nested ERP JSON", "Multiline CSV fields", "Persistent audit database", "LLM inference"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 16,
+    "cli_example": "passed: one JSON object, status=ok, exit 0; safety alert escalates to human",
+    "cli_error_cases": "passed: missing file, missing argument, invalid JSON, duplicate JSON key and invalid synthetic label produce status=error and exit 2"
+  }
+}

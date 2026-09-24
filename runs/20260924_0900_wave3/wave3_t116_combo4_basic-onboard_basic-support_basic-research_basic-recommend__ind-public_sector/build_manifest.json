@@ -1,0 +1,94 @@
+{
+  "build_id": "wave3_t116_combo4_basic-onboard_basic-support_basic-research_basic-recommend__ind-public_sector",
+  "composition_label": "basic:onboard -> basic:support -> basic:research -> basic:recommend",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created for this isolated build.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py",
+    "stdin": "python -B implementation.py -"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict government-form JSON: schema_version, synthetic, citizen, privacy, service_request, benefits_application, policy_documents.",
+    "output": "One envelope with schema_version, synthetic, status, stage, PII-minimized context, accumulated results, audit, safeguards.",
+    "entities": ["citizen service request", "benefits application", "policy document"],
+    "validation": "validate() checks input and each stage boundary. Shared context, policy and evidence validators enforce shapes, limits, synthetic identifiers, exact source citations, stage order, handoff integrity and safeguards.",
+    "errors": "One stdout JSON object with status error and exit 2; success status ok and exit 0. Error messages do not echo input PII or file paths."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "onboard",
+      "to": "support",
+      "data": "Validated minimized context and personalized next step based on benefits-application status."
+    },
+    {
+      "from": "support",
+      "to": "research",
+      "data": "Exact source quotations, policy IDs, unresolved question and onboarding next step."
+    },
+    {
+      "from": "research",
+      "to": "recommend",
+      "data": "Validated evidence set and next step. Only programs attached to cited policies can be suggested."
+    }
+  ],
+  "behavior": {
+    "onboarding": "Status-specific actionable instruction for draft, submitted or needs-information applications.",
+    "support": "Offline deterministic keyword matching against supplied policy sentences, scoped to the requested service; up to three short exact quotations, otherwise explicit abstention.",
+    "research": "Decision-review evidence with provenance and explicit uncertainty about completeness, freshness, conflicts and eligibility.",
+    "discovery": "Stable policy-ID order of evidence-backed services, with reasons, source IDs, next steps and required human review.",
+    "privacy": "Demonstration consent gate; drops citizen identity fields before first handoff; rejects direct contact and identity-number patterns in public text and repetitions of provided private values. No persistence or external transmission.",
+    "explainability": "Deterministic rule IDs, policy IDs and verbatim source quotations support review without retaining direct citizen identity fields.",
+    "accessibility": "Plain text instructions and short excerpts, explicit English-only validation, retained screen-reader/plain-text preferences, no image/color dependency.",
+    "fixtures": "Clearly synthetic personas, invented identifiers, reserved .invalid email and a non-traceable invented address."
+  },
+  "scope": {
+    "included": [
+      "One integrated pipeline and shared validation layer",
+      "Deterministic local execution with no model provider",
+      "Bounded JSON and policy/regulation text",
+      "PII minimization, source provenance and human-review safeguards",
+      "CLI and unittest verification"
+    ],
+    "excluded": [
+      "Real citizen data or real government policy",
+      "Legal, Privacy Act, GDPR or Section 508 compliance certification",
+      "Automated eligibility or benefits decisions",
+      "Semantic entailment, complete PII detection, contradiction resolution or policy freshness verification",
+      "Multilingual support, identity verification or authentication",
+      "Databases, production case management and live service integrations",
+      "LLM calls or optional provider integrations"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 38,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli_example": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "final_stage": "recommend"
+    }
+  }
+}

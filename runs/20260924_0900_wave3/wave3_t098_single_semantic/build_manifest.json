@@ -1,0 +1,57 @@
+{
+  "build_id": "wave3_t098_single_semantic",
+  "composition_label": "Semantic search (Smart product search)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "dataset_label": "required nonempty string, maximum 200 characters",
+      "query": "required nonempty string with word tokens, maximum 500 characters",
+      "products": "required list, maximum 1000; unique trimmed string id and title required; description string and tags list optional",
+      "limit": "optional integer 1..100, default 5; booleans rejected",
+      "semantic_weight": "optional number 0..1, default 0; positive value requires injected Python embedder"
+    },
+    "product_bounds": {"id": 100, "title": 300, "description": 5000, "tags": 30, "tag_characters": 100},
+    "success": "status=ok, dataset_label, query, matches[{id,title,score,lexical_score,semantic_score,matched_terms}], total_matches, index{product_count,term_count}, ranking{method,semantic_weight}",
+    "error": "status=error, error{code,message}; CLI exits 2 and prints one JSON object",
+    "validation": "Shared validation helpers used by request and embedding paths; unknown fields, duplicate IDs/JSON keys, invalid numbers and nonstandard JSON rejected"
+  },
+  "cross_stage_handoffs": [
+    "Validated request -> product-ID-sorted in-memory inverted index",
+    "Casefolded Unicode word tokens -> BM25 lexical scores",
+    "Optional injected query/document vectors -> validated normalized cosine similarities",
+    "Weighted score blend -> deterministic ranked shared response"
+  ],
+  "behavior": {
+    "lexical": "BM25 k1=1.2, b=0.75, positive IDF; score transformed as x/(1+x). Title, description and tags indexed together. Repeated query terms deduplicated.",
+    "embedding_interface": "search(payload, embedder=callable). One batch containing query then product texts in ID order. Return list of equal-dimensional nonzero finite numeric vectors, dimensions 1..4096. No live provider. Weight 0 disables callback; empty corpus skips it.",
+    "ranking": "(1-weight)*lexical + weight*max(0,cosine); positive scores retained, rounded to 6 decimal places; descending rounded score then ascending product ID; limit after ranking",
+    "empty_results": "Valid empty corpus or no positive matches returns status ok and empty matches",
+    "fixtures": "All example products and deterministic embedding test vectors are explicitly synthetic"
+  },
+  "scope": {
+    "included": ["single CLI JSON request/response", "shared validation", "in-memory search index", "lexical relevance ranking", "optional injected semantic vectors", "deterministic tests"],
+    "excluded": ["external providers", "pretrained embeddings", "network access", "persistence", "enterprise scale", "approximate nearest neighbors", "spell correction", "automatic synonyms without embeddings", "CLI plugin loading"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 14,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "example_top_product": "SYN-001",
+    "coverage": ["normal ranking", "case folding", "limits", "empty corpus", "no matches", "stable ties", "invalid schema", "synthetic semantic synonyms", "embedding validation and failure", "numerical stability", "CLI success", "CLI errors", "strict JSON"]
+  }
+}

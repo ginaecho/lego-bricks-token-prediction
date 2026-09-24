@@ -1,0 +1,90 @@
+{
+  "build_id": "wave3_t108_combo4_basic-research_basic-onboard_basic-insights_basic-support",
+  "composition_label": "basic:research -> basic:onboard -> basic:insights -> basic:support",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation constructed in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "envelope": ["schema_version", "status", "synthetic", "input", "stages"],
+    "input": {
+      "questions": "1..100 unique-id records {id,text}",
+      "sources": "0..100 unique-id records {id,title,content}",
+      "customer": "{id,name,goal,experience}; experience is new or experienced",
+      "feedback": "0..100 unique-id records {id,customer_id,text}",
+      "tickets": "0..100 unique-id records {id,customer_id,question}"
+    },
+    "constraints": "All input text is nonblank and at most 2000 characters. Derived actions and combined quotations may be longer. Feedback and ticket customer references must match the sole customer. Unknown fields, duplicate IDs and duplicate JSON keys are rejected.",
+    "validation": "validate(document, completed) validates the input plus the exact accumulated stage prefix before and after every stage. Evidence must quote ranked sources exactly; source, question, customer, feedback, ticket and next-step references are checked.",
+    "errors": "CLI validation, JSON parsing, encoding and file errors produce one JSON object with status error and exit 2; successful execution produces one JSON envelope with status ok and exit 0."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "onboard",
+      "data": "Goal-relevant research finding, exact source references and evidence availability determine personalized review steps and assistance needs."
+    },
+    {
+      "from": "onboard",
+      "to": "insights",
+      "data": "Customer and onboarding next-step IDs anchor feedback themes and remediation actions."
+    },
+    {
+      "from": "insights",
+      "to": "support",
+      "data": "Themes and recommended actions become support follow-ups; next-step IDs propagate. Research evidence remains available in the validated shared envelope for grounding."
+    }
+  ],
+  "behavior": {
+    "research": "Rank source material by distinct non-stopword overlap, tie-break by source ID, retain up to three exact excerpts per question, and flag insufficient evidence. Supported means lexical evidence exists, not independently verified truth.",
+    "onboard": "Select a question by goal overlap and question ID; personalize a review step and a small reversible goal-oriented task. New customers and missing evidence require assistance.",
+    "insights": "Classify feedback into billing, onboarding, reliability, usability, features or other using deterministic keyword counts; ties use alphabetical theme order. Preserve every feedback ID and count keyword-based negative signals.",
+    "support": "Search only sources retained by research, quote matching source text verbatim with citations, attach insight-driven follow-ups, and escalate unmatched questions without inventing an answer.",
+    "determinism": "No randomness, wall-clock use, external services, or model callables. Stages deep-copy their input.",
+    "synthetic_fixture": "example_input.json is explicitly labeled synthetic; all names, policies and feedback are fictional."
+  },
+  "scope": {
+    "included": [
+      "Single-customer bounded offline CLI pipeline",
+      "Shared schema and validation layer",
+      "Evidence provenance and missing-evidence handling",
+      "Personalized onboarding and feedback attribution",
+      "Deterministic grounded support and human-review disposition",
+      "Automated unit and CLI tests"
+    ],
+    "excluded": [
+      "Live retrieval, providers, LLMs and network calls",
+      "Enterprise workflows, authentication, persistent databases and external ticket creation",
+      "Semantic entailment, source trust verification and conflict resolution",
+      "Multilingual tokenization, stemming and nuanced sentiment analysis",
+      "Actual task completion tracking or automatic customer actions"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "run": 34,
+      "passed": 34,
+      "failed": 0
+    },
+    "cli_exit_code": 0,
+    "cli_output": "One valid JSON object with status ok and all four completed stages",
+    "deliverable_check": "Exactly the four requested files are present; no bytecode or scratch files"
+  }
+}

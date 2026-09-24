@@ -1,0 +1,61 @@
+{
+  "build_id": "wave3_t051_single_normal__ind-finance",
+  "composition_label": "Normal research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "required": ["schema_version", "synthetic", "query", "sources", "customers"],
+      "synthetic": "Must be true. All records must be fabricated; declaration is not identity verification.",
+      "query": "Nonempty string, max 1000 characters",
+      "sources": "Array of unique {id,title,text}; max 100 sources, 10000 characters each",
+      "customers": "Array of unique {id,name,iban,kyc_status,screening_flags?,card_number?}; IBAN must begin SYNTH-; KYC is verified/pending/rejected; flags pep/sanctions_match",
+      "transactions": "Optional array of {id,customer_id,amount,currency,date}, or {format:csv,data:string}; exact header id,customer_id,amount,currency,date",
+      "payments": "Optional ISO 20022-style JSON subset: CdtTrfTxInf.{PmtId.EndToEndId,Dbtr.CustomerId,Amt.InstdAmt.{value,Ccy},ReqdExctnDt}",
+      "loan_applications": "Optional array of {id,customer_id,amount,annual_income,currency}; income uses same currency as loan",
+      "max_findings": "Optional integer 1..20, default 5",
+      "validation": "One shared validator normalizes all formats; unique IDs per entity kind, valid foreign keys, positive finite amounts <= 1e12, nonnegative income, uppercase 3-letter currencies, valid YYYY-MM-DD dates. At most 1000 customers, combined transactions, and loans each. Unknown fields discarded rather than echoed."
+    },
+    "output": {
+      "success": "{status:ok,schema_version,synthetic,disclaimer,research:{query,findings,no_matches,sources},entities:{customers,transactions,loan_applications},assessments}",
+      "finding": "{finding,citation:{source_id,title,start,end,quote},relevance_score:{value,explanation}}",
+      "citation_offsets": "Zero-based Python Unicode character offsets, end exclusive, into returned unchanged source text",
+      "assessment": "{entity_type,entity_id,flags,screening_score:{value,range,aggregation,explanation}}",
+      "failure": "{status:error,message}; exit 2; never echo offending values"
+    }
+  },
+  "cross_stage_handoffs": [
+    "CLI JSON -> shared validation/normalization -> one deterministic passage retrieval and extraction stage -> integrated entity assessments and JSON serialization"
+  ],
+  "behavior": {
+    "retrieval": "Sentence-like spans split on .!? and newlines; lowercase ASCII token overlap excluding documented code stopwords. Positive matches only; relevance is distinct matched query terms. Sort descending overlap, then source ID and start offset. Extractive quotes only, no unsupported paraphrases.",
+    "screening": "KYC not verified +40; sanctions_match +80; pep +20; USD transaction >=10000 +30; loans with zero income +50 otherwise amount >3x annual income +30. Customer flags propagate to transactions/loans. Scores capped at 100, all contributions explained. No automated approval/rejection.",
+    "masking": "Structured card fields retain only last four digits. Free-text fields with 13..19 card-like digits are rejected to preserve exact citations without leaking PANs. Error messages are generic.",
+    "fixtures": "Example is clearly synthetic. Tests generate 40 randomized transactions with random.Random(51), ensuring deterministic replay.",
+    "llm": "No LLM step, injected callable, external knowledge source, or provider required"
+  },
+  "scope": {
+    "included": ["Bounded offline research", "Exact source citations", "JSON and CSV ledgers", "ISO-style JSON payments", "KYC/AML demonstration flags", "PCI-inspired masking", "Explainable rule scores", "Synthetic customer and loan records"],
+    "excluded": ["Compliance certification", "Full ISO 20022 XML validation", "Real IBAN validation", "Real sanctions lists", "Live financial data", "Currency conversion", "Production underwriting", "Statistical credit models", "Semantic retrieval", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 18,
+    "cli_example_exit_code": 0,
+    "cli_example_stdout": "One valid JSON object with status ok",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py"
+  }
+}

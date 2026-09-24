@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "fixture_label": "SYNTHETIC: fictitious machining assets, invented maintenance history, illustrative telemetry",
+  "work_orders": [
+    {
+      "id": "SYN-WO-100",
+      "asset_id": "SYN-MILL-07",
+      "product": "Fictitious precision pump housing",
+      "description": "Machine pump housing; investigate spindle overheating and vibration.",
+      "status": "held",
+      "tolerances": {
+        "temperature": {"unit": "C", "min": 15, "max": 75},
+        "vibration": {"unit": "mm/s", "min": 0, "max": 4.5},
+        "diameter": {"unit": "mm", "min": 24.95, "max": 25.05}
+      },
+      "maintenance_logs": [
+        {
+          "timestamp": "2026-09-23T08:00:00Z",
+          "technician": "Synthetic technician Avery",
+          "note": "Invented maintenance: replaced spindle bearing and checked coolant flow."
+        }
+      ]
+    },
+    {
+      "id": "SYN-WO-200",
+      "asset_id": "SYN-PRESS-12",
+      "product": "Fictitious valve cover",
+      "description": "Hydraulic forming of a valve cover with stable pressure.",
+      "status": "running",
+      "tolerances": {
+        "pressure": {"unit": "bar", "min": 90, "max": 115}
+      },
+      "maintenance_logs": [
+        {
+          "timestamp": "2026-09-22T10:00:00Z",
+          "technician": "Synthetic technician Blake",
+          "note": "Invented maintenance: inspected hose fittings and replaced filter."
+        }
+      ]
+    }
+  ],
+  "sensor_csv": "id,timestamp,asset_id,work_order_id,metric,value,unit,safety_critical\nSYN-S-01,2026-09-24T08:00:00Z,SYN-MILL-07,SYN-WO-100,temperature,62.38,C,false\nSYN-S-02,2026-09-24T08:01:00Z,SYN-MILL-07,SYN-WO-100,temperature,83.17,C,true\nSYN-S-03,2026-09-24T08:01:00Z,SYN-MILL-07,SYN-WO-100,vibration,5.14,mm/s,false\nSYN-S-04,2026-09-24T08:02:00Z,SYN-PRESS-12,SYN-WO-200,pressure,102.46,bar,false\n",
+  "quality_inspections": [
+    {
+      "id": "SYN-Q-01",
+      "work_order_id": "SYN-WO-100",
+      "asset_id": "SYN-MILL-07",
+      "timestamp": "2026-09-24T08:03:00Z",
+      "decision": "fail",
+      "decided_by": "Synthetic inspector Morgan",
+      "rationale": "Housing diameter exceeded the work-order tolerance; hold for human disposition.",
+      "measurements": [{"metric": "diameter", "value": 25.08, "unit": "mm"}]
+    }
+  ],
+  "search": {"query": "thermal spindle defect", "top_k": 5}
+}

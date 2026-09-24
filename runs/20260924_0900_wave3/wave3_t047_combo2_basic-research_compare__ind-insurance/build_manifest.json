@@ -1,0 +1,56 @@
+{
+  "build_id": "wave3_t047_combo2_basic-research_compare__ind-insurance",
+  "composition_label": "basic:research -> compare; Insurance",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated implementation created for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "schema_version, synthetic=true, question, sources[{source_id,format,content}], preferences{weights,max_annual_premium?}",
+    "formats": {
+      "acord_json": "content.ACORD contains policy, underwriting_submission, optional claim and optional discarded policyholder",
+      "acord_xml": "ACORD root with Policy attributes, Claim attributes plus Reason elements, UnderwritingSubmission attributes plus Factor elements; optional discarded Policyholder",
+      "claim_form": "One Label: value per line. Required: Claim ID, Policy ID, Loss Amount, Loss Date, Covered, Policy Active, Evidence Complete, Decision, Reasons. Optional discarded: Policyholder, VIN, Property Address."
+    },
+    "policy": "policy_id, premium, premium_period=monthly|annual, currency=EUR|USD|GBP, coverage_limit, deductible",
+    "claim": "claim_id, policy_id, loss_amount, loss_date=YYYY-MM-DD, covered, policy_active, evidence_complete, decision=approve|deny|review, reasons",
+    "underwriting_submission": "submission_id, policy_id, factors[{name,value,disclosed=true}]; factors limited to disclosed driving_history, property_type, occupancy, safety_features and their enumerated values",
+    "output": "schema_version, synthetic, status, preferences, research{records,evidence,answer,limitations}, comparison",
+    "validation": "validate_document applies the same entity, provenance, financial, disclosure and decision consistency checks at input, research handoff and completed output."
+  },
+  "cross_stage_handoffs": [
+    "Research parses local supplied sources, strips identity fields, resolves claim-policy references and creates normalized attributed facts with source IDs.",
+    "Comparison consumes only the validated research envelope, not raw input. It preserves research records and propagates citations, claim reasons and disclosed factors to side-by-side rows."
+  ],
+  "behavior": {
+    "research": "General-purpose deterministic lexical evidence selection over attributed facts; factual findings are rendered from citations. Unmatched questions receive all available evidence, not an invented answer.",
+    "optional_callable": "run_pipeline(document, selector=callable) accepts an offline evidence-ID selector. Unknown, duplicate, empty or malformed selections are rejected; no provider calls.",
+    "comparison": "Monthly premiums annualized; monetary values restricted to two decimal places; mixed currencies rejected. Budget filters precede eligible-set min-max utilities. Higher coverage and lower premium/deductible are preferred. Scores use user weights; ties use policy ID. All excluded means no recommendation.",
+    "claims": "Incomplete evidence requires review; otherwise inactive policies or excluded perils produce stated denial reasons; covered active claims are approved. Illustrative payment=max(0,min(loss,limit)-deductible); comparison never changes a claim decision.",
+    "privacy": "Policyholder names, VINs and property addresses are never propagated. Identifiers and necessary loss facts remain; this is minimization, not anonymization.",
+    "fixtures": "Explicitly synthetic invented identities, fabricated VINs and addresses. Losses and dates generated once with random.Random(47), for A then B: randint(100000,2000000)/100 and 2025-01-01 + timedelta(days=randrange(365)); persisted for deterministic replay.",
+    "errors": "CLI emits exactly one JSON object with status=error and exits 2 for file or validation failures without echoing source content; success exits 0."
+  },
+  "scope": {
+    "included": ["Integrated two-stage CLI", "Shared schema and validator", "ACORD-style JSON/XML subset", "Claim-form adapter", "Deterministic evidence selection and preference ranking", "Offline callable injection", "Synthetic insurance constraints"],
+    "excluded": ["Actual ACORD conformance or certification", "Legal or regulatory compliance certification", "Real policyholder data", "Live research or model providers", "Actuarial pricing", "Production underwriting or claims adjudication", "Full policy wording interpretation", "Currency conversion", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 29, "passed": 29, "failures": 0, "errors": 0},
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status=ok, ranking POL_B then POL_A",
+    "coverage": ["Both stages", "JSON/XML/form adapters", "Cross-stage propagation and tamper rejection", "Minimization", "Disclosure", "Reasoned claims decisions", "Invalid inputs", "Budget and ties", "Offline callable", "CLI success and errors"]
+  }
+}

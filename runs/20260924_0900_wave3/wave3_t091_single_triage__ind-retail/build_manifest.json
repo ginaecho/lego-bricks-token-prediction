@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t091_single_triage__ind-retail",
+  "composition_label": "Ticket triage & routing (AI customer support)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict object containing schema_version, synthetic=true, catalog JSON feed, customer profile/explicit consent, order or basket with shown price and stock, clickstream event-log array, ticket, and routing config.",
+    "catalog": "Unique invented SKU, name, nonnegative two-decimal price string, integer stock; currency USD/EUR/GBP.",
+    "clickstream": "Strictly increasing integer sequence, matching customer_id, known SKU, event view/add_to_basket/remove_from_basket.",
+    "output": "schema_version, synthetic, status, ticket_id, customer_id, order_id, category, priority, route(team/owner), reason, personalization(applied/recent_skus), canonical catalog products, empty reviews and endorsements.",
+    "error": "One JSON object with schema_version, status=error and error text; exit 2.",
+    "validation": "validate() is shared by input and successful output; missing/extra fields, invalid relationships and retail constraint violations are rejected."
+  },
+  "cross_stage_handoffs": ["Single triage stage: validated retail envelope -> configured categorization -> urgency override -> accountable team/owner -> output validation."],
+  "behavior": {
+    "categorization": "First ordered rule with a case-insensitive substring keyword match in subject/body wins; otherwise configured fallback.",
+    "priority": "Configured category priority, overridden to urgent for any configured urgent substring.",
+    "routing": "Every category requires a named team and accountable owner.",
+    "personalization": "Only explicitly requested personalization uses clickstream SKUs; both GDPR and CCPA consent booleans must be true before using it.",
+    "catalog_integrity": "Shown order/basket prices and stocks must equal the input catalog snapshot. Output products are copied from that snapshot.",
+    "reviews": "Endorsement requests rejected; no review/endorsement generation or freeform model text is supported.",
+    "optional_callable": "Python API triage(data, classifier=callable) accepts a local injected callable receiving only ticket subject/body and returning exactly one configured category; invalid returns or exceptions become validation errors.",
+    "synthetic_data": "All products, shopper personas, identities and orders are fictitious and explicitly labeled synthetic."
+  },
+  "scope": {
+    "included": ["Deterministic configurable triage", "Explicit accountability", "Shared strict validation", "Catalog and clickstream fixtures", "Local callable fixture tests", "JSON CLI"],
+    "excluded": ["Compliance certification", "Live provider or network access", "Persistent ticket delivery", "Inventory reservation", "Historical order pricing", "Natural-language safety classification", "Enterprise production features"],
+    "limitations": "Demonstrative consent rules are not legal advice. Catalog is authoritative for this one request, not a live inventory source. Historical orders use snapshot prices. Keyword matching is substring-based, not semantic. Ticket prose is untrusted text used for category matching, never published as endorsements. Quantities do not reserve or decrement stock."
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 17,
+    "tests_exit_code": 0,
+    "cli": "passed: one JSON object, status=ok, category=delivery, priority=high",
+    "cli_exit_code": 0,
+    "coverage": ["Normal and deterministic routing", "First-match and urgent precedence", "Fallback and empty event log", "Configurable ownership", "Consent gating", "Review/endorsement rejection", "Price and stock matching", "Invalid input and identity relationships", "Injected callable success and rejection", "Output integrity", "CLI success, malformed JSON, missing file and argument errors"]
+  }
+}

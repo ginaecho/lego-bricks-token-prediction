@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "onboarding": {
+    "experience": "novice",
+    "detail": "guided",
+    "format": "checklist",
+    "completed": []
+  },
+  "records": {
+    "patient_record": {
+      "resourceType": "Patient",
+      "id": "anon-001",
+      "synthetic": true,
+      "diagnoses": ["D001"],
+      "labs": [{"code": "L001", "value": 5.2, "unit": "mmol/L"}]
+    },
+    "clinical_note": {
+      "resourceType": "DocumentReference",
+      "id": "note-001",
+      "subject": {"reference": "Patient/anon-001"},
+      "text": "SYNTHETIC ONLY. Diagnoses: D001. Labs: L001=5.2 mmol/L. Human review required."
+    },
+    "prior_authorization_request": {
+      "resourceType": "Claim",
+      "id": "auth-001",
+      "patient": {"reference": "Patient/anon-001"},
+      "use": "preauthorization",
+      "status": "draft",
+      "service_code": "S001"
+    }
+  }
+}

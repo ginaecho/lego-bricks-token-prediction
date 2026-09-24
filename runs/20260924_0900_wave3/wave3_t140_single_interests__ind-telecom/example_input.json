@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "residency": "EU",
+  "subscriber_account": {
+    "id": "syn-account-001", "residency": "EU", "synthetic": true,
+    "phone": "+000123456789", "imei": "000000123456789",
+    "privacy": {
+      "personalization_consent": true, "sale_share_opt_out": false,
+      "deletion_requested": false, "purpose": "personalized_discovery"
+    },
+    "preferences": {"data": 8, "reliability": 6, "budget": 4}
+  },
+  "call_detail_records_csv": "id,subscriber_id,residency,synthetic,phone,imei,data_mb,call_minutes\nsyn-cdr-001,syn-account-001,EU,true,+000123456789,000000123456789,1327,47\nsyn-cdr-002,syn-account-001,EU,true,+000123456789,000000123456789,863,19\n",
+  "network_fault_tickets": [
+    {
+      "id": "syn-ticket-001", "subscriber_id": "syn-account-001", "residency": "EU",
+      "synthetic": true, "status": "open",
+      "support_chat_transcript": [
+        {"speaker": "subscriber", "text": "[SYNTHETIC] Invented dropped connection near Moonlight Tower.", "residency": "EU", "synthetic": true},
+        {"speaker": "agent", "text": "[SYNTHETIC] Invented ticket opened for diagnostics.", "residency": "EU", "synthetic": true}
+      ]
+    }
+  ],
+  "catalog": [
+    {"id": "syn-plan-data", "residency": "EU", "synthetic": true, "tags": ["data"], "kind": "plan"},
+    {"id": "syn-support-network", "residency": "EU", "synthetic": true, "tags": ["reliability"], "kind": "support"},
+    {"id": "syn-credit-review", "residency": "EU", "synthetic": true, "tags": ["budget"], "kind": "billing_adjustment",
+      "billing_adjustment": {"amount": -5, "currency": "EUR", "reason": "Synthetic service interruption review; not an executed credit."}},
+    {"id": "syn-plan-roaming", "residency": "EU", "synthetic": true, "tags": ["data", "roaming"], "kind": "plan"}
+  ],
+  "exclusions": {"ids": [], "tags": ["roaming"]},
+  "top_k": 3
+}

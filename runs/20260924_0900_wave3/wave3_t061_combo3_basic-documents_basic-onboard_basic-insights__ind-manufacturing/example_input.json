@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "fixture_label": "SYNTHETIC ONLY: fictitious customers, machines, lots, operators and maintenance logs; physically plausible seeded telemetry with injected demonstration anomalies.",
+  "industry": "Manufacturing",
+  "work_orders": [
+    {
+      "work_order_id": "SYN-WO-001",
+      "customer_id": "SYN-CUST-A",
+      "customer_name": "Invented Cedar Components",
+      "asset_id": "SYN-PRESS-17",
+      "lot_id": "SYN-LOT-A",
+      "product": "synthetic precision bushings",
+      "operator": "Fictitious Operator Nia",
+      "tolerances": {
+        "temperature": {
+          "unit": "C",
+          "min": 40,
+          "max": 75,
+          "safety_max": 90
+        },
+        "vibration": {
+          "unit": "mm/s",
+          "min": 0,
+          "max": 4.5,
+          "safety_max": 8
+        },
+        "diameter": {
+          "unit": "mm",
+          "min": 19.95,
+          "max": 20.05,
+          "safety_max": 21
+        }
+      }
+    },
+    {
+      "work_order_id": "SYN-WO-002",
+      "customer_id": "SYN-CUST-B",
+      "customer_name": "Invented Finch Fabrication",
+      "asset_id": "SYN-LATHE-24",
+      "lot_id": "SYN-LOT-B",
+      "product": "synthetic valve sleeves",
+      "operator": "Fictitious Operator Jules",
+      "tolerances": {
+        "temperature": {
+          "unit": "C",
+          "min": 40,
+          "max": 75,
+          "safety_max": 90
+        },
+        "vibration": {
+          "unit": "mm/s",
+          "min": 0,
+          "max": 4.5,
+          "safety_max": 8
+        },
+        "diameter": {
+          "unit": "mm",
+          "min": 29.95,
+          "max": 30.05,
+          "safety_max": 31
+        }
+      }
+    }
+  ],
+  "telemetry_csv": "reading_id,timestamp,work_order_id,asset_id,metric,value,unit\nSYN-R-001,2026-09-24T08:00:00Z,SYN-WO-001,SYN-PRESS-17,temperature,58.94,C\nSYN-R-002,2026-09-24T08:00:00Z,SYN-WO-001,SYN-PRESS-17,vibration,2.64,mm/s\nSYN-R-003,2026-09-24T08:01:00Z,SYN-WO-001,SYN-PRESS-17,temperature,62.1,C\nSYN-R-004,2026-09-24T08:01:00Z,SYN-WO-001,SYN-PRESS-17,vibration,5.4,mm/s\nSYN-R-005,2026-09-24T08:02:00Z,SYN-WO-001,SYN-PRESS-17,temperature,96.2,C\nSYN-R-006,2026-09-24T08:02:00Z,SYN-WO-001,SYN-PRESS-17,vibration,2.28,mm/s\nSYN-R-007,2026-09-24T08:00:00Z,SYN-WO-002,SYN-LATHE-24,temperature,57.21,C\nSYN-R-008,2026-09-24T08:00:00Z,SYN-WO-002,SYN-LATHE-24,vibration,2.84,mm/s\n",
+  "quality_inspections": [
+    {
+      "inspection_id": "SYN-QI-001",
+      "work_order_id": "SYN-WO-001",
+      "lot_id": "SYN-LOT-A",
+      "measurement": {
+        "metric": "diameter",
+        "value": 20.08,
+        "unit": "mm"
+      },
+      "decision": "reject",
+      "decision_by": "Fictitious Inspector Ada",
+      "decided_at": "2026-09-24T08:05:00Z",
+      "rationale": "Synthetic sample exceeds the 20.05 mm upper drawing tolerance; hold lot for human review."
+    },
+    {
+      "inspection_id": "SYN-QI-002",
+      "work_order_id": "SYN-WO-002",
+      "lot_id": "SYN-LOT-B",
+      "measurement": {
+        "metric": "diameter",
+        "value": 30.01,
+        "unit": "mm"
+      },
+      "decision": "accept",
+      "decision_by": "Fictitious Inspector Ren",
+      "decided_at": "2026-09-24T08:06:00Z",
+      "rationale": "Synthetic sample is within the recorded dimensional limits."
+    }
+  ],
+  "maintenance_logs": [
+    {
+      "log_id": "SYN-MAINT-001",
+      "work_order_id": "SYN-WO-001",
+      "asset_id": "SYN-PRESS-17",
+      "timestamp": "2026-09-24T08:03:00Z",
+      "text": "INVENTED LOG: guard interlock intermittently fails its diagnostic check; human safety inspection requested.",
+      "safety_critical": true,
+      "status": "open"
+    },
+    {
+      "log_id": "SYN-MAINT-002",
+      "work_order_id": "SYN-WO-002",
+      "asset_id": "SYN-LATHE-24",
+      "timestamp": "2026-09-24T07:00:00Z",
+      "text": "INVENTED LOG: scheduled lubrication completed by a fictitious technician.",
+      "safety_critical": false,
+      "status": "resolved"
+    }
+  ],
+  "feedback": [
+    {
+      "feedback_id": "SYN-FB-001",
+      "work_order_id": "SYN-WO-001",
+      "timestamp": "2026-09-24T09:00:00Z",
+      "text": "SYNTHETIC FEEDBACK: quality rejects and vibration delay our first lot.",
+      "sentiment": "negative"
+    },
+    {
+      "feedback_id": "SYN-FB-002",
+      "work_order_id": "SYN-WO-001",
+      "timestamp": "2026-09-24T09:01:00Z",
+      "text": "SYNTHETIC FEEDBACK: please explain the safety guard review next step.",
+      "sentiment": "neutral"
+    },
+    {
+      "feedback_id": "SYN-FB-003",
+      "work_order_id": "SYN-WO-002",
+      "timestamp": "2026-09-24T09:02:00Z",
+      "text": "SYNTHETIC FEEDBACK: training and setup instructions were clear.",
+      "sentiment": "positive"
+    }
+  ]
+}

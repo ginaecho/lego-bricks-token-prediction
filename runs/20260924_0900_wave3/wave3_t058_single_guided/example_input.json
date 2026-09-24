@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional marketplace seller onboarding",
+  "steps": [
+    {
+      "id": "profile",
+      "title": "Create a fictional seller profile",
+      "prerequisites": [],
+      "required_fields": ["display_name"]
+    },
+    {
+      "id": "shipping",
+      "title": "Choose a synthetic shipping region",
+      "prerequisites": ["profile"],
+      "required_fields": ["region"]
+    },
+    {
+      "id": "launch",
+      "title": "Finish the guided setup",
+      "prerequisites": ["profile", "shipping"],
+      "required_fields": []
+    }
+  ],
+  "actions": [
+    {"step_id": "profile", "operation": "start"},
+    {"step_id": "profile", "operation": "complete", "answers": {"display_name": "Synthetic Brick Shop"}},
+    {"step_id": "shipping", "operation": "start"}
+  ]
+}

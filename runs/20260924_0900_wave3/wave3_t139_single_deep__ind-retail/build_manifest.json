@@ -1,0 +1,55 @@
+{
+  "build_id": "wave3_t139_single_deep__ind-retail",
+  "composition_label": "single_deep",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "true",
+      "catalog": "currency USD/EUR/GBP; products with unique sku, name, nonnegative integer price_cents and stock",
+      "customer": "customer_id, synthetic persona, explicit boolean gdpr/ccpa consent, personalization_requested",
+      "basket": "order_id, matching customer_id, unique SKU items and positive integer quantity within stock",
+      "clickstream": "event_id, matching customer_id, known sku, view/click/add_to_basket action, timezone-aware ISO timestamp",
+      "documents": "unique document_id, title, source_id, synthetic true, structured claims",
+      "claims": "globally unique claim_id, known sku, durability/packaging/ease_of_use topic, positive/negative/uncertain value, specification/analyst_observation/return_summary evidence_kind",
+      "research_questions": "unique question_id, known sku, supported topic"
+    },
+    "output": "schema_version, status, synthetic, research, catalog_snapshot, basket, limitations; error envelope has schema_version, status error, error message",
+    "validation": "One validate function checks input and source-grounded canonical output; strict object fields, duplicate JSON key rejection, nonfinite number rejection, array length at most 1000, identifiers/text at most 2000 characters."
+  },
+  "cross_stage_handoffs": [
+    "Single Research functionality: validated shared input -> SKU/topic evidence groups -> canonical output checked against the same validated source."
+  ],
+  "behavior": {
+    "research": "Deterministic multi-document synthesis with exact document/claim/source provenance; positive and negative evidence is disputed without majority voting. Uncertain evidence is inconclusive; agreement across two supplied source IDs is corroborated; one source is insufficient. Questions without claims are no_evidence. Unresolved items include next steps. Missing SKU coverage and personalized out-of-scope questions are explicit.",
+    "personalization": "Generic mode ignores persona/clickstream for synthesis selection. Personalized SKU selection uses basket and clickstream only after both GDPR and CCPA consent flags are true.",
+    "retail_integrity": "Prices use exact integer cents. Displayed price and stock are copied from the catalog; basket totals derive from catalog prices. Reviews and endorsements are unsupported and rejected as evidence kinds. No review prose or endorsements are generated.",
+    "cli": "One JSON object on stdout; exit 0 success, exit 2 validation or file errors.",
+    "llm": "No LLM step; deterministic synthesis only."
+  },
+  "scope": {
+    "included": ["Synthetic retail JSON catalog", "Synthetic shopper persona", "Clickstream event log as JSON array", "Order/basket validation and totals", "Structured multi-document synthesis", "Disagreement and unresolved questions", "Demonstrative consent and catalog integrity rules"],
+    "excluded": ["Live web research", "Unstructured text interpretation", "Real personal data", "Compliance certification", "Verified independence of source IDs", "Real reviews or endorsements", "Checkout or inventory reservations", "Tax and shipping", "Enterprise production delivery"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_count": 18,
+    "cli_example": "passed: one JSON object with status ok, exit 0",
+    "unittest_result": "18 tests passed; exit 0",
+    "error_cli_result": "Missing file, argument, malformed JSON, duplicate key, nonfinite number and schema errors return status error and exit 2"
+  }
+}

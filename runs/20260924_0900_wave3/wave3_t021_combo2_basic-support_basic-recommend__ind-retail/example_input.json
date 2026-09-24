@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "catalog": {
+    "currency": "USD",
+    "products": [
+      {"sku": "FICTION-101", "name": "Imaginary Cloud Mug", "category": "kitchen", "price": "14.50", "stock": 8},
+      {"sku": "FICTION-102", "name": "Imaginary Dawn Bowl", "category": "kitchen", "price": "18.00", "stock": 5},
+      {"sku": "FICTION-201", "name": "Imaginary Trail Tote", "category": "outdoors", "price": "24.00", "stock": 3},
+      {"sku": "FICTION-202", "name": "Imaginary Rain Flask", "category": "outdoors", "price": "29.95", "stock": 0}
+    ]
+  },
+  "customer": {
+    "id": "synthetic-shopper-alex",
+    "consent": {"personalization": true},
+    "preferred_categories": ["outdoors"]
+  },
+  "order": {
+    "id": "synthetic-basket-001",
+    "status": "basket",
+    "items": [{"sku": "FICTION-101", "quantity": 1}]
+  },
+  "clickstream": [
+    {"customer_id": "synthetic-shopper-alex", "event": "view", "sku": "FICTION-102", "timestamp": "2026-09-24T08:00:00Z"},
+    {"customer_id": "synthetic-shopper-alex", "event": "add_to_cart", "sku": "FICTION-101", "timestamp": "2026-09-24T08:01:00Z"}
+  ],
+  "policies": {"return_window_days": 30, "support_contact": "synthetic-support@example.invalid"},
+  "request": {
+    "intent": "product",
+    "query": "What is the price and stock of this kitchen mug?",
+    "skus": ["FICTION-101"],
+    "recommendation_limit": 3
+  }
+}

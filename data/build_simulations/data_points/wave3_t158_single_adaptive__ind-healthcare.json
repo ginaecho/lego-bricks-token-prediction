@@ -97,7 +97,7 @@
   "split_group": "c09171332903170ac6080a3274949e8c22a8c75b65db2d5cc3d6c7a7ec927ed1",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "535deb35d6926f1d20de1da0d3698185e05ef7ea2c92fffb6b88d967dd132207",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t158_single_adaptive__ind-healthcare",
   "membership_point_id": "single_adaptive__ind-healthcare",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "84bcbda25fc414db33fa3e726ddf326c8caa6943d5ce2d9fa5d3288997e7f59b",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b47a8dba-5971-44f0-847e-2e5743634a36",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 119243,
+    "output_tokens": 6345,
+    "cache_read_tokens": 110607,
+    "cache_write_tokens": 8618,
+    "total_tokens": 125588,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38145,
+        "agent_id": "b47a8dba-5971-44f0-847e-2e5743634a36",
+        "model": "gpt-6-astra",
+        "input_tokens": 14993,
+        "output_tokens": 586,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 847,
+        "reasoning_tokens": 416,
+        "duration_ms": 17628,
+        "created_at": "2026-09-24T13:01:48.461Z"
+      },
+      {
+        "id": 38181,
+        "agent_id": "b47a8dba-5971-44f0-847e-2e5743634a36",
+        "model": "gpt-6-astra",
+        "input_tokens": 15606,
+        "output_tokens": 5150,
+        "cache_read_tokens": 14990,
+        "cache_write_tokens": 613,
+        "reasoning_tokens": 0,
+        "duration_ms": 81885,
+        "created_at": "2026-09-24T13:10:27.833Z"
+      },
+      {
+        "id": 38182,
+        "agent_id": "b47a8dba-5971-44f0-847e-2e5743634a36",
+        "model": "gpt-6-astra",
+        "input_tokens": 21076,
+        "output_tokens": 138,
+        "cache_read_tokens": 15603,
+        "cache_write_tokens": 5470,
+        "reasoning_tokens": 0,
+        "duration_ms": 6913,
+        "created_at": "2026-09-24T13:10:31.995Z"
+      },
+      {
+        "id": 38183,
+        "agent_id": "b47a8dba-5971-44f0-847e-2e5743634a36",
+        "model": "gpt-6-astra",
+        "input_tokens": 22259,
+        "output_tokens": 194,
+        "cache_read_tokens": 21073,
+        "cache_write_tokens": 1183,
+        "reasoning_tokens": 13,
+        "duration_ms": 5274,
+        "created_at": "2026-09-24T13:10:36.574Z"
+      },
+      {
+        "id": 38184,
+        "agent_id": "b47a8dba-5971-44f0-847e-2e5743634a36",
+        "model": "gpt-6-astra",
+        "input_tokens": 22545,
+        "output_tokens": 182,
+        "cache_read_tokens": 22256,
+        "cache_write_tokens": 286,
+        "reasoning_tokens": 0,
+        "duration_ms": 4319,
+        "created_at": "2026-09-24T13:10:40.419Z"
+      },
+      {
+        "id": 38185,
+        "agent_id": "b47a8dba-5971-44f0-847e-2e5743634a36",
+        "model": "gpt-6-astra",
+        "input_tokens": 22764,
+        "output_tokens": 95,
+        "cache_read_tokens": 22542,
+        "cache_write_tokens": 219,
+        "reasoning_tokens": 0,
+        "duration_ms": 4642,
+        "created_at": "2026-09-24T13:10:48.646Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.3932825,
+      "observed_cache_profile_estimate_usd": 0.14441675,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.719390000000001,
+      "observed_cache_profile_estimate_usd": 4.719390000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,188 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 0.539s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "audit_trail": [
+        {
+          "actor": "adaptive-onboarding",
+          "after": {
+            "clinical_decision": "not_performed",
+            "human_review_required": true,
+            "onboarding_status": "blocked"
+          },
+          "before": null,
+          "operation": "add",
+          "path": "/records/patient_record/workflow",
+          "reason": "Attach mandatory human-review routing metadata",
+          "resource_id": "anon-001",
+          "sequence": 1
+        },
+        {
+          "actor": "adaptive-onboarding",
+          "after": {
+            "clinical_decision": "not_performed",
+            "human_review_required": true,
+            "onboarding_status": "blocked"
+          },
+          "before": null,
+          "operation": "add",
+          "path": "/records/clinical_note/workflow",
+          "reason": "Attach mandatory human-review routing metadata",
+          "resource_id": "note-001",
+          "sequence": 2
+        },
+        {
+          "actor": "adaptive-onboarding",
+          "after": {
+            "clinical_decision": "not_performed",
+            "human_review_required": true,
+            "onboarding_status": "blocked"
+          },
+          "before": null,
+          "operation": "add",
+          "path": "/records/prior_authorization_request/workflow",
+          "reason": "Attach mandatory human-review routing metadata",
+          "resource_id": "auth-001",
+          "sequence": 3
+        }
+      ],
+      "human_review_required": true,
+      "limitations": [
+        "Synthetic Synthea-style fixtures, not real Synthea exports or full FHIR conformance.",
+        "Demonstrative HIPAA-oriented identifier exclusion, not compliance certification.",
+        "No diagnosis, treatment recommendation, eligibility determination, approval or denial."
+      ],
+      "onboarding": {
+        "detail": "guided",
+        "experience": "novice",
+        "format": "checklist",
+        "missing_prerequisites": [
+          "synthetic-data",
+          "human-review"
+        ],
+        "state": "blocked",
+        "steps": [
+          {
+            "explanation": "Use only de-identified synthetic fixtures; never enter patient identifiers.",
+            "guidance": "Read the explanation, inspect the synthetic example, then ask a human reviewer.",
+            "id": "synthetic-data",
+            "prerequisites": [],
+            "presentation": "checklist",
+            "state": "required"
+          },
+          {
+            "explanation": "A qualified human must review every record; no clinical decision is automated.",
+            "guidance": "Read the explanation, inspect the synthetic example, then ask a human reviewer.",
+            "id": "human-review",
+            "prerequisites": [],
+            "presentation": "checklist",
+            "state": "required"
+          },
+          {
+            "explanation": "Inspect synthetic diagnoses and lab values without interpreting their clinical meaning.",
+            "guidance": "Read the explanation, inspect the synthetic example, then ask a human reviewer.",
+            "id": "patient-record",
+            "prerequisites": [
+              "synthetic-data",
+              "human-review"
+            ],
+            "presentation": "checklist",
+            "state": "blocked"
+          },
+          {
+            "explanation": "Inspect the constrained synthetic note and its patient reference.",
+            "guidance": "Read the explanation, inspect the synthetic example, then ask a human reviewer.",
+            "id": "clinical-note",
+            "prerequisites": [
+              "synthetic-data",
+              "human-review"
+            ],
+            "presentation": "checklist",
+            "state": "blocked"
+          },
+          {
+            "explanation": "Prepare the request for human review, never approve or deny it automatically.",
+            "guidance": "Read the explanation, inspect the synthetic example, then ask a human reviewer.",
+            "id": "prior-authorization",
+            "prerequisites": [
+              "synthetic-data",
+              "human-review"
+            ],
+            "presentation": "checklist",
+            "state": "blocked"
+          }
+        ]
+      },
+      "records": {
+        "clinical_note": {
+          "id": "note-001",
+          "resourceType": "DocumentReference",
+          "subject": {
+            "reference": "Patient/anon-001"
+          },
+          "text": "SYNTHETIC ONLY. Diagnoses: D001. Labs: L001=5.2 mmol/L. Human review required.",
+          "workflow": {
+            "clinical_decision": "not_performed",
+            "human_review_required": true,
+            "onboarding_status": "blocked"
+          }
+        },
+        "patient_record": {
+          "diagnoses": [
+            "D001"
+          ],
+          "id": "anon-001",
+          "labs": [
+            {
+              "code": "L001",
+              "unit": "mmol/L",
+              "value": 5.2
+            }
+          ],
+          "resourceType": "Patient",
+          "synthetic": true,
+          "workflow": {
+            "clinical_decision": "not_performed",
+            "human_review_required": true,
+            "onboarding_status": "blocked"
+          }
+        },
+        "prior_authorization_request": {
+          "id": "auth-001",
+          "patient": {
+            "reference": "Patient/anon-001"
+          },
+          "resourceType": "Claim",
+          "service_code": "S001",
+          "status": "draft",
+          "use": "preauthorization",
+          "workflow": {
+            "clinical_decision": "not_performed",
+            "human_review_required": true,
+            "onboarding_status": "blocked"
+          }
+        }
+      },
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t158_single_adaptive__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "7e1df7c9210073a17da215af657fd82dd7988f81d1aed11e9130a12f4ebed458",
+      "test_implementation.py": "3778ac0ad475fdc54d22e61bb3b9988680fc8a8cc721bc220d90587e574deba4",
+      "example_input.json": "86c09375c944b4afbaceed6becea9f48adbcb6105ed3d46383860452d824c155",
+      "build_manifest.json": "bc2de3327c588c0703b9381e1675983b7d9bf73d8f52b3cce1adbbac3edcd6a2"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

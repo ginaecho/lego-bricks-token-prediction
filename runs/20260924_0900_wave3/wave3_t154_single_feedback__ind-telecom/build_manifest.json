@@ -1,0 +1,50 @@
+{
+  "build_id": "wave3_t154_single_feedback__ind-telecom",
+  "composition_label": "Feedback analysis (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "synthetic=true, residency EU|US, subscribers[], tickets[], usage_csv, feedback[]. All entity records carry id and matching residency. Strict fields; opaque identifiers use sub/tkt/cdr/fb plus underscore and 3-12 digits.",
+    "subscriber": "id, residency, phone (reserved fictitious range), imei (SYNTHETIC-IMEI marker), name, email (example.invalid), processing_basis consent|legitimate_interest, analytics_allowed=true",
+    "ticket": "id, residency, subscriber_id, fault network|billing|support|usage; optional billing_adjustment with finite amount and nonblank reason",
+    "usage_csv": "Exact header: id,residency,subscriber_id,ticket_id,call_seconds,data_mb. Nonnegative finite usage values, consistent account/ticket foreign keys.",
+    "feedback": "id, residency, subscriber_id, ticket_id, channel=support_chat, text (1-10000 characters). Text contains synthetic support chat transcript.",
+    "output": "status, synthetic, residency, summary counts, themes[] containing residency, count and evidence[]. Evidence carries residency, subscriber_id, ticket_id, source_feedback_ids, usage_record_ids and redacted excerpt.",
+    "validation": "One validate function gates all input entities and the published output; CLI errors return one generic JSON object and exit 2."
+  },
+  "cross_stage_handoffs": ["Single functionality: validated entities -> redacted normalized transcripts -> within-account/ticket deduplication -> deterministic keyword themes -> traceable evidence -> validated JSON result"],
+  "behavior": {
+    "deduplication": "Whitespace and case normalization after redaction; only within the same subscriber and ticket. Every duplicate source ID is preserved.",
+    "themes": "Fixed word-boundary rules: billing, connectivity, support, usage; unmatched transcripts use other. Multiple themes permitted; counts represent unique feedback, not total mentions.",
+    "excerpts": "First 240 characters after redaction. Theme detection uses complete redacted text. Input order determines retained excerpt case; output and ID lists sorted deterministically.",
+    "privacy": "Data minimization and opt-out/processing-basis validation illustrate GDPR/CCPA subscriber-data protections. Known names, phones, emails and IMEIs are redacted; generic email and numeric contact patterns also redacted. No raw transcript output or logging. Opaque subscriber references are pseudonymous, not anonymous.",
+    "residency": "Every input entity and output theme/evidence record must carry the selected region tag. Local-only processing; tags are demonstrative, not physical hosting attestation.",
+    "fixtures": "Explicit synthetic envelope, reserved phone numbers, labeled fake IMEI, invented tickets. Usage volumes are synthetic; tests additionally generate seeded randomized volumes.",
+    "llm": "No LLM or provider required or implemented."
+  },
+  "scope": {
+    "included": ["Local CLI", "Shared validation", "CSV call detail records", "Support chat transcripts", "Deduplication", "Themes and provenance", "Billing reason check", "Synthetic subscriber privacy and residency rules"],
+    "excluded": ["Compliance certification", "Production security guarantees", "Comprehensive arbitrary free-text PII detection", "Physical data-residency enforcement", "Live telecom systems", "Automatic billing changes", "Sentiment models", "Network access", "Provider calls"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 15,
+    "failures": 0,
+    "errors": 0,
+    "cli_example": {"exit_code": 0, "status": "ok", "feedback_records": 3, "unique_feedback": 2, "duplicates_removed": 1},
+    "cli_error_cases": "Missing file, missing/extra arguments, invalid JSON and wrong schema return error JSON and exit 2."
+  }
+}

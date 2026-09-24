@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "as_of": "2026-09-24",
+  "customers": [
+    {"id": "customer_demo", "name": "SYNTHETIC Ada Example", "account": "FAKE-IBAN-DEMO0001", "kyc_status": "pending", "screening": {"sanctions": false, "pep": true}}
+  ],
+  "transaction_ledger": {
+    "format": "json",
+    "data": [
+      {"id": "transaction_one", "customer_id": "customer_demo", "amount": "12500.00", "currency": "USD", "date": "2026-09-20", "card_number": "0000000000001234"},
+      {"id": "transaction_two", "customer_id": "customer_demo", "amount": "81.37", "currency": "USD", "date": "2026-09-21", "card_number": "0000000000005678"}
+    ]
+  },
+  "loans": [
+    {"id": "loan_demo", "customer_id": "customer_demo", "amount": "25000.00", "currency": "USD", "monthly_income": "4000.00", "monthly_payment": "1800.00"}
+  ],
+  "payments": [
+    {"MsgId": "message_one", "transaction_id": "transaction_one", "PmtInf": {
+      "Dbtr": {"Nm": "SYNTHETIC Ada Example", "IBAN": "FAKE-IBAN-DEMO0001"},
+      "Cdtr": {"Nm": "SYNTHETIC Merchant", "IBAN": "FAKE-IBAN-SHOP0002"},
+      "InstdAmt": {"Ccy": "USD", "Value": "12500.00"}
+    }}
+  ],
+  "documents": [
+    {"id": "identity_demo", "entity_type": "customer", "entity_id": "customer_demo", "kind": "identity", "verified": true, "issued_on": "2026-01-01", "expires_on": "2027-01-01"},
+    {"id": "address_demo", "entity_type": "customer", "entity_id": "customer_demo", "kind": "address", "verified": true, "issued_on": "2025-01-01", "expires_on": "2026-01-01"},
+    {"id": "authorization_demo", "entity_type": "transaction", "entity_id": "transaction_one", "kind": "payment_authorization", "verified": true, "issued_on": "2026-09-20", "expires_on": null},
+    {"id": "income_demo", "entity_type": "loan", "entity_id": "loan_demo", "kind": "income", "verified": false, "issued_on": "2026-09-01", "expires_on": null}
+  ]
+}

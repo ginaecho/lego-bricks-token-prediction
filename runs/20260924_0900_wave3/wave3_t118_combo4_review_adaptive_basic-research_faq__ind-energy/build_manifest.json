@@ -1,0 +1,69 @@
+{
+  "build_id": "wave3_t118_combo4_review_adaptive_basic-research_faq__ind-energy",
+  "composition_label": "review -> adaptive -> basic:research -> faq | energy and utilities",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation built from the supplied task",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope_fields": ["schema_version", "status", "stage", "context", "results"],
+    "input_stage": "input",
+    "stage_sequence": ["input", "review", "adaptive", "research", "faq"],
+    "context": "Explicitly synthetic grid assets/topology, interval CSV, SCADA telemetry JSON, outage reports, sourced emissions, document requirements, sources, learner profile, questions",
+    "output": "Same envelope with protected context and accumulated deterministic stage results",
+    "validation": "One validate() layer checks envelope, industry rules, referential integrity, bounded entities, and deterministic provenance replay at every handoff",
+    "error_contract": "One JSON object with status=error; exit 2; no raw input or identifiers echoed"
+  },
+  "cross_stage_handoffs": [
+    {"from": "review", "to": "adaptive", "data": "Traceable requirement gaps select modules and generate research questions"},
+    {"from": "adaptive", "to": "research", "data": "Validated user/gap research questions, onboarding topics, original gap IDs"},
+    {"from": "research", "to": "faq", "data": "Ranked verbatim evidence, source citations, declared-claim conflicts and insufficient-evidence states"}
+  ],
+  "behavior": {
+    "review": "Term-level evidence with exact source quotes and persistent gaps; seasonal kWh summaries; safety priorities; sourced/unit-bearing emissions",
+    "adaptive": "Prerequisite-first ordering, completed-topic skipping, experience-specific depth and preference-specific explanations",
+    "research": "General-purpose deterministic lexical retrieval over supplied source text; up to three evidence excerpts per question; conflicts checked across all retrieved sources; bounded decision guidance",
+    "faq": "Only verbatim grounded source excerpts; explicit abstention for absent or conflicting evidence",
+    "industry_rules": [
+      "Critical asset and corresponding device identifiers pseudonymized consistently before review output, including CSV, telemetry, topology and source text",
+      "Declared safety rules must prioritize life safety P1, then essential service P2, then routine P3",
+      "Emissions require finite nonnegative values, kgCO2e or tCO2e units and a supplied source",
+      "Meter timestamps are timezone-aware and meter/time pairs unique; telemetry units and device/asset relationships validated"
+    ],
+    "synthetic_fixture": "Fictitious two-node grid, fictitious substation/device identifiers and plausible winter heating consumption",
+    "llm": "No LLM step, injected callable or provider needed"
+  },
+  "scope": {
+    "included": ["Bounded local CLI", "Shared validation", "Four integrated stages", "Synthetic energy fixtures", "Deterministic evidence and abstention"],
+    "excluded": ["Compliance certification", "Real dispatch or grid control", "Access control or cryptographic anonymization", "Semantic fact checking", "Live research", "External providers", "Production deployment"],
+    "limitations": [
+      "Term presence does not establish requirement satisfaction outside this demonstration",
+      "Onboarding completion is supplied, not independently verified",
+      "Claim conflicts cover explicitly structured claims, not arbitrary prose contradictions",
+      "Review gaps persist even if onboarding completes",
+      "Source emissions figures are preserved with provenance, not independently audited"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "unittest",
+    "tests_run": 41,
+    "failures": 0,
+    "errors": 0,
+    "cli": "Passed: example prints one JSON object, status ok, stage faq, exit 0",
+    "error_cli": "Validated malformed JSON, invalid schemas, duplicate JSON keys, oversized numbers, missing file and missing arguments: JSON status error, exit 2",
+    "deliverable_inventory": "Verified exactly the four requested files, with no bytecode cache or additional artifacts",
+    "coverage": ["All four stages", "Cross-stage provenance and gap propagation", "Prerequisite ordering", "Preference and experience adaptation", "General-purpose research", "Grounded citations", "Explicit abstention", "Conflict beyond excerpt limit", "Synthetic labeling", "Protected identifiers", "Declared safety precedence", "Emission units and sources", "CSV and SCADA integrity", "Numeric and timestamp edge cases", "CLI behavior"]
+  }
+}
