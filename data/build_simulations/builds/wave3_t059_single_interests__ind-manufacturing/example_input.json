@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "fixture_seed": 59,
+  "preferences": {
+    "interests": {"preventive_maintenance": 4, "quality": 3, "energy_efficiency": 2},
+    "excluded_work_order_ids": [],
+    "excluded_asset_ids": ["SYN-PRESS-003"],
+    "excluded_tags": [],
+    "limit": 5
+  },
+  "work_orders": [
+    {
+      "work_order_id": "SYN-WO-001",
+      "asset_id": "SYN-MILL-001",
+      "title": "Synthetic spindle maintenance and dimensional review",
+      "tags": ["preventive_maintenance", "quality"],
+      "status": "open",
+      "safety_critical": false,
+      "maintenance_logs": [
+        {"log_id": "SYN-LOG-001", "timestamp": "2026-09-23T08:00:00Z", "note": "Invented maintenance log: spindle lubrication checked by fictitious technician."}
+      ]
+    },
+    {
+      "work_order_id": "SYN-WO-002",
+      "asset_id": "SYN-PUMP-002",
+      "title": "Synthetic pump energy-efficiency inspection",
+      "tags": ["energy_efficiency"],
+      "status": "in_progress",
+      "safety_critical": false,
+      "maintenance_logs": [
+        {"log_id": "SYN-LOG-002", "timestamp": "2026-09-23T09:00:00Z", "note": "Invented maintenance log: fictitious pump seal visually checked."}
+      ]
+    },
+    {
+      "work_order_id": "SYN-WO-003",
+      "asset_id": "SYN-PRESS-003",
+      "title": "Synthetic safety-critical press review",
+      "tags": ["quality"],
+      "status": "open",
+      "safety_critical": true,
+      "maintenance_logs": [
+        {"log_id": "SYN-LOG-003", "timestamp": "2026-09-23T10:00:00Z", "note": "Invented maintenance log: fictitious press fastener inspection requested."}
+      ]
+    }
+  ],
+  "sensor_csv": "reading_id,work_order_id,asset_id,timestamp,metric,value,unit,lower,upper,safety_critical\nSYN-R-001,SYN-WO-001,SYN-MILL-001,2026-09-24T08:00:00Z,temperature,52.242,C,20,80,false\nSYN-R-002,SYN-WO-001,SYN-MILL-001,2026-09-24T08:01:00Z,temperature,64.663,C,20,80,false\nSYN-R-003,SYN-WO-002,SYN-PUMP-002,2026-09-24T08:00:00Z,pressure,5.419,bar,3,8,false\nSYN-R-004,SYN-WO-002,SYN-PUMP-002,2026-09-24T08:01:00Z,pressure,4.068,bar,3,8,false\nSYN-R-005,SYN-WO-003,SYN-PRESS-003,2026-09-24T08:00:00Z,vibration,9.694,mm/s,0,7,true\nSYN-R-006,SYN-WO-003,SYN-PRESS-003,2026-09-24T08:01:00Z,vibration,9.429,mm/s,0,7,true\n",
+  "quality_inspections": [
+    {
+      "inspection_id": "SYN-QI-001", "work_order_id": "SYN-WO-001", "asset_id": "SYN-MILL-001",
+      "timestamp": "2026-09-24T08:02:00Z", "inspector_id": "SYN-INSPECTOR-A", "procedure_revision": "SYN-DIAMETER-REV-2",
+      "decision": "pass", "rationale": "Synthetic measured diameter lies within supplied tolerance.",
+      "metric": "diameter", "value": 20.01, "unit": "mm", "lower": 19.95, "upper": 20.05, "safety_critical": false
+    },
+    {
+      "inspection_id": "SYN-QI-002", "work_order_id": "SYN-WO-002", "asset_id": "SYN-PUMP-002",
+      "timestamp": "2026-09-24T08:02:00Z", "inspector_id": "SYN-INSPECTOR-B", "procedure_revision": "SYN-TORQUE-REV-1",
+      "decision": "pass", "rationale": "Synthetic fastener torque lies within supplied tolerance.",
+      "metric": "torque", "value": 42.0, "unit": "N*m", "lower": 40, "upper": 45, "safety_critical": false
+    },
+    {
+      "inspection_id": "SYN-QI-003", "work_order_id": "SYN-WO-003", "asset_id": "SYN-PRESS-003",
+      "timestamp": "2026-09-24T08:02:00Z", "inspector_id": "SYN-INSPECTOR-C", "procedure_revision": "SYN-TORQUE-REV-3",
+      "decision": "fail", "rationale": "Synthetic fastener torque exceeds upper tolerance; human review required.",
+      "metric": "torque", "value": 65, "unit": "N*m", "lower": 45, "upper": 55, "safety_critical": true
+    }
+  ]
+}

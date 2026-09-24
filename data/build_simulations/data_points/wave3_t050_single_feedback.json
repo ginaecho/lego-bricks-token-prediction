@@ -97,7 +97,7 @@
   "split_group": "8d372d111bab3e58274ee9b86f65e19d0d0206605074fc3365713e894c033ceb",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "508885208d5a1f40a43372f5d468773d1c4e1841bafa3f3919e3518d820db53e",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t050_single_feedback",
   "membership_point_id": "single_feedback",
@@ -105,8 +105,145 @@
   "trial_category": "BT_single_repeat",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "98457256f25efb4da8904c3f0774ef12625e22ab3e9d539042e3c1860f0bad56",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "0e7da9cc-9eee-4e46-8692-2a3fd4df3867",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 152019,
+    "output_tokens": 8790,
+    "cache_read_tokens": 140704,
+    "cache_write_tokens": 11294,
+    "total_tokens": 160809,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36628,
+        "agent_id": "0e7da9cc-9eee-4e46-8692-2a3fd4df3867",
+        "model": "gpt-6-astra",
+        "input_tokens": 14831,
+        "output_tokens": 1225,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 727,
+        "reasoning_tokens": 212,
+        "duration_ms": 16309,
+        "created_at": "2026-09-24T09:19:11.632Z"
+      },
+      {
+        "id": 36635,
+        "agent_id": "0e7da9cc-9eee-4e46-8692-2a3fd4df3867",
+        "model": "gpt-6-astra",
+        "input_tokens": 16086,
+        "output_tokens": 5740,
+        "cache_read_tokens": 14828,
+        "cache_write_tokens": 1255,
+        "reasoning_tokens": 516,
+        "duration_ms": 66583,
+        "created_at": "2026-09-24T09:20:14.476Z"
+      },
+      {
+        "id": 36639,
+        "agent_id": "0e7da9cc-9eee-4e46-8692-2a3fd4df3867",
+        "model": "gpt-6-astra",
+        "input_tokens": 22126,
+        "output_tokens": 1177,
+        "cache_read_tokens": 16083,
+        "cache_write_tokens": 6040,
+        "reasoning_tokens": 516,
+        "duration_ms": 19871,
+        "created_at": "2026-09-24T09:20:34.734Z"
+      },
+      {
+        "id": 36641,
+        "agent_id": "0e7da9cc-9eee-4e46-8692-2a3fd4df3867",
+        "model": "gpt-6-astra",
+        "input_tokens": 23532,
+        "output_tokens": 132,
+        "cache_read_tokens": 22123,
+        "cache_write_tokens": 1406,
+        "reasoning_tokens": 0,
+        "duration_ms": 2971,
+        "created_at": "2026-09-24T09:20:46.603Z"
+      },
+      {
+        "id": 36643,
+        "agent_id": "0e7da9cc-9eee-4e46-8692-2a3fd4df3867",
+        "model": "gpt-6-astra",
+        "input_tokens": 24859,
+        "output_tokens": 241,
+        "cache_read_tokens": 23529,
+        "cache_write_tokens": 1327,
+        "reasoning_tokens": 41,
+        "duration_ms": 4487,
+        "created_at": "2026-09-24T09:20:52.074Z"
+      },
+      {
+        "id": 36647,
+        "agent_id": "0e7da9cc-9eee-4e46-8692-2a3fd4df3867",
+        "model": "gpt-6-astra",
+        "input_tokens": 25187,
+        "output_tokens": 177,
+        "cache_read_tokens": 24856,
+        "cache_write_tokens": 328,
+        "reasoning_tokens": 0,
+        "duration_ms": 4256,
+        "created_at": "2026-09-24T09:21:00.259Z"
+      },
+      {
+        "id": 36649,
+        "agent_id": "0e7da9cc-9eee-4e46-8692-2a3fd4df3867",
+        "model": "gpt-6-astra",
+        "input_tokens": 25398,
+        "output_tokens": 98,
+        "cache_read_tokens": 25184,
+        "cache_write_tokens": 211,
+        "reasoning_tokens": 0,
+        "duration_ms": 2717,
+        "created_at": "2026-09-24T09:21:10.523Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5118974999999999,
+      "observed_cache_profile_estimate_usd": 0.1953135,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.14277,
+      "observed_cache_profile_estimate_usd": 6.14277,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +274,243 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................\n----------------------------------------------------------------------\nRan 16 tests in 0.479s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "dataset_label": "SYNTHETIC customer feedback fixture; not real customer data",
+      "summary": {
+        "input_count": 6,
+        "unique_count": 5,
+        "duplicate_count": 1
+      },
+      "groups": [
+        {
+          "group_id": "g0001",
+          "canonical_id": "syn-001",
+          "normalized_text": "delivery was late but support was helpful",
+          "sources": [
+            {
+              "id": "syn-001",
+              "text": "Delivery was late, but support was helpful."
+            },
+            {
+              "id": "syn-002",
+              "text": "  DELIVERY was late but support was helpful!  "
+            }
+          ]
+        },
+        {
+          "group_id": "g0002",
+          "canonical_id": "syn-003",
+          "normalized_text": "the price is expensive and the interface is confusing",
+          "sources": [
+            {
+              "id": "syn-003",
+              "text": "The price is expensive and the interface is confusing."
+            }
+          ]
+        },
+        {
+          "group_id": "g0003",
+          "canonical_id": "syn-004",
+          "normalized_text": "the product arrived damaged i requested a refund",
+          "sources": [
+            {
+              "id": "syn-004",
+              "text": "The product arrived damaged; I requested a refund."
+            }
+          ]
+        },
+        {
+          "group_id": "g0004",
+          "canonical_id": "syn-005",
+          "normalized_text": "i like the purple packaging",
+          "sources": [
+            {
+              "id": "syn-005",
+              "text": "I like the purple packaging."
+            }
+          ]
+        },
+        {
+          "group_id": "g0005",
+          "canonical_id": "syn-006",
+          "normalized_text": "the quality feels durable and it is easy to use",
+          "sources": [
+            {
+              "id": "syn-006",
+              "text": "The quality feels durable and it is easy to use."
+            }
+          ]
+        }
+      ],
+      "themes": [
+        {
+          "theme_id": "delivery",
+          "unique_feedback_count": 2,
+          "source_count": 3,
+          "group_ids": [
+            "g0001",
+            "g0003"
+          ],
+          "excerpts": [
+            {
+              "group_id": "g0001",
+              "source_id": "syn-001",
+              "start": 0,
+              "end": 43,
+              "text": "Delivery was late, but support was helpful."
+            },
+            {
+              "group_id": "g0001",
+              "source_id": "syn-002",
+              "start": 0,
+              "end": 46,
+              "text": "  DELIVERY was late but support was helpful!  "
+            },
+            {
+              "group_id": "g0003",
+              "source_id": "syn-004",
+              "start": 0,
+              "end": 50,
+              "text": "The product arrived damaged; I requested a refund."
+            }
+          ]
+        },
+        {
+          "theme_id": "other",
+          "unique_feedback_count": 1,
+          "source_count": 1,
+          "group_ids": [
+            "g0004"
+          ],
+          "excerpts": [
+            {
+              "group_id": "g0004",
+              "source_id": "syn-005",
+              "start": 0,
+              "end": 28,
+              "text": "I like the purple packaging."
+            }
+          ]
+        },
+        {
+          "theme_id": "price",
+          "unique_feedback_count": 2,
+          "source_count": 2,
+          "group_ids": [
+            "g0002",
+            "g0003"
+          ],
+          "excerpts": [
+            {
+              "group_id": "g0002",
+              "source_id": "syn-003",
+              "start": 0,
+              "end": 49,
+              "text": "The price is expensive and the interface is confu"
+            },
+            {
+              "group_id": "g0003",
+              "source_id": "syn-004",
+              "start": 3,
+              "end": 50,
+              "text": " product arrived damaged; I requested a refund."
+            }
+          ]
+        },
+        {
+          "theme_id": "product_quality",
+          "unique_feedback_count": 2,
+          "source_count": 2,
+          "group_ids": [
+            "g0003",
+            "g0005"
+          ],
+          "excerpts": [
+            {
+              "group_id": "g0003",
+              "source_id": "syn-004",
+              "start": 0,
+              "end": 50,
+              "text": "The product arrived damaged; I requested a refund."
+            },
+            {
+              "group_id": "g0005",
+              "source_id": "syn-006",
+              "start": 0,
+              "end": 48,
+              "text": "The quality feels durable and it is easy to use."
+            }
+          ]
+        },
+        {
+          "theme_id": "support",
+          "unique_feedback_count": 1,
+          "source_count": 2,
+          "group_ids": [
+            "g0001"
+          ],
+          "excerpts": [
+            {
+              "group_id": "g0001",
+              "source_id": "syn-001",
+              "start": 0,
+              "end": 43,
+              "text": "Delivery was late, but support was helpful."
+            },
+            {
+              "group_id": "g0001",
+              "source_id": "syn-002",
+              "start": 0,
+              "end": 46,
+              "text": "  DELIVERY was late but support was helpful!  "
+            }
+          ]
+        },
+        {
+          "theme_id": "usability",
+          "unique_feedback_count": 2,
+          "source_count": 2,
+          "group_ids": [
+            "g0002",
+            "g0005"
+          ],
+          "excerpts": [
+            {
+              "group_id": "g0002",
+              "source_id": "syn-003",
+              "start": 0,
+              "end": 54,
+              "text": "The price is expensive and the interface is confusing."
+            },
+            {
+              "group_id": "g0005",
+              "source_id": "syn-006",
+              "start": 0,
+              "end": 48,
+              "text": "The quality feels durable and it is easy to use."
+            }
+          ]
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t050_single_feedback",
+    "artifact_sha256": {
+      "implementation.py": "51697e78daf902d94e8ebad20e60d6bf1bb09d2670a064eb238455074f11f589",
+      "test_implementation.py": "65a660a0de3b8280c220fc535a92961d44c33480fdfde190c8cd86a3e30495f5",
+      "example_input.json": "3c2d0b322157e6ef62776f6fdc0e0596810675dabce00e8aafad695ee787b94b",
+      "build_manifest.json": "c2cfa31439620cc3a5839a2430d8e6cacb75756e48b1e6e695f3ccbc50d508b0"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

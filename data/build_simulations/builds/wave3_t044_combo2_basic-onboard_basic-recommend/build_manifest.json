@@ -1,0 +1,53 @@
+{
+  "build_id": "wave3_t044_combo2_basic-onboard_basic-recommend",
+  "composition_label": "basic:onboard -> basic:recommend",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact root keys: schema_version=1, synthetic=true, customer, catalog, limit (integer 1..20).",
+    "customer": "id, name, goal, experience (beginner/intermediate/advanced), interests (unique text list), budget (finite nonnegative number), completed_steps (ordered prefix of discover_preferences, explore_matches, choose_product).",
+    "product": "id (unique), name, tags, goals, levels (unique text lists; levels use customer experience enum), price (finite nonnegative number), available (boolean).",
+    "output": "Normalized input plus status=ok, onboarding and discovery; errors contain status=error and message, with exit code 2.",
+    "validation": "Shared validation functions normalize text, enforce exact fields, numeric types, uniqueness and progression. Each stage output is validated; onboarding context must match the validated customer. Discovery output is checked against deterministic ranking.",
+    "matching": "Case-sensitive exact matching after whitespace trimming; all amounts share an implicit currency."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:onboard",
+      "to": "basic:recommend",
+      "payload": "Validated pipeline state including customer_id, goal, interests, experience, max_price in onboarding.discovery_context and next_step.",
+      "consumption": "Discovery filters and scores exclusively using the validated onboarding context, and carries customer_id and onboarding_step into its output."
+    }
+  ],
+  "behavior": {
+    "onboarding": "Personalized next action based on ordered completed steps, customer name and goal; completed customers continue discovery.",
+    "discovery": "Exclude unavailable, over-budget and unrelated products in that priority. Require at least a goal or interest match. Score goal match +4, each interest match +2, experience match +1; sort by descending score, ascending price, ascending product id. Return up to limit, explanations, eligible count and exclusion counts.",
+    "empty_results": "No fabricated matches or automatic budget expansion; explain that interests or budget may need review.",
+    "determinism": "No randomness, providers, injected model steps or persistent state."
+  },
+  "scope": {
+    "included": ["Synthetic fixtures", "Integrated validated pipeline", "General-purpose catalog matching", "JSON CLI", "Unit and subprocess CLI tests"],
+    "excluded": ["Live customer data", "Network access", "LLM providers", "Persistence", "Authentication", "Production deployment", "Currency conversion", "Inventory reservation"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": 17,
+    "unit_tests_passed": 17,
+    "unit_test_exit_code": 0,
+    "cli": "Example emitted one JSON object with status=ok and two ranked recommendations",
+    "cli_exit_code": 0
+  }
+}

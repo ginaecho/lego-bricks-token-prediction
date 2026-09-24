@@ -95,7 +95,7 @@
   "split_group": "000057e8fdddf7db6636b8d158ad8acd1e065371e38f776ce0efd08fce33165d",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "487a0a7a6746fbb9872a92a97abea7185ecdda2141283216c98dfef14715b9e7",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t049_single_basic-support",
   "membership_point_id": "single_basic-support",
@@ -103,8 +103,145 @@
   "trial_category": "B_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "e4270ed6085f87cd3a618ec97c5527ac9dd698754936d426818fa184def3b507",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "a0f12ca6-366e-4234-8e1e-b1f201664122",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 137656,
+    "output_tokens": 7826,
+    "cache_read_tokens": 128720,
+    "cache_write_tokens": 8915,
+    "total_tokens": 145482,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36625,
+        "agent_id": "a0f12ca6-366e-4234-8e1e-b1f201664122",
+        "model": "gpt-6-astra",
+        "input_tokens": 14847,
+        "output_tokens": 159,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 743,
+        "reasoning_tokens": 0,
+        "duration_ms": 3273,
+        "created_at": "2026-09-24T09:18:52.696Z"
+      },
+      {
+        "id": 36630,
+        "agent_id": "a0f12ca6-366e-4234-8e1e-b1f201664122",
+        "model": "gpt-6-astra",
+        "input_tokens": 15032,
+        "output_tokens": 1577,
+        "cache_read_tokens": 15029,
+        "cache_write_tokens": 0,
+        "reasoning_tokens": 584,
+        "duration_ms": 24415,
+        "created_at": "2026-09-24T09:19:34.207Z"
+      },
+      {
+        "id": 36638,
+        "agent_id": "a0f12ca6-366e-4234-8e1e-b1f201664122",
+        "model": "gpt-6-astra",
+        "input_tokens": 16635,
+        "output_tokens": 5410,
+        "cache_read_tokens": 15029,
+        "cache_write_tokens": 1603,
+        "reasoning_tokens": 0,
+        "duration_ms": 59499,
+        "created_at": "2026-09-24T09:20:32.841Z"
+      },
+      {
+        "id": 36640,
+        "agent_id": "a0f12ca6-366e-4234-8e1e-b1f201664122",
+        "model": "gpt-6-astra",
+        "input_tokens": 22349,
+        "output_tokens": 133,
+        "cache_read_tokens": 16632,
+        "cache_write_tokens": 5714,
+        "reasoning_tokens": 0,
+        "duration_ms": 2716,
+        "created_at": "2026-09-24T09:20:38.107Z"
+      },
+      {
+        "id": 36642,
+        "agent_id": "a0f12ca6-366e-4234-8e1e-b1f201664122",
+        "model": "gpt-6-astra",
+        "input_tokens": 22644,
+        "output_tokens": 213,
+        "cache_read_tokens": 22346,
+        "cache_write_tokens": 295,
+        "reasoning_tokens": 0,
+        "duration_ms": 3345,
+        "created_at": "2026-09-24T09:20:49.750Z"
+      },
+      {
+        "id": 36645,
+        "agent_id": "a0f12ca6-366e-4234-8e1e-b1f201664122",
+        "model": "gpt-6-astra",
+        "input_tokens": 22945,
+        "output_tokens": 226,
+        "cache_read_tokens": 22641,
+        "cache_write_tokens": 301,
+        "reasoning_tokens": 46,
+        "duration_ms": 4404,
+        "created_at": "2026-09-24T09:20:54.116Z"
+      },
+      {
+        "id": 36648,
+        "agent_id": "a0f12ca6-366e-4234-8e1e-b1f201664122",
+        "model": "gpt-6-astra",
+        "input_tokens": 23204,
+        "output_tokens": 108,
+        "cache_read_tokens": 22942,
+        "cache_write_tokens": 259,
+        "reasoning_tokens": 0,
+        "duration_ms": 3013,
+        "created_at": "2026-09-24T09:21:06.005Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.46153,
+      "observed_cache_profile_estimate_usd": 0.17190999999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.53836,
+      "observed_cache_profile_estimate_usd": 5.53836,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -135,5 +272,37 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............\n----------------------------------------------------------------------\nRan 14 tests in 0.558s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "request_id": "synthetic-request-001",
+      "disposition": "answered",
+      "answer": "For the fictional Acorn Desk service, choose Forgot password on the sign-in screen, enter your registered email address, and follow the reset link. Never share your password or reset link with support.",
+      "citations": [
+        {
+          "id": "synthetic-password-reset",
+          "title": "Reset your password"
+        }
+      ],
+      "team_online": false,
+      "handoff": "not_needed",
+      "notice": "The support team is offline; knowledge-base help remains available."
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t049_single_basic-support",
+    "artifact_sha256": {
+      "implementation.py": "fbca4109da724269882baee183c26c3fcb4e1e8de2f302674a0f38140b69aa33",
+      "test_implementation.py": "923b483bd4d4f2e2ca31442fe1db4e73063a186c75d8d5a1f28e91e1520d35a6",
+      "example_input.json": "04617b591f7c11a1d7a0aeec92a4d7ac27b025d2b351091ff66e259953925477",
+      "build_manifest.json": "f3a10db62fdc58394b0c1b4f04a4571ccf89adbd832c057defecf29ac1e56155"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

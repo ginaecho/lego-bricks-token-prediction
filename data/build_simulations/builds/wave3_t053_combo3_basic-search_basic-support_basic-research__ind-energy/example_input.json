@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "query": "winter consumption bill savings",
+  "support_question": "How can interval usage help reduce winter bills during an outage?",
+  "research_question": "What evidence supports prioritizing outage safety before winter energy savings?",
+  "top_k": 3,
+  "sources": [
+    {
+      "id": "source-plans",
+      "title": "SYNTHETIC utility service catalog",
+      "text": "Winter Energy Insights provides interval consumption summaries and bill-saving guidance. Outage Alerts provides utility interruption notifications. Solar Explorer provides renewable energy planning information."
+    },
+    {
+      "id": "source-policy",
+      "title": "SYNTHETIC customer support policy",
+      "text": "Interval usage helps identify winter consumption peaks; savings are not guaranteed. During an outage, keep away from downed lines and report hazards to the utility. The fictitious SYN-SUB-ALDER-01 site is not a customer access point."
+    },
+    {
+      "id": "source-emissions",
+      "title": "SYNTHETIC emissions ledger",
+      "text": "Illustrative January 2026 emissions: 42.5 kgCO2e. This is a synthetic reported figure, not a measured customer footprint."
+    }
+  ],
+  "catalog": [
+    {
+      "id": "product-insights",
+      "name": "Winter Energy Insights",
+      "description": "Interval consumption summaries and bill-saving guidance; no guaranteed savings.",
+      "tags": ["winter", "usage", "efficiency"],
+      "source_id": "source-plans"
+    },
+    {
+      "id": "product-alerts",
+      "name": "Outage Alerts",
+      "description": "Utility interruption notifications; not emergency dispatch or a guaranteed restoration time.",
+      "tags": ["outage", "notifications"],
+      "source_id": "source-plans"
+    },
+    {
+      "id": "product-solar",
+      "name": "Solar Explorer",
+      "description": "Renewable energy planning information.",
+      "tags": ["solar", "renewable"],
+      "source_id": "source-plans"
+    }
+  ],
+  "knowledge": [
+    {
+      "id": "policy-usage",
+      "text": "Interval usage helps identify winter consumption peaks; savings are not guaranteed.",
+      "source_id": "source-policy"
+    },
+    {
+      "id": "policy-outage",
+      "text": "During an outage, keep away from downed lines and report hazards to the utility.",
+      "source_id": "source-policy"
+    }
+  ],
+  "grid_assets": [
+    {"id": "SYN-DEVICE-FEEDER-01", "substation_id": "SYN-SUB-ALDER-01", "kind": "feeder", "critical": true},
+    {"id": "SYN-DEVICE-TRANSFORMER-02", "substation_id": "SYN-SUB-ALDER-01", "kind": "transformer", "critical": false}
+  ],
+  "topology": [["SYN-DEVICE-FEEDER-01", "SYN-DEVICE-TRANSFORMER-02"]],
+  "meter_interval_csv": "meter_id,timestamp,kwh\nSYN-METER-HOUSE-01,2026-01-15T17:00:00+00:00,1.8\nSYN-METER-HOUSE-01,2026-01-15T17:30:00+00:00,2.2\nSYN-METER-HOUSE-01,2026-07-15T17:00:00+00:00,0.7\nSYN-METER-HOUSE-01,2026-07-15T17:30:00+00:00,0.9\n",
+  "telemetry": {
+    "format": "scada-style-v1",
+    "samples": [
+      {"asset_id": "SYN-DEVICE-FEEDER-01", "timestamp": "2026-01-15T17:30:00Z", "voltage_kv": 11.0, "load_pct": 105.0, "status": "warning"},
+      {"asset_id": "SYN-DEVICE-TRANSFORMER-02", "timestamp": "2026-01-15T17:30:00Z", "voltage_kv": 0.4, "load_pct": 82.0, "status": "normal"}
+    ]
+  },
+  "outage_reports": [
+    {"id": "outage-synthetic-1", "asset_id": "SYN-DEVICE-FEEDER-01", "timestamp": "2026-01-15T17:20:00Z", "customers_affected": 25, "life_safety": false, "downed_line": true, "critical_service": false, "priority": "P1"}
+  ],
+  "safety_rules": {
+    "life_safety": "P1",
+    "critical_service": "P2",
+    "widespread": "P2",
+    "routine": "P3",
+    "widespread_customer_threshold": 1000
+  },
+  "emissions": [
+    {"value": 42.5, "unit": "kgCO2e", "source_id": "source-emissions", "period": "January 2026 (synthetic)"}
+  ]
+}

@@ -110,7 +110,7 @@
   "split_group": "be6599518b4042f2951e9beff88da64b5f7a054cf41c6b2eccea90098d3be7f3",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "3b73e1db31bda3394ded75e493fe376baf3a6c76316729a8685628f28cb75183",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t040_combo2_compare_interests__ind-telecom",
   "membership_point_id": "combo2_compare_interests__ind-telecom",
@@ -118,8 +118,145 @@
   "trial_category": "combo_BTI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "8e989ec4792cd70df328672010f05a4f821afab9053ea683210b95bf226aade4",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "93d96253-94ed-4efd-9d5a-3e020de6c6b0",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 164547,
+    "output_tokens": 11908,
+    "cache_read_tokens": 150232,
+    "cache_write_tokens": 14294,
+    "total_tokens": 176455,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36553,
+        "agent_id": "93d96253-94ed-4efd-9d5a-3e020de6c6b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15017,
+        "output_tokens": 480,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 913,
+        "reasoning_tokens": 307,
+        "duration_ms": 11615,
+        "created_at": "2026-09-24T09:09:29.342Z"
+      },
+      {
+        "id": 36571,
+        "agent_id": "93d96253-94ed-4efd-9d5a-3e020de6c6b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15523,
+        "output_tokens": 8449,
+        "cache_read_tokens": 15014,
+        "cache_write_tokens": 506,
+        "reasoning_tokens": 483,
+        "duration_ms": 98942,
+        "created_at": "2026-09-24T09:11:08.257Z"
+      },
+      {
+        "id": 36574,
+        "agent_id": "93d96253-94ed-4efd-9d5a-3e020de6c6b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 24304,
+        "output_tokens": 518,
+        "cache_read_tokens": 15520,
+        "cache_write_tokens": 8781,
+        "reasoning_tokens": 359,
+        "duration_ms": 13431,
+        "created_at": "2026-09-24T09:11:28.192Z"
+      },
+      {
+        "id": 36577,
+        "agent_id": "93d96253-94ed-4efd-9d5a-3e020de6c6b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 25667,
+        "output_tokens": 1644,
+        "cache_read_tokens": 24301,
+        "cache_write_tokens": 1363,
+        "reasoning_tokens": 232,
+        "duration_ms": 19661,
+        "created_at": "2026-09-24T09:11:47.143Z"
+      },
+      {
+        "id": 36579,
+        "agent_id": "93d96253-94ed-4efd-9d5a-3e020de6c6b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 27564,
+        "output_tokens": 442,
+        "cache_read_tokens": 25664,
+        "cache_write_tokens": 1897,
+        "reasoning_tokens": 195,
+        "duration_ms": 10940,
+        "created_at": "2026-09-24T09:12:05.267Z"
+      },
+      {
+        "id": 36581,
+        "agent_id": "93d96253-94ed-4efd-9d5a-3e020de6c6b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 28074,
+        "output_tokens": 229,
+        "cache_read_tokens": 27561,
+        "cache_write_tokens": 510,
+        "reasoning_tokens": 26,
+        "duration_ms": 5915,
+        "created_at": "2026-09-24T09:12:08.528Z"
+      },
+      {
+        "id": 36584,
+        "agent_id": "93d96253-94ed-4efd-9d5a-3e020de6c6b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 28398,
+        "output_tokens": 146,
+        "cache_read_tokens": 28071,
+        "cache_write_tokens": 324,
+        "reasoning_tokens": 36,
+        "duration_ms": 4283,
+        "created_at": "2026-09-24T09:12:23.268Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5899874999999999,
+      "observed_cache_profile_estimate_usd": 0.2519655,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.0798499999999995,
+      "observed_cache_profile_estimate_usd": 7.0798499999999995,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -150,5 +287,166 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..........................\n----------------------------------------------------------------------\nRan 26 tests in 0.766s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "comparison": {
+        "columns": [
+          "monthly_price_cents",
+          "data_mb",
+          "network_quality",
+          "preference_score"
+        ],
+        "context": {
+          "billing_adjustment_count": 1,
+          "observed_call_minutes": 210,
+          "observed_data_mb": 14666,
+          "open_fault_count": 1,
+          "residency_tag": "EU",
+          "support_chat_count": 1
+        },
+        "preferences": {
+          "budget_cents": 3500,
+          "excluded_offer_ids": [
+            "OFFER_TRAVEL"
+          ],
+          "interests": [
+            "work",
+            "travel"
+          ],
+          "minimum_data_mb": 10000,
+          "residency_tag": "EU",
+          "top_n": 3
+        },
+        "residency_tag": "EU",
+        "rows": [
+          {
+            "data_mb": 25000,
+            "monthly_price_cents": 3500,
+            "network_quality": 95,
+            "offer_id": "OFFER_WORK",
+            "preference_score": 9800,
+            "rank": 1,
+            "residency_tag": "EU",
+            "tags": [
+              "work",
+              "streaming"
+            ]
+          },
+          {
+            "data_mb": 20000,
+            "monthly_price_cents": 3000,
+            "network_quality": 90,
+            "offer_id": "OFFER_TRAVEL",
+            "preference_score": 9600,
+            "rank": 2,
+            "residency_tag": "EU",
+            "tags": [
+              "travel",
+              "work"
+            ]
+          },
+          {
+            "data_mb": 10000,
+            "monthly_price_cents": 2000,
+            "network_quality": 80,
+            "offer_id": "OFFER_BASIC",
+            "preference_score": 7927,
+            "rank": 3,
+            "residency_tag": "EU",
+            "tags": [
+              "budget"
+            ]
+          }
+        ],
+        "schema_version": 1,
+        "synthetic_fixture": true
+      },
+      "recommendations": {
+        "context": {
+          "billing_adjustment_count": 1,
+          "observed_call_minutes": 210,
+          "observed_data_mb": 14666,
+          "open_fault_count": 1,
+          "residency_tag": "EU",
+          "support_chat_count": 1
+        },
+        "preferences": {
+          "budget_cents": 3500,
+          "excluded_offer_ids": [
+            "OFFER_TRAVEL"
+          ],
+          "interests": [
+            "work",
+            "travel"
+          ],
+          "minimum_data_mb": 10000,
+          "residency_tag": "EU",
+          "top_n": 3
+        },
+        "residency_tag": "EU",
+        "rows": [
+          {
+            "data_mb": 25000,
+            "explanations": [
+              "Matched interests: work",
+              "Monthly price: 3500 USD cents; budget: 3500 USD cents.",
+              "Data allowance: 25000 MB; network quality: 95/100.",
+              "Comparison preference score: 9800/10000."
+            ],
+            "monthly_price_cents": 3500,
+            "network_quality": 95,
+            "offer_id": "OFFER_WORK",
+            "preference_score": 9800,
+            "rank": 1,
+            "recommendation_score": 10200,
+            "residency_tag": "EU",
+            "tags": [
+              "work",
+              "streaming"
+            ]
+          },
+          {
+            "data_mb": 10000,
+            "explanations": [
+              "Matched interests: none",
+              "Monthly price: 2000 USD cents; budget: 3500 USD cents.",
+              "Data allowance: 10000 MB; network quality: 80/100.",
+              "Comparison preference score: 7927/10000."
+            ],
+            "monthly_price_cents": 2000,
+            "network_quality": 80,
+            "offer_id": "OFFER_BASIC",
+            "preference_score": 7927,
+            "rank": 2,
+            "recommendation_score": 7927,
+            "residency_tag": "EU",
+            "tags": [
+              "budget"
+            ]
+          }
+        ],
+        "schema_version": 1,
+        "synthetic_fixture": true
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic_fixture": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t040_combo2_compare_interests__ind-telecom",
+    "artifact_sha256": {
+      "implementation.py": "7be945331803f462c45757e6cfec89b8a6f226109fa3ce8f075ba4c48eb77f11",
+      "test_implementation.py": "83fe1263ac05ddbf1c02c24afede542139a299d1d5d86e825e789b95d08605f8",
+      "example_input.json": "70acf7213d1c10b16e71f12b948a2950b18cadda49f6ab2f36fd1d978842df3f",
+      "build_manifest.json": "6255c19fb65535ff1d711476acdffea378f9bbaea93f0ebc4407253fc43dcc01"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

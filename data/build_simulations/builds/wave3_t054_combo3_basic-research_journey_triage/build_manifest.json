@@ -1,0 +1,48 @@
+{
+  "build_id": "wave3_t054_combo3_basic-research_journey_triage",
+  "composition_label": "basic:research -> journey recommendations -> ticket triage & routing",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version, fixture_label, question, sources[{id,title,text,reliability}], actions[{id,title,prerequisites,evidence_terms,category}], completed[action_id], ticket{customer_id,text,severity}, routing{categories:{category:{keywords,team,owner}},fallback_category,priority_by_severity}",
+    "output": "schema_version, status=ok, fixture_label, research, journey, triage",
+    "errors": "One stdout JSON object with status=error and error message; exit 2",
+    "validation": "One validate function enforces input, research, journey, triage and final-envelope boundaries, including grounded citations, prerequisites and accountable ownership.",
+    "bounds": "1 MB CLI input; up to 100 sources, actions, categories and string-list items; strings at most 10000 characters; schema version 1; unknown fields rejected."
+  },
+  "cross_stage_handoffs": [
+    {"from": "research", "to": "journey", "data": "Validated exact source excerpts, relevance, reliability and source IDs determine supported actions; citation IDs are preserved."},
+    {"from": "journey", "to": "triage", "data": "Validated two-step action IDs vote for categories, blocked status raises the priority floor, source IDs and customer identity are retained."}
+  ],
+  "behavior": {
+    "research": "General-purpose Unicode lexical question/source overlap, exact source quotations, deterministic weighted ranking, max relevance-times-reliability confidence; explicit uncertainty and insufficient-evidence status. Zero-reliability sources are excluded.",
+    "journey": "Evidence-term overlap ranks actions. Next actions require completed prerequisites. Searches ranked first actions for a feasible distinct second action; returns exactly two validated steps or an explicit blocked result, never a partial journey.",
+    "triage": "Configurable keyword matches plus one category vote per journey step; lexical category tie break and configured fallback. Severity priority is configurable; blocked journeys have at least high priority. Every category requires a team and named owner.",
+    "determinism": "No randomness, current time, network calls, model calls or injected LLM is used. Research ties use source ID; action ties use action ID.",
+    "synthetic_data": "All example identities, source claims, organizations and support owners are clearly labeled synthetic."
+  },
+  "scope": {
+    "included": ["One integrated CLI pipeline", "Shared schema and semantic validation", "Configurable categories, prerequisites and priorities", "Grounded evidence and explicit limitations", "Unit and subprocess CLI tests"],
+    "excluded": ["Live research retrieval or providers", "Fact verification or contradiction resolution", "Enterprise authentication and persistence", "Real ticket delivery", "Automatic source trust assessment", "Journeys longer than two actions"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 23, "passed": 23, "failures": 0, "errors": 0},
+    "cli_exit_code": 0,
+    "cli_result": "One valid JSON object with status=ok, supported research, ready two-step journey, technical routing and an accountable owner.",
+    "coverage": ["Each pipeline stage", "Cross-stage citations and action propagation", "Prerequisite ordering and cycles", "Insufficient evidence and zero reliability", "Configurable routing and priority", "Invalid inputs and tampered handoffs", "Determinism", "CLI success, missing file, usage, malformed JSON, encoding, duplicate keys and size limit"]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "question": "Which synthetic policy offers the best premium and coverage for these preferences?",
+  "preferences": {
+    "weights": {"annual_premium": 0.6, "coverage_limit": 0.3, "deductible": 0.1},
+    "max_annual_premium": 1500
+  },
+  "sources": [
+    {
+      "source_id": "SRC_JSON",
+      "format": "acord_json",
+      "content": {
+        "ACORD": {
+          "policy": {
+            "policy_id": "POL_A",
+            "premium": 100,
+            "premium_period": "monthly",
+            "currency": "EUR",
+            "coverage_limit": 50000,
+            "deductible": 500
+          },
+          "underwriting_submission": {
+            "submission_id": "SUB_A",
+            "policy_id": "POL_A",
+            "factors": [
+              {"name": "property_type", "value": "house", "disclosed": true},
+              {"name": "safety_features", "value": "present", "disclosed": true}
+            ]
+          },
+          "policyholder": {
+            "fixture_label": "SYNTHETIC invented identity; not a real policyholder",
+            "name": "Invented Mira Example",
+            "vin": "SYNTHVIN0000000047",
+            "property_address": "47 Fiction Lane, Imaginary City"
+          }
+        }
+      }
+    },
+    {
+      "source_id": "SRC_XML",
+      "format": "acord_xml",
+      "content": "<ACORD><Policy policy_id=\"POL_B\" premium=\"900\" premium_period=\"annual\" currency=\"EUR\" coverage_limit=\"40000\" deductible=\"750\"/><Claim claim_id=\"CLM_B\" policy_id=\"POL_B\" loss_amount=\"10021.65\" loss_date=\"2025-10-11\" covered=\"true\" policy_active=\"true\" evidence_complete=\"false\" decision=\"review\"><Reason>insufficient_evidence</Reason></Claim><UnderwritingSubmission submission_id=\"SUB_B\" policy_id=\"POL_B\"><Factor name=\"property_type\" value=\"apartment\" disclosed=\"true\"/></UnderwritingSubmission><Policyholder name=\"Invented Leon Example\" vin=\"SYNTHVIN0000000048\" property_address=\"48 Fiction Lane, Imaginary City\"/></ACORD>"
+    },
+    {
+      "source_id": "SRC_FORM",
+      "format": "claim_form",
+      "content": "Claim ID: CLM_A\nPolicy ID: POL_A\nLoss Amount: 8378.75\nLoss Date: 2025-02-02\nCovered: true\nPolicy Active: true\nEvidence Complete: true\nDecision: approve\nReasons: covered_loss\nPolicyholder: Invented Mira Example\nVIN: SYNTHVIN0000000047\nProperty Address: 47 Fiction Lane, Imaginary City"
+    }
+  ]
+}

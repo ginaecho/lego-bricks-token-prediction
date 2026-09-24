@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t056_combo3_semantic_behavior_web__ind-retail",
+  "composition_label": "combo3_semantic_behavior_web",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "SYNTHETIC product catalog JSON feed, query, limit, timezone-aware as_of, synthetic customer profile with boolean GDPR/CCPA consent, basket, clickstream click/purchase event log, personalization switch, research allowlist and inline captured documents",
+    "output": "One status/schema_version/fixture_label/input_digest/stage/query/customer_id/basket_id/personalization_mode/items envelope shared by all stages",
+    "item": "Catalog SKU/name/category/price/currency/stock plus semantic_score, behavior_score, total score and provenance-preserving findings",
+    "validation": "Strict known fields, finite numeric values, exact catalog snapshots, referential integrity, timestamp ordering, consent, exact URL host allowlist and source-quote/hash matching; input fingerprint binds handoffs to the same request",
+    "errors": "CLI emits a single JSON object with status error and exits 2 for validation, parsing and file errors"
+  },
+  "cross_stage_handoffs": [
+    "semantic -> behavior: validated semantic envelope supplies bounded candidate SKUs and relevance scores; behavior retains membership and adds consented recency/profile/basket boosts",
+    "behavior -> web: validated behavior envelope supplies ranked candidate SKUs and scores; offline retrieval preserves ranking and commercial fields while attaching exact SKU-scoped source quotations"
+  ],
+  "behavior": {
+    "semantic": "Builds an inverted token index; lexical score is query-term coverage. Optional injected callable receives query plus SKU-sorted product texts and returns validated finite nonzero equal-width numeric vectors. Positive cosine similarity adds to relevance; score/SKU tie breaking is deterministic.",
+    "personalization": "Requires both GDPR and CCPA consent when enabled. Purchase weight 3 and click weight 1 decay with a 30-day half-life relative to as_of; basket quantity contributes 0.5 each; other same-category history contributes 0.25 of its weight; declared category interest adds 0.2. Disabled mode ignores history, basket and interests. Cold-start uses declared interests or unchanged semantic ranking.",
+    "research": "No HTTP calls. Caller supplies synthetic captured URL documents. HTTPS exact-host allowlisting rejects credentials, nonstandard ports, fragments and malformed hosts. Retrieve only query-relevant documents for ranked product SKUs, bounded per product, preserving exact title/text/capture time and SHA-256 content hash.",
+    "retail_constraints": "Price/currency/stock copied only from catalog. Out-of-stock products remain visible with stock zero; basket quantities must fit catalog stock. Synthetic research excludes reviews/endorsements and commercial claims through restrictive schema and demonstrative keyword checks.",
+    "synthetic_fixtures": "All SKUs, prices, stock, shopper identities, events and specifications are invented; reserved example.test source hosts are never contacted."
+  },
+  "scope": {
+    "included": ["Integrated deterministic CLI pipeline", "Shared schema and validation", "Injectable embedding fixtures", "Offline allowlisted URL ingestion and retrieval", "Catalog and consent demonstration rules", "Cross-stage and CLI unittest coverage"],
+    "excluded": ["Live web fetching", "Live model providers", "Generated reviews or endorsements", "Production security guarantees", "Regulatory compliance certification", "Checkout or payment execution", "Persistent search database", "Enterprise-scale relevance evaluation"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "test_cases": 28,
+    "tests_passed": 28,
+    "tests_failed": 0,
+    "cli_example_exit_code": 0,
+    "cli_example_status": "ok",
+    "verified_commands": [
+      "python -B -m unittest discover -s . -p test_implementation.py",
+      "python -B implementation.py example_input.json"
+    ]
+  }
+}

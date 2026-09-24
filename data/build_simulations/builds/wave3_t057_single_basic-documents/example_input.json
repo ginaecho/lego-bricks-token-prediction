@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC document automation fixture; no real customer data",
+  "documents": [
+    {"id": "synthetic-csv", "format": "csv", "content": "reference,amount,approved\nSYN-001,12.50,true\nSYN-002,8.25,false\n"},
+    {"id": "synthetic-form", "format": "key_value", "content": "reference: SYN-003\namount: 19.00\napproved: true"},
+    {"id": "synthetic-records", "format": "records", "content": [{"reference": " SYN-004 ", "amount": 0, "approved": true}]}
+  ],
+  "fields": [
+    {"source": "reference", "target": "document_reference", "type": "string", "required": true, "pattern": "SYN-[0-9]{3}"},
+    {"source": "amount", "target": "total", "type": "number", "required": true, "min": 0},
+    {"source": "approved", "target": "approved", "type": "boolean", "default": false}
+  ],
+  "unique": ["document_reference"]
+}

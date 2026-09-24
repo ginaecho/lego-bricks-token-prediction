@@ -1,0 +1,88 @@
+{
+  "build_id": "wave3_t049_single_basic-support",
+  "composition_label": "AI customer support",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New original implementation created in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "request_id": "Required nonblank string, up to 100 characters",
+      "message": "Required nonblank string, up to 4000 characters",
+      "team_online": "Required boolean; supplied by caller, not externally verified",
+      "consent_contact": "Optional boolean, default false",
+      "fixture_label": "Optional nonblank string up to 200 characters, labels the example as synthetic",
+      "knowledge_base": "Required array, 0 to 100 trusted articles. Each has unique id (100 characters), title (200), answer (8000), and keywords (0 to 30 nonblank strings of at most 100 characters)."
+    },
+    "success_output": {
+      "status": "ok",
+      "request_id": "Input correlation identifier",
+      "disposition": "answered | needs_clarification | human_requested",
+      "answer": "Exact article answer when answered; otherwise a deterministic fallback",
+      "citations": "Array of {id, title}; exactly one for answered and none for fallback",
+      "team_online": "Input availability",
+      "handoff": "not_needed | consent_required | suggested",
+      "notice": "Availability and transparent human-handoff limitations"
+    },
+    "error_output": {
+      "status": "error",
+      "error": {"code": "invalid_input_or_file", "message": "Readable diagnostic"}
+    },
+    "validation": "One shared validate function validates requests and grounded responses. Strict field sets, bounded strings and lists, strict booleans, unique IDs. CLI rejects duplicate JSON keys, non-finite JSON, malformed encoding/JSON, excessive nesting and files over 1000000 bytes. Errors exit 2; success exits 0. UTF-8 input supports a BOM."
+  },
+  "cross_stage_handoffs": [
+    "Single support stage: validated request -> deterministic article retrieval or human routing -> shared output validation -> one JSON object. No external handoff."
+  ],
+  "behavior": [
+    "Uses Unicode-aware case-folded word sets with a small English stopword list; lexical retrieval searches article titles and keywords.",
+    "Candidate requires at least one matching query token and at least 50 percent query coverage. Rank by coverage and overlap, with stable ID ordering. Equal best scores trigger clarification rather than a potentially conflicting answer.",
+    "Explicit requests to talk to a human override retrieval.",
+    "Answers quote trusted caller-supplied knowledge-base text exactly and cite article ID and title. This is source fidelity, not independent verification of policy correctness.",
+    "Offline users still receive the same grounded help. Unsupported and ambiguous queries get clarification guidance rather than invented policies.",
+    "Human follow-up is only suggested with consent; without consent it is marked consent_required. No ticket is submitted, no personal data is requested for a handoff, and no response time is promised.",
+    "No random, time-dependent, provider, generative or injected LLM steps."
+  ],
+  "scope": {
+    "included": [
+      "General-purpose FAQ-style support with caller-owned domain knowledge",
+      "Grounding, citations, conservative abstention and offline availability messaging",
+      "CLI/file validation and synthetic deterministic fixtures",
+      "No file writes by implementation or tests"
+    ],
+    "excluded": [
+      "Live providers, networks, embeddings, semantic understanding and multilingual quality guarantees",
+      "Production security, authentication, tenant isolation, persistent storage, real tickets and outbound messaging",
+      "Order lookup, account actions, policy verification, business-hours calculation and SLA guarantees",
+      "Conflict detection between unequal-ranked articles, conversation history and free-form generated answers"
+    ],
+    "artifact_exception": "A required session prompt log exists at docs\\My_prompt.txt in addition to the four requested deliverables."
+  },
+  "test_outcomes": {
+    "state": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests": 14,
+    "passed": 14,
+    "failed": 0,
+    "cli_example": {
+      "exit_code": 0,
+      "status": "ok",
+      "disposition": "answered",
+      "single_json_object": true
+    }
+  }
+}

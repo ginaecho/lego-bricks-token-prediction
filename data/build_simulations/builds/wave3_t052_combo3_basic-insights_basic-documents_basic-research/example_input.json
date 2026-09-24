@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC: fictional customer feedback and internal source notes",
+  "theme_rules": {
+    "onboarding": ["setup", "onboarding"],
+    "performance": ["slow", "fast"],
+    "pricing": ["price", "expensive"]
+  },
+  "required_fields": ["owner", "finding"],
+  "feedback": [
+    {"id": "f1", "text": "The setup is confusing and slow."},
+    {"id": "f2", "text": "The onboarding guide is helpful and easy."},
+    {"id": "f3", "text": "The price is expensive."}
+  ],
+  "documents": [
+    {
+      "id": "d1",
+      "text": "Owner: Experience team\nFinding: Setup delays appeared in two synthetic walkthroughs.\nNext step: Simplify setup guidance.",
+      "feedback_ids": ["f1", "f2"]
+    },
+    {
+      "id": "d2",
+      "text": "Owner: Pricing team\nFinding: Price concerns require further interviews.",
+      "feedback_ids": ["f3"]
+    },
+    {
+      "id": "d3",
+      "text": "Finding: Setup performance may need investigation.",
+      "feedback_ids": ["f1"]
+    }
+  ],
+  "questions": [
+    {"id": "q1", "text": "What setup guidance should we simplify?"},
+    {"id": "q2", "text": "What evidence addresses price concerns?"},
+    {"id": "q3", "text": "Does offline synchronization work?"}
+  ]
+}

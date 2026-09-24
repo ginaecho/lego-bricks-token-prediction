@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional research onboarding support scenario",
+  "question": "How can I evaluate sensor calibration?",
+  "sources": [
+    {"id": "synthetic-guide", "title": "Fictional sensor evaluation guide", "text": "Evaluate sensor calibration by reviewing the calibration checklist before running a sensor comparison.", "reliability": 0.9},
+    {"id": "synthetic-unrelated", "title": "Fictional delivery bulletin", "text": "Delivery windows depend on the warehouse.", "reliability": 0.8}
+  ],
+  "actions": [
+    {"id": "review", "title": "Review calibration checklist", "prerequisites": [], "evidence_terms": ["calibration", "checklist"], "category": "technical"},
+    {"id": "compare", "title": "Run sensor comparison", "prerequisites": ["review"], "evidence_terms": ["sensor", "comparison"], "category": "technical"}
+  ],
+  "completed": [],
+  "ticket": {"customer_id": "synthetic-customer-001", "text": "Please help with sensor calibration.", "severity": "standard"},
+  "routing": {
+    "categories": {
+      "technical": {"keywords": ["sensor", "calibration"], "team": "Synthetic Technical Support", "owner": "synthetic-tech-oncall"},
+      "general": {"keywords": [], "team": "Synthetic Customer Care", "owner": "synthetic-care-oncall"}
+    },
+    "fallback_category": "general",
+    "priority_by_severity": {"minor": "low", "standard": "normal", "major": "high", "critical": "urgent"}
+  }
+}

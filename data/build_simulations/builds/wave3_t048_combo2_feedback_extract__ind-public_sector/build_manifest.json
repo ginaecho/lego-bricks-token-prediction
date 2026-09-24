@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t048_combo2_feedback_extract__ind-public_sector",
+  "composition_label": "Feedback analysis (Customer insights) -> Structured extraction (Document automation)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict object: schema_version, synthetic=true, citizen_pii declarations, documents, fields. Documents have id, entity, format, content. Extraction fields have name, entity, label, required.",
+    "output": "Shared envelope: schema_version, synthetic, status, notice, fields, feedback, extraction. Feedback sources carry canonical IDs, original duplicate IDs, entity and redacted text. Extraction carries source IDs, original IDs, themes, fields, missing_fields, review_required and explanation.",
+    "validation": "validate(value, stage) checks input and both stage boundaries. Extraction is validated against deterministic recomputation from the validated feedback envelope.",
+    "spans": "Zero-based end-exclusive Python character offsets into redacted source text. Original text is intentionally not retained.",
+    "errors": "File, decoding and validation errors produce one JSON object with status=error and exit 2, without reflecting sensitive input."
+  },
+  "cross_stage_handoffs": [
+    "Input -> feedback: validate strict synthetic schema; redact declared PII, recognizable contact/ID patterns and explicitly labeled personal fields.",
+    "Feedback -> extraction: validate the envelope; consume only redacted canonical sources, duplicate aliases, themes and the shared field specifications. No second read of raw input.",
+    "Extraction -> output: validate field values, missing reports and inherited evidence against the same feedback source records."
+  ],
+  "behavior": {
+    "deduplication": "Same entity plus normalized case/whitespace of complete redacted document text. Retain the first redacted source and all original IDs. Different entities never merge. This is document-level deduplication, not semantic similarity.",
+    "themes": "Deterministic keyword-prefix matching with exact supporting line excerpts. Unmatched Feedback lines become Other feedback. Topic classification is not sentiment, factual endorsement or an administrative decision.",
+    "extraction": "Literal schema label followed by a colon at line start, case-insensitive. Copy trimmed text only. Multiple occurrences are ambiguous even if their values match. No inferred values or eligibility determinations.",
+    "missing_reporting": "Every applicable absent, empty, ambiguous or protected field is reported, including optional fields. Required missing fields set review_required. Protected values have no extracted value or span.",
+    "public_sector_safeguards": "Demonstrative data minimization and PII removal, traceable excerpts and source spans for open-records review, plain-language notices and human review. No Privacy Act, GDPR, FOIA or Section 508 certification claims.",
+    "synthetic_data": "Invented citizen, SYNTH case numbers, example.invalid email and non-traceable invented address; no real government policy."
+  },
+  "scope": {
+    "included": ["Government form JSON", "Policy/regulation-like text", "Three public-sector entities", "Deterministic integrated stages", "Standard-library CLI and unittest tests"],
+    "excluded": ["Live models or providers", "Real citizen data", "Production privacy guarantees", "Arbitrary unlabeled PII detection", "Identity resolution", "Semantic paraphrase deduplication", "Eligibility decisions", "Legal compliance certification", "OCR", "PDF parsing", "Authentication or persistent storage"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 19,
+    "test_command_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "observed": "All 19 unittest cases passed. The example CLI printed one valid JSON object; four input documents produced three canonical extraction records and one duplicate."
+  }
+}

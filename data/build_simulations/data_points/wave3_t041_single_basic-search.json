@@ -95,7 +95,7 @@
   "split_group": "450182d7ffc70da162a5169e56b8b17b01604623cd06a150f91b11ee5c77ce1e",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "223ba3d014c61df2aed8d50b04dcccc8fbeafa72bb7890e78cfb54341ac7b927",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t041_single_basic-search",
   "membership_point_id": "single_basic-search",
@@ -103,8 +103,133 @@
   "trial_category": "B_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "5dec2e2a5e0bd6471586264cd3dc794d5d4d61b65d2168d1eaed53a3bd983de8",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "1441eefd-efea-4979-8020-06f73f9ade96",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 119270,
+    "output_tokens": 7156,
+    "cache_read_tokens": 110532,
+    "cache_write_tokens": 8720,
+    "total_tokens": 126426,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36552,
+        "agent_id": "1441eefd-efea-4979-8020-06f73f9ade96",
+        "model": "gpt-6-astra",
+        "input_tokens": 14848,
+        "output_tokens": 466,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 744,
+        "reasoning_tokens": 292,
+        "duration_ms": 10781,
+        "created_at": "2026-09-24T09:09:26.618Z"
+      },
+      {
+        "id": 36558,
+        "agent_id": "1441eefd-efea-4979-8020-06f73f9ade96",
+        "model": "gpt-6-astra",
+        "input_tokens": 15344,
+        "output_tokens": 5832,
+        "cache_read_tokens": 14845,
+        "cache_write_tokens": 496,
+        "reasoning_tokens": 28,
+        "duration_ms": 62454,
+        "created_at": "2026-09-24T09:10:30.284Z"
+      },
+      {
+        "id": 36560,
+        "agent_id": "1441eefd-efea-4979-8020-06f73f9ade96",
+        "model": "gpt-6-astra",
+        "input_tokens": 21554,
+        "output_tokens": 150,
+        "cache_read_tokens": 15341,
+        "cache_write_tokens": 6210,
+        "reasoning_tokens": 0,
+        "duration_ms": 2690,
+        "created_at": "2026-09-24T09:10:33.100Z"
+      },
+      {
+        "id": 36565,
+        "agent_id": "1441eefd-efea-4979-8020-06f73f9ade96",
+        "model": "gpt-6-astra",
+        "input_tokens": 22080,
+        "output_tokens": 452,
+        "cache_read_tokens": 21551,
+        "cache_write_tokens": 526,
+        "reasoning_tokens": 155,
+        "duration_ms": 8929,
+        "created_at": "2026-09-24T09:10:46.316Z"
+      },
+      {
+        "id": 36566,
+        "agent_id": "1441eefd-efea-4979-8020-06f73f9ade96",
+        "model": "gpt-6-astra",
+        "input_tokens": 22620,
+        "output_tokens": 172,
+        "cache_read_tokens": 22077,
+        "cache_write_tokens": 540,
+        "reasoning_tokens": 0,
+        "duration_ms": 2776,
+        "created_at": "2026-09-24T09:10:54.729Z"
+      },
+      {
+        "id": 36568,
+        "agent_id": "1441eefd-efea-4979-8020-06f73f9ade96",
+        "model": "gpt-6-astra",
+        "input_tokens": 22824,
+        "output_tokens": 84,
+        "cache_read_tokens": 22617,
+        "cache_write_tokens": 204,
+        "reasoning_tokens": 0,
+        "duration_ms": 2611,
+        "created_at": "2026-09-24T09:11:03.850Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.405515,
+      "observed_cache_profile_estimate_usd": 0.15681799999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.86618,
+      "observed_cache_profile_estimate_usd": 4.86618,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -135,5 +260,103 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............\n----------------------------------------------------------------------\nRan 14 tests in 0.864s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "fixture_label": "SYNTHETIC reference catalog; prices in USD",
+      "query": "please find me a comfy couch",
+      "interpreted_terms": [
+        {
+          "term": "comfy",
+          "alternatives": [
+            "comfy"
+          ]
+        },
+        {
+          "term": "couch",
+          "alternatives": [
+            "couch",
+            "sofa"
+          ]
+        }
+      ],
+      "total_matches": 2,
+      "results": [
+        {
+          "product": {
+            "id": "syn-002",
+            "name": "Comfy Couch",
+            "description": "Soft seating for two.",
+            "category": "Furniture",
+            "price": 549,
+            "in_stock": true,
+            "tags": [
+              "living room"
+            ]
+          },
+          "score": 800,
+          "matches": [
+            {
+              "term": "comfy",
+              "matched": "comfy",
+              "kind": "exact",
+              "field": "name"
+            },
+            {
+              "term": "couch",
+              "matched": "couch",
+              "kind": "exact",
+              "field": "name"
+            }
+          ]
+        },
+        {
+          "product": {
+            "id": "syn-001",
+            "name": "Comfy Sofa",
+            "description": "A compact upholstered sofa for a reading corner.",
+            "category": "Furniture",
+            "price": 399,
+            "in_stock": true,
+            "tags": [
+              "comfy",
+              "seating"
+            ]
+          },
+          "score": 740,
+          "matches": [
+            {
+              "term": "comfy",
+              "matched": "comfy",
+              "kind": "exact",
+              "field": "name"
+            },
+            {
+              "term": "couch",
+              "matched": "sofa",
+              "kind": "synonym",
+              "field": "name"
+            }
+          ]
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t041_single_basic-search",
+    "artifact_sha256": {
+      "implementation.py": "5396598b00b45ac2523e5c4f8914282ef1e2ff251ec1698bdd92a153822f06fc",
+      "test_implementation.py": "67f70ad64aa6415cee6d20c48d942e472376324452ce5b67f9d17cd712ab32f2",
+      "example_input.json": "7d08f91ebe9dec9a81029a7d5e26ccefcc1e4195096fb1f10ac19770bbd03d9e",
+      "build_manifest.json": "cfc872955ff137b344dde388da60c03b9975717e275d56f2d79f08bf274f58cc"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

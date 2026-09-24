@@ -1,0 +1,71 @@
+{
+  "build_id": "wave3_t053_combo3_basic-search_basic-support_basic-research__ind-energy",
+  "composition_label": "basic:search -> basic:support -> basic:research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Newly authored isolated reference implementation with explicitly synthetic fixtures.",
+    "runtime": "Python 3 standard library; run with -B to avoid bytecode files.",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "One JSON object: synthetic=true; query/support_question/research_question; top_k 1..10; sources; catalog; knowledge; grid_assets; topology; meter_interval_csv; telemetry; outage_reports; safety_rules; emissions.",
+    "source": "id, title, text; knowledge statements quote a supplied source; all offering and emissions references resolve.",
+    "meter_reading": "CSV header exactly meter_id,timestamp,kwh; nonnegative finite kWh; timezone-aware ISO timestamps; unique meter/time pairs. Fixture intervals span winter and summer.",
+    "grid_asset": "id, substation_id, kind, critical; topology and telemetry references must resolve. SCADA-style JSON format=scada-style-v1; samples include asset_id, timestamp, voltage_kv, load_pct, status.",
+    "outage_report": "id, asset_id, timestamp, nonnegative integer customers_affected, boolean life_safety/downed_line/critical_service, priority.",
+    "output": "Versioned synthetic status/stage/context envelope with cumulative search, support and research payloads. CLI errors are one JSON status=error object with exit code 2.",
+    "validation": "normalize validates raw domain records; validate reconstructs and revalidates canonical shared context and recomputes deterministic stage payloads at every boundary. Tampered matches, claims, citations, extra envelope fields and inconsistent context are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:search",
+      "to": "basic:support",
+      "contract": "Validated canonical context and ranked catalog matches; support preserves matched product IDs, creates cited source-grounded claims, and applies safety escalation."
+    },
+    {
+      "from": "basic:support",
+      "to": "basic:research",
+      "contract": "Validated support claims, citations, limitations and product IDs; research ranks the exact claims against its question and preserves claim-level evidence provenance."
+    }
+  ],
+  "behavior": {
+    "search": "Deterministic general-purpose lexical, synonym and typo-tolerant retrieval over a supplied catalog, stable ranking and explicit no-match result.",
+    "support": "Catalog facts plus relevant source-quoted policy, observed interval totals, latest telemetry anomalies, prioritized outages and unit/source-bearing emissions. No invented restoration times or guaranteed savings.",
+    "research": "Question-ranked evidence with claim IDs and citations, partial/insufficient-evidence status, safety-first decision guidance, limitations and next steps.",
+    "identifier_protection": "All structured raw asset, substation and meter identifiers replaced by run-local aliases; exact identifier tokens in free text also redacted. Reserved output alias syntax is not accepted for raw identifiers. This is demonstrative data minimization, not encryption, access control or NERC CIP certification.",
+    "safety": "P1 if life_safety or downed_line; otherwise P2 for critical_service or customers meeting the declared positive widespread threshold; otherwise P3. All rule mappings must be explicitly declared and supplied priorities must agree.",
+    "emissions": "Nonnegative finite figures must carry kgCO2e or tCO2e, reporting period and a resolving supplied source. Figures are never added across incompatible units or extrapolated from seasonal samples.",
+    "errors": "JSON/file/validation failures do not echo input content, paths or identifiers."
+  },
+  "scope": {
+    "included": ["One integrated deterministic Python CLI", "Shared schema and validation", "Synthetic grid topology, fictitious identifiers and seasonal interval CSV", "SCADA-style telemetry JSON", "Source-cited support and research", "Offline unittest and CLI validation"],
+    "excluded": ["Live providers or network calls", "Production SCADA control", "Emergency dispatch", "Real customer or grid data", "Regulatory or compliance certification", "Authentication and cryptographic storage", "Causal emissions estimates", "Guaranteed recommendations", "Enterprise delivery"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 37,
+      "failures": 0,
+      "errors": 0,
+      "result": "OK",
+      "coverage": ["All three stages", "Cross-stage products and evidence provenance", "Tampered handoffs", "General-purpose synonym and typo search", "No-match and missing-evidence cases", "Identifier protection", "Safety priority rules", "Emissions units and sources", "CSV and telemetry validation", "CLI success and error behavior"]
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "stderr": "",
+      "status": "ok",
+      "final_stage": "research"
+    },
+    "deliverable_verification": "Exactly the four requested deliverables; no cache or scratch files."
+  }
+}

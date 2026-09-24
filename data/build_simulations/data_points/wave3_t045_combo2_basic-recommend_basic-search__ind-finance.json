@@ -107,7 +107,7 @@
   "split_group": "70522a5bb57420824547c66810a249208062c85c2af06d4fc05f01de6a9adb26",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "73ee96545abb86e3087d26cb0b558bd6df4c8e6b7589bd206de273d78c2fdaca",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t045_combo2_basic-recommend_basic-search__ind-finance",
   "membership_point_id": "combo2_basic-recommend_basic-search__ind-finance",
@@ -115,8 +115,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "13f91c961807dd8f074cbec028f305c14207dc3397f377363ffcb23e26008553",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "605a6451-0073-4771-bf4d-e05106771ad2",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 129813,
+    "output_tokens": 9198,
+    "cache_read_tokens": 118348,
+    "cache_write_tokens": 11447,
+    "total_tokens": 139011,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36590,
+        "agent_id": "605a6451-0073-4771-bf4d-e05106771ad2",
+        "model": "gpt-6-astra",
+        "input_tokens": 15050,
+        "output_tokens": 172,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 946,
+        "reasoning_tokens": 0,
+        "duration_ms": 4068,
+        "created_at": "2026-09-24T09:14:13.516Z"
+      },
+      {
+        "id": 36597,
+        "agent_id": "605a6451-0073-4771-bf4d-e05106771ad2",
+        "model": "gpt-6-astra",
+        "input_tokens": 15248,
+        "output_tokens": 8211,
+        "cache_read_tokens": 15047,
+        "cache_write_tokens": 198,
+        "reasoning_tokens": 201,
+        "duration_ms": 89182,
+        "created_at": "2026-09-24T09:15:40.867Z"
+      },
+      {
+        "id": 36601,
+        "agent_id": "605a6451-0073-4771-bf4d-e05106771ad2",
+        "model": "gpt-6-astra",
+        "input_tokens": 23795,
+        "output_tokens": 141,
+        "cache_read_tokens": 15245,
+        "cache_write_tokens": 8547,
+        "reasoning_tokens": 0,
+        "duration_ms": 3006,
+        "created_at": "2026-09-24T09:15:54.515Z"
+      },
+      {
+        "id": 36608,
+        "agent_id": "605a6451-0073-4771-bf4d-e05106771ad2",
+        "model": "gpt-6-astra",
+        "input_tokens": 24853,
+        "output_tokens": 367,
+        "cache_read_tokens": 23792,
+        "cache_write_tokens": 1058,
+        "reasoning_tokens": 106,
+        "duration_ms": 7729,
+        "created_at": "2026-09-24T09:17:03.821Z"
+      },
+      {
+        "id": 36612,
+        "agent_id": "605a6451-0073-4771-bf4d-e05106771ad2",
+        "model": "gpt-6-astra",
+        "input_tokens": 25316,
+        "output_tokens": 200,
+        "cache_read_tokens": 24850,
+        "cache_write_tokens": 463,
+        "reasoning_tokens": 0,
+        "duration_ms": 3627,
+        "created_at": "2026-09-24T09:17:19.824Z"
+      },
+      {
+        "id": 36613,
+        "agent_id": "605a6451-0073-4771-bf4d-e05106771ad2",
+        "model": "gpt-6-astra",
+        "input_tokens": 25551,
+        "output_tokens": 107,
+        "cache_read_tokens": 25313,
+        "cache_write_tokens": 235,
+        "reasoning_tokens": 0,
+        "duration_ms": 2906,
+        "created_at": "2026-09-24T09:17:29.113Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.46250250000000004,
+      "observed_cache_profile_estimate_usd": 0.1962195,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.55003,
+      "observed_cache_profile_estimate_usd": 5.55003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -147,5 +272,213 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 0.725s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "customer": {
+        "account_iban": "SYNTH-FAKEIBAN00000001",
+        "aml_flags": [],
+        "id": "SYNTH-CUSTOMER-001",
+        "kyc_status": "verified",
+        "preferences": [
+          "saving",
+          "travel"
+        ],
+        "risk_tolerance": 2
+      },
+      "loan_application": {
+        "amount": 4000,
+        "currency": "EUR",
+        "id": "SYNTH-LOAN-001",
+        "purpose": "car",
+        "status": "draft"
+      },
+      "products": [
+        {
+          "category": "saving",
+          "currency": "EUR",
+          "id": "saving-1",
+          "kind": "account",
+          "max_amount": 0,
+          "name": "Synthetic Flexible Savings",
+          "risk": 0,
+          "tags": [
+            "flexible",
+            "deposit"
+          ]
+        },
+        {
+          "category": "travel",
+          "currency": "EUR",
+          "id": "travel-1",
+          "kind": "card",
+          "max_amount": 0,
+          "name": "Synthetic Travel Rewards",
+          "risk": 1,
+          "tags": [
+            "reward"
+          ]
+        },
+        {
+          "category": "car",
+          "currency": "EUR",
+          "id": "loan-1",
+          "kind": "loan",
+          "max_amount": 10000,
+          "name": "Synthetic Car Loan",
+          "risk": 2,
+          "tags": [
+            "loan"
+          ]
+        },
+        {
+          "category": "investment",
+          "currency": "EUR",
+          "id": "invest-1",
+          "kind": "investment",
+          "max_amount": 0,
+          "name": "Synthetic Growth Fund",
+          "risk": 5,
+          "tags": [
+            "growth"
+          ]
+        }
+      ],
+      "query": "save",
+      "recommendations": [
+        {
+          "explanation": [
+            {
+              "points": 10,
+              "reason": "eligible product baseline; not a credit or suitability rating"
+            },
+            {
+              "points": 0,
+              "reason": "preference matches: none"
+            },
+            {
+              "points": 0,
+              "reason": "transaction category matches: none"
+            },
+            {
+              "points": 25,
+              "reason": "matches active loan application"
+            }
+          ],
+          "product_id": "loan-1",
+          "score": 35
+        },
+        {
+          "explanation": [
+            {
+              "points": 10,
+              "reason": "eligible product baseline; not a credit or suitability rating"
+            },
+            {
+              "points": 20,
+              "reason": "preference matches: travel"
+            },
+            {
+              "points": 5,
+              "reason": "transaction category matches: travel"
+            },
+            {
+              "points": 0,
+              "reason": "not a loan application match"
+            }
+          ],
+          "product_id": "travel-1",
+          "score": 35
+        },
+        {
+          "explanation": [
+            {
+              "points": 10,
+              "reason": "eligible product baseline; not a credit or suitability rating"
+            },
+            {
+              "points": 20,
+              "reason": "preference matches: saving"
+            },
+            {
+              "points": 0,
+              "reason": "transaction category matches: none"
+            },
+            {
+              "points": 0,
+              "reason": "not a loan application match"
+            }
+          ],
+          "product_id": "saving-1",
+          "score": 30
+        }
+      ],
+      "results": [
+        {
+          "explanation": [
+            {
+              "points": 30,
+              "reason": "validated discovery score"
+            },
+            {
+              "points": 40,
+              "reason": "exact/alias query match: saving"
+            }
+          ],
+          "product_id": "saving-1",
+          "score": 70
+        }
+      ],
+      "schema_version": "1.0",
+      "screening": {
+        "blocked": false,
+        "notice": "Demonstrative screening only; no compliance certification.",
+        "reasons": []
+      },
+      "stage": "search",
+      "status": "ok",
+      "synthetic": true,
+      "transactions": [
+        {
+          "amount": -82.31,
+          "category": "travel",
+          "currency": "EUR",
+          "date": "2026-09-01",
+          "id": "SYNTH-TX-001",
+          "masked_card": "************1234"
+        },
+        {
+          "amount": -24.89,
+          "category": "groceries",
+          "currency": "EUR",
+          "date": "2026-09-03",
+          "id": "SYNTH-TX-002",
+          "masked_card": null
+        },
+        {
+          "amount": 2150.42,
+          "category": "salary",
+          "currency": "EUR",
+          "date": "2026-09-05",
+          "id": "SYNTH-TX-003",
+          "masked_card": null
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t045_combo2_basic-recommend_basic-search__ind-finance",
+    "artifact_sha256": {
+      "implementation.py": "af59054ba4a6d8ebda691e89f3b98d80ec475b2c6582ab76b593800515c64046",
+      "test_implementation.py": "1eca8600cf5c042b32e361f9d20a0fca904d938c4a97004566d7bdac8c150278",
+      "example_input.json": "f88dee7bd69685f28a0854edb04d5e08441db3093121b59d6241ce6028a2da91",
+      "build_manifest.json": "9dde6fce85a6496091b30b287843bbc521ad3d811cfdc1b9ec6704da46ecff2c"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

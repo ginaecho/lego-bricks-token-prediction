@@ -1,0 +1,59 @@
+{
+  "build_id": "wave3_t045_combo2_basic-recommend_basic-search__ind-finance",
+  "composition_label": "basic:recommend -> basic:search; financial services",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch within the isolated build directory",
+    "runtime": "Python 3.9+ standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "schema_version, synthetic=true, customer, ledger, loan_application (object or null), products, query",
+    "customer": "id, kyc_status (verified/pending/rejected), aml_flags[], preferences[], risk_tolerance (0..5), account_iban (explicit SYNTH- identifier)",
+    "ledger": "format (json/csv/iso20022), data; normalized transactions: id, date YYYY-MM-DD, finite signed amount, currency, category, masked_card",
+    "csv": "Exact headers: id,date,amount,currency,category,card_number; empty card_number is permitted",
+    "iso20022_style": "CstmrCdtTrfInitn.PmtInf[] containing EndToEndId, ReqdExctnDt, InstdAmt {value,Ccy}, CtgyPurp, optional CardNumber; intentionally simplified JSON, not full ISO XML",
+    "loan_application": "id, amount (>0), purpose, currency, status (draft/submitted/declined)",
+    "product": "id, name, category, tags[], risk (0..5), kind (account/card/loan/investment), currency, max_amount",
+    "output": "Shared state: schema_version,status,synthetic,stage,customer,transactions,loan_application,products,query,recommendations[],results[],screening",
+    "scores": "product_id, score, explanation[] of reason and points; every score equals its component sum",
+    "validation": "validate_state runs at normalized ingress and before/after every stage; unknown fields, duplicates, nonfinite numbers, invalid dates, unmasked cards, ineligible results and inconsistent score propagation are rejected",
+    "errors": "One JSON object with status=error, exit 2; generic messages avoid echoing sensitive invalid inputs"
+  },
+  "cross_stage_handoffs": [
+    "normalize_input converts all ledger formats to the shared validated state and masks cards",
+    "recommend consumes validated state and emits screened, eligibility-filtered scored candidates",
+    "search consumes validated recommend output only; never introduces products outside those candidates; discovery score retained as the first explained component"
+  ],
+  "behavior": {
+    "discovery": "Deterministic baseline 10, 20 per distinct preference token match, 5 per distinct historical category token match, 25 for an eligible loan application match; sort descending score then product id",
+    "search": "Case folding, punctuation tokenization, synonym normalization, deterministic typo matching cutoff 0.8 for tokens of length >=4; all meaningful query terms must match; exact/alias match adds 40, typo adds 25; blank/stopword-only query preserves discovery ranking",
+    "financial_constraints": "Pending/rejected KYC or any AML flag suppresses all recommendations and search results. Product risk must not exceed customer tolerance. Loans require nondeclined application, matching currency and amount within product maximum.",
+    "masking": "Only last four card digits survive in normalized state. Demonstrative PCI DSS-inspired masking, not PCI certification. No raw ledger is carried forward.",
+    "fixtures": "Explicit synthetic marker, fabricated customer, fake SYNTH account/IBAN identifier, all-zero fake card prefix; test fixture uses seed 45 randomized transaction histories",
+    "mutability": "Stages deep-copy their inputs and never modify caller data"
+  },
+  "scope": {
+    "included": ["Integrated CLI pipeline", "Single validation layer", "JSON/CSV/ISO-style ledger adapters", "Explainable deterministic scores", "Screening and fake-account validation", "Synthetic fixtures", "CLI and stage unit tests"],
+    "excluded": ["Live providers or LLM calls", "Production compliance", "Real account validation", "Credit decisions", "Investment advice", "Full ISO 20022 XML support", "Currency conversion", "Persistent storage", "Enterprise scaling", "Free-text DLP"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 23,
+    "unittest_failures": 0,
+    "unittest_errors": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "example_search_product_ids": ["saving-1"],
+    "verified": ["Both stages", "Score propagation", "KYC/AML gating", "Card masking", "Loan and risk eligibility", "All three ledger adapters", "Seeded randomized histories", "Invalid schema and ledger values", "CLI success/error behavior"]
+  }
+}

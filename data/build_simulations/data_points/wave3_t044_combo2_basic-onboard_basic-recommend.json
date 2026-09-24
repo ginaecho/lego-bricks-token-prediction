@@ -107,7 +107,7 @@
   "split_group": "4be21c8f0f74c4ea1e0b5dad49d9b3484bffa9f42ae14684311d4fbee4269ebb",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "a14cefd39afb8ab47798d4f4738ea7f48ce2d60cb2e5c98a2e85ee249fefae84",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t044_combo2_basic-onboard_basic-recommend",
   "membership_point_id": "combo2_basic-onboard_basic-recommend",
@@ -115,8 +115,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "8253a583da18c99feb690178817a5a1ae5ec2206c2cc2d66ab4f2ecd669e1b09",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "c37ef0e8-c5a3-4804-944c-f161385663b0",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 117034,
+    "output_tokens": 6333,
+    "cache_read_tokens": 108861,
+    "cache_write_tokens": 8155,
+    "total_tokens": 123367,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36589,
+        "agent_id": "c37ef0e8-c5a3-4804-944c-f161385663b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 14935,
+        "output_tokens": 169,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 831,
+        "reasoning_tokens": 0,
+        "duration_ms": 3941,
+        "created_at": "2026-09-24T09:14:12.671Z"
+      },
+      {
+        "id": 36595,
+        "agent_id": "c37ef0e8-c5a3-4804-944c-f161385663b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15130,
+        "output_tokens": 5513,
+        "cache_read_tokens": 14932,
+        "cache_write_tokens": 195,
+        "reasoning_tokens": 308,
+        "duration_ms": 62593,
+        "created_at": "2026-09-24T09:15:12.349Z"
+      },
+      {
+        "id": 36596,
+        "agent_id": "c37ef0e8-c5a3-4804-944c-f161385663b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 20967,
+        "output_tokens": 138,
+        "cache_read_tokens": 15127,
+        "cache_write_tokens": 5837,
+        "reasoning_tokens": 0,
+        "duration_ms": 4793,
+        "created_at": "2026-09-24T09:15:17.274Z"
+      },
+      {
+        "id": 36599,
+        "agent_id": "c37ef0e8-c5a3-4804-944c-f161385663b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 21699,
+        "output_tokens": 252,
+        "cache_read_tokens": 20964,
+        "cache_write_tokens": 732,
+        "reasoning_tokens": 62,
+        "duration_ms": 5066,
+        "created_at": "2026-09-24T09:15:48.693Z"
+      },
+      {
+        "id": 36603,
+        "agent_id": "c37ef0e8-c5a3-4804-944c-f161385663b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 22044,
+        "output_tokens": 181,
+        "cache_read_tokens": 21696,
+        "cache_write_tokens": 345,
+        "reasoning_tokens": 0,
+        "duration_ms": 3297,
+        "created_at": "2026-09-24T09:16:24.685Z"
+      },
+      {
+        "id": 36605,
+        "agent_id": "c37ef0e8-c5a3-4804-944c-f161385663b0",
+        "model": "gpt-6-astra",
+        "input_tokens": 22259,
+        "output_tokens": 80,
+        "cache_read_tokens": 22041,
+        "cache_write_tokens": 215,
+        "reasoning_tokens": 0,
+        "duration_ms": 2341,
+        "created_at": "2026-09-24T09:16:48.165Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.38758,
+      "observed_cache_profile_estimate_usd": 0.14264274999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.65096,
+      "observed_cache_profile_estimate_usd": 4.65096,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -147,5 +272,157 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.814s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "customer": {
+        "id": "synthetic-customer-01",
+        "name": "Alex Example",
+        "goal": "learn",
+        "experience": "beginner",
+        "interests": [
+          "robotics",
+          "crafts"
+        ],
+        "budget": 60,
+        "completed_steps": [
+          "discover_preferences"
+        ]
+      },
+      "catalog": [
+        {
+          "id": "kit-01",
+          "name": "Synthetic Robot Starter",
+          "tags": [
+            "robotics"
+          ],
+          "goals": [
+            "learn"
+          ],
+          "levels": [
+            "beginner"
+          ],
+          "price": 45,
+          "available": true
+        },
+        {
+          "id": "kit-02",
+          "name": "Synthetic Craft Starter",
+          "tags": [
+            "crafts"
+          ],
+          "goals": [
+            "learn"
+          ],
+          "levels": [
+            "beginner"
+          ],
+          "price": 25,
+          "available": true
+        },
+        {
+          "id": "kit-03",
+          "name": "Synthetic Advanced Robot",
+          "tags": [
+            "robotics"
+          ],
+          "goals": [
+            "upgrade"
+          ],
+          "levels": [
+            "advanced"
+          ],
+          "price": 120,
+          "available": true
+        },
+        {
+          "id": "kit-04",
+          "name": "Synthetic Unavailable Craft",
+          "tags": [
+            "crafts"
+          ],
+          "goals": [
+            "learn"
+          ],
+          "levels": [
+            "beginner"
+          ],
+          "price": 10,
+          "available": false
+        }
+      ],
+      "limit": 3,
+      "status": "ok",
+      "onboarding": {
+        "customer_id": "synthetic-customer-01",
+        "completed": false,
+        "next_step": {
+          "id": "explore_matches",
+          "instruction": "Alex Example, explore products matched to your preferences to pursue learn."
+        },
+        "discovery_context": {
+          "customer_id": "synthetic-customer-01",
+          "goal": "learn",
+          "interests": [
+            "robotics",
+            "crafts"
+          ],
+          "experience": "beginner",
+          "max_price": 60
+        }
+      },
+      "discovery": {
+        "customer_id": "synthetic-customer-01",
+        "onboarding_step": "explore_matches",
+        "items": [
+          {
+            "product_id": "kit-02",
+            "name": "Synthetic Craft Starter",
+            "price": 25,
+            "score": 7,
+            "reasons": [
+              "Matches your goal",
+              "Matches interest: crafts",
+              "Matches your experience"
+            ]
+          },
+          {
+            "product_id": "kit-01",
+            "name": "Synthetic Robot Starter",
+            "price": 45,
+            "score": 7,
+            "reasons": [
+              "Matches your goal",
+              "Matches interest: robotics",
+              "Matches your experience"
+            ]
+          }
+        ],
+        "eligible_count": 2,
+        "excluded": {
+          "unavailable": 1,
+          "over_budget": 1,
+          "no_relevance": 0
+        },
+        "message": "Personalized matches ready"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t044_combo2_basic-onboard_basic-recommend",
+    "artifact_sha256": {
+      "implementation.py": "f7214718ac2cf06d1b83d24c7680034c9bd43cf56e0d61819ed7b634ad1c230f",
+      "test_implementation.py": "a0ed8a47ac483f05462f0817d403b390a78a45446018e0ad0810fd6023fa9f6b",
+      "example_input.json": "3b55dfdf213a2e7153f792bd34ecbf97093415e67b4f958a034430d74f6f1d39",
+      "build_manifest.json": "838f5999c1bf03e1e8b5abb90b2e30208f7060caaeb078c7e3e8d31ad17a3207"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

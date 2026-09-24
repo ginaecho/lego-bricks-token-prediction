@@ -1,0 +1,52 @@
+{
+  "build_id": "wave3_t057_single_basic-documents",
+  "composition_label": "single_basic-documents",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Version 1 envelope: schema_version=1, optional fixture_label, documents array, nonempty fields array, optional unique target-name array. Unknown configuration keys are rejected.",
+    "documents": "Each document has a unique nonblank id, format (records, csv, key_value), and embedded content. Records content is an array of objects; other content is text.",
+    "fields": "Each field declares exact source key, unique target key, type (string, integer, number, boolean); optional required, default, trim, min, max, pattern, choices. No nested-path interpretation.",
+    "output": "Version 1 envelope: status (ok or needs_review), fixture_label, records [{document_id,row,data,valid}], issues [{document_id,row,field,code,message}], summary {documents,records,valid_records,issues}. Rows are one-based extracted record ordinals.",
+    "errors": "Invalid input/configuration, document structure, JSON, or files produce {schema_version:1,status:error,error:message}, exit 2. Data-quality issues produce needs_review and exit 0.",
+    "validation": "A shared validation layer validates all formats and mapping configuration before extraction; the same conversion and field checks apply to every extracted record."
+  },
+  "cross_stage_handoffs": [
+    "Validated documents -> ordered source dictionaries",
+    "Source dictionaries -> typed target dictionaries with document and row lineage",
+    "Target dictionaries -> field checks, global per-field uniqueness checks, issue list and summary"
+  ],
+  "behavior": [
+    "Deterministic document, record, field and issue ordering; no clock, randomness, I/O writes or provider calls in implementation.",
+    "CSV supports quoting and rejects duplicate/blank headers and inconsistent widths. Headers and source keys are exact.",
+    "Key-value text uses the first colon, strips keys and values, skips blank lines, rejects duplicate keys.",
+    "Default applies only when a source key is absent; explicit null or empty text remains missing. Optional missing values become null.",
+    "Trimming defaults to true. Integer conversion accepts integers or integer strings, never booleans or fractional values. Number conversion rejects nonfinite values. Boolean conversion accepts booleans or case-insensitive true/false strings.",
+    "Patterns are full matches; numeric bounds are inclusive. Each uniqueness target is checked independently across all documents, skipping missing and unconvertible values.",
+    "Checks retain converted out-of-range values for review; conversion failures yield null. Unmapped source keys are omitted. No records are silently discarded due to quality issues."
+  ],
+  "scope": {
+    "included": ["Embedded structured documents", "CSV extraction", "Key-value extraction", "Configurable reshaping and defaults", "Typed validation and data quality checks", "Record provenance", "Synthetic fixtures", "JSON CLI"],
+    "excluded": ["PDF, DOCX, OCR and image extraction", "Nested field paths", "Live providers or LLM steps", "External document retrieval", "Enterprise workflow scheduling", "Document rendering", "Untrusted-scale resource controls"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "test_count": 14,
+    "cli_example": "passed: exit 0, one JSON object, status ok, 3 documents, 4 valid records, 0 issues",
+    "suite_exit_code": 0,
+    "coverage": ["normal mapping", "three extraction formats", "empty input", "defaults and nulls", "type and range errors", "cross-document uniqueness", "patterns and choices", "invalid schemas", "malformed documents", "quoted CSV", "nonfinite values and booleans", "determinism and nonmutation", "CLI success", "CLI validation, file, usage and JSON errors"]
+  }
+}

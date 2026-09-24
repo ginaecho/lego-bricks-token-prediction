@@ -1,0 +1,50 @@
+{
+  "build_id": "wave3_t050_single_feedback",
+  "composition_label": "Feedback analysis (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact keys: schema_version (integer 1), dataset_label (nonblank string up to 200 trimmed characters), feedback (0..1000 objects with unique trimmed id 1..128 characters and text 1..10000 characters containing word characters). Unknown fields rejected.",
+    "output": "schema_version, status=ok, dataset_label, summary (input_count, unique_count, duplicate_count), groups (group_id, canonical_id, normalized_text, sources), themes (theme_id, unique_feedback_count, source_count, group_ids, excerpts)",
+    "evidence": "Each excerpt has group_id, source_id, start, end, text. Offsets are half-open Python character offsets into unchanged source text. All sources remain embedded in groups.",
+    "errors": "Single JSON object with schema_version=1, status=error and error.type/error.message; exit 2 for usage, validation, JSON, decoding and file errors.",
+    "validation": "One validate function enforces input structure and output evidence relationships/count consistency. Strict JSON parsing rejects duplicate keys and nonfinite numbers."
+  },
+  "cross_stage_handoffs": [
+    "One integrated stage: validated records -> normalized duplicate groups retaining all originals -> fixed lexical themes and source excerpts -> validated JSON result."
+  ],
+  "behavior": {
+    "deduplication": "NFKC Unicode normalization, casefolding and word-token joining; punctuation/whitespace differences ignored. First occurrence is canonical. Stable group IDs follow input order.",
+    "themes": "Fixed whole-word keyword dictionaries for delivery, price, product_quality, support and usability; unmatched feedback is other. Multiple themes allowed; alphabetical theme ordering.",
+    "support": "First matching original keyword with at most 40 characters of context on either side per source/theme; if Unicode normalization creates a keyword without a direct original token, the full bounded source is the excerpt. Other uses first 120 characters.",
+    "counting": "Theme unique_feedback_count counts groups, source_count counts original feedback records. Theme totals may exceed overall totals because themes overlap.",
+    "synthetic_data": "Example and all tests explicitly use synthetic data.",
+    "llm": "None: all analysis deterministic and local."
+  },
+  "scope": {
+    "included": ["Lexical deduplication", "Fixed keyword themes", "Exact traceable supporting excerpts", "Shared schema and validation", "JSON CLI", "Bounded fixture tests"],
+    "excluded": ["Semantic near-duplicate detection", "Sentiment or negation inference", "Learned topic modeling", "Live providers", "Persistent storage", "Enterprise production guarantees", "Network calls"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 16,
+    "failures": 0,
+    "errors": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_status": "passed: exit 0, one JSON object, status ok",
+    "example_summary": {"input_count": 6, "unique_count": 5, "duplicate_count": 1}
+  }
+}

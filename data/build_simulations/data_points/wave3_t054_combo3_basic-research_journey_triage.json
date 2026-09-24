@@ -121,7 +121,7 @@
   "split_group": "3559fb9e326dedcd508732f3e8f104651eeee5c27134d7b3779b066d3fff2502",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "7bc1defb47aaeeb6b2a191a7aef53d2a5887fcaf9832f202fb90c8c992c3d202",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t054_combo3_basic-research_journey_triage",
   "membership_point_id": "combo3_basic-research_journey_triage",
@@ -129,8 +129,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "e21e36b394ff38d9b75a787fefe77d8ca264ca1b0089b90e42f6a5c1bfea351e",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "11ddf80e-2e18-475f-9eb8-80ebeaac15f4",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 127266,
+    "output_tokens": 9096,
+    "cache_read_tokens": 116562,
+    "cache_write_tokens": 10686,
+    "total_tokens": 136362,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36663,
+        "agent_id": "11ddf80e-2e18-475f-9eb8-80ebeaac15f4",
+        "model": "gpt-6-astra",
+        "input_tokens": 14954,
+        "output_tokens": 254,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 850,
+        "reasoning_tokens": 85,
+        "duration_ms": 6302,
+        "created_at": "2026-09-24T09:23:23.247Z"
+      },
+      {
+        "id": 36677,
+        "agent_id": "11ddf80e-2e18-475f-9eb8-80ebeaac15f4",
+        "model": "gpt-6-astra",
+        "input_tokens": 15238,
+        "output_tokens": 8050,
+        "cache_read_tokens": 14951,
+        "cache_write_tokens": 284,
+        "reasoning_tokens": 435,
+        "duration_ms": 96128,
+        "created_at": "2026-09-24T09:25:00.605Z"
+      },
+      {
+        "id": 36679,
+        "agent_id": "11ddf80e-2e18-475f-9eb8-80ebeaac15f4",
+        "model": "gpt-6-astra",
+        "input_tokens": 23616,
+        "output_tokens": 137,
+        "cache_read_tokens": 15235,
+        "cache_write_tokens": 8378,
+        "reasoning_tokens": 0,
+        "duration_ms": 5585,
+        "created_at": "2026-09-24T09:25:06.285Z"
+      },
+      {
+        "id": 36681,
+        "agent_id": "11ddf80e-2e18-475f-9eb8-80ebeaac15f4",
+        "model": "gpt-6-astra",
+        "input_tokens": 24106,
+        "output_tokens": 362,
+        "cache_read_tokens": 23613,
+        "cache_write_tokens": 490,
+        "reasoning_tokens": 77,
+        "duration_ms": 9445,
+        "created_at": "2026-09-24T09:25:22.972Z"
+      },
+      {
+        "id": 36682,
+        "agent_id": "11ddf80e-2e18-475f-9eb8-80ebeaac15f4",
+        "model": "gpt-6-astra",
+        "input_tokens": 24562,
+        "output_tokens": 189,
+        "cache_read_tokens": 24103,
+        "cache_write_tokens": 456,
+        "reasoning_tokens": 0,
+        "duration_ms": 5861,
+        "created_at": "2026-09-24T09:25:24.823Z"
+      },
+      {
+        "id": 36685,
+        "agent_id": "11ddf80e-2e18-475f-9eb8-80ebeaac15f4",
+        "model": "gpt-6-astra",
+        "input_tokens": 24790,
+        "output_tokens": 104,
+        "cache_read_tokens": 24559,
+        "cache_write_tokens": 228,
+        "reasoning_tokens": 0,
+        "duration_ms": 3624,
+        "created_at": "2026-09-24T09:25:36.064Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.45460500000000004,
+      "observed_cache_profile_estimate_usd": 0.19234049999999997,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.45526,
+      "observed_cache_profile_estimate_usd": 5.45526,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -161,5 +286,78 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 0.447s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "fixture_label": "SYNTHETIC: fictional research onboarding support scenario",
+      "journey": {
+        "evidence_ids": [
+          "synthetic-guide"
+        ],
+        "next_actions": [
+          "review"
+        ],
+        "reason": "Two evidence-supported actions satisfy prerequisites in sequence.",
+        "status": "ready",
+        "steps": [
+          "review",
+          "compare"
+        ]
+      },
+      "research": {
+        "confidence": 0.9,
+        "evidence": [
+          {
+            "excerpt": "Evaluate sensor calibration by reviewing the calibration checklist before running a sensor comparison.",
+            "relevance": 1.0,
+            "reliability": 0.9,
+            "source_id": "synthetic-guide",
+            "title": "Fictional sensor evaluation guide"
+          }
+        ],
+        "limitations": [
+          "Lexical relevance is not fact verification.",
+          "Source reliability is supplied by the caller; contradictions are not resolved."
+        ],
+        "question": "How can I evaluate sensor calibration?",
+        "status": "supported"
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "triage": {
+        "action_ids": [
+          "review",
+          "compare"
+        ],
+        "category": "technical",
+        "customer_id": "synthetic-customer-001",
+        "evidence_ids": [
+          "synthetic-guide"
+        ],
+        "journey_status": "ready",
+        "owner": "synthetic-tech-oncall",
+        "priority": "normal",
+        "reasons": [
+          "Category uses ticket keyword matches plus one vote per journey action; ties use category name.",
+          "Configured severity priority applies; blocked journeys have a high-priority floor."
+        ],
+        "team": "Synthetic Technical Support"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t054_combo3_basic-research_journey_triage",
+    "artifact_sha256": {
+      "implementation.py": "e9856a05f834f4995ae5b29b35558c3bff75b63f75bc3ea4cc8b72aa90e4f46d",
+      "test_implementation.py": "3e0cbb5293e94200f442e411f76b1bd7209967a07470958b43d9b7b6fbc5d2ba",
+      "example_input.json": "6b3b13de604823628e20ddbeb4022b62511608b8d8b975ae51ca604e72b92950",
+      "build_manifest.json": "135dde3f39ad717f8fe29f66d07c2b047c3c07e843334ba21409f2c47f4660b1"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

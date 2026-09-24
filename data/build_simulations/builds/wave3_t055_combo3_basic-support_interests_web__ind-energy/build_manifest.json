@@ -1,0 +1,101 @@
+{
+  "build_id": "wave3_t055_combo3_basic-support_interests_web__ind-energy",
+  "composition_label": "basic:support -> interests -> web; Energy and utilities",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written for this build; no other build read or copied.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "envelope_fields": [
+      "schema_version", "synthetic", "status", "stage", "context", "support", "interests", "web"
+    ],
+    "stages": ["input", "support", "interests", "web"],
+    "input_contract": "synthetic=true, status=ok, stage=input; future outputs null; normalized meter_readings initially empty. Unknown fields and duplicate JSON keys rejected.",
+    "context": {
+      "request": "question and team_online",
+      "preferences": "nonnegative tag weights 0..10, excluded IDs/tags, limit 0..20",
+      "knowledge_base": "Unique IDs, title, text, tags and HTTPS provenance URL",
+      "catalog": "Unique IDs, title, tags, nonempty valid knowledge IDs and HTTPS URL",
+      "sources": "Exact canonical URL allowlist and synthetic offline document snapshots; source_sha256 initially null, populated with original snapshot digest before protection",
+      "energy": "Smart-meter interval CSV plus normalized readings, synthetic grid assets/topology, SCADA-style telemetry JSON, outage reports, sourced emissions and immutable declared safety rules"
+    },
+    "validation": "One shared validate function checks every incoming/outgoing stage, context types, finite numbers, relationships, safety priorities and exact deterministic stage outputs.",
+    "error_contract": "CLI returns one JSON object with status=error and exit 2 for validation, JSON decoding, file, size and usage errors. Error messages never echo source values."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "input",
+      "to": "support",
+      "data": "Validated context, normalized meter intervals and identifier-protected assets. Raw grid IDs are replaced throughout public context before support generation."
+    },
+    {
+      "from": "support",
+      "to": "interests",
+      "data": "Validated support intent tags and matched knowledge IDs influence recommendation scores; the handoff records consumed knowledge IDs."
+    },
+    {
+      "from": "interests",
+      "to": "web",
+      "data": "Validated selected recommendation IDs, research terms and grounding URLs strictly bound research scope. Excluded recommendations cannot create findings."
+    }
+  ],
+  "behavior": {
+    "support": "General-purpose token-based knowledge retrieval, verbatim cited excerpts, explicit unknown-answer fallback, offline async-ticket or online live-queue suggestion, safety escalation, meter totals and sourced emissions. No ticket is actually submitted.",
+    "interests": "Score = sum of matching explicit preference weights + 2 per shared support intent tag + 1 per shared support knowledge ID. Positive-score candidates only; ID/tag exclusions always win; stable ID tie-break; explanations show contributions and source excerpts.",
+    "web": "Supplied snapshots only, never live HTTP. Exact canonical HTTPS URL ingestion allowlist. Finds matching passages only for selected recommendations; preserves URL, title, protected quote/offset, SHA-256 of protected snapshot content and source_sha256 of the original snapshot. Missing, blocked and irrelevant URLs are reported separately.",
+    "asset_protection": "NERC CIP-style demonstrative identifier minimization, not certification: every synthetic grid identifier is replaced by a stable per-input alias throughout all output strings and references. No mapping is returned. Identifier-bearing URLs are rejected, including percent-encoded identifiers. sha256 and quote offsets refer to protected content; source_sha256 identifies the original supplied content without exposing identifiers.",
+    "outage_rules": {
+      "P1": "life_safety or critical_service, regardless of affected customer count",
+      "P2": "otherwise customers_affected >= 100",
+      "P3": "otherwise"
+    },
+    "emissions": "Structured emissions require finite nonnegative values, kgCO2e/tCO2e/gCO2e-per-kWh units and a known knowledge-base source ID.",
+    "fixtures": "Clearly synthetic fictitious substation/feeder topology, smart-meter half-hour intervals with plausible higher winter consumption, SCADA voltage/load/frequency points, outage scenarios and illustrative emissions.",
+    "determinism": "No clock, randomness, network, model call, file mutation or provider dependency in the pipeline."
+  },
+  "scope": {
+    "included": [
+      "Bounded integrated CLI reference implementation",
+      "Shared schema and validation on all handoffs",
+      "Offline grounded support and preference ranking",
+      "Allowlisted offline snapshot research and traceable findings",
+      "Synthetic energy entity validation and public identifier protection",
+      "Standard-library unittest and subprocess CLI checks"
+    ],
+    "excluded": [
+      "Production deployment, authentication, encrypted storage and operational access controls",
+      "Live websites, crawling, HTTP redirects, providers and LLM inference",
+      "Actual outage dispatch, restoration predictions, ticket submission or grid control",
+      "NERC CIP or other regulatory certification",
+      "Fact verification beyond supplied evidence, free-text emissions extraction and real-world emissions accounting"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_command_exit_code": 0,
+    "tests_run": 60,
+    "failures": 0,
+    "errors": 0,
+    "example_cli_exit_code": 0,
+    "example_cli_status": "ok",
+    "example_cli_stage": "web",
+    "example_cli_findings": 3,
+    "example_cli_stdout_json_objects": 1
+  }
+}

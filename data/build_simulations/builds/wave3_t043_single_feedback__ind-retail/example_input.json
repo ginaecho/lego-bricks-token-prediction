@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC_FICTITIOUS_RETAIL",
+  "personalize": false,
+  "catalog": {
+    "currency": "USD",
+    "products": [
+      {"sku": "FICTION-MUG-01", "name": "Invented Cloud Mug", "price": "12.50", "stock": 20},
+      {"sku": "FICTION-TOTE-02", "name": "Invented Meadow Tote", "price": "8.00", "stock": 0}
+    ]
+  },
+  "customers": [
+    {"customer_id": "SYN-A", "persona": "Synthetic budget-conscious shopper", "consent": {"gdpr_personalization": true, "ccpa_personalization": true}},
+    {"customer_id": "SYN-B", "persona": "Synthetic occasional gift shopper", "consent": {"gdpr_personalization": false, "ccpa_personalization": false}}
+  ],
+  "orders": [
+    {"order_id": "BASKET-A", "customer_id": "SYN-A", "items": [{"sku": "FICTION-MUG-01", "quantity": 1, "shown_price": "12.50", "shown_stock": 20}]},
+    {"order_id": "BASKET-B", "customer_id": "SYN-B", "items": [{"sku": "FICTION-MUG-01", "quantity": 2, "shown_price": "12.50", "shown_stock": 20}]}
+  ],
+  "clickstream": [
+    {"event_id": "EVENT-1", "customer_id": "SYN-A", "order_id": null, "sku": "FICTION-TOTE-02", "action": "view", "shown_price": "8.00", "shown_stock": 0},
+    {"event_id": "EVENT-2", "customer_id": "SYN-A", "order_id": "BASKET-A", "sku": "FICTION-MUG-01", "action": "purchase", "shown_price": "12.50", "shown_stock": 20}
+  ],
+  "feedback": [
+    {"feedback_id": "F-01", "customer_id": "SYN-A", "order_id": "BASKET-A", "sku": "FICTION-MUG-01", "text": "Delivery was late, but the quality is durable.", "provenance": "synthetic_fixture"},
+    {"feedback_id": "F-02", "customer_id": "SYN-A", "order_id": "BASKET-A", "sku": "FICTION-MUG-01", "text": "  DELIVERY was late, but the quality is durable.  ", "provenance": "synthetic_fixture"},
+    {"feedback_id": "F-03", "customer_id": "SYN-B", "order_id": "BASKET-B", "sku": "FICTION-MUG-01", "text": "The packaging box was broken; the price is expensive.", "provenance": "synthetic_fixture"}
+  ]
+}

@@ -118,7 +118,7 @@
   "split_group": "4fd6515fcb34988989c55bdc99eb554a9ec1c52309adfd077dc7e18094d399fa",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "fd882676eaaf034ce22f6fdfae96ba4f36a7c183207d6be58a820cb7e4d637b4",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t052_combo3_basic-insights_basic-documents_basic-research",
   "membership_point_id": "combo3_basic-insights_basic-documents_basic-research",
@@ -126,8 +126,121 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "229d8a8aebb37595947d1006b80109112ceeab2b9d838376a01f7e0c64d3f92b",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "4bb271de-d8dc-44a8-9622-470177abbbc3",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 5,
+    "input_tokens": 97412,
+    "output_tokens": 7300,
+    "cache_read_tokens": 88785,
+    "cache_write_tokens": 8612,
+    "total_tokens": 104712,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36633,
+        "agent_id": "4bb271de-d8dc-44a8-9622-470177abbbc3",
+        "model": "gpt-6-astra",
+        "input_tokens": 14981,
+        "output_tokens": 421,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 877,
+        "reasoning_tokens": 221,
+        "duration_ms": 9809,
+        "created_at": "2026-09-24T09:19:47.067Z"
+      },
+      {
+        "id": 36644,
+        "agent_id": "4bb271de-d8dc-44a8-9622-470177abbbc3",
+        "model": "gpt-6-astra",
+        "input_tokens": 15432,
+        "output_tokens": 6151,
+        "cache_read_tokens": 14978,
+        "cache_write_tokens": 451,
+        "reasoning_tokens": 0,
+        "duration_ms": 65492,
+        "created_at": "2026-09-24T09:20:52.386Z"
+      },
+      {
+        "id": 36650,
+        "agent_id": "4bb271de-d8dc-44a8-9622-470177abbbc3",
+        "model": "gpt-6-astra",
+        "input_tokens": 21919,
+        "output_tokens": 380,
+        "cache_read_tokens": 15429,
+        "cache_write_tokens": 6487,
+        "reasoning_tokens": 28,
+        "duration_ms": 5415,
+        "created_at": "2026-09-24T09:21:11.672Z"
+      },
+      {
+        "id": 36653,
+        "agent_id": "4bb271de-d8dc-44a8-9622-470177abbbc3",
+        "model": "gpt-6-astra",
+        "input_tokens": 22364,
+        "output_tokens": 256,
+        "cache_read_tokens": 21916,
+        "cache_write_tokens": 445,
+        "reasoning_tokens": 39,
+        "duration_ms": 4850,
+        "created_at": "2026-09-24T09:21:20.630Z"
+      },
+      {
+        "id": 36655,
+        "agent_id": "4bb271de-d8dc-44a8-9622-470177abbbc3",
+        "model": "gpt-6-astra",
+        "input_tokens": 22716,
+        "output_tokens": 92,
+        "cache_read_tokens": 22361,
+        "cache_write_tokens": 352,
+        "reasoning_tokens": 0,
+        "duration_ms": 3718,
+        "created_at": "2026-09-24T09:21:26.473Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.35303,
+      "observed_cache_profile_estimate_usd": 0.15326375,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.23636,
+      "observed_cache_profile_estimate_usd": 4.23636,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -158,5 +271,324 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "......................\n----------------------------------------------------------------------\nRan 22 tests in 0.447s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "answers": [
+          {
+            "evidence": [
+              {
+                "document_id": "d1",
+                "excerpt": "Owner: Experience team\nFinding: Setup delays appeared in two synthetic walkthroughs.\nNext step: Simplify setup guidance.",
+                "feedback_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "insight_negative_count": 1,
+                "matched_terms": [
+                  "guidance",
+                  "setup",
+                  "simplify"
+                ],
+                "score": 3,
+                "themes": [
+                  "onboarding",
+                  "performance"
+                ]
+              }
+            ],
+            "evidence_status": "evidence_found",
+            "id": "q1",
+            "limitations": [
+              "Lexical matches do not establish truth, causality, or consensus.",
+              "Sentiment and themes are keyword heuristics.",
+              "Unchecked documents are excluded, not repaired or verified."
+            ],
+            "question": "What setup guidance should we simplify?",
+            "related_themes": [
+              "onboarding",
+              "performance"
+            ],
+            "suggested_actions": [
+              "Investigate reported friction in onboarding",
+              "Investigate reported friction in performance"
+            ],
+            "summary": "1 checked document(s) contain matching terms; review cited excerpts before deciding."
+          },
+          {
+            "evidence": [
+              {
+                "document_id": "d2",
+                "excerpt": "Owner: Pricing team\nFinding: Price concerns require further interviews.",
+                "feedback_ids": [
+                  "f3"
+                ],
+                "insight_negative_count": 1,
+                "matched_terms": [
+                  "concerns",
+                  "price"
+                ],
+                "score": 2,
+                "themes": [
+                  "pricing"
+                ]
+              }
+            ],
+            "evidence_status": "evidence_found",
+            "id": "q2",
+            "limitations": [
+              "Lexical matches do not establish truth, causality, or consensus.",
+              "Sentiment and themes are keyword heuristics.",
+              "Unchecked documents are excluded, not repaired or verified."
+            ],
+            "question": "What evidence addresses price concerns?",
+            "related_themes": [
+              "pricing"
+            ],
+            "suggested_actions": [
+              "Investigate reported friction in pricing"
+            ],
+            "summary": "1 checked document(s) contain matching terms; review cited excerpts before deciding."
+          },
+          {
+            "evidence": [],
+            "evidence_status": "insufficient_evidence",
+            "id": "q3",
+            "limitations": [
+              "Lexical matches do not establish truth, causality, or consensus.",
+              "Sentiment and themes are keyword heuristics.",
+              "Unchecked documents are excluded, not repaired or verified."
+            ],
+            "question": "Does offline synchronization work?",
+            "related_themes": [],
+            "suggested_actions": [],
+            "summary": "No checked document contains matching terms; collect more evidence."
+          }
+        ],
+        "context": {
+          "documents": [
+            {
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ],
+              "id": "d1",
+              "text": "Owner: Experience team\nFinding: Setup delays appeared in two synthetic walkthroughs.\nNext step: Simplify setup guidance."
+            },
+            {
+              "feedback_ids": [
+                "f3"
+              ],
+              "id": "d2",
+              "text": "Owner: Pricing team\nFinding: Price concerns require further interviews."
+            },
+            {
+              "feedback_ids": [
+                "f1"
+              ],
+              "id": "d3",
+              "text": "Finding: Setup performance may need investigation."
+            }
+          ],
+          "feedback": [
+            {
+              "id": "f1",
+              "text": "The setup is confusing and slow."
+            },
+            {
+              "id": "f2",
+              "text": "The onboarding guide is helpful and easy."
+            },
+            {
+              "id": "f3",
+              "text": "The price is expensive."
+            }
+          ],
+          "fixture_label": "SYNTHETIC: fictional customer feedback and internal source notes",
+          "questions": [
+            {
+              "id": "q1",
+              "text": "What setup guidance should we simplify?"
+            },
+            {
+              "id": "q2",
+              "text": "What evidence addresses price concerns?"
+            },
+            {
+              "id": "q3",
+              "text": "Does offline synchronization work?"
+            }
+          ],
+          "required_fields": [
+            "owner",
+            "finding"
+          ],
+          "schema_version": "1.0",
+          "theme_rules": {
+            "onboarding": [
+              "setup",
+              "onboarding"
+            ],
+            "performance": [
+              "slow",
+              "fast"
+            ],
+            "pricing": [
+              "price",
+              "expensive"
+            ]
+          }
+        },
+        "feedback": [
+          {
+            "id": "f1",
+            "sentiment": "negative",
+            "text": "The setup is confusing and slow.",
+            "themes": [
+              "onboarding",
+              "performance"
+            ]
+          },
+          {
+            "id": "f2",
+            "sentiment": "positive",
+            "text": "The onboarding guide is helpful and easy.",
+            "themes": [
+              "onboarding"
+            ]
+          },
+          {
+            "id": "f3",
+            "sentiment": "negative",
+            "text": "The price is expensive.",
+            "themes": [
+              "pricing"
+            ]
+          }
+        ],
+        "records": [
+          {
+            "check_status": "valid",
+            "feedback_ids": [
+              "f1",
+              "f2"
+            ],
+            "fields": {
+              "finding": "Setup delays appeared in two synthetic walkthroughs.",
+              "next_step": "Simplify setup guidance.",
+              "owner": "Experience team"
+            },
+            "id": "d1",
+            "insight_negative_count": 1,
+            "issues": [],
+            "text": "Owner: Experience team\nFinding: Setup delays appeared in two synthetic walkthroughs.\nNext step: Simplify setup guidance.",
+            "themes": [
+              "onboarding",
+              "performance"
+            ]
+          },
+          {
+            "check_status": "valid",
+            "feedback_ids": [
+              "f3"
+            ],
+            "fields": {
+              "finding": "Price concerns require further interviews.",
+              "owner": "Pricing team"
+            },
+            "id": "d2",
+            "insight_negative_count": 1,
+            "issues": [],
+            "text": "Owner: Pricing team\nFinding: Price concerns require further interviews.",
+            "themes": [
+              "pricing"
+            ]
+          },
+          {
+            "check_status": "needs_review",
+            "feedback_ids": [
+              "f1"
+            ],
+            "fields": {
+              "finding": "Setup performance may need investigation."
+            },
+            "id": "d3",
+            "insight_negative_count": 1,
+            "issues": [
+              "missing:owner"
+            ],
+            "text": "Finding: Setup performance may need investigation.",
+            "themes": [
+              "onboarding",
+              "performance"
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "count": 2,
+            "feedback_ids": [
+              "f1",
+              "f2"
+            ],
+            "name": "onboarding",
+            "priority": "review",
+            "sentiment_counts": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 1
+            },
+            "suggested_action": "Investigate reported friction in onboarding"
+          },
+          {
+            "count": 1,
+            "feedback_ids": [
+              "f1"
+            ],
+            "name": "performance",
+            "priority": "review",
+            "sentiment_counts": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 0
+            },
+            "suggested_action": "Investigate reported friction in performance"
+          },
+          {
+            "count": 1,
+            "feedback_ids": [
+              "f3"
+            ],
+            "name": "pricing",
+            "priority": "review",
+            "sentiment_counts": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 0
+            },
+            "suggested_action": "Investigate reported friction in pricing"
+          }
+        ]
+      },
+      "schema_version": "1.0",
+      "stage": "research",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t052_combo3_basic-insights_basic-documents_basic-research",
+    "artifact_sha256": {
+      "implementation.py": "7c87f90e5453087b505a8a44d4065c944df65e19f0ad8e9593fc1bc14770b2b4",
+      "test_implementation.py": "58ba7010fba4513da5629d4642a042111f6ce918e86c7371c839eff14f61a1f0",
+      "example_input.json": "e0584b220b2a8c93b5dc2ae237a157089a3f1ec24a70ab036d81e1cb3e1ddbec",
+      "build_manifest.json": "2820df5327daba4cb1d1d13f2237fcbe40bac699fe1c3e85b6521e6e56494a9b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

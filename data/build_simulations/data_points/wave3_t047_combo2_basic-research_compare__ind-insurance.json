@@ -109,7 +109,7 @@
   "split_group": "6c56884318915ce574ad65536c22273b65f13398c8f10c6e865b8167e414fd18",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "7d9bf9186182f3ae5b0b2b8c3d568041dcf58f304087bb286ea162b7c81a9259",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t047_combo2_basic-research_compare__ind-insurance",
   "membership_point_id": "combo2_basic-research_compare__ind-insurance",
@@ -117,8 +117,145 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "b9219c6d0391916726c6d9c75610ced1fa591195e49eb715fe3595dcb4f70b40",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "398a865a-9633-4f6e-b7b7-9d4395102d24",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 172884,
+    "output_tokens": 13211,
+    "cache_read_tokens": 156508,
+    "cache_write_tokens": 16355,
+    "total_tokens": 186095,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36594,
+        "agent_id": "398a865a-9633-4f6e-b7b7-9d4395102d24",
+        "model": "gpt-6-astra",
+        "input_tokens": 15026,
+        "output_tokens": 694,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 922,
+        "reasoning_tokens": 510,
+        "duration_ms": 15621,
+        "created_at": "2026-09-24T09:14:18.644Z"
+      },
+      {
+        "id": 36606,
+        "agent_id": "398a865a-9633-4f6e-b7b7-9d4395102d24",
+        "model": "gpt-6-astra",
+        "input_tokens": 15750,
+        "output_tokens": 9953,
+        "cache_read_tokens": 15023,
+        "cache_write_tokens": 724,
+        "reasoning_tokens": 516,
+        "duration_ms": 112153,
+        "created_at": "2026-09-24T09:16:51.298Z"
+      },
+      {
+        "id": 36611,
+        "agent_id": "398a865a-9633-4f6e-b7b7-9d4395102d24",
+        "model": "gpt-6-astra",
+        "input_tokens": 26035,
+        "output_tokens": 731,
+        "cache_read_tokens": 15747,
+        "cache_write_tokens": 10285,
+        "reasoning_tokens": 141,
+        "duration_ms": 9955,
+        "created_at": "2026-09-24T09:17:16.677Z"
+      },
+      {
+        "id": 36614,
+        "agent_id": "398a865a-9633-4f6e-b7b7-9d4395102d24",
+        "model": "gpt-6-astra",
+        "input_tokens": 26862,
+        "output_tokens": 247,
+        "cache_read_tokens": 26032,
+        "cache_write_tokens": 827,
+        "reasoning_tokens": 40,
+        "duration_ms": 4148,
+        "created_at": "2026-09-24T09:17:29.127Z"
+      },
+      {
+        "id": 36616,
+        "agent_id": "398a865a-9633-4f6e-b7b7-9d4395102d24",
+        "model": "gpt-6-astra",
+        "input_tokens": 28750,
+        "output_tokens": 1078,
+        "cache_read_tokens": 26859,
+        "cache_write_tokens": 1888,
+        "reasoning_tokens": 112,
+        "duration_ms": 13382,
+        "created_at": "2026-09-24T09:17:37.318Z"
+      },
+      {
+        "id": 36617,
+        "agent_id": "398a865a-9633-4f6e-b7b7-9d4395102d24",
+        "model": "gpt-6-astra",
+        "input_tokens": 30002,
+        "output_tokens": 394,
+        "cache_read_tokens": 28747,
+        "cache_write_tokens": 1252,
+        "reasoning_tokens": 0,
+        "duration_ms": 4953,
+        "created_at": "2026-09-24T09:17:45.677Z"
+      },
+      {
+        "id": 36619,
+        "agent_id": "398a865a-9633-4f6e-b7b7-9d4395102d24",
+        "model": "gpt-6-astra",
+        "input_tokens": 30459,
+        "output_tokens": 114,
+        "cache_read_tokens": 29999,
+        "cache_write_tokens": 457,
+        "reasoning_tokens": 0,
+        "duration_ms": 2874,
+        "created_at": "2026-09-24T09:17:57.635Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.630375,
+      "observed_cache_profile_estimate_usd": 0.278232,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.5645,
+      "observed_cache_profile_estimate_usd": 7.5645,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -149,5 +286,336 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............................\n----------------------------------------------------------------------\nRan 29 tests in 0.646s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "comparison": {
+        "decision_boundary": "Preference ranking only; not a claim, eligibility, or underwriting decision.",
+        "method": "Eligible-set min-max weighted utility; ties by policy ID; no currency conversion.",
+        "ranking": [
+          "POL_B",
+          "POL_A"
+        ],
+        "recommended_policy_id": "POL_B",
+        "side_by_side": [
+          {
+            "attributes": {
+              "annual_premium": 1200,
+              "coverage_limit": 50000,
+              "deductible": 500
+            },
+            "claim_decisions": [
+              {
+                "claim_id": "CLM_A",
+                "decision": "approve",
+                "illustrative_payment": 7878.75,
+                "reasons": [
+                  "covered_loss"
+                ]
+              }
+            ],
+            "currency": "EUR",
+            "disclosed_underwriting_factors": [
+              {
+                "disclosed": true,
+                "name": "property_type",
+                "value": "house"
+              },
+              {
+                "disclosed": true,
+                "name": "safety_features",
+                "value": "present"
+              }
+            ],
+            "eligible": true,
+            "evidence_ids": [
+              "POL_A_annual_premium",
+              "POL_A_coverage_limit",
+              "POL_A_deductible"
+            ],
+            "exclusion_reasons": [],
+            "policy_id": "POL_A",
+            "rank": 2,
+            "score": 0.4,
+            "score_reasons": [
+              {
+                "contribution": 0.0,
+                "metric": "annual_premium",
+                "utility": 0.0,
+                "weight": 0.6
+              },
+              {
+                "contribution": 0.3,
+                "metric": "coverage_limit",
+                "utility": 1.0,
+                "weight": 0.3
+              },
+              {
+                "contribution": 0.1,
+                "metric": "deductible",
+                "utility": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "source_ids": [
+              "SRC_JSON",
+              "SRC_FORM"
+            ]
+          },
+          {
+            "attributes": {
+              "annual_premium": 900.0,
+              "coverage_limit": 40000.0,
+              "deductible": 750.0
+            },
+            "claim_decisions": [
+              {
+                "claim_id": "CLM_B",
+                "decision": "review",
+                "illustrative_payment": null,
+                "reasons": [
+                  "insufficient_evidence"
+                ]
+              }
+            ],
+            "currency": "EUR",
+            "disclosed_underwriting_factors": [
+              {
+                "disclosed": true,
+                "name": "property_type",
+                "value": "apartment"
+              }
+            ],
+            "eligible": true,
+            "evidence_ids": [
+              "POL_B_annual_premium",
+              "POL_B_coverage_limit",
+              "POL_B_deductible"
+            ],
+            "exclusion_reasons": [],
+            "policy_id": "POL_B",
+            "rank": 1,
+            "score": 0.6,
+            "score_reasons": [
+              {
+                "contribution": 0.6,
+                "metric": "annual_premium",
+                "utility": 1.0,
+                "weight": 0.6
+              },
+              {
+                "contribution": 0.0,
+                "metric": "coverage_limit",
+                "utility": 0.0,
+                "weight": 0.3
+              },
+              {
+                "contribution": 0.0,
+                "metric": "deductible",
+                "utility": 0.0,
+                "weight": 0.1
+              }
+            ],
+            "source_ids": [
+              "SRC_XML"
+            ]
+          }
+        ]
+      },
+      "preferences": {
+        "max_annual_premium": 1500,
+        "weights": {
+          "annual_premium": 0.6,
+          "coverage_limit": 0.3,
+          "deductible": 0.1
+        }
+      },
+      "research": {
+        "answer": {
+          "evidence_ids": [
+            "POL_A_annual_premium",
+            "POL_A_coverage_limit",
+            "POL_B_annual_premium",
+            "POL_B_coverage_limit"
+          ],
+          "finding": "POL_A: annual_premium=1200 EUR; POL_A: coverage_limit=50000 EUR; POL_B: annual_premium=900.0 EUR; POL_B: coverage_limit=40000.0 EUR"
+        },
+        "evidence": [
+          {
+            "attribute": "annual_premium",
+            "entity_id": "POL_A",
+            "evidence_id": "POL_A_annual_premium",
+            "source_ids": [
+              "SRC_JSON",
+              "SRC_FORM"
+            ],
+            "unit": "EUR",
+            "value": 1200
+          },
+          {
+            "attribute": "coverage_limit",
+            "entity_id": "POL_A",
+            "evidence_id": "POL_A_coverage_limit",
+            "source_ids": [
+              "SRC_JSON",
+              "SRC_FORM"
+            ],
+            "unit": "EUR",
+            "value": 50000
+          },
+          {
+            "attribute": "deductible",
+            "entity_id": "POL_A",
+            "evidence_id": "POL_A_deductible",
+            "source_ids": [
+              "SRC_JSON",
+              "SRC_FORM"
+            ],
+            "unit": "EUR",
+            "value": 500
+          },
+          {
+            "attribute": "annual_premium",
+            "entity_id": "POL_B",
+            "evidence_id": "POL_B_annual_premium",
+            "source_ids": [
+              "SRC_XML"
+            ],
+            "unit": "EUR",
+            "value": 900.0
+          },
+          {
+            "attribute": "coverage_limit",
+            "entity_id": "POL_B",
+            "evidence_id": "POL_B_coverage_limit",
+            "source_ids": [
+              "SRC_XML"
+            ],
+            "unit": "EUR",
+            "value": 40000.0
+          },
+          {
+            "attribute": "deductible",
+            "entity_id": "POL_B",
+            "evidence_id": "POL_B_deductible",
+            "source_ids": [
+              "SRC_XML"
+            ],
+            "unit": "EUR",
+            "value": 750.0
+          }
+        ],
+        "limitations": [
+          "SYNTHETIC FIXTURE DATA: not real policies, people, or losses.",
+          "Evidence is supplied, not independently verified; no external research is performed.",
+          "Coverage is simplified; claim facts are assumed and human review remains necessary.",
+          "Demonstrative fairness, minimization and disclosure checks; no compliance certification."
+        ],
+        "records": [
+          {
+            "claims": [
+              {
+                "claim_id": "CLM_A",
+                "covered": true,
+                "decision": "approve",
+                "evidence_complete": true,
+                "loss_amount": 8378.75,
+                "loss_date": "2025-02-02",
+                "policy_active": true,
+                "policy_id": "POL_A",
+                "reasons": [
+                  "covered_loss"
+                ]
+              }
+            ],
+            "policy": {
+              "coverage_limit": 50000,
+              "currency": "EUR",
+              "deductible": 500,
+              "policy_id": "POL_A",
+              "premium": 100,
+              "premium_period": "monthly"
+            },
+            "source_ids": [
+              "SRC_JSON",
+              "SRC_FORM"
+            ],
+            "underwriting_submission": {
+              "factors": [
+                {
+                  "disclosed": true,
+                  "name": "property_type",
+                  "value": "house"
+                },
+                {
+                  "disclosed": true,
+                  "name": "safety_features",
+                  "value": "present"
+                }
+              ],
+              "policy_id": "POL_A",
+              "submission_id": "SUB_A"
+            }
+          },
+          {
+            "claims": [
+              {
+                "claim_id": "CLM_B",
+                "covered": true,
+                "decision": "review",
+                "evidence_complete": false,
+                "loss_amount": 10021.65,
+                "loss_date": "2025-10-11",
+                "policy_active": true,
+                "policy_id": "POL_B",
+                "reasons": [
+                  "insufficient_evidence"
+                ]
+              }
+            ],
+            "policy": {
+              "coverage_limit": 40000.0,
+              "currency": "EUR",
+              "deductible": 750.0,
+              "policy_id": "POL_B",
+              "premium": 900.0,
+              "premium_period": "annual"
+            },
+            "source_ids": [
+              "SRC_XML"
+            ],
+            "underwriting_submission": {
+              "factors": [
+                {
+                  "disclosed": true,
+                  "name": "property_type",
+                  "value": "apartment"
+                }
+              ],
+              "policy_id": "POL_B",
+              "submission_id": "SUB_B"
+            }
+          }
+        ]
+      },
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t047_combo2_basic-research_compare__ind-insurance",
+    "artifact_sha256": {
+      "implementation.py": "ceb97fcbcad4d6eff725db5955a0de1db82967f6220728287d16defa3a79d23b",
+      "test_implementation.py": "00a576f13500ef26e8ec66114cc78b3aedd38c364b670fbb326cb27f514ad7af",
+      "example_input.json": "895528bc2f961c05bfed94ae19b04742510a49768f5843627224dace81e656a1",
+      "build_manifest.json": "032ba9d65dc2da36af2f315dca305b83d530ec1039c4890a7b29f984d19e7df8"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

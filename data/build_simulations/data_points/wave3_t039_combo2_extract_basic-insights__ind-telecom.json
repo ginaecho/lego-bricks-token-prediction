@@ -109,7 +109,7 @@
   "split_group": "1ccdad1ba763964741d96d3b2bf8af2ad40af8f3530ffb4de08170a7c5716fe2",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "49e1b0792d1936b64d669b532913a381ff0083105e3d9e509cf651a7e3dbef32",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t039_combo2_extract_basic-insights__ind-telecom",
   "membership_point_id": "combo2_extract_basic-insights__ind-telecom",
@@ -117,8 +117,133 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "ef4c97b542583ae5076f98982a5dfbfed392ebb26109bfdbdf529862ec16a538",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "cdd9a55f-d613-454f-82ce-e14d10f3df89",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 133494,
+    "output_tokens": 9810,
+    "cache_read_tokens": 106823,
+    "cache_write_tokens": 26653,
+    "total_tokens": 143304,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36549,
+        "agent_id": "cdd9a55f-d613-454f-82ce-e14d10f3df89",
+        "model": "gpt-6-astra",
+        "input_tokens": 15034,
+        "output_tokens": 308,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 15031,
+        "reasoning_tokens": 138,
+        "duration_ms": 6283,
+        "created_at": "2026-09-24T09:09:21.848Z"
+      },
+      {
+        "id": 36567,
+        "agent_id": "cdd9a55f-d613-454f-82ce-e14d10f3df89",
+        "model": "gpt-6-astra",
+        "input_tokens": 15372,
+        "output_tokens": 8524,
+        "cache_read_tokens": 15031,
+        "cache_write_tokens": 338,
+        "reasoning_tokens": 483,
+        "duration_ms": 93896,
+        "created_at": "2026-09-24T09:10:57.246Z"
+      },
+      {
+        "id": 36570,
+        "agent_id": "cdd9a55f-d613-454f-82ce-e14d10f3df89",
+        "model": "gpt-6-astra",
+        "input_tokens": 24232,
+        "output_tokens": 157,
+        "cache_read_tokens": 15369,
+        "cache_write_tokens": 8860,
+        "reasoning_tokens": 0,
+        "duration_ms": 4033,
+        "created_at": "2026-09-24T09:11:04.871Z"
+      },
+      {
+        "id": 36573,
+        "agent_id": "cdd9a55f-d613-454f-82ce-e14d10f3df89",
+        "model": "gpt-6-astra",
+        "input_tokens": 25811,
+        "output_tokens": 482,
+        "cache_read_tokens": 24229,
+        "cache_write_tokens": 1579,
+        "reasoning_tokens": 228,
+        "duration_ms": 10687,
+        "created_at": "2026-09-24T09:11:26.214Z"
+      },
+      {
+        "id": 36575,
+        "agent_id": "cdd9a55f-d613-454f-82ce-e14d10f3df89",
+        "model": "gpt-6-astra",
+        "input_tokens": 26389,
+        "output_tokens": 232,
+        "cache_read_tokens": 25808,
+        "cache_write_tokens": 578,
+        "reasoning_tokens": 0,
+        "duration_ms": 4976,
+        "created_at": "2026-09-24T09:11:28.544Z"
+      },
+      {
+        "id": 36576,
+        "agent_id": "cdd9a55f-d613-454f-82ce-e14d10f3df89",
+        "model": "gpt-6-astra",
+        "input_tokens": 26656,
+        "output_tokens": 107,
+        "cache_read_tokens": 26386,
+        "cache_write_tokens": 267,
+        "reasoning_tokens": 0,
+        "duration_ms": 2588,
+        "created_at": "2026-09-24T09:11:37.240Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.480885,
+      "observed_cache_profile_estimate_usd": 0.24053325,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.770619999999999,
+      "observed_cache_profile_estimate_usd": 5.770619999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -149,5 +274,324 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 0.647s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": "1.0",
+      "synthetic": true,
+      "extraction": {
+        "schema_version": "1.0",
+        "synthetic": true,
+        "processing_residency": "EU",
+        "records": [
+          {
+            "record_id": "r0001",
+            "subscriber_ref": "4f760c44bdaa8ad818e741c7",
+            "kind": "subscriber_account",
+            "residency": "EU",
+            "source_length": 183,
+            "fields": {
+              "plan": {
+                "value": "Orbit 20 GB",
+                "span": [
+                  60,
+                  71
+                ],
+                "protected": false
+              },
+              "phone": {
+                "value": "[REDACTED]",
+                "span": [
+                  79,
+                  94
+                ],
+                "protected": true
+              },
+              "imei": {
+                "value": "[REDACTED]",
+                "span": [
+                  101,
+                  116
+                ],
+                "protected": true
+              },
+              "feedback": {
+                "value": "The plan is expensive but the support agent was helpful.",
+                "span": [
+                  127,
+                  183
+                ],
+                "protected": false
+              }
+            },
+            "missing_fields": []
+          },
+          {
+            "record_id": "r0002",
+            "subscriber_ref": "4f760c44bdaa8ad818e741c7",
+            "kind": "network_fault_ticket",
+            "residency": "EU",
+            "source_length": 254,
+            "fields": {
+              "ticket_id": {
+                "value": "SYN-FAULT-42",
+                "span": [
+                  49,
+                  61
+                ],
+                "protected": false
+              },
+              "feedback": {
+                "value": "Calls drop near my home. My bill includes an outage charge. Call [REDACTED] or [REDACTED].",
+                "span": [
+                  72,
+                  177
+                ],
+                "protected": true
+              },
+              "billing_adjustment": {
+                "value": -7.5,
+                "span": [
+                  198,
+                  203
+                ],
+                "protected": false
+              },
+              "adjustment_reason": {
+                "value": "Invented outage service credit.",
+                "span": [
+                  223,
+                  254
+                ],
+                "protected": false
+              }
+            },
+            "missing_fields": []
+          },
+          {
+            "record_id": "r0003",
+            "subscriber_ref": "4f760c44bdaa8ad818e741c7",
+            "kind": "call_data_usage_record",
+            "residency": "EU",
+            "source_length": 88,
+            "fields": {
+              "duration_seconds": {
+                "value": 183.72,
+                "span": [
+                  35,
+                  41
+                ],
+                "protected": false
+              },
+              "data_mb": {
+                "value": 12741.38,
+                "span": [
+                  42,
+                  50
+                ],
+                "protected": false
+              },
+              "feedback": {
+                "value": "Slow data, allowance is expensive",
+                "span": [
+                  51,
+                  86
+                ],
+                "protected": false
+              }
+            },
+            "missing_fields": []
+          },
+          {
+            "record_id": "r0004",
+            "subscriber_ref": "0615fe54ec06b54627e28b8e",
+            "kind": "call_data_usage_record",
+            "residency": "EU",
+            "source_length": 64,
+            "fields": {
+              "duration_seconds": {
+                "value": 42.19,
+                "span": [
+                  34,
+                  39
+                ],
+                "protected": false
+              },
+              "data_mb": {
+                "value": 386.54,
+                "span": [
+                  40,
+                  46
+                ],
+                "protected": false
+              },
+              "feedback": {
+                "value": "Everything works",
+                "span": [
+                  47,
+                  63
+                ],
+                "protected": false
+              }
+            },
+            "missing_fields": []
+          }
+        ],
+        "excluded": [
+          {
+            "record_id": "r0005",
+            "residency": "EU",
+            "reason": "privacy_opt_out"
+          }
+        ]
+      },
+      "insights": {
+        "record_count": 4,
+        "subscriber_count": 2,
+        "excluded_count": 1,
+        "incomplete_record_count": 0,
+        "themes": [
+          {
+            "theme": "network_reliability",
+            "record_count": 2,
+            "action": "Review fault clusters and prioritize affected network coverage.",
+            "evidence": [
+              {
+                "record_id": "r0002",
+                "residency": "EU",
+                "field": "feedback",
+                "span": [
+                  72,
+                  177
+                ],
+                "excerpt": "Calls drop near my home. My bill includes an outage charge. Call [REDACTED] or [REDACTED]."
+              },
+              {
+                "record_id": "r0003",
+                "residency": "EU",
+                "field": "feedback",
+                "span": [
+                  51,
+                  86
+                ],
+                "excerpt": "Slow data, allowance is expensive"
+              }
+            ]
+          },
+          {
+            "theme": "plan_value",
+            "record_count": 2,
+            "action": "Review plan fit and explain available allowances and prices.",
+            "evidence": [
+              {
+                "record_id": "r0001",
+                "residency": "EU",
+                "field": "feedback",
+                "span": [
+                  127,
+                  183
+                ],
+                "excerpt": "The plan is expensive but the support agent was helpful."
+              },
+              {
+                "record_id": "r0003",
+                "residency": "EU",
+                "field": "feedback",
+                "span": [
+                  51,
+                  86
+                ],
+                "excerpt": "Slow data, allowance is expensive"
+              }
+            ]
+          },
+          {
+            "theme": "billing",
+            "record_count": 1,
+            "action": "Audit disputed charges and explain any reasoned adjustments.",
+            "evidence": [
+              {
+                "record_id": "r0002",
+                "residency": "EU",
+                "field": "feedback",
+                "span": [
+                  72,
+                  177
+                ],
+                "excerpt": "Calls drop near my home. My bill includes an outage charge. Call [REDACTED] or [REDACTED]."
+              }
+            ]
+          },
+          {
+            "theme": "high_usage",
+            "record_count": 1,
+            "action": "Offer an allowance review; do not automatically change plans.",
+            "evidence": [
+              {
+                "record_id": "r0003",
+                "residency": "EU",
+                "field": "data_mb",
+                "span": [
+                  42,
+                  50
+                ],
+                "excerpt": 12741.38
+              }
+            ]
+          },
+          {
+            "theme": "other",
+            "record_count": 1,
+            "action": "Manually review uncategorized feedback.",
+            "evidence": [
+              {
+                "record_id": "r0004",
+                "residency": "EU",
+                "field": "feedback",
+                "span": [
+                  47,
+                  63
+                ],
+                "excerpt": "Everything works"
+              }
+            ]
+          },
+          {
+            "theme": "support_experience",
+            "record_count": 1,
+            "action": "Review support response times and coach recurring service issues.",
+            "evidence": [
+              {
+                "record_id": "r0001",
+                "residency": "EU",
+                "field": "feedback",
+                "span": [
+                  127,
+                  183
+                ],
+                "excerpt": "The plan is expensive but the support agent was helpful."
+              }
+            ]
+          }
+        ],
+        "limitations": "Deterministic keyword themes, not sentiment or causal diagnosis; counts are record-level and themes may overlap."
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t039_combo2_extract_basic-insights__ind-telecom",
+    "artifact_sha256": {
+      "implementation.py": "e6cd90176d8027b664a643378245ac88055bb3d6037ef5fe67e155f3c4f45ac2",
+      "test_implementation.py": "275dbdd1ff83414aa4b68494092cd2fe1a559bd967aa47bbccbe341ed55f93ee",
+      "example_input.json": "23dd5eeee38373a66dc9c00d480f03eaf8e349227b76599192b2d84588f69508",
+      "build_manifest.json": "ee35ac95a295b0405a86a5f7d40b7900494c7fa35013c683fb27a5a98e5dcc56"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

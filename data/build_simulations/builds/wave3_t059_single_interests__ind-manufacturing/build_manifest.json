@@ -1,0 +1,61 @@
+{
+  "build_id": "wave3_t059_single_interests__ind-manufacturing",
+  "composition_label": "Interest-based recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created directly for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "synthetic": "Required literal true; all fixture assets, logs and inspections are fictitious",
+      "fixture_seed": "Integer random seed for synthetic telemetry fixture reproduction",
+      "preferences": "interests maps exact, case-sensitive tags to integer weights 1..10; excluded_work_order_ids, excluded_asset_ids and excluded_tags are arrays; limit is integer 1..50",
+      "work_orders": "ERP/MES-style JSON records with unique work_order_id, asset_id, title, tags, status (open/in_progress/closed), safety_critical and nonempty invented maintenance_logs",
+      "sensor_csv": "Embedded time-series CSV string with strict columns reading_id,work_order_id,asset_id,timestamp,metric,value,unit,lower,upper,safety_critical; boolean text is true/false",
+      "quality_inspections": "Unique inspection_id with work_order_id, asset_id, timezone-aware timestamp, inspector_id, procedure_revision, decision, rationale, metric, value, unit, lower, upper and safety_critical"
+    },
+    "output": "One JSON object: schema_version, status, synthetic, recommendations, eligible_count, excluded, escalations, notice. Errors: schema_version, status=error and error message, exit 2.",
+    "validation": "One validate boundary normalizes CSV, checks strict object fields, unique IDs, referential integrity, required per-order evidence, timezone-aware timestamps, finite numeric values, unit compatibility and ordered tolerances. Inspection pass/fail must agree with inclusive tolerances.",
+    "measurement_domains": {
+      "temperature": "C, -50..500",
+      "vibration": "mm/s, 0..100",
+      "pressure": "bar, 0..1000",
+      "diameter": "mm, 0..10000; inspection only",
+      "torque": "N*m, 0..100000; inspection only"
+    }
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: shared validator -> normalized linked manufacturing records -> exclusion enforcement and weighted preference ranking -> grounded JSON recommendations.",
+    "Independent safety scan over all validated evidence -> human review queue records, even for excluded or closed work orders and when no interests match."
+  ],
+  "behavior": {
+    "ranking": "Sum weights for unique matched declared work-order tags. No matches yields no recommendation. Descending score then ascending work_order_id; apply limit only after exclusions.",
+    "explanations": "Deterministic matched tags and numeric contributions; full sensor and quality decision evidence, plus maintenance log IDs. No inference of equipment safety or quality authorization.",
+    "traceability": "Demonstrative ISO 9001-style traceability links each recommendation to recorded inspection decision, inspector, procedure revision, timestamp, rationale and measurement. No compliance certification claims.",
+    "safety": "Out-of-tolerance sensor or inspection values escalate if either evidence or associated work order is safety-critical. Escalations are pending_human_review records routed to human_safety_reviewer, not delivered notifications.",
+    "fixtures": "Clearly labeled synthetic data. Six plausible readings generated with random.Random(59), uniform ranges [(50,60),(60,65),(4,5.5),(4,7),(8,10),(8,10)], rounded to three decimals; deliberately abnormal press vibration and torque exercise human escalation."
+  },
+  "scope": {
+    "included": ["Deterministic personalized work-order discovery", "Strict shared input validation", "Exclusion enforcement", "Grounded quality traceability", "Advisory human-escalation queue", "Synthetic ERP/MES JSON and time-series CSV"],
+    "excluded": ["Live ERP/MES integration", "Network or model providers", "Automatic equipment control or release", "Notification delivery", "Compliance certification", "Enterprise persistence and authentication", "Predictive maintenance modeling", "Unit conversion", "LLM generation"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 19,
+    "unittest_result": "Ran 19 tests; OK; exit 0",
+    "cli": "Verified single JSON object, status ok, exit 0; two recommendations and three human escalation records",
+    "error_paths": "Missing file, missing argument, malformed JSON, duplicate JSON keys and invalid schema produce JSON status error and exit 2",
+    "fixture_validation": "Seeded telemetry reproducibility test passed after correcting fixture values to match random.Random(59)"
+  }
+}

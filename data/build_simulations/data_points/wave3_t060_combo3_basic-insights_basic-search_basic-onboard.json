@@ -118,7 +118,7 @@
   "split_group": "a96c0c2863845a71fcb2acb33ff120e940a0c014135aec90cc92bbd036c3d472",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "7890ddc41ebed37a01c657f773db43f04811471783ebebf4ce238a5ecb53f5b9",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t060_combo3_basic-insights_basic-search_basic-onboard",
   "membership_point_id": "combo3_basic-insights_basic-search_basic-onboard",
@@ -126,8 +126,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "9e3c86f7c373a32b43b20de8fd383e56b1b274e11182c5811ad74ef1d9cad146",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "479d4f45-1e22-493f-aa81-f9d56b341def",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 129019,
+    "output_tokens": 9101,
+    "cache_read_tokens": 117715,
+    "cache_write_tokens": 11286,
+    "total_tokens": 138120,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36702,
+        "agent_id": "479d4f45-1e22-493f-aa81-f9d56b341def",
+        "model": "gpt-6-astra",
+        "input_tokens": 14985,
+        "output_tokens": 362,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 881,
+        "reasoning_tokens": 189,
+        "duration_ms": 19385,
+        "created_at": "2026-09-24T09:27:02.770Z"
+      },
+      {
+        "id": 36719,
+        "agent_id": "479d4f45-1e22-493f-aa81-f9d56b341def",
+        "model": "gpt-6-astra",
+        "input_tokens": 15373,
+        "output_tokens": 7842,
+        "cache_read_tokens": 14982,
+        "cache_write_tokens": 388,
+        "reasoning_tokens": 332,
+        "duration_ms": 99805,
+        "created_at": "2026-09-24T09:28:43.832Z"
+      },
+      {
+        "id": 36722,
+        "agent_id": "479d4f45-1e22-493f-aa81-f9d56b341def",
+        "model": "gpt-6-astra",
+        "input_tokens": 23547,
+        "output_tokens": 228,
+        "cache_read_tokens": 15370,
+        "cache_write_tokens": 8174,
+        "reasoning_tokens": 86,
+        "duration_ms": 6985,
+        "created_at": "2026-09-24T09:28:51.555Z"
+      },
+      {
+        "id": 36725,
+        "agent_id": "479d4f45-1e22-493f-aa81-f9d56b341def",
+        "model": "gpt-6-astra",
+        "input_tokens": 24593,
+        "output_tokens": 365,
+        "cache_read_tokens": 23544,
+        "cache_write_tokens": 1046,
+        "reasoning_tokens": 13,
+        "duration_ms": 6285,
+        "created_at": "2026-09-24T09:29:01.991Z"
+      },
+      {
+        "id": 36727,
+        "agent_id": "479d4f45-1e22-493f-aa81-f9d56b341def",
+        "model": "gpt-6-astra",
+        "input_tokens": 25131,
+        "output_tokens": 209,
+        "cache_read_tokens": 24590,
+        "cache_write_tokens": 538,
+        "reasoning_tokens": 0,
+        "duration_ms": 3786,
+        "created_at": "2026-09-24T09:29:07.618Z"
+      },
+      {
+        "id": 36730,
+        "agent_id": "479d4f45-1e22-493f-aa81-f9d56b341def",
+        "model": "gpt-6-astra",
+        "input_tokens": 25390,
+        "output_tokens": 95,
+        "cache_read_tokens": 25128,
+        "cache_write_tokens": 259,
+        "reasoning_tokens": 0,
+        "duration_ms": 4255,
+        "created_at": "2026-09-24T09:29:22.660Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4590625,
+      "observed_cache_profile_estimate_usd": 0.19420375000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.50875,
+      "observed_cache_profile_estimate_usd": 5.50875,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -158,5 +283,202 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "........................\n----------------------------------------------------------------------\nRan 24 tests in 0.700s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "input": {
+        "schema_version": 1,
+        "synthetic": true,
+        "fixture_label": "Synthetic customer workspace marketplace; no real customer data",
+        "customer": {
+          "id": "synthetic-customer-1",
+          "goal": "Organize team tasks",
+          "experience": "beginner",
+          "completed_steps": []
+        },
+        "feedback": [
+          {
+            "id": "f1",
+            "customer_id": "synthetic-customer-1",
+            "text": "The setup is confusing and I need a tutorial."
+          },
+          {
+            "id": "f2",
+            "customer_id": "synthetic-customer-2",
+            "text": "The current plan is expensive. An affordable option would help."
+          },
+          {
+            "id": "f3",
+            "customer_id": "synthetic-customer-3",
+            "text": "A simple interface and clear documentation are important."
+          }
+        ],
+        "products": [
+          {
+            "id": "starter",
+            "name": "Synthetic Starter Workspace",
+            "description": "An affordable and easy team task organizer with a tutorial.",
+            "tags": [
+              "affordable",
+              "easy",
+              "tutorial"
+            ]
+          },
+          {
+            "id": "advanced",
+            "name": "Synthetic Advanced Workspace",
+            "description": "Advanced workflow automation and reliable reporting.",
+            "tags": [
+              "automation",
+              "reliable"
+            ]
+          },
+          {
+            "id": "lite",
+            "name": "Synthetic Lite Workspace",
+            "description": "An affordable and easy team organizer.",
+            "tags": [
+              "affordable",
+              "easy"
+            ]
+          }
+        ],
+        "query": "cheap simple workspace",
+        "limit": 3
+      },
+      "insights": {
+        "feedback_count": 3,
+        "themes": [
+          {
+            "id": "support",
+            "count": 3,
+            "negative_count": 2,
+            "feedback_ids": [
+              "f1",
+              "f2",
+              "f3"
+            ],
+            "action": "Improve help content for recurring customer questions."
+          },
+          {
+            "id": "usability",
+            "count": 2,
+            "negative_count": 1,
+            "feedback_ids": [
+              "f1",
+              "f3"
+            ],
+            "action": "Simplify the most frequently reported confusing workflow."
+          },
+          {
+            "id": "pricing",
+            "count": 1,
+            "negative_count": 1,
+            "feedback_ids": [
+              "f2"
+            ],
+            "action": "Review pricing clarity and publish value-focused guidance."
+          }
+        ]
+      },
+      "search": {
+        "query_terms": [
+          "affordable",
+          "easy",
+          "workspace"
+        ],
+        "theme_ids": [
+          "support",
+          "usability",
+          "pricing"
+        ],
+        "results": [
+          {
+            "product_id": "starter",
+            "score": 9.6,
+            "matched_terms": [
+              "affordable",
+              "easy",
+              "workspace"
+            ],
+            "matched_themes": [
+              "support",
+              "usability",
+              "pricing"
+            ]
+          },
+          {
+            "product_id": "lite",
+            "score": 9.3,
+            "matched_terms": [
+              "affordable",
+              "easy",
+              "workspace"
+            ],
+            "matched_themes": [
+              "usability",
+              "pricing"
+            ]
+          },
+          {
+            "product_id": "advanced",
+            "score": 3,
+            "matched_terms": [
+              "workspace"
+            ],
+            "matched_themes": []
+          }
+        ]
+      },
+      "onboarding": {
+        "customer_id": "synthetic-customer-1",
+        "recommended_product_id": "starter",
+        "theme_ids": [
+          "support",
+          "usability",
+          "pricing"
+        ],
+        "steps": [
+          {
+            "id": "learn_basics",
+            "instruction": "Follow the introductory tutorial for Synthetic Starter Workspace."
+          },
+          {
+            "id": "configure_product",
+            "instruction": "Configure Synthetic Starter Workspace for your workflow."
+          },
+          {
+            "id": "complete_first_task",
+            "instruction": "Complete a first task toward: Organize team tasks."
+          },
+          {
+            "id": "review_progress",
+            "instruction": "Review your results and share feedback."
+          }
+        ],
+        "next_step": {
+          "id": "learn_basics",
+          "instruction": "Follow the introductory tutorial for Synthetic Starter Workspace."
+        },
+        "status": "ready"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t060_combo3_basic-insights_basic-search_basic-onboard",
+    "artifact_sha256": {
+      "implementation.py": "cd8a39040211d4e8a99f64905ba2ab79d0542a4c75e927684506e7b2e271c4ff",
+      "test_implementation.py": "b0bd643309285b0fea0aefc8ac77b0c39ae2d094e1b27c6119288a9ae97d95e8",
+      "example_input.json": "23a218db378882ab024513ed11c43494b3025b441313c95e37b156473ae6f6e6",
+      "build_manifest.json": "9620b038c51ca94f23d5862e55b2d5d779a0ee6dab35af9ff64ab661e899d89b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

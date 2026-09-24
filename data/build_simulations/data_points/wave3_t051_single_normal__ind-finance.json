@@ -97,7 +97,7 @@
   "split_group": "1746d2ed8cf49342080e0df5ab9b238050dedd838832021b238f6a5ba4755de1",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "41f93b5df5809001a051058c2002c1ce0691046fa77abbc4bee36faf971e0d88",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t051_single_normal__ind-finance",
   "membership_point_id": "single_normal__ind-finance",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "ad1bc5ee1eb32a332e053f052e3e608e30370f314fe5dc4371ebd177d6f3c0eb",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "8c5ad15c-9b7a-4fd0-9433-09cc968739e0",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 130548,
+    "output_tokens": 9294,
+    "cache_read_tokens": 118327,
+    "cache_write_tokens": 12203,
+    "total_tokens": 139842,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36627,
+        "agent_id": "8c5ad15c-9b7a-4fd0-9433-09cc968739e0",
+        "model": "gpt-6-astra",
+        "input_tokens": 14942,
+        "output_tokens": 579,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 838,
+        "reasoning_tokens": 407,
+        "duration_ms": 16319,
+        "created_at": "2026-09-24T09:19:11.390Z"
+      },
+      {
+        "id": 36636,
+        "agent_id": "8c5ad15c-9b7a-4fd0-9433-09cc968739e0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15547,
+        "output_tokens": 7101,
+        "cache_read_tokens": 14939,
+        "cache_write_tokens": 605,
+        "reasoning_tokens": 0,
+        "duration_ms": 74003,
+        "created_at": "2026-09-24T09:20:21.316Z"
+      },
+      {
+        "id": 36637,
+        "agent_id": "8c5ad15c-9b7a-4fd0-9433-09cc968739e0",
+        "model": "gpt-6-astra",
+        "input_tokens": 22964,
+        "output_tokens": 336,
+        "cache_read_tokens": 15544,
+        "cache_write_tokens": 7417,
+        "reasoning_tokens": 198,
+        "duration_ms": 8638,
+        "created_at": "2026-09-24T09:20:30.056Z"
+      },
+      {
+        "id": 36646,
+        "agent_id": "8c5ad15c-9b7a-4fd0-9433-09cc968739e0",
+        "model": "gpt-6-astra",
+        "input_tokens": 24808,
+        "output_tokens": 931,
+        "cache_read_tokens": 22961,
+        "cache_write_tokens": 1844,
+        "reasoning_tokens": 59,
+        "duration_ms": 10624,
+        "created_at": "2026-09-24T09:20:58.094Z"
+      },
+      {
+        "id": 36651,
+        "agent_id": "8c5ad15c-9b7a-4fd0-9433-09cc968739e0",
+        "model": "gpt-6-astra",
+        "input_tokens": 25980,
+        "output_tokens": 255,
+        "cache_read_tokens": 24805,
+        "cache_write_tokens": 1172,
+        "reasoning_tokens": 0,
+        "duration_ms": 4333,
+        "created_at": "2026-09-24T09:21:11.713Z"
+      },
+      {
+        "id": 36652,
+        "agent_id": "8c5ad15c-9b7a-4fd0-9433-09cc968739e0",
+        "model": "gpt-6-astra",
+        "input_tokens": 26307,
+        "output_tokens": 92,
+        "cache_read_tokens": 25977,
+        "cache_write_tokens": 327,
+        "reasoning_tokens": 0,
+        "duration_ms": 3001,
+        "created_at": "2026-09-24T09:21:18.948Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4657800000000001,
+      "observed_cache_profile_estimate_usd": 0.19954425,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.58936,
+      "observed_cache_profile_estimate_usd": 5.58936,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,325 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................\n----------------------------------------------------------------------\nRan 18 tests in 0.515s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "assessments": [
+        {
+          "entity_id": "C1",
+          "entity_type": "customer",
+          "flags": [],
+          "screening_score": {
+            "aggregation": "sum of disclosed contributions, capped at 100",
+            "explanation": [
+              {
+                "points": 0,
+                "rule": "no demonstration flags"
+              }
+            ],
+            "range": [
+              0,
+              100
+            ],
+            "value": 0
+          }
+        },
+        {
+          "entity_id": "C2",
+          "entity_type": "customer",
+          "flags": [
+            "KYC not verified; review required",
+            "sanctions_match; review required",
+            "pep; review required"
+          ],
+          "screening_score": {
+            "aggregation": "sum of disclosed contributions, capped at 100",
+            "explanation": [
+              {
+                "points": 40,
+                "rule": "KYC not verified; review required"
+              },
+              {
+                "points": 80,
+                "rule": "sanctions_match; review required"
+              },
+              {
+                "points": 20,
+                "rule": "pep; review required"
+              }
+            ],
+            "range": [
+              0,
+              100
+            ],
+            "value": 100
+          }
+        },
+        {
+          "entity_id": "T1",
+          "entity_type": "transaction",
+          "flags": [],
+          "screening_score": {
+            "aggregation": "sum of disclosed contributions, capped at 100",
+            "explanation": [
+              {
+                "points": 0,
+                "rule": "no demonstration flags"
+              }
+            ],
+            "range": [
+              0,
+              100
+            ],
+            "value": 0
+          }
+        },
+        {
+          "entity_id": "T2",
+          "entity_type": "transaction",
+          "flags": [
+            "KYC not verified; review required",
+            "sanctions_match; review required",
+            "pep; review required"
+          ],
+          "screening_score": {
+            "aggregation": "sum of disclosed contributions, capped at 100",
+            "explanation": [
+              {
+                "points": 40,
+                "rule": "KYC not verified; review required"
+              },
+              {
+                "points": 80,
+                "rule": "sanctions_match; review required"
+              },
+              {
+                "points": 20,
+                "rule": "pep; review required"
+              }
+            ],
+            "range": [
+              0,
+              100
+            ],
+            "value": 100
+          }
+        },
+        {
+          "entity_id": "P1",
+          "entity_type": "transaction",
+          "flags": [
+            "KYC not verified; review required",
+            "sanctions_match; review required",
+            "pep; review required",
+            "synthetic AML threshold: USD amount >= 10000"
+          ],
+          "screening_score": {
+            "aggregation": "sum of disclosed contributions, capped at 100",
+            "explanation": [
+              {
+                "points": 40,
+                "rule": "KYC not verified; review required"
+              },
+              {
+                "points": 80,
+                "rule": "sanctions_match; review required"
+              },
+              {
+                "points": 20,
+                "rule": "pep; review required"
+              },
+              {
+                "points": 30,
+                "rule": "synthetic AML threshold: USD amount >= 10000"
+              }
+            ],
+            "range": [
+              0,
+              100
+            ],
+            "value": 100
+          }
+        },
+        {
+          "entity_id": "L1",
+          "entity_type": "loan_application",
+          "flags": [
+            "requested amount > 3 times annual income in same currency"
+          ],
+          "screening_score": {
+            "aggregation": "sum of disclosed contributions, capped at 100",
+            "explanation": [
+              {
+                "points": 30,
+                "rule": "requested amount > 3 times annual income in same currency"
+              }
+            ],
+            "range": [
+              0,
+              100
+            ],
+            "value": 30
+          }
+        }
+      ],
+      "disclaimer": "Synthetic demonstration only; not compliance certification, financial advice, credit approval, or real AML/KYC screening. Card masking is a PCI-inspired demonstration, not PCI DSS certification.",
+      "entities": {
+        "customers": [
+          {
+            "card_number": "************1111",
+            "iban": "SYNTH-ZZ-ACCOUNT-A",
+            "id": "C1",
+            "kyc_status": "verified",
+            "name": "Synthetic Ada Finch",
+            "screening_flags": []
+          },
+          {
+            "card_number": null,
+            "iban": "SYNTH-ZZ-ACCOUNT-B",
+            "id": "C2",
+            "kyc_status": "pending",
+            "name": "Synthetic Ben Vale",
+            "screening_flags": [
+              "sanctions_match",
+              "pep"
+            ]
+          }
+        ],
+        "loan_applications": [
+          {
+            "amount": 150000,
+            "annual_income": 40000,
+            "currency": "USD",
+            "customer_id": "C1",
+            "id": "L1"
+          }
+        ],
+        "transactions": [
+          {
+            "amount": 231.54,
+            "currency": "USD",
+            "customer_id": "C1",
+            "date": "2026-01-01",
+            "id": "T1"
+          },
+          {
+            "amount": 860.75,
+            "currency": "EUR",
+            "customer_id": "C2",
+            "date": "2026-01-02",
+            "id": "T2"
+          },
+          {
+            "amount": 15000,
+            "currency": "USD",
+            "customer_id": "C2",
+            "date": "2026-01-03",
+            "id": "P1"
+          }
+        ]
+      },
+      "research": {
+        "findings": [
+          {
+            "citation": {
+              "end": 43,
+              "quote": "KYC pending profiles require manual review.",
+              "source_id": "S1",
+              "start": 0,
+              "title": "Synthetic onboarding policy"
+            },
+            "finding": "KYC pending profiles require manual review.",
+            "relevance_score": {
+              "explanation": {
+                "matched_terms": [
+                  "kyc",
+                  "review"
+                ],
+                "rule": "count of distinct non-stopword query terms in passage"
+              },
+              "value": 2
+            }
+          },
+          {
+            "citation": {
+              "end": 77,
+              "quote": "A USD transaction at or above 10000 receives a demonstration AML review flag.",
+              "source_id": "S2",
+              "start": 0,
+              "title": "Synthetic transaction guidance"
+            },
+            "finding": "A USD transaction at or above 10000 receives a demonstration AML review flag.",
+            "relevance_score": {
+              "explanation": {
+                "matched_terms": [
+                  "review",
+                  "transaction"
+                ],
+                "rule": "count of distinct non-stopword query terms in passage"
+              },
+              "value": 2
+            }
+          },
+          {
+            "citation": {
+              "end": 62,
+              "quote": "A loan above three times annual income receives a review flag.",
+              "source_id": "S3",
+              "start": 0,
+              "title": "Synthetic lending guidance"
+            },
+            "finding": "A loan above three times annual income receives a review flag.",
+            "relevance_score": {
+              "explanation": {
+                "matched_terms": [
+                  "loan",
+                  "review"
+                ],
+                "rule": "count of distinct non-stopword query terms in passage"
+              },
+              "value": 2
+            }
+          }
+        ],
+        "no_matches": false,
+        "query": "KYC transaction loan review",
+        "sources": [
+          {
+            "id": "S1",
+            "text": "KYC pending profiles require manual review. A sanctions match is a screening flag, not proof of wrongdoing.",
+            "title": "Synthetic onboarding policy"
+          },
+          {
+            "id": "S2",
+            "text": "A USD transaction at or above 10000 receives a demonstration AML review flag. Other currencies are not converted.",
+            "title": "Synthetic transaction guidance"
+          },
+          {
+            "id": "S3",
+            "text": "A loan above three times annual income receives a review flag. Every score must disclose the contributing rules.",
+            "title": "Synthetic lending guidance"
+          }
+        ]
+      },
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t051_single_normal__ind-finance",
+    "artifact_sha256": {
+      "implementation.py": "9a587170c43a22440660420d8d25023be198f23fd5bc4225b4508f888cad437a",
+      "test_implementation.py": "29b029aa87134fa3efcaa3e0e31073b441654e6cb50c91be91ca1d78b545f954",
+      "example_input.json": "c6267106fafe776e9d45922883137aa1ffb63b9e0960e559f98d1635d30b730f",
+      "build_manifest.json": "6dbf83e2801ba75b3a30b7cd5c1982a11b42c7381c10c4bb72bfcf748d510755"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }
