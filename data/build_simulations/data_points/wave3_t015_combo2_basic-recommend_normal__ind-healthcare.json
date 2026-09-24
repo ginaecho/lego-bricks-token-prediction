@@ -109,7 +109,7 @@
   "split_group": "8def70adf2d9c894c6aab20fcc280c034b4686b4ab80989262d6b83a629a3cfe",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "919da6fec6613fe2f29c329b25c8a7e209f45c9fa555b633db9e19cc8e3fc64e",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t015_combo2_basic-recommend_normal__ind-healthcare",
   "membership_point_id": "combo2_basic-recommend_normal__ind-healthcare",
@@ -117,8 +117,133 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "49d3abd5c6bb09173848024211bf2f7cd30037d68e118eea63be1e0f0eaade3b",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "36da9c30-0863-42ce-aecc-39fb43d5c0ce",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 129257,
+    "output_tokens": 8981,
+    "cache_read_tokens": 117382,
+    "cache_write_tokens": 11857,
+    "total_tokens": 138238,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36362,
+        "agent_id": "36da9c30-0863-42ce-aecc-39fb43d5c0ce",
+        "model": "gpt-6-astra",
+        "input_tokens": 15015,
+        "output_tokens": 591,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 931,
+        "reasoning_tokens": 414,
+        "duration_ms": 16239,
+        "created_at": "2026-09-24T08:45:18.705Z"
+      },
+      {
+        "id": 36372,
+        "agent_id": "36da9c30-0863-42ce-aecc-39fb43d5c0ce",
+        "model": "gpt-6-astra",
+        "input_tokens": 15632,
+        "output_tokens": 6820,
+        "cache_read_tokens": 15012,
+        "cache_write_tokens": 617,
+        "reasoning_tokens": 0,
+        "duration_ms": 82105,
+        "created_at": "2026-09-24T08:46:35.264Z"
+      },
+      {
+        "id": 36373,
+        "agent_id": "36da9c30-0863-42ce-aecc-39fb43d5c0ce",
+        "model": "gpt-6-astra",
+        "input_tokens": 22784,
+        "output_tokens": 162,
+        "cache_read_tokens": 15629,
+        "cache_write_tokens": 7152,
+        "reasoning_tokens": 7,
+        "duration_ms": 3049,
+        "created_at": "2026-09-24T08:46:41.625Z"
+      },
+      {
+        "id": 36387,
+        "agent_id": "36da9c30-0863-42ce-aecc-39fb43d5c0ce",
+        "model": "gpt-6-astra",
+        "input_tokens": 24328,
+        "output_tokens": 976,
+        "cache_read_tokens": 22781,
+        "cache_write_tokens": 1544,
+        "reasoning_tokens": 227,
+        "duration_ms": 14879,
+        "created_at": "2026-09-24T08:48:16.857Z"
+      },
+      {
+        "id": 36393,
+        "agent_id": "36da9c30-0863-42ce-aecc-39fb43d5c0ce",
+        "model": "gpt-6-astra",
+        "input_tokens": 25557,
+        "output_tokens": 325,
+        "cache_read_tokens": 24325,
+        "cache_write_tokens": 1229,
+        "reasoning_tokens": 0,
+        "duration_ms": 5088,
+        "created_at": "2026-09-24T08:48:36.149Z"
+      },
+      {
+        "id": 36395,
+        "agent_id": "36da9c30-0863-42ce-aecc-39fb43d5c0ce",
+        "model": "gpt-6-astra",
+        "input_tokens": 25941,
+        "output_tokens": 107,
+        "cache_read_tokens": 25554,
+        "cache_write_tokens": 384,
+        "reasoning_tokens": 0,
+        "duration_ms": 2950,
+        "created_at": "2026-09-24T08:48:45.321Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4578575,
+      "observed_cache_profile_estimate_usd": 0.193748,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.49429,
+      "observed_cache_profile_estimate_usd": 5.49429,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -149,5 +274,225 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "......................\n----------------------------------------------------------------------\nRan 22 tests in 0.988s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "audit_trail": [
+          {
+            "actor": "deterministic-reference-cli",
+            "after_sha256": "7832560787e5f86f6677a596efa3b2189f064bad62b836013d589876230dce47",
+            "before_sha256": null,
+            "operation": "create",
+            "record_id": "rec-syn-product-education",
+            "sequence": 1,
+            "stage": "basic:recommend"
+          },
+          {
+            "actor": "deterministic-reference-cli",
+            "after_sha256": "67330195a94c1d5adb1627ac6d88940218273015061817bf04bc69eeaaed7648",
+            "before_sha256": null,
+            "operation": "create",
+            "record_id": "rec-syn-product-auth",
+            "sequence": 2,
+            "stage": "basic:recommend"
+          },
+          {
+            "actor": "deterministic-reference-cli",
+            "after_sha256": "31dc89250a8d782f10f219e26506a546c385657c6b708c0e76948ceca7a7705c",
+            "before_sha256": null,
+            "operation": "create",
+            "record_id": "finding-rec-syn-product-education-1",
+            "sequence": 3,
+            "stage": "normal"
+          },
+          {
+            "actor": "deterministic-reference-cli",
+            "after_sha256": "822ccb1e63cc3ed71bfdb85f0b665201f5220358666313dcdb2c22fcedc851c3",
+            "before_sha256": null,
+            "operation": "create",
+            "record_id": "finding-rec-syn-product-auth-1",
+            "sequence": 4,
+            "stage": "normal"
+          },
+          {
+            "actor": "deterministic-reference-cli",
+            "after_sha256": "7a7a109e73eb9626f09f1574d727491757035b51a17e8166e34bf492c982bd27",
+            "before_sha256": null,
+            "operation": "create",
+            "record_id": "finding-rec-syn-product-auth-2",
+            "sequence": 5,
+            "stage": "normal"
+          }
+        ],
+        "catalog": [
+          {
+            "category": "education",
+            "id": "syn-product-education",
+            "tags": [
+              "diabetes",
+              "education"
+            ],
+            "title": "Synthetic diabetes education reading guide"
+          },
+          {
+            "category": "administrative-support",
+            "id": "syn-product-auth",
+            "tags": [
+              "authorization",
+              "paperwork"
+            ],
+            "title": "Synthetic prior authorization paperwork guide"
+          },
+          {
+            "category": "administrative-support",
+            "id": "syn-product-general",
+            "tags": [
+              "navigation"
+            ],
+            "title": "Synthetic general service navigation"
+          }
+        ],
+        "clinical_notes": [
+          {
+            "human_review_required": true,
+            "id": "syn-note-001",
+            "resourceType": "DocumentReference",
+            "subject": "Patient/syn-patient-001",
+            "synthetic": true,
+            "text": "SYNTHETIC Synthea-style fixture; not a real patient. Diabetes education materials were requested. The synthetic a1c lab value is 7.2 percent; clinician review is required."
+          }
+        ],
+        "discovery": [
+          {
+            "autonomous_clinical_decision": false,
+            "human_review_required": true,
+            "id": "rec-syn-product-education",
+            "matched_tags": [
+              "diabetes",
+              "education"
+            ],
+            "patient_reference": "syn-patient-001",
+            "product_id": "syn-product-education",
+            "query_terms": [
+              "diabetes",
+              "education"
+            ],
+            "score": 5
+          },
+          {
+            "autonomous_clinical_decision": false,
+            "human_review_required": true,
+            "id": "rec-syn-product-auth",
+            "matched_tags": [
+              "authorization"
+            ],
+            "patient_reference": "syn-patient-001",
+            "product_id": "syn-product-auth",
+            "query_terms": [
+              "authorization",
+              "paperwork"
+            ],
+            "score": 2
+          }
+        ],
+        "patient_record": {
+          "conditions": [
+            "diabetes"
+          ],
+          "deidentified": true,
+          "id": "syn-patient-001",
+          "labs": [
+            {
+              "code": "a1c",
+              "unit": "%",
+              "value": 7.2
+            }
+          ],
+          "resourceType": "Patient",
+          "synthetic": true
+        },
+        "preferences": {
+          "interests": [
+            "education"
+          ],
+          "limit": 2
+        },
+        "prior_authorization_requests": [
+          {
+            "human_review_required": true,
+            "id": "syn-auth-001",
+            "reasonText": "SYNTHETIC authorization request for administrative review. Authorization paperwork needs human review; no coverage or clinical decision has been made.",
+            "resourceType": "Claim",
+            "status": "draft",
+            "subject": "Patient/syn-patient-001",
+            "synthetic": true,
+            "use": "preauthorization"
+          }
+        ],
+        "research": [
+          {
+            "autonomous_clinical_decision": false,
+            "citation": {
+              "end": 97,
+              "quote": "Diabetes education materials were requested.",
+              "source_id": "syn-note-001",
+              "start": 53
+            },
+            "finding": "Diabetes education materials were requested.",
+            "human_review_required": true,
+            "id": "finding-rec-syn-product-education-1",
+            "patient_reference": "syn-patient-001",
+            "recommendation_reference": "rec-syn-product-education"
+          },
+          {
+            "autonomous_clinical_decision": false,
+            "citation": {
+              "end": 150,
+              "quote": "Authorization paperwork needs human review; no coverage or clinical decision has been made.",
+              "source_id": "syn-auth-001",
+              "start": 59
+            },
+            "finding": "Authorization paperwork needs human review; no coverage or clinical decision has been made.",
+            "human_review_required": true,
+            "id": "finding-rec-syn-product-auth-1",
+            "patient_reference": "syn-patient-001",
+            "recommendation_reference": "rec-syn-product-auth"
+          },
+          {
+            "autonomous_clinical_decision": false,
+            "citation": {
+              "end": 58,
+              "quote": "SYNTHETIC authorization request for administrative review.",
+              "source_id": "syn-auth-001",
+              "start": 0
+            },
+            "finding": "SYNTHETIC authorization request for administrative review.",
+            "human_review_required": true,
+            "id": "finding-rec-syn-product-auth-2",
+            "patient_reference": "syn-patient-001",
+            "recommendation_reference": "rec-syn-product-auth"
+          }
+        ],
+        "schema_version": "healthcare-discovery-research/1",
+        "synthetic": true
+      },
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t015_combo2_basic-recommend_normal__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "accd607b697437b45caa79792359587e0755cc06839c03035185b4b8c1742a04",
+      "test_implementation.py": "c45ea46cf18a219a16ae010b6ea9b5c49b7c7479a87d9e8a23c5cbdca3d614ef",
+      "example_input.json": "a95c472051acca4c18626be1879f0b0592411d049b15d9bae95ec86e7e25c39f",
+      "build_manifest.json": "0a800a3dd7bbdfabb28b8ed8e5b9f906306b1d307af3528327a646639b55571c"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

@@ -1,0 +1,53 @@
+{
+  "build_id": "wave3_t011_single_sentiment__ind-insurance",
+  "composition_label": "Sentiment & prioritization (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch within the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Object: schema_version='1.0', synthetic=true, records[1..100]. Each record: unique opaque REC- record_id, entity policy|claim|underwriting_submission, severity low|medium|high|critical, submission {format,content}.",
+    "sources": {
+      "acord_json": "content={ACORD:{policyholder_ref,feedback, optional policyholder_name,vin,property_address,loss_amount,loss_date}}",
+      "acord_xml": "Plain ACORD root with PolicyholderRef, Feedback and optional PolicyholderName, VIN, PropertyAddress, LossAmount, LossDate elements; no namespaces, attributes, nested elements or DTDs.",
+      "claim_text": "Claim-only form: one XML-style field name: value per line; Feedback is a single line."
+    },
+    "constraints": "SYN- policyholder references; bounded text; optional nonnegative finite numeric loss amount and ISO loss date; fabricated 17-character VIN. Claims require claim_handling {decision:pending|approved|denied,reasons:[nonempty text]}. Underwriting requires unique underwriting_factors {name,value,disclosed:true} from vehicle_age, property_age, prior_claims, loss_amount, coverage_limit. Unknown fields rejected.",
+    "output": "Object: status, schema_version, synthetic, results, method, safeguards. Results contain record_id, entity, severity, sentiment {score,label,matches}, priority {score,band,reasons,rank}, claim_handling human-review explanation or null, underwriting_factors.",
+    "validation": "All supported formats converge in parse_source and normalize before any scoring. CLI errors are one JSON object with status=error and exit 2; success exit 0."
+  },
+  "cross_stage_handoffs": [
+    "Single integrated stage: format adapters -> shared canonical validation -> lexicon sentiment -> severity-aware ranking -> minimized JSON output. No external stage or provider."
+  ],
+  "behavior": {
+    "sentiment": "Fixed transparent lexicon, immediate-token negation, clipped integer score -5..5; unmatched text neutral.",
+    "priority": "Severity base 0/10/20/30 plus negative sentiment penalty 0..5. Severity always dominates. Descending score, ascending opaque record ID breaks ties.",
+    "claims": "Supplied decisions must state reasons; always emit human review, never approve or deny using sentiment. Reason content is validated but not retained in output.",
+    "privacy": "Only required triage fields retained in normalized records. Free text, source policyholder identifiers, names, addresses, VINs and loss details are omitted from output. No logs or persistence of inputs.",
+    "underwriting": "Disclosure required and allowlist rejects hidden/protected factors. Factors are echoed transparently but never used in triage priority.",
+    "fixtures": "All records are clearly labeled synthetic; names, VIN and property addresses are invented. Loss amounts and dates were generated with random.Random(3011), uniform(500,40000) rounded to cents and 2025-01-01 plus randrange(365) days, persisted for deterministic execution."
+  },
+  "scope": {
+    "included": ["Three insurance entities", "Three ACORD-inspired/form adapters", "Deterministic sentiment and severity triage", "Demonstrative industry constraints", "CLI and unittest validation"],
+    "excluded": ["Production ACORD conformance", "Real policyholder processing", "Coverage, payout or underwriting decisions", "Fairness or GDPR certification", "Provider calls or LLM integration", "Full natural-language understanding, sarcasm and multilingual support", "Storage, networking and enterprise operations"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "test_cases": 19,
+    "cli": "passed: example prints one JSON object with status ok, exit 0; usage, file, JSON and schema errors tested with status error and exit 2",
+    "passed": 19,
+    "failed": 0
+  }
+}

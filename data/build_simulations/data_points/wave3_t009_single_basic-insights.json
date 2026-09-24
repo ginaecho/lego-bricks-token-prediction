@@ -95,7 +95,7 @@
   "split_group": "79903612248ff962e77e564d2349df78fc0e1711b7aa0b810c49f7f1133d2124",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "f31ae0dbe43528afff6be984b6ea5dbfc5fe5f9d03a5a2a6528e0f323a4a0ad0",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t009_single_basic-insights",
   "membership_point_id": "single_basic-insights",
@@ -103,8 +103,133 @@
   "trial_category": "B_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "8236ec459ff2cb5ff72dcc52fa5d0a6d1710ae4e6ad2ca0168cecc79977a90f6",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "f6bb2941-70e2-466d-a9ae-e2255e738957",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 120823,
+    "output_tokens": 6914,
+    "cache_read_tokens": 111750,
+    "cache_write_tokens": 9055,
+    "total_tokens": 127737,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36294,
+        "agent_id": "f6bb2941-70e2-466d-a9ae-e2255e738957",
+        "model": "gpt-6-astra",
+        "input_tokens": 14826,
+        "output_tokens": 270,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 742,
+        "reasoning_tokens": 92,
+        "duration_ms": 7282,
+        "created_at": "2026-09-24T08:34:35.153Z"
+      },
+      {
+        "id": 36340,
+        "agent_id": "f6bb2941-70e2-466d-a9ae-e2255e738957",
+        "model": "gpt-6-astra",
+        "input_tokens": 15128,
+        "output_tokens": 5922,
+        "cache_read_tokens": 15125,
+        "cache_write_tokens": 0,
+        "reasoning_tokens": 193,
+        "duration_ms": 100613,
+        "created_at": "2026-09-24T08:42:56.914Z"
+      },
+      {
+        "id": 36341,
+        "agent_id": "f6bb2941-70e2-466d-a9ae-e2255e738957",
+        "model": "gpt-6-astra",
+        "input_tokens": 21358,
+        "output_tokens": 151,
+        "cache_read_tokens": 15125,
+        "cache_write_tokens": 6230,
+        "reasoning_tokens": 0,
+        "duration_ms": 3910,
+        "created_at": "2026-09-24T08:43:06.963Z"
+      },
+      {
+        "id": 36342,
+        "agent_id": "f6bb2941-70e2-466d-a9ae-e2255e738957",
+        "model": "gpt-6-astra",
+        "input_tokens": 22847,
+        "output_tokens": 287,
+        "cache_read_tokens": 21355,
+        "cache_write_tokens": 1489,
+        "reasoning_tokens": 14,
+        "duration_ms": 6498,
+        "created_at": "2026-09-24T08:43:12.187Z"
+      },
+      {
+        "id": 36343,
+        "agent_id": "f6bb2941-70e2-466d-a9ae-e2255e738957",
+        "model": "gpt-6-astra",
+        "input_tokens": 23223,
+        "output_tokens": 183,
+        "cache_read_tokens": 22844,
+        "cache_write_tokens": 376,
+        "reasoning_tokens": 0,
+        "duration_ms": 4210,
+        "created_at": "2026-09-24T08:43:15.241Z"
+      },
+      {
+        "id": 36344,
+        "agent_id": "f6bb2941-70e2-466d-a9ae-e2255e738957",
+        "model": "gpt-6-astra",
+        "input_tokens": 23441,
+        "output_tokens": 101,
+        "cache_read_tokens": 23220,
+        "cache_write_tokens": 218,
+        "reasoning_tokens": 0,
+        "duration_ms": 3550,
+        "created_at": "2026-09-24T08:43:24.943Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.40576749999999995,
+      "observed_cache_profile_estimate_usd": 0.15433000000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.86921,
+      "observed_cache_profile_estimate_usd": 4.86921,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -135,5 +260,255 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............\n----------------------------------------------------------------------\nRan 13 tests in 1.023s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "assignments": [
+        {
+          "feedback_id": "F001",
+          "sentiment": "negative",
+          "theme_ids": [
+            "delivery",
+            "quality"
+          ]
+        },
+        {
+          "feedback_id": "F002",
+          "sentiment": "positive",
+          "theme_ids": [
+            "support"
+          ]
+        },
+        {
+          "feedback_id": "F003",
+          "sentiment": "negative",
+          "theme_ids": [
+            "pricing",
+            "usability"
+          ]
+        },
+        {
+          "feedback_id": "F004",
+          "sentiment": "neutral",
+          "theme_ids": [
+            "requests"
+          ]
+        },
+        {
+          "feedback_id": "F005",
+          "sentiment": "positive",
+          "theme_ids": [
+            "quality",
+            "usability"
+          ]
+        },
+        {
+          "feedback_id": "F006",
+          "sentiment": "neutral",
+          "theme_ids": [
+            "other"
+          ]
+        }
+      ],
+      "data_label": "SYNTHETIC fixture: fictional customer feedback, not real customer data",
+      "limitations": [
+        "English-oriented keyword and sentiment heuristics; no semantic inference.",
+        "Themes overlap, so theme counts and shares need not sum to the total.",
+        "Counts represent feedback records, not unique customers; duplicate text is retained.",
+        "Evidence shows at most three records per theme, ordered by feedback ID.",
+        "Sentiment is record-level; mixed opinions can cancel and sarcasm is not detected.",
+        "Recommended actions are review suggestions, not verified root causes."
+      ],
+      "schema_version": "1.0",
+      "status": "ok",
+      "summary": {
+        "sentiment_counts": {
+          "negative": 2,
+          "neutral": 2,
+          "positive": 2
+        },
+        "source_counts": {
+          "email": 2,
+          "review": 2,
+          "survey": 2
+        },
+        "theme_count": 7,
+        "total_feedback": 6
+      },
+      "themes": [
+        {
+          "evidence": [
+            {
+              "feedback_id": "F001",
+              "source": "survey",
+              "text": "The delivery was late and the product arrived broken."
+            },
+            {
+              "feedback_id": "F005",
+              "source": "review",
+              "text": "The product is reliable and easy to use."
+            }
+          ],
+          "feedback_count": 2,
+          "id": "quality",
+          "name": "Product quality",
+          "priority_reason": "3 × negative + neutral + positive feedback counts",
+          "priority_score": 4,
+          "recommended_action": "Review quality-related evidence and reproduce recurring defects.",
+          "sentiment_counts": {
+            "negative": 1,
+            "neutral": 0,
+            "positive": 1
+          },
+          "share_of_feedback": 0.3333
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "F003",
+              "source": "review",
+              "text": "Navigation is confusing and the price is expensive."
+            },
+            {
+              "feedback_id": "F005",
+              "source": "review",
+              "text": "The product is reliable and easy to use."
+            }
+          ],
+          "feedback_count": 2,
+          "id": "usability",
+          "name": "Ease of use",
+          "priority_reason": "3 × negative + neutral + positive feedback counts",
+          "priority_score": 4,
+          "recommended_action": "Test the reported workflows with customers and simplify friction points.",
+          "sentiment_counts": {
+            "negative": 1,
+            "neutral": 0,
+            "positive": 1
+          },
+          "share_of_feedback": 0.3333
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "F001",
+              "source": "survey",
+              "text": "The delivery was late and the product arrived broken."
+            }
+          ],
+          "feedback_count": 1,
+          "id": "delivery",
+          "name": "Delivery and fulfillment",
+          "priority_reason": "3 × negative + neutral + positive feedback counts",
+          "priority_score": 3,
+          "recommended_action": "Check fulfillment delays and improve delivery communication.",
+          "sentiment_counts": {
+            "negative": 1,
+            "neutral": 0,
+            "positive": 0
+          },
+          "share_of_feedback": 0.1667
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "F003",
+              "source": "review",
+              "text": "Navigation is confusing and the price is expensive."
+            }
+          ],
+          "feedback_count": 1,
+          "id": "pricing",
+          "name": "Pricing and value",
+          "priority_reason": "3 × negative + neutral + positive feedback counts",
+          "priority_score": 3,
+          "recommended_action": "Review perceived value and clarify pricing against cited concerns.",
+          "sentiment_counts": {
+            "negative": 1,
+            "neutral": 0,
+            "positive": 0
+          },
+          "share_of_feedback": 0.1667
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "F006",
+              "source": "email",
+              "text": "My package color is blue."
+            }
+          ],
+          "feedback_count": 1,
+          "id": "other",
+          "name": "Uncategorized feedback",
+          "priority_reason": "3 × negative + neutral + positive feedback counts",
+          "priority_score": 1,
+          "recommended_action": "Read uncategorized feedback and refine the theme dictionary.",
+          "sentiment_counts": {
+            "negative": 0,
+            "neutral": 1,
+            "positive": 0
+          },
+          "share_of_feedback": 0.1667
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "F004",
+              "source": "survey",
+              "text": "Please add a feature to export my history."
+            }
+          ],
+          "feedback_count": 1,
+          "id": "requests",
+          "name": "Feature requests",
+          "priority_reason": "3 × negative + neutral + positive feedback counts",
+          "priority_score": 1,
+          "recommended_action": "Validate the requested capabilities with customers before prioritizing.",
+          "sentiment_counts": {
+            "negative": 0,
+            "neutral": 1,
+            "positive": 0
+          },
+          "share_of_feedback": 0.1667
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "F002",
+              "source": "email",
+              "text": "The support agent was helpful and the response was fast."
+            }
+          ],
+          "feedback_count": 1,
+          "id": "support",
+          "name": "Customer support",
+          "priority_reason": "3 × negative + neutral + positive feedback counts",
+          "priority_score": 1,
+          "recommended_action": "Audit support conversations and response-time expectations.",
+          "sentiment_counts": {
+            "negative": 0,
+            "neutral": 0,
+            "positive": 1
+          },
+          "share_of_feedback": 0.1667
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t009_single_basic-insights",
+    "artifact_sha256": {
+      "implementation.py": "c41013a1837e554550c41a4c35679733863185010111ae44818a9e2a6955d2ba",
+      "test_implementation.py": "0100eed5714545f586777d9c2bf95e9a28c77d7bceacdde1aa9e32ec0c70bdeb",
+      "example_input.json": "337915cc2af10f2b7035ff8cf9c6a3ddae0aa1bc3fa304683a63a15e70633fef",
+      "build_manifest.json": "7c4480b9a156f72443e209b209078e8fd31a2e33fcf69d63afc3c9cc24a913f8"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

@@ -1,0 +1,70 @@
+{
+  "build_id": "wave3_t024_combo2_web_triage__ind-insurance",
+  "composition_label": "Web research -> Ticket triage & routing | Insurance",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Explicit synthetic_fixture=true; exact allowlisted_hosts; local documents with URL/status/content_type/body; ticket with ID, entity_type, format, submission, source_urls; configurable entity-to-category mapping, routes and loss threshold",
+    "submissions": "Bounded ACORD-style JSON/XML subset with Policy, Claim or UnderwritingSubmission; flat key:value claim-form text. Not full ACORD standard conformance.",
+    "stage_envelope": "schema_version, synthetic_fixture, stage, ticket_id, minimized entity, source_urls, findings; triage adds status, triage and privacy",
+    "validation": "validate(value, stage) is the shared boundary validator, supported by common URL, field, amount, identifier and underwriting-factor validators",
+    "findings": "Stable finding_id, matching entity_type, statement and provenance with exact source URL, original UTF-8 body SHA-256, one-based line, fixture retrieval mode and redaction flag",
+    "errors": "CLI emits one JSON object with status=error and exits 2 for validation, file or JSON decoding errors"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "triage",
+      "contract": "Validated minimized entity plus nonempty entity-matching findings and provenance; triage revalidates, copies without mutation, cites finding IDs in every reason, and preserves research evidence"
+    }
+  ],
+  "behavior": {
+    "retrieval": "Offline HTTP-response fixtures only. Exact HTTPS host allowlist, no credentials, ports, query strings, fragments, percent encodings or redirects. Requested sources must exist and return status 200 with text/plain.",
+    "extraction": "Each nonempty source line uses entity_type|finding text. Only matching entity lines enter the handoff. Instructions in findings are data and never executed.",
+    "triage": "Entity-matching evidence gates the configurable entity-to-category mapping. Configured category determines accountable team and owner. Claims at or above the configured loss amount threshold receive high queue priority; other tickets receive normal priority. Threshold is disclosed in the reason.",
+    "fair_claims_handling": "Every result has stated evidence-linked reasons and requires human review. Queue triage never makes coverage, claim payment, denial or underwriting eligibility decisions. Names and addresses do not determine routing.",
+    "minimization": "Raw submission, description, name, VIN, address and email are not retained in the output entity. Known submitted personal values and email patterns are redacted in finding statements; redaction is labeled and original body digest retained.",
+    "underwriting": "Only occupancy and building_age factors accepted; every supplied factor must be explicitly disclosed. No hidden factors or inferred scores.",
+    "fixtures": "All data explicitly synthetic: invented policyholders, fabricated VINs and addresses. Tests use seeded randomized loss amounts and dates.",
+    "determinism": "No clock-dependent decisions, model calls, random runtime classification or external retrieval"
+  },
+  "scope": {
+    "included": [
+      "One integrated sequential pipeline and one shared validation entry point",
+      "Policy, claim and underwriting submission entities",
+      "Provenance-preserving fixture retrieval and transparent accountable routing",
+      "Bounded strict input, safe XML subset, duplicate JSON field rejection",
+      "CLI and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live web retrieval, HTML parsing and arbitrary website research",
+      "Live or injected LLM steps; all logic is deterministic",
+      "Full ACORD schema support, actual policy interpretation and insurer integration",
+      "Legal compliance certification or production claims adjudication",
+      "Persistent storage, authentication, production queue service or audit infrastructure",
+      "General-purpose personal-data detection: only supplied private values and email patterns are redacted; source fixtures must contain only synthetic data"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 23,
+    "unittest_passed": 23,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status=ok, claim_review category, high priority and accountable owner",
+    "error_contract": "Tests verified exit 2 and JSON status=error for missing file, usage, malformed JSON, duplicate keys and invalid input"
+  }
+}

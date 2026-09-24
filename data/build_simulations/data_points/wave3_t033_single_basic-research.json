@@ -95,7 +95,7 @@
   "split_group": "aff94acd492f7c6a5c8ed5e9d9f8619fb915bef0e1030782bdadb405eeaef542",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "5c1e2a38a0f25d40c04e90f9582d5f1827ea1277505fd4e12490cf77ed30812c",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t033_single_basic-research",
   "membership_point_id": "single_basic-research",
@@ -103,8 +103,145 @@
   "trial_category": "B_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "cf81d88500367f54e9bcbc144bf80f2e47fda10b460242587e537b20b081d861",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "7af586e5-6ab8-46e3-969b-930ad71a6a03",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 141781,
+    "output_tokens": 6994,
+    "cache_read_tokens": 132630,
+    "cache_write_tokens": 9130,
+    "total_tokens": 148775,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36481,
+        "agent_id": "7af586e5-6ab8-46e3-969b-930ad71a6a03",
+        "model": "gpt-6-astra",
+        "input_tokens": 14824,
+        "output_tokens": 600,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 740,
+        "reasoning_tokens": 435,
+        "duration_ms": 15656,
+        "created_at": "2026-09-24T09:01:26.385Z"
+      },
+      {
+        "id": 36490,
+        "agent_id": "7af586e5-6ab8-46e3-969b-930ad71a6a03",
+        "model": "gpt-6-astra",
+        "input_tokens": 15450,
+        "output_tokens": 5254,
+        "cache_read_tokens": 14821,
+        "cache_write_tokens": 626,
+        "reasoning_tokens": 0,
+        "duration_ms": 58301,
+        "created_at": "2026-09-24T09:02:28.042Z"
+      },
+      {
+        "id": 36495,
+        "agent_id": "7af586e5-6ab8-46e3-969b-930ad71a6a03",
+        "model": "gpt-6-astra",
+        "input_tokens": 21012,
+        "output_tokens": 459,
+        "cache_read_tokens": 15447,
+        "cache_write_tokens": 5562,
+        "reasoning_tokens": 118,
+        "duration_ms": 8298,
+        "created_at": "2026-09-24T09:02:49.159Z"
+      },
+      {
+        "id": 36499,
+        "agent_id": "7af586e5-6ab8-46e3-969b-930ad71a6a03",
+        "model": "gpt-6-astra",
+        "input_tokens": 21633,
+        "output_tokens": 135,
+        "cache_read_tokens": 21009,
+        "cache_write_tokens": 621,
+        "reasoning_tokens": 0,
+        "duration_ms": 2513,
+        "created_at": "2026-09-24T09:03:02.968Z"
+      },
+      {
+        "id": 36503,
+        "agent_id": "7af586e5-6ab8-46e3-969b-930ad71a6a03",
+        "model": "gpt-6-astra",
+        "input_tokens": 22643,
+        "output_tokens": 273,
+        "cache_read_tokens": 21630,
+        "cache_write_tokens": 1010,
+        "reasoning_tokens": 0,
+        "duration_ms": 4523,
+        "created_at": "2026-09-24T09:03:18.431Z"
+      },
+      {
+        "id": 36505,
+        "agent_id": "7af586e5-6ab8-46e3-969b-930ad71a6a03",
+        "model": "gpt-6-astra",
+        "input_tokens": 23005,
+        "output_tokens": 176,
+        "cache_read_tokens": 22640,
+        "cache_write_tokens": 362,
+        "reasoning_tokens": 0,
+        "duration_ms": 3487,
+        "created_at": "2026-09-24T09:03:24.713Z"
+      },
+      {
+        "id": 36507,
+        "agent_id": "7af586e5-6ab8-46e3-969b-930ad71a6a03",
+        "model": "gpt-6-astra",
+        "input_tokens": 23214,
+        "output_tokens": 97,
+        "cache_read_tokens": 23002,
+        "cache_write_tokens": 209,
+        "reasoning_tokens": 0,
+        "duration_ms": 2524,
+        "created_at": "2026-09-24T09:03:34.953Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.45936249999999995,
+      "observed_cache_profile_estimate_usd": 0.160945,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.51235,
+      "observed_cache_profile_estimate_usd": 5.51235,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -135,5 +272,150 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............\n----------------------------------------------------------------------\nRan 13 tests in 0.705s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "briefs": [
+        {
+          "assessment": "mixed",
+          "directional_weights": {
+            "neutral": 0.0,
+            "oppose": 0.9,
+            "support": 0.8
+          },
+          "evidence": [
+            {
+              "locator": "fixture:budget:section-2",
+              "matched_terms": [
+                "evening",
+                "hours",
+                "library"
+              ],
+              "origin": "fictional-finance-team",
+              "passage_index": 0,
+              "quote": "Evening library hours would require staffing beyond the fictional budget.",
+              "relevance": 1.0,
+              "reliability": 0.9,
+              "source_id": "budget",
+              "source_title": "Synthetic staffing estimate",
+              "stance": "oppose",
+              "weighted_relevance": 0.9
+            },
+            {
+              "locator": "fixture:survey:section-1",
+              "matched_terms": [
+                "evening",
+                "hours",
+                "library"
+              ],
+              "origin": "fictional-survey-team",
+              "passage_index": 0,
+              "quote": "The synthetic survey found requests for evening library hours.",
+              "relevance": 1.0,
+              "reliability": 0.8,
+              "source_id": "survey",
+              "source_title": "Synthetic resident survey",
+              "stance": "support",
+              "weighted_relevance": 0.8
+            },
+            {
+              "locator": null,
+              "matched_terms": [
+                "evening",
+                "hours",
+                "library"
+              ],
+              "origin": "fictional-survey-team",
+              "passage_index": 0,
+              "quote": "Residents requested evening library hours.",
+              "relevance": 1.0,
+              "reliability": 0.6,
+              "source_id": "newsletter",
+              "source_title": "Synthetic survey reprint",
+              "stance": "support",
+              "weighted_relevance": 0.6
+            }
+          ],
+          "independent_origin_count": 2,
+          "limitations": [
+            "Lexical matching can miss paraphrases and retrieve irrelevant mentions.",
+            "Reliability, stance and origin annotations are supplied by the caller, not independently verified.",
+            "Scores measure weighted term coverage, not probability or factual confidence.",
+            "Sources sharing an origin are deduplicated for directional weighting."
+          ],
+          "positive_weight_origin_count": 2,
+          "question": "Should a library expand evening opening hours?",
+          "question_id": "q1",
+          "recommended_next_step": "Resolve conflicting source positions before deciding; inspect the cited passages.",
+          "search_terms": [
+            "evening",
+            "hours",
+            "library"
+          ],
+          "source_count": 3
+        },
+        {
+          "assessment": "informational",
+          "directional_weights": {
+            "neutral": 0.8,
+            "oppose": 0.0,
+            "support": 0.0
+          },
+          "evidence": [
+            {
+              "locator": "fixture:survey:section-1",
+              "matched_terms": [
+                "bus",
+                "transport"
+              ],
+              "origin": "fictional-survey-team",
+              "passage_index": 1,
+              "quote": "Bus transport was a reported attendance barrier.",
+              "relevance": 1.0,
+              "reliability": 0.8,
+              "source_id": "survey",
+              "source_title": "Synthetic resident survey",
+              "stance": "neutral",
+              "weighted_relevance": 0.8
+            }
+          ],
+          "independent_origin_count": 1,
+          "limitations": [
+            "Lexical matching can miss paraphrases and retrieve irrelevant mentions.",
+            "Reliability, stance and origin annotations are supplied by the caller, not independently verified.",
+            "Scores measure weighted term coverage, not probability or factual confidence.",
+            "Fewer than two positive-weight independent origins; corroboration is limited."
+          ],
+          "positive_weight_origin_count": 1,
+          "question": "What transport barriers affect attendance?",
+          "question_id": "q2",
+          "recommended_next_step": "Review the cited facts and annotate decision positions if a directional answer is needed.",
+          "search_terms": [
+            "bus",
+            "transport"
+          ],
+          "source_count": 1
+        }
+      ],
+      "fixture_label": "SYNTHETIC: fictional research evidence, not real findings",
+      "method": "deterministic lexical retrieval with caller-annotated positions",
+      "schema_version": "1.0",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t033_single_basic-research",
+    "artifact_sha256": {
+      "implementation.py": "139ef3a00a2036a8c88af3c9b2ea381a3cdcf238ddf986b74b0c386fa0f3a4c6",
+      "test_implementation.py": "92e46607126faa324d29fd80948122c5e325136e5a66e3b546765cc334d47b8f",
+      "example_input.json": "9e19847eb4decd6eed1a863a59e135681dd592ce900f9f0868499e2d4a719cd2",
+      "build_manifest.json": "b5d5f31bf0d1e1b93708bdaa1837324831f6ec61d5450d3a39463e218b74f887"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

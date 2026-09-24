@@ -1,0 +1,53 @@
+{
+  "build_id": "wave3_t010_single_behavior",
+  "composition_label": "Behavioral personalization (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input_required": ["schema_version", "synthetic", "as_of", "user_id", "catalog", "events"],
+    "input_optional_defaults": {"limit": 10, "half_life_days": 30, "popularity_weight": 0.1},
+    "catalog_item": {"item_id": "unique nonempty string", "category": "nonempty string", "popularity": "finite number [0,1]", "available": "boolean"},
+    "event": {"event_id": "unique nonempty string", "user_id": "nonempty string", "item_id": "existing catalog ID", "kind": "browse or purchase", "timestamp": "timezone-aware ISO 8601, not after as_of"},
+    "constraints": "Unknown fields rejected. Catalog <=10000 items, events <=100000. Limit integer 0..1000. Half-life 0.001..36500 days; popularity weight 0..1. Booleans are not numbers.",
+    "success_output": ["schema_version", "status", "synthetic", "user_id", "as_of", "cold_start", "history_events_used", "recommendations"],
+    "recommendation": ["item_id", "score", "reason", "components"],
+    "error_output": {"schema_version": 1, "status": "error", "error": "diagnostic string"},
+    "validation": "One validate function used by discover and CLI; JSON decoding additionally rejects duplicate keys. Input and file errors exit 2 with one JSON object."
+  },
+  "cross_stage_handoffs": [],
+  "behavior": {
+    "stage_order": ["Behavioral personalization"],
+    "recency": "event weight = action multiplier * 2^(-age_days/half_life_days), browse=1, purchase=3; age relative to explicit as_of",
+    "personalization": "Only requested user's events contribute. Item affinity and category affinity normalized by total user event weight.",
+    "score": "0.7*item_affinity + 0.3*category_affinity + popularity_weight*popularity",
+    "cold_start": "No effective history (including numerical underflow): rank by popularity alone.",
+    "eligibility": "Only available catalog items returned. Previously purchased or browsed items remain eligible. Unavailable items may still inform history.",
+    "determinism": "Events accumulated in event_id order; descending unrounded score, then ascending item_id; output numbers rounded to 12 decimals.",
+    "fixtures": "example_input.json and all test fixtures are explicitly synthetic"
+  },
+  "scope": {
+    "included": ["Single integrated CLI", "Shared validation", "Recency decay", "Purchase weighting", "Category affinity", "Cold-start popularity", "Availability filtering", "Bounded inputs", "Explainable scores"],
+    "excluded": ["Live providers or LLM steps", "Networks", "Persistence", "Training", "Authentication", "Enterprise deployment", "Real customer data", "Inventory mutation"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 14,
+    "tests_failed": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "coverage": ["Purchase and recency score arithmetic", "Recency ranking reversal", "Cold start", "Availability", "User isolation", "Empty catalog", "Zero limit", "Stable ties", "Input immutability", "Event order invariance", "Invalid scalar values", "Invalid events", "Duplicate IDs", "Invalid collection shapes", "CLI success", "CLI usage and file errors", "Malformed JSON", "Duplicate JSON keys", "Timezone equivalence", "Decay underflow fallback"]
+  }
+}

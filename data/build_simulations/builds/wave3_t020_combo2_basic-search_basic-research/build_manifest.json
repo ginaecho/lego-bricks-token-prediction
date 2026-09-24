@@ -1,0 +1,47 @@
+{
+  "build_id": "wave3_t020_combo2_basic-search_basic-research",
+  "composition_label": "basic:search -> basic:research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Newly authored isolated Python standard-library reference implementation",
+    "runtime": "Python 3.13.15 (compatible with Python 3.9+)",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version, fixture_label, query, question, products[], sources[], optional filters and limit",
+    "product": "id, name, description, category, nonnegative finite price, uppercase currency, boolean in_stock",
+    "source": "id, product_id, title, text, kind (specification/review/note)",
+    "output": "schema_version, status, fixture_label, search {query, interpreted_terms, results[]}, research {question, evidence[], comparison[], recommendation|null, limitations[]}",
+    "validation": "Shared validate function checks request, search boundary, final output, referential integrity, unchanged product snapshots, filters and verbatim citations. CLI validation/file failures are JSON status:error with exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Validated input feeds search. Research validates the search handoff against the original request before consuming selected product IDs and rank.",
+    "Research only cites sources linked to selected products. Search limit, price/category/availability constraints propagate to research comparison and recommendations.",
+    "One final validated JSON envelope preserves input query, question and fixture label."
+  ],
+  "behavior": {
+    "search": "Case-insensitive alphanumeric tokenization; stopwords, small generic synonym map and conservative difflib typo matching. Partial matches allowed. Scores normalize matched weights by query terms. Tie break: price then product ID. Explicit filters are hard constraints; limit 1..50.",
+    "research": "Question-token overlap retrieves source evidence. Retains complete verbatim source text, IDs, titles and kinds. Compares evidence coverage and recommends a candidate for further evaluation, not purchase, using relevant source count then search rank. Abstains when evidence is absent.",
+    "determinism": "No randomness, clocks, network, external provider, or LLM. Stable ordering throughout.",
+    "fixture_data": "All example products and sources are explicitly synthetic.",
+    "usage": "Run both commands from this directory with -B to avoid bytecode files."
+  },
+  "scope": {
+    "included": ["Single integrated CLI", "Shared schemas and validation", "Search intent heuristics", "Product filters", "Evidence provenance", "Deterministic evidence coverage comparison", "Explicit uncertainty and abstention", "CLI and unit tests"],
+    "excluded": ["Live research or scraping", "LLM integrations", "Currency conversion", "Full multilingual semantic search", "Independent fact verification", "Contradiction resolution", "Source quality estimation", "Numerical question answering", "Production deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"passed": 17, "failed": 0, "command_exit_code": 0},
+    "cli_example": {"command_exit_code": 0, "stdout": "One valid JSON object with status ok; selected p1 and p2; only their sources cited; p1 prioritized for further evaluation."}
+  }
+}

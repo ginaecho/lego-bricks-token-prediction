@@ -109,7 +109,7 @@
   "split_group": "9d1b1f46135f815485126318dc76cdd2a8267b91b69590b794bcb11324477883",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "895954e79c77c85b6522ece8e993c747c15ae421b890c9e242fe131bec1fc00a",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t022_combo2_deep_basic-recommend",
   "membership_point_id": "combo2_deep_basic-recommend",
@@ -117,8 +117,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "7a63325613283f0e1faae51aaf1df3c1113e7bc7ce997bc828faf44deecdbc26",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "ca7671c8-2967-49c4-b5e0-773fd461b4b6",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 132387,
+    "output_tokens": 9457,
+    "cache_read_tokens": 119741,
+    "cache_write_tokens": 12628,
+    "total_tokens": 141844,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36405,
+        "agent_id": "ca7671c8-2967-49c4-b5e0-773fd461b4b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 14897,
+        "output_tokens": 696,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 813,
+        "reasoning_tokens": 516,
+        "duration_ms": 18594,
+        "created_at": "2026-09-24T08:50:41.144Z"
+      },
+      {
+        "id": 36414,
+        "agent_id": "ca7671c8-2967-49c4-b5e0-773fd461b4b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 15623,
+        "output_tokens": 7465,
+        "cache_read_tokens": 14894,
+        "cache_write_tokens": 726,
+        "reasoning_tokens": 471,
+        "duration_ms": 102660,
+        "created_at": "2026-09-24T08:52:25.670Z"
+      },
+      {
+        "id": 36421,
+        "agent_id": "ca7671c8-2967-49c4-b5e0-773fd461b4b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 23408,
+        "output_tokens": 157,
+        "cache_read_tokens": 15620,
+        "cache_write_tokens": 7785,
+        "reasoning_tokens": 18,
+        "duration_ms": 4649,
+        "created_at": "2026-09-24T08:53:05.533Z"
+      },
+      {
+        "id": 36429,
+        "agent_id": "ca7671c8-2967-49c4-b5e0-773fd461b4b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 25369,
+        "output_tokens": 765,
+        "cache_read_tokens": 23405,
+        "cache_write_tokens": 1961,
+        "reasoning_tokens": 196,
+        "duration_ms": 13125,
+        "created_at": "2026-09-24T08:53:43.410Z"
+      },
+      {
+        "id": 36431,
+        "agent_id": "ca7671c8-2967-49c4-b5e0-773fd461b4b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 26378,
+        "output_tokens": 276,
+        "cache_read_tokens": 25366,
+        "cache_write_tokens": 1009,
+        "reasoning_tokens": 0,
+        "duration_ms": 4890,
+        "created_at": "2026-09-24T08:53:50.855Z"
+      },
+      {
+        "id": 36432,
+        "agent_id": "ca7671c8-2967-49c4-b5e0-773fd461b4b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 26712,
+        "output_tokens": 98,
+        "cache_read_tokens": 26375,
+        "cache_write_tokens": 334,
+        "reasoning_tokens": 0,
+        "duration_ms": 2977,
+        "created_at": "2026-09-24T08:54:00.081Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.47282250000000003,
+      "observed_cache_profile_estimate_usd": 0.20340525000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.67387,
+      "observed_cache_profile_estimate_usd": 5.67387,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -149,5 +274,363 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............\n----------------------------------------------------------------------\nRan 14 tests in 0.559s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "documents": [
+        {
+          "id": "synthetic-lab",
+          "title": "Synthetic laboratory comparison",
+          "text": "The compact form is portable. The quiet setting is quiet.",
+          "reliability": 0.9,
+          "claims": [
+            {
+              "topic": "form",
+              "value": "compact",
+              "stance": "support",
+              "confidence": 1.0,
+              "quote": "The compact form is portable."
+            },
+            {
+              "topic": "sound",
+              "value": "quiet",
+              "stance": "support",
+              "confidence": 0.8,
+              "quote": "The quiet setting is quiet."
+            }
+          ]
+        },
+        {
+          "id": "synthetic-field",
+          "title": "Synthetic field observations",
+          "text": "The quiet setting was noisy under load. The compact form travels well.",
+          "reliability": 0.8,
+          "claims": [
+            {
+              "topic": "sound",
+              "value": "quiet",
+              "stance": "oppose",
+              "confidence": 0.9,
+              "quote": "The quiet setting was noisy under load."
+            },
+            {
+              "topic": "form",
+              "value": "compact",
+              "stance": "support",
+              "confidence": 0.75,
+              "quote": "The compact form travels well."
+            }
+          ]
+        }
+      ],
+      "products": [
+        {
+          "id": "synthetic-a",
+          "name": "Synthetic Travel One",
+          "attributes": {
+            "form": "compact",
+            "sound": "quiet",
+            "finish": "blue"
+          }
+        },
+        {
+          "id": "synthetic-b",
+          "name": "Synthetic Desk Two",
+          "attributes": {
+            "form": "large",
+            "sound": "quiet",
+            "finish": "black"
+          }
+        },
+        {
+          "id": "synthetic-c",
+          "name": "Synthetic Pocket Three",
+          "attributes": {
+            "form": "compact",
+            "sound": "standard",
+            "finish": "blue"
+          }
+        }
+      ],
+      "profile": {
+        "preferences": [
+          {
+            "topic": "form",
+            "value": "compact",
+            "weight": 1.0
+          },
+          {
+            "topic": "sound",
+            "value": "quiet",
+            "weight": 0.8
+          },
+          {
+            "topic": "finish",
+            "value": "blue",
+            "weight": 0.3
+          }
+        ],
+        "exclude_product_ids": []
+      },
+      "limit": 3,
+      "status": "ok",
+      "research": {
+        "document_count": 2,
+        "findings": [
+          {
+            "topic": "form",
+            "value": "compact",
+            "support_weight": 1.5,
+            "oppose_weight": 0.0,
+            "evidence_balance": 1.0,
+            "assessment": "supported",
+            "source_count": 2,
+            "citations": [
+              {
+                "document_id": "synthetic-field",
+                "quote": "The compact form travels well.",
+                "stance": "support",
+                "weight": 0.6000000000000001
+              },
+              {
+                "document_id": "synthetic-lab",
+                "quote": "The compact form is portable.",
+                "stance": "support",
+                "weight": 0.9
+              }
+            ]
+          },
+          {
+            "topic": "sound",
+            "value": "quiet",
+            "support_weight": 0.7200000000000001,
+            "oppose_weight": 0.7200000000000001,
+            "evidence_balance": 0.0,
+            "assessment": "disputed",
+            "source_count": 2,
+            "citations": [
+              {
+                "document_id": "synthetic-field",
+                "quote": "The quiet setting was noisy under load.",
+                "stance": "oppose",
+                "weight": 0.7200000000000001
+              },
+              {
+                "document_id": "synthetic-lab",
+                "quote": "The quiet setting is quiet.",
+                "stance": "support",
+                "weight": 0.7200000000000001
+              }
+            ]
+          }
+        ],
+        "disagreements": [
+          {
+            "topic": "sound",
+            "value": "quiet",
+            "supporting_document_ids": [
+              "synthetic-lab"
+            ],
+            "opposing_document_ids": [
+              "synthetic-field"
+            ]
+          }
+        ],
+        "unresolved_questions": [
+          {
+            "topic": "sound",
+            "value": "quiet",
+            "reason": "disputed",
+            "question": "What additional independent evidence resolves sound=quiet?"
+          },
+          {
+            "topic": "finish",
+            "value": "blue",
+            "reason": "no_evidence",
+            "question": "What evidence supports finish=blue?"
+          }
+        ],
+        "limitations": [
+          "Synthetic fixture claims, not independently verified facts.",
+          "Exact topic/value matching; source independence is not verified.",
+          "Evidence balance measures weighted agreement, not truth probability."
+        ]
+      },
+      "recommendations": [
+        {
+          "product_id": "synthetic-a",
+          "name": "Synthetic Travel One",
+          "score": 0.8690476190476191,
+          "mode": "personalized",
+          "reasons": [
+            {
+              "topic": "finish",
+              "desired_value": "blue",
+              "actual_value": "blue",
+              "matched": true,
+              "assessment": "no_evidence",
+              "evidence_balance": 0.0,
+              "document_ids": [],
+              "weighted_contribution": 0.22499999999999998
+            },
+            {
+              "topic": "form",
+              "desired_value": "compact",
+              "actual_value": "compact",
+              "matched": true,
+              "assessment": "supported",
+              "evidence_balance": 1.0,
+              "document_ids": [
+                "synthetic-field",
+                "synthetic-lab"
+              ],
+              "weighted_contribution": 1.0
+            },
+            {
+              "topic": "sound",
+              "desired_value": "quiet",
+              "actual_value": "quiet",
+              "matched": true,
+              "assessment": "disputed",
+              "evidence_balance": 0.0,
+              "document_ids": [
+                "synthetic-field",
+                "synthetic-lab"
+              ],
+              "weighted_contribution": 0.6000000000000001
+            }
+          ],
+          "unresolved_questions": [
+            {
+              "topic": "sound",
+              "value": "quiet",
+              "reason": "disputed",
+              "question": "What additional independent evidence resolves sound=quiet?"
+            },
+            {
+              "topic": "finish",
+              "value": "blue",
+              "reason": "no_evidence",
+              "question": "What evidence supports finish=blue?"
+            }
+          ]
+        },
+        {
+          "product_id": "synthetic-c",
+          "name": "Synthetic Pocket Three",
+          "score": 0.5833333333333334,
+          "mode": "personalized",
+          "reasons": [
+            {
+              "topic": "finish",
+              "desired_value": "blue",
+              "actual_value": "blue",
+              "matched": true,
+              "assessment": "no_evidence",
+              "evidence_balance": 0.0,
+              "document_ids": [],
+              "weighted_contribution": 0.22499999999999998
+            },
+            {
+              "topic": "form",
+              "desired_value": "compact",
+              "actual_value": "compact",
+              "matched": true,
+              "assessment": "supported",
+              "evidence_balance": 1.0,
+              "document_ids": [
+                "synthetic-field",
+                "synthetic-lab"
+              ],
+              "weighted_contribution": 1.0
+            },
+            {
+              "topic": "sound",
+              "desired_value": "quiet",
+              "actual_value": "standard",
+              "matched": false,
+              "assessment": "not_matched",
+              "evidence_balance": 0.0,
+              "document_ids": [],
+              "weighted_contribution": 0.0
+            }
+          ],
+          "unresolved_questions": [
+            {
+              "topic": "finish",
+              "value": "blue",
+              "reason": "no_evidence",
+              "question": "What evidence supports finish=blue?"
+            }
+          ]
+        },
+        {
+          "product_id": "synthetic-b",
+          "name": "Synthetic Desk Two",
+          "score": 0.28571428571428575,
+          "mode": "personalized",
+          "reasons": [
+            {
+              "topic": "finish",
+              "desired_value": "blue",
+              "actual_value": "black",
+              "matched": false,
+              "assessment": "not_matched",
+              "evidence_balance": 0.0,
+              "document_ids": [],
+              "weighted_contribution": 0.0
+            },
+            {
+              "topic": "form",
+              "desired_value": "compact",
+              "actual_value": "large",
+              "matched": false,
+              "assessment": "not_matched",
+              "evidence_balance": 0.0,
+              "document_ids": [],
+              "weighted_contribution": 0.0
+            },
+            {
+              "topic": "sound",
+              "desired_value": "quiet",
+              "actual_value": "quiet",
+              "matched": true,
+              "assessment": "disputed",
+              "evidence_balance": 0.0,
+              "document_ids": [
+                "synthetic-field",
+                "synthetic-lab"
+              ],
+              "weighted_contribution": 0.6000000000000001
+            }
+          ],
+          "unresolved_questions": [
+            {
+              "topic": "sound",
+              "value": "quiet",
+              "reason": "disputed",
+              "question": "What additional independent evidence resolves sound=quiet?"
+            }
+          ]
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t022_combo2_deep_basic-recommend",
+    "artifact_sha256": {
+      "implementation.py": "03588f8da97002555434cd34c1d17303164e250d98849c4985b2b19395adff2f",
+      "test_implementation.py": "26175e363598e512293af51b00ea83386d4d2ef57ac79bb70196cb0062824438",
+      "example_input.json": "e192d983c33a0e27d79077d797a18c757ba47701006ba8c30511cf538c5af9e2",
+      "build_manifest.json": "16cd50d41f5e167569ce31a9bf7f10eb543071a1e6fa5f5fb842d249886be296"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

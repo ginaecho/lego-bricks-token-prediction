@@ -110,7 +110,7 @@
   "split_group": "9fd1dd553998be8bfa0c93f9883193c7d925116e96a76e5dba644923fbdc4790",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "fb7ba20c905069859fc0bbdad9869b4bee0d64369c2a5ef1a31f309dc0346742",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t032_combo2_adaptive_normal__ind-energy",
   "membership_point_id": "combo2_adaptive_normal__ind-energy",
@@ -118,8 +118,133 @@
   "trial_category": "combo_BTI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "d92849934c52e6a31e73564d3e17221522708829a28bde283c6220f2913dca4d",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "8713978a-8522-4f84-a1c9-8de4f6ae638e",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 126180,
+    "output_tokens": 8447,
+    "cache_read_tokens": 115549,
+    "cache_write_tokens": 10613,
+    "total_tokens": 134627,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36473,
+        "agent_id": "8713978a-8522-4f84-a1c9-8de4f6ae638e",
+        "model": "gpt-6-astra",
+        "input_tokens": 14989,
+        "output_tokens": 156,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 905,
+        "reasoning_tokens": 0,
+        "duration_ms": 3734,
+        "created_at": "2026-09-24T08:59:59.631Z"
+      },
+      {
+        "id": 36489,
+        "agent_id": "8713978a-8522-4f84-a1c9-8de4f6ae638e",
+        "model": "gpt-6-astra",
+        "input_tokens": 15171,
+        "output_tokens": 7386,
+        "cache_read_tokens": 14986,
+        "cache_write_tokens": 182,
+        "reasoning_tokens": 244,
+        "duration_ms": 84000,
+        "created_at": "2026-09-24T09:02:25.247Z"
+      },
+      {
+        "id": 36493,
+        "agent_id": "8713978a-8522-4f84-a1c9-8de4f6ae638e",
+        "model": "gpt-6-astra",
+        "input_tokens": 22881,
+        "output_tokens": 218,
+        "cache_read_tokens": 15168,
+        "cache_write_tokens": 7710,
+        "reasoning_tokens": 61,
+        "duration_ms": 4362,
+        "created_at": "2026-09-24T09:02:36.504Z"
+      },
+      {
+        "id": 36501,
+        "agent_id": "8713978a-8522-4f84-a1c9-8de4f6ae638e",
+        "model": "gpt-6-astra",
+        "input_tokens": 23987,
+        "output_tokens": 375,
+        "cache_read_tokens": 22878,
+        "cache_write_tokens": 1106,
+        "reasoning_tokens": 64,
+        "duration_ms": 7104,
+        "created_at": "2026-09-24T09:03:13.257Z"
+      },
+      {
+        "id": 36504,
+        "agent_id": "8713978a-8522-4f84-a1c9-8de4f6ae638e",
+        "model": "gpt-6-astra",
+        "input_tokens": 24455,
+        "output_tokens": 207,
+        "cache_read_tokens": 23984,
+        "cache_write_tokens": 468,
+        "reasoning_tokens": 0,
+        "duration_ms": 3358,
+        "created_at": "2026-09-24T09:03:21.274Z"
+      },
+      {
+        "id": 36506,
+        "agent_id": "8713978a-8522-4f84-a1c9-8de4f6ae638e",
+        "model": "gpt-6-astra",
+        "input_tokens": 24697,
+        "output_tokens": 105,
+        "cache_read_tokens": 24452,
+        "cache_write_tokens": 242,
+        "reasoning_tokens": 0,
+        "duration_ms": 2965,
+        "created_at": "2026-09-24T09:03:33.533Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.44215499999999996,
+      "observed_cache_profile_estimate_usd": 0.18216975,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.30586,
+      "observed_cache_profile_estimate_usd": 5.30586,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -150,5 +275,154 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................\n----------------------------------------------------------------------\nRan 20 tests in 0.869s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "synthetic-energy/v1",
+      "synthetic": true,
+      "status": "ok",
+      "notice": "Synthetic demonstration only; not NERC CIP compliance certification.",
+      "onboarding": {
+        "schema_version": "synthetic-energy/v1",
+        "topics": [
+          "consumption",
+          "outages",
+          "emissions"
+        ],
+        "detail": "guided",
+        "required": [
+          "energy_basics",
+          "asset_protection",
+          "safety_rules",
+          "emissions_units"
+        ],
+        "pending": [],
+        "ready": true,
+        "lessons": []
+      },
+      "research": {
+        "schema_version": "synthetic-energy/v1",
+        "topics": [
+          "consumption",
+          "outages",
+          "emissions"
+        ],
+        "status": "complete",
+        "findings": [
+          {
+            "topic": "consumption",
+            "finding": "Synthetic asset-2 consumed 2.4 kWh and 2.6 kWh in winter half-hour intervals, compared with 1.2 kWh in a summer half-hour interval.",
+            "citation": {
+              "source_id": "synthetic-consumption",
+              "title": "Synthetic seasonal meter observations",
+              "start": 0,
+              "end": 131,
+              "quote": "Synthetic asset-2 consumed 2.4 kWh and 2.6 kWh in winter half-hour intervals, compared with 1.2 kWh in a summer half-hour interval."
+            }
+          },
+          {
+            "topic": "outages",
+            "finding": "Synthetic outage-1 threatens life safety and is P1. Essential-service outages without life-safety impact are P2; routine outages are P3.",
+            "citation": {
+              "source_id": "synthetic-outages",
+              "title": "Synthetic safety dispatch policy",
+              "start": 0,
+              "end": 136,
+              "quote": "Synthetic outage-1 threatens life safety and is P1. Essential-service outages without life-safety impact are P2; routine outages are P3."
+            }
+          },
+          {
+            "topic": "emissions",
+            "finding": "Synthetic asset-1 emissions are 1.5 kgCO2e for the observed interval, from this fictitious emissions ledger, not an audited inventory.",
+            "citation": {
+              "source_id": "synthetic-emissions",
+              "title": "Synthetic emissions ledger",
+              "start": 0,
+              "end": 134,
+              "quote": "Synthetic asset-1 emissions are 1.5 kgCO2e for the observed interval, from this fictitious emissions ledger, not an audited inventory."
+            }
+          }
+        ],
+        "unanswered_topics": []
+      },
+      "entities": {
+        "grid_assets": [
+          {
+            "alias": "asset-1",
+            "critical": true
+          },
+          {
+            "alias": "asset-2",
+            "critical": false
+          }
+        ],
+        "topology": [
+          [
+            "asset-1",
+            "asset-2"
+          ]
+        ],
+        "meter_readings": [
+          {
+            "meter_id": "asset-2",
+            "timestamp": "2026-01-15T18:00:00+00:00",
+            "interval_minutes": 30,
+            "consumption": 2.4,
+            "unit": "kWh"
+          },
+          {
+            "meter_id": "asset-2",
+            "timestamp": "2026-01-15T18:30:00+00:00",
+            "interval_minutes": 30,
+            "consumption": 2.6,
+            "unit": "kWh"
+          },
+          {
+            "meter_id": "asset-2",
+            "timestamp": "2026-07-15T18:00:00+00:00",
+            "interval_minutes": 30,
+            "consumption": 1.2,
+            "unit": "kWh"
+          }
+        ],
+        "outage_reports": [
+          {
+            "report_id": "outage-1",
+            "asset_id": "asset-1",
+            "life_safety": true,
+            "essential_service": true,
+            "priority": "P1"
+          }
+        ],
+        "telemetry": [
+          {
+            "timestamp": "2026-01-15T18:00:00Z",
+            "load": 42.0,
+            "load_unit": "kW",
+            "emissions": {
+              "value": 1.5,
+              "unit": "kgCO2e",
+              "source_id": "synthetic-emissions"
+            },
+            "device_id": "asset-1"
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t032_combo2_adaptive_normal__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "9974e6c65a633d861390ef18d9e8ac4a82a086d8308956f0b9e0b647be264a18",
+      "test_implementation.py": "344183ca7c0a0adae614aad1d2e1fd2cf4bc93defcfb1e9530128da9657cd7cd",
+      "example_input.json": "fbdcb9868e3289fdeaa3e7bef783a00dc6b2df113bcf0eae94844b4e8c02d50a",
+      "build_manifest.json": "d8ef3fa79919d8d7d1c26d19ca8e974f42e079fc4a7483a8e14a278abdef50ac"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

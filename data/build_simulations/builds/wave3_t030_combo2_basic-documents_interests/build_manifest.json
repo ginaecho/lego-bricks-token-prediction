@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t030_combo2_basic-documents_interests",
+  "composition_label": "basic:documents -> interests",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version=1, fixture_label, documents[], profile{weights, exclusions{ids,tags,terms}, limit}",
+    "document": "document_id, fields mapping id/title/description/tags and optional quality to dotted object paths, rows of JSON objects. Unmapped source columns are ignored.",
+    "canonical_item": "id, title, description: normalized nonempty strings; tags: sorted unique casefolded strings; quality: finite number in [0,1], default 0; source: document_id, zero-based row and field mapping",
+    "profile": "Casefolded tag weights in [-10,10]; exact case-sensitive normalized ID exclusions; casefolded tag and substring title/description exclusions; integer limit [0,100]",
+    "output": "status, schema_version, fixture_label, canonical catalog, ranked recommendations with score/explanation/source, excluded with reasons, eligible_count, counts",
+    "validation": "Shared require/object/text/number/tag validators; canonical items checked at extraction and ranking boundaries. Unknown configuration keys, duplicate item/document IDs, duplicate normalized preferences, duplicate JSON keys and missing mapped fields are errors. Batch is atomic."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:documents",
+      "to": "interests",
+      "data": "Validated canonical catalog including normalized tags, quality and original document/row/field provenance",
+      "enforcement": "Ranking revalidates each item; it never reads raw document rows."
+    }
+  ],
+  "behavior": {
+    "extraction": "Configurable nested object extraction, whitespace cleanup, comma-separated or array tags, deduplication and bounded numeric validation",
+    "ranking": "Exclude first, then descending quality plus sum of matching signed tag weights; exact score ties sort by ID; apply limit last. Empty interests fall back to quality.",
+    "explanations": "Structured matched tags and signed contributions, base quality, formula and provenance; exclusions include the matched rule and source text field where applicable",
+    "errors": "CLI prints one JSON object with status error and exits 2 for validation or file errors; success exits 0.",
+    "fixtures": "All example records and preferences are explicitly synthetic",
+    "determinism": "No randomness, current-time dependencies, learned model or external provider"
+  },
+  "scope": {
+    "included": ["JSON row document automation", "Configurable dotted object field extraction", "Shared validation", "Signed preference ranking", "Hard exclusion enforcement", "Grounded audit explanations", "CLI and unit tests"],
+    "excluded": ["PDF/OCR and binary document parsing", "Array path indexing", "Live providers and LLM calls", "Network access", "Persistent storage", "Enterprise-scale processing", "Fuzzy matching", "User authentication"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_cases": 16,
+    "tests_exit_code": 0,
+    "cli": "passed: one JSON object, status ok, 4 extracted, 1 excluded, 3 recommendations",
+    "cli_exit_code": 0
+  }
+}

@@ -107,7 +107,7 @@
   "split_group": "20355ce3338f10a5f29997568e6988cee2b55bfc800412341f61cc87280dd979",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "f9df4b1754be85582613a8a8b4280303502404fb81895d2a957b9cae9180272c",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t021_combo2_basic-support_basic-recommend__ind-retail",
   "membership_point_id": "combo2_basic-support_basic-recommend__ind-retail",
@@ -115,8 +115,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "107fa4b5edc60b01f2a6a608ae3b721a16dd44940958c042f2fffb40f15a560a",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "8920e288-fcc9-4660-b241-b5ba1fa37e05",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 126206,
+    "output_tokens": 8458,
+    "cache_read_tokens": 115639,
+    "cache_write_tokens": 10549,
+    "total_tokens": 134664,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36401,
+        "agent_id": "8920e288-fcc9-4660-b241-b5ba1fa37e05",
+        "model": "gpt-6-astra",
+        "input_tokens": 15025,
+        "output_tokens": 273,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 941,
+        "reasoning_tokens": 84,
+        "duration_ms": 6106,
+        "created_at": "2026-09-24T08:50:29.721Z"
+      },
+      {
+        "id": 36410,
+        "agent_id": "8920e288-fcc9-4660-b241-b5ba1fa37e05",
+        "model": "gpt-6-astra",
+        "input_tokens": 15329,
+        "output_tokens": 7306,
+        "cache_read_tokens": 15022,
+        "cache_write_tokens": 304,
+        "reasoning_tokens": 516,
+        "duration_ms": 99773,
+        "created_at": "2026-09-24T08:52:12.532Z"
+      },
+      {
+        "id": 36411,
+        "agent_id": "8920e288-fcc9-4660-b241-b5ba1fa37e05",
+        "model": "gpt-6-astra",
+        "input_tokens": 22971,
+        "output_tokens": 142,
+        "cache_read_tokens": 15326,
+        "cache_write_tokens": 7642,
+        "reasoning_tokens": 0,
+        "duration_ms": 3188,
+        "created_at": "2026-09-24T08:52:19.381Z"
+      },
+      {
+        "id": 36418,
+        "agent_id": "8920e288-fcc9-4660-b241-b5ba1fa37e05",
+        "model": "gpt-6-astra",
+        "input_tokens": 23861,
+        "output_tokens": 430,
+        "cache_read_tokens": 22968,
+        "cache_write_tokens": 890,
+        "reasoning_tokens": 139,
+        "duration_ms": 9173,
+        "created_at": "2026-09-24T08:52:44.187Z"
+      },
+      {
+        "id": 36422,
+        "agent_id": "8920e288-fcc9-4660-b241-b5ba1fa37e05",
+        "model": "gpt-6-astra",
+        "input_tokens": 24387,
+        "output_tokens": 211,
+        "cache_read_tokens": 23858,
+        "cache_write_tokens": 526,
+        "reasoning_tokens": 0,
+        "duration_ms": 3996,
+        "created_at": "2026-09-24T08:53:07.975Z"
+      },
+      {
+        "id": 36424,
+        "agent_id": "8920e288-fcc9-4660-b241-b5ba1fa37e05",
+        "model": "gpt-6-astra",
+        "input_tokens": 24633,
+        "output_tokens": 96,
+        "cache_read_tokens": 24384,
+        "cache_write_tokens": 246,
+        "reasoning_tokens": 0,
+        "duration_ms": 2752,
+        "created_at": "2026-09-24T08:53:22.967Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.442385,
+      "observed_cache_profile_estimate_usd": 0.18219725,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.30862,
+      "observed_cache_profile_estimate_usd": 5.30862,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -147,5 +272,165 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".....................\n----------------------------------------------------------------------\nRan 21 tests in 0.631s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "context": {
+        "schema_version": 1,
+        "synthetic": true,
+        "catalog": {
+          "currency": "USD",
+          "products": [
+            {
+              "sku": "FICTION-101",
+              "name": "Imaginary Cloud Mug",
+              "category": "kitchen",
+              "price": "14.50",
+              "stock": 8
+            },
+            {
+              "sku": "FICTION-102",
+              "name": "Imaginary Dawn Bowl",
+              "category": "kitchen",
+              "price": "18.00",
+              "stock": 5
+            },
+            {
+              "sku": "FICTION-201",
+              "name": "Imaginary Trail Tote",
+              "category": "outdoors",
+              "price": "24.00",
+              "stock": 3
+            },
+            {
+              "sku": "FICTION-202",
+              "name": "Imaginary Rain Flask",
+              "category": "outdoors",
+              "price": "29.95",
+              "stock": 0
+            }
+          ]
+        },
+        "customer": {
+          "id": "synthetic-shopper-alex",
+          "consent": {
+            "personalization": true
+          },
+          "preferred_categories": [
+            "outdoors"
+          ]
+        },
+        "order": {
+          "id": "synthetic-basket-001",
+          "status": "basket",
+          "items": [
+            {
+              "sku": "FICTION-101",
+              "quantity": 1
+            }
+          ]
+        },
+        "clickstream": [
+          {
+            "customer_id": "synthetic-shopper-alex",
+            "event": "view",
+            "sku": "FICTION-102",
+            "timestamp": "2026-09-24T08:00:00Z"
+          },
+          {
+            "customer_id": "synthetic-shopper-alex",
+            "event": "add_to_cart",
+            "sku": "FICTION-101",
+            "timestamp": "2026-09-24T08:01:00Z"
+          }
+        ],
+        "policies": {
+          "return_window_days": 30,
+          "support_contact": "synthetic-support@example.invalid"
+        },
+        "request": {
+          "intent": "product",
+          "query": "What is the price and stock of this kitchen mug?",
+          "skus": [
+            "FICTION-101"
+          ],
+          "recommendation_limit": 3
+        }
+      },
+      "support": {
+        "answer": "FICTION-101 (Imaginary Cloud Mug): USD 14.50; stock 8.",
+        "resolution": "answered",
+        "facts": [
+          {
+            "sku": "FICTION-101",
+            "name": "Imaginary Cloud Mug",
+            "price": "14.50",
+            "stock": 8,
+            "currency": "USD"
+          }
+        ],
+        "discovery_context": {
+          "personalization_allowed": true,
+          "interest_categories": [
+            "kitchen"
+          ],
+          "preferred_categories": [
+            "outdoors"
+          ],
+          "basket_skus": [
+            "FICTION-101"
+          ],
+          "viewed_skus": [
+            "FICTION-102"
+          ]
+        }
+      },
+      "recommendations": {
+        "mode": "personalized",
+        "items": [
+          {
+            "sku": "FICTION-102",
+            "name": "Imaginary Dawn Bowl",
+            "price": "18.00",
+            "stock": 5,
+            "currency": "USD",
+            "score": 5,
+            "reasons": [
+              "Matches the category discussed with support",
+              "Previously viewed with personalization consent"
+            ]
+          },
+          {
+            "sku": "FICTION-201",
+            "name": "Imaginary Trail Tote",
+            "price": "24.00",
+            "stock": 3,
+            "currency": "USD",
+            "score": 2,
+            "reasons": [
+              "Matches a consented profile preference"
+            ]
+          }
+        ],
+        "notice": "Personalization uses explicit supplied consent."
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t021_combo2_basic-support_basic-recommend__ind-retail",
+    "artifact_sha256": {
+      "implementation.py": "cde416bdf702d88355d3c7adb9d93be79bcfe68f0406fdc30a7d0c29986fe729",
+      "test_implementation.py": "3b54bf4dc5ce52a5183c2dbb175919d0ad82db8202af2bc5dddf97179edce84d",
+      "example_input.json": "9825869ad567ee84a00d12e2d79dd96377775f1639b3ab4d2083f73fd32367e5",
+      "build_manifest.json": "cdf9b0c2ce5b6042312cfbee9a2501f0adbe3ecb646031e82665e5f5fed901d8"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

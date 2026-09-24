@@ -1,0 +1,87 @@
+{
+  "build_id": "wave3_t012_combo2_basic-insights_basic-documents",
+  "composition_label": "Customer insights -> Document automation",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored within the isolated build directory",
+    "runtime": "Python 3.13.15, standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Object with schema_version, fixture_label, feedback array; optional theme_rules and document configuration. Feedback requires unique id, customer, text and optional integer rating 1..5.",
+    "theme_rules": "Optional list of {name, keywords, action}; case-insensitively unique names, with Other reserved. Empty rules route all feedback to Other.",
+    "document_config": "Optional title, format csv|json, nonnegative min_mentions, and nonempty columns [{label, source, transform?}]. Unique labels; transform identity|upper|lower. Text transforms cannot be applied to numeric sources.",
+    "output": "Object with schema_version, status, fixture_label, insights and documents. Error envelope has schema_version, status:error and error {type,message}.",
+    "insights": "feedback_count and themes [{theme,mentions,customer_count,sentiments:{positive,neutral,negative},action,priority,evidence:[{id,customer,text,sentiment}]}].",
+    "documents": "title, format, rows, serialized content, checks {row_count,source_feedback_count,included_theme_count,excluded_theme_count}.",
+    "validation": "Shared validate entry point checks all input and stage boundaries, evidence uniqueness and consistency, derived counts, priorities, mapped document rows, rendered content and checks. Unknown input fields, duplicate JSON keys and non-finite numbers are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:insights",
+      "to": "basic:documents",
+      "payload": "Validated insight aggregates with original evidence IDs, text and customer identifiers",
+      "contract": "Document automation accepts validated insights and document configuration, never raw feedback. Invalid aggregates halt processing; document output is checked against source insights."
+    }
+  ],
+  "behavior": {
+    "themes": "Default reliability, usability, pricing and support rules; configurable whole-word or phrase matching ignoring case and punctuation. Multiple themes per record are allowed. Unmatched feedback goes to Other. Results sorted by theme and evidence ID.",
+    "sentiment": "Rating 1-2 negative, 3 neutral, 4-5 positive. Without rating, compare distinct positive and negative lexicon terms; ties neutral.",
+    "actions": "Rule-defined recommended actions; Other prompts manual review. Any negative evidence makes priority high, otherwise any neutral makes medium, otherwise low.",
+    "documents": "Extract theme aggregates, filter by mentions, map and rename selected fields, optionally change text case, and render CSV or a JSON array. Preserve evidence provenance and report exclusion counts. Formula-like CSV text and headers are apostrophe-prefixed; JSON rows retain original values.",
+    "count_semantics": "Mentions count distinct feedback within a theme; customer_count counts distinct exact customer identifiers. Multi-theme assignment means total mentions can exceed source feedback_count.",
+    "empty_feedback": "Successful empty insight and document rows; CSV still has a header.",
+    "cli": "Exactly one JSON object on stdout. Success exits 0; usage, file, JSON and validation errors exit 2.",
+    "synthetic_data": "All example feedback and customer identifiers are explicitly synthetic."
+  },
+  "scope": {
+    "included": [
+      "Integrated deterministic two-stage pipeline",
+      "Configurable theme rules and evidence-backed action summaries",
+      "Configurable CSV and JSON document automation",
+      "Shared schema validation and cross-stage integrity checks",
+      "CLI and unittest fixtures without external dependencies"
+    ],
+    "excluded": [
+      "Live providers, LLM calls, network access and external packages",
+      "PDF, OCR, office formats and unstructured source-file ingestion",
+      "Semantic clustering, sarcasm, negation and multilingual sentiment models",
+      "Persistence, authentication, enterprise workflows and production deployment",
+      "Automatic execution of recommended customer actions"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_count": 15,
+    "unittest_exit_code": 0,
+    "cli_example": "passed: one JSON object, status ok, five source feedback records and five document rows",
+    "cli_exit_code": 0,
+    "coverage": [
+      "Theme grouping, multi-theme assignment and sentiment",
+      "Custom phrases and whole-word boundaries",
+      "Cross-stage evidence, counts and customer propagation",
+      "JSON filtering and text transforms",
+      "CSV quoting, newlines and formula neutralization",
+      "Empty feedback",
+      "Invalid input and document configurations",
+      "Invalid insight handoff and document output",
+      "Determinism and input immutability",
+      "CLI success, file errors, usage errors and validation errors",
+      "Malformed JSON, duplicate object keys and non-finite numbers"
+    ]
+  }
+}

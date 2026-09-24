@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "customers": [
+    {"id": "C001", "name": "Synthetic Avery", "goal": "payments", "kyc_status": "pending", "screening_flags": [], "account": {"number": "SYNTH-A001", "iban": "ZZ00SYNTHA001"}},
+    {"id": "C002", "name": "Synthetic Morgan", "goal": "borrow", "kyc_status": "verified", "screening_flags": [], "account": {"number": "SYNTH-A002", "iban": "ZZ00SYNTHA002"}},
+    {"id": "C003", "name": "Synthetic Riley", "goal": "save", "kyc_status": "verified", "screening_flags": ["aml_review"], "account": {"number": "SYNTH-A003", "iban": "ZZ00SYNTHA003"}}
+  ],
+  "ledger": {
+    "format": "json",
+    "data": [
+      {"id": "T001", "customer_id": "C001", "amount": "24.17", "currency": "EUR", "booking_date": "2026-09-01", "description": "Synthetic grocery payment", "screening_flags": [], "card_number": "4111111111111111"},
+      {"id": "T002", "customer_id": "C002", "amount": "118.63", "currency": "EUR", "booking_date": "2026-09-02", "description": "Synthetic rent contribution", "screening_flags": [], "card_number": "5555 5555 5555 4444"},
+      {"id": "T003", "customer_id": "C003", "amount": "67.92", "currency": "USD", "booking_date": "2026-09-03", "description": "Synthetic flagged transfer", "screening_flags": ["sanctions_match"], "card_number": ""}
+    ]
+  },
+  "loans": [
+    {"id": "L001", "customer_id": "C002", "amount": "1500.00", "currency": "EUR", "status": "draft", "documents_complete": false}
+  ],
+  "feedback": [
+    {"id": "F001", "customer_id": "C001", "entity_type": "customer", "entity_id": "C001", "text": "Synthetic feedback: identity verification instructions are unclear.", "sentiment": "negative"},
+    {"id": "F002", "customer_id": "C002", "entity_type": "loan", "entity_id": "L001", "text": "Synthetic feedback: which loan document is missing?", "sentiment": "negative"},
+    {"id": "F003", "customer_id": "C003", "entity_type": "transaction", "entity_id": "T003", "text": "Synthetic feedback: my transfer is held and support has not replied.", "sentiment": "negative"}
+  ]
+}

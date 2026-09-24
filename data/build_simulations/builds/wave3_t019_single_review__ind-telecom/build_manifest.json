@@ -1,0 +1,49 @@
+{
+  "build_id": "wave3_t019_single_review__ind-telecom",
+  "composition_label": "Document review (Document automation)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Authored from scratch in isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1",
+    "input": "Object with schema_version, synthetic=true, processing_residency EU/US and accounts, tickets, usage_records, billing_adjustments, documents, requirements arrays. All array records require unique safe id and matching residency.",
+    "entities": "Subscriber accounts declare GDPR/CCPA, protection, purpose, lawful basis and fixed fictitious phone/dummy IMEI. Tickets and usage reference accounts. Adjustments require finite amount and nonblank reason.",
+    "documents": "Support chat text or CDR CSV, plus explicit entity_ids. CDR header: id,account_id,residency,call_seconds,data_mb. Every CSV row must agree with the linked usage record.",
+    "requirements": "entity_type account/ticket/usage, entity_id, document_ids and nonempty required_terms",
+    "output": "schema_version, synthetic, status, processing_residency, review_state, summary, findings and notice. Findings carry requirement/entity IDs, residency, supporting/inspected document IDs and a gap reason; no raw personal data or transcripts.",
+    "errors": "One JSON object with schema_version, status=error and sanitized message; CLI exit 2"
+  },
+  "cross_stage_handoffs": ["Single review stage: shared validation -> deterministic evidence matching -> content-free traceable findings"],
+  "behavior": [
+    "All required case-insensitive literal substrings must occur within one explicitly linked document; no semantic truth inference.",
+    "Missing evidence is a review gap, not a validation error; an empty requirement list is not_assessed.",
+    "Declared residency must match processing region on every structured record and CSV row.",
+    "Demonstrative GDPR/CCPA declarations and output minimization; no certification or actual data-residency enforcement.",
+    "Example fixture is explicitly synthetic, uses invented tickets and fictitious phone/dummy IMEI; usage is seeded pseudo-random.",
+    "No LLM step or provider needed. Deterministic and nonmutating."
+  ],
+  "scope": {
+    "included": ["One local JSON CLI", "Shared schema and validator", "CSV reconciliation", "Support transcript checking", "Traceable requirement gaps", "Privacy-minimized output"],
+    "excluded": ["Compliance certification", "Real subscriber data", "Production security or residency guarantees", "Network calls", "Semantic inference", "Authentication", "Persistence", "Billing execution"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 22,
+    "failures": 0,
+    "errors": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli": {"exit_code": 0, "status": "ok", "supported": 2, "gaps": 1},
+    "coverage": ["Normal review", "Traceable gaps", "Empty review", "Entity-linked evidence", "No cross-document term mixing", "Determinism", "Nonmutation", "Every-record residency", "CDR reconciliation", "GDPR/CCPA declarations", "Billing reasons", "Privacy-minimized output", "Malformed JSON", "Duplicate IDs and keys", "Unknown references", "Invalid types and numeric bounds", "Seeded synthetic usage", "CLI success and error behavior"]
+  }
+}

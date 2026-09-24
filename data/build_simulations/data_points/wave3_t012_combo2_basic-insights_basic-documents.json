@@ -107,7 +107,7 @@
   "split_group": "d93187eec6914da34b81d7852edaab806bb0f9a3bc356728234c1d5ccc479925",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "458837b916b806746bdb19fb757990f2176682432ceb1fcd03fbafc340e22474",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t012_combo2_basic-insights_basic-documents",
   "membership_point_id": "combo2_basic-insights_basic-documents",
@@ -115,8 +115,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "cd7cfda09da1481b88e40550827a1c0e2cd4982a5cd1358050d252babc0c2c64",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "aa28e562-7dea-415b-b20a-344af3a87161",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 129266,
+    "output_tokens": 9270,
+    "cache_read_tokens": 117674,
+    "cache_write_tokens": 11574,
+    "total_tokens": 138536,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36322,
+        "agent_id": "aa28e562-7dea-415b-b20a-344af3a87161",
+        "model": "gpt-6-astra",
+        "input_tokens": 14916,
+        "output_tokens": 195,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 832,
+        "reasoning_tokens": 0,
+        "duration_ms": 3980,
+        "created_at": "2026-09-24T08:40:20.673Z"
+      },
+      {
+        "id": 36332,
+        "agent_id": "aa28e562-7dea-415b-b20a-344af3a87161",
+        "model": "gpt-6-astra",
+        "input_tokens": 15142,
+        "output_tokens": 8038,
+        "cache_read_tokens": 14913,
+        "cache_write_tokens": 226,
+        "reasoning_tokens": 411,
+        "duration_ms": 97531,
+        "created_at": "2026-09-24T08:41:57.044Z"
+      },
+      {
+        "id": 36333,
+        "agent_id": "aa28e562-7dea-415b-b20a-344af3a87161",
+        "model": "gpt-6-astra",
+        "input_tokens": 23504,
+        "output_tokens": 155,
+        "cache_read_tokens": 15139,
+        "cache_write_tokens": 8362,
+        "reasoning_tokens": 0,
+        "duration_ms": 2971,
+        "created_at": "2026-09-24T08:42:01.473Z"
+      },
+      {
+        "id": 36336,
+        "agent_id": "aa28e562-7dea-415b-b20a-344af3a87161",
+        "model": "gpt-6-astra",
+        "input_tokens": 24754,
+        "output_tokens": 445,
+        "cache_read_tokens": 23501,
+        "cache_write_tokens": 1250,
+        "reasoning_tokens": 118,
+        "duration_ms": 8134,
+        "created_at": "2026-09-24T08:42:11.850Z"
+      },
+      {
+        "id": 36337,
+        "agent_id": "aa28e562-7dea-415b-b20a-344af3a87161",
+        "model": "gpt-6-astra",
+        "input_tokens": 25292,
+        "output_tokens": 321,
+        "cache_read_tokens": 24751,
+        "cache_write_tokens": 538,
+        "reasoning_tokens": 0,
+        "duration_ms": 6509,
+        "created_at": "2026-09-24T08:42:30.730Z"
+      },
+      {
+        "id": 36339,
+        "agent_id": "aa28e562-7dea-415b-b20a-344af3a87161",
+        "model": "gpt-6-astra",
+        "input_tokens": 25658,
+        "output_tokens": 116,
+        "cache_read_tokens": 25289,
+        "cache_write_tokens": 366,
+        "reasoning_tokens": 0,
+        "duration_ms": 3070,
+        "created_at": "2026-09-24T08:42:49.010Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.46221499999999993,
+      "observed_cache_profile_estimate_usd": 0.19744850000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.54658,
+      "observed_cache_profile_estimate_usd": 5.54658,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -147,5 +272,196 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 1.254s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "documents": {
+        "checks": {
+          "excluded_theme_count": 0,
+          "included_theme_count": 5,
+          "row_count": 5,
+          "source_feedback_count": 5
+        },
+        "content": "Theme,Mentions,Customers,Negative,Priority,Recommended action,Evidence IDs\nOther,1,1,0,MEDIUM,Review uncategorized feedback and refine themes.,SYN-005\nPricing,1,1,1,HIGH,Review pricing clarity and perceived value.,SYN-003\nReliability,1,1,1,HIGH,Investigate recurring failures and verify fixes.,SYN-001\nSupport,1,1,0,LOW,Review support response quality and follow-up.,SYN-002\nUsability,2,2,1,HIGH,Review the reported workflows with customers.,\"SYN-001, SYN-004\"\n",
+        "format": "csv",
+        "rows": [
+          {
+            "Customers": 1,
+            "Evidence IDs": "SYN-005",
+            "Mentions": 1,
+            "Negative": 0,
+            "Priority": "MEDIUM",
+            "Recommended action": "Review uncategorized feedback and refine themes.",
+            "Theme": "Other"
+          },
+          {
+            "Customers": 1,
+            "Evidence IDs": "SYN-003",
+            "Mentions": 1,
+            "Negative": 1,
+            "Priority": "HIGH",
+            "Recommended action": "Review pricing clarity and perceived value.",
+            "Theme": "Pricing"
+          },
+          {
+            "Customers": 1,
+            "Evidence IDs": "SYN-001",
+            "Mentions": 1,
+            "Negative": 1,
+            "Priority": "HIGH",
+            "Recommended action": "Investigate recurring failures and verify fixes.",
+            "Theme": "Reliability"
+          },
+          {
+            "Customers": 1,
+            "Evidence IDs": "SYN-002",
+            "Mentions": 1,
+            "Negative": 0,
+            "Priority": "LOW",
+            "Recommended action": "Review support response quality and follow-up.",
+            "Theme": "Support"
+          },
+          {
+            "Customers": 2,
+            "Evidence IDs": "SYN-001, SYN-004",
+            "Mentions": 2,
+            "Negative": 1,
+            "Priority": "HIGH",
+            "Recommended action": "Review the reported workflows with customers.",
+            "Theme": "Usability"
+          }
+        ],
+        "title": "SYNTHETIC customer feedback action report"
+      },
+      "fixture_label": "SYNTHETIC: fictional customer feedback for pipeline demonstration",
+      "insights": {
+        "feedback_count": 5,
+        "themes": [
+          {
+            "action": "Review uncategorized feedback and refine themes.",
+            "customer_count": 1,
+            "evidence": [
+              {
+                "customer": "Synthetic Dee",
+                "id": "SYN-005",
+                "sentiment": "neutral",
+                "text": "Please offer a dark theme."
+              }
+            ],
+            "mentions": 1,
+            "priority": "medium",
+            "sentiments": {
+              "negative": 0,
+              "neutral": 1,
+              "positive": 0
+            },
+            "theme": "Other"
+          },
+          {
+            "action": "Review pricing clarity and perceived value.",
+            "customer_count": 1,
+            "evidence": [
+              {
+                "customer": "Synthetic Ada",
+                "id": "SYN-003",
+                "sentiment": "negative",
+                "text": "The price is expensive."
+              }
+            ],
+            "mentions": 1,
+            "priority": "high",
+            "sentiments": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 0
+            },
+            "theme": "Pricing"
+          },
+          {
+            "action": "Investigate recurring failures and verify fixes.",
+            "customer_count": 1,
+            "evidence": [
+              {
+                "customer": "Synthetic Ada",
+                "id": "SYN-001",
+                "sentiment": "negative",
+                "text": "The app crash makes navigation confusing."
+              }
+            ],
+            "mentions": 1,
+            "priority": "high",
+            "sentiments": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 0
+            },
+            "theme": "Reliability"
+          },
+          {
+            "action": "Review support response quality and follow-up.",
+            "customer_count": 1,
+            "evidence": [
+              {
+                "customer": "Synthetic Ben",
+                "id": "SYN-002",
+                "sentiment": "positive",
+                "text": "Support was helpful and the response was excellent."
+              }
+            ],
+            "mentions": 1,
+            "priority": "low",
+            "sentiments": {
+              "negative": 0,
+              "neutral": 0,
+              "positive": 1
+            },
+            "theme": "Support"
+          },
+          {
+            "action": "Review the reported workflows with customers.",
+            "customer_count": 2,
+            "evidence": [
+              {
+                "customer": "Synthetic Ada",
+                "id": "SYN-001",
+                "sentiment": "negative",
+                "text": "The app crash makes navigation confusing."
+              },
+              {
+                "customer": "Synthetic Cleo",
+                "id": "SYN-004",
+                "sentiment": "positive",
+                "text": "Navigation is easy now."
+              }
+            ],
+            "mentions": 2,
+            "priority": "high",
+            "sentiments": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 1
+            },
+            "theme": "Usability"
+          }
+        ]
+      },
+      "schema_version": "1.0",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t012_combo2_basic-insights_basic-documents",
+    "artifact_sha256": {
+      "implementation.py": "d9a56570bf21899bbc4611ce89eea2fc7ee8d47a9f6534de0c3535739bb7d939",
+      "test_implementation.py": "99a051f4739b9b541f004447d32178fccf07f148a9a1261c2c13ec7e619743ad",
+      "example_input.json": "5076110d512ff29f1586c35b27c30bc59168afa956e7d011b77de3d274a60a8d",
+      "build_manifest.json": "035dc65f3b26776d508290c65deaf3e96d3b19c372540c9b30bf45a0e559dedb"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

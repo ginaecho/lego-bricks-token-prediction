@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "synthetic_fixture": true,
+  "allowlisted_hosts": ["insurance.example"],
+  "documents": [
+    {
+      "url": "https://insurance.example/claims",
+      "status": 200,
+      "content_type": "text/plain",
+      "body": "claim|SYNTHETIC guidance: Claims must be reviewed fairly with stated reasons, without automatic coverage denial.\nclaim|SYNTHETIC guidance: Escalate large losses for accountable human review; minimize policyholder data.\npolicy|SYNTHETIC policy service guidance: Refer policy questions to a named service owner."
+    }
+  ],
+  "ticket": {
+    "ticket_id": "TKT-SYN024",
+    "entity_type": "claim",
+    "format": "acord_json",
+    "source_urls": ["https://insurance.example/claims"],
+    "submission": {
+      "ACORD": {
+        "Claim": {
+          "Reference": "CLM-SYN024",
+          "PolicyReference": "POL-SYN024",
+          "PolicyholderName": "Invented Mira Example",
+          "VIN": "SYNTHVIN000000024",
+          "PropertyAddress": "24 Fabricated Lantern Lane, Imaginary Borough",
+          "Email": "mira.synthetic@example.invalid",
+          "Description": "SYNTHETIC claim: fictional storm damage; amount and date are fixture samples from random.Random(2403).",
+          "LossAmount": 56975.8,
+          "LossDate": "2025-05-23"
+        }
+      }
+    }
+  },
+  "config": {
+    "high_loss_amount": 50000,
+    "categories": {
+      "policy": "policy_service",
+      "claim": "claim_review",
+      "underwriting_submission": "underwriting_review"
+    },
+    "routes": {
+      "policy_service": {"team": "policy-service", "owner": "policy-duty-lead"},
+      "claim_review": {"team": "claims-review", "owner": "claims-duty-lead"},
+      "underwriting_review": {"team": "underwriting", "owner": "underwriting-duty-lead"}
+    }
+  }
+}

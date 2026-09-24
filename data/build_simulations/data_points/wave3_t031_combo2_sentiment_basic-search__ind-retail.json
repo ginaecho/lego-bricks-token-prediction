@@ -109,7 +109,7 @@
   "split_group": "2aa11b673b0b885a32b7b6f86529fbf937ac0603f64db5794c325e0ed7ffda32",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "6d080ff66b35997fcd5214864e8ee991141501dc7adb2f7d897ffcbc633c383c",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t031_combo2_sentiment_basic-search__ind-retail",
   "membership_point_id": "combo2_sentiment_basic-search__ind-retail",
@@ -117,8 +117,133 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "be49b134e964436f09fd679351df997bfe316b5b476229f707dcbd55a5706a82",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "8be520e8-b4c1-4fc1-82fa-1de0ba169865",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 124586,
+    "output_tokens": 7816,
+    "cache_read_tokens": 114484,
+    "cache_write_tokens": 10084,
+    "total_tokens": 132402,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36475,
+        "agent_id": "8be520e8-b4c1-4fc1-82fa-1de0ba169865",
+        "model": "gpt-6-astra",
+        "input_tokens": 15012,
+        "output_tokens": 228,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 928,
+        "reasoning_tokens": 56,
+        "duration_ms": 5430,
+        "created_at": "2026-09-24T09:00:05.772Z"
+      },
+      {
+        "id": 36483,
+        "agent_id": "8be520e8-b4c1-4fc1-82fa-1de0ba169865",
+        "model": "gpt-6-astra",
+        "input_tokens": 15266,
+        "output_tokens": 6947,
+        "cache_read_tokens": 15009,
+        "cache_write_tokens": 254,
+        "reasoning_tokens": 352,
+        "duration_ms": 83868,
+        "created_at": "2026-09-24T09:01:49.561Z"
+      },
+      {
+        "id": 36486,
+        "agent_id": "8be520e8-b4c1-4fc1-82fa-1de0ba169865",
+        "model": "gpt-6-astra",
+        "input_tokens": 22545,
+        "output_tokens": 150,
+        "cache_read_tokens": 15263,
+        "cache_write_tokens": 7279,
+        "reasoning_tokens": 8,
+        "duration_ms": 3032,
+        "created_at": "2026-09-24T09:02:05.720Z"
+      },
+      {
+        "id": 36487,
+        "agent_id": "8be520e8-b4c1-4fc1-82fa-1de0ba169865",
+        "model": "gpt-6-astra",
+        "input_tokens": 23645,
+        "output_tokens": 210,
+        "cache_read_tokens": 22542,
+        "cache_write_tokens": 1100,
+        "reasoning_tokens": 36,
+        "duration_ms": 4868,
+        "created_at": "2026-09-24T09:02:22.408Z"
+      },
+      {
+        "id": 36492,
+        "agent_id": "8be520e8-b4c1-4fc1-82fa-1de0ba169865",
+        "model": "gpt-6-astra",
+        "input_tokens": 23950,
+        "output_tokens": 185,
+        "cache_read_tokens": 23642,
+        "cache_write_tokens": 305,
+        "reasoning_tokens": 0,
+        "duration_ms": 3037,
+        "created_at": "2026-09-24T09:02:33.964Z"
+      },
+      {
+        "id": 36496,
+        "agent_id": "8be520e8-b4c1-4fc1-82fa-1de0ba169865",
+        "model": "gpt-6-astra",
+        "input_tokens": 24168,
+        "output_tokens": 96,
+        "cache_read_tokens": 23947,
+        "cache_write_tokens": 218,
+        "reasoning_tokens": 0,
+        "duration_ms": 2793,
+        "created_at": "2026-09-24T09:02:52.524Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.428705,
+      "observed_cache_profile_estimate_usd": 0.171116,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.1444600000000005,
+      "observed_cache_profile_estimate_usd": 5.1444600000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -149,5 +274,203 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................\n----------------------------------------------------------------------\nRan 20 tests in 1.194s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "input": {
+        "schema_version": 1,
+        "synthetic": true,
+        "catalog": [
+          {
+            "sku": "SYN-SHOE-001",
+            "name": "Nimbus Running Shoe",
+            "description": "Invented lightweight running footwear",
+            "category": "shoes",
+            "price_cents": 6499,
+            "currency": "USD",
+            "stock": 8
+          },
+          {
+            "sku": "SYN-SHOE-002",
+            "name": "Comet Running Shoe",
+            "description": "Invented cushioned running footwear",
+            "category": "shoes",
+            "price_cents": 7999,
+            "currency": "USD",
+            "stock": 0
+          },
+          {
+            "sku": "SYN-PACK-001",
+            "name": "Moss Trail Backpack",
+            "description": "Invented green daypack for walks",
+            "category": "backpacks",
+            "price_cents": 3599,
+            "currency": "USD",
+            "stock": 15
+          }
+        ],
+        "customer": {
+          "id": "SYN-SHOPPER-001",
+          "consent": {
+            "personalization": true
+          },
+          "preferred_categories": [
+            "shoes"
+          ]
+        },
+        "basket": [
+          {
+            "sku": "SYN-SHOE-001",
+            "quantity": 1
+          }
+        ],
+        "issues": [
+          {
+            "id": "SYN-ISSUE-001",
+            "sku": "SYN-SHOE-002",
+            "text": "The shoe is broken and unsafe. I am disappointed.",
+            "severity": "high"
+          },
+          {
+            "id": "SYN-ISSUE-002",
+            "sku": "SYN-PACK-001",
+            "text": "I love the backpack. It is not bad.",
+            "severity": "low"
+          }
+        ],
+        "query": "jogging trainers",
+        "clickstream": [
+          {
+            "sequence": 1,
+            "customer_id": "SYN-SHOPPER-001",
+            "action": "view",
+            "sku": "SYN-SHOE-002"
+          },
+          {
+            "sequence": 2,
+            "customer_id": "SYN-SHOPPER-001",
+            "action": "click",
+            "sku": "SYN-SHOE-001"
+          }
+        ]
+      },
+      "insights": {
+        "issues": [
+          {
+            "issue_id": "SYN-ISSUE-001",
+            "sku": "SYN-SHOE-002",
+            "category": "shoes",
+            "severity": "high",
+            "score": -8,
+            "sentiment": "negative",
+            "priority": 28,
+            "evidence": [
+              {
+                "token": "broken",
+                "position": 3,
+                "negated": false,
+                "weight": -3
+              },
+              {
+                "token": "unsafe",
+                "position": 5,
+                "negated": false,
+                "weight": -3
+              },
+              {
+                "token": "disappointed",
+                "position": 8,
+                "negated": false,
+                "weight": -2
+              }
+            ]
+          },
+          {
+            "issue_id": "SYN-ISSUE-002",
+            "sku": "SYN-PACK-001",
+            "category": "backpacks",
+            "severity": "low",
+            "score": 3,
+            "sentiment": "positive",
+            "priority": 0,
+            "evidence": [
+              {
+                "token": "love",
+                "position": 1,
+                "negated": false,
+                "weight": 2
+              },
+              {
+                "token": "bad",
+                "position": 7,
+                "negated": true,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "overall_score": -5,
+        "urgent": true,
+        "negative_categories": [
+          "shoes"
+        ]
+      },
+      "search": {
+        "query": "jogging trainers",
+        "normalized_terms": [
+          "running",
+          "shoe"
+        ],
+        "personalization_applied": true,
+        "urgent_in_stock_only": true,
+        "source_issue_ids": [
+          "SYN-ISSUE-001",
+          "SYN-ISSUE-002"
+        ],
+        "results": [
+          {
+            "product": {
+              "sku": "SYN-SHOE-001",
+              "name": "Nimbus Running Shoe",
+              "description": "Invented lightweight running footwear",
+              "category": "shoes",
+              "price_cents": 6499,
+              "currency": "USD",
+              "stock": 8
+            },
+            "score": 35,
+            "matched_terms": [
+              "running",
+              "shoe"
+            ],
+            "score_components": {
+              "query": 28,
+              "preferred_category": 2,
+              "clickstream": 1,
+              "basket": 1,
+              "issue_context": 3
+            }
+          }
+        ],
+        "message": "Catalog matches"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t031_combo2_sentiment_basic-search__ind-retail",
+    "artifact_sha256": {
+      "implementation.py": "79eac0921d615835f96fa5d642c37615e0b935fc7ffbbb6dbf266cd51bfcc010",
+      "test_implementation.py": "a0d0a7dab2af2ac8680d2a873c47b86fc19b2ffe71d51f7c2c793513f67464ec",
+      "example_input.json": "168990bde7b68fbabbb076377f0461ddccb1e779b13beb68f48494b81d3bf9ef",
+      "build_manifest.json": "be2f165c927d64800a516660c8fda61b7ca8a6af0d65756b1c4b3a91f0235c14"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

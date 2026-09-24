@@ -1,0 +1,52 @@
+{
+  "build_id": "wave3_t007_combo2_semantic_basic-onboard__ind-manufacturing",
+  "composition_label": "semantic -> basic:onboard",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation, authored in this directory.",
+    "runtime": "Python 3.13.15; standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "Synthetic flag, customer {customer_id,name,goal,role,experience}, query, optional limit 1..20, ERP/MES work_orders, telemetry_csv, quality_inspections.",
+    "entities": "Work orders contain fictitious assets, products, positive quantities, status and attributed maintenance logs. Telemetry and inspections reference an existing matching work order/asset.",
+    "measurements": "Supported metric/unit pairs: temperature/C, vibration/mm/s, diameter/mm. Finite numeric values, ordered inclusive tolerances and basic physical bounds are required. Telemetry times are timezone-aware and chronological per asset/metric.",
+    "output": "Versioned status/stage/customer/query envelope; search has ranked typed records, source evidence, all safety alerts and attributed quality decisions; onboarding carries the validated search envelope, one personalized next_step and human_escalations.",
+    "validation": "One validate function dispatches input/search/onboarding boundaries, sharing primitive and measurement validation. CLI errors are JSON status:error with exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Validated input becomes a normalized record collection for the local search index.",
+    "Ranked search hits are checked against source records, then consumed directly by onboarding.",
+    "Customer, query, work-order links, quality evidence and all safety alerts survive the handoff, even with no search hits."
+  ],
+  "behavior": {
+    "search": "Concept-normalized inverted index with a small explicit synonym vocabulary; weighted query coverage; descending score then record-ID tie break; positive-score results only.",
+    "embedding": "Optional Python callable receives query and document strings in one batch. Finite same-dimension nonzero vectors are validated. Scores combine 65% lexical coverage and 35% nonnegative cosine. No live provider.",
+    "onboarding": "Personalized by role, name, goal, experience and top search evidence. No hits prompt query refinement. Any safety-critical out-of-tolerance reading or failed inspection overrides normal onboarding and routes to a human safety supervisor.",
+    "quality_traceability": "Demonstrative ISO 9001-oriented traceability: attributed timestamped inspection decisions, rationale, measurements, units, tolerances and work-order/asset references are retained. Decisions must match evidence. No compliance certification claims.",
+    "fixture": "Clearly labeled invented customers, assets and maintenance logs with physically plausible seeded randomized telemetry."
+  },
+  "scope": {
+    "included": ["Integrated deterministic CLI", "Local semantic synonym search", "Optional validated embedding callable", "General-purpose role-based onboarding", "Manufacturing validation", "Unittest and CLI coverage"],
+    "excluded": ["Production deployment", "Live providers", "Persistent index", "Authentication", "Real ERP/MES integration", "Actual human notification delivery", "Autonomous machine control", "Regulatory certification", "Full natural-language understanding"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 22,
+    "failures": 0,
+    "errors": 0,
+    "cli_example": "Passed: exit 0, one valid JSON object, status ok, stage onboarding.",
+    "cli_errors": "Verified missing arguments, missing file, malformed JSON and invalid schema produce JSON status error and exit 2.",
+    "isolation": "Verified exactly the four requested deliverables; no bytecode or scratch files."
+  }
+}

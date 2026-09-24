@@ -1,0 +1,50 @@
+{
+  "build_id": "wave3_t036_combo2_basic-support_basic-search",
+  "composition_label": "basic:support -> basic:search",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created for this isolated build.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact fields: schema_version=1, message (nonblank, <=4000 characters), filters {category: string|null, max_price: finite nonnegative number|null, limit: integer 1..20}, knowledge [{id,question,answer,keywords:string[]}], products [{id,name,description,category,price,in_stock:boolean,tags:string[]}]. All textual record fields are nonblank. IDs are unique within each collection. Prices use a single caller-selected currency.",
+    "output": "Success: {schema_version:1,status:ok,support:{answer,citations,needs_human,search_request:{query,filters}},search:{query,filters,results:[{id,name,price,category,score,matched_terms}],message}}. Error: {status:error,error:string}.",
+    "validation": "Shared validate function validates input, grounded support contract, preserved handoff and search result shape. CLI rejects unknown fields, duplicate JSON object keys, malformed JSON and nonfinite numbers."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:support",
+      "to": "basic:search",
+      "payload": "Validated support.search_request contains the exact original query and a copied, validated filter object.",
+      "enforcement": "Search revalidates support output against input before consuming its search_request. Tampered queries, filters, citations or answer grounding are rejected."
+    }
+  ],
+  "behavior": {
+    "support": "Match normalized explicit knowledge keywords, select at most two topics by overlap then ID, quote supplied answers with citation IDs. Unsupported questions receive a fixed uncertainty response and needs_human=true without blocking search. No ticket is sent or created.",
+    "search": "Unicode word tokenization, case folding, stopword removal and bounded synonym normalization. Weighted overlap favors names/tags over descriptions/categories. Stock, category, price and limit are hard filters. Stable ordering is score descending, price ascending, ID ascending. Unrelated catalog items are not returned.",
+    "injection": "Optional run(data, responder=callable) receives an isolated support proposal. Shared validation permits only exact cited knowledge or the fixed fallback and prohibits changed search intent. Tests use offline identity, malformed and fabricated-answer fixtures.",
+    "fixtures": "All example policy and product records are clearly labeled synthetic."
+  },
+  "scope": {
+    "included": ["Offline integrated CLI", "Shared input and stage validation", "Grounded FAQ support", "Deterministic synonym-aware catalog search", "Structured errors", "Unit and subprocess CLI tests"],
+    "excluded": ["Live providers", "Networks", "Persistence", "Real support ticket creation", "Order/account access", "Embeddings", "Fuzzy spelling correction", "Automatic natural-language price parsing", "Production security hardening", "Multi-currency conversion"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": 16,
+    "unit_tests_passed": 16,
+    "unit_test_exit_code": 0,
+    "cli_example": "Passed: one JSON object, status ok, grounded return policy and two matching in-stock products within the price cap.",
+    "cli_exit_code": 0
+  }
+}

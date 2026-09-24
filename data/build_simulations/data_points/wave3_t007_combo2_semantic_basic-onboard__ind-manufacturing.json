@@ -109,7 +109,7 @@
   "split_group": "00bb9fad85b0fc3b3f505aa7db13845becf422f046374914e7053f078d06987a",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "dc50880d57acf416327430a6a403bf6a73c8f9965845ed7d90337603328ad480",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t007_combo2_semantic_basic-onboard__ind-manufacturing",
   "membership_point_id": "combo2_semantic_basic-onboard__ind-manufacturing",
@@ -117,8 +117,145 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "8cea47dd765289eb001fe2a99d9ba3566850544bfe4a66655651786c64638274",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b95076f0-3fc0-410b-b9da-c06f1b081843",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 167913,
+    "output_tokens": 11963,
+    "cache_read_tokens": 152818,
+    "cache_write_tokens": 15074,
+    "total_tokens": 179876,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36296,
+        "agent_id": "b95076f0-3fc0-410b-b9da-c06f1b081843",
+        "model": "gpt-6-astra",
+        "input_tokens": 15018,
+        "output_tokens": 439,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 934,
+        "reasoning_tokens": 207,
+        "duration_ms": 11873,
+        "created_at": "2026-09-24T08:35:16.464Z"
+      },
+      {
+        "id": 36324,
+        "agent_id": "b95076f0-3fc0-410b-b9da-c06f1b081843",
+        "model": "gpt-6-astra",
+        "input_tokens": 15488,
+        "output_tokens": 8717,
+        "cache_read_tokens": 15015,
+        "cache_write_tokens": 470,
+        "reasoning_tokens": 0,
+        "duration_ms": 130824,
+        "created_at": "2026-09-24T08:41:02.327Z"
+      },
+      {
+        "id": 36325,
+        "agent_id": "b95076f0-3fc0-410b-b9da-c06f1b081843",
+        "model": "gpt-6-astra",
+        "input_tokens": 24545,
+        "output_tokens": 350,
+        "cache_read_tokens": 15485,
+        "cache_write_tokens": 9057,
+        "reasoning_tokens": 139,
+        "duration_ms": 8249,
+        "created_at": "2026-09-24T08:41:14.601Z"
+      },
+      {
+        "id": 36328,
+        "agent_id": "b95076f0-3fc0-410b-b9da-c06f1b081843",
+        "model": "gpt-6-astra",
+        "input_tokens": 26418,
+        "output_tokens": 1801,
+        "cache_read_tokens": 24542,
+        "cache_write_tokens": 1873,
+        "reasoning_tokens": 190,
+        "duration_ms": 27432,
+        "created_at": "2026-09-24T08:41:47.430Z"
+      },
+      {
+        "id": 36334,
+        "agent_id": "b95076f0-3fc0-410b-b9da-c06f1b081843",
+        "model": "gpt-6-astra",
+        "input_tokens": 28478,
+        "output_tokens": 260,
+        "cache_read_tokens": 26415,
+        "cache_write_tokens": 2060,
+        "reasoning_tokens": 15,
+        "duration_ms": 4846,
+        "created_at": "2026-09-24T08:42:03.627Z"
+      },
+      {
+        "id": 36335,
+        "agent_id": "b95076f0-3fc0-410b-b9da-c06f1b081843",
+        "model": "gpt-6-astra",
+        "input_tokens": 28808,
+        "output_tokens": 253,
+        "cache_read_tokens": 28475,
+        "cache_write_tokens": 330,
+        "reasoning_tokens": 0,
+        "duration_ms": 4799,
+        "created_at": "2026-09-24T08:42:11.660Z"
+      },
+      {
+        "id": 36338,
+        "agent_id": "b95076f0-3fc0-410b-b9da-c06f1b081843",
+        "model": "gpt-6-astra",
+        "input_tokens": 29158,
+        "output_tokens": 143,
+        "cache_read_tokens": 28805,
+        "cache_write_tokens": 350,
+        "reasoning_tokens": 40,
+        "duration_ms": 3867,
+        "created_at": "2026-09-24T08:42:48.932Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5992275,
+      "observed_cache_profile_estimate_usd": 0.25538700000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.19073,
+      "observed_cache_profile_estimate_usd": 7.19073,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -149,5 +286,207 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "......................\n----------------------------------------------------------------------\nRan 22 tests in 1.365s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "customer": {
+        "customer_id": "SYN-CUSTOMER-01",
+        "experience": "new",
+        "goal": "Understand bearing vibration before beginning a new work order",
+        "name": "Synthetic Avery",
+        "role": "operator"
+      },
+      "human_escalations": [],
+      "next_step": {
+        "action": "review_work_order_and_safety_checklist",
+        "customer_id": "SYN-CUSTOMER-01",
+        "goal": "Understand bearing vibration before beginning a new work order",
+        "guidance_level": "guided",
+        "instruction": "Synthetic Avery, review work order and safety checklist for SYN-WO-101 to support your goal: Understand bearing vibration before beginning a new work order.",
+        "owner": "operator",
+        "record_id": "sensor:SYN-R003",
+        "requires_human": false,
+        "work_order_id": "SYN-WO-101"
+      },
+      "query": "bearing shaking",
+      "schema_version": 1,
+      "search": {
+        "alerts": [],
+        "customer": {
+          "customer_id": "SYN-CUSTOMER-01",
+          "experience": "new",
+          "goal": "Understand bearing vibration before beginning a new work order",
+          "name": "Synthetic Avery",
+          "role": "operator"
+        },
+        "hits": [
+          {
+            "record": {
+              "asset_id": "SYN-LATHE-07",
+              "data": {
+                "asset_id": "SYN-LATHE-07",
+                "lower": 0.0,
+                "metric": "vibration",
+                "reading_id": "SYN-R003",
+                "safety_critical": true,
+                "timestamp": "2026-09-24T08:00:00Z",
+                "unit": "mm/s",
+                "upper": 4.5,
+                "value": 2.38,
+                "work_order_id": "SYN-WO-101"
+              },
+              "kind": "sensor",
+              "record_id": "sensor:SYN-R003",
+              "text": "vibration telemetry Precision bearing housing",
+              "work_order_id": "SYN-WO-101"
+            },
+            "score": 1.0
+          },
+          {
+            "record": {
+              "asset_id": "SYN-LATHE-07",
+              "data": {
+                "asset_id": "SYN-LATHE-07",
+                "lower": 0.0,
+                "metric": "vibration",
+                "reading_id": "SYN-R004",
+                "safety_critical": true,
+                "timestamp": "2026-09-24T08:01:00Z",
+                "unit": "mm/s",
+                "upper": 4.5,
+                "value": 2.51,
+                "work_order_id": "SYN-WO-101"
+              },
+              "kind": "sensor",
+              "record_id": "sensor:SYN-R004",
+              "text": "vibration telemetry Precision bearing housing",
+              "work_order_id": "SYN-WO-101"
+            },
+            "score": 1.0
+          },
+          {
+            "record": {
+              "asset_id": "SYN-LATHE-07",
+              "data": {
+                "asset_id": "SYN-LATHE-07",
+                "description": "Machine a batch of housings; review vibration telemetry and diameter inspection.",
+                "maintenance_logs": [
+                  {
+                    "note": "Invented maintenance: spindle lubrication checked and bearing guard visually reviewed.",
+                    "technician": "Synthetic Morgan",
+                    "timestamp": "2026-09-23T14:00:00Z"
+                  }
+                ],
+                "product": "Precision bearing housing",
+                "quantity": 120,
+                "status": "planned",
+                "work_order_id": "SYN-WO-101"
+              },
+              "kind": "work_order",
+              "record_id": "work_order:SYN-WO-101",
+              "text": "Precision bearing housing Machine a batch of housings; review vibration telemetry and diameter inspection. Invented maintenance: spindle lubrication checked and bearing guard visually reviewed.",
+              "work_order_id": "SYN-WO-101"
+            },
+            "score": 1.0
+          },
+          {
+            "record": {
+              "asset_id": "SYN-LATHE-07",
+              "data": {
+                "asset_id": "SYN-LATHE-07",
+                "decision": "pass",
+                "inspection_id": "SYN-QI-001",
+                "inspector": "Synthetic Casey",
+                "lower": 24.95,
+                "metric": "diameter",
+                "rationale": "Invented first-piece measurement lies within the supplied dimensional tolerance.",
+                "safety_critical": false,
+                "timestamp": "2026-09-24T08:02:00Z",
+                "unit": "mm",
+                "upper": 25.05,
+                "value": 25.01,
+                "work_order_id": "SYN-WO-101"
+              },
+              "kind": "quality_inspection",
+              "record_id": "inspection:SYN-QI-001",
+              "text": "quality inspection diameter Invented first-piece measurement lies within the supplied dimensional tolerance. Precision bearing housing",
+              "work_order_id": "SYN-WO-101"
+            },
+            "score": 0.40101178
+          },
+          {
+            "record": {
+              "asset_id": "SYN-LATHE-07",
+              "data": {
+                "asset_id": "SYN-LATHE-07",
+                "lower": 20.0,
+                "metric": "temperature",
+                "reading_id": "SYN-R001",
+                "safety_critical": true,
+                "timestamp": "2026-09-24T08:00:00Z",
+                "unit": "C",
+                "upper": 80.0,
+                "value": 64.83,
+                "work_order_id": "SYN-WO-101"
+              },
+              "kind": "sensor",
+              "record_id": "sensor:SYN-R001",
+              "text": "temperature telemetry Precision bearing housing",
+              "work_order_id": "SYN-WO-101"
+            },
+            "score": 0.40101178
+          }
+        ],
+        "quality_decisions": [
+          {
+            "asset_id": "SYN-LATHE-07",
+            "decision": "pass",
+            "evidence": {
+              "asset_id": "SYN-LATHE-07",
+              "decision": "pass",
+              "inspection_id": "SYN-QI-001",
+              "inspector": "Synthetic Casey",
+              "lower": 24.95,
+              "metric": "diameter",
+              "rationale": "Invented first-piece measurement lies within the supplied dimensional tolerance.",
+              "safety_critical": false,
+              "timestamp": "2026-09-24T08:02:00Z",
+              "unit": "mm",
+              "upper": 25.05,
+              "value": 25.01,
+              "work_order_id": "SYN-WO-101"
+            },
+            "inspector": "Synthetic Casey",
+            "rationale": "Invented first-piece measurement lies within the supplied dimensional tolerance.",
+            "record_id": "inspection:SYN-QI-001",
+            "timestamp": "2026-09-24T08:02:00Z",
+            "work_order_id": "SYN-WO-101"
+          }
+        ],
+        "query": "bearing shaking",
+        "schema_version": 1,
+        "stage": "search",
+        "status": "ok",
+        "synthetic": true
+      },
+      "stage": "onboarding",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t007_combo2_semantic_basic-onboard__ind-manufacturing",
+    "artifact_sha256": {
+      "implementation.py": "f1d4d436728d489005e5ba1c4c9dfec2ad090bdb0b3c03f5439ab878b16156b7",
+      "test_implementation.py": "9d2d1d18c85b28a20f1fbd4f532fd81f5e4c90a9c354c8ec340265ccae37988c",
+      "example_input.json": "2c0327e5f18e5a9c89bd84196b5365fb00d4d277dfb8ad36719ed743a24ebcc5",
+      "build_manifest.json": "fb490f51ac5900e0a74e8617fbb44ef6d500ce90ec757d0f9369e9d5e083ddda"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

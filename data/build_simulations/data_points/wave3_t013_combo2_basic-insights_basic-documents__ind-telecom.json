@@ -107,7 +107,7 @@
   "split_group": "c41c52223752983f7c558a08f9e328a48898be9fc7eeb5258f57b8b00eeebc69",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "4ccfe983d1dec8075d9a6bdeb453e758b75b855c818de28fbb78f26166827b9e",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t013_combo2_basic-insights_basic-documents__ind-telecom",
   "membership_point_id": "combo2_basic-insights_basic-documents__ind-telecom",
@@ -115,8 +115,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "05928c14bb2e2c3fbb468f83aea83610bfbee76a32edf958a8f6a62f599d6e27",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "fb53ac4b-f1bc-49ed-9928-bf79742aef16",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 133043,
+    "output_tokens": 10441,
+    "cache_read_tokens": 120068,
+    "cache_write_tokens": 12957,
+    "total_tokens": 143484,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36330,
+        "agent_id": "fb53ac4b-f1bc-49ed-9928-bf79742aef16",
+        "model": "gpt-6-astra",
+        "input_tokens": 15031,
+        "output_tokens": 176,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 947,
+        "reasoning_tokens": 0,
+        "duration_ms": 3821,
+        "created_at": "2026-09-24T08:41:53.502Z"
+      },
+      {
+        "id": 36351,
+        "agent_id": "fb53ac4b-f1bc-49ed-9928-bf79742aef16",
+        "model": "gpt-6-astra",
+        "input_tokens": 15233,
+        "output_tokens": 8343,
+        "cache_read_tokens": 15028,
+        "cache_write_tokens": 202,
+        "reasoning_tokens": 885,
+        "duration_ms": 121120,
+        "created_at": "2026-09-24T08:43:53.535Z"
+      },
+      {
+        "id": 36354,
+        "agent_id": "fb53ac4b-f1bc-49ed-9928-bf79742aef16",
+        "model": "gpt-6-astra",
+        "input_tokens": 23920,
+        "output_tokens": 239,
+        "cache_read_tokens": 15230,
+        "cache_write_tokens": 8687,
+        "reasoning_tokens": 50,
+        "duration_ms": 5349,
+        "created_at": "2026-09-24T08:44:12.967Z"
+      },
+      {
+        "id": 36355,
+        "agent_id": "fb53ac4b-f1bc-49ed-9928-bf79742aef16",
+        "model": "gpt-6-astra",
+        "input_tokens": 25129,
+        "output_tokens": 1297,
+        "cache_read_tokens": 23917,
+        "cache_write_tokens": 1209,
+        "reasoning_tokens": 114,
+        "duration_ms": 17657,
+        "created_at": "2026-09-24T08:44:23.695Z"
+      },
+      {
+        "id": 36356,
+        "agent_id": "fb53ac4b-f1bc-49ed-9928-bf79742aef16",
+        "model": "gpt-6-astra",
+        "input_tokens": 26689,
+        "output_tokens": 291,
+        "cache_read_tokens": 25126,
+        "cache_write_tokens": 1560,
+        "reasoning_tokens": 0,
+        "duration_ms": 5769,
+        "created_at": "2026-09-24T08:44:28.987Z"
+      },
+      {
+        "id": 36357,
+        "agent_id": "fb53ac4b-f1bc-49ed-9928-bf79742aef16",
+        "model": "gpt-6-astra",
+        "input_tokens": 27041,
+        "output_tokens": 95,
+        "cache_read_tokens": 26686,
+        "cache_write_tokens": 352,
+        "reasoning_tokens": 0,
+        "duration_ms": 3076,
+        "created_at": "2026-09-24T08:44:39.923Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4892225,
+      "observed_cache_profile_estimate_usd": 0.21906949999999997,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.87067,
+      "observed_cache_profile_estimate_usd": 5.87067,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -147,5 +272,177 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..........................\n----------------------------------------------------------------------\nRan 26 tests in 1.055s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "documents": {
+        "fixture_label": "SYNTHETIC",
+        "records": [
+          {
+            "adjustments": [
+              {
+                "amount": "-3.25",
+                "reason": "service_outage",
+                "residency": "EU",
+                "usage_ref": "72409cbf0e192afe646bc9da"
+              }
+            ],
+            "checks": {
+              "billing_reconciliation": "passed",
+              "residency": "passed",
+              "subscriber_minimization": "passed"
+            },
+            "document_id": "service-review-3c65bdb5eac8a4177cfa3ce1",
+            "residency": "EU",
+            "subscriber_ref": "3c65bdb5eac8a4177cfa3ce1",
+            "themes": [
+              {
+                "action": "Investigate network reliability and affected fault tickets.",
+                "evidence_count": 2,
+                "name": "connectivity"
+              },
+              {
+                "action": "Review coverage and roaming availability.",
+                "evidence_count": 1,
+                "name": "coverage"
+              }
+            ],
+            "ticket_refs": [
+              "22c49601821a395b2dc84f7b"
+            ],
+            "type": "document",
+            "usage": {
+              "billing_adjustment_total": "-3.25",
+              "call_minutes": 267,
+              "data_mb": 9540,
+              "record_count": 2
+            }
+          },
+          {
+            "adjustments": [
+              {
+                "amount": "-1.10",
+                "reason": "billing_correction",
+                "residency": "US",
+                "usage_ref": "4325efcba4364f61975de0c9"
+              }
+            ],
+            "checks": {
+              "billing_reconciliation": "passed",
+              "residency": "passed",
+              "subscriber_minimization": "passed"
+            },
+            "document_id": "service-review-10d36f0a1f5768cdf0adbde8",
+            "residency": "US",
+            "subscriber_ref": "10d36f0a1f5768cdf0adbde8",
+            "themes": [
+              {
+                "action": "Review charges and explain eligible corrections.",
+                "evidence_count": 2,
+                "name": "billing"
+              }
+            ],
+            "ticket_refs": [
+              "b61210f24c457e57a0926382"
+            ],
+            "type": "document",
+            "usage": {
+              "billing_adjustment_total": "-1.10",
+              "call_minutes": 95,
+              "data_mb": 4189,
+              "record_count": 1
+            }
+          }
+        ],
+        "schema_version": 1,
+        "stage": "documents"
+      },
+      "insights": {
+        "fixture_label": "SYNTHETIC",
+        "records": [
+          {
+            "adjustments": [
+              {
+                "amount": "-3.25",
+                "reason": "service_outage",
+                "residency": "EU",
+                "usage_ref": "72409cbf0e192afe646bc9da"
+              }
+            ],
+            "residency": "EU",
+            "subscriber_ref": "3c65bdb5eac8a4177cfa3ce1",
+            "themes": [
+              {
+                "action": "Investigate network reliability and affected fault tickets.",
+                "evidence_count": 2,
+                "name": "connectivity"
+              },
+              {
+                "action": "Review coverage and roaming availability.",
+                "evidence_count": 1,
+                "name": "coverage"
+              }
+            ],
+            "ticket_refs": [
+              "22c49601821a395b2dc84f7b"
+            ],
+            "type": "insight",
+            "usage": {
+              "billing_adjustment_total": "-3.25",
+              "call_minutes": 267,
+              "data_mb": 9540,
+              "record_count": 2
+            }
+          },
+          {
+            "adjustments": [
+              {
+                "amount": "-1.10",
+                "reason": "billing_correction",
+                "residency": "US",
+                "usage_ref": "4325efcba4364f61975de0c9"
+              }
+            ],
+            "residency": "US",
+            "subscriber_ref": "10d36f0a1f5768cdf0adbde8",
+            "themes": [
+              {
+                "action": "Review charges and explain eligible corrections.",
+                "evidence_count": 2,
+                "name": "billing"
+              }
+            ],
+            "ticket_refs": [
+              "b61210f24c457e57a0926382"
+            ],
+            "type": "insight",
+            "usage": {
+              "billing_adjustment_total": "-1.10",
+              "call_minutes": 95,
+              "data_mb": 4189,
+              "record_count": 1
+            }
+          }
+        ],
+        "schema_version": 1,
+        "stage": "insights"
+      },
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t013_combo2_basic-insights_basic-documents__ind-telecom",
+    "artifact_sha256": {
+      "implementation.py": "8031bb35f640ebc3447a4483ee4ed616d0a3784cd154c92712d43dcbc1ba119c",
+      "test_implementation.py": "9db69c04dd54c30d54ab8b9d991ad8f5402ff10e686212cebbd85a1104c16159",
+      "example_input.json": "c4106337195272a86176f448acf5cbcc9b02378ca1231a83f96fbb25fd5391a2",
+      "build_manifest.json": "4618ffee7d678a458a3d8a6e0968d1aad7af45cc1421e117a346cb8229ef152f"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

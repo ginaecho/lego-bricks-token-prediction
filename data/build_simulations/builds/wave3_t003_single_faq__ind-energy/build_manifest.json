@@ -1,0 +1,45 @@
+{
+  "build_id": "wave3_t003_single_faq__ind-energy",
+  "composition_label": "single_faq",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict JSON envelope: schema_version, synthetic=true, question, grid_assets, smart_meter_interval_csv, telemetry, outage_reports, safety_rules, knowledge_base. Arrays contain explicitly typed records; unknown fields are rejected.",
+    "meter_reading": "CSV header timestamp,meter_id,asset_id,consumption_kwh; timezone-aware timestamps strictly increasing per meter; finite nonnegative consumption. Example has winter and summer half-hour observations with intentional gaps.",
+    "grid_asset": "Fictitious SYN identifier, substation/device kind, boolean critical marker, validated connected_to references",
+    "outage_report": "Unique report_id, registered asset_id, timezone-aware timestamp, hazard, declared priority",
+    "telemetry": "SCADA-style JSON with timestamp, asset_id, voltage_kv, load_mw, status, emissions {value,unit,source}",
+    "output": "schema_version, synthetic, status (answered/abstained), answer, abstention_reason, citations, entities, protection. File/schema errors use schema_version,status=error,error and exit 2.",
+    "validation": "One shared validate() boundary checks every entity before retrieval. Answer callable outputs are validated against immutable retrieved excerpts."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: validated shared request -> deterministic knowledge retrieval -> cited extractive answer or explicit abstention -> recursive critical identifier redaction."
+  ],
+  "behavior": {
+    "retrieval": "Lowercase token matching against KB titles/tags after stopword removal; require at least 50% query-token coverage; rank by overlap descending and article ID ascending; top three.",
+    "grounding": "Answers consist solely of cited KB excerpts, never inferred operational status or restoration predictions.",
+    "abstention": "Empty/no sufficiently relevant knowledge yields null answer, empty citations and explicit reason; abstention exits 0.",
+    "optional_callable": "Python API answer_request(data, answer_callable=None). Injected local callable receives copied, redacted question/evidence; returns answer and evidence_ids. Exact excerpt equality and citation membership required. CLI uses deterministic mode.",
+    "asset_protection": "Case-insensitive recursive redaction of all registered critical identifiers before external callable input and final output; generic CLI errors never echo input or paths.",
+    "outage_safety": "Fixed declared rules life_safety=critical, essential_service=high, routine=normal; inconsistent priorities and rule overrides rejected.",
+    "emissions": "Structured figures must be finite and nonnegative with kgCO2e, tCO2e or gCO2e/kWh units and a nonblank source."
+  },
+  "scope": {
+    "included": ["Clearly labeled synthetic grid topology and seasonal consumption", "CSV and SCADA-style JSON validation", "Knowledge retrieval, exact cited answers, abstention", "Demonstrative NERC CIP-style critical-identifier protection", "Optional fixture-tested local callable"],
+    "excluded": ["Compliance certification", "Real critical infrastructure identifiers", "Live SCADA/meter integration", "Provider calls", "Authentication, encryption and production access control", "Semantic truth verification of operator-authored KB prose or emissions source", "Outage dispatch or physical asset control"]
+  },
+  "test_outcomes": {"status": "passed", "tests_passed": 16, "tests_failed": 0, "cli_exit_code": 0, "cli_output_status": "answered", "coverage": ["Grounded answers", "Unknown question and empty knowledge abstention", "Critical identifier redaction", "All declared outage priority rules", "Emissions units/source/finiteness", "Invalid CSV", "Invalid topology and schema", "Injected callable grounding and mutation isolation", "CLI success, usage, file errors, malformed JSON and duplicate keys"]}
+}

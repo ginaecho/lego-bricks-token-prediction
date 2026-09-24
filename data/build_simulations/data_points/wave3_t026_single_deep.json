@@ -97,7 +97,7 @@
   "split_group": "3bcbdbfeabe66919ef169526ed028d2172dda37348ee1e2e7ea3a45e7727d1b3",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "3bd04f647cf4cab519875de85c713a9857813c9e3a0ec655580ed96f739df084",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t026_single_deep",
   "membership_point_id": "single_deep",
@@ -105,8 +105,133 @@
   "trial_category": "BT_single_repeat",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "ff4fd8f09c57ffb5e1c51fe62fdfa1414cdd536d078072f4503e5c601af2d8b1",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "457d47e9-b51b-42a3-b125-692613b5ed0b",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 119579,
+    "output_tokens": 6787,
+    "cache_read_tokens": 110714,
+    "cache_write_tokens": 8847,
+    "total_tokens": 126366,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36439,
+        "agent_id": "457d47e9-b51b-42a3-b125-692613b5ed0b",
+        "model": "gpt-6-astra",
+        "input_tokens": 14810,
+        "output_tokens": 521,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 726,
+        "reasoning_tokens": 343,
+        "duration_ms": 13732,
+        "created_at": "2026-09-24T08:55:40.940Z"
+      },
+      {
+        "id": 36444,
+        "agent_id": "457d47e9-b51b-42a3-b125-692613b5ed0b",
+        "model": "gpt-6-astra",
+        "input_tokens": 15364,
+        "output_tokens": 5652,
+        "cache_read_tokens": 14807,
+        "cache_write_tokens": 554,
+        "reasoning_tokens": 0,
+        "duration_ms": 68575,
+        "created_at": "2026-09-24T08:56:50.345Z"
+      },
+      {
+        "id": 36445,
+        "agent_id": "457d47e9-b51b-42a3-b125-692613b5ed0b",
+        "model": "gpt-6-astra",
+        "input_tokens": 21320,
+        "output_tokens": 133,
+        "cache_read_tokens": 15361,
+        "cache_write_tokens": 5956,
+        "reasoning_tokens": 0,
+        "duration_ms": 2647,
+        "created_at": "2026-09-24T08:56:53.138Z"
+      },
+      {
+        "id": 36451,
+        "agent_id": "457d47e9-b51b-42a3-b125-692613b5ed0b",
+        "model": "gpt-6-astra",
+        "input_tokens": 22431,
+        "output_tokens": 204,
+        "cache_read_tokens": 21317,
+        "cache_write_tokens": 1111,
+        "reasoning_tokens": 0,
+        "duration_ms": 3428,
+        "created_at": "2026-09-24T08:57:20.503Z"
+      },
+      {
+        "id": 36454,
+        "agent_id": "457d47e9-b51b-42a3-b125-692613b5ed0b",
+        "model": "gpt-6-astra",
+        "input_tokens": 22723,
+        "output_tokens": 175,
+        "cache_read_tokens": 22428,
+        "cache_write_tokens": 292,
+        "reasoning_tokens": 0,
+        "duration_ms": 2954,
+        "created_at": "2026-09-24T08:57:34.907Z"
+      },
+      {
+        "id": 36456,
+        "agent_id": "457d47e9-b51b-42a3-b125-692613b5ed0b",
+        "model": "gpt-6-astra",
+        "input_tokens": 22931,
+        "output_tokens": 102,
+        "cache_read_tokens": 22720,
+        "cache_write_tokens": 208,
+        "reasoning_tokens": 0,
+        "duration_ms": 2975,
+        "created_at": "2026-09-24T08:57:49.199Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4007525,
+      "observed_cache_profile_estimate_usd": 0.151646,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.80903,
+      "observed_cache_profile_estimate_usd": 4.80903,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,176 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............\n----------------------------------------------------------------------\nRan 13 tests in 0.780s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "synthetic": true,
+      "question_results": [
+        {
+          "question_id": "q1",
+          "question": "Does the synthetic checkout redesign reduce abandonment?",
+          "finding": "disputed",
+          "summary": "disputed: 1 supporting, 1 contradicting, 0 uncertain documents. These are supplied annotations, not independently verified conclusions.",
+          "document_ids_by_stance": {
+            "supports": [
+              "pilot"
+            ],
+            "contradicts": [
+              "followup"
+            ],
+            "uncertain": []
+          },
+          "distinct_document_count": 2,
+          "evidence": [
+            {
+              "id": "e3",
+              "question_id": "q1",
+              "stance": "contradicts",
+              "excerpt": "Abandonment increased in the follow-up cohort.",
+              "document_id": "followup",
+              "document_title": "SYNTHETIC: Follow-up cohort report"
+            },
+            {
+              "id": "e1",
+              "question_id": "q1",
+              "stance": "supports",
+              "excerpt": "Abandonment fell in the pilot cohort.",
+              "document_id": "pilot",
+              "document_title": "SYNTHETIC: Pilot cohort report"
+            }
+          ],
+          "disagreements": [
+            {
+              "supporting_evidence_ids": [
+                "e1"
+              ],
+              "contradicting_evidence_ids": [
+                "e3"
+              ],
+              "internally_conflicted_document_ids": [],
+              "cross_document": true
+            }
+          ],
+          "unresolved_questions": [
+            {
+              "question": "Does the synthetic checkout redesign reduce abandonment?",
+              "reason": "Opposing evidence needs reconciliation; document counts do not decide truth."
+            }
+          ]
+        },
+        {
+          "question_id": "q2",
+          "question": "Does the redesign improve repeat purchasing?",
+          "finding": "uncertain_only",
+          "summary": "uncertain_only: 0 supporting, 0 contradicting, 1 uncertain documents. These are supplied annotations, not independently verified conclusions.",
+          "document_ids_by_stance": {
+            "supports": [],
+            "contradicts": [],
+            "uncertain": [
+              "pilot"
+            ]
+          },
+          "distinct_document_count": 1,
+          "evidence": [
+            {
+              "id": "e2",
+              "question_id": "q2",
+              "stance": "uncertain",
+              "excerpt": "Repeat purchasing was not measured.",
+              "document_id": "pilot",
+              "document_title": "SYNTHETIC: Pilot cohort report"
+            }
+          ],
+          "disagreements": [],
+          "unresolved_questions": [
+            {
+              "question": "Does the redesign improve repeat purchasing?",
+              "reason": "At least one source explicitly leaves this question uncertain."
+            },
+            {
+              "question": "Does the redesign improve repeat purchasing?",
+              "reason": "Only one document addresses this question; seek independent corroboration."
+            }
+          ]
+        },
+        {
+          "question_id": "q3",
+          "question": "Does the redesign improve accessibility?",
+          "finding": "no_evidence",
+          "summary": "no_evidence: 0 supporting, 0 contradicting, 0 uncertain documents. These are supplied annotations, not independently verified conclusions.",
+          "document_ids_by_stance": {
+            "supports": [],
+            "contradicts": [],
+            "uncertain": []
+          },
+          "distinct_document_count": 0,
+          "evidence": [],
+          "disagreements": [],
+          "unresolved_questions": [
+            {
+              "question": "Does the redesign improve accessibility?",
+              "reason": "No supplied evidence addresses this question."
+            }
+          ]
+        }
+      ],
+      "unresolved_questions": [
+        {
+          "question": "Does the synthetic checkout redesign reduce abandonment?",
+          "reason": "Opposing evidence needs reconciliation; document counts do not decide truth.",
+          "question_id": "q1"
+        },
+        {
+          "question": "Does the redesign improve repeat purchasing?",
+          "reason": "At least one source explicitly leaves this question uncertain.",
+          "question_id": "q2"
+        },
+        {
+          "question": "Does the redesign improve repeat purchasing?",
+          "reason": "Only one document addresses this question; seek independent corroboration.",
+          "question_id": "q2"
+        },
+        {
+          "question": "Does the redesign improve accessibility?",
+          "reason": "No supplied evidence addresses this question.",
+          "question_id": "q3"
+        }
+      ],
+      "source_inventory": [
+        {
+          "document_id": "followup",
+          "title": "SYNTHETIC: Follow-up cohort report",
+          "evidence_count": 1
+        },
+        {
+          "document_id": "pilot",
+          "title": "SYNTHETIC: Pilot cohort report",
+          "evidence_count": 2
+        }
+      ],
+      "limitations": [
+        "Evidence relevance and stance are supplied by the caller, not inferred.",
+        "Verbatim excerpt validation establishes provenance, not truth or source independence.",
+        "No live research, causal inference, confidence scoring, or majority-vote resolution.",
+        "An empty unresolved list means no rule-triggered gaps, not a complete research answer."
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t026_single_deep",
+    "artifact_sha256": {
+      "implementation.py": "cd19456bdfdc0fe7aed37ed9108a49ed6b5af58da1a152e946653817f5e255ca",
+      "test_implementation.py": "2965397cda2575dbb354fd88f3fc554e323cfdad7b9ba1e09ed290fe9260f2d1",
+      "example_input.json": "a2115928d4376b73f652d28492c0773853350c4395686b08978e324e32d4676d",
+      "build_manifest.json": "dd63fce0c952167054f82db5ef43814edc102f5247e05342d7d49212d021dc96"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

@@ -97,7 +97,7 @@
   "split_group": "bff7d49317d7ba9f766b4276dcb9d5df088d5b5f20d1e08f1ed1f22ec73738e7",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "22e944d57074229f57686ec1f252b7ab8a551bf201ea8c905add8e008743a736",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t035_single_compare__ind-public_sector",
   "membership_point_id": "single_compare__ind-public_sector",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "34818071509d4f47509f2d1a3e0024b959b7eb0395d109a470ba3acea79304f2",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "ddc95e80-dd30-4159-888f-9c57cffa65f3",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 129386,
+    "output_tokens": 9268,
+    "cache_read_tokens": 117530,
+    "cache_write_tokens": 11838,
+    "total_tokens": 138654,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36511,
+        "agent_id": "ddc95e80-dd30-4159-888f-9c57cffa65f3",
+        "model": "gpt-6-astra",
+        "input_tokens": 14926,
+        "output_tokens": 261,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 842,
+        "reasoning_tokens": 104,
+        "duration_ms": 5349,
+        "created_at": "2026-09-24T09:05:13.260Z"
+      },
+      {
+        "id": 36524,
+        "agent_id": "ddc95e80-dd30-4159-888f-9c57cffa65f3",
+        "model": "gpt-6-astra",
+        "input_tokens": 15213,
+        "output_tokens": 7626,
+        "cache_read_tokens": 14923,
+        "cache_write_tokens": 287,
+        "reasoning_tokens": 437,
+        "duration_ms": 88295,
+        "created_at": "2026-09-24T09:06:46.761Z"
+      },
+      {
+        "id": 36528,
+        "agent_id": "ddc95e80-dd30-4159-888f-9c57cffa65f3",
+        "model": "gpt-6-astra",
+        "input_tokens": 23155,
+        "output_tokens": 242,
+        "cache_read_tokens": 15210,
+        "cache_write_tokens": 7942,
+        "reasoning_tokens": 104,
+        "duration_ms": 5134,
+        "created_at": "2026-09-24T09:06:59.966Z"
+      },
+      {
+        "id": 36536,
+        "agent_id": "ddc95e80-dd30-4159-888f-9c57cffa65f3",
+        "model": "gpt-6-astra",
+        "input_tokens": 24590,
+        "output_tokens": 749,
+        "cache_read_tokens": 23152,
+        "cache_write_tokens": 1435,
+        "reasoning_tokens": 109,
+        "duration_ms": 9744,
+        "created_at": "2026-09-24T09:07:26.863Z"
+      },
+      {
+        "id": 36538,
+        "agent_id": "ddc95e80-dd30-4159-888f-9c57cffa65f3",
+        "model": "gpt-6-astra",
+        "input_tokens": 25580,
+        "output_tokens": 280,
+        "cache_read_tokens": 24587,
+        "cache_write_tokens": 990,
+        "reasoning_tokens": 0,
+        "duration_ms": 5371,
+        "created_at": "2026-09-24T09:07:29.005Z"
+      },
+      {
+        "id": 36539,
+        "agent_id": "ddc95e80-dd30-4159-888f-9c57cffa65f3",
+        "model": "gpt-6-astra",
+        "input_tokens": 25922,
+        "output_tokens": 110,
+        "cache_read_tokens": 25577,
+        "cache_write_tokens": 342,
+        "reasoning_tokens": 0,
+        "duration_ms": 3013,
+        "created_at": "2026-09-24T09:07:31.894Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.462485,
+      "observed_cache_profile_estimate_usd": 0.19804249999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.54982,
+      "observed_cache_profile_estimate_usd": 5.54982,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,206 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.364s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true,
+      "citizen_service_request": {
+        "case_number": "SYN-REQ-001",
+        "service": "housing_support"
+      },
+      "comparison": {
+        "columns": [
+          "SYN-OPT-A",
+          "SYN-OPT-B"
+        ],
+        "rows": [
+          {
+            "attribute": "turnaround",
+            "unit": "days",
+            "preferred_direction": "lower",
+            "range": {
+              "minimum": 2.0,
+              "maximum": 7.0
+            },
+            "values": {
+              "SYN-OPT-A": 2.0,
+              "SYN-OPT-B": 7.0
+            }
+          },
+          {
+            "attribute": "fee",
+            "unit": "USD",
+            "preferred_direction": "lower",
+            "range": {
+              "minimum": 0.0,
+              "maximum": 5.0
+            },
+            "values": {
+              "SYN-OPT-A": 0.0,
+              "SYN-OPT-B": 5.0
+            }
+          },
+          {
+            "attribute": "accessibility",
+            "unit": "percent",
+            "preferred_direction": "higher",
+            "range": {
+              "minimum": 80.0,
+              "maximum": 100.0
+            },
+            "values": {
+              "SYN-OPT-A": 100.0,
+              "SYN-OPT-B": 80.0
+            }
+          },
+          {
+            "attribute": "online",
+            "unit": "boolean",
+            "preferred_direction": "higher",
+            "range": {
+              "minimum": false,
+              "maximum": true
+            },
+            "values": {
+              "SYN-OPT-A": false,
+              "SYN-OPT-B": true
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "SYN-OPT-A",
+          "label": "Synthetic community service desk",
+          "benefits_application": {
+            "case_number": "SYN-APP-001",
+            "status": "illustrative"
+          },
+          "policy_document": {
+            "id": "SYN-POL-A"
+          },
+          "normalized_attributes": {
+            "turnaround": 2.0,
+            "fee": 0.0,
+            "accessibility": 100.0,
+            "online": false
+          },
+          "score": 0.9,
+          "missing_attributes": [],
+          "explanation": {
+            "turnaround": {
+              "points": 1.0,
+              "weight": 0.4,
+              "weighted_points": 0.4,
+              "explanation": "A lower value is better. Points run from zero to one within this comparison."
+            },
+            "fee": {
+              "points": 1.0,
+              "weight": 0.25,
+              "weighted_points": 0.25,
+              "explanation": "A lower value is better. Points run from zero to one within this comparison."
+            },
+            "accessibility": {
+              "points": 1.0,
+              "weight": 0.25,
+              "weighted_points": 0.25,
+              "explanation": "A higher value is better. Points run from zero to one within this comparison."
+            },
+            "online": {
+              "points": 0.0,
+              "weight": 0.1,
+              "weighted_points": 0.0,
+              "explanation": "Online service gets one point; no online service gets zero."
+            }
+          }
+        },
+        {
+          "id": "SYN-OPT-B",
+          "label": "Synthetic online service desk",
+          "benefits_application": {
+            "case_number": "SYN-APP-002",
+            "status": "illustrative"
+          },
+          "policy_document": {
+            "id": "SYN-POL-B"
+          },
+          "normalized_attributes": {
+            "turnaround": 7.0,
+            "fee": 5.0,
+            "accessibility": 80.0,
+            "online": true
+          },
+          "score": 0.1,
+          "missing_attributes": [],
+          "explanation": {
+            "turnaround": {
+              "points": 0.0,
+              "weight": 0.4,
+              "weighted_points": 0.0,
+              "explanation": "A lower value is better. Points run from zero to one within this comparison."
+            },
+            "fee": {
+              "points": 0.0,
+              "weight": 0.25,
+              "weighted_points": 0.0,
+              "explanation": "A lower value is better. Points run from zero to one within this comparison."
+            },
+            "accessibility": {
+              "points": 0.0,
+              "weight": 0.25,
+              "weighted_points": 0.0,
+              "explanation": "A higher value is better. Points run from zero to one within this comparison."
+            },
+            "online": {
+              "points": 1.0,
+              "weight": 0.1,
+              "weighted_points": 0.1,
+              "explanation": "Online service gets one point; no online service gets zero."
+            }
+          }
+        }
+      ],
+      "ranking": [
+        {
+          "rank": 1,
+          "option_id": "SYN-OPT-A",
+          "score": 0.9
+        },
+        {
+          "rank": 2,
+          "option_id": "SYN-OPT-B",
+          "score": 0.1
+        }
+      ],
+      "summary": "First for your preferences: SYN-OPT-A. This is a service comparison, not a decision about benefits.",
+      "review": {
+        "method": "Weighted sum of attribute points. Highest score comes first.",
+        "numeric_formula": "When values differ: lower is better uses (maximum - value) / (maximum - minimum); higher is better uses (value - minimum) / (maximum - minimum).",
+        "tie_rule": "Equal scores are ordered by synthetic option identifier.",
+        "missing_rule": "Missing values receive zero points. Weights are not redistributed.",
+        "policy_use": "Policy text is context only. Attributes are supplied facts, not extracted legal conclusions.",
+        "privacy": "Persona identifiers, addresses, and policy text are omitted from the result.",
+        "limitations": "Synthetic demonstration only. No Privacy Act, GDPR, FOIA, or Section 508 certification.",
+        "plain_language": "Units and point explanations are included as text. No colors or images are required."
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t035_single_compare__ind-public_sector",
+    "artifact_sha256": {
+      "implementation.py": "dfed6e31608083d9522ebc06a7fd72c0f5c8d1e5a7b838eb35aeb7534ebfaa08",
+      "test_implementation.py": "dc5b1bcebbb72f9a0b0236e3d525207451141cc3e1d273472ede746d931eebe0",
+      "example_input.json": "e76130f6ddab44d1ac4b10bb84cf3abbebc9991aefc8e0d7c70745ed7b41ddd1",
+      "build_manifest.json": "7a4aac3c5530fe0da7208bbb553764d25850e37a3f925770db016d6a6fb661ba"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

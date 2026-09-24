@@ -1,0 +1,56 @@
+{
+  "build_id": "wave3_t037_combo2_basic-onboard_basic-insights__ind-finance",
+  "composition_label": "basic:onboard -> basic:insights / financial services",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3.13.15 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version=1, synthetic=true, customers[], ledger{format,data}, loans[], feedback[]",
+    "customer": "id, name, goal(payments|borrow|save), kyc_status(verified|pending|rejected), screening_flags[], account{number:SYNTH-...,iban:ZZ00SYNTH...}",
+    "transaction": "id, customer_id, amount(decimal string), currency(three uppercase letters), booking_date(YYYY-MM-DD), description, screening_flags[], card_number(13-19 digits or empty; input only)",
+    "loan": "id, customer_id, positive amount, currency, status(draft|submitted|closed), documents_complete(boolean)",
+    "feedback": "id, customer_id, entity_type(customer|transaction|loan), entity_id, text, sentiment(negative|neutral|positive); entity ownership required",
+    "ledger_formats": {
+      "json": "data is a list of transaction objects",
+      "csv": "data is CSV text with exactly the transaction fields as unique headers; screening_flags separated by |",
+      "iso20022": "data.Document.CstmrCdtTrfInitn.PmtInf[].CdtTrfTxInf[]: PmtId.EndToEndId, Dbtr.Id, Amt.InstdAmt{value,Ccy}, ReqdExctnDt, RmtInf.Ustrd, ScreeningFlags[], CardNumber. Positive transfer amounts only. Demonstrative JSON subset, not ISO conformance."
+    },
+    "normalized_envelope": "schema_version, synthetic, stage, customers[], transactions[](masked_card replaces card_number), loans[], feedback[], onboarding[], insights[]",
+    "output": "status=ok, data=final normalized envelope, notice. Errors: status=error, message; exit 2.",
+    "validation": "One validate function enforces schemas, unique IDs, foreign keys, ownership, bounded decimal amounts, calendar dates, privacy and stage invariants; derived results and explanations are recomputed at handoff."
+  },
+  "cross_stage_handoffs": [
+    {"from": "normalization", "to": "basic:onboard", "validated_stage": "validated", "data": "Canonical transactions, masked evidence, customer/KYC profiles, loan applications and feedback"},
+    {"from": "basic:onboard", "to": "basic:insights", "validated_stage": "onboarded", "data": "Customer next steps and screening-blocked statuses enrich theme evidence and priority scores"}
+  ],
+  "behavior": {
+    "onboarding": "Personalized next step, screening hold before KYC before loan documents before goal/history guidance; human review for screening and loan decisions.",
+    "insights": "Deterministic first-match keyword themes in order: loans, verification, payments, fees, support, other. Loan-specific terminology takes precedence over generic document mentions. Actionable recommendations, evidence IDs and onboarding context; empty feedback yields no themes.",
+    "scores": "Every score includes formula, component contributions, range, rules version and limitations. Readiness gates to zero for incomplete KYC or screening flags. Theme priority=min(100,15*negative feedback+20*unique blocked customers+5*feedback count).",
+    "privacy": "Mask input card fields and card-like digit sequences in names/descriptions/feedback to last four digits; reject unsafe remaining digit sequences. Generic errors never echo input.",
+    "synthetic_fixtures": "Fabricated names and visibly fake account/IBANs. Fixed sample ledger plus deterministic seeded randomized histories in tests (seed 3702).",
+    "determinism": "No clock, provider, network or runtime randomness in business logic. Stable priority ordering and caller input preserved."
+  },
+  "scope": {
+    "included": ["Guided onboarding", "Customer feedback themes", "Customer/KYC, transaction and loan entities", "Demonstrative KYC/AML screening flags", "PCI DSS-inspired card masking", "Explainable operational scores", "JSON/CSV/ISO-20022-style adapters", "CLI and unittest suite"],
+    "excluded": ["Compliance certification", "Full ISO 20022 validation", "Real banking integrations", "Actual AML detection", "Credit underwriting or automated approvals", "Currency conversion", "PII vaults and production authorization", "Live LLMs or external dependencies"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {"tests_run": 24, "failures": 0, "errors": 0, "exit_code": 0},
+    "cli": {"exit_code": 0, "stdout_json_objects": 1, "status": "ok", "final_stage": "insights"},
+    "coverage": ["Each stage", "Validated cross-stage propagation and tamper rejection", "JSON/CSV/ISO-style equivalence", "Empty population", "Seeded randomized histories", "Masking and screening constraints", "Explainable score components and cap", "Foreign references and ownership", "CLI success, invalid input and file failures"]
+  }
+}

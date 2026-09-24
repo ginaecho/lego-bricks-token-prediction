@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "synthetic_fixture": true,
+  "prerequisites": {
+    "deidentification_training_complete": true,
+    "reviewer_available": true,
+    "reviewer_id": "syn-reviewer-001"
+  },
+  "records": {
+    "patient_record": {
+      "resourceType": "Patient",
+      "id": "syn-patient-001",
+      "synthetic": true,
+      "conditions": [{"resourceType": "Condition", "code": "DEMO-DX-001"}],
+      "lab_values": [{"resourceType": "Observation", "code": "DEMO-LAB-001", "value": 95, "unit": "mg/dL"}]
+    },
+    "clinical_note": {
+      "resourceType": "DocumentReference",
+      "id": "syn-note-001",
+      "subject": "Patient/syn-patient-001",
+      "synthetic": true,
+      "text": "SYNTHETIC: Training note only. No clinical decision recorded.",
+      "human_review_required": true
+    },
+    "prior_authorization_request": {
+      "resourceType": "Claim",
+      "id": "syn-auth-001",
+      "patient": "Patient/syn-patient-001",
+      "synthetic": true,
+      "service_code": "DEMO-SERVICE-001",
+      "status": "draft",
+      "human_review_required": true
+    }
+  },
+  "actions": [
+    "check_prerequisites",
+    "register_patient",
+    "attach_clinical_note",
+    "prepare_prior_authorization",
+    "request_human_review"
+  ]
+}

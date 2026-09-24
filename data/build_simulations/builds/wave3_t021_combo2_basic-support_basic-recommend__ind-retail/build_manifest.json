@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t021_combo2_basic-support_basic-recommend__ind-retail",
+  "composition_label": "basic:support -> basic:recommend; Retail",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New deterministic reference implementation authored in this isolated build directory.",
+    "runtime": "Python 3.13.15; Python 3.9+ standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict JSON object: schema_version=1, synthetic=true, catalog(currency, products[sku,name,category,price,stock]), customer(id,consent.personalization,preferred_categories), order(id,status,items[sku,quantity]), clickstream[customer_id,event,sku,timestamp], policies(return_window_days,support_contact), request(intent,query,skus,recommendation_limit). Prices are nonnegative two-decimal strings. Events use timezone-aware ISO timestamps.",
+    "support_envelope": "schema_version, status, validated context containing the input, support(answer,resolution,facts,discovery_context)",
+    "final_envelope": "Support envelope plus recommendations(mode,items,notice). Product facts carry exact catalog price, stock, currency and identity. Recommendation items add deterministic score and reasons.",
+    "validation": "validate_document validates input, support and complete envelopes. Every stage validates before consuming and returning data. Canonical payload comparisons reject modified facts, unsupported prose, handoff signals and ranking.",
+    "errors": "CLI prints exactly one JSON object with status=error and exits 2 for invalid input, malformed JSON, usage and file errors."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:support",
+      "to": "basic:recommend",
+      "contract": "Validated support envelope carries catalog context and discovery_context with consent gate, support-derived category interests, preferred categories, basket SKUs and viewed SKUs. Recommendation stage accepts only that validated envelope."
+    }
+  ],
+  "behavior": {
+    "support": "General-purpose deterministic support for product, stock, price, order, returns and staff escalation. Queries use explicit intents and catalog SKUs, with category substring matching for discovery interests. Unknown answers and delivery dates are not invented.",
+    "personalization": "Explicit consent is required before using support interests, profile preferences, basket exclusions or clickstream for ranking. Without consent all personal handoff signals are empty and in-stock items use SKU ordering.",
+    "ranking": "Consented support category +4, profile category +2, viewed SKU +1; descending score, ascending SKU tie break. Excludes zero-stock products and, with consent, basket items. Limit 1..20.",
+    "grounding": "No generated reviews, endorsements, popularity assertions or live model calls. Product price and stock are projected directly from catalog and validated against canonical outputs.",
+    "fixtures": "Clearly labeled synthetic catalog, invented FICTION SKUs, synthetic shopper Alex and synthetic basket; no real customer records."
+  },
+  "scope": {
+    "included": ["Integrated two-stage CLI", "Strict shared validation", "Synthetic JSON catalog and clickstream fixture", "Explicit consent gate", "Deterministic catalog-grounded discovery", "Unit and CLI tests"],
+    "excluded": ["Compliance certification", "Identity authentication", "Consent collection or revocation storage", "Production policy verification", "Live stock reservations", "Checkout or refund execution", "Persistent customer storage", "Live providers or networks", "Machine learning", "Arbitrary natural-language understanding"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 21,
+    "failures": 0,
+    "errors": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_status": "passed; exactly one JSON object with status=ok",
+    "cli_exit_code": 0,
+    "coverage": ["Support facts and intents", "Cross-stage ranking propagation", "Consent denial and ranking invariance", "Price and stock grounding", "No fabricated endorsements", "Empty and unavailable catalogs", "Input and clickstream validation", "Tampered handoff and recommendation rejection", "Determinism and input preservation", "CLI success, usage, missing file, malformed JSON and validation errors"]
+  }
+}

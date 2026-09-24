@@ -1,0 +1,57 @@
+{
+  "build_id": "wave3_t034_single_extract",
+  "composition_label": "Structured extraction (Document automation)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "document": "String, maximum 1000000 Unicode code points",
+      "schema": "1..100 field objects; required name, type, required; optional aliases",
+      "field_types": ["string", "integer", "number", "boolean", "date"],
+      "labels": "Field name and up to 20 aliases; case-insensitive, whitespace-normalized, globally unique",
+      "unknown_properties": "Rejected"
+    },
+    "output": {
+      "status": "ok for completed extraction, even with unresolved fields; error for input/file failures",
+      "fields": "Schema-ordered objects: name, type, required, state, value, sources, message",
+      "state": ["extracted", "missing", "invalid", "ambiguous"],
+      "sources": "Objects with label, text, start and end; zero-based, half-open Unicode code-point offsets into the original document",
+      "missing_fields": "Required fields without an extracted value, with name and reason",
+      "error": "Error output contains status and error message"
+    },
+    "validation": "One Validator layer validates requests and verifies output types, source spans and required-field reporting. JSON duplicate keys and nonstandard constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    "Validated request -> deterministic labeled-line matcher -> typed conversion -> validated shared result"
+  ],
+  "behavior": {
+    "matching": "One label:value or label=value per line; first delimiter separates label and value; unknown lines ignored",
+    "values": "Outer whitespace trimmed; inner text preserved; integers capped at 100 characters; finite decimal numbers; true/false booleans; strict valid YYYY-MM-DD dates",
+    "ambiguity": "Any repeated matching label, including aliases or identical values, is ambiguous; all candidate spans retained",
+    "missing": "Absent and blank values are missing. Required missing, invalid and ambiguous fields appear in missing_fields; optional unresolved fields remain visible in fields.",
+    "cli": "Exactly one UTF-8 JSON input file argument. Prints one JSON object; exit 0 on completed extraction, exit 2 on validation/file errors.",
+    "fixtures": "Example and tests use clearly labeled synthetic data; no live documents or services"
+  },
+  "scope": {
+    "included": ["Schema-driven extraction", "Typed values", "Source spans", "Missing-field reporting", "CLI", "Shared validation", "Deterministic fixtures"],
+    "excluded": ["OCR", "PDF parsing", "Multiline field values", "Unlabeled natural-language inference", "Nested schemas", "Live providers", "LLM calls", "Enterprise production delivery"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "13 unittest test cases passed",
+    "cli_example": "Passed: exit 0, one valid JSON object with status ok, six extracted fields and required purchase_order reported missing",
+    "cli_errors": "Verified exit 2 and JSON status error for missing argument, missing file, invalid JSON, duplicate keys, nonstandard constants and invalid schema"
+  }
+}

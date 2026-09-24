@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t026_single_deep",
+  "composition_label": "Deep research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in this isolated build directory.",
+    "runtime": "Python 3.13.15; Python 3 standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Exact keys: schema_version (integer 1), synthetic (true), questions ([{id,text}]), documents ([{id,title,content,evidence:[{id,question_id,stance,excerpt}]}]). All text is nonblank. IDs are unique within question/document/evidence namespaces. Evidence references an existing question, uses supports/contradicts/uncertain, and quotes a verbatim substring of its document.",
+    "bounds": "1-100 questions, 0-100 documents, up to 1000 evidence items per document and 10000 total, at most 100000 characters per text field. JSON file loading itself is not streaming or byte-limited.",
+    "success": "status=ok, schema_version=1, synthetic=true, question_results, unresolved_questions, source_inventory, limitations. Each question result contains question_id, question, finding, summary, document_ids_by_stance, distinct_document_count, evidence with document provenance, disagreements, unresolved_questions, and optional optional_summary.",
+    "error": "status=error, schema_version=1, error={type,message}; CLI emits one JSON object and exits 2.",
+    "validation": "API and CLI share validate(); common field/text/list/ID validators also validate optional callable output. JSON loader rejects duplicate keys and non-finite constants.",
+    "optional_callable": "run(payload, summarizer=None). Callable receives a deep copy of one question result and must return exactly {summary: nonblank text, evidence_ids: unique IDs citing all and only that question's evidence}. Failure returns the shared error envelope. Structural validation is not semantic verification."
+  },
+  "cross_stage_handoffs": [
+    "Single integrated functionality: validated documents and annotated excerpts -> question-indexed evidence -> per-document stance aggregation -> findings, disagreements and unresolved questions -> shared JSON response.",
+    "Optional injected callable receives the deterministic question result; it cannot alter the core evidence or findings."
+  ],
+  "behavior": [
+    "Clearly labeled synthetic example includes opposing cohort findings, unmeasured repeat purchasing, and an accessibility evidence gap.",
+    "Findings distinguish disputed, support_only, contradiction_only, uncertain_only and no_evidence.",
+    "Explicit support and contradiction produce disagreement even within one document. Cross-document and internal disagreement are distinguished.",
+    "Counts use distinct document IDs per stance, never raw quotation frequency. A document may appear under multiple stances.",
+    "Unresolved questions identify opposing findings, missing evidence, explicit uncertainty and single-document coverage.",
+    "Evidence and sources use stable ID ordering; questions retain input order. No timestamps, randomness, networking or live providers.",
+    "Absence of a rule-triggered unresolved question does not establish completeness or truth."
+  ],
+  "scope": {
+    "included": ["Offline multi-document synthesis", "Grounded excerpt provenance", "Disagreement inventory", "Unresolved research questions", "Shared CLI/API validation", "Optional offline callable tested with synthetic fixtures"],
+    "excluded": ["Live browsing or retrieval", "Automatic stance/relevance extraction", "Source authenticity or independence verification", "Semantic verification of generated text", "Statistical confidence or causal conclusions", "Enterprise production infrastructure"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 13,
+    "unittest_passed": 13,
+    "unittest_failed": 0,
+    "cli_example": "Passed: one JSON object, status ok, exit 0",
+    "cli_errors": "Verified usage and missing-file failures exit 2; invalid JSON/schema and decoding failures emit the shared JSON error envelope."
+  }
+}

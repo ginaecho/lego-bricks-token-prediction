@@ -1,0 +1,55 @@
+{
+  "schema_version": "healthcare-discovery-research/1",
+  "synthetic": true,
+  "patient_record": {
+    "resourceType": "Patient",
+    "id": "syn-patient-001",
+    "synthetic": true,
+    "deidentified": true,
+    "conditions": ["diabetes"],
+    "labs": [{"code": "a1c", "value": 7.2, "unit": "%"}]
+  },
+  "clinical_notes": [
+    {
+      "resourceType": "DocumentReference",
+      "id": "syn-note-001",
+      "subject": "Patient/syn-patient-001",
+      "synthetic": true,
+      "human_review_required": true,
+      "text": "SYNTHETIC Synthea-style fixture; not a real patient. Diabetes education materials were requested. The synthetic a1c lab value is 7.2 percent; clinician review is required."
+    }
+  ],
+  "prior_authorization_requests": [
+    {
+      "resourceType": "Claim",
+      "id": "syn-auth-001",
+      "subject": "Patient/syn-patient-001",
+      "synthetic": true,
+      "human_review_required": true,
+      "use": "preauthorization",
+      "status": "draft",
+      "reasonText": "SYNTHETIC authorization request for administrative review. Authorization paperwork needs human review; no coverage or clinical decision has been made."
+    }
+  ],
+  "catalog": [
+    {
+      "id": "syn-product-education",
+      "title": "Synthetic diabetes education reading guide",
+      "category": "education",
+      "tags": ["diabetes", "education"]
+    },
+    {
+      "id": "syn-product-auth",
+      "title": "Synthetic prior authorization paperwork guide",
+      "category": "administrative-support",
+      "tags": ["authorization", "paperwork"]
+    },
+    {
+      "id": "syn-product-general",
+      "title": "Synthetic general service navigation",
+      "category": "administrative-support",
+      "tags": ["navigation"]
+    }
+  ],
+  "preferences": {"interests": ["education"], "limit": 2}
+}

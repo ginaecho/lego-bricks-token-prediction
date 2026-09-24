@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t032_combo2_adaptive_normal__ind-energy",
+  "composition_label": "Adaptive onboarding (Guided onboarding) -> Normal research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated working directory",
+    "runtime": "Python 3.9+ standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "synthetic-energy/v1",
+    "input": "synthetic flag; profile experience/detail/topics/completed; fixed safety_rules; grid_assets; topology; meter_csv; SCADA-synthetic telemetry; outage_reports; topic-tagged passages",
+    "output": "versioned synthetic envelope with status, notice, onboarding, research, and sanitized entities",
+    "validation": "One validate(kind, value, context) boundary checks input, onboarding and research. The same input is revalidated before research; citations and handoffs are checked against their source.",
+    "meter_csv_columns": ["meter_id", "timestamp", "interval_minutes", "consumption", "unit"],
+    "units": {"meter": "kWh", "telemetry_load": "kW", "emissions": ["kgCO2e", "tCO2e"]}
+  },
+  "cross_stage_handoffs": [
+    "Validated input becomes experience-aware prerequisites and detail-aware explanations.",
+    "Validated onboarding topics, detail preference and readiness control passage retrieval.",
+    "Missing prerequisites block research without auto-completing training; explicitly update completed and rerun.",
+    "Research validates its findings and exact citation offsets against supplied source passages."
+  ],
+  "behavior": {
+    "retrieval": "Deterministic curated topic-tag matching, sorted by source_id; brief returns one passage per topic, guided returns all. Findings are entire verbatim passages, cited with source ID, title and Unicode character start/end offsets.",
+    "missing_evidence": "Explicit unanswered_topics; no fabricated findings.",
+    "asset_protection": "All internal synthetic identifiers are replaced with public aliases in entity output. Sources containing internal identifiers are rejected, preserving exact citation text. A final leak check covers serialized output.",
+    "outage_policy": "Life safety P1 overrides essential service; otherwise essential service P2, routine P3. Declared rules and report priority must agree.",
+    "emissions": "Nonnegative finite figures require kgCO2e or tCO2e units and an existing source ID.",
+    "errors": "CLI validation, JSON, CSV and file errors produce one generic status:error JSON object and exit 2; successful and prerequisite-blocked valid runs exit 0.",
+    "fixture": "Clearly synthetic two-node topology, fictitious substation/meter IDs, winter and summer interval readings, SCADA-style telemetry, and safety-prioritized outage."
+  },
+  "scope": {
+    "included": ["Integrated deterministic pipeline", "Shared validation and versioned schema", "Exact extractive citations", "Adaptive prerequisites", "Demonstrative industry constraints", "CLI and unittest coverage"],
+    "excluded": ["Live providers or networks", "LLM generation", "Production SCADA integration", "Compliance certification", "Authentication and persistence", "Semantic search", "Independent emissions audits"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 20,
+    "failures": 0,
+    "errors": 0,
+    "cli_example": {"exit_code": 0, "stdout": "One JSON object", "status": "ok"},
+    "coverage": ["Both stages", "Validated handoff tampering", "Prerequisite blocking", "Preference propagation", "Exact citations", "Missing evidence", "Identifier protection", "All safety priority combinations", "Emissions units and sources", "Meter intervals", "Synthetic topology", "Timezone validation", "CLI success, determinism, file, usage and malformed-input errors"]
+  }
+}

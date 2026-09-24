@@ -109,7 +109,7 @@
   "split_group": "a333e3da212056d60f44e014c4498d26d7b487a5dc47eba975d5317dd90a0ed9",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "bd425423b29d8fcf9f5469756638d8703427da656d22dd8dfa04c417ab1bf501",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t030_combo2_basic-documents_interests",
   "membership_point_id": "combo2_basic-documents_interests",
@@ -117,8 +117,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "219ec05fc32748ae2c9f30b9d3efeabc42e6e807904148cf7517a8375dca6f43",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "1686681e-c1cc-40f4-a55d-45c817a34e73",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 119495,
+    "output_tokens": 6684,
+    "cache_read_tokens": 110665,
+    "cache_write_tokens": 8812,
+    "total_tokens": 126179,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36477,
+        "agent_id": "1686681e-c1cc-40f4-a55d-45c817a34e73",
+        "model": "gpt-6-astra",
+        "input_tokens": 14899,
+        "output_tokens": 549,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 815,
+        "reasoning_tokens": 385,
+        "duration_ms": 14192,
+        "created_at": "2026-09-24T09:00:34.707Z"
+      },
+      {
+        "id": 36482,
+        "agent_id": "1686681e-c1cc-40f4-a55d-45c817a34e73",
+        "model": "gpt-6-astra",
+        "input_tokens": 15478,
+        "output_tokens": 5466,
+        "cache_read_tokens": 14896,
+        "cache_write_tokens": 579,
+        "reasoning_tokens": 0,
+        "duration_ms": 58531,
+        "created_at": "2026-09-24T09:01:43.891Z"
+      },
+      {
+        "id": 36484,
+        "agent_id": "1686681e-c1cc-40f4-a55d-45c817a34e73",
+        "model": "gpt-6-astra",
+        "input_tokens": 21264,
+        "output_tokens": 134,
+        "cache_read_tokens": 15475,
+        "cache_write_tokens": 5786,
+        "reasoning_tokens": 0,
+        "duration_ms": 2662,
+        "created_at": "2026-09-24T09:01:50.415Z"
+      },
+      {
+        "id": 36488,
+        "agent_id": "1686681e-c1cc-40f4-a55d-45c817a34e73",
+        "model": "gpt-6-astra",
+        "input_tokens": 22320,
+        "output_tokens": 226,
+        "cache_read_tokens": 21261,
+        "cache_write_tokens": 1056,
+        "reasoning_tokens": 42,
+        "duration_ms": 4272,
+        "created_at": "2026-09-24T09:02:25.210Z"
+      },
+      {
+        "id": 36494,
+        "agent_id": "1686681e-c1cc-40f4-a55d-45c817a34e73",
+        "model": "gpt-6-astra",
+        "input_tokens": 22638,
+        "output_tokens": 223,
+        "cache_read_tokens": 22317,
+        "cache_write_tokens": 318,
+        "reasoning_tokens": 0,
+        "duration_ms": 3413,
+        "created_at": "2026-09-24T09:02:40.449Z"
+      },
+      {
+        "id": 36498,
+        "agent_id": "1686681e-c1cc-40f4-a55d-45c817a34e73",
+        "model": "gpt-6-astra",
+        "input_tokens": 22896,
+        "output_tokens": 86,
+        "cache_read_tokens": 22635,
+        "cache_write_tokens": 258,
+        "reasoning_tokens": 0,
+        "duration_ms": 2339,
+        "created_at": "2026-09-24T09:02:58.640Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.3989975,
+      "observed_cache_profile_estimate_usd": 0.15000125,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.78797,
+      "observed_cache_profile_estimate_usd": 4.78797,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -149,5 +274,214 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................\n----------------------------------------------------------------------\nRan 16 tests in 1.053s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "fixture_label": "SYNTHETIC learning-resource catalog and preferences",
+      "catalog": [
+        {
+          "id": "r1",
+          "title": "Garden Planning",
+          "description": "Plan a small vegetable garden.",
+          "tags": [
+            "gardening",
+            "outdoors"
+          ],
+          "quality": 0.8,
+          "source": {
+            "document_id": "synthetic-course-sheet",
+            "row": 0,
+            "fields": {
+              "id": "code",
+              "title": "details.name",
+              "description": "details.summary",
+              "tags": "topics",
+              "quality": "quality"
+            }
+          }
+        },
+        {
+          "id": "r2",
+          "title": "Trail Photography",
+          "description": "Practice framing outdoor scenes.",
+          "tags": [
+            "outdoors",
+            "photography"
+          ],
+          "quality": 0.9,
+          "source": {
+            "document_id": "synthetic-course-sheet",
+            "row": 1,
+            "fields": {
+              "id": "code",
+              "title": "details.name",
+              "description": "details.summary",
+              "tags": "topics",
+              "quality": "quality"
+            }
+          }
+        },
+        {
+          "id": "r3",
+          "title": "Advanced Climbing",
+          "description": "A synthetic high-risk adventure course.",
+          "tags": [
+            "extreme",
+            "outdoors"
+          ],
+          "quality": 1.0,
+          "source": {
+            "document_id": "synthetic-course-sheet",
+            "row": 2,
+            "fields": {
+              "id": "code",
+              "title": "details.name",
+              "description": "details.summary",
+              "tags": "topics",
+              "quality": "quality"
+            }
+          }
+        },
+        {
+          "id": "r4",
+          "title": "Indoor Sketching",
+          "description": "Draw household objects.",
+          "tags": [],
+          "quality": 0.5,
+          "source": {
+            "document_id": "synthetic-course-sheet",
+            "row": 3,
+            "fields": {
+              "id": "code",
+              "title": "details.name",
+              "description": "details.summary",
+              "tags": "topics",
+              "quality": "quality"
+            }
+          }
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "r1",
+          "title": "Garden Planning",
+          "score": 4.8,
+          "explanation": {
+            "quality": 0.8,
+            "matched_interests": [
+              {
+                "tag": "gardening",
+                "weight": 3.0
+              },
+              {
+                "tag": "outdoors",
+                "weight": 1.0
+              }
+            ],
+            "basis": "quality + sum of matched tag weights",
+            "fallback": false
+          },
+          "source": {
+            "document_id": "synthetic-course-sheet",
+            "row": 0,
+            "fields": {
+              "id": "code",
+              "title": "details.name",
+              "description": "details.summary",
+              "tags": "topics",
+              "quality": "quality"
+            }
+          }
+        },
+        {
+          "id": "r2",
+          "title": "Trail Photography",
+          "score": 2.4,
+          "explanation": {
+            "quality": 0.9,
+            "matched_interests": [
+              {
+                "tag": "outdoors",
+                "weight": 1.0
+              },
+              {
+                "tag": "photography",
+                "weight": 0.5
+              }
+            ],
+            "basis": "quality + sum of matched tag weights",
+            "fallback": false
+          },
+          "source": {
+            "document_id": "synthetic-course-sheet",
+            "row": 1,
+            "fields": {
+              "id": "code",
+              "title": "details.name",
+              "description": "details.summary",
+              "tags": "topics",
+              "quality": "quality"
+            }
+          }
+        },
+        {
+          "id": "r4",
+          "title": "Indoor Sketching",
+          "score": 0.5,
+          "explanation": {
+            "quality": 0.5,
+            "matched_interests": [],
+            "basis": "quality + sum of matched tag weights",
+            "fallback": true
+          },
+          "source": {
+            "document_id": "synthetic-course-sheet",
+            "row": 3,
+            "fields": {
+              "id": "code",
+              "title": "details.name",
+              "description": "details.summary",
+              "tags": "topics",
+              "quality": "quality"
+            }
+          }
+        }
+      ],
+      "excluded": [
+        {
+          "id": "r3",
+          "reasons": [
+            {
+              "kind": "tag",
+              "value": "extreme"
+            }
+          ]
+        }
+      ],
+      "eligible_count": 3,
+      "counts": {
+        "documents": 1,
+        "extracted": 4,
+        "excluded": 1,
+        "returned": 3
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t030_combo2_basic-documents_interests",
+    "artifact_sha256": {
+      "implementation.py": "ee8975614de2362fe9e143c593375df7a7aff9bbb9a2c4ede1dde52bf35f7dc8",
+      "test_implementation.py": "ba373ecf296573c3c7109c3f11b987f580e46c046ab8bdbaeea88f87e96511cc",
+      "example_input.json": "0f71ae5e3def860d81f71802046e19182fc63a0ba7195574ae9803aac1bb5a6a",
+      "build_manifest.json": "c0c16df8c55bcd822feecd6ffd0f1d921ad9b9254b944577f5e832684c9e5931"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

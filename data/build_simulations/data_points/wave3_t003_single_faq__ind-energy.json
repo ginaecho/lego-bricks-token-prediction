@@ -97,7 +97,7 @@
   "split_group": "0373cd6a6a38a14a1e878c8cb69765ab894794d3db080c964b9fb264a7c29e1d",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "dc2f8011074e4b58ceabd9c032062a4cf9912cd038fe7ba2e1d5c4fc79c6b15d",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t003_single_faq__ind-energy",
   "membership_point_id": "single_faq__ind-energy",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "79b6575f278ace584355fb2b3d952d3b123c1e2d6fe438838f59e0329b33ccc0",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "c601eab8-9acb-47d9-b3c8-3c8333f50ace",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 121467,
+    "output_tokens": 7401,
+    "cache_read_tokens": 98141,
+    "cache_write_tokens": 23308,
+    "total_tokens": 128868,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36262,
+        "agent_id": "c601eab8-9acb-47d9-b3c8-3c8333f50ace",
+        "model": "gpt-6-astra",
+        "input_tokens": 14923,
+        "output_tokens": 660,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 14920,
+        "reasoning_tokens": 497,
+        "duration_ms": 19413,
+        "created_at": "2026-09-24T08:30:24.025Z"
+      },
+      {
+        "id": 36269,
+        "agent_id": "c601eab8-9acb-47d9-b3c8-3c8333f50ace",
+        "model": "gpt-6-astra",
+        "input_tokens": 15613,
+        "output_tokens": 5973,
+        "cache_read_tokens": 14920,
+        "cache_write_tokens": 690,
+        "reasoning_tokens": 0,
+        "duration_ms": 67478,
+        "created_at": "2026-09-24T08:31:25.207Z"
+      },
+      {
+        "id": 36271,
+        "agent_id": "c601eab8-9acb-47d9-b3c8-3c8333f50ace",
+        "model": "gpt-6-astra",
+        "input_tokens": 21902,
+        "output_tokens": 154,
+        "cache_read_tokens": 15610,
+        "cache_write_tokens": 6289,
+        "reasoning_tokens": 7,
+        "duration_ms": 3322,
+        "created_at": "2026-09-24T08:31:35.162Z"
+      },
+      {
+        "id": 36275,
+        "agent_id": "c601eab8-9acb-47d9-b3c8-3c8333f50ace",
+        "model": "gpt-6-astra",
+        "input_tokens": 22666,
+        "output_tokens": 295,
+        "cache_read_tokens": 21899,
+        "cache_write_tokens": 764,
+        "reasoning_tokens": 50,
+        "duration_ms": 5803,
+        "created_at": "2026-09-24T08:31:53.737Z"
+      },
+      {
+        "id": 36277,
+        "agent_id": "c601eab8-9acb-47d9-b3c8-3c8333f50ace",
+        "model": "gpt-6-astra",
+        "input_tokens": 23052,
+        "output_tokens": 223,
+        "cache_read_tokens": 22663,
+        "cache_write_tokens": 386,
+        "reasoning_tokens": 0,
+        "duration_ms": 4035,
+        "created_at": "2026-09-24T08:32:01.820Z"
+      },
+      {
+        "id": 36279,
+        "agent_id": "c601eab8-9acb-47d9-b3c8-3c8333f50ace",
+        "model": "gpt-6-astra",
+        "input_tokens": 23311,
+        "output_tokens": 96,
+        "cache_read_tokens": 23049,
+        "cache_write_tokens": 259,
+        "reasoning_tokens": 0,
+        "duration_ms": 2628,
+        "created_at": "2026-09-24T08:32:11.165Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4146825,
+      "observed_cache_profile_estimate_usd": 0.19386525000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.97619,
+      "observed_cache_profile_estimate_usd": 4.97619,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,100 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................\n----------------------------------------------------------------------\nRan 16 tests in 0.748s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "synthetic": true,
+      "status": "answered",
+      "answer": "Synthetic support guidance: report an outage through the utility reporting channel. Stay away from fallen wires; contact local emergency services for immediate danger. Life-safety reports receive critical priority. Internal routing uses [PROTECTED-ASSET].",
+      "abstention_reason": null,
+      "citations": [
+        {
+          "id": "SYN-KB-OUTAGE",
+          "title": "Report an outage",
+          "excerpt": "Synthetic support guidance: report an outage through the utility reporting channel. Stay away from fallen wires; contact local emergency services for immediate danger. Life-safety reports receive critical priority. Internal routing uses [PROTECTED-ASSET]."
+        }
+      ],
+      "entities": {
+        "grid_assets": [
+          {
+            "asset_id": "[PROTECTED-ASSET]",
+            "kind": "substation",
+            "critical": true,
+            "connected_to": [
+              "SYN-DEVICE-101"
+            ]
+          },
+          {
+            "asset_id": "SYN-DEVICE-101",
+            "kind": "device",
+            "critical": false,
+            "connected_to": [
+              "[PROTECTED-ASSET]"
+            ]
+          }
+        ],
+        "meter_readings": [
+          {
+            "timestamp": "2026-01-15T18:00:00Z",
+            "meter_id": "SYN-METER-01",
+            "asset_id": "SYN-DEVICE-101",
+            "consumption_kwh": 2.4
+          },
+          {
+            "timestamp": "2026-01-15T18:30:00Z",
+            "meter_id": "SYN-METER-01",
+            "asset_id": "SYN-DEVICE-101",
+            "consumption_kwh": 2.7
+          },
+          {
+            "timestamp": "2026-07-15T18:00:00Z",
+            "meter_id": "SYN-METER-01",
+            "asset_id": "SYN-DEVICE-101",
+            "consumption_kwh": 1.1
+          }
+        ],
+        "telemetry": [
+          {
+            "timestamp": "2026-01-15T18:30:00Z",
+            "asset_id": "[PROTECTED-ASSET]",
+            "voltage_kv": 33.0,
+            "load_mw": 12.8,
+            "status": "alarm",
+            "emissions": {
+              "value": 185.0,
+              "unit": "gCO2e/kWh",
+              "source": "Synthetic seasonal dispatch fixture; not measured emissions"
+            }
+          }
+        ],
+        "outage_reports": [
+          {
+            "report_id": "SYN-OUTAGE-01",
+            "asset_id": "[PROTECTED-ASSET]",
+            "timestamp": "2026-01-15T18:30:00Z",
+            "hazard": "life_safety",
+            "priority": "critical"
+          }
+        ]
+      },
+      "protection": "Registered critical asset identifiers redacted; demonstration only."
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t003_single_faq__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "dd66695b51046705d4596410a8bd775c6d8ddfab65bf80c95eb271766dccb09d",
+      "test_implementation.py": "b38e99c5162c495e880a68d1248e3cf7b7869f82fb2c0239f41e21d5ce29f2a8",
+      "example_input.json": "d13013446bf2d63274cf19e896aac488231d15c253aef20ccacdbae42e5feae9",
+      "build_manifest.json": "154ab001d2be807d04fffe87809469bfb7683d88793a69cb1543d9bd6c3c116d"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

@@ -109,7 +109,7 @@
   "split_group": "486de18f7e6d3508aaca14deb21aa6c39f52923cadc3dd42753b09296db3ec6d",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "22653f8151648c55db216b4e16042eae7fbed360cd5fe5fa7b8a0469577afa9e",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t038_combo2_feedback_basic-support",
   "membership_point_id": "combo2_feedback_basic-support",
@@ -117,8 +117,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "9fa425d5c2167c81d19d09fa64855c9aa9acf9a4c37bc4da22e2f2d6ed1dc803",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "91bbbe5e-8aec-4b5c-bb52-9cd78ceae410",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 123589,
+    "output_tokens": 7699,
+    "cache_read_tokens": 113746,
+    "cache_write_tokens": 9825,
+    "total_tokens": 131288,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36517,
+        "agent_id": "91bbbe5e-8aec-4b5c-bb52-9cd78ceae410",
+        "model": "gpt-6-astra",
+        "input_tokens": 14899,
+        "output_tokens": 556,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 815,
+        "reasoning_tokens": 388,
+        "duration_ms": 14626,
+        "created_at": "2026-09-24T09:05:59.797Z"
+      },
+      {
+        "id": 36522,
+        "agent_id": "91bbbe5e-8aec-4b5c-bb52-9cd78ceae410",
+        "model": "gpt-6-astra",
+        "input_tokens": 15481,
+        "output_tokens": 6486,
+        "cache_read_tokens": 14896,
+        "cache_write_tokens": 582,
+        "reasoning_tokens": 0,
+        "duration_ms": 69850,
+        "created_at": "2026-09-24T09:06:41.242Z"
+      },
+      {
+        "id": 36525,
+        "agent_id": "91bbbe5e-8aec-4b5c-bb52-9cd78ceae410",
+        "model": "gpt-6-astra",
+        "input_tokens": 22279,
+        "output_tokens": 136,
+        "cache_read_tokens": 15478,
+        "cache_write_tokens": 6798,
+        "reasoning_tokens": 0,
+        "duration_ms": 2780,
+        "created_at": "2026-09-24T09:06:48.324Z"
+      },
+      {
+        "id": 36531,
+        "agent_id": "91bbbe5e-8aec-4b5c-bb52-9cd78ceae410",
+        "model": "gpt-6-astra",
+        "input_tokens": 23351,
+        "output_tokens": 229,
+        "cache_read_tokens": 22276,
+        "cache_write_tokens": 1072,
+        "reasoning_tokens": 11,
+        "duration_ms": 5118,
+        "created_at": "2026-09-24T09:07:06.360Z"
+      },
+      {
+        "id": 36533,
+        "agent_id": "91bbbe5e-8aec-4b5c-bb52-9cd78ceae410",
+        "model": "gpt-6-astra",
+        "input_tokens": 23670,
+        "output_tokens": 197,
+        "cache_read_tokens": 23348,
+        "cache_write_tokens": 319,
+        "reasoning_tokens": 0,
+        "duration_ms": 3330,
+        "created_at": "2026-09-24T09:07:18.912Z"
+      },
+      {
+        "id": 36535,
+        "agent_id": "91bbbe5e-8aec-4b5c-bb52-9cd78ceae410",
+        "model": "gpt-6-astra",
+        "input_tokens": 23909,
+        "output_tokens": 95,
+        "cache_read_tokens": 23667,
+        "cache_write_tokens": 239,
+        "reasoning_tokens": 0,
+        "duration_ms": 2766,
+        "created_at": "2026-09-24T09:07:25.721Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.42445750000000004,
+      "observed_cache_profile_estimate_usd": 0.16852899999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.09349,
+      "observed_cache_profile_estimate_usd": 5.09349,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -149,5 +274,196 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................\n----------------------------------------------------------------------\nRan 18 tests in 0.412s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "data_label": "synthetic",
+      "status": "ok",
+      "feedback_analysis": {
+        "source_count": 4,
+        "unique_count": 3,
+        "duplicate_count": 1,
+        "groups": [
+          {
+            "id": "f1",
+            "source_ids": [
+              "f1",
+              "f2"
+            ],
+            "text": "My delivery is late!",
+            "themes": [
+              "delivery"
+            ]
+          },
+          {
+            "id": "f3",
+            "source_ids": [
+              "f3"
+            ],
+            "text": "The refund instructions were helpful.",
+            "themes": [
+              "refunds"
+            ]
+          },
+          {
+            "id": "f4",
+            "source_ids": [
+              "f4"
+            ],
+            "text": "The product arrived damaged; I need support.",
+            "themes": [
+              "product",
+              "support"
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "delivery",
+            "unique_feedback_count": 1,
+            "source_feedback_count": 2,
+            "excerpts": [
+              {
+                "group_id": "f1",
+                "source_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "excerpt": "My delivery is late!"
+              }
+            ]
+          },
+          {
+            "name": "product",
+            "unique_feedback_count": 1,
+            "source_feedback_count": 1,
+            "excerpts": [
+              {
+                "group_id": "f4",
+                "source_ids": [
+                  "f4"
+                ],
+                "excerpt": "The product arrived damaged; I need support."
+              }
+            ]
+          },
+          {
+            "name": "refunds",
+            "unique_feedback_count": 1,
+            "source_feedback_count": 1,
+            "excerpts": [
+              {
+                "group_id": "f3",
+                "source_ids": [
+                  "f3"
+                ],
+                "excerpt": "The refund instructions were helpful."
+              }
+            ]
+          },
+          {
+            "name": "support",
+            "unique_feedback_count": 1,
+            "source_feedback_count": 1,
+            "excerpts": [
+              {
+                "group_id": "f4",
+                "source_ids": [
+                  "f4"
+                ],
+                "excerpt": "The product arrived damaged; I need support."
+              }
+            ]
+          }
+        ]
+      },
+      "support": {
+        "team_online": false,
+        "responses": [
+          {
+            "id": "q1",
+            "question": "My delivery is late. What can I do?",
+            "status": "grounded_guidance",
+            "answer": "Here is the relevant published guidance:\n[kb-delivery] Check the tracking link in your shipping confirmation. If the tracking status is unclear, contact support with your order reference.\nThe team is currently offline. No response time is promised.\nRelated customer feedback is listed separately; it is not verified policy.",
+            "citations": [
+              {
+                "id": "kb-delivery",
+                "title": "Synthetic delivery guidance",
+                "excerpt": "Check the tracking link in your shipping confirmation. If the tracking status is unclear, contact support with your order reference."
+              }
+            ],
+            "related_themes": [
+              "delivery"
+            ],
+            "supporting_feedback": [
+              {
+                "group_id": "f1",
+                "source_ids": [
+                  "f1",
+                  "f2"
+                ],
+                "excerpt": "My delivery is late!"
+              }
+            ],
+            "handoff": null
+          },
+          {
+            "id": "q2",
+            "question": "How do I request a refund?",
+            "status": "grounded_guidance",
+            "answer": "Here is the relevant published guidance:\n[kb-refunds] To request a return, contact support with your order reference and the reason for the return. Eligibility is reviewed by the support team.\nThe team is currently offline. No response time is promised.\nRelated customer feedback is listed separately; it is not verified policy.",
+            "citations": [
+              {
+                "id": "kb-refunds",
+                "title": "Synthetic returns guidance",
+                "excerpt": "To request a return, contact support with your order reference and the reason for the return. Eligibility is reviewed by the support team."
+              }
+            ],
+            "related_themes": [
+              "refunds"
+            ],
+            "supporting_feedback": [
+              {
+                "group_id": "f3",
+                "source_ids": [
+                  "f3"
+                ],
+                "excerpt": "The refund instructions were helpful."
+              }
+            ],
+            "handoff": null
+          },
+          {
+            "id": "q3",
+            "question": "Can you change my subscription billing currency?",
+            "status": "needs_human",
+            "answer": "I don't have published guidance matching this question. Please contact support with the issue details; do not send passwords or payment details.\nThe team is currently offline. No response time is promised.",
+            "citations": [],
+            "related_themes": [],
+            "supporting_feedback": [],
+            "handoff": {
+              "reason": "No matching published guidance",
+              "created": false
+            }
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t038_combo2_feedback_basic-support",
+    "artifact_sha256": {
+      "implementation.py": "83dfde7ea6ca6518dae10eda358dc8b28c6a685242584edccfee2c37888db271",
+      "test_implementation.py": "3d94c59748dd8b37b45cef568ba631801c96bd01ef45c4b8a6a2aa2507fc39a7",
+      "example_input.json": "208c1da1d3643397bb00227ea015f0ca27901589376a4816f7d42dc985b462e0",
+      "build_manifest.json": "10b699e43039275ee8565218864787a71e57bcdb89b6e5d05ee80d9ce182ef60"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

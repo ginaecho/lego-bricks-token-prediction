@@ -107,7 +107,7 @@
   "split_group": "1d6a3b89d65d89b9079589b355b0b1d71d1d5ed343735fc48110c1598aabc350",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "f80aac24522f7453aab845485e6ff4d6c6bc2d86351c3a19a4c916e8f6cc19a4",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t020_combo2_basic-search_basic-research",
   "membership_point_id": "combo2_basic-search_basic-research",
@@ -115,8 +115,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "41cfbdb1ae1381fd6a3b2223058c8fde2d61302e50547e264ea3eb85a2a9bebc",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "54f195d1-6876-43d8-a29c-c564a0a925c8",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 123078,
+    "output_tokens": 7994,
+    "cache_read_tokens": 112994,
+    "cache_write_tokens": 10066,
+    "total_tokens": 131072,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36403,
+        "agent_id": "54f195d1-6876-43d8-a29c-c564a0a925c8",
+        "model": "gpt-6-astra",
+        "input_tokens": 14915,
+        "output_tokens": 348,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 831,
+        "reasoning_tokens": 176,
+        "duration_ms": 10029,
+        "created_at": "2026-09-24T08:50:34.070Z"
+      },
+      {
+        "id": 36408,
+        "agent_id": "54f195d1-6876-43d8-a29c-c564a0a925c8",
+        "model": "gpt-6-astra",
+        "input_tokens": 15301,
+        "output_tokens": 6419,
+        "cache_read_tokens": 14912,
+        "cache_write_tokens": 386,
+        "reasoning_tokens": 0,
+        "duration_ms": 81213,
+        "created_at": "2026-09-24T08:51:54.730Z"
+      },
+      {
+        "id": 36409,
+        "agent_id": "54f195d1-6876-43d8-a29c-c564a0a925c8",
+        "model": "gpt-6-astra",
+        "input_tokens": 22040,
+        "output_tokens": 144,
+        "cache_read_tokens": 15298,
+        "cache_write_tokens": 6739,
+        "reasoning_tokens": 7,
+        "duration_ms": 3238,
+        "created_at": "2026-09-24T08:52:04.169Z"
+      },
+      {
+        "id": 36412,
+        "agent_id": "54f195d1-6876-43d8-a29c-c564a0a925c8",
+        "model": "gpt-6-astra",
+        "input_tokens": 22873,
+        "output_tokens": 682,
+        "cache_read_tokens": 22037,
+        "cache_write_tokens": 833,
+        "reasoning_tokens": 149,
+        "duration_ms": 12047,
+        "created_at": "2026-09-24T08:52:21.407Z"
+      },
+      {
+        "id": 36417,
+        "agent_id": "54f195d1-6876-43d8-a29c-c564a0a925c8",
+        "model": "gpt-6-astra",
+        "input_tokens": 23799,
+        "output_tokens": 292,
+        "cache_read_tokens": 22870,
+        "cache_write_tokens": 926,
+        "reasoning_tokens": 0,
+        "duration_ms": 4760,
+        "created_at": "2026-09-24T08:52:42.500Z"
+      },
+      {
+        "id": 36420,
+        "agent_id": "54f195d1-6876-43d8-a29c-c564a0a925c8",
+        "model": "gpt-6-astra",
+        "input_tokens": 24150,
+        "output_tokens": 109,
+        "cache_read_tokens": 23796,
+        "cache_write_tokens": 351,
+        "reasoning_tokens": 0,
+        "duration_ms": 2949,
+        "created_at": "2026-09-24T08:53:04.654Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.427605,
+      "observed_cache_profile_estimate_usd": 0.17336849999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.131259999999999,
+      "observed_cache_profile_estimate_usd": 5.131259999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -147,5 +272,143 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 1.046s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "fixture_label": "SYNTHETIC catalog and evidence: invented products and source text",
+      "research": {
+        "comparison": [
+          {
+            "evidence_count": 2,
+            "evidence_ids": [
+              "s1",
+              "s2"
+            ],
+            "product_id": "p1"
+          },
+          {
+            "evidence_count": 1,
+            "evidence_ids": [
+              "s3"
+            ],
+            "product_id": "p2"
+          }
+        ],
+        "evidence": [
+          {
+            "kind": "specification",
+            "product_id": "p1",
+            "quote": "Rated battery life is 24 hours under synthetic laboratory conditions.",
+            "relevance": 0.4,
+            "source_id": "s1",
+            "title": "Synthetic Cloud specification"
+          },
+          {
+            "kind": "review",
+            "product_id": "p1",
+            "quote": "One fictional reviewer found comfort adequate for a two-hour session.",
+            "relevance": 0.2,
+            "source_id": "s2",
+            "title": "Synthetic comfort observation"
+          },
+          {
+            "kind": "specification",
+            "product_id": "p2",
+            "quote": "Rated battery life is 32 hours. Comfort has not been assessed.",
+            "relevance": 0.6,
+            "source_id": "s3",
+            "title": "Synthetic Studio specification"
+          }
+        ],
+        "limitations": [
+          "Offline lexical matching and a small synonym dictionary do not provide full semantic understanding.",
+          "Sources are supplied, not independently verified; counts do not measure quality or independence.",
+          "Quotes may disagree; this pipeline does not resolve contradictions, sentiment, or numerical comparisons."
+        ],
+        "question": "Which headphones offer battery life and comfort?",
+        "recommendation": {
+          "basis": "Prioritize for further evaluation: most question-relevant supplied sources; ties use search rank. Not a quality or purchase verdict.",
+          "evidence_ids": [
+            "s1",
+            "s2"
+          ],
+          "product_id": "p1"
+        }
+      },
+      "schema_version": 1,
+      "search": {
+        "interpreted_terms": [
+          "cordless",
+          "headphone"
+        ],
+        "query": "wireless headphones",
+        "results": [
+          {
+            "matches": [
+              {
+                "matched_term": "cordless",
+                "method": "exact_or_synonym",
+                "query_term": "cordless"
+              },
+              {
+                "matched_term": "headphone",
+                "method": "exact_or_synonym",
+                "query_term": "headphone"
+              }
+            ],
+            "product": {
+              "category": "Audio",
+              "currency": "USD",
+              "description": "Light headphone for travel",
+              "id": "p1",
+              "in_stock": true,
+              "name": "Cloud Cordless Headset",
+              "price": 89
+            },
+            "score": 1.0
+          },
+          {
+            "matches": [
+              {
+                "matched_term": "cordless",
+                "method": "exact_or_synonym",
+                "query_term": "cordless"
+              },
+              {
+                "matched_term": "headphone",
+                "method": "exact_or_synonym",
+                "query_term": "headphone"
+              }
+            ],
+            "product": {
+              "category": "Audio",
+              "currency": "USD",
+              "description": "Over-ear audio headset",
+              "id": "p2",
+              "in_stock": true,
+              "name": "Studio Wireless Headphones",
+              "price": 110
+            },
+            "score": 1.0
+          }
+        ]
+      },
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t020_combo2_basic-search_basic-research",
+    "artifact_sha256": {
+      "implementation.py": "8e8009cdd20368b0491ea01a08e41361f47c39061599006ff5d8907ac82564ef",
+      "test_implementation.py": "1e18f43584078ab8a409bf719f0394a56a27fae9ec3f6d9dea11c9a8951154d3",
+      "example_input.json": "eac161efbc49de678181cacefd456e430af215b3871ce8d4f01a7b81cbe1bb36",
+      "build_manifest.json": "91209c3374192eb0ba0e1ab9e3e4fa265bbc722b701c294341b46553aa1fa745"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

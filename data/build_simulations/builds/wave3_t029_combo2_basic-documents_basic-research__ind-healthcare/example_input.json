@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "resources": [
+    {"resourceType": "Patient", "id": "SYN-P1"},
+    {"resourceType": "ClinicalNote", "id": "SYN-N1", "subject": {"reference": "Patient/SYN-P1"}, "text": "Diagnosis: E11.9\nLab: 4548-4 7.2 %\nRequest: LAB-A1C"},
+    {"resourceType": "PriorAuthorizationRequest", "id": "SYN-A1", "subject": {"reference": "Patient/SYN-P1"}, "serviceCode": "LAB-A1C"}
+  ],
+  "research": {
+    "question": "What synthetic evidence supports or contradicts the documented service and diagnosis?",
+    "focus_codes": ["E11.9", "LAB-A1C", "4548-4"],
+    "sources": [
+      {"id": "SRC-1", "synthetic": true, "text": "FICTITIOUS teaching source: E11.9 is included in this synthetic cohort. LAB-A1C has supporting administrative evidence.", "claims": [
+        {"code": "E11.9", "stance": "supports", "quote": "E11.9 is included in this synthetic cohort."},
+        {"code": "LAB-A1C", "stance": "supports", "quote": "LAB-A1C has supporting administrative evidence."}
+      ]},
+      {"id": "SRC-2", "synthetic": true, "text": "FICTITIOUS teaching source: LAB-A1C has conflicting administrative evidence.", "claims": [
+        {"code": "LAB-A1C", "stance": "contradicts", "quote": "LAB-A1C has conflicting administrative evidence."}
+      ]}
+    ]
+  }
+}

@@ -107,7 +107,7 @@
   "split_group": "593f5899961f44c1ae8d33f1144c49ae128f6348e777146ce6db999455397947",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "8b33b4aec8b33eaf04b404e137d8bc8ed43accb3e561a4c70d7d30ba5a40f5d6",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t005_combo2_basic-support_basic-search__ind-public_sector",
   "membership_point_id": "combo2_basic-support_basic-search__ind-public_sector",
@@ -115,8 +115,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "a59ee7c84f06c66e2287a46568c2bc0f4cd0216d028aaa10ccf15b78a1dfe6c9",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "42a77082-c091-43cd-84fd-69d113e62ba0",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 126383,
+    "output_tokens": 8666,
+    "cache_read_tokens": 115697,
+    "cache_write_tokens": 10668,
+    "total_tokens": 135049,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36259,
+        "agent_id": "42a77082-c091-43cd-84fd-69d113e62ba0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15033,
+        "output_tokens": 174,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 949,
+        "reasoning_tokens": 0,
+        "duration_ms": 6140,
+        "created_at": "2026-09-24T08:30:03.576Z"
+      },
+      {
+        "id": 36273,
+        "agent_id": "42a77082-c091-43cd-84fd-69d113e62ba0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15233,
+        "output_tokens": 7457,
+        "cache_read_tokens": 15030,
+        "cache_write_tokens": 200,
+        "reasoning_tokens": 807,
+        "duration_ms": 100894,
+        "created_at": "2026-09-24T08:31:45.967Z"
+      },
+      {
+        "id": 36274,
+        "agent_id": "42a77082-c091-43cd-84fd-69d113e62ba0",
+        "model": "gpt-6-astra",
+        "input_tokens": 23022,
+        "output_tokens": 166,
+        "cache_read_tokens": 15230,
+        "cache_write_tokens": 7789,
+        "reasoning_tokens": 7,
+        "duration_ms": 3242,
+        "created_at": "2026-09-24T08:31:52.136Z"
+      },
+      {
+        "id": 36280,
+        "agent_id": "42a77082-c091-43cd-84fd-69d113e62ba0",
+        "model": "gpt-6-astra",
+        "input_tokens": 23856,
+        "output_tokens": 536,
+        "cache_read_tokens": 23019,
+        "cache_write_tokens": 834,
+        "reasoning_tokens": 234,
+        "duration_ms": 10914,
+        "created_at": "2026-09-24T08:32:12.228Z"
+      },
+      {
+        "id": 36281,
+        "agent_id": "42a77082-c091-43cd-84fd-69d113e62ba0",
+        "model": "gpt-6-astra",
+        "input_tokens": 24487,
+        "output_tokens": 230,
+        "cache_read_tokens": 23853,
+        "cache_write_tokens": 631,
+        "reasoning_tokens": 0,
+        "duration_ms": 3786,
+        "created_at": "2026-09-24T08:32:15.691Z"
+      },
+      {
+        "id": 36282,
+        "agent_id": "42a77082-c091-43cd-84fd-69d113e62ba0",
+        "model": "gpt-6-astra",
+        "input_tokens": 24752,
+        "output_tokens": 103,
+        "cache_read_tokens": 24484,
+        "cache_write_tokens": 265,
+        "reasoning_tokens": 0,
+        "duration_ms": 3028,
+        "created_at": "2026-09-24T08:32:21.969Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4459475,
+      "observed_cache_profile_estimate_usd": 0.18562925,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.351369999999999,
+      "observed_cache_profile_estimate_usd": 5.351369999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -147,5 +272,114 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.613s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "fixture_label": "SYNTHETIC - no real citizens or cases",
+      "status": "ok",
+      "request": {
+        "case_number": "SYN-CASE-0042",
+        "kind": "benefits_application",
+        "question": "I am [redacted]. My email is [redacted]. How can I get help with rent?",
+        "citizen": null
+      },
+      "benefits_application": {
+        "application_id": "SYN-APP-0017",
+        "program": "Housing support",
+        "status": "submitted"
+      },
+      "policies": [
+        {
+          "id": "POL-HOUSING",
+          "title": "Invented housing support policy",
+          "text": "Synthetic regulation H-1. Housing support accepts a benefits application. Submit the form to the service team for review.",
+          "plain_language_summary": "Housing support accepts a benefits application. Submit the form to the service team for review."
+        },
+        {
+          "id": "POL-FOOD",
+          "title": "Invented food support policy",
+          "text": "Synthetic regulation F-1. Food support offers an application form. Ask the service team about the documents you need.",
+          "plain_language_summary": "Food support offers an application form. Ask the service team about the documents you need."
+        }
+      ],
+      "services": [
+        {
+          "id": "SVC-HOUSING",
+          "title": "Housing support application",
+          "description": "Find the housing form and ask for help from the service team.",
+          "policy_ids": [
+            "POL-HOUSING"
+          ]
+        },
+        {
+          "id": "SVC-FOOD",
+          "title": "Food support application",
+          "description": "Find a food benefit form and ask for help.",
+          "policy_ids": [
+            "POL-FOOD"
+          ]
+        }
+      ],
+      "support": {
+        "query_terms": [
+          "am",
+          "email",
+          "housing"
+        ],
+        "answer": "Housing support accepts a benefits application. Submit the form to the service team for review.",
+        "citations": [
+          {
+            "policy_id": "POL-HOUSING",
+            "evidence": "Synthetic regulation H-1. Housing support accepts a benefits application. Submit the form to the service team for review."
+          }
+        ],
+        "needs_human": false,
+        "notice": "This is general guidance, not a benefits decision. A service team must review your application.",
+        "explanation": "Guidance uses only supplied policies that share normalized words with your question."
+      },
+      "search": {
+        "source_query_terms": [
+          "am",
+          "email",
+          "housing"
+        ],
+        "source_policy_ids": [
+          "POL-HOUSING"
+        ],
+        "results": [
+          {
+            "service_id": "SVC-HOUSING",
+            "title": "Housing support application",
+            "description": "Find the housing form and ask for help from the service team.",
+            "score": 3,
+            "matched_terms": [
+              "housing"
+            ],
+            "support_policy_ids": [
+              "POL-HOUSING"
+            ],
+            "explanation": "Matched words: housing."
+          }
+        ],
+        "message": "These services may help. Check the service details before applying.",
+        "ranking_rule": "Two points per matched word, plus one per linked support policy. Ties use service ID."
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t005_combo2_basic-support_basic-search__ind-public_sector",
+    "artifact_sha256": {
+      "implementation.py": "41e3bba053c450c866f8974fb6c0d7e6c42411b7e5ed062a5e2525e122038c4a",
+      "test_implementation.py": "7096a435c0253717df52f3096e7f760d33448bf4c93dd81176a19240e64919b7",
+      "example_input.json": "a7d83bea90fa9a7b3dfd2e3e60139db3c18016a8f52d392f3e0e3664bc1ba953",
+      "build_manifest.json": "baf23adbfb3c3cb5b7720231a4ae7cbf5499551b10e4dcb463bb62623016de57"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

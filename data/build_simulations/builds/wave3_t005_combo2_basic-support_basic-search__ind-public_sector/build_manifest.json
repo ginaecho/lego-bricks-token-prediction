@@ -1,0 +1,57 @@
+{
+  "build_id": "wave3_t005_combo2_basic-support_basic-search__ind-public_sector",
+  "composition_label": "basic:support -> basic:search | public_sector",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "envelope_fields": ["schema_version", "fixture_label", "status", "request", "benefits_application", "policies", "services", "support", "search"],
+    "phases": "input: citizen object and null outputs; supported: citizen null and validated support; ok: citizen null and both validated outputs.",
+    "validation": "One validate(envelope, phase) layer enforces exact keys, bounded text and catalogs, synthetic identifiers, unique IDs, policy references, public text privacy, plain-language summaries, grounding, handoff integrity and deterministic rankings.",
+    "formats": "Government form JSON with a citizen service request and benefits application; invented policy/regulation text embedded in policy documents."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "support",
+      "to": "search",
+      "data": ["support.query_terms", "support.citations[].policy_id"],
+      "validation": "Search accepts only a validated supported envelope. It copies canonical query terms and citation IDs into its output and uses them for word matching and policy-link ranking bonuses."
+    }
+  ],
+  "behavior": {
+    "support": "Removes supplied citizen PII and recognizable email, phone, national-ID and street-address patterns from the question. Finds policies using normalized terms. Returns verbatim short policy summaries, policy IDs, full evidence text, an explanation and a non-decision notice. Escalates when no policy matches.",
+    "search": "Normalizes a small general-purpose synonym vocabulary. Ranks supplied public services by two points per distinct matching term plus one per linked support policy. Stable ID tie-break. Returns matched terms, provenance and plain-language descriptions. No service is an entitlement determination.",
+    "privacy": "Citizen fields are never included in successful outputs. Public catalog and application program fields reject supplied PII and recognizable patterns. Errors are generic and never echo paths, input or exceptions. No persistence or logging.",
+    "explainability": "Policy quotations, stable identifiers, matched terms, explicit ranking rule and handoff provenance support demonstrative open-records review without releasing citizen fields.",
+    "accessibility": "Text-only JSON, plain-language service text and policy summaries, sentence-length limits and a small jargon exclusion list. These are Section 508-inspired demonstrations, not accessibility certification.",
+    "cli": "One JSON object on stdout, exit 0 on success; JSON status error and exit 2 for file, parse or validation errors."
+  },
+  "scope": {
+    "included": ["Offline deterministic integrated pipeline", "Synthetic fixtures", "Shared phase-aware schema", "Demonstrative Privacy Act/GDPR safeguards", "Grounded general guidance", "Explainable synonym-based service search"],
+    "excluded": ["Live providers or networks", "Eligibility decisions", "Real citizen data", "Comprehensive PII detection", "Legal or regulatory compliance certification", "Enterprise operations", "Complete semantic understanding", "Independent truth verification of supplied policies"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "run": 25,
+      "passed": 25,
+      "failures": 0,
+      "errors": 0,
+      "coverage": ["Support grounding", "Synonym search", "Validated cross-stage propagation", "Determinism and non-mutation", "PII removal and public-field rejection", "Unknown queries and empty catalogs", "Stable ranking explanations", "Invalid schemas and references", "Plain-language constraints", "No eligibility determination", "Tampered handoffs and stage ordering", "CLI success, usage, missing file, malformed JSON and validation errors"]
+    },
+    "cli_exit_code": 0,
+    "cli_output_status": "ok"
+  }
+}

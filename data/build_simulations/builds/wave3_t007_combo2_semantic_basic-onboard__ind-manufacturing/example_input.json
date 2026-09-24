@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "fixture_description": "Entirely invented manufacturing example. Python random.Random(42): two gauss(65,1.2) temperature samples followed by two gauss(2.4,0.15) vibration samples, rounded to 2 decimals. Physically plausible, not actual plant data. All assets, staff and maintenance logs are fictitious.",
+  "customer": {
+    "customer_id": "SYN-CUSTOMER-01",
+    "name": "Synthetic Avery",
+    "role": "operator",
+    "experience": "new",
+    "goal": "Understand bearing vibration before beginning a new work order"
+  },
+  "query": "bearing shaking",
+  "limit": 5,
+  "work_orders": [
+    {
+      "work_order_id": "SYN-WO-101",
+      "asset_id": "SYN-LATHE-07",
+      "product": "Precision bearing housing",
+      "description": "Machine a batch of housings; review vibration telemetry and diameter inspection.",
+      "status": "planned",
+      "quantity": 120,
+      "maintenance_logs": [
+        {
+          "timestamp": "2026-09-23T14:00:00Z",
+          "technician": "Synthetic Morgan",
+          "note": "Invented maintenance: spindle lubrication checked and bearing guard visually reviewed."
+        }
+      ]
+    },
+    {
+      "work_order_id": "SYN-WO-102",
+      "asset_id": "SYN-PRESS-03",
+      "product": "Bracket plate",
+      "description": "Prepare a small batch of stamped support plates.",
+      "status": "active",
+      "quantity": 80,
+      "maintenance_logs": [
+        {
+          "timestamp": "2026-09-23T15:00:00Z",
+          "technician": "Synthetic Lee",
+          "note": "Invented maintenance: die guides cleaned during planned service."
+        }
+      ]
+    }
+  ],
+  "telemetry_csv": "reading_id,work_order_id,asset_id,timestamp,metric,value,unit,lower,upper,safety_critical\nSYN-R001,SYN-WO-101,SYN-LATHE-07,2026-09-24T08:00:00Z,temperature,64.83,C,20,80,true\nSYN-R002,SYN-WO-101,SYN-LATHE-07,2026-09-24T08:01:00Z,temperature,64.79,C,20,80,true\nSYN-R003,SYN-WO-101,SYN-LATHE-07,2026-09-24T08:00:00Z,vibration,2.38,mm/s,0,4.5,true\nSYN-R004,SYN-WO-101,SYN-LATHE-07,2026-09-24T08:01:00Z,vibration,2.51,mm/s,0,4.5,true\n",
+  "quality_inspections": [
+    {
+      "inspection_id": "SYN-QI-001",
+      "work_order_id": "SYN-WO-101",
+      "asset_id": "SYN-LATHE-07",
+      "timestamp": "2026-09-24T08:02:00Z",
+      "inspector": "Synthetic Casey",
+      "metric": "diameter",
+      "value": 25.01,
+      "unit": "mm",
+      "lower": 24.95,
+      "upper": 25.05,
+      "decision": "pass",
+      "rationale": "Invented first-piece measurement lies within the supplied dimensional tolerance.",
+      "safety_critical": false
+    }
+  ]
+}

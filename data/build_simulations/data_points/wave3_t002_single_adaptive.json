@@ -97,7 +97,7 @@
   "split_group": "ffcc3ef5fe0b307894c624c8a5a0006350af75478bd69390708c41404dcfd5fc",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "7b08dbc75e124d27927300d2f5cbe4d3dcc874cb38cc78aad6792ddc358cb255",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t002_single_adaptive",
   "membership_point_id": "single_adaptive",
@@ -105,8 +105,133 @@
   "trial_category": "BT_single_repeat",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "d48c942d3dd812c02cfc21c9622d3b2f6442b19b624cc5bfbf33abe25e32b352",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "4fefe4a8-ac89-4fbe-86b6-c8cb5ef8cc5f",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 116278,
+    "output_tokens": 6205,
+    "cache_read_tokens": 108218,
+    "cache_write_tokens": 8042,
+    "total_tokens": 122483,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36255,
+        "agent_id": "4fefe4a8-ac89-4fbe-86b6-c8cb5ef8cc5f",
+        "model": "gpt-6-astra",
+        "input_tokens": 14812,
+        "output_tokens": 338,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 728,
+        "reasoning_tokens": 177,
+        "duration_ms": 8711,
+        "created_at": "2026-09-24T08:29:20.669Z"
+      },
+      {
+        "id": 36265,
+        "agent_id": "4fefe4a8-ac89-4fbe-86b6-c8cb5ef8cc5f",
+        "model": "gpt-6-astra",
+        "input_tokens": 15180,
+        "output_tokens": 5194,
+        "cache_read_tokens": 14809,
+        "cache_write_tokens": 368,
+        "reasoning_tokens": 301,
+        "duration_ms": 81392,
+        "created_at": "2026-09-24T08:31:09.674Z"
+      },
+      {
+        "id": 36267,
+        "agent_id": "4fefe4a8-ac89-4fbe-86b6-c8cb5ef8cc5f",
+        "model": "gpt-6-astra",
+        "input_tokens": 20678,
+        "output_tokens": 133,
+        "cache_read_tokens": 15177,
+        "cache_write_tokens": 5498,
+        "reasoning_tokens": 0,
+        "duration_ms": 2760,
+        "created_at": "2026-09-24T08:31:13.370Z"
+      },
+      {
+        "id": 36272,
+        "agent_id": "4fefe4a8-ac89-4fbe-86b6-c8cb5ef8cc5f",
+        "model": "gpt-6-astra",
+        "input_tokens": 21568,
+        "output_tokens": 258,
+        "cache_read_tokens": 20675,
+        "cache_write_tokens": 890,
+        "reasoning_tokens": 32,
+        "duration_ms": 5577,
+        "created_at": "2026-09-24T08:31:40.615Z"
+      },
+      {
+        "id": 36276,
+        "agent_id": "4fefe4a8-ac89-4fbe-86b6-c8cb5ef8cc5f",
+        "model": "gpt-6-astra",
+        "input_tokens": 21914,
+        "output_tokens": 177,
+        "cache_read_tokens": 21565,
+        "cache_write_tokens": 346,
+        "reasoning_tokens": 0,
+        "duration_ms": 4808,
+        "created_at": "2026-09-24T08:31:55.600Z"
+      },
+      {
+        "id": 36278,
+        "agent_id": "4fefe4a8-ac89-4fbe-86b6-c8cb5ef8cc5f",
+        "model": "gpt-6-astra",
+        "input_tokens": 22126,
+        "output_tokens": 105,
+        "cache_read_tokens": 21911,
+        "cache_write_tokens": 212,
+        "reasoning_tokens": 0,
+        "duration_ms": 4444,
+        "created_at": "2026-09-24T08:32:07.813Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.38377,
+      "observed_cache_profile_estimate_usd": 0.14027949999999997,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.60524,
+      "observed_cache_profile_estimate_usd": 4.60524,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,136 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............\n----------------------------------------------------------------------\nRan 12 tests in 1.246s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "data": {
+        "schema_version": 1,
+        "fixture": {
+          "kind": "synthetic",
+          "id": "synthetic-new-seller-001"
+        },
+        "experience": "novice",
+        "preferences": {
+          "format": "practice",
+          "pace": "focused"
+        },
+        "goals": [
+          "launch_store"
+        ],
+        "steps": [
+          {
+            "id": "orientation",
+            "title": "Understand the storefront",
+            "state": "ready",
+            "prerequisites": [],
+            "blocked_by": [],
+            "serves_goals": [
+              "launch_store"
+            ],
+            "explanation": "Learn how products, prices and checkout connect.",
+            "guidance": "Understand the storefront. Learn how products, prices and checkout connect. Work through one decision at a time and review before continuing. Practice with a synthetic example, then check the result.",
+            "guidance_level": "guided"
+          },
+          {
+            "id": "catalog",
+            "title": "Create a product listing",
+            "state": "blocked",
+            "prerequisites": [
+              "orientation"
+            ],
+            "blocked_by": [
+              "orientation"
+            ],
+            "serves_goals": [
+              "launch_store"
+            ],
+            "explanation": "A listing gives shoppers something to evaluate.",
+            "guidance": "Create a product listing. A listing gives shoppers something to evaluate. Work through one decision at a time and review before continuing. Practice with a synthetic example, then check the result.",
+            "guidance_level": "guided"
+          },
+          {
+            "id": "pricing",
+            "title": "Set a sustainable price",
+            "state": "blocked",
+            "prerequisites": [
+              "catalog"
+            ],
+            "blocked_by": [
+              "catalog"
+            ],
+            "serves_goals": [
+              "launch_store"
+            ],
+            "explanation": "Price a listed product before offering it for sale.",
+            "guidance": "Set a sustainable price. Price a listed product before offering it for sale. Work through one decision at a time and review before continuing. Practice with a synthetic example, then check the result.",
+            "guidance_level": "guided"
+          },
+          {
+            "id": "payments",
+            "title": "Configure test checkout",
+            "state": "blocked",
+            "prerequisites": [
+              "orientation"
+            ],
+            "blocked_by": [
+              "orientation"
+            ],
+            "serves_goals": [
+              "launch_store"
+            ],
+            "explanation": "Verify the checkout path before accepting orders.",
+            "guidance": "Configure test checkout. Verify the checkout path before accepting orders. Work through one decision at a time and review before continuing. Practice with a synthetic example, then check the result.",
+            "guidance_level": "guided"
+          },
+          {
+            "id": "publish",
+            "title": "Review and publish the store",
+            "state": "blocked",
+            "prerequisites": [
+              "pricing",
+              "payments"
+            ],
+            "blocked_by": [
+              "pricing",
+              "payments"
+            ],
+            "serves_goals": [
+              "launch_store"
+            ],
+            "explanation": "Publish only after listings, pricing and checkout are ready.",
+            "guidance": "Review and publish the store. Publish only after listings, pricing and checkout are ready. Work through one decision at a time and review before continuing. Practice with a synthetic example, then check the result.",
+            "guidance_level": "guided"
+          }
+        ],
+        "next_actions": [
+          "orientation"
+        ],
+        "progress": {
+          "completed": 0,
+          "total": 5,
+          "percent": 0.0
+        },
+        "onboarding_complete": false,
+        "adaptation_explanation": "novice experience uses guided guidance; practice preference controls learning activity; focused pace offers at most 1 ready action(s). Novices must complete orientation before listings or checkout. Experience never bypasses operational prerequisites."
+      },
+      "errors": []
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t002_single_adaptive",
+    "artifact_sha256": {
+      "implementation.py": "95f8010ac958b30957ff064232716b6f35c982040550970c423b2085b7d5f37c",
+      "test_implementation.py": "14c30d1eac1a54dc664d937e8aa93a0c3d5717af63ce49f314fc783219193c57",
+      "example_input.json": "4de96910dfdc0b6e1c6058d358fc06134cc0e0423b7fd25c1b6e6c74a8b928c6",
+      "build_manifest.json": "2046116191b0c5e19649af4a5a50ff68073bf9a59709b8693637918c910488b3"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

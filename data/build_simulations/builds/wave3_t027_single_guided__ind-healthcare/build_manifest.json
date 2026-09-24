@@ -1,0 +1,80 @@
+{
+  "build_id": "wave3_t027_single_guided__ind-healthcare",
+  "composition_label": "Guided setup (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Closed object with schema_version=1, synthetic_fixture=true, prerequisites, records, actions.",
+    "prerequisites": "Strict boolean deidentification_training_complete and reviewer_available; synthetic reviewer_id.",
+    "records": "Exactly patient_record (Patient with Condition and Observation fixture data), clinical_note (DocumentReference with controlled text), prior_authorization_request (Claim initially draft).",
+    "synthetic_ids": "syn-patient-, syn-note-, syn-auth-, or syn-reviewer- followed by exactly three digits. No actual MRNs, names or dates of birth.",
+    "clinical_notes": [
+      "SYNTHETIC: Training note only. No clinical decision recorded.",
+      "SYNTHETIC: Fictitious follow-up note. Human review required."
+    ],
+    "output": "Successful output retains the validated input envelope and adds status=ok, onboarding progress, active_records and audit_trail. Error output has status=error and a non-sensitive message.",
+    "validation": "One shared validate() boundary; closed field allowlists, controlled synthetic vocabulary, matching references, finite lab values, mandatory human review and draft-only proposed authorization."
+  },
+  "cross_stage_handoffs": [
+    "check_prerequisites gates register_patient",
+    "register_patient creates the patient before attach_clinical_note",
+    "attach_clinical_note creates the note before prepare_prior_authorization",
+    "prepare_prior_authorization creates a draft before request_human_review",
+    "request_human_review changes only the workflow status to pending-human-review; no clinical or payer decision is made"
+  ],
+  "behavior": {
+    "ordered_steps": [
+      "check_prerequisites",
+      "register_patient",
+      "attach_clinical_note",
+      "prepare_prior_authorization",
+      "request_human_review"
+    ],
+    "progress": "0-100 percent, completed steps and next step; duplicate completed actions are idempotent.",
+    "resumption": "Stateless deterministic replay: retain original input and append actions to continue. Output active_records are distinct from immutable proposed input records. Project the five shared input fields before replay; do not submit the augmented output unchanged.",
+    "audit": "Every active record creation and change has a sequence, actor, triggering step, record id, operation and before/after snapshots. Nested conditions and labs are covered by the patient snapshot. Replay reconstructs audit deterministically; no wall-clock timestamps or external audit storage.",
+    "privacy": "Demonstrative HIPAA de-identification constraints enforced by accepting only closed synthetic resources and controlled note templates. Unknown demographic fields and free-form text are rejected rather than redacted. No compliance certification claim.",
+    "human_review": "Always required; setup completion means a review request, not reviewed care or approved authorization.",
+    "cli": "One JSON object on stdout; success exits 0, validation/file/usage errors exit 2 without echoing potentially sensitive input."
+  },
+  "scope": {
+    "included": [
+      "Prerequisite-driven guided onboarding with deterministic progress",
+      "Clearly labeled fictitious Synthea-style fixture data",
+      "FHIR-style JSON resources and controlled clinical note text",
+      "Record-change audit snapshots and human review flags"
+    ],
+    "excluded": [
+      "Real patient data and general-purpose text de-identification",
+      "Full FHIR conformance or HIPAA certification",
+      "Clinical recommendations, diagnoses, treatment or authorization decisions",
+      "Actual review approval, authentication, external persistence and production deployment",
+      "LLMs, networks and external providers"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_test_count": 17,
+    "cli_example": "Passed: exactly one JSON object with status=ok, progress_percent=100, pending human review and exit code 0.",
+    "unit_tests": "17 unittest cases passed, including normal, partial, duplicate, invalid input, privacy, clinical decision restrictions, audit replay and CLI paths.",
+    "error_paths": "Missing file, missing arguments, malformed JSON, duplicate JSON keys, non-finite JSON constants and schema/ordering failures produce status=error and exit code 2."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "build_id": "wave3_t014_combo2_extract_basic-search",
+  "composition_label": "Structured extraction -> Smart product search (basic)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, isolated implementation using synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1",
+    "input": "schema_version, document, fields, catalog, search; fixture_label is optional metadata",
+    "fields": "Unique names and non-overlapping case-insensitive aliases; types string, number, boolean; explicit required flag",
+    "catalog": "Unique id, name, description, category, tags, finite nonnegative price, boolean in_stock",
+    "search": "Typed field references: query_field required; max_price_field, category_field, in_stock_field optional; limit 1..100; min_score in (0,1]",
+    "output": "schema_version, status (ok or needs_input), extraction, search; errors have status error and error message",
+    "validation": "Shared Schema layer validates input, extraction handoff and ranked catalog results",
+    "spans": "Zero-based half-open Python Unicode character offsets in original document, including original newline widths",
+    "missing": "Null value and span; missing_fields includes absent or blank optional and required fields; missing_required is the required subset"
+  },
+  "cross_stage_handoffs": [
+    "Extract validates typed values against source_text and document spans.",
+    "Search revalidates extraction and obtains query, maximum price, category and stock solely from extracted field values.",
+    "Missing required fields or unusable search query skip ranking and return needs_input with exit code 0."
+  ],
+  "behavior": {
+    "extraction": "Deterministic line-oriented label: value parsing with normalized aliases, whitespace trimming, strict decimals and yes/no/true/false booleans. Unknown labels ignored; repeated known labels rejected.",
+    "search": "Unicode token normalization, explicit small synonym dictionary, stop words, prefix matching and bounded fuzzy spelling similarity; field-weighted average query coverage; structured exact category, stock and maximum-price filters",
+    "ranking": "Score descending, price ascending, product id ascending; per-term explanation and pre-limit total_matches",
+    "errors": "File, JSON and validation failures print one JSON object and exit 2",
+    "fixtures": "All document and catalog data is synthetic"
+  },
+  "scope": {
+    "included": ["Integrated deterministic CLI", "Schema-driven typed extraction", "Source spans", "Missing-field reporting", "General catalog search", "Validated handoff", "Unit and subprocess CLI tests"],
+    "excluded": ["Live model providers", "Network access", "OCR", "Arbitrary prose extraction", "Currency/unit conversion", "Embeddings", "Enterprise indexing", "Persistence", "Production scale", "Injected LLM callable"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 16,
+    "failures": 0,
+    "errors": 0,
+    "cli_example_exit_code": 0,
+    "cli_example_status": "ok",
+    "cli_example_top_product": "syn-1",
+    "cli_error_cases": "Missing input file, malformed JSON and invalid argument counts produce one JSON error and exit 2",
+    "verified_behaviors": ["Aliases and exact Unicode spans", "Required and optional missing fields", "Synonyms", "Typo and prefix matching", "Typed filter propagation", "No matches", "Empty catalog", "Stable ranking and limits", "Invalid schema and values", "Tampered handoff rejection"]
+  }
+}

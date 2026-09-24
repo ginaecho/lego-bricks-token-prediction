@@ -1,0 +1,68 @@
+{
+  "build_id": "wave3_t009_single_basic-insights",
+  "composition_label": "Customer insights (basic functionality, Intelligence)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch within this isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "required": ["schema_version", "feedback"],
+      "optional": ["data_label", "themes"],
+      "feedback_item": {"required": ["id", "text"], "optional": ["source", "customer_id"]},
+      "theme_item": {"required": ["id", "name", "keywords", "action"]},
+      "constraints": [
+        "Unknown fields rejected at every input-object level; all textual fields must be nonblank.",
+        "Feedback IDs must be unique after trimming; at most 10000 feedback records.",
+        "Feedback text is limited to 5000 characters; other record fields to 200.",
+        "Optional custom themes replace defaults; 1..50 themes, each with 1..50 nonempty keyword phrases.",
+        "Theme IDs are unique; 'other' is reserved for the fallback theme.",
+        "Theme ID/name and keywords are limited to 200 characters; actions to 1000.",
+        "CLI accepts UTF-8 JSON with optional BOM, at most 2000000 bytes; duplicate fields and nonstandard constants rejected."
+      ]
+    },
+    "output": {
+      "success": ["schema_version", "status", "data_label", "summary", "themes", "assignments", "limitations"],
+      "theme": ["id", "name", "feedback_count", "share_of_feedback", "sentiment_counts", "priority_score", "priority_reason", "recommended_action", "evidence"],
+      "error": {"schema_version": "1.0", "status": "error", "error": {"type": "validation_or_file_error", "message": "Diagnostic string"}},
+      "exit_codes": {"success": 0, "validation_or_file_error": 2}
+    },
+    "validation_layer": "validate_input is shared by analyze and the CLI. File parsing additionally enforces strict JSON and byte limits."
+  },
+  "cross_stage_handoffs": [
+    "Single requested stage: validated normalized feedback and theme definitions enter customer insights; one integrated result is emitted. There are no external or inter-service handoffs."
+  ],
+  "behavior": {
+    "theme_matching": "Case-folded whole-token phrases; multi-label; unmatched feedback assigned to 'other'. Six default themes cover quality, usability, support, pricing, delivery and feature requests. Custom dictionaries support other domains.",
+    "sentiment": "English positive/negative word counts with immediate-token negation; ties are neutral. Record-level sentiment is reused for every assigned theme.",
+    "priority": "3 * negative + neutral + positive counts; descending score, descending count, then ascending theme ID.",
+    "evidence": "Up to three complete original-text excerpts per theme sorted by feedback ID, with source and feedback ID. Normalization trims outer whitespace.",
+    "empty_input": "Valid empty feedback returns zero counts and empty themes/assignments.",
+    "repeat_feedback": "Unique record IDs required, but repeated text and customer IDs retained. Counts are feedback records, not distinct people.",
+    "determinism": "No randomness, timestamps, model calls, or mutation of caller input. Input record ordering does not affect results.",
+    "fixture_label": "Example and test fixtures are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["Local JSON CLI", "Shared validation", "Configurable themes", "Heuristic sentiment", "Ranked actionable suggestions", "Traceable evidence", "Source-level counts", "Automated tests"],
+    "excluded": ["Live providers or networks", "LLM processing", "Enterprise ingestion", "Authentication", "Persistent databases", "PII anonymization", "Semantic clustering", "Multilingual sentiment", "Sarcasm detection", "Statistical significance", "Verified root-cause claims"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": 13,
+    "unit_test_exit_code": 0,
+    "cli_example": "passed: one JSON object, status ok, six synthetic feedback records and seven themes",
+    "cli_exit_code": 0,
+    "coverage": ["Normal insights", "Empty feedback", "Whole-word matching", "Custom phrase themes", "Sentiment negation", "Determinism", "Input immutability", "Evidence limits", "Repeated text", "Invalid schema", "Invalid themes", "CLI success", "CLI missing file and usage", "Malformed JSON", "Invalid UTF-8", "Duplicate JSON keys", "Nonstandard JSON constants", "Oversized input"]
+  }
+}

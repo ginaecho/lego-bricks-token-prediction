@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t028_combo2_basic-recommend_basic-support",
+  "composition_label": "basic:recommend -> basic:support",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored for this build using only synthetic fixtures.",
+    "runtime": "Python 3.13.15 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict object: schema_version=1, fixture_label=synthetic, customer(preferred_categories, interests, budget nullable, purchased_ids), catalog(id, name, category, tags, price, currency=USD, stock, description), policies(shipping, returns, contact), support_request(question, product_id nullable), limit 1..20.",
+    "output": "status=ok, schema_version, fixture_label, discovery(items, empty_reason), support(product_id, facts[{source,text}], needs_human, answer). Errors: status=error and error string, exit 2.",
+    "validation": "Shared Validator enforces shapes, text, uniqueness, finite nonnegative numbers and integer counts. Both public stages validate input. Support revalidates the complete discovery ranking, IDs, prices and explanations against input. Support evidence and assembled answers are validated against supplied facts.",
+    "comparison_semantics": "Preferences, tags and IDs use exact case-sensitive matching; support topic matching is case-insensitive."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:recommend",
+      "to": "basic:support",
+      "payload": "Validated discovery items with product_id, name, price, currency, score, reasons, plus empty_reason.",
+      "consumption": "Support selects the requested recommended item or the highest-ranked item, uses its price and ranking reasons, and looks up its validated catalog description/stock. A requested item outside this handoff escalates rather than being silently substituted."
+    }
+  ],
+  "behavior": {
+    "discovery": "Exclude unavailable, purchased and over-budget products. Score category matches +4 and each matching interest +2; tie-break by price then ID; limit output. Empty preferences use eligible-catalog fallback. Missing historical products are accepted.",
+    "support": "Deterministic English topic matching for recommendation reasons, price, availability, description, shipping and returns; policy facts quoted verbatim with references. Unknown words/topics cause conservative human escalation, including mixed supported/unsupported questions. No ticket is actually submitted.",
+    "empty_results": "Policy questions remain answerable without recommended products; product questions escalate.",
+    "cli": "One JSON object on stdout. File, usage, JSON and validation failures return exit 2. Duplicate JSON keys and nonstandard numeric constants are rejected."
+  },
+  "scope": {
+    "included": ["Integrated pipeline", "Synthetic fixture catalog and customer preferences", "Deterministic ranking and grounded support", "Shared boundary validation", "CLI and unittest coverage"],
+    "excluded": ["Live LLM or optional callable integration", "Networks", "Persistence", "Real customer data", "Multilingual freeform understanding", "Order actions and actual ticket creation", "Real-time inventory", "Currency conversion", "Production authentication or deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 18,
+    "tests_passed": 18,
+    "cli_example": "Passed: one JSON object, status ok, exit 0",
+    "validation_command_exit_code": 0
+  }
+}

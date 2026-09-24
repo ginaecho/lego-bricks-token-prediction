@@ -107,7 +107,7 @@
   "split_group": "4f787132ef50df2811a20bb69d569bbf06f9a09525cff0ef3dc681bb068972d3",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "fbcb8aa911a22ea3b43defa2bfb24a2d9c0525d2a47873f2622176952075db46",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t029_combo2_basic-documents_basic-research__ind-healthcare",
   "membership_point_id": "combo2_basic-documents_basic-research__ind-healthcare",
@@ -115,8 +115,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "45af4ee5024343e8b779d68f4223b848ecfe1adf2611bbca96ef96b0bd8e2d9a",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "fdd0080f-bc7e-41c9-b93a-37b1c7bd5912",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 132362,
+    "output_tokens": 8735,
+    "cache_read_tokens": 119967,
+    "cache_write_tokens": 12377,
+    "total_tokens": 141097,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36476,
+        "agent_id": "fdd0080f-bc7e-41c9-b93a-37b1c7bd5912",
+        "model": "gpt-6-astra",
+        "input_tokens": 15032,
+        "output_tokens": 281,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 948,
+        "reasoning_tokens": 105,
+        "duration_ms": 6413,
+        "created_at": "2026-09-24T09:00:05.927Z"
+      },
+      {
+        "id": 36485,
+        "agent_id": "fdd0080f-bc7e-41c9-b93a-37b1c7bd5912",
+        "model": "gpt-6-astra",
+        "input_tokens": 15339,
+        "output_tokens": 7719,
+        "cache_read_tokens": 15029,
+        "cache_write_tokens": 307,
+        "reasoning_tokens": 516,
+        "duration_ms": 91397,
+        "created_at": "2026-09-24T09:02:00.467Z"
+      },
+      {
+        "id": 36491,
+        "agent_id": "fdd0080f-bc7e-41c9-b93a-37b1c7bd5912",
+        "model": "gpt-6-astra",
+        "input_tokens": 23398,
+        "output_tokens": 207,
+        "cache_read_tokens": 15336,
+        "cache_write_tokens": 8059,
+        "reasoning_tokens": 46,
+        "duration_ms": 5217,
+        "created_at": "2026-09-24T09:02:30.573Z"
+      },
+      {
+        "id": 36497,
+        "agent_id": "fdd0080f-bc7e-41c9-b93a-37b1c7bd5912",
+        "model": "gpt-6-astra",
+        "input_tokens": 25904,
+        "output_tokens": 227,
+        "cache_read_tokens": 23395,
+        "cache_write_tokens": 2506,
+        "reasoning_tokens": 14,
+        "duration_ms": 5969,
+        "created_at": "2026-09-24T09:02:53.304Z"
+      },
+      {
+        "id": 36500,
+        "agent_id": "fdd0080f-bc7e-41c9-b93a-37b1c7bd5912",
+        "model": "gpt-6-astra",
+        "input_tokens": 26228,
+        "output_tokens": 198,
+        "cache_read_tokens": 25901,
+        "cache_write_tokens": 324,
+        "reasoning_tokens": 0,
+        "duration_ms": 3456,
+        "created_at": "2026-09-24T09:03:04.845Z"
+      },
+      {
+        "id": 36502,
+        "agent_id": "fdd0080f-bc7e-41c9-b93a-37b1c7bd5912",
+        "model": "gpt-6-astra",
+        "input_tokens": 26461,
+        "output_tokens": 103,
+        "cache_read_tokens": 26225,
+        "cache_write_tokens": 233,
+        "reasoning_tokens": 0,
+        "duration_ms": 4718,
+        "created_at": "2026-09-24T09:03:17.362Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.46193000000000006,
+      "observed_cache_profile_estimate_usd": 0.19200425,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.54316,
+      "observed_cache_profile_estimate_usd": 5.54316,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -147,5 +272,366 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 0.834s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "clinical_decision": "not_performed",
+      "human_review_required": true,
+      "limitations": [
+        "Clearly labeled synthetic fixtures only; no real patient data.",
+        "Demonstrative HIPAA-oriented identifier exclusion, not certification or Safe Harbor verification.",
+        "Stable synthetic pseudonyms are linkable, not anonymization.",
+        "Source assertions are not verified medical truth; no treatment or authorization decision.",
+        "FHIR-style subset, not full HL7 FHIR conformance; restricted clinical-note grammar.",
+        "Audit snapshots cover pipeline record changes, not tamper-proof storage."
+      ],
+      "records": [
+        {
+          "audit": [
+            {
+              "after": {
+                "evidence": [],
+                "facts": [],
+                "human_review_required": true,
+                "id": "deid-4ef3670560b003d5c107",
+                "kind": "patient",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "before": null,
+              "sequence": 1,
+              "stage": "documents"
+            },
+            {
+              "after": {
+                "evidence": [],
+                "facts": [],
+                "human_review_required": true,
+                "id": "deid-4ef3670560b003d5c107",
+                "kind": "patient",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "before": {
+                "evidence": [],
+                "facts": [],
+                "human_review_required": true,
+                "id": "deid-4ef3670560b003d5c107",
+                "kind": "patient",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "sequence": 2,
+              "stage": "research"
+            }
+          ],
+          "evidence": [],
+          "facts": [],
+          "human_review_required": true,
+          "id": "deid-4ef3670560b003d5c107",
+          "kind": "patient",
+          "patient_ref": "deid-4ef3670560b003d5c107"
+        },
+        {
+          "audit": [
+            {
+              "after": {
+                "evidence": [],
+                "facts": [
+                  {
+                    "code": "E11.9",
+                    "kind": "diagnosis",
+                    "unit": null,
+                    "value": null
+                  },
+                  {
+                    "code": "4548-4",
+                    "kind": "lab",
+                    "unit": "%",
+                    "value": 7.2
+                  },
+                  {
+                    "code": "LAB-A1C",
+                    "kind": "requested-service",
+                    "unit": null,
+                    "value": null
+                  }
+                ],
+                "human_review_required": true,
+                "id": "deid-c0815884046e2bc39d32",
+                "kind": "clinical-note",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "before": null,
+              "sequence": 1,
+              "stage": "documents"
+            },
+            {
+              "after": {
+                "evidence": [
+                  {
+                    "code": "E11.9",
+                    "quote_sha256": "bdfbbd980a01edd3b1c76ebf3887bc1b4d129e27f01cb79e849974dae6175969",
+                    "source_id": "SRC-1",
+                    "stance": "supports"
+                  },
+                  {
+                    "code": "LAB-A1C",
+                    "quote_sha256": "69a87b760426da36b498a72a905ba789725d08ac14593004c4880e73e7640626",
+                    "source_id": "SRC-1",
+                    "stance": "supports"
+                  },
+                  {
+                    "code": "LAB-A1C",
+                    "quote_sha256": "15ac78c6111ba6e35759197b6b7909f8de4ebd28d62197778ff73c3edf3748ee",
+                    "source_id": "SRC-2",
+                    "stance": "contradicts"
+                  }
+                ],
+                "facts": [
+                  {
+                    "code": "E11.9",
+                    "kind": "diagnosis",
+                    "unit": null,
+                    "value": null
+                  },
+                  {
+                    "code": "4548-4",
+                    "kind": "lab",
+                    "unit": "%",
+                    "value": 7.2
+                  },
+                  {
+                    "code": "LAB-A1C",
+                    "kind": "requested-service",
+                    "unit": null,
+                    "value": null
+                  }
+                ],
+                "human_review_required": true,
+                "id": "deid-c0815884046e2bc39d32",
+                "kind": "clinical-note",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "before": {
+                "evidence": [],
+                "facts": [
+                  {
+                    "code": "E11.9",
+                    "kind": "diagnosis",
+                    "unit": null,
+                    "value": null
+                  },
+                  {
+                    "code": "4548-4",
+                    "kind": "lab",
+                    "unit": "%",
+                    "value": 7.2
+                  },
+                  {
+                    "code": "LAB-A1C",
+                    "kind": "requested-service",
+                    "unit": null,
+                    "value": null
+                  }
+                ],
+                "human_review_required": true,
+                "id": "deid-c0815884046e2bc39d32",
+                "kind": "clinical-note",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "sequence": 2,
+              "stage": "research"
+            }
+          ],
+          "evidence": [
+            {
+              "code": "E11.9",
+              "quote_sha256": "bdfbbd980a01edd3b1c76ebf3887bc1b4d129e27f01cb79e849974dae6175969",
+              "source_id": "SRC-1",
+              "stance": "supports"
+            },
+            {
+              "code": "LAB-A1C",
+              "quote_sha256": "69a87b760426da36b498a72a905ba789725d08ac14593004c4880e73e7640626",
+              "source_id": "SRC-1",
+              "stance": "supports"
+            },
+            {
+              "code": "LAB-A1C",
+              "quote_sha256": "15ac78c6111ba6e35759197b6b7909f8de4ebd28d62197778ff73c3edf3748ee",
+              "source_id": "SRC-2",
+              "stance": "contradicts"
+            }
+          ],
+          "facts": [
+            {
+              "code": "E11.9",
+              "kind": "diagnosis",
+              "unit": null,
+              "value": null
+            },
+            {
+              "code": "4548-4",
+              "kind": "lab",
+              "unit": "%",
+              "value": 7.2
+            },
+            {
+              "code": "LAB-A1C",
+              "kind": "requested-service",
+              "unit": null,
+              "value": null
+            }
+          ],
+          "human_review_required": true,
+          "id": "deid-c0815884046e2bc39d32",
+          "kind": "clinical-note",
+          "patient_ref": "deid-4ef3670560b003d5c107"
+        },
+        {
+          "audit": [
+            {
+              "after": {
+                "evidence": [],
+                "facts": [
+                  {
+                    "code": "LAB-A1C",
+                    "kind": "requested-service",
+                    "unit": null,
+                    "value": null
+                  }
+                ],
+                "human_review_required": true,
+                "id": "deid-9f769d0ac581891f0d0a",
+                "kind": "prior-authorization-request",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "before": null,
+              "sequence": 1,
+              "stage": "documents"
+            },
+            {
+              "after": {
+                "evidence": [
+                  {
+                    "code": "LAB-A1C",
+                    "quote_sha256": "69a87b760426da36b498a72a905ba789725d08ac14593004c4880e73e7640626",
+                    "source_id": "SRC-1",
+                    "stance": "supports"
+                  },
+                  {
+                    "code": "LAB-A1C",
+                    "quote_sha256": "15ac78c6111ba6e35759197b6b7909f8de4ebd28d62197778ff73c3edf3748ee",
+                    "source_id": "SRC-2",
+                    "stance": "contradicts"
+                  }
+                ],
+                "facts": [
+                  {
+                    "code": "LAB-A1C",
+                    "kind": "requested-service",
+                    "unit": null,
+                    "value": null
+                  }
+                ],
+                "human_review_required": true,
+                "id": "deid-9f769d0ac581891f0d0a",
+                "kind": "prior-authorization-request",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "before": {
+                "evidence": [],
+                "facts": [
+                  {
+                    "code": "LAB-A1C",
+                    "kind": "requested-service",
+                    "unit": null,
+                    "value": null
+                  }
+                ],
+                "human_review_required": true,
+                "id": "deid-9f769d0ac581891f0d0a",
+                "kind": "prior-authorization-request",
+                "patient_ref": "deid-4ef3670560b003d5c107"
+              },
+              "sequence": 2,
+              "stage": "research"
+            }
+          ],
+          "evidence": [
+            {
+              "code": "LAB-A1C",
+              "quote_sha256": "69a87b760426da36b498a72a905ba789725d08ac14593004c4880e73e7640626",
+              "source_id": "SRC-1",
+              "stance": "supports"
+            },
+            {
+              "code": "LAB-A1C",
+              "quote_sha256": "15ac78c6111ba6e35759197b6b7909f8de4ebd28d62197778ff73c3edf3748ee",
+              "source_id": "SRC-2",
+              "stance": "contradicts"
+            }
+          ],
+          "facts": [
+            {
+              "code": "LAB-A1C",
+              "kind": "requested-service",
+              "unit": null,
+              "value": null
+            }
+          ],
+          "human_review_required": true,
+          "id": "deid-9f769d0ac581891f0d0a",
+          "kind": "prior-authorization-request",
+          "patient_ref": "deid-4ef3670560b003d5c107"
+        }
+      ],
+      "research": {
+        "disposition": "human_review_only",
+        "findings": [
+          {
+            "assessment": "no_evidence",
+            "code": "4548-4",
+            "human_review_required": true,
+            "source_ids": []
+          },
+          {
+            "assessment": "support_only",
+            "code": "E11.9",
+            "human_review_required": true,
+            "source_ids": [
+              "SRC-1"
+            ]
+          },
+          {
+            "assessment": "conflicting",
+            "code": "LAB-A1C",
+            "human_review_required": true,
+            "source_ids": [
+              "SRC-1",
+              "SRC-2"
+            ]
+          }
+        ],
+        "question_sha256": "e5ba652c6f53dd9b6180bdeedfae318be2ef80af881c530795e909c823ac37c6"
+      },
+      "schema_version": 1,
+      "stage": "research",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t029_combo2_basic-documents_basic-research__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "55bfa106cbf177d2f23f604602ade0feea4d115a9e3ed5bb21cedd2bc831b08e",
+      "test_implementation.py": "e777fd99e6fd5f557fde2f94171081c5517d5a7d49df08050a1e70cf5f4b7b64",
+      "example_input.json": "ced62723121f33937a02a09e3a9c7d10bd016a2d9c36a81360138d63758c6b5d",
+      "build_manifest.json": "e94f09a32ac65373b6bd78dd0db918b8bf45c8d0f280ca05fcd01b37be20a0c2"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

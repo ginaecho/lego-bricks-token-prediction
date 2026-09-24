@@ -110,7 +110,7 @@
   "split_group": "ace89e30277b4d7d1a7c194c40fe5901f43b2b40b474c970bce810c8fa60e864",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "dbf63a37234d9141e753f0fbe06fdb8e0efa31b0b2a86b00105119fc7145907e",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t008_combo2_semantic_guided__ind-finance",
   "membership_point_id": "combo2_semantic_guided__ind-finance",
@@ -118,8 +118,133 @@
   "trial_category": "combo_BTI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "6525ee72b97f646537753fda6bb56479e1d84af207a98b68d305e758f51d438e",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "9ba6f545-8ef6-440d-9b6a-175504bda1a1",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 142236,
+    "output_tokens": 13297,
+    "cache_read_tokens": 125962,
+    "cache_write_tokens": 16256,
+    "total_tokens": 155533,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36297,
+        "agent_id": "9ba6f545-8ef6-440d-9b6a-175504bda1a1",
+        "model": "gpt-6-astra",
+        "input_tokens": 14997,
+        "output_tokens": 716,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 913,
+        "reasoning_tokens": 516,
+        "duration_ms": 20103,
+        "created_at": "2026-09-24T08:35:22.490Z"
+      },
+      {
+        "id": 36314,
+        "agent_id": "9ba6f545-8ef6-440d-9b6a-175504bda1a1",
+        "model": "gpt-6-astra",
+        "input_tokens": 15226,
+        "output_tokens": 10477,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 1142,
+        "reasoning_tokens": 440,
+        "duration_ms": 120819,
+        "created_at": "2026-09-24T08:39:33.033Z"
+      },
+      {
+        "id": 36315,
+        "agent_id": "9ba6f545-8ef6-440d-9b6a-175504bda1a1",
+        "model": "gpt-6-astra",
+        "input_tokens": 26035,
+        "output_tokens": 458,
+        "cache_read_tokens": 15223,
+        "cache_write_tokens": 10809,
+        "reasoning_tokens": 299,
+        "duration_ms": 12153,
+        "created_at": "2026-09-24T08:39:36.431Z"
+      },
+      {
+        "id": 36316,
+        "agent_id": "9ba6f545-8ef6-440d-9b6a-175504bda1a1",
+        "model": "gpt-6-astra",
+        "input_tokens": 27576,
+        "output_tokens": 1146,
+        "cache_read_tokens": 26032,
+        "cache_write_tokens": 1541,
+        "reasoning_tokens": 177,
+        "duration_ms": 15233,
+        "created_at": "2026-09-24T08:39:43.840Z"
+      },
+      {
+        "id": 36318,
+        "agent_id": "9ba6f545-8ef6-440d-9b6a-175504bda1a1",
+        "model": "gpt-6-astra",
+        "input_tokens": 28975,
+        "output_tokens": 387,
+        "cache_read_tokens": 27573,
+        "cache_write_tokens": 1399,
+        "reasoning_tokens": 66,
+        "duration_ms": 7709,
+        "created_at": "2026-09-24T08:40:00.106Z"
+      },
+      {
+        "id": 36320,
+        "agent_id": "9ba6f545-8ef6-440d-9b6a-175504bda1a1",
+        "model": "gpt-6-astra",
+        "input_tokens": 29427,
+        "output_tokens": 113,
+        "cache_read_tokens": 28972,
+        "cache_write_tokens": 452,
+        "reasoning_tokens": 0,
+        "duration_ms": 3341,
+        "created_at": "2026-09-24T08:40:11.465Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.555045,
+      "observed_cache_profile_estimate_usd": 0.2716305,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.66054,
+      "observed_cache_profile_estimate_usd": 6.66054,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -150,5 +275,196 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "......................\n----------------------------------------------------------------------\nRan 22 tests in 0.744s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "customer": {
+        "aml_flags": [],
+        "id": "SYN-CUSTOMER-001",
+        "kyc_flags": [],
+        "kyc_status": "verified",
+        "name": "Synthetic Customer Avery"
+      },
+      "guided": {
+        "customer_id": "SYN-CUSTOMER-001",
+        "loan_application_id": "SYN-LOAN-001",
+        "next_steps": [
+          "kyc_review"
+        ],
+        "notice": "Synthetic demonstration only. Screening flags block setup; no credit decision or compliance certification.",
+        "progress": {
+          "completed": 0,
+          "percent": 0.0,
+          "total": 4
+        },
+        "resume": {
+          "completed_steps": [],
+          "selected_product_id": "SYN-PRODUCT-LOAN"
+        },
+        "selected_product_id": "SYN-PRODUCT-LOAN",
+        "selection_explanation": {
+          "currency_filter": "EUR",
+          "embedding_cosine": null,
+          "formula": "lexical_coverage",
+          "lexical_coverage": 1.0,
+          "matched_tokens": [
+            "loan",
+            "personal"
+          ],
+          "purpose": "search relevance only; not creditworthiness or approval",
+          "query_tokens": [
+            "loan",
+            "personal"
+          ]
+        },
+        "status": "in_progress",
+        "steps": [
+          {
+            "evidence_satisfied": true,
+            "explanation": "KYC must be verified with no screening flags.",
+            "id": "kyc_review",
+            "prerequisites": [],
+            "status": "ready",
+            "unmet_prerequisites": []
+          },
+          {
+            "evidence_satisfied": true,
+            "explanation": "AML flags require human review and clearance.",
+            "id": "aml_review",
+            "prerequisites": [
+              "kyc_review"
+            ],
+            "status": "blocked",
+            "unmet_prerequisites": [
+              "kyc_review"
+            ]
+          },
+          {
+            "evidence_satisfied": true,
+            "explanation": "At least one validated synthetic transaction is required.",
+            "id": "transaction_review",
+            "prerequisites": [
+              "aml_review"
+            ],
+            "status": "blocked",
+            "unmet_prerequisites": [
+              "aml_review"
+            ]
+          },
+          {
+            "evidence_satisfied": true,
+            "explanation": "Validated loan details may be submitted for human review; no approval is implied.",
+            "id": "loan_application",
+            "prerequisites": [
+              "transaction_review"
+            ],
+            "status": "blocked",
+            "unmet_prerequisites": [
+              "transaction_review"
+            ]
+          }
+        ],
+        "transaction_ids": [
+          "SYN-TX-001",
+          "SYN-TX-002",
+          "SYN-TX-003"
+        ]
+      },
+      "loan_application": {
+        "amount": "12000.00",
+        "currency": "EUR",
+        "customer_id": "SYN-CUSTOMER-001",
+        "id": "SYN-LOAN-001",
+        "purpose": "Synthetic home improvement",
+        "term_months": 36
+      },
+      "notice": "Synthetic fixture data. Card masking is a demonstration, not PCI DSS certification.",
+      "schema_version": "1.0",
+      "semantic": {
+        "customer_id": "SYN-CUSTOMER-001",
+        "loan_application_id": "SYN-LOAN-001",
+        "matches": [
+          {
+            "explanation": {
+              "currency_filter": "EUR",
+              "embedding_cosine": null,
+              "formula": "lexical_coverage",
+              "lexical_coverage": 1.0,
+              "matched_tokens": [
+                "loan",
+                "personal"
+              ],
+              "purpose": "search relevance only; not creditworthiness or approval",
+              "query_tokens": [
+                "loan",
+                "personal"
+              ]
+            },
+            "product": {
+              "currency": "EUR",
+              "description": "Borrow for home improvements with a personal installment loan",
+              "id": "SYN-PRODUCT-LOAN",
+              "kind": "loan",
+              "name": "Synthetic personal loan"
+            },
+            "score": 1.0
+          }
+        ],
+        "query": "borrow personal loan",
+        "schema_version": "1.0",
+        "selected_product_id": "SYN-PRODUCT-LOAN",
+        "transaction_ids": [
+          "SYN-TX-001",
+          "SYN-TX-002",
+          "SYN-TX-003"
+        ]
+      },
+      "status": "ok",
+      "synthetic": true,
+      "transactions": [
+        {
+          "account": "FAKE-IBAN-EU-00000001",
+          "amount": "2764.13",
+          "card_number": "************4242",
+          "currency": "EUR",
+          "customer_id": "SYN-CUSTOMER-001",
+          "description": "Synthetic salary fixture",
+          "id": "SYN-TX-001"
+        },
+        {
+          "account": "FAKE-IBAN-EU-00000001",
+          "amount": "-118.44",
+          "card_number": "************4242",
+          "currency": "EUR",
+          "customer_id": "SYN-CUSTOMER-001",
+          "description": "Synthetic grocery fixture",
+          "id": "SYN-TX-002"
+        },
+        {
+          "account": "FAKE-ACCOUNT-00000001",
+          "amount": "-803.27",
+          "card_number": null,
+          "currency": "EUR",
+          "customer_id": "SYN-CUSTOMER-001",
+          "description": "Synthetic housing fixture",
+          "id": "SYN-TX-003"
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t008_combo2_semantic_guided__ind-finance",
+    "artifact_sha256": {
+      "implementation.py": "cfdfb08414fcd66bbd0db2d692fa1cf090bf94b2d3bbc90d87b4442afd7c6f11",
+      "test_implementation.py": "14c0c00af306fad7e448bc5f7f561d7a44d01fcb26fac9b78f751cec61a210f4",
+      "example_input.json": "5a4149baba6888ce0ca47d82593524d526379b9f14c8fefc87a109a566d45ff4",
+      "build_manifest.json": "cf208deaf50004f83365a87be4da5612ff15ce1073ead3bb4a0afc381ee4da49"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

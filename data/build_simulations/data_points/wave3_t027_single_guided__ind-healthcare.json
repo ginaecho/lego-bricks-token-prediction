@@ -97,7 +97,7 @@
   "split_group": "e411a9cfa66a00df4bf4d22f307d482f3c810803bf816457c068c11a989f0a6f",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "2111d70bb1e22e23b796c04ab39bc0139f1f995e1d02706aa4390966074fe0f1",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t027_single_guided__ind-healthcare",
   "membership_point_id": "single_guided__ind-healthcare",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "66171579e4324597e15157b6a7e94ad5da06abd652d890ba8e0f24820d653fdb",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b41a17a0-3eb5-435c-96e7-bd0727d8d928",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 124114,
+    "output_tokens": 7724,
+    "cache_read_tokens": 113790,
+    "cache_write_tokens": 10306,
+    "total_tokens": 131838,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36441,
+        "agent_id": "b41a17a0-3eb5-435c-96e7-bd0727d8d928",
+        "model": "gpt-6-astra",
+        "input_tokens": 14931,
+        "output_tokens": 688,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 847,
+        "reasoning_tokens": 516,
+        "duration_ms": 18478,
+        "created_at": "2026-09-24T08:55:48.348Z"
+      },
+      {
+        "id": 36448,
+        "agent_id": "b41a17a0-3eb5-435c-96e7-bd0727d8d928",
+        "model": "gpt-6-astra",
+        "input_tokens": 15651,
+        "output_tokens": 5848,
+        "cache_read_tokens": 14928,
+        "cache_write_tokens": 720,
+        "reasoning_tokens": 286,
+        "duration_ms": 72676,
+        "created_at": "2026-09-24T08:57:00.710Z"
+      },
+      {
+        "id": 36453,
+        "agent_id": "b41a17a0-3eb5-435c-96e7-bd0727d8d928",
+        "model": "gpt-6-astra",
+        "input_tokens": 21819,
+        "output_tokens": 249,
+        "cache_read_tokens": 15648,
+        "cache_write_tokens": 6168,
+        "reasoning_tokens": 110,
+        "duration_ms": 5435,
+        "created_at": "2026-09-24T08:57:34.867Z"
+      },
+      {
+        "id": 36459,
+        "agent_id": "b41a17a0-3eb5-435c-96e7-bd0727d8d928",
+        "model": "gpt-6-astra",
+        "input_tokens": 23251,
+        "output_tokens": 577,
+        "cache_read_tokens": 21816,
+        "cache_write_tokens": 1432,
+        "reasoning_tokens": 32,
+        "duration_ms": 7638,
+        "created_at": "2026-09-24T08:58:02.622Z"
+      },
+      {
+        "id": 36460,
+        "agent_id": "b41a17a0-3eb5-435c-96e7-bd0727d8d928",
+        "model": "gpt-6-astra",
+        "input_tokens": 24072,
+        "output_tokens": 264,
+        "cache_read_tokens": 23248,
+        "cache_write_tokens": 821,
+        "reasoning_tokens": 0,
+        "duration_ms": 4359,
+        "created_at": "2026-09-24T08:58:05.665Z"
+      },
+      {
+        "id": 36462,
+        "agent_id": "b41a17a0-3eb5-435c-96e7-bd0727d8d928",
+        "model": "gpt-6-astra",
+        "input_tokens": 24390,
+        "output_tokens": 98,
+        "cache_read_tokens": 24069,
+        "cache_write_tokens": 318,
+        "reasoning_tokens": 0,
+        "duration_ms": 3059,
+        "created_at": "2026-09-24T08:58:12.873Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.426145,
+      "observed_cache_profile_estimate_usd": 0.17011750000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.11374,
+      "observed_cache_profile_estimate_usd": 5.11374,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,218 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.610s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "actions": [
+        "check_prerequisites",
+        "register_patient",
+        "attach_clinical_note",
+        "prepare_prior_authorization",
+        "request_human_review"
+      ],
+      "active_records": {
+        "clinical_note": {
+          "human_review_required": true,
+          "id": "syn-note-001",
+          "resourceType": "DocumentReference",
+          "subject": "Patient/syn-patient-001",
+          "synthetic": true,
+          "text": "SYNTHETIC: Training note only. No clinical decision recorded."
+        },
+        "patient_record": {
+          "conditions": [
+            {
+              "code": "DEMO-DX-001",
+              "resourceType": "Condition"
+            }
+          ],
+          "id": "syn-patient-001",
+          "lab_values": [
+            {
+              "code": "DEMO-LAB-001",
+              "resourceType": "Observation",
+              "unit": "mg/dL",
+              "value": 95
+            }
+          ],
+          "resourceType": "Patient",
+          "synthetic": true
+        },
+        "prior_authorization_request": {
+          "human_review_required": true,
+          "id": "syn-auth-001",
+          "patient": "Patient/syn-patient-001",
+          "resourceType": "Claim",
+          "service_code": "DEMO-SERVICE-001",
+          "status": "pending-human-review",
+          "synthetic": true
+        }
+      },
+      "audit_trail": [
+        {
+          "actor": "synthetic-onboarding-system",
+          "after": {
+            "conditions": [
+              {
+                "code": "DEMO-DX-001",
+                "resourceType": "Condition"
+              }
+            ],
+            "id": "syn-patient-001",
+            "lab_values": [
+              {
+                "code": "DEMO-LAB-001",
+                "resourceType": "Observation",
+                "unit": "mg/dL",
+                "value": 95
+              }
+            ],
+            "resourceType": "Patient",
+            "synthetic": true
+          },
+          "before": null,
+          "operation": "create",
+          "record_id": "syn-patient-001",
+          "sequence": 1,
+          "step": "register_patient"
+        },
+        {
+          "actor": "synthetic-onboarding-system",
+          "after": {
+            "human_review_required": true,
+            "id": "syn-note-001",
+            "resourceType": "DocumentReference",
+            "subject": "Patient/syn-patient-001",
+            "synthetic": true,
+            "text": "SYNTHETIC: Training note only. No clinical decision recorded."
+          },
+          "before": null,
+          "operation": "create",
+          "record_id": "syn-note-001",
+          "sequence": 2,
+          "step": "attach_clinical_note"
+        },
+        {
+          "actor": "synthetic-onboarding-system",
+          "after": {
+            "human_review_required": true,
+            "id": "syn-auth-001",
+            "patient": "Patient/syn-patient-001",
+            "resourceType": "Claim",
+            "service_code": "DEMO-SERVICE-001",
+            "status": "draft",
+            "synthetic": true
+          },
+          "before": null,
+          "operation": "create",
+          "record_id": "syn-auth-001",
+          "sequence": 3,
+          "step": "prepare_prior_authorization"
+        },
+        {
+          "actor": "synthetic-onboarding-system",
+          "after": {
+            "human_review_required": true,
+            "id": "syn-auth-001",
+            "patient": "Patient/syn-patient-001",
+            "resourceType": "Claim",
+            "service_code": "DEMO-SERVICE-001",
+            "status": "pending-human-review",
+            "synthetic": true
+          },
+          "before": {
+            "human_review_required": true,
+            "id": "syn-auth-001",
+            "patient": "Patient/syn-patient-001",
+            "resourceType": "Claim",
+            "service_code": "DEMO-SERVICE-001",
+            "status": "draft",
+            "synthetic": true
+          },
+          "operation": "update",
+          "record_id": "syn-auth-001",
+          "sequence": 4,
+          "step": "request_human_review"
+        }
+      ],
+      "onboarding": {
+        "autonomous_clinical_decisions": false,
+        "completed_steps": [
+          "check_prerequisites",
+          "register_patient",
+          "attach_clinical_note",
+          "prepare_prior_authorization",
+          "request_human_review"
+        ],
+        "human_review_required": true,
+        "next_step": null,
+        "progress_percent": 100,
+        "review_status": "pending",
+        "reviewer_id": "syn-reviewer-001",
+        "setup_complete": true
+      },
+      "prerequisites": {
+        "deidentification_training_complete": true,
+        "reviewer_available": true,
+        "reviewer_id": "syn-reviewer-001"
+      },
+      "records": {
+        "clinical_note": {
+          "human_review_required": true,
+          "id": "syn-note-001",
+          "resourceType": "DocumentReference",
+          "subject": "Patient/syn-patient-001",
+          "synthetic": true,
+          "text": "SYNTHETIC: Training note only. No clinical decision recorded."
+        },
+        "patient_record": {
+          "conditions": [
+            {
+              "code": "DEMO-DX-001",
+              "resourceType": "Condition"
+            }
+          ],
+          "id": "syn-patient-001",
+          "lab_values": [
+            {
+              "code": "DEMO-LAB-001",
+              "resourceType": "Observation",
+              "unit": "mg/dL",
+              "value": 95
+            }
+          ],
+          "resourceType": "Patient",
+          "synthetic": true
+        },
+        "prior_authorization_request": {
+          "human_review_required": true,
+          "id": "syn-auth-001",
+          "patient": "Patient/syn-patient-001",
+          "resourceType": "Claim",
+          "service_code": "DEMO-SERVICE-001",
+          "status": "draft",
+          "synthetic": true
+        }
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic_fixture": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t027_single_guided__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "f8da09e00705952d9459f4e5511fbb799ffd10a3bb45993d6cb2b6e4a79124d4",
+      "test_implementation.py": "490edb75be73137102a1c25adf7e977975dafc997f8398dbb1dfaf18965806b6",
+      "example_input.json": "b3ff7b9b3b257aff12a030164f69478f0bbae56c2d4bb3856b7e04c9970d7527",
+      "build_manifest.json": "63a4081b13b1638d204c6dcf86921453a13b29964de6c134f323f0bbce2c93d8"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

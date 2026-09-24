@@ -97,7 +97,7 @@
   "split_group": "f9f25d7a558b5d49660cb080b8ea9f890d2fafe283e087f38483616355ee19b8",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "49f21900d29788d5dc1a8324beb950d847f5fbf778154879885754346de7738d",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t018_single_compare",
   "membership_point_id": "single_compare",
@@ -105,8 +105,133 @@
   "trial_category": "BT_single_repeat",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "37eaffbfff90ef41fa75713905f30a7cf9e652833df973b184b9b197906681e1",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "af5764ed-779f-46d2-8f7c-9ea8b0b23c15",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 120187,
+    "output_tokens": 6987,
+    "cache_read_tokens": 111047,
+    "cache_write_tokens": 9122,
+    "total_tokens": 127174,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36366,
+        "agent_id": "af5764ed-779f-46d2-8f7c-9ea8b0b23c15",
+        "model": "gpt-6-astra",
+        "input_tokens": 14811,
+        "output_tokens": 285,
+        "cache_read_tokens": 14081,
+        "cache_write_tokens": 727,
+        "reasoning_tokens": 105,
+        "duration_ms": 10779,
+        "created_at": "2026-09-24T08:45:47.555Z"
+      },
+      {
+        "id": 36379,
+        "agent_id": "af5764ed-779f-46d2-8f7c-9ea8b0b23c15",
+        "model": "gpt-6-astra",
+        "input_tokens": 15129,
+        "output_tokens": 5966,
+        "cache_read_tokens": 14808,
+        "cache_write_tokens": 318,
+        "reasoning_tokens": 428,
+        "duration_ms": 76132,
+        "created_at": "2026-09-24T08:47:15.852Z"
+      },
+      {
+        "id": 36386,
+        "agent_id": "af5764ed-779f-46d2-8f7c-9ea8b0b23c15",
+        "model": "gpt-6-astra",
+        "input_tokens": 21395,
+        "output_tokens": 218,
+        "cache_read_tokens": 15126,
+        "cache_write_tokens": 6266,
+        "reasoning_tokens": 82,
+        "duration_ms": 5923,
+        "created_at": "2026-09-24T08:48:13.778Z"
+      },
+      {
+        "id": 36390,
+        "agent_id": "af5764ed-779f-46d2-8f7c-9ea8b0b23c15",
+        "model": "gpt-6-astra",
+        "input_tokens": 22671,
+        "output_tokens": 217,
+        "cache_read_tokens": 21392,
+        "cache_write_tokens": 1276,
+        "reasoning_tokens": 10,
+        "duration_ms": 4024,
+        "created_at": "2026-09-24T08:48:28.837Z"
+      },
+      {
+        "id": 36394,
+        "agent_id": "af5764ed-779f-46d2-8f7c-9ea8b0b23c15",
+        "model": "gpt-6-astra",
+        "input_tokens": 22975,
+        "output_tokens": 197,
+        "cache_read_tokens": 22668,
+        "cache_write_tokens": 304,
+        "reasoning_tokens": 0,
+        "duration_ms": 3340,
+        "created_at": "2026-09-24T08:48:39.974Z"
+      },
+      {
+        "id": 36396,
+        "agent_id": "af5764ed-779f-46d2-8f7c-9ea8b0b23c15",
+        "model": "gpt-6-astra",
+        "input_tokens": 23206,
+        "output_tokens": 104,
+        "cache_read_tokens": 22972,
+        "cache_write_tokens": 231,
+        "reasoning_tokens": 0,
+        "duration_ms": 3159,
+        "created_at": "2026-09-24T08:48:49.737Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4052725,
+      "observed_cache_profile_estimate_usd": 0.15541675,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.86327,
+      "observed_cache_profile_estimate_usd": 4.86327,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,253 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 0.704s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "fixture_label": "SYNTHETIC portable drive comparison; not real products or prices",
+      "attributes": [
+        {
+          "key": "price",
+          "kind": "number",
+          "label": "Price",
+          "unit": "USD"
+        },
+        {
+          "key": "weight",
+          "kind": "number",
+          "label": "Weight",
+          "unit": "g"
+        },
+        {
+          "key": "capacity",
+          "kind": "number",
+          "label": "Capacity (decimal)",
+          "unit": "GB"
+        },
+        {
+          "key": "finish",
+          "kind": "category",
+          "label": "Finish",
+          "unit": ""
+        }
+      ],
+      "products": [
+        {
+          "id": "a",
+          "name": "Synthetic Pocket Drive",
+          "attributes": {
+            "price": 80.0,
+            "weight": 120.0,
+            "capacity": 1000.0,
+            "finish": "matte"
+          }
+        },
+        {
+          "id": "b",
+          "name": "Synthetic Desk Drive",
+          "attributes": {
+            "price": 100.0,
+            "weight": 200.0,
+            "capacity": 2000.0,
+            "finish": "gloss"
+          }
+        },
+        {
+          "id": "c",
+          "name": "Synthetic Mini Drive",
+          "attributes": {
+            "price": 60.0,
+            "weight": null,
+            "capacity": 500.0,
+            "finish": "matte"
+          }
+        }
+      ],
+      "preferences": [
+        {
+          "attribute": "price",
+          "weight": 3.0,
+          "direction": "lower"
+        },
+        {
+          "attribute": "weight",
+          "weight": 1.0,
+          "direction": "lower"
+        },
+        {
+          "attribute": "capacity",
+          "weight": 2.0,
+          "direction": "higher"
+        },
+        {
+          "attribute": "finish",
+          "weight": 1.0,
+          "order": [
+            "matte",
+            "gloss"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "key": "price",
+          "kind": "number",
+          "label": "Price",
+          "unit": "USD",
+          "values": {
+            "a": 80.0,
+            "b": 100.0,
+            "c": 60.0
+          }
+        },
+        {
+          "key": "weight",
+          "kind": "number",
+          "label": "Weight",
+          "unit": "g",
+          "values": {
+            "a": 120.0,
+            "b": 200.0,
+            "c": null
+          }
+        },
+        {
+          "key": "capacity",
+          "kind": "number",
+          "label": "Capacity (decimal)",
+          "unit": "GB",
+          "values": {
+            "a": 1000.0,
+            "b": 2000.0,
+            "c": 500.0
+          }
+        },
+        {
+          "key": "finish",
+          "kind": "category",
+          "label": "Finish",
+          "unit": "",
+          "values": {
+            "a": "matte",
+            "b": "gloss",
+            "c": "matte"
+          }
+        }
+      ],
+      "ranking": [
+        {
+          "id": "a",
+          "name": "Synthetic Pocket Drive",
+          "score": 0.595238,
+          "contributions": [
+            {
+              "attribute": "price",
+              "utility": 0.5,
+              "weighted_score": 0.214286,
+              "missing": false
+            },
+            {
+              "attribute": "weight",
+              "utility": 1.0,
+              "weighted_score": 0.142857,
+              "missing": false
+            },
+            {
+              "attribute": "capacity",
+              "utility": 0.333333,
+              "weighted_score": 0.095238,
+              "missing": false
+            },
+            {
+              "attribute": "finish",
+              "utility": 1.0,
+              "weighted_score": 0.142857,
+              "missing": false
+            }
+          ],
+          "rank": 1
+        },
+        {
+          "id": "c",
+          "name": "Synthetic Mini Drive",
+          "score": 0.571429,
+          "contributions": [
+            {
+              "attribute": "price",
+              "utility": 1.0,
+              "weighted_score": 0.428571,
+              "missing": false
+            },
+            {
+              "attribute": "weight",
+              "utility": 0.0,
+              "weighted_score": 0.0,
+              "missing": true
+            },
+            {
+              "attribute": "capacity",
+              "utility": 0.0,
+              "weighted_score": 0.0,
+              "missing": false
+            },
+            {
+              "attribute": "finish",
+              "utility": 1.0,
+              "weighted_score": 0.142857,
+              "missing": false
+            }
+          ],
+          "rank": 2
+        },
+        {
+          "id": "b",
+          "name": "Synthetic Desk Drive",
+          "score": 0.357143,
+          "contributions": [
+            {
+              "attribute": "price",
+              "utility": 0.0,
+              "weighted_score": 0.0,
+              "missing": false
+            },
+            {
+              "attribute": "weight",
+              "utility": 0.0,
+              "weighted_score": 0.0,
+              "missing": false
+            },
+            {
+              "attribute": "capacity",
+              "utility": 1.0,
+              "weighted_score": 0.285714,
+              "missing": false
+            },
+            {
+              "attribute": "finish",
+              "utility": 0.5,
+              "weighted_score": 0.071429,
+              "missing": false
+            }
+          ],
+          "rank": 3
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t018_single_compare",
+    "artifact_sha256": {
+      "implementation.py": "782af3e5ea60092c23b9b72a87641245c1a2ad379e76beeca3a14747bd714daf",
+      "test_implementation.py": "2d67c88b5aac3bb376be25ef083b07c6f148f29f59a79b4d3bff511d302e15cb",
+      "example_input.json": "036d5a4b5e2b8600d80a4de884dc2f5226a794df55ce55e649336ae76e527238",
+      "build_manifest.json": "0186800e72250bcfac0c01f4395753e2403a8b56d13c3ee70455121d7542805d"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }
