@@ -121,7 +121,7 @@
   "split_group": "60408c6236c95c159f168de8d26851a16235cd1f2499fff4caf14d17d57877b0",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "59f0e9dcde3d6ef4f9f99f723c80467cfe697e690fb1e58ca0b0424b63ff34b9",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t087_combo3_sentiment_basic-search_normal__ind-healthcare",
   "membership_point_id": "combo3_sentiment_basic-search_normal__ind-healthcare",
@@ -129,8 +129,133 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "21d7a5f868cb7ce291d295e10d75da8b3d985a56ebcfd6eac5d9e4eeb765567b",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "5ffbf307-528d-4124-8659-0a18b7a94dfe",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 124994,
+    "output_tokens": 8483,
+    "cache_read_tokens": 115076,
+    "cache_write_tokens": 9900,
+    "total_tokens": 133477,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37114,
+        "agent_id": "5ffbf307-528d-4124-8659-0a18b7a94dfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 15070,
+        "output_tokens": 558,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 966,
+        "reasoning_tokens": 386,
+        "duration_ms": 15578,
+        "created_at": "2026-09-24T10:40:17.694Z"
+      },
+      {
+        "id": 37149,
+        "agent_id": "5ffbf307-528d-4124-8659-0a18b7a94dfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 15654,
+        "output_tokens": 7092,
+        "cache_read_tokens": 15067,
+        "cache_write_tokens": 584,
+        "reasoning_tokens": 0,
+        "duration_ms": 104897,
+        "created_at": "2026-09-24T10:42:48.760Z"
+      },
+      {
+        "id": 37151,
+        "agent_id": "5ffbf307-528d-4124-8659-0a18b7a94dfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 23082,
+        "output_tokens": 271,
+        "cache_read_tokens": 15651,
+        "cache_write_tokens": 7428,
+        "reasoning_tokens": 25,
+        "duration_ms": 5573,
+        "created_at": "2026-09-24T10:42:52.247Z"
+      },
+      {
+        "id": 37152,
+        "agent_id": "5ffbf307-528d-4124-8659-0a18b7a94dfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 23410,
+        "output_tokens": 268,
+        "cache_read_tokens": 23079,
+        "cache_write_tokens": 328,
+        "reasoning_tokens": 12,
+        "duration_ms": 5675,
+        "created_at": "2026-09-24T10:42:55.991Z"
+      },
+      {
+        "id": 37153,
+        "agent_id": "5ffbf307-528d-4124-8659-0a18b7a94dfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 23774,
+        "output_tokens": 191,
+        "cache_read_tokens": 23407,
+        "cache_write_tokens": 364,
+        "reasoning_tokens": 0,
+        "duration_ms": 4222,
+        "created_at": "2026-09-24T10:42:58.774Z"
+      },
+      {
+        "id": 37156,
+        "agent_id": "5ffbf307-528d-4124-8659-0a18b7a94dfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 24004,
+        "output_tokens": 103,
+        "cache_read_tokens": 23771,
+        "cache_write_tokens": 230,
+        "reasoning_tokens": 0,
+        "duration_ms": 3908,
+        "created_at": "2026-09-24T10:43:12.511Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.43973000000000007,
+      "observed_cache_profile_estimate_usd": 0.180809,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.27676,
+      "observed_cache_profile_estimate_usd": 5.27676,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -161,5 +286,1160 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 0.857s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "audit_trail": [
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "evidence": [
+              {
+                "negated": false,
+                "term": "frustrated",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "delay",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "clear",
+                "weight": 1
+              },
+              {
+                "negated": false,
+                "term": "denied",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "worried",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "delay",
+                "weight": -1
+              }
+            ],
+            "human_review_required": true,
+            "label": "negative",
+            "priority": 304,
+            "query_terms": [
+              "about",
+              "administrative",
+              "authorization",
+              "c",
+              "clear",
+              "delay",
+              "denied",
+              "diabetes",
+              "diagnosis",
+              "fictitious",
+              "fixture",
+              "frustrated",
+              "hba",
+              "illustrative",
+              "information",
+              "insurance",
+              "lab",
+              "no",
+              "percent",
+              "recommendation",
+              "requests",
+              "review",
+              "style",
+              "synthea",
+              "treatment",
+              "type",
+              "urgent",
+              "worried"
+            ],
+            "score": -4,
+            "severity": 3,
+            "severity_terms": [
+              "delay",
+              "denied",
+              "urgent"
+            ]
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "sentiment",
+          "record_id": "anon-p001",
+          "sequence": 1,
+          "stage": "sentiment"
+        },
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "evidence": [
+              {
+                "negated": false,
+                "term": "frustrated",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "delay",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "clear",
+                "weight": 1
+              }
+            ],
+            "human_review_required": true,
+            "label": "negative",
+            "priority": 201,
+            "query_terms": [
+              "authorization",
+              "c",
+              "clear",
+              "delay",
+              "diabetes",
+              "diagnosis",
+              "fictitious",
+              "fixture",
+              "frustrated",
+              "hba",
+              "illustrative",
+              "information",
+              "insurance",
+              "lab",
+              "no",
+              "percent",
+              "recommendation",
+              "requests",
+              "style",
+              "synthea",
+              "treatment",
+              "type"
+            ],
+            "score": -1,
+            "severity": 2,
+            "severity_terms": [
+              "delay"
+            ]
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "sentiment",
+          "record_id": "note-001",
+          "sequence": 2,
+          "stage": "sentiment"
+        },
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "evidence": [
+              {
+                "negated": false,
+                "term": "denied",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "worried",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "delay",
+                "weight": -1
+              }
+            ],
+            "human_review_required": true,
+            "label": "negative",
+            "priority": 303,
+            "query_terms": [
+              "about",
+              "administrative",
+              "authorization",
+              "delay",
+              "denied",
+              "information",
+              "insurance",
+              "review",
+              "urgent",
+              "worried"
+            ],
+            "score": -3,
+            "severity": 3,
+            "severity_terms": [
+              "delay",
+              "denied",
+              "urgent"
+            ]
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "sentiment",
+          "record_id": "request-001",
+          "sequence": 3,
+          "stage": "sentiment"
+        },
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "human_review_required": true,
+            "priority": 304,
+            "query_terms": [
+              "about",
+              "administrative",
+              "authorization",
+              "c",
+              "clear",
+              "delay",
+              "denied",
+              "diabetes",
+              "diagnosis",
+              "fictitious",
+              "fixture",
+              "frustrated",
+              "hba",
+              "illustrative",
+              "information",
+              "insurance",
+              "lab",
+              "no",
+              "percent",
+              "recommendation",
+              "requests",
+              "review",
+              "style",
+              "synthea",
+              "treatment",
+              "type",
+              "urgent",
+              "worried"
+            ],
+            "results": [
+              {
+                "matched_terms": [
+                  "administrative",
+                  "authorization",
+                  "delay",
+                  "denied",
+                  "information",
+                  "insurance"
+                ],
+                "product_id": "authorization-guide",
+                "score": 6,
+                "source_ids": [
+                  "admin-handbook"
+                ]
+              },
+              {
+                "matched_terms": [
+                  "about",
+                  "information"
+                ],
+                "product_id": "appointment-help",
+                "score": 2,
+                "source_ids": [
+                  "scheduling-handbook"
+                ]
+              }
+            ]
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "search",
+          "record_id": "anon-p001",
+          "sequence": 4,
+          "stage": "search"
+        },
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "human_review_required": true,
+            "priority": 201,
+            "query_terms": [
+              "authorization",
+              "c",
+              "clear",
+              "delay",
+              "diabetes",
+              "diagnosis",
+              "fictitious",
+              "fixture",
+              "frustrated",
+              "hba",
+              "illustrative",
+              "information",
+              "insurance",
+              "lab",
+              "no",
+              "percent",
+              "recommendation",
+              "requests",
+              "style",
+              "synthea",
+              "treatment",
+              "type"
+            ],
+            "results": [
+              {
+                "matched_terms": [
+                  "authorization",
+                  "delay",
+                  "information",
+                  "insurance"
+                ],
+                "product_id": "authorization-guide",
+                "score": 4,
+                "source_ids": [
+                  "admin-handbook"
+                ]
+              },
+              {
+                "matched_terms": [
+                  "information"
+                ],
+                "product_id": "appointment-help",
+                "score": 1,
+                "source_ids": [
+                  "scheduling-handbook"
+                ]
+              }
+            ]
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "search",
+          "record_id": "note-001",
+          "sequence": 5,
+          "stage": "search"
+        },
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "human_review_required": true,
+            "priority": 303,
+            "query_terms": [
+              "about",
+              "administrative",
+              "authorization",
+              "delay",
+              "denied",
+              "information",
+              "insurance",
+              "review",
+              "urgent",
+              "worried"
+            ],
+            "results": [
+              {
+                "matched_terms": [
+                  "administrative",
+                  "authorization",
+                  "delay",
+                  "denied",
+                  "information",
+                  "insurance"
+                ],
+                "product_id": "authorization-guide",
+                "score": 6,
+                "source_ids": [
+                  "admin-handbook"
+                ]
+              },
+              {
+                "matched_terms": [
+                  "about",
+                  "information"
+                ],
+                "product_id": "appointment-help",
+                "score": 2,
+                "source_ids": [
+                  "scheduling-handbook"
+                ]
+              }
+            ]
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "search",
+          "record_id": "request-001",
+          "sequence": 6,
+          "stage": "search"
+        },
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "clinical_decision": null,
+            "evidence_status": "found",
+            "findings": [
+              {
+                "end": 112,
+                "matched_terms": [
+                  "administrative",
+                  "authorization",
+                  "delay",
+                  "denied",
+                  "insurance",
+                  "requests"
+                ],
+                "passage_id": "authorization-process",
+                "quote": "Insurance authorization requests with denied coverage or delay may be routed to a human administrative reviewer.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 119,
+                "matched_terms": [
+                  "authorization",
+                  "information",
+                  "insurance",
+                  "review",
+                  "treatment",
+                  "urgent"
+                ],
+                "passage_id": "review-boundary",
+                "quote": "Urgent authorization inquiries require human review; this information does not approve coverage or recommend treatment.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 84,
+                "matched_terms": [
+                  "information"
+                ],
+                "passage_id": "scheduling-process",
+                "quote": "Appointment scheduling information is available from a human scheduling coordinator.",
+                "source_id": "scheduling-handbook",
+                "start": 0
+              }
+            ],
+            "human_review_required": true,
+            "priority": 304
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "research",
+          "record_id": "anon-p001",
+          "sequence": 7,
+          "stage": "research"
+        },
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "clinical_decision": null,
+            "evidence_status": "found",
+            "findings": [
+              {
+                "end": 112,
+                "matched_terms": [
+                  "authorization",
+                  "delay",
+                  "insurance",
+                  "requests"
+                ],
+                "passage_id": "authorization-process",
+                "quote": "Insurance authorization requests with denied coverage or delay may be routed to a human administrative reviewer.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 119,
+                "matched_terms": [
+                  "authorization",
+                  "information",
+                  "insurance",
+                  "treatment"
+                ],
+                "passage_id": "review-boundary",
+                "quote": "Urgent authorization inquiries require human review; this information does not approve coverage or recommend treatment.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 84,
+                "matched_terms": [
+                  "information"
+                ],
+                "passage_id": "scheduling-process",
+                "quote": "Appointment scheduling information is available from a human scheduling coordinator.",
+                "source_id": "scheduling-handbook",
+                "start": 0
+              }
+            ],
+            "human_review_required": true,
+            "priority": 201
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "research",
+          "record_id": "note-001",
+          "sequence": 8,
+          "stage": "research"
+        },
+        {
+          "actor": "deterministic-reference",
+          "after": {
+            "clinical_decision": null,
+            "evidence_status": "found",
+            "findings": [
+              {
+                "end": 112,
+                "matched_terms": [
+                  "administrative",
+                  "authorization",
+                  "delay",
+                  "denied",
+                  "insurance"
+                ],
+                "passage_id": "authorization-process",
+                "quote": "Insurance authorization requests with denied coverage or delay may be routed to a human administrative reviewer.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 119,
+                "matched_terms": [
+                  "authorization",
+                  "information",
+                  "insurance",
+                  "review",
+                  "urgent"
+                ],
+                "passage_id": "review-boundary",
+                "quote": "Urgent authorization inquiries require human review; this information does not approve coverage or recommend treatment.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 84,
+                "matched_terms": [
+                  "information"
+                ],
+                "passage_id": "scheduling-process",
+                "quote": "Appointment scheduling information is available from a human scheduling coordinator.",
+                "source_id": "scheduling-handbook",
+                "start": 0
+              }
+            ],
+            "human_review_required": true,
+            "priority": 303
+          },
+          "before": null,
+          "human_review_required": true,
+          "operation": "add_enrichment",
+          "path": "research",
+          "record_id": "request-001",
+          "sequence": 9,
+          "stage": "research"
+        }
+      ],
+      "clinical_decision": null,
+      "human_review_required": true,
+      "input": {
+        "catalog": [
+          {
+            "description": "Administrative support for denied or delayed insurance authorization.",
+            "id": "authorization-guide",
+            "keywords": [
+              "coverage",
+              "appeal",
+              "authorization"
+            ],
+            "source_ids": [
+              "admin-handbook"
+            ],
+            "title": "Insurance authorization information"
+          },
+          {
+            "description": "Information about scheduling appointments.",
+            "id": "appointment-help",
+            "keywords": [
+              "appointment",
+              "schedule"
+            ],
+            "source_ids": [
+              "scheduling-handbook"
+            ],
+            "title": "Appointment scheduling help"
+          }
+        ],
+        "resources": [
+          {
+            "human_review_required": true,
+            "id": "anon-p001",
+            "resourceType": "Patient",
+            "synthetic": true
+          },
+          {
+            "human_review_required": true,
+            "id": "note-001",
+            "resourceType": "ClinicalNote",
+            "subject": "Patient/anon-p001",
+            "synthetic": true,
+            "text": "SYNTHETIC Synthea-style fixture. Fictitious diagnosis: type 2 diabetes. Illustrative lab HbA1c 7.4 percent. Frustrated with delayed coverage authorization. Requests clear insurance information. No treatment recommendation."
+          },
+          {
+            "human_review_required": true,
+            "id": "request-001",
+            "reason": "SYNTHETIC urgent administrative review: preauthorization denied; worried about waiting for coverage information.",
+            "resourceType": "PriorAuthorizationRequest",
+            "status": "pending",
+            "subject": "Patient/anon-p001",
+            "synthetic": true
+          }
+        ],
+        "schema_version": "1.0",
+        "sources": [
+          {
+            "id": "admin-handbook",
+            "passages": [
+              {
+                "id": "authorization-process",
+                "text": "Insurance authorization requests with denied coverage or delay may be routed to a human administrative reviewer."
+              },
+              {
+                "id": "review-boundary",
+                "text": "Urgent authorization inquiries require human review; this information does not approve coverage or recommend treatment."
+              }
+            ],
+            "title": "SYNTHETIC authorization handbook"
+          },
+          {
+            "id": "scheduling-handbook",
+            "passages": [
+              {
+                "id": "scheduling-process",
+                "text": "Appointment scheduling information is available from a human scheduling coordinator."
+              }
+            ],
+            "title": "SYNTHETIC scheduling handbook"
+          }
+        ],
+        "synthetic": true
+      },
+      "records": [
+        {
+          "research": {
+            "clinical_decision": null,
+            "evidence_status": "found",
+            "findings": [
+              {
+                "end": 112,
+                "matched_terms": [
+                  "administrative",
+                  "authorization",
+                  "delay",
+                  "denied",
+                  "insurance",
+                  "requests"
+                ],
+                "passage_id": "authorization-process",
+                "quote": "Insurance authorization requests with denied coverage or delay may be routed to a human administrative reviewer.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 119,
+                "matched_terms": [
+                  "authorization",
+                  "information",
+                  "insurance",
+                  "review",
+                  "treatment",
+                  "urgent"
+                ],
+                "passage_id": "review-boundary",
+                "quote": "Urgent authorization inquiries require human review; this information does not approve coverage or recommend treatment.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 84,
+                "matched_terms": [
+                  "information"
+                ],
+                "passage_id": "scheduling-process",
+                "quote": "Appointment scheduling information is available from a human scheduling coordinator.",
+                "source_id": "scheduling-handbook",
+                "start": 0
+              }
+            ],
+            "human_review_required": true,
+            "priority": 304
+          },
+          "resource": {
+            "human_review_required": true,
+            "id": "anon-p001",
+            "resourceType": "Patient",
+            "synthetic": true
+          },
+          "search": {
+            "human_review_required": true,
+            "priority": 304,
+            "query_terms": [
+              "about",
+              "administrative",
+              "authorization",
+              "c",
+              "clear",
+              "delay",
+              "denied",
+              "diabetes",
+              "diagnosis",
+              "fictitious",
+              "fixture",
+              "frustrated",
+              "hba",
+              "illustrative",
+              "information",
+              "insurance",
+              "lab",
+              "no",
+              "percent",
+              "recommendation",
+              "requests",
+              "review",
+              "style",
+              "synthea",
+              "treatment",
+              "type",
+              "urgent",
+              "worried"
+            ],
+            "results": [
+              {
+                "matched_terms": [
+                  "administrative",
+                  "authorization",
+                  "delay",
+                  "denied",
+                  "information",
+                  "insurance"
+                ],
+                "product_id": "authorization-guide",
+                "score": 6,
+                "source_ids": [
+                  "admin-handbook"
+                ]
+              },
+              {
+                "matched_terms": [
+                  "about",
+                  "information"
+                ],
+                "product_id": "appointment-help",
+                "score": 2,
+                "source_ids": [
+                  "scheduling-handbook"
+                ]
+              }
+            ]
+          },
+          "sentiment": {
+            "evidence": [
+              {
+                "negated": false,
+                "term": "frustrated",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "delay",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "clear",
+                "weight": 1
+              },
+              {
+                "negated": false,
+                "term": "denied",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "worried",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "delay",
+                "weight": -1
+              }
+            ],
+            "human_review_required": true,
+            "label": "negative",
+            "priority": 304,
+            "query_terms": [
+              "about",
+              "administrative",
+              "authorization",
+              "c",
+              "clear",
+              "delay",
+              "denied",
+              "diabetes",
+              "diagnosis",
+              "fictitious",
+              "fixture",
+              "frustrated",
+              "hba",
+              "illustrative",
+              "information",
+              "insurance",
+              "lab",
+              "no",
+              "percent",
+              "recommendation",
+              "requests",
+              "review",
+              "style",
+              "synthea",
+              "treatment",
+              "type",
+              "urgent",
+              "worried"
+            ],
+            "score": -4,
+            "severity": 3,
+            "severity_terms": [
+              "delay",
+              "denied",
+              "urgent"
+            ]
+          }
+        },
+        {
+          "research": {
+            "clinical_decision": null,
+            "evidence_status": "found",
+            "findings": [
+              {
+                "end": 112,
+                "matched_terms": [
+                  "authorization",
+                  "delay",
+                  "insurance",
+                  "requests"
+                ],
+                "passage_id": "authorization-process",
+                "quote": "Insurance authorization requests with denied coverage or delay may be routed to a human administrative reviewer.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 119,
+                "matched_terms": [
+                  "authorization",
+                  "information",
+                  "insurance",
+                  "treatment"
+                ],
+                "passage_id": "review-boundary",
+                "quote": "Urgent authorization inquiries require human review; this information does not approve coverage or recommend treatment.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 84,
+                "matched_terms": [
+                  "information"
+                ],
+                "passage_id": "scheduling-process",
+                "quote": "Appointment scheduling information is available from a human scheduling coordinator.",
+                "source_id": "scheduling-handbook",
+                "start": 0
+              }
+            ],
+            "human_review_required": true,
+            "priority": 201
+          },
+          "resource": {
+            "human_review_required": true,
+            "id": "note-001",
+            "resourceType": "ClinicalNote",
+            "subject": "Patient/anon-p001",
+            "synthetic": true,
+            "text": "SYNTHETIC Synthea-style fixture. Fictitious diagnosis: type 2 diabetes. Illustrative lab HbA1c 7.4 percent. Frustrated with delayed coverage authorization. Requests clear insurance information. No treatment recommendation."
+          },
+          "search": {
+            "human_review_required": true,
+            "priority": 201,
+            "query_terms": [
+              "authorization",
+              "c",
+              "clear",
+              "delay",
+              "diabetes",
+              "diagnosis",
+              "fictitious",
+              "fixture",
+              "frustrated",
+              "hba",
+              "illustrative",
+              "information",
+              "insurance",
+              "lab",
+              "no",
+              "percent",
+              "recommendation",
+              "requests",
+              "style",
+              "synthea",
+              "treatment",
+              "type"
+            ],
+            "results": [
+              {
+                "matched_terms": [
+                  "authorization",
+                  "delay",
+                  "information",
+                  "insurance"
+                ],
+                "product_id": "authorization-guide",
+                "score": 4,
+                "source_ids": [
+                  "admin-handbook"
+                ]
+              },
+              {
+                "matched_terms": [
+                  "information"
+                ],
+                "product_id": "appointment-help",
+                "score": 1,
+                "source_ids": [
+                  "scheduling-handbook"
+                ]
+              }
+            ]
+          },
+          "sentiment": {
+            "evidence": [
+              {
+                "negated": false,
+                "term": "frustrated",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "delay",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "clear",
+                "weight": 1
+              }
+            ],
+            "human_review_required": true,
+            "label": "negative",
+            "priority": 201,
+            "query_terms": [
+              "authorization",
+              "c",
+              "clear",
+              "delay",
+              "diabetes",
+              "diagnosis",
+              "fictitious",
+              "fixture",
+              "frustrated",
+              "hba",
+              "illustrative",
+              "information",
+              "insurance",
+              "lab",
+              "no",
+              "percent",
+              "recommendation",
+              "requests",
+              "style",
+              "synthea",
+              "treatment",
+              "type"
+            ],
+            "score": -1,
+            "severity": 2,
+            "severity_terms": [
+              "delay"
+            ]
+          }
+        },
+        {
+          "research": {
+            "clinical_decision": null,
+            "evidence_status": "found",
+            "findings": [
+              {
+                "end": 112,
+                "matched_terms": [
+                  "administrative",
+                  "authorization",
+                  "delay",
+                  "denied",
+                  "insurance"
+                ],
+                "passage_id": "authorization-process",
+                "quote": "Insurance authorization requests with denied coverage or delay may be routed to a human administrative reviewer.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 119,
+                "matched_terms": [
+                  "authorization",
+                  "information",
+                  "insurance",
+                  "review",
+                  "urgent"
+                ],
+                "passage_id": "review-boundary",
+                "quote": "Urgent authorization inquiries require human review; this information does not approve coverage or recommend treatment.",
+                "source_id": "admin-handbook",
+                "start": 0
+              },
+              {
+                "end": 84,
+                "matched_terms": [
+                  "information"
+                ],
+                "passage_id": "scheduling-process",
+                "quote": "Appointment scheduling information is available from a human scheduling coordinator.",
+                "source_id": "scheduling-handbook",
+                "start": 0
+              }
+            ],
+            "human_review_required": true,
+            "priority": 303
+          },
+          "resource": {
+            "human_review_required": true,
+            "id": "request-001",
+            "reason": "SYNTHETIC urgent administrative review: preauthorization denied; worried about waiting for coverage information.",
+            "resourceType": "PriorAuthorizationRequest",
+            "status": "pending",
+            "subject": "Patient/anon-p001",
+            "synthetic": true
+          },
+          "search": {
+            "human_review_required": true,
+            "priority": 303,
+            "query_terms": [
+              "about",
+              "administrative",
+              "authorization",
+              "delay",
+              "denied",
+              "information",
+              "insurance",
+              "review",
+              "urgent",
+              "worried"
+            ],
+            "results": [
+              {
+                "matched_terms": [
+                  "administrative",
+                  "authorization",
+                  "delay",
+                  "denied",
+                  "information",
+                  "insurance"
+                ],
+                "product_id": "authorization-guide",
+                "score": 6,
+                "source_ids": [
+                  "admin-handbook"
+                ]
+              },
+              {
+                "matched_terms": [
+                  "about",
+                  "information"
+                ],
+                "product_id": "appointment-help",
+                "score": 2,
+                "source_ids": [
+                  "scheduling-handbook"
+                ]
+              }
+            ]
+          },
+          "sentiment": {
+            "evidence": [
+              {
+                "negated": false,
+                "term": "denied",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "worried",
+                "weight": -1
+              },
+              {
+                "negated": false,
+                "term": "delay",
+                "weight": -1
+              }
+            ],
+            "human_review_required": true,
+            "label": "negative",
+            "priority": 303,
+            "query_terms": [
+              "about",
+              "administrative",
+              "authorization",
+              "delay",
+              "denied",
+              "information",
+              "insurance",
+              "review",
+              "urgent",
+              "worried"
+            ],
+            "score": -3,
+            "severity": 3,
+            "severity_terms": [
+              "delay",
+              "denied",
+              "urgent"
+            ]
+          }
+        }
+      ],
+      "schema_version": "1.0",
+      "stage": "research",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t087_combo3_sentiment_basic-search_normal__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "c183c3bf588dc7275e68deeb0f61ce41c39689ee8708ac760742acf41fe6964a",
+      "test_implementation.py": "a43c7923f12da93ccb69ec32c80921f52425300d6700944d13879f6071fe2760",
+      "example_input.json": "45e556bc13184b76f4f2b9b75617e4623e6a9df8a4f971171cce2e60803dcafe",
+      "build_manifest.json": "be0cf37a07bc7eeded1e88f5a599389ec93195b0d7e1c66c1521dd78ab2206c2"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

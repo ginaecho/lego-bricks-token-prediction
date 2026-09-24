@@ -1,0 +1,93 @@
+{
+  "build_id": "wave3_t100_combo4_basic-onboard_basic-support_basic-recommend_basic-documents",
+  "composition_label": "basic:onboard -> basic:support -> basic:recommend -> basic:documents",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "envelope": "schema_version, fixture_label, status, customer, question, knowledge, catalog, document_text, stages",
+    "input": "status=ready, stages={}, fixture_label=synthetic; strict field sets",
+    "output": "Same envelope; status=ok and four validated stage results",
+    "customer": "id, name, email (empty allowed), goals[], interests[], budget_cents",
+    "knowledge": "Objects containing id, keywords[], answer, tags[]",
+    "catalog": "Objects containing id, name, tags[], price_cents, stock, active",
+    "document_text": "Reference and Quantity required; Notes optional. Case-insensitive Field: value lines; duplicate and unknown fields rejected; quantity 1..1000.",
+    "money": "Nonnegative integer USD cents; bools and floats rejected. Recommendation budget is per item; document total is checked against the same budget.",
+    "validation": "One validate function enforces all input and stage boundaries, ordered stage prefixes, and exact deterministic derived outputs. JSON duplicate keys/nonfinite constants are rejected by CLI.",
+    "limits": "Input <=1,000,000 characters; <=1000 catalog/knowledge entries; <=100 tags/goals/interests; bounded strings and integers"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "onboarding",
+      "to": "support",
+      "data": "Validated customer identity and personalized next step; next step preserved in support result"
+    },
+    {
+      "from": "support",
+      "to": "recommendations",
+      "data": "Validated resolution, knowledge source IDs and topic tags; topic matches affect ranking"
+    },
+    {
+      "from": "recommendations",
+      "to": "documents",
+      "data": "Validated top product, unit price, customer ID and support sources generate proposal lines"
+    }
+  ],
+  "behavior": {
+    "onboarding": "Personal greeting and one next action: add contact, choose goal or explore first goal",
+    "support": "Deterministic keyword-overlap retrieval over supplied synthetic knowledge only; verbatim grounded answer plus source ID, or explicit human-review fallback without claiming a submitted ticket",
+    "discovery": "Exclude inactive, out-of-stock and over-budget products; rank tag overlaps (interest=3, goal=2, support=4), then price and ID; return up to 3 with transparent matched terms",
+    "documents": "Extract key/value fields, reshape top recommendation into a synthetic proposal, calculate exact totals and flag total-budget/inventory/empty-selection issues; no order is submitted",
+    "cli": "Exactly one JSON object on stdout; successful run exits 0, validation/file/encoding/JSON/usage errors exit 2 with status=error",
+    "immutability": "Pipeline does not mutate caller input; all stage outputs checked before further use"
+  },
+  "scope": {
+    "included": [
+      "Integrated four-stage deterministic pipeline",
+      "Clearly labeled synthetic input and document output",
+      "Personalized onboarding, grounded offline support, explainable discovery",
+      "Structured extraction, rendered proposal text and review checks",
+      "Shared schemas and strict validation",
+      "In-memory operation and CLI",
+      "Unittest fixtures and subprocess CLI checks"
+    ],
+    "excluded": [
+      "Live AI or model providers",
+      "Network access",
+      "Ticket creation, outbound messages, payments or order submission",
+      "OCR, PDF parsing, arbitrary document formats",
+      "Tax, shipping, currency conversion",
+      "Persistent storage, authentication or production infrastructure",
+      "Semantic understanding beyond deterministic keyword matching"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 35,
+    "failures": 0,
+    "errors": 0,
+    "test_exit_code": 0,
+    "cli": "Verified example_input.json prints one JSON object with status ok",
+    "cli_exit_code": 0,
+    "example_document_total_cents": 5000,
+    "coverage": "All stages, all handoffs, ranking propagation, deterministic ties, tamper rejection, input immutability, missing contact/goals, support fallback, empty discovery, budget/inventory checks, invalid schemas/documents, CLI success/file/encoding/JSON/size/usage errors"
+  }
+}

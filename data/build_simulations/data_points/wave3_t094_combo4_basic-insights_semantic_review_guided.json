@@ -133,7 +133,7 @@
   "split_group": "aaa4171018058ea1bc2b47da39e1feab6e47af68079ae57c13def3589d213b08",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "8b45e5fd763daab9df8995217b14ed066d4449d7a45b51f542a0d05c7c1cf200",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t094_combo4_basic-insights_semantic_review_guided",
   "membership_point_id": "combo4_basic-insights_semantic_review_guided",
@@ -141,8 +141,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "96cc62a8b6d84d091eba74b07fa7ea969c9a893c966f9766cfd8dc9536d14ba9",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "1ff2326a-aa0e-419f-afb6-29ce85fdf161",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 147922,
+    "output_tokens": 14765,
+    "cache_read_tokens": 131800,
+    "cache_write_tokens": 16104,
+    "total_tokens": 162687,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37251,
+        "agent_id": "1ff2326a-aa0e-419f-afb6-29ce85fdf161",
+        "model": "gpt-6-astra",
+        "input_tokens": 14999,
+        "output_tokens": 294,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 874,
+        "reasoning_tokens": 112,
+        "duration_ms": 6889,
+        "created_at": "2026-09-24T10:49:16.536Z"
+      },
+      {
+        "id": 37362,
+        "agent_id": "1ff2326a-aa0e-419f-afb6-29ce85fdf161",
+        "model": "gpt-6-astra",
+        "input_tokens": 15323,
+        "output_tokens": 12856,
+        "cache_read_tokens": 14996,
+        "cache_write_tokens": 324,
+        "reasoning_tokens": 727,
+        "duration_ms": 183568,
+        "created_at": "2026-09-24T11:01:14.766Z"
+      },
+      {
+        "id": 37369,
+        "agent_id": "1ff2326a-aa0e-419f-afb6-29ce85fdf161",
+        "model": "gpt-6-astra",
+        "input_tokens": 28511,
+        "output_tokens": 324,
+        "cache_read_tokens": 15320,
+        "cache_write_tokens": 13188,
+        "reasoning_tokens": 69,
+        "duration_ms": 6321,
+        "created_at": "2026-09-24T11:02:05.710Z"
+      },
+      {
+        "id": 37380,
+        "agent_id": "1ff2326a-aa0e-419f-afb6-29ce85fdf161",
+        "model": "gpt-6-astra",
+        "input_tokens": 28921,
+        "output_tokens": 923,
+        "cache_read_tokens": 28508,
+        "cache_write_tokens": 410,
+        "reasoning_tokens": 512,
+        "duration_ms": 19648,
+        "created_at": "2026-09-24T11:02:53.740Z"
+      },
+      {
+        "id": 37386,
+        "agent_id": "1ff2326a-aa0e-419f-afb6-29ce85fdf161",
+        "model": "gpt-6-astra",
+        "input_tokens": 29939,
+        "output_tokens": 254,
+        "cache_read_tokens": 28918,
+        "cache_write_tokens": 1018,
+        "reasoning_tokens": 0,
+        "duration_ms": 7223,
+        "created_at": "2026-09-24T11:03:36.327Z"
+      },
+      {
+        "id": 37394,
+        "agent_id": "1ff2326a-aa0e-419f-afb6-29ce85fdf161",
+        "model": "gpt-6-astra",
+        "input_tokens": 30229,
+        "output_tokens": 114,
+        "cache_read_tokens": 29936,
+        "cache_write_tokens": 290,
+        "reasoning_tokens": 0,
+        "duration_ms": 3422,
+        "created_at": "2026-09-24T11:04:35.687Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.59128,
+      "observed_cache_profile_estimate_usd": 0.29473,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.095359999999999,
+      "observed_cache_profile_estimate_usd": 7.095359999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -173,5 +298,364 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "......................................\n----------------------------------------------------------------------\nRan 38 tests in 1.378s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true,
+      "stages": {
+        "insights": {
+          "schema_version": 1,
+          "stage": "insights",
+          "items": [
+            {
+              "id": "theme-1",
+              "keyword": "delivery",
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ],
+              "count": 2,
+              "sentiment": "mixed",
+              "query": "delivery",
+              "action": "Investigate 'delivery' using 2 feedback item(s)."
+            },
+            {
+              "id": "theme-2",
+              "keyword": "tracking",
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ],
+              "count": 2,
+              "sentiment": "mixed",
+              "query": "tracking",
+              "action": "Investigate 'tracking' using 2 feedback item(s)."
+            },
+            {
+              "id": "theme-3",
+              "keyword": "policy",
+              "feedback_ids": [
+                "f3"
+              ],
+              "count": 1,
+              "sentiment": "negative",
+              "query": "policy",
+              "action": "Investigate 'policy' using 1 feedback item(s)."
+            },
+            {
+              "id": "theme-4",
+              "keyword": "refund",
+              "feedback_ids": [
+                "f3"
+              ],
+              "count": 1,
+              "sentiment": "negative",
+              "query": "refund",
+              "action": "Investigate 'refund' using 1 feedback item(s)."
+            }
+          ],
+          "summary": {
+            "feedback_count": 3,
+            "theme_count": 4,
+            "ignored_feedback_ids": [],
+            "omitted_keyword_count": 0,
+            "method": "frequency themes; heuristic sentiment, not an LLM judgment"
+          }
+        },
+        "semantic": {
+          "schema_version": 1,
+          "stage": "semantic",
+          "items": [
+            {
+              "id": "query-1",
+              "theme_id": "theme-1",
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ],
+              "query": "delivery",
+              "hits": [
+                {
+                  "document_id": "delivery-guide",
+                  "title": "Synthetic delivery guide",
+                  "text": "Delivery tracking provides shipment updates. This is synthetic evidence.",
+                  "score": 0.530656465,
+                  "lexical_score": 0.530656465,
+                  "embedding_score": 0
+                }
+              ]
+            },
+            {
+              "id": "query-2",
+              "theme_id": "theme-2",
+              "feedback_ids": [
+                "f1",
+                "f2"
+              ],
+              "query": "tracking",
+              "hits": [
+                {
+                  "document_id": "delivery-guide",
+                  "title": "Synthetic delivery guide",
+                  "text": "Delivery tracking provides shipment updates. This is synthetic evidence.",
+                  "score": 0.3134142566,
+                  "lexical_score": 0.3134142566,
+                  "embedding_score": 0
+                }
+              ]
+            },
+            {
+              "id": "query-3",
+              "theme_id": "theme-3",
+              "feedback_ids": [
+                "f3"
+              ],
+              "query": "policy",
+              "hits": [
+                {
+                  "document_id": "refund-guide",
+                  "title": "Synthetic refund guide",
+                  "text": "Refund policy describes return eligibility. This is synthetic evidence.",
+                  "score": 0.3134142566,
+                  "lexical_score": 0.3134142566,
+                  "embedding_score": 0
+                }
+              ]
+            },
+            {
+              "id": "query-4",
+              "theme_id": "theme-4",
+              "feedback_ids": [
+                "f3"
+              ],
+              "query": "refund",
+              "hits": [
+                {
+                  "document_id": "refund-guide",
+                  "title": "Synthetic refund guide",
+                  "text": "Refund policy describes return eligibility. This is synthetic evidence.",
+                  "score": 0.530656465,
+                  "lexical_score": 0.530656465,
+                  "embedding_score": 0
+                }
+              ]
+            }
+          ],
+          "summary": {
+            "document_count": 3,
+            "index": {
+              "and": [
+                "unrelated"
+              ],
+              "catalog": [
+                "unrelated"
+              ],
+              "colors": [
+                "unrelated"
+              ],
+              "delivery": [
+                "delivery-guide"
+              ],
+              "describes": [
+                "refund-guide"
+              ],
+              "dimensions": [
+                "unrelated"
+              ],
+              "eligibility": [
+                "refund-guide"
+              ],
+              "evidence": [
+                "delivery-guide",
+                "refund-guide"
+              ],
+              "furniture": [
+                "unrelated"
+              ],
+              "guide": [
+                "delivery-guide",
+                "refund-guide"
+              ],
+              "is": [
+                "delivery-guide",
+                "refund-guide"
+              ],
+              "material": [
+                "unrelated"
+              ],
+              "policy": [
+                "refund-guide"
+              ],
+              "provides": [
+                "delivery-guide"
+              ],
+              "refund": [
+                "refund-guide"
+              ],
+              "return": [
+                "refund-guide"
+              ],
+              "shipment": [
+                "delivery-guide"
+              ],
+              "synthetic": [
+                "delivery-guide",
+                "refund-guide",
+                "unrelated"
+              ],
+              "this": [
+                "delivery-guide",
+                "refund-guide"
+              ],
+              "tracking": [
+                "delivery-guide"
+              ],
+              "updates": [
+                "delivery-guide"
+              ]
+            },
+            "ranking": "tf-idf cosine",
+            "embedding_used": false
+          }
+        },
+        "review": {
+          "schema_version": 1,
+          "stage": "review",
+          "items": [
+            {
+              "id": "r-delivery",
+              "status": "supported",
+              "required_terms": [
+                "delivery",
+                "tracking"
+              ],
+              "min_evidence": 1,
+              "evidence": [
+                {
+                  "document_id": "delivery-guide",
+                  "query_ids": [
+                    "query-1",
+                    "query-2"
+                  ],
+                  "start": 0,
+                  "end": 17,
+                  "quote": "Delivery tracking",
+                  "matched_terms": [
+                    "delivery",
+                    "tracking"
+                  ]
+                }
+              ],
+              "gap": null
+            },
+            {
+              "id": "r-refund",
+              "status": "gap",
+              "required_terms": [
+                "refund",
+                "deadline"
+              ],
+              "min_evidence": 1,
+              "evidence": [],
+              "gap": {
+                "reason": "insufficient_evidence",
+                "needed_count": 1,
+                "candidate_checks": [
+                  {
+                    "document_id": "delivery-guide",
+                    "missing_terms": [
+                      "refund",
+                      "deadline"
+                    ]
+                  },
+                  {
+                    "document_id": "refund-guide",
+                    "missing_terms": [
+                      "deadline"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "summary": {
+            "supported": 1,
+            "gaps": 1,
+            "notice": "Literal term coverage in retrieved documents only; no certification, truth, entailment, or compliance claim. Negation requires human review."
+          }
+        },
+        "guided": {
+          "schema_version": 1,
+          "stage": "guided",
+          "items": [
+            {
+              "id": "register",
+              "title": "Register synthetic workspace",
+              "prerequisites": [],
+              "requirement_ids": [],
+              "status": "completed",
+              "blockers": []
+            },
+            {
+              "id": "delivery",
+              "title": "Enable delivery guidance",
+              "prerequisites": [
+                "register"
+              ],
+              "requirement_ids": [
+                "r-delivery"
+              ],
+              "status": "ready",
+              "blockers": []
+            },
+            {
+              "id": "refund",
+              "title": "Enable refund guidance",
+              "prerequisites": [
+                "delivery"
+              ],
+              "requirement_ids": [
+                "r-refund"
+              ],
+              "status": "blocked",
+              "blockers": [
+                {
+                  "kind": "prerequisite",
+                  "id": "delivery"
+                },
+                {
+                  "kind": "requirement_gap",
+                  "id": "r-refund"
+                }
+              ]
+            }
+          ],
+          "summary": {
+            "total": 3,
+            "completed": 1,
+            "ready": 1,
+            "blocked": 1,
+            "percent_complete": 33.33
+          }
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t094_combo4_basic-insights_semantic_review_guided",
+    "artifact_sha256": {
+      "implementation.py": "9ef5b174f3f2cfea8064b0ed7dd263169bbd69385e93e314b6a7de69cb9bbd39",
+      "test_implementation.py": "0bc4e712d11af008b5b2a4dff1c252c54b1099013e4cbfe7d382ee73fc6a973a",
+      "example_input.json": "240cf49337e32e8ab1e17c0069665fdf5ed3aef3431be738bde6e9cb7910c67b",
+      "build_manifest.json": "bf881d37dacf257ad9952c3d57b22a36af9d36c0f0e800061d792e5185ee99d5"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

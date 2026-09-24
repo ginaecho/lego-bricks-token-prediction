@@ -1,0 +1,96 @@
+{
+  "build_id": "wave3_t093_combo3_basic-documents_basic-insights_basic-research__ind-retail",
+  "composition_label": "basic:documents -> basic:insights -> basic:research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Object with schema_version, synthetic=true, catalog feed, customers, orders/baskets, clickstream event array, feedback, supplied sources and questions. Unknown fields are rejected.",
+    "catalog": "currency and products with unique SKU, name, integer price_cents and stock.",
+    "profiles": "Unique customer ID, invented persona and explicit personalization/withdrawn booleans.",
+    "orders": "Customer reference, basket/completed status, SKU lines with positive integer quantity and catalog-matching unit_price_cents.",
+    "event_log": "Unique event ID, customer and SKU references, event type, timezone-bearing ISO timestamp and displayed catalog price/stock.",
+    "feedback": "Unique ID, customer/SKU references, optional order reference, review/service kind, text and synthetic=true. Reviews require a matching completed order.",
+    "sources": "Unique ID, title, supplied text, synthetic=true and structured catalog_claims validated against the catalog.",
+    "questions": "Unique ID and nonempty text.",
+    "output": "status=ok plus data carrying the same envelope with cumulative documents, insights and research sections; stage=research. Errors are a single JSON object with status=error and message, exit 2.",
+    "validation": "One validate() layer validates entity fields, identifiers, relationships, industry constraints and deterministic derived-stage integrity at every handoff."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "documents",
+      "to": "insights",
+      "consumes": "Validated extracted feedback, offer, order and clickstream rows; active consent from the shared customer profiles.",
+      "produces": "Overlapping keyword themes with exact feedback IDs, product behavior metrics and consent-gated in-stock offers."
+    },
+    {
+      "from": "insights",
+      "to": "research",
+      "consumes": "Validated theme counts, provenance and actions, plus document-stage questions, source rows and catalog offers retained in the same envelope.",
+      "produces": "Decision questions with ranked lexical evidence, extractive findings, cited theme actions and explicit insufficient-evidence results."
+    }
+  ],
+  "behavior": [
+    "Document automation extracts and reshapes JSON entities, trims feedback boundaries, computes integer line totals and verifies relationships.",
+    "Customer insights categorize supplied feedback deterministically, retain unmatched feedback under other, distinguish basket events from completed sales and never generate review text.",
+    "Research uses only supplied synthetic materials, observed themes and authoritative catalog facts. Evidence-found means lexical relevance, not a proven answer.",
+    "Personalization requires explicit consent and no withdrawal. Nonconsenting profiles receive no personalized offers; aggregate feedback still contributes to themes.",
+    "Displayed offers, basket/order prices and structured source price/stock claims must match the input catalog snapshot.",
+    "Free-text source claims are retained as unverified quotations, not independently fact-checked; structured catalog assertions are authoritative for price and stock.",
+    "Synthetic fixture review provenance is checked against synthetic completed orders; this does not verify real-world purchase authenticity.",
+    "No compliance certification is claimed. No external research, providers, or generated endorsements."
+  ],
+  "scope": {
+    "included": [
+      "Integrated deterministic CLI",
+      "Reusable in-process stage functions",
+      "Shared schema and validation",
+      "Synthetic retail fixtures",
+      "Standard-library unittest coverage",
+      "Traceable extractive evidence and data-integrity checks"
+    ],
+    "excluded": [
+      "Production persistence or deployment",
+      "Live networks and model providers",
+      "GDPR/CCPA legal compliance certification",
+      "Real-world identity, consent or review authenticity verification",
+      "Free-text factual verification",
+      "Causal inference, sentiment scoring or statistical generalization",
+      "Currency conversion, historical pricing and inventory reconciliation",
+      "External document parsers or internet research"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 40,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "coverage": "All three stages, both handoffs, propagation, provenance, consent and withdrawal, catalog consistency, empty inputs, invalid types and references, tampering, determinism, CLI success and error contracts."
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout": "Exactly one valid JSON object with status=ok and data.stage=research.",
+      "stderr": "Empty"
+    },
+    "deliverable_inventory": "Verified exactly the four required files and no generated cache files."
+  }
+}

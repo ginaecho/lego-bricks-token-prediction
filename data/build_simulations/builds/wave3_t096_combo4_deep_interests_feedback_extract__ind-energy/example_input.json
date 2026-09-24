@@ -1,0 +1,56 @@
+{
+  "synthetic": true,
+  "fixture_label": "SYNTHETIC winter feeder study; all sites and devices fictitious",
+  "assets": [
+    {"id": "FICT-SUB-NORTH-01", "critical": true},
+    {"id": "FICT-FEEDER-EAST-02", "critical": false},
+    {"id": "FICT-SUB-SOUTH-03", "critical": true}
+  ],
+  "topology": [
+    ["FICT-SUB-NORTH-01", "FICT-FEEDER-EAST-02"],
+    ["FICT-FEEDER-EAST-02", "FICT-SUB-SOUTH-03"]
+  ],
+  "meter_csv": "meter_id,asset_id,timestamp,consumption_kwh\nFICT-METER-01,FICT-SUB-NORTH-01,2026-01-15T17:00:00Z,3.2\nFICT-METER-01,FICT-SUB-NORTH-01,2026-01-15T17:30:00Z,3.7\nFICT-METER-02,FICT-FEEDER-EAST-02,2026-07-15T17:00:00Z,1.8\n",
+  "telemetry": {
+    "format": "synthetic-scada-v1",
+    "devices": [
+      {"device_id": "FICT-RTU-01", "asset_id": "FICT-SUB-NORTH-01", "timestamp": "2026-01-15T17:30:00Z", "voltage_kv": 11.2, "state": "energized"},
+      {"device_id": "FICT-RTU-02", "asset_id": "FICT-FEEDER-EAST-02", "timestamp": "2026-01-15T17:30:00Z", "voltage_kv": 0, "state": "isolated"}
+    ]
+  },
+  "documents": [
+    {"id": "doc-a", "asset_id": "FICT-SUB-NORTH-01", "text": "SYNTHETIC inspection: reliability is stable. Emissions estimate: 12 kgCO2e.",
+     "claims": [
+       {"topic": "reliability", "value": "stable", "quote": "reliability is stable"},
+       {"topic": "emissions", "value": 12, "unit": "kgCO2e", "source": "doc-a", "quote": "Emissions estimate: 12 kgCO2e"}
+     ]},
+    {"id": "doc-b", "asset_id": "FICT-SUB-NORTH-01", "text": "SYNTHETIC operations: reliability is degraded. Winter consumption rises.",
+     "claims": [
+       {"topic": "reliability", "value": "degraded", "quote": "reliability is degraded"},
+       {"topic": "consumption", "value": "winter_peak", "quote": "Winter consumption rises"}
+     ]},
+    {"id": "doc-c", "asset_id": "FICT-FEEDER-EAST-02", "text": "SYNTHETIC summer consumption is moderate.",
+     "claims": [{"topic": "consumption", "value": "moderate", "quote": "summer consumption is moderate"}]},
+    {"id": "doc-d", "asset_id": "FICT-SUB-SOUTH-03", "text": "SYNTHETIC reliability is stable.",
+     "claims": [{"topic": "reliability", "value": "stable", "quote": "reliability is stable"}]}
+  ],
+  "preferences": {"weights": {"reliability": 5, "consumption": 2, "emissions": 1, "flood_resilience": 1}, "exclude_assets": ["FICT-SUB-SOUTH-03"]},
+  "safety_rules": {"fire": "critical", "live_wire": "critical", "medical_dependency": "critical", "sustained_loss": "high", "default": "routine"},
+  "outages": [
+    {"id": "OUT-SYN-1", "asset_id": "FICT-SUB-NORTH-01", "safety_flags": ["live_wire", "sustained_loss"], "priority": "critical"},
+    {"id": "OUT-SYN-2", "asset_id": "FICT-FEEDER-EAST-02", "safety_flags": ["sustained_loss"], "priority": "high"},
+    {"id": "OUT-SYN-3", "asset_id": "FICT-SUB-SOUTH-03", "safety_flags": [], "priority": "routine"}
+  ],
+  "feedback": [
+    {"id": "response-a", "asset_id": "FICT-SUB-NORTH-01", "outage_id": "OUT-SYN-1", "text": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at FICT-SUB-NORTH-01"},
+    {"id": "response-b", "asset_id": "FICT-SUB-NORTH-01", "outage_id": "OUT-SYN-1", "text": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at FICT-SUB-NORTH-01"},
+    {"id": "response-c", "asset_id": "FICT-FEEDER-EAST-02", "outage_id": "OUT-SYN-2", "text": "Outage: OUT-SYN-2; Priority: high; Note: interruption restored in summer"},
+    {"id": "response-d", "asset_id": "FICT-SUB-SOUTH-03", "outage_id": "OUT-SYN-3", "text": "Outage: OUT-SYN-3; Priority: routine; Note: planned outage"}
+  ],
+  "extraction_schema": [
+    {"name": "outage_id", "label": "Outage", "type": "string", "required": true},
+    {"name": "priority", "label": "Priority", "type": "string", "required": true, "semantic": "priority"},
+    {"name": "consumption", "label": "Consumption", "type": "number", "required": false, "unit": "kWh"},
+    {"name": "emissions", "label": "Emissions", "type": "number", "required": true, "unit": "kgCO2e", "semantic": "emissions"}
+  ]
+}

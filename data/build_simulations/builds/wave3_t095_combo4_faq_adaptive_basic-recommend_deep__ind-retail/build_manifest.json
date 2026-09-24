@@ -1,0 +1,95 @@
+{
+  "build_id": "wave3_t095_combo4_faq_adaptive_basic-recommend_deep__ind-retail",
+  "composition_label": "faq -> adaptive -> basic:recommend -> deep | retail",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, isolated implementation written for this build; no other builds or repository files accessed.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "One strict synthetic JSON request: catalog currency/products, customer identity/experience/explicit consents/preferences, basket order/items, clickstream event log, question, knowledge_base, technical documents with structured extractive claims.",
+    "output": "One JSON handoff envelope: schema_version, status, synthetic, customer_id, personalization_mode, catalog-valued basket, completed_stages, results keyed by ordered stage.",
+    "validation": "validate() validates input and every previous/new handoff. Handoffs must equal canonical deterministic derivations, rejecting altered answers, consent, stage order, ranking, prices, stock and citations.",
+    "money": "Integer cents; no floating point price arithmetic; basket line totals derive from catalog prices.",
+    "limits": "One-megabyte CLI input; bounded strings/arrays; exact fields; unique IDs; timestamps require timezones; duplicate JSON keys and nonfinite constants rejected. Evidence quotes must contain an exact structured fact: SKU attribute: value.",
+    "errors": "Validation and file errors produce one JSON object with status error and exit code 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "faq",
+      "to": "adaptive",
+      "consumed": "Validated extractive answer status, topic, source IDs and unanswered question determine policy-review versus support-followup onboarding."
+    },
+    {
+      "from": "adaptive",
+      "to": "basic:recommend",
+      "consumed": "Validated consent-gated categories, budget, clickstream interest scores, ready onboarding steps, support context and research attributes."
+    },
+    {
+      "from": "basic:recommend",
+      "to": "deep",
+      "consumed": "Validated selected SKU cards determine research scope; technical attributes, KB source IDs and unresolved support questions flow into synthesis."
+    }
+  ],
+  "behavior": {
+    "faq": "Deterministic keyword overlap retrieves one unique best article. Exact source answer and quote returned. No matches or tied best matches explicitly abstain.",
+    "adaptive": "Experience-aware, prerequisite-ordered explained steps. Experts can satisfy basics by experience. Without both explicit consents, personal experience, preferences and clicks are ignored.",
+    "basic:recommend": "General catalog recommendation using consented category and bounded click scores, budget filtering, stable price/SKU tie breaking, in-stock and not-already-in-basket eligibility; at most three cards. Generic catalog ranking without consent.",
+    "deep": "Per recommended SKU, synthesize material/durability/care from exact source quotes, aggregate matching claims across documents, retain conflicting alternatives without majority voting, and enumerate missing evidence and unresolved support questions.",
+    "industry_constraints": [
+      "Both GDPR and CCPA personalization consent booleans must be true before experience, preferences or clickstream influence output. Demonstrative rule, not legal certification.",
+      "No generated reviews, endorsements or ratings. Structured evidence accepts synthetic technical kinds and technical attributes only.",
+      "Every displayed price and stock quantity is derived from the supplied catalog snapshot. Basket quantities cannot exceed stock."
+    ],
+    "fixture_label": "All products, SKUs, prices, stock, personas, click events, policies and evidence are clearly synthetic."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic CLI pipeline and shared validation layer",
+      "Synthetic JSON catalog and clickstream fixtures",
+      "Grounded support abstention, prerequisite onboarding, personalized or generic discovery",
+      "Multi-document synthesis, explicit disagreements and unresolved questions",
+      "Standard-library unit and subprocess CLI tests"
+    ],
+    "excluded": [
+      "Live providers, LLMs, networks, external dependencies and agents",
+      "Enterprise production delivery or compliance certification",
+      "Checkout, payment, stock reservation and live inventory",
+      "Real shopper data, real reviews or endorsements",
+      "Semantic entailment, source independence verification and autonomous conflict resolution",
+      "Persistence or an interactive onboarding completion engine"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 38,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "coverage": "Every stage; all handoffs; consent withdrawal; generic independence from personal data; prerequisites; budget; empty input collections; catalog consistency; extractive evidence grounding; disagreements; tampering; CLI success, usage, file and validation errors."
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "stderr_empty": true,
+      "completed_stages": ["faq", "adaptive", "basic:recommend", "deep"]
+    }
+  }
+}

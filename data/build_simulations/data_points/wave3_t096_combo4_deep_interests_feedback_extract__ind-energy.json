@@ -134,7 +134,7 @@
   "split_group": "999a97449e15226b652273ff5e6f3deaf93db966204e3d8c4309a3c46ae7fdfa",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "242ed5b46d8b6faed189b490f38fd2f7533c8d3149f699862155b85361207e2e",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t096_combo4_deep_interests_feedback_extract__ind-energy",
   "membership_point_id": "combo4_deep_interests_feedback_extract__ind-energy",
@@ -142,8 +142,145 @@
   "trial_category": "combo_BTI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "bc09c57f76fd02e2a3663eb89f04250711146b95179762920777f1a38f7c6ee7",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "4158f620-def9-42ec-81c4-020e5f0d1e35",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 173509,
+    "output_tokens": 14895,
+    "cache_read_tokens": 157037,
+    "cache_write_tokens": 16451,
+    "total_tokens": 188404,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37256,
+        "agent_id": "4158f620-def9-42ec-81c4-020e5f0d1e35",
+        "model": "gpt-6-astra",
+        "input_tokens": 15087,
+        "output_tokens": 319,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 962,
+        "reasoning_tokens": 158,
+        "duration_ms": 8687,
+        "created_at": "2026-09-24T10:49:27.587Z"
+      },
+      {
+        "id": 37339,
+        "agent_id": "4158f620-def9-42ec-81c4-020e5f0d1e35",
+        "model": "gpt-6-astra",
+        "input_tokens": 15432,
+        "output_tokens": 7989,
+        "cache_read_tokens": 15084,
+        "cache_write_tokens": 345,
+        "reasoning_tokens": 516,
+        "duration_ms": 112115,
+        "created_at": "2026-09-24T10:58:37.444Z"
+      },
+      {
+        "id": 37371,
+        "agent_id": "4158f620-def9-42ec-81c4-020e5f0d1e35",
+        "model": "gpt-6-astra",
+        "input_tokens": 23596,
+        "output_tokens": 5313,
+        "cache_read_tokens": 15429,
+        "cache_write_tokens": 8164,
+        "reasoning_tokens": 194,
+        "duration_ms": 76553,
+        "created_at": "2026-09-24T11:02:18.312Z"
+      },
+      {
+        "id": 37377,
+        "agent_id": "4158f620-def9-42ec-81c4-020e5f0d1e35",
+        "model": "gpt-6-astra",
+        "input_tokens": 29171,
+        "output_tokens": 244,
+        "cache_read_tokens": 23593,
+        "cache_write_tokens": 5575,
+        "reasoning_tokens": 0,
+        "duration_ms": 4570,
+        "created_at": "2026-09-24T11:02:43.281Z"
+      },
+      {
+        "id": 37389,
+        "agent_id": "4158f620-def9-42ec-81c4-020e5f0d1e35",
+        "model": "gpt-6-astra",
+        "input_tokens": 29491,
+        "output_tokens": 569,
+        "cache_read_tokens": 29168,
+        "cache_write_tokens": 320,
+        "reasoning_tokens": 233,
+        "duration_ms": 12040,
+        "created_at": "2026-09-24T11:03:46.195Z"
+      },
+      {
+        "id": 37406,
+        "agent_id": "4158f620-def9-42ec-81c4-020e5f0d1e35",
+        "model": "gpt-6-astra",
+        "input_tokens": 30156,
+        "output_tokens": 359,
+        "cache_read_tokens": 29488,
+        "cache_write_tokens": 665,
+        "reasoning_tokens": 25,
+        "duration_ms": 12331,
+        "created_at": "2026-09-24T11:05:34.986Z"
+      },
+      {
+        "id": 37412,
+        "agent_id": "4158f620-def9-42ec-81c4-020e5f0d1e35",
+        "model": "gpt-6-astra",
+        "input_tokens": 30576,
+        "output_tokens": 102,
+        "cache_read_tokens": 30153,
+        "cache_write_tokens": 420,
+        "reasoning_tokens": 0,
+        "duration_ms": 3084,
+        "created_at": "2026-09-24T11:06:35.757Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6571975000000001,
+      "observed_cache_profile_estimate_usd": 0.30386425,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.88637,
+      "observed_cache_profile_estimate_usd": 7.88637,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -174,5 +311,603 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............................................\n----------------------------------------------------------------------\nRan 45 tests in 2.311s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "extraction": [
+          {
+            "fields": {
+              "consumption": {
+                "source": "response-a",
+                "span": {
+                  "end": 59,
+                  "quote": "3.7 kWh",
+                  "start": 52
+                },
+                "unit": "kWh",
+                "value": 3.7
+              },
+              "emissions": {
+                "source": "response-a",
+                "span": {
+                  "end": 81,
+                  "quote": "12 kgCO2e",
+                  "start": 72
+                },
+                "unit": "kgCO2e",
+                "value": 12.0
+              },
+              "outage_id": {
+                "source": "response-a",
+                "span": {
+                  "end": 17,
+                  "quote": "OUT-SYN-1",
+                  "start": 8
+                },
+                "value": "OUT-SYN-1"
+              },
+              "priority": {
+                "source": "response-a",
+                "span": {
+                  "end": 37,
+                  "quote": "critical",
+                  "start": 29
+                },
+                "value": "critical"
+              }
+            },
+            "missing_fields": [],
+            "missing_required": [],
+            "record_id": "feedback-0001"
+          },
+          {
+            "fields": {
+              "consumption": null,
+              "emissions": null,
+              "outage_id": {
+                "source": "response-c",
+                "span": {
+                  "end": 17,
+                  "quote": "OUT-SYN-2",
+                  "start": 8
+                },
+                "value": "OUT-SYN-2"
+              },
+              "priority": {
+                "source": "response-c",
+                "span": {
+                  "end": 33,
+                  "quote": "high",
+                  "start": 29
+                },
+                "value": "high"
+              }
+            },
+            "missing_fields": [
+              "consumption",
+              "emissions"
+            ],
+            "missing_required": [
+              "emissions"
+            ],
+            "record_id": "feedback-0002"
+          }
+        ],
+        "feedback_analysis": {
+          "duplicates_removed": 1,
+          "excluded_feedback_count": 1,
+          "records": [
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "id": "feedback-0001",
+              "outage_id": "OUT-SYN-1",
+              "supports": [
+                {
+                  "feedback_id": "response-a",
+                  "span": {
+                    "end": 147,
+                    "quote": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794",
+                    "start": 0
+                  }
+                },
+                {
+                  "feedback_id": "response-b",
+                  "span": {
+                    "end": 147,
+                    "quote": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794",
+                    "start": 0
+                  }
+                }
+              ],
+              "text": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794"
+            },
+            {
+              "asset_id": "protected-672aefd717f71199",
+              "id": "feedback-0002",
+              "outage_id": "OUT-SYN-2",
+              "supports": [
+                {
+                  "feedback_id": "response-c",
+                  "span": {
+                    "end": 72,
+                    "quote": "Outage: OUT-SYN-2; Priority: high; Note: interruption restored in summer",
+                    "start": 0
+                  }
+                }
+              ],
+              "text": "Outage: OUT-SYN-2; Priority: high; Note: interruption restored in summer"
+            }
+          ],
+          "themes": [
+            {
+              "count": 1,
+              "name": "safety",
+              "record_ids": [
+                "feedback-0001"
+              ],
+              "supporting_excerpts": [
+                {
+                  "feedback_id": "response-a",
+                  "span": {
+                    "end": 147,
+                    "quote": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794",
+                    "start": 0
+                  }
+                }
+              ]
+            },
+            {
+              "count": 2,
+              "name": "reliability",
+              "record_ids": [
+                "feedback-0001",
+                "feedback-0002"
+              ],
+              "supporting_excerpts": [
+                {
+                  "feedback_id": "response-a",
+                  "span": {
+                    "end": 147,
+                    "quote": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794",
+                    "start": 0
+                  }
+                },
+                {
+                  "feedback_id": "response-c",
+                  "span": {
+                    "end": 72,
+                    "quote": "Outage: OUT-SYN-2; Priority: high; Note: interruption restored in summer",
+                    "start": 0
+                  }
+                }
+              ]
+            },
+            {
+              "count": 2,
+              "name": "consumption",
+              "record_ids": [
+                "feedback-0001",
+                "feedback-0002"
+              ],
+              "supporting_excerpts": [
+                {
+                  "feedback_id": "response-a",
+                  "span": {
+                    "end": 147,
+                    "quote": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794",
+                    "start": 0
+                  }
+                },
+                {
+                  "feedback_id": "response-c",
+                  "span": {
+                    "end": 72,
+                    "quote": "Outage: OUT-SYN-2; Priority: high; Note: interruption restored in summer",
+                    "start": 0
+                  }
+                }
+              ]
+            },
+            {
+              "count": 1,
+              "name": "emissions",
+              "record_ids": [
+                "feedback-0001"
+              ],
+              "supporting_excerpts": [
+                {
+                  "feedback_id": "response-a",
+                  "span": {
+                    "end": 147,
+                    "quote": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794",
+                    "start": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "recommendations": [
+          {
+            "asset_id": "protected-0ca310f614702794",
+            "evidence_ids": [
+              "evidence-0001",
+              "evidence-0002",
+              "evidence-0003",
+              "evidence-0004"
+            ],
+            "explanation": "Matched weighted topics: consumption, emissions, reliability",
+            "score": 8,
+            "uncertainty": [
+              {
+                "asset_id": "protected-0ca310f614702794",
+                "evidence_ids": [
+                  "evidence-0001",
+                  "evidence-0003"
+                ],
+                "topic": "reliability"
+              }
+            ]
+          },
+          {
+            "asset_id": "protected-672aefd717f71199",
+            "evidence_ids": [
+              "evidence-0005"
+            ],
+            "explanation": "Matched weighted topics: consumption",
+            "score": 2,
+            "uncertainty": []
+          }
+        ],
+        "research": {
+          "disagreements": [
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "evidence_ids": [
+                "evidence-0001",
+                "evidence-0003"
+              ],
+              "topic": "reliability"
+            }
+          ],
+          "evidence": [
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "document_id": "doc-a",
+              "id": "evidence-0001",
+              "span": {
+                "end": 43,
+                "quote": "reliability is stable",
+                "start": 22
+              },
+              "topic": "reliability",
+              "value": "stable"
+            },
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "document_id": "doc-a",
+              "id": "evidence-0002",
+              "source": "doc-a",
+              "span": {
+                "end": 74,
+                "quote": "Emissions estimate: 12 kgCO2e",
+                "start": 45
+              },
+              "topic": "emissions",
+              "unit": "kgCO2e",
+              "value": 12
+            },
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "document_id": "doc-b",
+              "id": "evidence-0003",
+              "span": {
+                "end": 45,
+                "quote": "reliability is degraded",
+                "start": 22
+              },
+              "topic": "reliability",
+              "value": "degraded"
+            },
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "document_id": "doc-b",
+              "id": "evidence-0004",
+              "span": {
+                "end": 71,
+                "quote": "Winter consumption rises",
+                "start": 47
+              },
+              "topic": "consumption",
+              "value": "winter_peak"
+            },
+            {
+              "asset_id": "protected-672aefd717f71199",
+              "document_id": "doc-c",
+              "id": "evidence-0005",
+              "span": {
+                "end": 40,
+                "quote": "summer consumption is moderate",
+                "start": 10
+              },
+              "topic": "consumption",
+              "value": "moderate"
+            },
+            {
+              "asset_id": "protected-76116b9e01a33ccd",
+              "document_id": "doc-d",
+              "id": "evidence-0006",
+              "span": {
+                "end": 31,
+                "quote": "reliability is stable",
+                "start": 10
+              },
+              "topic": "reliability",
+              "value": "stable"
+            }
+          ],
+          "meter_readings": [
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "consumption_kwh": 3.2,
+              "meter_id": "protected-674169585d93e88d",
+              "timestamp": "2026-01-15T17:00:00Z",
+              "unit": "kWh"
+            },
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "consumption_kwh": 3.7,
+              "meter_id": "protected-674169585d93e88d",
+              "timestamp": "2026-01-15T17:30:00Z",
+              "unit": "kWh"
+            },
+            {
+              "asset_id": "protected-672aefd717f71199",
+              "consumption_kwh": 1.8,
+              "meter_id": "protected-47d6826ea664b86c",
+              "timestamp": "2026-07-15T17:00:00Z",
+              "unit": "kWh"
+            }
+          ],
+          "summary": {
+            "claims": 6,
+            "disagreements": 1,
+            "documents": 4
+          },
+          "unresolved_questions": [
+            "Reconcile conflicting reliability evidence for protected-0ca310f614702794.",
+            "Obtain evidence about flood_resilience."
+          ]
+        },
+        "source": {
+          "assets": [
+            {
+              "critical": true,
+              "id": "protected-0ca310f614702794"
+            },
+            {
+              "critical": false,
+              "id": "protected-672aefd717f71199"
+            },
+            {
+              "critical": true,
+              "id": "protected-76116b9e01a33ccd"
+            }
+          ],
+          "documents": [
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "claims": [
+                {
+                  "quote": "reliability is stable",
+                  "topic": "reliability",
+                  "value": "stable"
+                },
+                {
+                  "quote": "Emissions estimate: 12 kgCO2e",
+                  "source": "doc-a",
+                  "topic": "emissions",
+                  "unit": "kgCO2e",
+                  "value": 12
+                }
+              ],
+              "id": "doc-a",
+              "text": "SYNTHETIC inspection: reliability is stable. Emissions estimate: 12 kgCO2e."
+            },
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "claims": [
+                {
+                  "quote": "reliability is degraded",
+                  "topic": "reliability",
+                  "value": "degraded"
+                },
+                {
+                  "quote": "Winter consumption rises",
+                  "topic": "consumption",
+                  "value": "winter_peak"
+                }
+              ],
+              "id": "doc-b",
+              "text": "SYNTHETIC operations: reliability is degraded. Winter consumption rises."
+            },
+            {
+              "asset_id": "protected-672aefd717f71199",
+              "claims": [
+                {
+                  "quote": "summer consumption is moderate",
+                  "topic": "consumption",
+                  "value": "moderate"
+                }
+              ],
+              "id": "doc-c",
+              "text": "SYNTHETIC summer consumption is moderate."
+            },
+            {
+              "asset_id": "protected-76116b9e01a33ccd",
+              "claims": [
+                {
+                  "quote": "reliability is stable",
+                  "topic": "reliability",
+                  "value": "stable"
+                }
+              ],
+              "id": "doc-d",
+              "text": "SYNTHETIC reliability is stable."
+            }
+          ],
+          "extraction_schema": [
+            {
+              "label": "Outage",
+              "name": "outage_id",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "label": "Priority",
+              "name": "priority",
+              "required": true,
+              "semantic": "priority",
+              "type": "string"
+            },
+            {
+              "label": "Consumption",
+              "name": "consumption",
+              "required": false,
+              "type": "number",
+              "unit": "kWh"
+            },
+            {
+              "label": "Emissions",
+              "name": "emissions",
+              "required": true,
+              "semantic": "emissions",
+              "type": "number",
+              "unit": "kgCO2e"
+            }
+          ],
+          "feedback": [
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "id": "response-a",
+              "outage_id": "OUT-SYN-1",
+              "text": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794"
+            },
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "id": "response-b",
+              "outage_id": "OUT-SYN-1",
+              "text": "Outage: OUT-SYN-1; Priority: critical; Consumption: 3.7 kWh; Emissions: 12 kgCO2e; Note: winter outage with live wire at protected-0ca310f614702794"
+            },
+            {
+              "asset_id": "protected-672aefd717f71199",
+              "id": "response-c",
+              "outage_id": "OUT-SYN-2",
+              "text": "Outage: OUT-SYN-2; Priority: high; Note: interruption restored in summer"
+            },
+            {
+              "asset_id": "protected-76116b9e01a33ccd",
+              "id": "response-d",
+              "outage_id": "OUT-SYN-3",
+              "text": "Outage: OUT-SYN-3; Priority: routine; Note: planned outage"
+            }
+          ],
+          "fixture_label": "SYNTHETIC winter feeder study; all sites and devices fictitious",
+          "meter_csv": "meter_id,asset_id,timestamp,consumption_kwh\nprotected-674169585d93e88d,protected-0ca310f614702794,2026-01-15T17:00:00Z,3.2\nprotected-674169585d93e88d,protected-0ca310f614702794,2026-01-15T17:30:00Z,3.7\nprotected-47d6826ea664b86c,protected-672aefd717f71199,2026-07-15T17:00:00Z,1.8\n",
+          "outages": [
+            {
+              "asset_id": "protected-0ca310f614702794",
+              "id": "OUT-SYN-1",
+              "priority": "critical",
+              "safety_flags": [
+                "live_wire",
+                "sustained_loss"
+              ]
+            },
+            {
+              "asset_id": "protected-672aefd717f71199",
+              "id": "OUT-SYN-2",
+              "priority": "high",
+              "safety_flags": [
+                "sustained_loss"
+              ]
+            },
+            {
+              "asset_id": "protected-76116b9e01a33ccd",
+              "id": "OUT-SYN-3",
+              "priority": "routine",
+              "safety_flags": []
+            }
+          ],
+          "preferences": {
+            "exclude_assets": [
+              "protected-76116b9e01a33ccd"
+            ],
+            "weights": {
+              "consumption": 2,
+              "emissions": 1,
+              "flood_resilience": 1,
+              "reliability": 5
+            }
+          },
+          "safety_rules": {
+            "default": "routine",
+            "fire": "critical",
+            "live_wire": "critical",
+            "medical_dependency": "critical",
+            "sustained_loss": "high"
+          },
+          "synthetic": true,
+          "telemetry": {
+            "devices": [
+              {
+                "asset_id": "protected-0ca310f614702794",
+                "device_id": "protected-1a21dabc1d4fa70d",
+                "state": "energized",
+                "timestamp": "2026-01-15T17:30:00Z",
+                "voltage_kv": 11.2
+              },
+              {
+                "asset_id": "protected-672aefd717f71199",
+                "device_id": "protected-eebbd763fbeed6d4",
+                "state": "isolated",
+                "timestamp": "2026-01-15T17:30:00Z",
+                "voltage_kv": 0
+              }
+            ],
+            "format": "synthetic-scada-v1"
+          },
+          "topology": [
+            [
+              "protected-0ca310f614702794",
+              "protected-672aefd717f71199"
+            ],
+            [
+              "protected-672aefd717f71199",
+              "protected-76116b9e01a33ccd"
+            ]
+          ]
+        }
+      },
+      "schema_version": "energy-reference/1",
+      "stage": "extract",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t096_combo4_deep_interests_feedback_extract__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "3d29c2bdeb36d22db4f73e880d539899407ed9bb9b63b3e22e370a022eca62de",
+      "test_implementation.py": "3701f8a29be6f6fa6b22e08a551675aa6fbb0a98b68dd643ceee23a670fdaf0d",
+      "example_input.json": "a11c8cb8ec9e0be33fa9b2dec7de926446bdbdbb71df3bef4c5054e5e6c75e0f",
+      "build_manifest.json": "07324794103c20f07157fa1b0606e0d406ea6493bc96052ad233b95d1d9bea80"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

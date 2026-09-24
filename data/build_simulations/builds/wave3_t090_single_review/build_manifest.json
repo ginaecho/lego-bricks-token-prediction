@@ -1,0 +1,74 @@
+{
+  "build_id": "wave3_t090_single_review",
+  "composition_label": "Document review (Document automation)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New standalone implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": {
+      "schema_version": "Required string '1.0'",
+      "dataset": "Required label string and synthetic boolean",
+      "requirements": "1-100 objects: unique id, text, 1-30 unique case-insensitive evidence_terms, optional min_sources integer 1-100 (default 1)",
+      "documents": "0-100 objects: unique id, title, content (empty allowed)"
+    },
+    "output": {
+      "success": "schema_version, status=ok, dataset, review_method, disclaimer, summary, findings",
+      "finding": "requirement_id, requirement_text, status=supported|gap, required_sources, supporting_document_ids, evidence, gap",
+      "evidence": "document_id, document_title, complete, matches(term/quote/start/end), missing_terms",
+      "gap": "null or code, additional_sources_needed, message",
+      "error": "schema_version, status=error, errors array of path/message"
+    },
+    "validation": "One validate_input boundary for CLI and Python review. Strict object fields, bounded text/arrays, no duplicate IDs/terms; JSON loader rejects duplicate keys and non-finite values. File limit 2000000 bytes; aggregate document content limit 500000 characters."
+  },
+  "cross_stage_handoffs": [
+    "Single review stage: validated shared input -> literal evidence matching -> traceable findings and summary in one output object."
+  ],
+  "behavior": {
+    "matching": "Python re.IGNORECASE escaped literal substring matching; first occurrence per term, no token boundaries, stemming, normalization or semantic inference",
+    "coverage": "Every term must occur within the same document. min_sources counts distinct supplied document IDs, not occurrences. Does not establish independent provenance or detect duplicate content.",
+    "traceability": "Every document is evaluated per requirement; matches include exact quotes and zero-based, end-exclusive Python Unicode character offsets into original content. Missing terms are reported per document.",
+    "gaps": "Insufficient complete documents produces a gap and source deficit. Missing evidence is not proof of noncompliance. Negated statements can match literal terms.",
+    "ordering": "Input requirement/document/term order is preserved; deterministic and input is not mutated.",
+    "exit_codes": "0 for completed review even with gaps; 2 for validation, JSON, encoding, usage or file errors; one JSON object on stdout.",
+    "fixtures": "Clearly labeled synthetic fictional procedures; no live data or providers.",
+    "llm": "No LLM step; optional callable injection is not required for this literal reference implementation."
+  },
+  "scope": {
+    "included": [
+      "JSON CLI and reusable Python review function",
+      "Requirement/evidence coverage with exact source traces",
+      "Traceable partial and missing evidence",
+      "Shared validation and synthetic unittest fixtures"
+    ],
+    "excluded": [
+      "Certification claims and compliance determinations",
+      "Semantic truth, contradiction, negation or evidence-quality adjudication",
+      "PDF/OCR, external integrations, providers and document retrieval",
+      "Enterprise security, persistence, provenance verification or production deployment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 12,
+    "cli": "passed: exit 0, one JSON object, status ok; 2 requirements, 1 supported, 1 traceable gap",
+    "suite_exit_code": 0,
+    "coverage": "Normal coverage, source offsets, missing/empty documents, same-document cooccurrence, literal regex escaping and Unicode, determinism, invalid schema and limits, duplicates, malformed JSON/encoding/oversize input, CLI success and errors"
+  }
+}

@@ -95,7 +95,7 @@
   "split_group": "aff94acd492f7c6a5c8ed5e9d9f8619fb915bef0e1030782bdadb405eeaef542",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "7afc7208b2cadc5271a4f4fc7c8e1a8fef86ab80517a35549f3224ebf83d7e9a",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t089_single_basic-research",
   "membership_point_id": "single_basic-research",
@@ -103,8 +103,145 @@
   "trial_category": "B_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "2740418966ebb8e2c5cf7df29919ef84edac9c201eca55b5fca1cc87214d6aec",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "94323b51-77c3-4895-9064-41d0ab1a7604",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 142080,
+    "output_tokens": 7092,
+    "cache_read_tokens": 132803,
+    "cache_write_tokens": 9256,
+    "total_tokens": 149172,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37108,
+        "agent_id": "94323b51-77c3-4895-9064-41d0ab1a7604",
+        "model": "gpt-6-astra",
+        "input_tokens": 14844,
+        "output_tokens": 299,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 740,
+        "reasoning_tokens": 121,
+        "duration_ms": 7418,
+        "created_at": "2026-09-24T10:39:51.341Z"
+      },
+      {
+        "id": 37140,
+        "agent_id": "94323b51-77c3-4895-9064-41d0ab1a7604",
+        "model": "gpt-6-astra",
+        "input_tokens": 15175,
+        "output_tokens": 5531,
+        "cache_read_tokens": 14841,
+        "cache_write_tokens": 331,
+        "reasoning_tokens": 254,
+        "duration_ms": 86414,
+        "created_at": "2026-09-24T10:42:17.253Z"
+      },
+      {
+        "id": 37143,
+        "agent_id": "94323b51-77c3-4895-9064-41d0ab1a7604",
+        "model": "gpt-6-astra",
+        "input_tokens": 21014,
+        "output_tokens": 572,
+        "cache_read_tokens": 15172,
+        "cache_write_tokens": 5839,
+        "reasoning_tokens": 57,
+        "duration_ms": 9710,
+        "created_at": "2026-09-24T10:42:29.792Z"
+      },
+      {
+        "id": 37145,
+        "agent_id": "94323b51-77c3-4895-9064-41d0ab1a7604",
+        "model": "gpt-6-astra",
+        "input_tokens": 21748,
+        "output_tokens": 157,
+        "cache_read_tokens": 21011,
+        "cache_write_tokens": 734,
+        "reasoning_tokens": 0,
+        "duration_ms": 3177,
+        "created_at": "2026-09-24T10:42:32.590Z"
+      },
+      {
+        "id": 37146,
+        "agent_id": "94323b51-77c3-4895-9064-41d0ab1a7604",
+        "model": "gpt-6-astra",
+        "input_tokens": 22802,
+        "output_tokens": 246,
+        "cache_read_tokens": 21745,
+        "cache_write_tokens": 1054,
+        "reasoning_tokens": 0,
+        "duration_ms": 4708,
+        "created_at": "2026-09-24T10:42:35.258Z"
+      },
+      {
+        "id": 37147,
+        "agent_id": "94323b51-77c3-4895-9064-41d0ab1a7604",
+        "model": "gpt-6-astra",
+        "input_tokens": 23137,
+        "output_tokens": 184,
+        "cache_read_tokens": 22799,
+        "cache_write_tokens": 335,
+        "reasoning_tokens": 0,
+        "duration_ms": 3518,
+        "created_at": "2026-09-24T10:42:37.801Z"
+      },
+      {
+        "id": 37148,
+        "agent_id": "94323b51-77c3-4895-9064-41d0ab1a7604",
+        "model": "gpt-6-astra",
+        "input_tokens": 23360,
+        "output_tokens": 103,
+        "cache_read_tokens": 23134,
+        "cache_write_tokens": 223,
+        "reasoning_tokens": 0,
+        "duration_ms": 3210,
+        "created_at": "2026-09-24T10:42:44.887Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.46158,
+      "observed_cache_profile_estimate_usd": 0.16277324999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.53896,
+      "observed_cache_profile_estimate_usd": 5.53896,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -135,5 +272,135 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............\n----------------------------------------------------------------------\nRan 12 tests in 4.660s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic_fixture": true,
+      "results": [
+        {
+          "question_id": "q1",
+          "question": "Should the library extend evening opening hours?",
+          "direction": "mixed",
+          "recommended_next_step": "Resolve conflicting source statements before deciding.",
+          "evidence_strength": "limited",
+          "counts": {
+            "matched_passages": 2,
+            "qualified_origins": 2,
+            "supporting_origins": 1,
+            "opposing_origins": 1
+          },
+          "evidence": [
+            {
+              "source_id": "synthetic-staffing",
+              "title": "SYNTHETIC: staffing memo",
+              "origin": "synthetic-operations",
+              "published": "2026-09-05",
+              "quote": "The library should not extend evening opening hours without additional staffing.",
+              "start_offset": 0,
+              "stance": "opposes",
+              "method": "user_annotation",
+              "relevance": 1.0,
+              "reliability": 0.9,
+              "rank_score": 0.97
+            },
+            {
+              "source_id": "synthetic-survey",
+              "title": "SYNTHETIC: library visitor survey",
+              "origin": "synthetic-visitors",
+              "published": "2026-09-01",
+              "quote": "Extending evening opening hours would help surveyed library visitors.",
+              "start_offset": 0,
+              "stance": "supports",
+              "method": "user_annotation",
+              "relevance": 0.8,
+              "reliability": 0.8,
+              "rank_score": 0.8
+            }
+          ],
+          "limitations": [
+            "No independent fact checking; reliability and stances are supplied annotations.",
+            "Lexical retrieval does not interpret negation, causality, or semantic equivalence.",
+            "Publication dates are reported but freshness is not assessed."
+          ]
+        },
+        {
+          "question_id": "q2",
+          "question": "What staffing constraints affect evening opening?",
+          "direction": "insufficient",
+          "recommended_next_step": "Gather additional independent, directional evidence before deciding.",
+          "evidence_strength": "limited",
+          "counts": {
+            "matched_passages": 3,
+            "qualified_origins": 2,
+            "supporting_origins": 0,
+            "opposing_origins": 0
+          },
+          "evidence": [
+            {
+              "source_id": "synthetic-staffing",
+              "title": "SYNTHETIC: staffing memo",
+              "origin": "synthetic-operations",
+              "published": "2026-09-05",
+              "quote": "Evening staffing constraints include overtime and supervisor availability.",
+              "start_offset": 81,
+              "stance": "neutral",
+              "method": "lexical_retrieval",
+              "relevance": 0.6,
+              "reliability": 0.9,
+              "rank_score": 0.69
+            },
+            {
+              "source_id": "synthetic-staffing",
+              "title": "SYNTHETIC: staffing memo",
+              "origin": "synthetic-operations",
+              "published": "2026-09-05",
+              "quote": "The library should not extend evening opening hours without additional staffing.",
+              "start_offset": 0,
+              "stance": "neutral",
+              "method": "lexical_retrieval",
+              "relevance": 0.6,
+              "reliability": 0.9,
+              "rank_score": 0.69
+            },
+            {
+              "source_id": "synthetic-survey",
+              "title": "SYNTHETIC: library visitor survey",
+              "origin": "synthetic-visitors",
+              "published": "2026-09-01",
+              "quote": "Extending evening opening hours would help surveyed library visitors.",
+              "start_offset": 0,
+              "stance": "neutral",
+              "method": "lexical_retrieval",
+              "relevance": 0.4,
+              "reliability": 0.8,
+              "rank_score": 0.52
+            }
+          ],
+          "limitations": [
+            "No independent fact checking; reliability and stances are supplied annotations.",
+            "Lexical retrieval does not interpret negation, causality, or semantic equivalence.",
+            "Publication dates are reported but freshness is not assessed.",
+            "Relevant passages alone do not establish a directional conclusion."
+          ]
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t089_single_basic-research",
+    "artifact_sha256": {
+      "implementation.py": "2539c82e88b3a7c341740ff677c0edd8ced1905e2f42e60c75ce5d52a1455668",
+      "test_implementation.py": "dbee274cf6091a5e7ede10240dcf55003429353fa3a30fdd63ba376a924ff13b",
+      "example_input.json": "838961b3c4430452425d15ce899e3952672e4d4c9801064b2c16ddf03d1817b7",
+      "build_manifest.json": "defd551b962464ba6260f41df5b6e65f430f05be757e80f8b6480312c8bcfea4"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

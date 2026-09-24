@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "policy": {
+    "purpose": "support_resolution",
+    "allowed_residencies": ["EU", "US"],
+    "retention_days": 30
+  },
+  "accounts": [
+    {"id": "ACC-SYN-001", "subscriber_ref": "SUB-SYN-001", "residency": "EU", "consent": true, "phone": "+999000000001", "imei": "000000000000001"},
+    {"id": "ACC-SYN-002", "subscriber_ref": "SUB-SYN-002", "residency": "US", "consent": true, "phone": "+999000000002", "imei": "000000000000002"}
+  ],
+  "tickets": [
+    {
+      "id": "TKT-SYN-001",
+      "account_id": "ACC-SYN-001",
+      "residency": "EU",
+      "subject": "Synthetic invented network outage",
+      "transcript": "SUBSCRIBER: My fictitious phone +999000000001 has no internet signal.\nSUPPORT: This invented outage is widespread; diagnostics are pending."
+    },
+    {
+      "id": "TKT-SYN-002",
+      "account_id": "ACC-SYN-002",
+      "residency": "US",
+      "subject": "Synthetic invented duplicate charge",
+      "transcript": "SUBSCRIBER: My synthetic bill has a duplicate charge.\nSUPPORT: We recorded a proposed refund.",
+      "billing_adjustment": {"amount": -12.5, "reason": "Invented duplicate data charge in synthetic billing cycle"}
+    }
+  ],
+  "cdr_csv": "id,account_id,residency,phone,imei,call_seconds,data_mb\nCDR-SYN-001,ACC-SYN-001,EU,+999000000001,000000000000001,632,184.75\nCDR-SYN-002,ACC-SYN-001,EU,+999000000001,000000000000001,109,92.31\nCDR-SYN-003,ACC-SYN-002,US,+999000000002,000000000000002,487,621.44\n",
+  "documents": [
+    {"id": "DOC-SYN-001", "ticket_id": "TKT-SYN-001", "residency": "EU", "evidence": {"fault_description": "Invented outage at fictional test cell ALPHA.", "diagnostics": ""}},
+    {"id": "DOC-SYN-002", "ticket_id": "TKT-SYN-002", "residency": "US", "evidence": {"subscriber_request": "Invented subscriber requests correction of duplicate charge."}}
+  ],
+  "query": {"text": "connectivity missing diagnostics", "residency": "EU", "limit": 5}
+}

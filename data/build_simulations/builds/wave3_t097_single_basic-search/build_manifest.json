@@ -1,0 +1,55 @@
+{
+  "build_id": "wave3_t097_single_basic-search",
+  "composition_label": "Smart product search",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New standalone implementation created for this build; no copied repository code.",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "required": ["query", "products"],
+      "query": "String, maximum 300 characters. Blank browses the catalog.",
+      "products": "Array of up to 1000 products. Required: unique string id, name, category, finite nonnegative price, boolean in_stock. Optional: description and array of tags.",
+      "filters": "Optional object: category (case-insensitive exact), min_price, max_price (inclusive), in_stock (boolean). All prices must share a caller-selected currency.",
+      "limit": "Optional integer 1..100; default 10.",
+      "sort": "Optional relevance (default), price_asc, or price_desc."
+    },
+    "success": "status=ok, original query, normalized_tokens, mode, total_matches before limiting, results with product, score, and token matches.",
+    "error": "status=error, error object with code=invalid_input and message; CLI exits 2.",
+    "validation": "One shared validate function used by search and CLI; rejects unknown fields, invalid types, duplicate product ids, inverted ranges, nonfinite prices. CLI additionally rejects duplicate JSON keys and nonstandard constants."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: validated input -> normalization -> hard filters -> token matching and ranking -> shared response envelope."
+  ],
+  "behavior": {
+    "normalization": "Unicode case folding and accent removal, punctuation tokenization, small English stop-word list, explicit product synonym map, deduplicated query tokens.",
+    "matching": "Every meaningful query token must match a catalog token. Exact/canonical synonym strength 1, prefix 0.8 for query length >=3, typo strength 0.65 when SequenceMatcher ratio >=0.8 and both tokens have length >=4.",
+    "ranking": "Best weighted match per query token, summed: name weight 3, category and tags weight 2, description weight 1. Stable tie-break on product id; price sorts use relevance then id.",
+    "empty_query": "Whitespace-only query browses filtered products. Nonblank punctuation-only or stop-word-only queries return no results.",
+    "fixtures": "All shipped catalog entries and tests are synthetic.",
+    "determinism": "No randomness, clock-based ranking, external data, LLM calls, or mutable state."
+  },
+  "scope": {
+    "included": ["Local JSON CLI", "Strict shared validation", "Synonyms", "Typo tolerance", "Prefix search", "Hard structured filters", "Deterministic ranking", "Match explanations", "Synthetic fixture tests"],
+    "excluded": ["Live providers or networks", "LLM integration", "Embeddings", "Persistence", "Personalization", "Currency conversion", "Natural-language numeric constraint parsing", "Full multilingual morphology", "Enterprise-scale indexing"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "13 unittest cases including normal, edge, invalid-input and CLI behavior",
+    "tests_run": 13,
+    "tests_passed": 13,
+    "test_exit_code": 0,
+    "cli_example": "Passed: one JSON object with status ok and one matching synthetic running-shoe product.",
+    "cli_exit_code": 0
+  }
+}

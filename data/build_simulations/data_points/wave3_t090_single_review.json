@@ -97,7 +97,7 @@
   "split_group": "a96884a032c81cf1c81370de64f329159a5f5b2eaaccc5ae0df3ea1bec5d1cca",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "47843f5cc609953800991300a4f93defcc34d78b3ff1f912fe67b8e26b3465e2",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t090_single_review",
   "membership_point_id": "single_review",
@@ -105,8 +105,133 @@
   "trial_category": "BT_single_repeat",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "0f9278a9df5c796d73c016c3789735da34618ec71c9383022b60ebb5040b4489",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "941d80ba-7944-4e45-b8a6-fb11a498f4db",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 115694,
+    "output_tokens": 6087,
+    "cache_read_tokens": 93818,
+    "cache_write_tokens": 21858,
+    "total_tokens": 121781,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37173,
+        "agent_id": "941d80ba-7944-4e45-b8a6-fb11a498f4db",
+        "model": "gpt-6-astra",
+        "input_tokens": 14852,
+        "output_tokens": 522,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 14849,
+        "reasoning_tokens": 348,
+        "duration_ms": 51894,
+        "created_at": "2026-09-24T10:44:18.195Z"
+      },
+      {
+        "id": 37188,
+        "agent_id": "941d80ba-7944-4e45-b8a6-fb11a498f4db",
+        "model": "gpt-6-astra",
+        "input_tokens": 15404,
+        "output_tokens": 4890,
+        "cache_read_tokens": 14849,
+        "cache_write_tokens": 552,
+        "reasoning_tokens": 0,
+        "duration_ms": 80333,
+        "created_at": "2026-09-24T10:45:54.519Z"
+      },
+      {
+        "id": 37190,
+        "agent_id": "941d80ba-7944-4e45-b8a6-fb11a498f4db",
+        "model": "gpt-6-astra",
+        "input_tokens": 20594,
+        "output_tokens": 155,
+        "cache_read_tokens": 15401,
+        "cache_write_tokens": 5190,
+        "reasoning_tokens": 0,
+        "duration_ms": 17037,
+        "created_at": "2026-09-24T10:46:07.852Z"
+      },
+      {
+        "id": 37193,
+        "agent_id": "941d80ba-7944-4e45-b8a6-fb11a498f4db",
+        "model": "gpt-6-astra",
+        "input_tokens": 21329,
+        "output_tokens": 238,
+        "cache_read_tokens": 20591,
+        "cache_write_tokens": 735,
+        "reasoning_tokens": 11,
+        "duration_ms": 32040,
+        "created_at": "2026-09-24T10:46:35.602Z"
+      },
+      {
+        "id": 37198,
+        "agent_id": "941d80ba-7944-4e45-b8a6-fb11a498f4db",
+        "model": "gpt-6-astra",
+        "input_tokens": 21654,
+        "output_tokens": 174,
+        "cache_read_tokens": 21326,
+        "cache_write_tokens": 325,
+        "reasoning_tokens": 0,
+        "duration_ms": 16878,
+        "created_at": "2026-09-24T10:46:52.575Z"
+      },
+      {
+        "id": 37204,
+        "agent_id": "941d80ba-7944-4e45-b8a6-fb11a498f4db",
+        "model": "gpt-6-astra",
+        "input_tokens": 21861,
+        "output_tokens": 108,
+        "cache_read_tokens": 21651,
+        "cache_write_tokens": 207,
+        "reasoning_tokens": 0,
+        "duration_ms": 13106,
+        "created_at": "2026-09-24T10:47:11.120Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.38054,
+      "observed_cache_profile_estimate_usd": 0.16944950000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.56648,
+      "observed_cache_profile_estimate_usd": 4.56648,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,133 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.778s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "dataset": {
+        "label": "SYNTHETIC document-review fixture; fictional procedures",
+        "synthetic": true
+      },
+      "review_method": "case_insensitive_literal_substring",
+      "disclaimer": "Literal evidence coverage only; not a determination of correctness, compliance, or certification. Human review remains necessary.",
+      "summary": {
+        "requirements": 2,
+        "supported": 1,
+        "gaps": 1
+      },
+      "findings": [
+        {
+          "requirement_id": "REQ-01",
+          "requirement_text": "A procedure identifies an owner and a review interval.",
+          "status": "supported",
+          "required_sources": 1,
+          "supporting_document_ids": [
+            "DOC-01"
+          ],
+          "evidence": [
+            {
+              "document_id": "DOC-01",
+              "document_title": "SYNTHETIC procedure",
+              "complete": true,
+              "matches": [
+                {
+                  "term": "owner",
+                  "quote": "Owner",
+                  "start": 0,
+                  "end": 5
+                },
+                {
+                  "term": "annual review",
+                  "quote": "Annual review",
+                  "start": 21,
+                  "end": 34
+                }
+              ],
+              "missing_terms": []
+            },
+            {
+              "document_id": "DOC-02",
+              "document_title": "SYNTHETIC operations note",
+              "complete": false,
+              "matches": [],
+              "missing_terms": [
+                "owner",
+                "annual review"
+              ]
+            }
+          ],
+          "gap": null
+        },
+        {
+          "requirement_id": "REQ-02",
+          "requirement_text": "Two distinct documents mention retention and deletion.",
+          "status": "gap",
+          "required_sources": 2,
+          "supporting_document_ids": [
+            "DOC-01"
+          ],
+          "evidence": [
+            {
+              "document_id": "DOC-01",
+              "document_title": "SYNTHETIC procedure",
+              "complete": true,
+              "matches": [
+                {
+                  "term": "retention",
+                  "quote": "Retention",
+                  "start": 51,
+                  "end": 60
+                },
+                {
+                  "term": "deletion",
+                  "quote": "deletion",
+                  "start": 76,
+                  "end": 84
+                }
+              ],
+              "missing_terms": []
+            },
+            {
+              "document_id": "DOC-02",
+              "document_title": "SYNTHETIC operations note",
+              "complete": false,
+              "matches": [
+                {
+                  "term": "retention",
+                  "quote": "Retention",
+                  "start": 0,
+                  "end": 9
+                }
+              ],
+              "missing_terms": [
+                "deletion"
+              ]
+            }
+          ],
+          "gap": {
+            "code": "insufficient_complete_sources",
+            "additional_sources_needed": 1,
+            "message": "Need 1 additional document(s) containing every required literal term; inspect per-document missing_terms."
+          }
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t090_single_review",
+    "artifact_sha256": {
+      "implementation.py": "e1a60d5fa57475f014a8a4a055c5faafa7ab9eb89c2c0a32fa94b7b8ce97ea2c",
+      "test_implementation.py": "dd8b3a33808e263fd25c623bdb1b822d79630ead2400fa304f98fb0ce64f87b6",
+      "example_input.json": "ba2af5f9a9e61ab8dc62f483c3ec057de6c2af9fdab061af6786dc959aa9fc6c",
+      "build_manifest.json": "54629ca2f522a381359cf81b566af791a05aaeff463388d32cbe303480b16b5f"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

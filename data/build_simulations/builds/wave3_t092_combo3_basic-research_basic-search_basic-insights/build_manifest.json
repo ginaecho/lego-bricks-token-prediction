@@ -1,0 +1,50 @@
+{
+  "build_id": "wave3_t092_combo3_basic-research_basic-search_basic-insights",
+  "composition_label": "basic:research -> basic:search -> basic:insights",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in this isolated build directory",
+    "runtime": "Python 3.13.15; Python standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact keys: schema_version=1, fixture_label, question, sources, query, products, feedback. IDs are nonempty unique strings per collection. Source: id/text/credibility [0,1]. Product: id/name/description/tags/price >=0/available boolean. Feedback: id/product_id/text/rating null or [1,5]. Query: text/max_price null or >=0/limit integer [1,100].",
+    "output": "Envelope: schema_version, status, stage, data. Data carries validated request and cumulative research, search, insights objects. Error envelope: status=error, error string.",
+    "validation": "One shared validator enforces request structure, finite numbers, foreign keys, stage order, original evidence text, search eligibility and provenance, feedback selection, and theme count consistency. Every stage validates both its input and output."
+  },
+  "cross_stage_handoffs": [
+    {"from": "research", "to": "search", "data": "Validated verbatim evidence IDs and up to 12 weighted source terms enrich query ranking."},
+    {"from": "search", "to": "insights", "data": "Validated ranked selected product IDs restrict eligible feedback and preserve product and feedback provenance."}
+  ],
+  "behavior": {
+    "research": "Unicode casefolded tokens and generic aliases; question-term coverage times supplied credibility ranks relevant sources. Source terms weighted by credibility yield needs; exact excerpts and limitations preserve evidence.",
+    "search": "Alias normalization and deterministic vocabulary typo correction at similarity 0.84; score = 3 times query matches plus research matches. Hard availability and price filters. Score descending, price ascending, ID ascending ties; limit and positive-score restriction.",
+    "insights": "Overlapping keyword themes; explicit ratings precede fallback lexical sentiment. Unknown themes fall into other. Negative count, volume, and theme name determine priority; actionable follow-ups retain feedback IDs.",
+    "errors": "CLI emits one JSON error object with exit 2 for validation, usage, malformed JSON, encoding, and file failures.",
+    "fixtures": "All example products, sources, and feedback are clearly labeled synthetic."
+  },
+  "scope": {
+    "included": ["Integrated deterministic CLI", "Shared validation", "Evidence provenance", "Query synonyms and typo handling", "Budget and availability filters", "Selected-product feedback themes", "Action suggestions", "Standard-library tests"],
+    "excluded": ["Live research or providers", "LLM calls", "External dependencies", "Enterprise infrastructure", "Causal claims", "Truth verification", "Multilingual semantic understanding", "Negation and sarcasm sentiment understanding", "Population-level inference"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 21,
+    "unittest_failures": 0,
+    "unittest_errors": 0,
+    "cli_example_exit_code": 0,
+    "cli_example_status": "ok",
+    "cli_example_final_stage": "insights",
+    "cli_error_exit_code": 2,
+    "coverage": ["Research evidence selection", "Synonyms and typo correction", "Budget and availability", "Research-to-search propagation", "Search-to-insights propagation", "Feedback themes and sentiment", "No evidence or results", "Empty collections", "Provenance tampering", "Determinism", "Input immutability", "Invalid schemas and numbers", "Large integers", "CLI success, usage, file and parsing failures"]
+  }
+}
