@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "protection_key": "synthetic-demo-key-not-for-production",
+  "interval_minutes": 30,
+  "safety_rules": {
+    "life_safety": "emergency",
+    "essential_service": "urgent",
+    "otherwise": "routine"
+  },
+  "preferences": {"monthly_cost_usd": 2, "consumption_kwh": 1, "emissions_kgCO2e": 2, "availability_percent": 1, "outage_risk": 3},
+  "candidates": [
+    {
+      "name": "Synthetic Winter Efficiency Package",
+      "monthly_cost_usd": 95,
+      "grid_assets": [
+        {"asset_id": "FICT-SUB-ALPHA", "kind": "substation", "critical": true},
+        {"asset_id": "FICT-METER-ALPHA", "kind": "meter", "critical": false}
+      ],
+      "topology": [{"from": "FICT-SUB-ALPHA", "to": "FICT-METER-ALPHA"}],
+      "meter_csv": "device_id,timestamp,consumption,unit\nFICT-METER-ALPHA,2026-01-15T18:00:00Z,1800,Wh\nFICT-METER-ALPHA,2026-01-15T18:30:00Z,2.1,kWh\n",
+      "telemetry_json": "{\"synthetic\":true,\"samples\":[{\"asset_id\":\"FICT-SUB-ALPHA\",\"availability_percent\":99.8,\"emissions\":{\"value\":0.9,\"unit\":\"kgCO2e\",\"source\":\"Synthetic winter dispatch model\"}},{\"asset_id\":\"FICT-METER-ALPHA\",\"availability_percent\":99.9,\"emissions\":{\"value\":100,\"unit\":\"gCO2e\",\"source\":\"Synthetic device allocation\"}}]}",
+      "outage_reports": []
+    },
+    {
+      "name": "Synthetic Winter Economy Package",
+      "monthly_cost_usd": 80,
+      "grid_assets": [
+        {"asset_id": "FICT-SUB-BETA", "kind": "substation", "critical": true},
+        {"asset_id": "FICT-METER-BETA", "kind": "meter", "critical": false}
+      ],
+      "topology": [{"from": "FICT-SUB-BETA", "to": "FICT-METER-BETA"}],
+      "meter_csv": "device_id,timestamp,consumption,unit\nFICT-METER-BETA,2026-01-15T18:00:00Z,0.0022,MWh\nFICT-METER-BETA,2026-01-15T18:30:00Z,2.4,kWh\n",
+      "telemetry_json": "{\"synthetic\":true,\"samples\":[{\"asset_id\":\"FICT-SUB-BETA\",\"availability_percent\":98.5,\"emissions\":{\"value\":0.0018,\"unit\":\"tCO2e\",\"source\":\"Synthetic winter dispatch model\"}},{\"asset_id\":\"FICT-METER-BETA\",\"availability_percent\":99,\"emissions\":{\"value\":0.2,\"unit\":\"kgCO2e\",\"source\":\"Synthetic device allocation\"}}]}",
+      "outage_reports": [{"asset_id": "FICT-SUB-BETA", "life_safety": false, "essential_service": true, "priority": "urgent"}]
+    }
+  ]
+}

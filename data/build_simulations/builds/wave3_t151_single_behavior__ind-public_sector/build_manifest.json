@@ -1,0 +1,44 @@
+{
+  "build_id": "wave3_t151_single_behavior__ind-public_sector",
+  "composition_label": "Behavioral personalization (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated Python standard-library implementation",
+    "runtime": "Python 3",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict JSON object: schema_version=1, synthetic=true, as_of=timezone-aware ISO timestamp, consent=boolean, persona={id:persona-NNNN,synthetic_address:NOT A REAL ADDRESS}, items=list, events=list, limit=1..50.",
+    "item": "id=item-NNNN; entity=citizen_service_request|benefits_application|policy_document; topic=housing|transport|family|environment; public_priority=integer 0..100; form={case_number:CASE-SYN-NNNN,summary:text} for requests/applications otherwise null; policy_text=text for policy documents otherwise null.",
+    "event": "id=event-NNNN, item_id=known item-NNNN, action=browse|purchase, at=timezone-aware ISO timestamp no later than as_of.",
+    "output": "Success: status, schema_version, synthetic, mode, reason, recommendations with item_id/entity/label/score/explanation, audit. Errors: status=error and non-echoing plain-language message; exit 2.",
+    "validation": "Single validate boundary; exact fields; strict booleans and bounded integer values; unique IDs and JSON keys; finite JSON numbers; catalog/event bounds; synthetic-only persona/address/case rules; basic contact/identity-number screening. Raw free text and persona identifiers never appear in results."
+  },
+  "cross_stage_handoffs": ["Validated catalog and timestamped events feed one deterministic discovery ranking function; no other stages."],
+  "behavior": {
+    "recency": "Each browse contributes 1 and purchase contributes 2, multiplied by 2^(-age_days/30). Topic interest is topic weight divided by max(1,total weight), so old sparse history fades.",
+    "ranking": "With usable consented history: 0.2 * public_priority/100 + 0.8 * topic_interest. Scores rounded to 10 decimals; ties resolved by ascending item ID. Input is not mutated.",
+    "cold_start": "No consent or total effective history below 1e-9: rank only by public priority. Empty catalog returns an empty list. All events are validated even without consent, but then ignored.",
+    "public_sector": "Synthetic purchase is a generic discovery engagement signal, not a payment or benefits award. Rank does not decide eligibility, entitlement, service access or case outcome.",
+    "reviewability": "Per-result numerical contributions, public algorithm parameters, ranking time, tie rule and short plain-language explanations support demonstrative open-records review without exposing citizen data."
+  },
+  "scope": {
+    "included": ["Synthetic government form JSON and invented policy text", "Fabricated persona identifier, invented case numbers and non-traceable address placeholder", "Recency-weighted personalized discovery and cold start", "Privacy minimization and consent handling", "Plain-language machine-readable output", "CLI errors and deterministic unittest fixtures"],
+    "excluded": ["Real citizen records", "Production PII detection or redaction guarantees", "Legal compliance or accessibility certification", "Eligibility decisions", "Persistent profiling", "Authentication and encryption infrastructure", "Live networks, providers and LLM calls", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {"tests_run": 14, "failures": 0, "errors": 0, "exit_code": 0},
+    "example_cli": {"exit_code": 0, "stdout": "One JSON object with status=ok", "top_item": "item-0003"},
+    "coverage": ["Recency and purchase weighting", "Cold start and ancient history", "Consent", "Empty catalog", "Deterministic ties and no mutation", "Schema and event validation", "PII screening and output minimization", "Plain-language explanations and score reconstruction", "CLI success, file errors, malformed JSON and invalid input"]
+  }
+}

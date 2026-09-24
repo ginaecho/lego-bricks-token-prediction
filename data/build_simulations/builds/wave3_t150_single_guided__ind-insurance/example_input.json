@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "policy": {
+    "policy_id": "SYN-POL-100",
+    "policyholder": {"synthetic_id": "SYN-HOLDER-ARIA-100"},
+    "property_address": "SYNTHETIC: 42 Imaginary Lane, Fictionville ZZ 00000",
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "limit": 50000,
+    "deductible": 500,
+    "covered_losses": ["fire", "water"]
+  },
+  "claim": {
+    "format": "claim-form-text",
+    "content": "claim_id: SYN-CLM-100\npolicy_id: SYN-POL-100\nloss_date: 2026-05-17\nloss_amount: 8243.52\nloss_type: water"
+  },
+  "underwriting_submission": {
+    "format": "acord-json",
+    "content": {"ACORD": {"Submission": {
+      "submission_id": "SYN-SUB-100",
+      "policy_id": "SYN-POL-100",
+      "factors": [
+        {"name": "property_type", "value": "house", "disclosed": true},
+        {"name": "protection", "value": "alarm", "disclosed": true}
+      ]
+    }}}
+  },
+  "onboarding": {
+    "completed_steps": [],
+    "requested_steps": ["verify_policy", "review_underwriting", "review_claim", "finish"]
+  }
+}

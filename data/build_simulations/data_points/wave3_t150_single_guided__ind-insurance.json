@@ -97,7 +97,7 @@
   "split_group": "fd10f91f67846d47b37e0fe091ef61bea0152155e61575c6198d6102fe96317f",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "a48d14257f8c9e2148d4906c5f61dffb362654f4978decd987c3f045fbffd53f",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t150_single_guided__ind-insurance",
   "membership_point_id": "single_guided__ind-insurance",
@@ -105,8 +105,145 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "746a2bc727169e7012a22c28f889d4bd14aba55e16b20c1a354028111e2aa789",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "50a2ef6e-e42a-42ec-80ff-7fac4bf1bd0c",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 146529,
+    "output_tokens": 8874,
+    "cache_read_tokens": 135033,
+    "cache_write_tokens": 11475,
+    "total_tokens": 155403,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38042,
+        "agent_id": "50a2ef6e-e42a-42ec-80ff-7fac4bf1bd0c",
+        "model": "gpt-6-astra",
+        "input_tokens": 14984,
+        "output_tokens": 430,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 838,
+        "reasoning_tokens": 251,
+        "duration_ms": 11830,
+        "created_at": "2026-09-24T12:48:40.779Z"
+      },
+      {
+        "id": 38080,
+        "agent_id": "50a2ef6e-e42a-42ec-80ff-7fac4bf1bd0c",
+        "model": "gpt-6-astra",
+        "input_tokens": 15445,
+        "output_tokens": 3444,
+        "cache_read_tokens": 14981,
+        "cache_write_tokens": 461,
+        "reasoning_tokens": 0,
+        "duration_ms": 56422,
+        "created_at": "2026-09-24T12:51:25.562Z"
+      },
+      {
+        "id": 38081,
+        "agent_id": "50a2ef6e-e42a-42ec-80ff-7fac4bf1bd0c",
+        "model": "gpt-6-astra",
+        "input_tokens": 19056,
+        "output_tokens": 3572,
+        "cache_read_tokens": 15442,
+        "cache_write_tokens": 3611,
+        "reasoning_tokens": 126,
+        "duration_ms": 58973,
+        "created_at": "2026-09-24T12:51:44.470Z"
+      },
+      {
+        "id": 38082,
+        "agent_id": "50a2ef6e-e42a-42ec-80ff-7fac4bf1bd0c",
+        "model": "gpt-6-astra",
+        "input_tokens": 22954,
+        "output_tokens": 154,
+        "cache_read_tokens": 19053,
+        "cache_write_tokens": 3898,
+        "reasoning_tokens": 0,
+        "duration_ms": 4141,
+        "created_at": "2026-09-24T12:51:47.637Z"
+      },
+      {
+        "id": 38084,
+        "agent_id": "50a2ef6e-e42a-42ec-80ff-7fac4bf1bd0c",
+        "model": "gpt-6-astra",
+        "input_tokens": 23661,
+        "output_tokens": 903,
+        "cache_read_tokens": 22951,
+        "cache_write_tokens": 707,
+        "reasoning_tokens": 194,
+        "duration_ms": 18406,
+        "created_at": "2026-09-24T12:51:56.736Z"
+      },
+      {
+        "id": 38086,
+        "agent_id": "50a2ef6e-e42a-42ec-80ff-7fac4bf1bd0c",
+        "model": "gpt-6-astra",
+        "input_tokens": 24808,
+        "output_tokens": 252,
+        "cache_read_tokens": 23658,
+        "cache_write_tokens": 1147,
+        "reasoning_tokens": 0,
+        "duration_ms": 4843,
+        "created_at": "2026-09-24T12:52:02.436Z"
+      },
+      {
+        "id": 38089,
+        "agent_id": "50a2ef6e-e42a-42ec-80ff-7fac4bf1bd0c",
+        "model": "gpt-6-astra",
+        "input_tokens": 25621,
+        "output_tokens": 119,
+        "cache_read_tokens": 24805,
+        "cache_write_tokens": 813,
+        "reasoning_tokens": 0,
+        "duration_ms": 3587,
+        "created_at": "2026-09-24T12:52:14.928Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.49943249999999995,
+      "observed_cache_profile_estimate_usd": 0.19560825000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.99319,
+      "observed_cache_profile_estimate_usd": 5.99319,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +274,120 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".....................\n----------------------------------------------------------------------\nRan 21 tests in 0.606s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "claim": {
+        "claim_id": "SYN-CLM-100",
+        "loss_amount": 8243.52,
+        "loss_date": "2026-05-17",
+        "loss_type": "water",
+        "policy_id": "SYN-POL-100"
+      },
+      "claim_decision": {
+        "amount": 7743.52,
+        "decision": "payable",
+        "reasons": [
+          "Covered loss within policy dates; amount = min(max(loss - deductible, 0), limit)."
+        ],
+        "review_notice": "Synthetic rules only; a disputed decision requires human review."
+      },
+      "onboarding": {
+        "completed_steps": [
+          "verify_policy",
+          "review_underwriting",
+          "review_claim",
+          "finish"
+        ],
+        "events": [
+          {
+            "result": "completed",
+            "step": "verify_policy"
+          },
+          {
+            "result": "completed",
+            "step": "review_underwriting"
+          },
+          {
+            "result": "completed",
+            "step": "review_claim"
+          },
+          {
+            "result": "completed",
+            "step": "finish"
+          }
+        ],
+        "next_step": null,
+        "next_step_ready": false,
+        "percent_complete": 100,
+        "requested_steps": [],
+        "total_steps": 4
+      },
+      "policy": {
+        "covered_losses": [
+          "fire",
+          "water"
+        ],
+        "deductible": 500,
+        "end_date": "2026-12-31",
+        "limit": 50000,
+        "policy_id": "SYN-POL-100",
+        "policyholder": {
+          "synthetic_id": "SYN-HOLDER-ARIA-100"
+        },
+        "property_address": "SYNTHETIC: 42 Imaginary Lane, Fictionville ZZ 00000",
+        "start_date": "2026-01-01"
+      },
+      "schema_version": 1,
+      "scope_notice": "Demonstrative validation only; not compliance certification or binding insurance advice.",
+      "status": "ok",
+      "synthetic": true,
+      "underwriting_review": {
+        "disclosed_factors": [
+          {
+            "disclosed": true,
+            "name": "property_type",
+            "value": "house"
+          },
+          {
+            "disclosed": true,
+            "name": "protection",
+            "value": "alarm"
+          }
+        ],
+        "result": "ready_for_human_review"
+      },
+      "underwriting_submission": {
+        "factors": [
+          {
+            "disclosed": true,
+            "name": "property_type",
+            "value": "house"
+          },
+          {
+            "disclosed": true,
+            "name": "protection",
+            "value": "alarm"
+          }
+        ],
+        "policy_id": "SYN-POL-100",
+        "submission_id": "SYN-SUB-100"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t150_single_guided__ind-insurance",
+    "artifact_sha256": {
+      "implementation.py": "42c2ccc95d96456204ab58bd7374c32f2b34651b95be0b6b4514617072f5e657",
+      "test_implementation.py": "99bc10288cfcb77a07438326a7a7d145e013c3184e66d007ab07997786ae7e0e",
+      "example_input.json": "c41696a4f84da988b7ef08721d06bac2ff9d0267ee0f142af30d789e9cbd8307",
+      "build_manifest.json": "caccb49723878d93e7354ea7dbd56a0112f49581a5844c4f91915623c18fe824"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

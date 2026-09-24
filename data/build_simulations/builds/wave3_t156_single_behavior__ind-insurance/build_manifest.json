@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t156_single_behavior__ind-insurance",
+  "composition_label": "single_behavior",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation constructed in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "Version 1 object: synthetic=true, explicit timezone as_of, SYN- policyholder_ref, items, events; optional half_life_days (default 30) and limit (default 10). Unknown fields rejected recursively.",
+    "item": "Unique SYN- id, entity (policy, claim, underwriting_submission), source {format,payload}. All source adapters feed one normalization and validation layer.",
+    "formats": "ACORD-style JSON wraps fields under ACORD. Simple XML uses an ACORD root with scalar children (policy/claim). Underwriting factor lists use JSON. Claim-form text uses strict key: value lines; no arbitrary narrative.",
+    "attributes": "All entities require line=auto/property. Policy: positive coverage_amount. Claim: nonnegative loss_amount, timezone loss_date not after as_of, boolean documents_complete. Submission: disclosed allowed numeric factors.",
+    "event": "Unique SYN- id, known item_id, browse/purchase action, timezone at not after as_of; purchase only for policy.",
+    "output": "status, schema_version, synthetic, cold_start, ranked recommendations with normalized attributes/scores/reasons, separate complete claim_handling, safeguards. Error output: status=error and generic message; exit 2."
+  },
+  "cross_stage_handoffs": [
+    "One functionality: source decoding -> shared schema validation -> recency-weighted discovery -> JSON response. Claims administrative routing is a behavior-independent guardrail, not a downstream personalized decision stage."
+  ],
+  "behavior": {
+    "scoring": "Sum action_weight * 2^(-age_days/half_life_days) per item plus 0.2 times same-entity interest sum; browse=1, purchase=3. Explicit as_of makes ranking deterministic.",
+    "cold_start": "No effective event weight: equal zero scores and stable id ordering. All ties use id ascending.",
+    "fair_claim_handling": "Documents complete -> ready_for_human_review; incomplete -> request_information, each with reason. Every claim appears in separate handling output even when discovery limit excludes it. Rank never decides eligibility, payments, denial or processing priority.",
+    "minimization": "Only synthetic holder reference accepted. Names, VINs, addresses and arbitrary free text rejected, never echoed in errors. Invented policyholder, fabricated VIN/address fixtures in tests demonstrate rejection of unnecessary identifying fields.",
+    "underwriting": "Only coverage_amount, property_age_years, vehicle_age_years accepted. Each factor requires disclosed=true and appears in recommendation attributes. Factors do not affect discovery scoring.",
+    "fixtures": "All fixtures clearly synthetic. Claim loss amounts and dates also generated deterministically using seed 156 in tests."
+  },
+  "scope": {
+    "included": ["CLI", "strict shared schema", "ACORD-style JSON/XML subset", "structured claim-form text", "behavioral ranking", "cold start", "demonstrative insurance safeguards", "seeded synthetic fixtures"],
+    "excluded": ["ACORD standard certification", "GDPR or insurance compliance certification", "real policyholder data", "production persistence", "full XML schemas", "claims adjudication", "premium or underwriting risk decisions", "LLMs and model providers"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 17,
+    "failures": 0,
+    "errors": 0,
+    "cli_example": {"exit_code": 0, "stdout": "One JSON object with status=ok"},
+    "cli_invalid_input": {"exit_code": 2, "stdout": "One JSON object with status=error"},
+    "verified": ["deterministic ranking", "half-life decay", "purchase weights", "cold start", "empty catalog", "privacy minimization", "factor disclosure", "behavior-independent claims routing", "seeded losses", "invalid events and types", "XML rejection", "CLI success and failure"]
+  }
+}

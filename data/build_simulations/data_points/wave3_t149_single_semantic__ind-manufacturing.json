@@ -97,7 +97,7 @@
   "split_group": "dd910a3645b29d0ec34fcb69e47936f92087c7ecf12a4112724a28a2fc8e120a",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "5ab8c724eb0524d67070d1ac581b826ec2a8201d7690815695037db7508d1299",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t149_single_semantic__ind-manufacturing",
   "membership_point_id": "single_semantic__ind-manufacturing",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "d485e95a742a33aee8c4d13be105dbf681cfbc289e1a27214664ea70cdf511ee",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "42bd169b-f615-4a38-8a8f-2dadcb26d916",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 145104,
+    "output_tokens": 12649,
+    "cache_read_tokens": 129721,
+    "cache_write_tokens": 15365,
+    "total_tokens": 157753,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38044,
+        "agent_id": "42bd169b-f615-4a38-8a8f-2dadcb26d916",
+        "model": "gpt-6-astra",
+        "input_tokens": 14993,
+        "output_tokens": 1523,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 847,
+        "reasoning_tokens": 516,
+        "duration_ms": 26605,
+        "created_at": "2026-09-24T12:48:46.012Z"
+      },
+      {
+        "id": 38069,
+        "agent_id": "42bd169b-f615-4a38-8a8f-2dadcb26d916",
+        "model": "gpt-6-astra",
+        "input_tokens": 16543,
+        "output_tokens": 9768,
+        "cache_read_tokens": 14990,
+        "cache_write_tokens": 1550,
+        "reasoning_tokens": 516,
+        "duration_ms": 123637,
+        "created_at": "2026-09-24T12:50:40.160Z"
+      },
+      {
+        "id": 38070,
+        "agent_id": "42bd169b-f615-4a38-8a8f-2dadcb26d916",
+        "model": "gpt-6-astra",
+        "input_tokens": 26635,
+        "output_tokens": 161,
+        "cache_read_tokens": 16540,
+        "cache_write_tokens": 10092,
+        "reasoning_tokens": 21,
+        "duration_ms": 3601,
+        "created_at": "2026-09-24T12:50:44.176Z"
+      },
+      {
+        "id": 38075,
+        "agent_id": "42bd169b-f615-4a38-8a8f-2dadcb26d916",
+        "model": "gpt-6-astra",
+        "input_tokens": 28296,
+        "output_tokens": 737,
+        "cache_read_tokens": 26632,
+        "cache_write_tokens": 1661,
+        "reasoning_tokens": 360,
+        "duration_ms": 17032,
+        "created_at": "2026-09-24T12:51:03.773Z"
+      },
+      {
+        "id": 38077,
+        "agent_id": "42bd169b-f615-4a38-8a8f-2dadcb26d916",
+        "model": "gpt-6-astra",
+        "input_tokens": 29126,
+        "output_tokens": 352,
+        "cache_read_tokens": 28293,
+        "cache_write_tokens": 830,
+        "reasoning_tokens": 0,
+        "duration_ms": 5240,
+        "created_at": "2026-09-24T12:51:17.663Z"
+      },
+      {
+        "id": 38078,
+        "agent_id": "42bd169b-f615-4a38-8a8f-2dadcb26d916",
+        "model": "gpt-6-astra",
+        "input_tokens": 29511,
+        "output_tokens": 108,
+        "cache_read_tokens": 29123,
+        "cache_write_tokens": 385,
+        "reasoning_tokens": 0,
+        "duration_ms": 2855,
+        "created_at": "2026-09-24T12:51:23.560Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.552495,
+      "observed_cache_profile_estimate_usd": 0.26062275,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.62994,
+      "observed_cache_profile_estimate_usd": 6.62994,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,213 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".....................\n----------------------------------------------------------------------\nRan 21 tests in 0.574s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "alerts": [
+        {
+          "asset_id": "SYN-MILL-07",
+          "automatic_action_taken": false,
+          "reason": "safety-critical reading",
+          "record_id": "SYN-S-02",
+          "requires_human": true,
+          "route": "human_safety_operator",
+          "severity": "critical",
+          "state": "pending_human_review",
+          "work_order_id": "SYN-WO-100"
+        },
+        {
+          "asset_id": "SYN-MILL-07",
+          "automatic_action_taken": false,
+          "reason": "outside work-order tolerance",
+          "record_id": "SYN-S-03",
+          "requires_human": true,
+          "route": "human_quality_reviewer",
+          "severity": "warning",
+          "state": "pending_human_review",
+          "work_order_id": "SYN-WO-100"
+        }
+      ],
+      "constraint_notice": "Demonstrative traceability and safety routing only; not compliance certification.",
+      "fixture_label": "SYNTHETIC: fictitious machining assets, invented maintenance history, illustrative telemetry",
+      "index": {
+        "document_count": 7,
+        "matched_count": 5,
+        "ranking": "BM25+synonyms",
+        "term_count": 90
+      },
+      "query": "thermal spindle defect",
+      "results": [
+        {
+          "asset_id": "SYN-MILL-07",
+          "entity_type": "work_order",
+          "id": "SYN-WO-100",
+          "score": 0.75126778,
+          "synthetic": true,
+          "text": "SYN-WO-100 SYN-MILL-07 Fictitious precision pump housing Machine pump housing; investigate spindle overheating and vibration. held Invented maintenance: replaced spindle bearing and checked coolant flow.",
+          "traceability": {
+            "maintenance_logs": [
+              {
+                "note": "Invented maintenance: replaced spindle bearing and checked coolant flow.",
+                "technician": "Synthetic technician Avery",
+                "timestamp": "2026-09-23T08:00:00Z"
+              }
+            ],
+            "record_id": "SYN-WO-100",
+            "source_format": "ERP/MES JSON",
+            "tolerances": {
+              "diameter": {
+                "max": 25.05,
+                "min": 24.95,
+                "unit": "mm"
+              },
+              "temperature": {
+                "max": 75,
+                "min": 15,
+                "unit": "C"
+              },
+              "vibration": {
+                "max": 4.5,
+                "min": 0,
+                "unit": "mm/s"
+              }
+            }
+          },
+          "work_order_id": "SYN-WO-100"
+        },
+        {
+          "asset_id": "SYN-MILL-07",
+          "entity_type": "sensor_reading",
+          "id": "SYN-S-02",
+          "score": 0.61610266,
+          "synthetic": true,
+          "text": "SYN-S-02 2026-09-24T08:01:00Z SYN-MILL-07 SYN-WO-100 temperature 83.17 C true safety critical alert human escalation outside tolerance failure",
+          "traceability": {
+            "metric": "temperature",
+            "outside_tolerance": true,
+            "record_id": "SYN-S-02",
+            "safety_critical": true,
+            "source_format": "time-series CSV",
+            "timestamp": "2026-09-24T08:01:00Z",
+            "tolerance": {
+              "max": 75,
+              "min": 15,
+              "unit": "C"
+            },
+            "unit": "C",
+            "value": 83.17
+          },
+          "work_order_id": "SYN-WO-100"
+        },
+        {
+          "asset_id": "SYN-MILL-07",
+          "entity_type": "sensor_reading",
+          "id": "SYN-S-01",
+          "score": 0.47875375,
+          "synthetic": true,
+          "text": "SYN-S-01 2026-09-24T08:00:00Z SYN-MILL-07 SYN-WO-100 temperature 62.38 C false",
+          "traceability": {
+            "metric": "temperature",
+            "outside_tolerance": false,
+            "record_id": "SYN-S-01",
+            "safety_critical": false,
+            "source_format": "time-series CSV",
+            "timestamp": "2026-09-24T08:00:00Z",
+            "tolerance": {
+              "max": 75,
+              "min": 15,
+              "unit": "C"
+            },
+            "unit": "C",
+            "value": 62.38
+          },
+          "work_order_id": "SYN-WO-100"
+        },
+        {
+          "asset_id": "SYN-MILL-07",
+          "entity_type": "sensor_reading",
+          "id": "SYN-S-03",
+          "score": 0.46136435,
+          "synthetic": true,
+          "text": "SYN-S-03 2026-09-24T08:01:00Z SYN-MILL-07 SYN-WO-100 vibration 5.14 mm/s false outside tolerance failure",
+          "traceability": {
+            "metric": "vibration",
+            "outside_tolerance": true,
+            "record_id": "SYN-S-03",
+            "safety_critical": false,
+            "source_format": "time-series CSV",
+            "timestamp": "2026-09-24T08:01:00Z",
+            "tolerance": {
+              "max": 4.5,
+              "min": 0,
+              "unit": "mm/s"
+            },
+            "unit": "mm/s",
+            "value": 5.14
+          },
+          "work_order_id": "SYN-WO-100"
+        },
+        {
+          "asset_id": "SYN-MILL-07",
+          "entity_type": "quality_inspection",
+          "id": "SYN-Q-01",
+          "score": 0.42295745,
+          "synthetic": true,
+          "text": "SYN-Q-01 SYN-WO-100 SYN-MILL-07 quality inspection fail Housing diameter exceeded the work-order tolerance; hold for human disposition. Synthetic inspector Morgan [{\"metric\": \"diameter\", \"unit\": \"mm\", \"value\": 25.08}]",
+          "traceability": {
+            "decided_by": "Synthetic inspector Morgan",
+            "decision": "fail",
+            "measurements": [
+              {
+                "metric": "diameter",
+                "unit": "mm",
+                "value": 25.08
+              }
+            ],
+            "outside_tolerance": true,
+            "rationale": "Housing diameter exceeded the work-order tolerance; hold for human disposition.",
+            "record_id": "SYN-Q-01",
+            "source_format": "quality inspection JSON",
+            "timestamp": "2026-09-24T08:03:00Z",
+            "tolerances": {
+              "diameter": {
+                "max": 25.05,
+                "min": 24.95,
+                "unit": "mm"
+              },
+              "temperature": {
+                "max": 75,
+                "min": 15,
+                "unit": "C"
+              },
+              "vibration": {
+                "max": 4.5,
+                "min": 0,
+                "unit": "mm/s"
+              }
+            }
+          },
+          "work_order_id": "SYN-WO-100"
+        }
+      ],
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t149_single_semantic__ind-manufacturing",
+    "artifact_sha256": {
+      "implementation.py": "a78856d75cfbb47270c156c56c525e1a637a49c305993670b0c38cc753f2c711",
+      "test_implementation.py": "35196942f62668a3522f9b30ebe75f307afcfa23ffa73bc5e728954c52bd9a15",
+      "example_input.json": "88bae0815fc4ffabbf3df7a17d95fa3311b008b54e542fb9246b380e6f221aeb",
+      "build_manifest.json": "29aea64c0b1e2972457e3790339702f99efcce9562388d72e19e6dd9a9172a73"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

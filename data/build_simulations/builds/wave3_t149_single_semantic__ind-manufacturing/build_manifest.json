@@ -1,0 +1,78 @@
+{
+  "build_id": "wave3_t149_single_semantic__ind-manufacturing",
+  "composition_label": "single_semantic",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original, self-contained Python implementation created for this isolated build.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": 1,
+      "synthetic": "Required literal true",
+      "fixture_label": "Nonblank explicit synthetic-data label",
+      "work_orders": "ERP/MES-style JSON list: id, asset_id, product, description, status, tolerances, maintenance_logs",
+      "sensor_csv": "Embedded time-series CSV with exact header: id,timestamp,asset_id,work_order_id,metric,value,unit,safety_critical",
+      "quality_inspections": "JSON list: id, work_order_id, asset_id, timestamp, decision, decided_by, rationale, measurements",
+      "search": {"query": "Nonblank searchable string, maximum 500 characters", "top_k": "Integer 1 through 100"}
+    },
+    "normalized_document": ["id", "entity_type", "work_order_id", "asset_id", "synthetic", "text", "traceability"],
+    "output": "status, schema_version, synthetic, fixture_label, query, results (document plus score), alerts, index, constraint_notice",
+    "error": {"status": "error", "error": "Explanation; CLI exit code 2"},
+    "units_and_tolerances": "Exact units: temperature C, vibration mm/s, pressure bar, diameter mm. No implicit unit conversion. Finite numeric min <= max within demonstrative physical bounds, inclusive endpoints. Each measurement requires the corresponding work-order tolerance.",
+    "timestamps": "ISO 8601 with timezone. Input ordering is not required; document IDs provide deterministic tie breaks.",
+    "quality_traceability": "Decision author, timestamp, rationale, measurement evidence, asset/work-order linkage and applicable tolerance snapshot are mandatory and retained in the result. A pass cannot contradict measured tolerances. Demonstrative ISO 9001-inspired traceability only, not certification."
+  },
+  "cross_stage_handoffs": [
+    "Single semantic-search functionality: the shared validator parses all entity sources into common documents and independently collected human-review alerts.",
+    "Validated documents feed an in-memory inverted index; canonical domain synonyms feed BM25 ranking.",
+    "Optional injected local embedding callable accepts [query, *document_texts]. Returned vectors are validated before cosine reranking.",
+    "Ranked common document envelopes retain source evidence and tolerance snapshots; alerts survive no-match queries and top-k truncation."
+  ],
+  "behavior": {
+    "ranking": "BM25 (k1=1.2, b=0.75), score/(1+score); optional 0.7 lexical + 0.3 nonnegative cosine. Descending score, ascending unique ID tie break, positive-score matches only.",
+    "embedding_contract": "Optional run(payload, embed=callable) only; one finite nonzero vector per input, identical dimensions 1..4096; no live provider. Callable determinism is the caller's responsibility.",
+    "human_escalation": "Every explicitly safety-critical reading produces pending_human_review routed to human_safety_operator even when in tolerance. Other out-of-tolerance readings route to human_quality_reviewer. No automatic machine action and no claim of delivered notification.",
+    "fixtures": "Clearly labeled synthetic assets, work orders and invented maintenance history. Tests generate physically plausible randomized temperature readings with fixed random seed 149.",
+    "validation": "Strict JSON object shapes, unique record IDs, existing work-order links, asset match, timezone timestamps, finite physical values, exact CSV header, unit and tolerance checks. CLI rejects duplicate JSON keys and nonstandard numeric constants.",
+    "bounds": "1000 work orders, 1000 inspections, 10000 sensor rows, 2000000 CSV characters, 100 logs/order, 100 measurements/inspection.",
+    "determinism": "No wall-clock dependency, random ranking, live model call, network connection, or persisted index. Input is not mutated."
+  },
+  "scope": {
+    "included": ["Unified CLI/API", "Shared validation", "In-memory search index", "Domain synonyms and relevance ranking", "Optional fixture-tested embedding callable", "Traceable quality decisions", "Human-review alert envelopes", "Standard-library unittest suite"],
+    "excluded": ["Enterprise production operation", "Compliance certification", "Actual safety control or human notification delivery", "Persistent database", "Authentication", "Live MES integrations", "Live embeddings or LLM providers", "Automatic unit conversion", "Learning or fitting a semantic model"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 21,
+    "failures": 0,
+    "errors": 0,
+    "suite_exit_code": 0,
+    "cli": "passed: one JSON object on stdout, status ok",
+    "cli_exit_code": 0,
+    "example_document_count": 7,
+    "example_result_count": 5,
+    "example_alert_count": 2,
+    "coverage": [
+      "Deterministic ranking and input immutability",
+      "Domain synonyms and all three entity types",
+      "Quality-decision evidence and contradictory pass rejection",
+      "Safety-critical human escalation independent of query and result limits",
+      "Seeded randomized physically plausible telemetry",
+      "Empty index, no matches, inclusive tolerance boundaries and top-k",
+      "Invalid schema, units, tolerance ranges, numeric values, CSV and references",
+      "Injected embedding retrieval, malformed vectors and callable failures",
+      "CLI success, usage errors, missing file, malformed JSON and input validation"
+    ]
+  }
+}

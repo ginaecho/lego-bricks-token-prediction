@@ -97,7 +97,7 @@
   "split_group": "8da539b005badbb838a00475f0c09ef2877460af6aba3d62c96bc50b68ce6165",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "98ec5b59e43d4252b01db8e86ff9aa2f4e208f8ba759122d3ce0b8d28219376f",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t151_single_behavior__ind-public_sector",
   "membership_point_id": "single_behavior__ind-public_sector",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "abb3c2596f44f4e7713e5d978ad76396e0098539fee906c312a55e5c9bd69a1d",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "31663226-1f69-4788-9dce-8b936d4bb55a",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 119413,
+    "output_tokens": 6941,
+    "cache_read_tokens": 110694,
+    "cache_write_tokens": 8701,
+    "total_tokens": 126354,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38088,
+        "agent_id": "31663226-1f69-4788-9dce-8b936d4bb55a",
+        "model": "gpt-6-astra",
+        "input_tokens": 14990,
+        "output_tokens": 240,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 844,
+        "reasoning_tokens": 84,
+        "duration_ms": 6155,
+        "created_at": "2026-09-24T12:52:11.185Z"
+      },
+      {
+        "id": 38101,
+        "agent_id": "31663226-1f69-4788-9dce-8b936d4bb55a",
+        "model": "gpt-6-astra",
+        "input_tokens": 15261,
+        "output_tokens": 5946,
+        "cache_read_tokens": 14987,
+        "cache_write_tokens": 271,
+        "reasoning_tokens": 315,
+        "duration_ms": 81694,
+        "created_at": "2026-09-24T12:53:30.259Z"
+      },
+      {
+        "id": 38103,
+        "agent_id": "31663226-1f69-4788-9dce-8b936d4bb55a",
+        "model": "gpt-6-astra",
+        "input_tokens": 21523,
+        "output_tokens": 133,
+        "cache_read_tokens": 15258,
+        "cache_write_tokens": 6262,
+        "reasoning_tokens": 0,
+        "duration_ms": 3021,
+        "created_at": "2026-09-24T12:53:37.600Z"
+      },
+      {
+        "id": 38108,
+        "agent_id": "31663226-1f69-4788-9dce-8b936d4bb55a",
+        "model": "gpt-6-astra",
+        "input_tokens": 22193,
+        "output_tokens": 315,
+        "cache_read_tokens": 21520,
+        "cache_write_tokens": 670,
+        "reasoning_tokens": 41,
+        "duration_ms": 5690,
+        "created_at": "2026-09-24T12:54:00.858Z"
+      },
+      {
+        "id": 38109,
+        "agent_id": "31663226-1f69-4788-9dce-8b936d4bb55a",
+        "model": "gpt-6-astra",
+        "input_tokens": 22599,
+        "output_tokens": 211,
+        "cache_read_tokens": 22190,
+        "cache_write_tokens": 406,
+        "reasoning_tokens": 0,
+        "duration_ms": 3412,
+        "created_at": "2026-09-24T12:54:07.505Z"
+      },
+      {
+        "id": 38113,
+        "agent_id": "31663226-1f69-4788-9dce-8b936d4bb55a",
+        "model": "gpt-6-astra",
+        "input_tokens": 22847,
+        "output_tokens": 96,
+        "cache_read_tokens": 22596,
+        "cache_write_tokens": 248,
+        "reasoning_tokens": 0,
+        "duration_ms": 2670,
+        "created_at": "2026-09-24T12:54:30.163Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4026475,
+      "observed_cache_profile_estimate_usd": 0.153586,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.831770000000001,
+      "observed_cache_profile_estimate_usd": 4.831770000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,85 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............\n----------------------------------------------------------------------\nRan 14 tests in 1.139s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "synthetic": true,
+      "mode": "personalized",
+      "reason": "recent_history",
+      "recommendations": [
+        {
+          "item_id": "item-0003",
+          "entity": "policy_document",
+          "label": "Policy document: housing",
+          "score": 0.8,
+          "explanation": {
+            "plain_language": "Shown using public priority and your recent interest in this topic.",
+            "public_priority": 0.8,
+            "topic_interest": 0.8,
+            "public_weight": 0.2,
+            "interest_weight": 0.8
+          }
+        },
+        {
+          "item_id": "item-0002",
+          "entity": "benefits_application",
+          "label": "Benefits application: housing",
+          "score": 0.76,
+          "explanation": {
+            "plain_language": "Shown using public priority and your recent interest in this topic.",
+            "public_priority": 0.6,
+            "topic_interest": 0.8,
+            "public_weight": 0.2,
+            "interest_weight": 0.8
+          }
+        },
+        {
+          "item_id": "item-0001",
+          "entity": "citizen_service_request",
+          "label": "Citizen service request: transport",
+          "score": 0.3,
+          "explanation": {
+            "plain_language": "Shown using public priority and your recent interest in this topic.",
+            "public_priority": 0.7,
+            "topic_interest": 0.2,
+            "public_weight": 0.2,
+            "interest_weight": 0.8
+          }
+        }
+      ],
+      "audit": {
+        "algorithm": "recency-topic-v1",
+        "as_of": "2026-09-24T12:00:00Z",
+        "half_life_days": 30,
+        "action_weights": {
+          "browse": 1,
+          "purchase": 2
+        },
+        "formula": "interest = topic weight / max(1, total weight); score = public weight * priority + interest weight * interest",
+        "tie_break": "item_id ascending after score rounded to 10 decimal places",
+        "events_used": 2,
+        "privacy": "No persona, address, case number, form text or policy text is returned.",
+        "notice": "Discovery only. This does not decide benefit eligibility or service access.",
+        "limits": "Synthetic demonstration, not a Privacy Act, GDPR, FOIA or Section 508 certification. Text screening is not a complete PII detector."
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t151_single_behavior__ind-public_sector",
+    "artifact_sha256": {
+      "implementation.py": "41e9d61a61f1288da27e464067ef5322cd35ea2879b7db2dd7785495730943da",
+      "test_implementation.py": "f6645b8e836459521f97555f19c76293e75afdd08c0172cd6471493f71cdaac0",
+      "example_input.json": "5f2028d1a2e5f29cb460bcaf235576aec239c69a6ca208600b7caac5bfcd6fb7",
+      "build_manifest.json": "60d1cef043c095c3491b3bf1f245856c911c494cd5746afaa894ebb2fe054bca"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

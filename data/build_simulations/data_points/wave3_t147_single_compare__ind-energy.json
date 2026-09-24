@@ -97,7 +97,7 @@
   "split_group": "dcd00b39387fc453b31982b7f03e4513c557b3ed96b2835333b8fff9aa9a5e91",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "45183c47a5cd4ecad804dc651d803efd7f36322c20017fae476ca33a0bee2984",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t147_single_compare__ind-energy",
   "membership_point_id": "single_compare__ind-energy",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "528e668e2d4ce4843d81702e04d2c4085a1e7e2b4ca482a610b42e18070c5c91",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "fa06406b-d60d-411f-90f0-70573aeec150",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 125330,
+    "output_tokens": 7748,
+    "cache_read_tokens": 114973,
+    "cache_write_tokens": 10339,
+    "total_tokens": 133078,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38008,
+        "agent_id": "fa06406b-d60d-411f-90f0-70573aeec150",
+        "model": "gpt-6-astra",
+        "input_tokens": 14982,
+        "output_tokens": 463,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 836,
+        "reasoning_tokens": 296,
+        "duration_ms": 14833,
+        "created_at": "2026-09-24T12:41:13.666Z"
+      },
+      {
+        "id": 38071,
+        "agent_id": "fa06406b-d60d-411f-90f0-70573aeec150",
+        "model": "gpt-6-astra",
+        "input_tokens": 15472,
+        "output_tokens": 6493,
+        "cache_read_tokens": 14979,
+        "cache_write_tokens": 490,
+        "reasoning_tokens": 0,
+        "duration_ms": 95917,
+        "created_at": "2026-09-24T12:50:48.413Z"
+      },
+      {
+        "id": 38072,
+        "agent_id": "fa06406b-d60d-411f-90f0-70573aeec150",
+        "model": "gpt-6-astra",
+        "input_tokens": 22277,
+        "output_tokens": 172,
+        "cache_read_tokens": 15469,
+        "cache_write_tokens": 6805,
+        "reasoning_tokens": 33,
+        "duration_ms": 4966,
+        "created_at": "2026-09-24T12:50:55.809Z"
+      },
+      {
+        "id": 38073,
+        "agent_id": "fa06406b-d60d-411f-90f0-70573aeec150",
+        "model": "gpt-6-astra",
+        "input_tokens": 23844,
+        "output_tokens": 336,
+        "cache_read_tokens": 22274,
+        "cache_write_tokens": 1567,
+        "reasoning_tokens": 145,
+        "duration_ms": 8283,
+        "created_at": "2026-09-24T12:50:58.381Z"
+      },
+      {
+        "id": 38074,
+        "agent_id": "fa06406b-d60d-411f-90f0-70573aeec150",
+        "model": "gpt-6-astra",
+        "input_tokens": 24270,
+        "output_tokens": 179,
+        "cache_read_tokens": 23841,
+        "cache_write_tokens": 426,
+        "reasoning_tokens": 0,
+        "duration_ms": 3812,
+        "created_at": "2026-09-24T12:51:01.589Z"
+      },
+      {
+        "id": 38076,
+        "agent_id": "fa06406b-d60d-411f-90f0-70573aeec150",
+        "model": "gpt-6-astra",
+        "input_tokens": 24485,
+        "output_tokens": 105,
+        "cache_read_tokens": 24267,
+        "cache_write_tokens": 215,
+        "reasoning_tokens": 0,
+        "duration_ms": 4473,
+        "created_at": "2026-09-24T12:51:14.816Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.42954499999999995,
+      "observed_cache_profile_estimate_usd": 0.17085575,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.15454,
+      "observed_cache_profile_estimate_usd": 5.15454,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,231 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................\n----------------------------------------------------------------------\nRan 18 tests in 0.958s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "synthetic": true,
+      "products": [
+        {
+          "name": "Synthetic Winter Efficiency Package",
+          "attributes": {
+            "monthly_cost_usd": 95.0,
+            "consumption_kwh": 3.9000000000000004,
+            "emissions_kgCO2e": 1.0,
+            "availability_percent": 99.85,
+            "outage_risk": 0
+          },
+          "meter_readings": [
+            {
+              "device_ref": "asset_63f928004e07ebb0b38d93e3",
+              "timestamp": "2026-01-15T18:00:00+00:00",
+              "consumption_kwh": 1.8
+            },
+            {
+              "device_ref": "asset_63f928004e07ebb0b38d93e3",
+              "timestamp": "2026-01-15T18:30:00+00:00",
+              "consumption_kwh": 2.1
+            }
+          ],
+          "grid_assets": [
+            {
+              "asset_ref": "asset_813bad1745cf29327d77eb7b",
+              "kind": "substation",
+              "critical": true
+            },
+            {
+              "asset_ref": "asset_63f928004e07ebb0b38d93e3",
+              "kind": "meter",
+              "critical": false
+            }
+          ],
+          "topology": [
+            {
+              "from": "asset_813bad1745cf29327d77eb7b",
+              "to": "asset_63f928004e07ebb0b38d93e3"
+            }
+          ],
+          "outage_reports": [],
+          "emissions": [
+            {
+              "asset_ref": "asset_813bad1745cf29327d77eb7b",
+              "value": 0.9,
+              "unit": "kgCO2e",
+              "source": "Synthetic winter dispatch model"
+            },
+            {
+              "asset_ref": "asset_63f928004e07ebb0b38d93e3",
+              "value": 0.1,
+              "unit": "kgCO2e",
+              "source": "Synthetic device allocation"
+            }
+          ]
+        },
+        {
+          "name": "Synthetic Winter Economy Package",
+          "attributes": {
+            "monthly_cost_usd": 80.0,
+            "consumption_kwh": 4.6,
+            "emissions_kgCO2e": 2.0,
+            "availability_percent": 98.75,
+            "outage_risk": 2
+          },
+          "meter_readings": [
+            {
+              "device_ref": "asset_09eb4a61a6ff2639a3c5de7c",
+              "timestamp": "2026-01-15T18:00:00+00:00",
+              "consumption_kwh": 2.2
+            },
+            {
+              "device_ref": "asset_09eb4a61a6ff2639a3c5de7c",
+              "timestamp": "2026-01-15T18:30:00+00:00",
+              "consumption_kwh": 2.4
+            }
+          ],
+          "grid_assets": [
+            {
+              "asset_ref": "asset_8341cce799faec9c6141a98e",
+              "kind": "substation",
+              "critical": true
+            },
+            {
+              "asset_ref": "asset_09eb4a61a6ff2639a3c5de7c",
+              "kind": "meter",
+              "critical": false
+            }
+          ],
+          "topology": [
+            {
+              "from": "asset_8341cce799faec9c6141a98e",
+              "to": "asset_09eb4a61a6ff2639a3c5de7c"
+            }
+          ],
+          "outage_reports": [
+            {
+              "asset_ref": "asset_8341cce799faec9c6141a98e",
+              "priority": "urgent",
+              "life_safety": false,
+              "essential_service": true
+            }
+          ],
+          "emissions": [
+            {
+              "asset_ref": "asset_8341cce799faec9c6141a98e",
+              "value": 1.8,
+              "unit": "kgCO2e",
+              "source": "Synthetic winter dispatch model"
+            },
+            {
+              "asset_ref": "asset_09eb4a61a6ff2639a3c5de7c",
+              "value": 0.2,
+              "unit": "kgCO2e",
+              "source": "Synthetic device allocation"
+            }
+          ]
+        }
+      ],
+      "side_by_side": {
+        "monthly_cost_usd": [
+          {
+            "name": "Synthetic Winter Efficiency Package",
+            "value": 95.0
+          },
+          {
+            "name": "Synthetic Winter Economy Package",
+            "value": 80.0
+          }
+        ],
+        "consumption_kwh": [
+          {
+            "name": "Synthetic Winter Efficiency Package",
+            "value": 3.9000000000000004
+          },
+          {
+            "name": "Synthetic Winter Economy Package",
+            "value": 4.6
+          }
+        ],
+        "emissions_kgCO2e": [
+          {
+            "name": "Synthetic Winter Efficiency Package",
+            "value": 1.0
+          },
+          {
+            "name": "Synthetic Winter Economy Package",
+            "value": 2.0
+          }
+        ],
+        "availability_percent": [
+          {
+            "name": "Synthetic Winter Efficiency Package",
+            "value": 99.85
+          },
+          {
+            "name": "Synthetic Winter Economy Package",
+            "value": 98.75
+          }
+        ],
+        "outage_risk": [
+          {
+            "name": "Synthetic Winter Efficiency Package",
+            "value": 0
+          },
+          {
+            "name": "Synthetic Winter Economy Package",
+            "value": 2
+          }
+        ]
+      },
+      "ranking": [
+        {
+          "name": "Synthetic Winter Efficiency Package",
+          "score": 0.77777778,
+          "weighted_utilities": {
+            "monthly_cost_usd": 0.0,
+            "consumption_kwh": 0.1111111111111111,
+            "emissions_kgCO2e": 0.2222222222222222,
+            "availability_percent": 0.1111111111111111,
+            "outage_risk": 0.3333333333333333
+          },
+          "rank": 1
+        },
+        {
+          "name": "Synthetic Winter Economy Package",
+          "score": 0.22222222,
+          "weighted_utilities": {
+            "monthly_cost_usd": 0.2222222222222222,
+            "consumption_kwh": 0.0,
+            "emissions_kgCO2e": 0.0,
+            "availability_percent": 0.0,
+            "outage_risk": 0.0
+          },
+          "rank": 2
+        }
+      ],
+      "safety_rules": {
+        "life_safety": "emergency",
+        "essential_service": "urgent",
+        "otherwise": "routine"
+      },
+      "method": "Weighted min-max utility; ties alphabetical; equal metrics have utility 1",
+      "notice": "Synthetic demonstration only; no NERC CIP compliance certification"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t147_single_compare__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "d131420b2c05f2c26c082cc2581325c5210424df91e0ea3432f409d64408c5cf",
+      "test_implementation.py": "7047afce51817071739d128abe64482ced4dc566a471966c559fe981aa3eecb4",
+      "example_input.json": "3e28d03749eaac10a12a92ca4b22bd58f9427b65939558a587835fe2e3cc037b",
+      "build_manifest.json": "ac35e78ae88fd9634c974a0ee7856dfd8d04766cc33b349c10f60b22401593ee"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

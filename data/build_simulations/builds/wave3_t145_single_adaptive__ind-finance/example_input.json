@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "customer": {
+    "customer_id": "SYN-CUST-001",
+    "name": "Fabricated Avery Example",
+    "experience": "beginner",
+    "preference": "guided",
+    "kyc_status": "verified",
+    "aml_flags": [],
+    "account_iban": "ZZ00FAKECUSTOMER001",
+    "card_number": "4111 1111 1111 1111"
+  },
+  "ledger": {
+    "format": "json",
+    "data": [
+      {"transaction_id": "SYN-T001", "date": "2026-09-01", "amount": "123.45", "currency": "EUR", "description": "Synthetic generated credit"},
+      {"transaction_id": "SYN-T002", "date": "2026-09-02", "amount": "-42.17", "currency": "EUR", "description": "Synthetic generated debit"}
+    ]
+  },
+  "payment": {
+    "MsgId": "SYN-MSG-001",
+    "EndToEndId": "SYN-PAY-001",
+    "InstdAmt": {"Ccy": "EUR", "Value": "25.00"},
+    "DbtrAcct": {"IBAN": "ZZ00FAKECUSTOMER001"},
+    "CdtrAcct": {"IBAN": "ZZ00FAKECREDITOR001"}
+  },
+  "loan_application": {
+    "application_id": "SYN-LOAN-001",
+    "amount": "1500.00",
+    "currency": "EUR",
+    "term_months": 12,
+    "purpose": "Synthetic education example"
+  },
+  "completed_steps": ["profile"]
+}
