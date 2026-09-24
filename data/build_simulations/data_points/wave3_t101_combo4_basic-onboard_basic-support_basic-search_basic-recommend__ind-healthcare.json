@@ -129,7 +129,7 @@
   "split_group": "c8dc1992ea6b4362291a58e52455b1d00c343debfd2884442c6c7c3aadcee01a",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "c89fdfc48874bd73ff3bca3a5fbab095ddd6af452bada6f8d2305324ef388fc9",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t101_combo4_basic-onboard_basic-support_basic-search_basic-recommend__ind-healthcare",
   "membership_point_id": "combo4_basic-onboard_basic-support_basic-search_basic-recommend__ind-healthcare",
@@ -137,8 +137,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "c87ed51f318f132a4b48bc88560f9e0a62f4df34d9e076251132eb71e0dacceb",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "e1e9bfca-ff11-4212-9f8b-c62ad17a9544",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 165064,
+    "output_tokens": 17621,
+    "cache_read_tokens": 144827,
+    "cache_write_tokens": 20219,
+    "total_tokens": 182685,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37441,
+        "agent_id": "e1e9bfca-ff11-4212-9f8b-c62ad17a9544",
+        "model": "gpt-6-astra",
+        "input_tokens": 15172,
+        "output_tokens": 1793,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 1047,
+        "reasoning_tokens": 411,
+        "duration_ms": 27667,
+        "created_at": "2026-09-24T11:12:52.349Z"
+      },
+      {
+        "id": 37499,
+        "agent_id": "e1e9bfca-ff11-4212-9f8b-c62ad17a9544",
+        "model": "gpt-6-astra",
+        "input_tokens": 16997,
+        "output_tokens": 14259,
+        "cache_read_tokens": 15169,
+        "cache_write_tokens": 1825,
+        "reasoning_tokens": 2816,
+        "duration_ms": 223876,
+        "created_at": "2026-09-24T11:25:38.858Z"
+      },
+      {
+        "id": 37500,
+        "agent_id": "e1e9bfca-ff11-4212-9f8b-c62ad17a9544",
+        "model": "gpt-6-astra",
+        "input_tokens": 31612,
+        "output_tokens": 164,
+        "cache_read_tokens": 16994,
+        "cache_write_tokens": 14615,
+        "reasoning_tokens": 19,
+        "duration_ms": 3646,
+        "created_at": "2026-09-24T11:25:41.008Z"
+      },
+      {
+        "id": 37501,
+        "agent_id": "e1e9bfca-ff11-4212-9f8b-c62ad17a9544",
+        "model": "gpt-6-astra",
+        "input_tokens": 32899,
+        "output_tokens": 1040,
+        "cache_read_tokens": 31609,
+        "cache_write_tokens": 1287,
+        "reasoning_tokens": 645,
+        "duration_ms": 22226,
+        "created_at": "2026-09-24T11:25:44.567Z"
+      },
+      {
+        "id": 37502,
+        "agent_id": "e1e9bfca-ff11-4212-9f8b-c62ad17a9544",
+        "model": "gpt-6-astra",
+        "input_tokens": 34040,
+        "output_tokens": 261,
+        "cache_read_tokens": 32896,
+        "cache_write_tokens": 1141,
+        "reasoning_tokens": 0,
+        "duration_ms": 4094,
+        "created_at": "2026-09-24T11:25:47.910Z"
+      },
+      {
+        "id": 37503,
+        "agent_id": "e1e9bfca-ff11-4212-9f8b-c62ad17a9544",
+        "model": "gpt-6-astra",
+        "input_tokens": 34344,
+        "output_tokens": 104,
+        "cache_read_tokens": 34037,
+        "cache_write_tokens": 304,
+        "reasoning_tokens": 0,
+        "duration_ms": 2619,
+        "created_at": "2026-09-24T11:25:54.646Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6769749999999999,
+      "observed_cache_profile_estimate_usd": 0.35111424999999996,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 8.1237,
+      "observed_cache_profile_estimate_usd": 8.1237,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -169,5 +294,270 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............................................\n----------------------------------------------------------------------\nRan 45 tests in 1.734s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true,
+      "human_review_required": true,
+      "records": {
+        "patient": {
+          "resourceType": "Patient",
+          "id": "synthetic-patient-001",
+          "meta": {
+            "tag": [
+              {
+                "system": "urn:synthetic-fixture",
+                "code": "synthetic"
+              }
+            ]
+          },
+          "age_band": "adult",
+          "diagnoses": [
+            {
+              "code": "E11.9",
+              "display": "Type 2 diabetes mellitus"
+            }
+          ],
+          "labs": [
+            {
+              "code": "4548-4",
+              "display": "Hemoglobin A1c",
+              "value": 7.2,
+              "unit": "%"
+            }
+          ],
+          "human_review_required": true
+        },
+        "clinical_note": {
+          "resourceType": "DocumentReference",
+          "id": "synthetic-note-001",
+          "meta": {
+            "tag": [
+              {
+                "system": "urn:synthetic-fixture",
+                "code": "synthetic"
+              }
+            ]
+          },
+          "subject": {
+            "reference": "Patient/synthetic-patient-001"
+          },
+          "text": "Synthetic clinical note. Diagnosis codes: E11.9. Labs: 4548-4=7.2 %. Administrative context only; clinician review required.",
+          "human_review_required": true
+        },
+        "prior_authorization_request": {
+          "resourceType": "Claim",
+          "id": "synthetic-authorization-001",
+          "meta": {
+            "tag": [
+              {
+                "system": "urn:synthetic-fixture",
+                "code": "synthetic"
+              }
+            ]
+          },
+          "patient": {
+            "reference": "Patient/synthetic-patient-001"
+          },
+          "purpose": "preauthorization",
+          "status": "draft",
+          "service_code": "specialist-visit",
+          "required_documents": [
+            "clinical-note",
+            "insurance-summary",
+            "referral"
+          ],
+          "provided_documents": [
+            "clinical-note"
+          ],
+          "workflow_status": "awaiting-human-review",
+          "suggested_resource_ids": [
+            "resource-auth-audio",
+            "resource-auth-checklist"
+          ],
+          "human_review_required": true
+        }
+      },
+      "customer": {
+        "experience": "new",
+        "goal": "authorization",
+        "preferred_format": "audio",
+        "language": "en",
+        "accessibility": "accessible",
+        "interests": [
+          "authorization"
+        ]
+      },
+      "request": {
+        "question": "How do I track prior authorization?",
+        "search_query": "insurance approvl",
+        "limit": 3
+      },
+      "stages": {
+        "onboarding": {
+          "consumed_stage": "input",
+          "patient_reference": "Patient/synthetic-patient-001",
+          "authorization_reference": "Claim/synthetic-authorization-001",
+          "goal": "authorization",
+          "next_step": "Review the authorization orientation as the customer. Prepare insurance-summary for human review.",
+          "missing_documents": [
+            "insurance-summary",
+            "referral"
+          ],
+          "preferred_format": "audio",
+          "human_review_required": true
+        },
+        "support": {
+          "consumed_stage": "onboarding",
+          "onboarding_next_step": "Review the authorization orientation as the customer. Prepare insurance-summary for human review.",
+          "intent": "authorization",
+          "answer": "Prior authorization is reviewed by a payer and a human care team. Gather the requested documents and ask the team to check submission status. This tool cannot approve coverage or submit requests.",
+          "source_id": "kb-authorization-v1",
+          "search_terms": [
+            "authorization"
+          ],
+          "escalated": false,
+          "availability": "offline-knowledge",
+          "answer_language": "en",
+          "human_review_required": true
+        },
+        "search": {
+          "consumed_stage": "support",
+          "support_source_id": "kb-authorization-v1",
+          "query_terms": [
+            "authorization"
+          ],
+          "results": [
+            {
+              "resource_id": "resource-auth-audio",
+              "title": "Audio authorization navigation guide",
+              "score": 12,
+              "matched_terms": [
+                "authorization"
+              ],
+              "kind": "administrative-resource",
+              "human_review_required": true
+            },
+            {
+              "resource_id": "resource-auth-checklist",
+              "title": "Authorization document checklist",
+              "score": 12,
+              "matched_terms": [
+                "authorization"
+              ],
+              "kind": "administrative-resource",
+              "human_review_required": true
+            }
+          ],
+          "no_results": false,
+          "human_review_required": true
+        },
+        "recommend": {
+          "consumed_stage": "search",
+          "search_result_ids": [
+            "resource-auth-audio",
+            "resource-auth-checklist"
+          ],
+          "recommendations": [
+            {
+              "resource_id": "resource-auth-audio",
+              "title": "Audio authorization navigation guide",
+              "score": 20,
+              "reasons": [
+                "Matches the validated support-to-search handoff.",
+                "Matches preferred audio format.",
+                "Matches stated interests: authorization."
+              ],
+              "human_review_required": true
+            },
+            {
+              "resource_id": "resource-auth-checklist",
+              "title": "Authorization document checklist",
+              "score": 15,
+              "reasons": [
+                "Matches the validated support-to-search handoff.",
+                "Matches stated interests: authorization."
+              ],
+              "human_review_required": true
+            }
+          ],
+          "next_step": "Review these administrative resources with a human care navigator.",
+          "clinical_decision": "not-made",
+          "human_review_required": true
+        }
+      },
+      "audit": [
+        {
+          "sequence": 1,
+          "stage": "onboarding",
+          "record_reference": "Claim/synthetic-authorization-001",
+          "field": "workflow_status",
+          "before": "new",
+          "after": "onboarding-ready",
+          "actor": "administrative-assistant",
+          "human_review_required": true
+        },
+        {
+          "sequence": 2,
+          "stage": "support",
+          "record_reference": "Claim/synthetic-authorization-001",
+          "field": "workflow_status",
+          "before": "onboarding-ready",
+          "after": "support-ready",
+          "actor": "administrative-assistant",
+          "human_review_required": true
+        },
+        {
+          "sequence": 3,
+          "stage": "search",
+          "record_reference": "Claim/synthetic-authorization-001",
+          "field": "suggested_resource_ids",
+          "before": [],
+          "after": [
+            "resource-auth-audio",
+            "resource-auth-checklist"
+          ],
+          "actor": "administrative-assistant",
+          "human_review_required": true
+        },
+        {
+          "sequence": 4,
+          "stage": "search",
+          "record_reference": "Claim/synthetic-authorization-001",
+          "field": "workflow_status",
+          "before": "support-ready",
+          "after": "resources-found",
+          "actor": "administrative-assistant",
+          "human_review_required": true
+        },
+        {
+          "sequence": 5,
+          "stage": "recommend",
+          "record_reference": "Claim/synthetic-authorization-001",
+          "field": "workflow_status",
+          "before": "resources-found",
+          "after": "awaiting-human-review",
+          "actor": "administrative-assistant",
+          "human_review_required": true
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t101_combo4_basic-onboard_basic-support_basic-search_basic-recommend__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "157118f21e8e1ee35cbda05a9b15e5f638eeb6875a29bec9f617b138c0c81b7b",
+      "test_implementation.py": "434a78a62d5c9e0227954c8814b72eb21ce6df33636a009be984baa956feef85",
+      "example_input.json": "40339c6412761bdff43b5ca18313c5a76f25903ac4dc2bf61a9a4e47c14662fc",
+      "build_manifest.json": "1e823c789053f7f883cf5d11e03db884e656830ee4748bab7be306bb0ddbc14e"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

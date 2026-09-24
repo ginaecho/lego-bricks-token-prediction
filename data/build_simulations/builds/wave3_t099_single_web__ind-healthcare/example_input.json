@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "records": [
+    {
+      "resourceType": "Patient",
+      "id": "patient-synthetic-001",
+      "synthetic": true,
+      "ageBand": "adult",
+      "diagnosisCodes": ["E11.9"],
+      "labs": [{"code": "2345-7", "value": 105, "unit": "mg/dL"}]
+    },
+    {
+      "resourceType": "DocumentReference",
+      "id": "note-synthetic-001",
+      "synthetic": true,
+      "subject": {"reference": "Patient/patient-synthetic-001"},
+      "text": "SYNTHETIC: Lab results recorded. Human clinician review required."
+    },
+    {
+      "resourceType": "Claim",
+      "id": "auth-synthetic-001",
+      "synthetic": true,
+      "patient": {"reference": "Patient/patient-synthetic-001"},
+      "status": "draft",
+      "use": "preauthorization",
+      "serviceCode": "DEMO-LAB"
+    }
+  ],
+  "research": {
+    "urls": ["https://guidance.synthetic.example/research/documentation.txt"],
+    "fixtures": {
+      "https://guidance.synthetic.example/research/documentation.txt": {
+        "content_type": "text/plain",
+        "source_label": "SYNTHETIC educational fixture",
+        "body": "SYNTHETIC educational material; not medical advice.\nPrior authorization documentation may include a clinical note and lab record.\nA human reviewer must assess all documentation; this fixture grants no authorization."
+      }
+    }
+  }
+}

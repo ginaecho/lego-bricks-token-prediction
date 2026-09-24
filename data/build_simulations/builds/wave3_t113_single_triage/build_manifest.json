@@ -1,0 +1,76 @@
+{
+  "build_id": "wave3_t113_single_triage",
+  "composition_label": "Ticket triage & routing (AI customer support)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation with clearly labeled synthetic fixtures",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "integer 1",
+      "dataset_label": "nonblank string; example is explicitly SYNTHETIC",
+      "config": {
+        "categories": "nonempty ordered array of {id, keywords, base_priority, team, owner}; unique IDs",
+        "fallback_category": "existing category ID",
+        "priority_rules": "ordered array of {keywords, priority}; nonempty keyword arrays"
+      },
+      "tickets": "array of {id, subject, body}; unique nonblank IDs, text may be empty"
+    },
+    "output": {
+      "status": "ok",
+      "schema_version": 1,
+      "dataset_label": "copied input label",
+      "results": "ordered array of {ticket_id, category, priority, route: {team, owner}, reason}",
+      "summary": "{total, by_priority: {low, normal, high, urgent}}"
+    },
+    "validation": "One validate() boundary used by triage() and the CLI. Exact fields and types, unique IDs, recognized priorities, accountable routes, valid fallback, no blank or case-insensitive duplicate keywords. At most 10000 tickets, 1000 categories/rules/keywords per array, 100000 characters per string. Duplicate JSON keys and non-finite constants rejected.",
+    "errors": "CLI prints one JSON object {status: error, error: message} and exits 2 for usage, file, decoding, JSON or validation errors; success exits 0."
+  },
+  "cross_stage_handoffs": [
+    "Single integrated functionality: validated ticket text -> first matching category or fallback -> maximum matching priority -> configured accountable team and owner -> shared JSON result."
+  ],
+  "behavior": [
+    "Casefolded substring keyword matching across subject and body, separated by a newline; not semantic or whole-word matching.",
+    "Category configuration order resolves ambiguity; matching keyword evidence is returned.",
+    "Priority ordering is low < normal < high < urgent. Rules only raise a category baseline; all matched rules are recorded with zero-based indices.",
+    "Fallback categories can have keywords but need not. Every route has a nonblank team and accountable owner.",
+    "Empty batches are valid; empty ticket text uses fallback. Input order and values are preserved, input is not mutated.",
+    "No live model or optional callable is needed; all decisions are deterministic."
+  ],
+  "scope": {
+    "included": [
+      "Configurable categorization, priority rules and accountable routing",
+      "Shared schema and strict validation",
+      "Auditable keyword and priority evidence",
+      "Runnable CLI, synthetic example, standard-library tests"
+    ],
+    "excluded": [
+      "Live LLMs, networking, external integrations or providers",
+      "Model training, probabilistic inference or semantic classification",
+      "Ticket persistence, queue delivery, authentication and SLA scheduling",
+      "Enterprise production hardening, workload-aware assignment and human escalation workflows"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 14,
+    "unittest_exit_code": 0,
+    "cli_example": "passed: one JSON object, status ok, three routed tickets",
+    "cli_exit_code": 0
+  }
+}

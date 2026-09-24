@@ -95,7 +95,7 @@
   "split_group": "000057e8fdddf7db6636b8d158ad8acd1e065371e38f776ce0efd08fce33165d",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "ab6afc6460a7ba6ed3b73e1f79c4ace5b86d3b2535d0be0883938c7e4f7cef5a",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t105_single_basic-support",
   "membership_point_id": "single_basic-support",
@@ -103,8 +103,133 @@
   "trial_category": "B_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "c366fc3e62fcfdc742b02e49ea95039efeb652fe608d5b32a85e48ab164b2679",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b68cdcef-4917-4ac9-8416-82602bef35de",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 113150,
+    "output_tokens": 5775,
+    "cache_read_tokens": 105946,
+    "cache_write_tokens": 7186,
+    "total_tokens": 118925,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37458,
+        "agent_id": "b68cdcef-4917-4ac9-8416-82602bef35de",
+        "model": "gpt-6-astra",
+        "input_tokens": 14868,
+        "output_tokens": 321,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 743,
+        "reasoning_tokens": 154,
+        "duration_ms": 7755,
+        "created_at": "2026-09-24T11:18:43.253Z"
+      },
+      {
+        "id": 37479,
+        "agent_id": "b68cdcef-4917-4ac9-8416-82602bef35de",
+        "model": "gpt-6-astra",
+        "input_tokens": 15216,
+        "output_tokens": 4651,
+        "cache_read_tokens": 14865,
+        "cache_write_tokens": 348,
+        "reasoning_tokens": 130,
+        "duration_ms": 68659,
+        "created_at": "2026-09-24T11:23:47.246Z"
+      },
+      {
+        "id": 37482,
+        "agent_id": "b68cdcef-4917-4ac9-8416-82602bef35de",
+        "model": "gpt-6-astra",
+        "input_tokens": 20171,
+        "output_tokens": 172,
+        "cache_read_tokens": 15213,
+        "cache_write_tokens": 4955,
+        "reasoning_tokens": 13,
+        "duration_ms": 3777,
+        "created_at": "2026-09-24T11:24:13.410Z"
+      },
+      {
+        "id": 37483,
+        "agent_id": "b68cdcef-4917-4ac9-8416-82602bef35de",
+        "model": "gpt-6-astra",
+        "input_tokens": 20562,
+        "output_tokens": 299,
+        "cache_read_tokens": 20168,
+        "cache_write_tokens": 391,
+        "reasoning_tokens": 0,
+        "duration_ms": 4410,
+        "created_at": "2026-09-24T11:24:18.945Z"
+      },
+      {
+        "id": 37484,
+        "agent_id": "b68cdcef-4917-4ac9-8416-82602bef35de",
+        "model": "gpt-6-astra",
+        "input_tokens": 21022,
+        "output_tokens": 236,
+        "cache_read_tokens": 20559,
+        "cache_write_tokens": 460,
+        "reasoning_tokens": 0,
+        "duration_ms": 4532,
+        "created_at": "2026-09-24T11:24:23.976Z"
+      },
+      {
+        "id": 37485,
+        "agent_id": "b68cdcef-4917-4ac9-8416-82602bef35de",
+        "model": "gpt-6-astra",
+        "input_tokens": 21311,
+        "output_tokens": 96,
+        "cache_read_tokens": 21019,
+        "cache_write_tokens": 289,
+        "reasoning_tokens": 0,
+        "duration_ms": 2549,
+        "created_at": "2026-09-24T11:24:32.578Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.36950000000000005,
+      "observed_cache_profile_estimate_usd": 0.1311215,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.434,
+      "observed_cache_profile_estimate_usd": 4.434,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -135,5 +260,41 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............\n----------------------------------------------------------------------\nRan 14 tests in 1.276s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "resolution": "answered",
+      "answer": "From the supplied support knowledge base:\n\n[synthetic-returns] For this synthetic demonstration store, return an unused purchase within 30 days. Use the returns form in your account and include your order number. Refunds are processed within 5 business days after inspection.",
+      "citations": [
+        {
+          "id": "synthetic-returns",
+          "title": "SYNTHETIC FIXTURE: Returns policy",
+          "excerpt": "For this synthetic demonstration store, return an unused purchase within 30 days. Use the returns form in your account and include your order number. Refunds are processed within 5 business days after inspection."
+        }
+      ],
+      "handoff": {
+        "needed": false,
+        "reason": null,
+        "team_online": false,
+        "delivery": "not_sent",
+        "summary": null
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t105_single_basic-support",
+    "artifact_sha256": {
+      "implementation.py": "22c8968aceecc0489e8feb99dd8c25cc25ef5544649c2bc318fd7b80098fa170",
+      "test_implementation.py": "7eafab866bca5dea4f8b5d32d5826b2bdaebc7303e546f7139ffb3cf4b7fb72f",
+      "example_input.json": "df1d257d2fbc685dbef3aefedd1252a9c289074be1a918803bb0a2b888d0f1db",
+      "build_manifest.json": "4201f10d0c995e184cf144b92017a308070cf7f61b755f174cb3556b2f42b462"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

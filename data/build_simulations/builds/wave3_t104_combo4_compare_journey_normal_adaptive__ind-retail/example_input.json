@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "catalog": {
+    "currency": "USD",
+    "products": [
+      {
+        "sku": "FICTION-PACK-101",
+        "name": "Synthetic Meadow Pack",
+        "price_cents": 4900,
+        "stock": 7,
+        "attributes": {
+          "weight": {"value": 0.65, "unit": "kg"},
+          "capacity": {"value": 20, "unit": "l"},
+          "waterproof": true
+        },
+        "passages": [
+          {"source_id": "fiction-101-spec", "kind": "specification", "text": "Synthetic Meadow Pack has a waterproof shell and a padded laptop pocket."},
+          {"source_id": "fiction-101-care", "kind": "care", "text": "To clean the waterproof shell, wipe with a damp cloth and air dry."}
+        ]
+      },
+      {
+        "sku": "FICTION-PACK-202",
+        "name": "Synthetic Orchard Pack",
+        "price_cents": 3900,
+        "stock": 4,
+        "attributes": {
+          "weight": {"value": 800, "unit": "g"},
+          "capacity": {"value": 18000, "unit": "ml"},
+          "waterproof": false
+        },
+        "passages": [
+          {"source_id": "fiction-202-spec", "kind": "specification", "text": "Synthetic Orchard Pack has a padded pocket and a mesh bottle holder."}
+        ]
+      },
+      {
+        "sku": "FICTION-PACK-303",
+        "name": "Synthetic Summit Pack",
+        "price_cents": 6900,
+        "stock": 0,
+        "attributes": {
+          "weight": {"value": 0.5, "unit": "kg"},
+          "capacity": {"value": 25, "unit": "l"},
+          "waterproof": true
+        },
+        "passages": [
+          {"source_id": "fiction-303-spec", "kind": "specification", "text": "Synthetic Summit Pack includes waterproof fabric and adjustable straps."}
+        ]
+      }
+    ]
+  },
+  "customer": {
+    "customer_id": "synthetic-shopper-01",
+    "consent": {"personalization": true},
+    "experience": "novice",
+    "preferences": {
+      "budget_cents": 6000,
+      "minimum_capacity_ml": 15000,
+      "waterproof_required": true,
+      "priority": "price"
+    }
+  },
+  "basket": {
+    "basket_id": "synthetic-basket-01",
+    "lines": [{"sku": "FICTION-PACK-202", "quantity": 1}]
+  },
+  "clickstream": [
+    {"sequence": 1, "event": "view", "sku": "FICTION-PACK-101"},
+    {"sequence": 2, "event": "compare", "sku": "FICTION-PACK-202"}
+  ],
+  "research_query": "waterproof shell care"
+}

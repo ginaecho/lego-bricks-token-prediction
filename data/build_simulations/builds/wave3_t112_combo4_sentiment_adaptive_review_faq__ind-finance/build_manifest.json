@@ -1,0 +1,62 @@
+{
+  "build_id": "wave3_t112_combo4_sentiment_adaptive_review_faq__ind-finance",
+  "composition_label": "sentiment_adaptive_review_faq",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated standard-library reference implementation",
+    "runtime": "Python 3",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "envelope": ["schema_version", "synthetic", "status", "stage", "data", "results"],
+    "input": "status=ok, stage=input, results={}; data holds a labeled synthetic fixture, ISO as_of date, customer/KYC profile, ledger, linked loan application, issues, documents, knowledge_base and question.",
+    "output": "Same envelope, stage=faq, canonical masked data, and all four validated cumulative results.",
+    "errors": "A JSON object with schema_version, status=error and an error code/message; exit 2. No raw input values or file paths in errors.",
+    "ledger_formats": {
+      "json": "Array of transactions with id, amount, currency, account, counterparty_iban, card_number and screening_flags.",
+      "csv": "Exact same ordered columns; screening_flags is a pipe-separated cell. Empty ledgers may contain only the header.",
+      "iso20022": "Demonstrative JSON subset: MsgId and PmtInf array; each payment has DbtrAcct.Id and CdtTrfTxInf array. Each transfer has PmtId.EndToEndId, Amt.InstdAmt.{Value,Ccy}, CdtrAcct.IBAN, CardNumber and ScreeningFlags. Not an ISO 20022 schema validator."
+    },
+    "validation": "Strict field sets, bounded collections/text, linked loan ownership, unique entity IDs, enum/boolean checks, date checks, decimal amounts and synthetic account/IBAN rules. Every transition validates predecessor stage order, canonical masked data and recomputes prior deterministic results to reject inconsistent handoffs.",
+    "document_evidence": "Final, nonexpired, non-future evidence must match the customer/loan and contain type-specific fields. Identity names and loan amount/currency/purpose must match. All candidate document IDs and rejection reasons are retained.",
+    "amounts": "Finite positive amounts up to 1,000,000,000 with at most two fractional digits; normalized decimal strings; USD/EUR/GBP only."
+  },
+  "cross_stage_handoffs": [
+    {"from": "sentiment", "to": "adaptive", "consumes": ["ranked issue IDs", "critical issues", "aggregated screening flags"], "effects": ["ordered attention", "incident requirement", "screening gates and additional evidence"]},
+    {"from": "adaptive", "to": "review", "consumes": ["evidence requirements and reasons", "screening flags", "urgent issue IDs"], "effects": ["traceable requirement checks", "gaps and holds"]},
+    {"from": "review", "to": "faq", "consumes": ["gap IDs", "hold reasons", "review status", "urgent issue IDs"], "effects": ["retrieval applicability", "explainable context-weighted ranking", "grounded case context"]}
+  ],
+  "behavior": {
+    "determinism": "Fixed lexicon, explicit weights, stable ID tie-breaks and explicit as_of date; no runtime randomness. The test suite creates seeded randomized synthetic transaction histories.",
+    "sentiment": "Token-weight sum clipped to [-5,5]; full token contributions. Fraud/unauthorized terms elevate severity to critical. Priority is severity base plus a bounded negative-sentiment boost; every score carries its formula and components.",
+    "adaptive": "Experience and pace select optional orientation; presentation follows preferences. Mandatory profile/identity/screening/ledger/loan prerequisites remain unchanged. Each module explains its status and blockers.",
+    "review": "Evidence completeness does not approve loans, certify compliance or clear screening holds; even a manual-review document cannot automatically clear input flags.",
+    "faq": "Ranks applicable supplied entries using question overlap and review-context bonus, with every component explained. Context alone cannot retrieve an unrelated answer. Returns up to two exact excerpts with source IDs; explicitly abstains without applicable question overlap.",
+    "industry_constraints": "Demonstrative supplied KYC/AML flag propagation, human-review holds, synthetic-only account/ZZ IBAN validation, and PCI DSS-inspired masking of 13–19 digit card-like strings, including free text. Masking alone is not PCI DSS compliance.",
+    "privacy": "Only last four card digits survive normalization; output contains synthetic customer/evidence data and is not a general PII anonymizer."
+  },
+  "scope": {
+    "included": ["One integrated CLI pipeline", "Shared input/output envelope and validation", "Three ledger encodings", "Synthetic KYC/AML gates", "Traceable scores/evidence/citations", "Deterministic randomized-history fixtures in tests"],
+    "excluded": ["Live LLMs or injected model steps", "Networks/providers", "Real KYC/AML or sanctions lookup", "Credit underwriting", "Financial advice", "Compliance certification", "Full ISO 20022/XML support", "Semantic entailment or document authenticity verification", "Production persistence, authorization and encryption"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 43,
+    "tests_failed": 0,
+    "malformed_schema_mutations_exercised": 1152,
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status=ok and stage=faq; masked cards and all four cumulative results.",
+    "error_behavior": "Missing-file subprocess and mocked malformed JSON, schema, duplicate-key, nonfinite-number, excessive-size, oversized-integer and usage cases return JSON status=error and exit 2.",
+    "validation_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "example_command": "python -B implementation.py example_input.json"
+  }
+}

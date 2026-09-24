@@ -133,7 +133,7 @@
   "split_group": "efecce570ff7fb79f47f903904e29f8dc06652db8b7b28318c55a0625be54b89",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "cac71fea84d7f97b54029b218a5e20aae01df80680c71ca09d5d85d62aba7dcd",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t111_combo4_compare_triage_basic-onboard_interests__ind-manufacturing",
   "membership_point_id": "combo4_compare_triage_basic-onboard_interests__ind-manufacturing",
@@ -141,8 +141,145 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "37e5469b4b7f3d81f853cfd5c668f6b8303fd22541f11ae3143f96b8eae2f008",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "10ef0fea-87da-46fa-880f-635d48f3842c",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 169943,
+    "output_tokens": 12285,
+    "cache_read_tokens": 154052,
+    "cache_write_tokens": 15870,
+    "total_tokens": 182228,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37513,
+        "agent_id": "10ef0fea-87da-46fa-880f-635d48f3842c",
+        "model": "gpt-6-astra",
+        "input_tokens": 15123,
+        "output_tokens": 320,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 998,
+        "reasoning_tokens": 142,
+        "duration_ms": 7763,
+        "created_at": "2026-09-24T11:27:11.394Z"
+      },
+      {
+        "id": 37546,
+        "agent_id": "10ef0fea-87da-46fa-880f-635d48f3842c",
+        "model": "gpt-6-astra",
+        "input_tokens": 15470,
+        "output_tokens": 7615,
+        "cache_read_tokens": 15120,
+        "cache_write_tokens": 347,
+        "reasoning_tokens": 516,
+        "duration_ms": 105450,
+        "created_at": "2026-09-24T11:31:38.371Z"
+      },
+      {
+        "id": 37565,
+        "agent_id": "10ef0fea-87da-46fa-880f-635d48f3842c",
+        "model": "gpt-6-astra",
+        "input_tokens": 23269,
+        "output_tokens": 2045,
+        "cache_read_tokens": 15467,
+        "cache_write_tokens": 7799,
+        "reasoning_tokens": 267,
+        "duration_ms": 33971,
+        "created_at": "2026-09-24T11:33:37.808Z"
+      },
+      {
+        "id": 37594,
+        "agent_id": "10ef0fea-87da-46fa-880f-635d48f3842c",
+        "model": "gpt-6-astra",
+        "input_tokens": 27496,
+        "output_tokens": 1426,
+        "cache_read_tokens": 23266,
+        "cache_write_tokens": 4227,
+        "reasoning_tokens": 257,
+        "duration_ms": 22590,
+        "created_at": "2026-09-24T11:36:45.372Z"
+      },
+      {
+        "id": 37603,
+        "agent_id": "10ef0fea-87da-46fa-880f-635d48f3842c",
+        "model": "gpt-6-astra",
+        "input_tokens": 29106,
+        "output_tokens": 317,
+        "cache_read_tokens": 27493,
+        "cache_write_tokens": 1610,
+        "reasoning_tokens": 0,
+        "duration_ms": 5810,
+        "created_at": "2026-09-24T11:37:08.664Z"
+      },
+      {
+        "id": 37606,
+        "agent_id": "10ef0fea-87da-46fa-880f-635d48f3842c",
+        "model": "gpt-6-astra",
+        "input_tokens": 29484,
+        "output_tokens": 411,
+        "cache_read_tokens": 29103,
+        "cache_write_tokens": 378,
+        "reasoning_tokens": 0,
+        "duration_ms": 7550,
+        "created_at": "2026-09-24T11:37:23.121Z"
+      },
+      {
+        "id": 37609,
+        "agent_id": "10ef0fea-87da-46fa-880f-635d48f3842c",
+        "model": "gpt-6-astra",
+        "input_tokens": 29995,
+        "output_tokens": 151,
+        "cache_read_tokens": 29481,
+        "cache_write_tokens": 511,
+        "reasoning_tokens": 52,
+        "duration_ms": 5077,
+        "created_at": "2026-09-24T11:37:41.713Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6091325000000001,
+      "observed_cache_profile_estimate_usd": 0.2625155,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.309590000000001,
+      "observed_cache_profile_estimate_usd": 7.309590000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -173,5 +310,362 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..........................................\n----------------------------------------------------------------------\nRan 42 tests in 0.646s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "context": {
+        "customer": {
+          "completed_steps": [],
+          "experience": "new",
+          "id": "SYN-CUSTOMER-11",
+          "interests": [
+            "reliability",
+            "efficient"
+          ],
+          "name": "Fictitious Forge Works"
+        },
+        "fixture_metadata": {
+          "label": "SYNTHETIC: fictitious ERP/MES work order, randomized sensor telemetry and invented maintenance history",
+          "random_seed": 111
+        },
+        "maintenance_logs": [
+          {
+            "asset_id": "SYN-ASSET-111",
+            "note": "INVENTED maintenance log: inspected spindle bearing and renewed lubricant; no real asset or service event.",
+            "timestamp": "2026-09-23T09:00:00Z"
+          }
+        ],
+        "normalized_products": [
+          {
+            "attributes": {
+              "lead_hours": 48.0,
+              "price_usd": 400.0,
+              "vibration_reduction_pct": 60.0
+            },
+            "compatible_assets": [
+              "SYN-ASSET-111"
+            ],
+            "id": "KIT-A",
+            "name": "Synthetic stability kit",
+            "tags": [
+              "reliability",
+              "efficient"
+            ]
+          },
+          {
+            "attributes": {
+              "lead_hours": 24.0,
+              "price_usd": 250.0,
+              "vibration_reduction_pct": 35.0
+            },
+            "compatible_assets": [
+              "SYN-ASSET-111"
+            ],
+            "id": "KIT-B",
+            "name": "Synthetic rapid-service kit",
+            "tags": [
+              "fast"
+            ]
+          }
+        ],
+        "preferences": {
+          "budget_usd": 1000,
+          "excluded_product_ids": [],
+          "excluded_tags": [],
+          "recommendation_limit": 3,
+          "weights": {
+            "lead_hours": 0.2,
+            "price_usd": 0.4,
+            "vibration_reduction_pct": 0.4
+          }
+        },
+        "products": [
+          {
+            "attributes": {
+              "cost_usd": {
+                "unit": "USD",
+                "value": 400
+              },
+              "lead_days": {
+                "unit": "day",
+                "value": 2
+              },
+              "reduction_fraction": {
+                "unit": "fraction",
+                "value": 0.6
+              }
+            },
+            "compatible_assets": [
+              "SYN-ASSET-111"
+            ],
+            "id": "KIT-A",
+            "name": "Synthetic stability kit",
+            "tags": [
+              "reliability",
+              "efficient"
+            ]
+          },
+          {
+            "attributes": {
+              "lead_hours": {
+                "unit": "h",
+                "value": 24
+              },
+              "price_usd": {
+                "unit": "USD",
+                "value": 250
+              },
+              "vibration_reduction_pct": {
+                "unit": "%",
+                "value": 35
+              }
+            },
+            "compatible_assets": [
+              "SYN-ASSET-111"
+            ],
+            "id": "KIT-B",
+            "name": "Synthetic rapid-service kit",
+            "tags": [
+              "fast"
+            ]
+          }
+        ],
+        "quality_inspections": [
+          {
+            "asset_id": "SYN-ASSET-111",
+            "characteristic": "shaft diameter",
+            "decision": "accept",
+            "id": "SYN-QI-111",
+            "inspector": "SYN-INSPECTOR-7",
+            "measured": 20.02,
+            "nominal": 20,
+            "reason": "Synthetic calibrated gauge reading falls within the recorded diameter tolerance.",
+            "timestamp": "2026-09-24T08:06:00Z",
+            "tolerance": 0.05,
+            "unit": "mm",
+            "work_order_id": "SYN-WO-111"
+          }
+        ],
+        "readings": [
+          {
+            "asset_id": "SYN-ASSET-111",
+            "temperature": 61.309,
+            "timestamp": "2026-09-24T08:00:00Z",
+            "vibration": 1.828
+          },
+          {
+            "asset_id": "SYN-ASSET-111",
+            "temperature": 61.77,
+            "timestamp": "2026-09-24T08:01:00Z",
+            "vibration": 1.996
+          },
+          {
+            "asset_id": "SYN-ASSET-111",
+            "temperature": 59.59,
+            "timestamp": "2026-09-24T08:02:00Z",
+            "vibration": 2.07
+          },
+          {
+            "asset_id": "SYN-ASSET-111",
+            "temperature": 58.679,
+            "timestamp": "2026-09-24T08:03:00Z",
+            "vibration": 1.816
+          },
+          {
+            "asset_id": "SYN-ASSET-111",
+            "temperature": 59.687,
+            "timestamp": "2026-09-24T08:04:00Z",
+            "vibration": 1.838
+          },
+          {
+            "asset_id": "SYN-ASSET-111",
+            "temperature": 60.682,
+            "timestamp": "2026-09-24T08:05:00Z",
+            "vibration": 1.95
+          }
+        ],
+        "routing": {
+          "procurement": {
+            "human": false,
+            "owner": "Synthetic purchasing owner",
+            "priority": "low"
+          },
+          "quality": {
+            "human": true,
+            "owner": "Synthetic human quality reviewer",
+            "priority": "high"
+          },
+          "safety": {
+            "human": true,
+            "owner": "Synthetic human safety desk",
+            "priority": "critical"
+          },
+          "telemetry": {
+            "human": true,
+            "owner": "Synthetic maintenance coordinator",
+            "priority": "normal"
+          }
+        },
+        "schema_version": 1,
+        "sensor_specs": {
+          "temperature": {
+            "nominal": 60,
+            "safety_upper": 85,
+            "tolerance": 5,
+            "unit": "C"
+          },
+          "vibration": {
+            "nominal": 2,
+            "safety_upper": 8,
+            "tolerance": 1,
+            "unit": "mm/s"
+          }
+        },
+        "synthetic": true,
+        "telemetry_csv": "timestamp,asset_id,temperature,temperature_unit,vibration,vibration_unit\n2026-09-24T08:00:00Z,SYN-ASSET-111,61.309,C,1.828,mm/s\n2026-09-24T08:01:00Z,SYN-ASSET-111,61.77,C,1.996,mm/s\n2026-09-24T08:02:00Z,SYN-ASSET-111,59.59,C,2.07,mm/s\n2026-09-24T08:03:00Z,SYN-ASSET-111,58.679,C,1.816,mm/s\n2026-09-24T08:04:00Z,SYN-ASSET-111,59.687,C,1.838,mm/s\n2026-09-24T08:05:00Z,SYN-ASSET-111,60.682,C,1.95,mm/s\n",
+        "work_order": {
+          "asset_id": "SYN-ASSET-111",
+          "id": "SYN-WO-111",
+          "operation": "Precision shaft machining",
+          "quantity": 24
+        }
+      },
+      "schema_version": 1,
+      "stage": "interests",
+      "stages": {
+        "compare": {
+          "columns": {
+            "lead_hours": "h",
+            "price_usd": "USD",
+            "vibration_reduction_pct": "%"
+          },
+          "ranking": [
+            {
+              "product_id": "KIT-B",
+              "score": 0.6
+            },
+            {
+              "product_id": "KIT-A",
+              "score": 0.4
+            }
+          ],
+          "selected_product_id": "KIT-B",
+          "selection_status": "selected",
+          "side_by_side": [
+            {
+              "eligible": true,
+              "lead_hours": 48.0,
+              "price_usd": 400.0,
+              "product_id": "KIT-A",
+              "vibration_reduction_pct": 60.0
+            },
+            {
+              "eligible": true,
+              "lead_hours": 24.0,
+              "price_usd": 250.0,
+              "product_id": "KIT-B",
+              "vibration_reduction_pct": 35.0
+            }
+          ],
+          "work_order_id": "SYN-WO-111"
+        },
+        "interests": {
+          "next_step": "confirm_profile",
+          "recommendations": [
+            {
+              "explanation": {
+                "comparison_score": 0.4,
+                "compatible_asset": "SYN-ASSET-111",
+                "matched_interests": [
+                  "efficient",
+                  "reliability"
+                ],
+                "onboarding_next_step": "confirm_profile",
+                "price_usd": 400.0
+              },
+              "product_id": "KIT-A",
+              "score": 0.58
+            },
+            {
+              "explanation": {
+                "comparison_score": 0.6,
+                "compatible_asset": "SYN-ASSET-111",
+                "matched_interests": [],
+                "onboarding_next_step": "confirm_profile",
+                "price_usd": 250.0
+              },
+              "product_id": "KIT-B",
+              "score": 0.42
+            }
+          ],
+          "source_stage": "onboard",
+          "status": "ranked"
+        },
+        "onboard": {
+          "accountable_owner": "Synthetic purchasing owner",
+          "blocked": false,
+          "customer_id": "SYN-CUSTOMER-11",
+          "discovery_allowed": true,
+          "instruction": "Fictitious Forge Works: Confirm your customer profile and preferences.",
+          "interests": [
+            "reliability",
+            "efficient"
+          ],
+          "next_step": "confirm_profile",
+          "selected_product_id": "KIT-B",
+          "source_stage": "triage",
+          "ticket_id": "T-SYN-WO-111",
+          "work_authorized": false
+        },
+        "triage": {
+          "accountable_owner": "Synthetic purchasing owner",
+          "asset_id": "SYN-ASSET-111",
+          "category": "procurement",
+          "detected_categories": [
+            "procurement"
+          ],
+          "evidence": [],
+          "priority": "low",
+          "quality_decision_trace": [
+            {
+              "asset_id": "SYN-ASSET-111",
+              "characteristic": "shaft diameter",
+              "decision": "accept",
+              "id": "SYN-QI-111",
+              "inspector": "SYN-INSPECTOR-7",
+              "measured": 20.02,
+              "nominal": 20,
+              "reason": "Synthetic calibrated gauge reading falls within the recorded diameter tolerance.",
+              "timestamp": "2026-09-24T08:06:00Z",
+              "tolerance": 0.05,
+              "unit": "mm",
+              "work_order_id": "SYN-WO-111"
+            }
+          ],
+          "requires_human": false,
+          "safety_hold": false,
+          "selected_product_id": "KIT-B",
+          "source_stage": "compare",
+          "ticket_id": "T-SYN-WO-111",
+          "work_order_id": "SYN-WO-111"
+        }
+      },
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t111_combo4_compare_triage_basic-onboard_interests__ind-manufacturing",
+    "artifact_sha256": {
+      "implementation.py": "3bd8c2867b93ab5bfeccabca204738daad9acc29ed8dac5d660a6245b97717e8",
+      "test_implementation.py": "c8086a48f3c05a82177f09786b51afe7fb0c56514b5098f2a4a5a7fa177659fc",
+      "example_input.json": "61037b8732ae9eb1633e03ef78e618344b1878424a0f850e06151fbb8817d356",
+      "build_manifest.json": "21f3ddc881540562bee4f84f64ce456e63dc55c17cd50798200a073b7d071e19"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

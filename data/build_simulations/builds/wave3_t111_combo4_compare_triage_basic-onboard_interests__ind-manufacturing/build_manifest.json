@@ -1,0 +1,99 @@
+{
+  "build_id": "wave3_t111_combo4_compare_triage_basic-onboard_interests__ind-manufacturing",
+  "composition_label": "compare -> triage -> basic:onboard -> interests | Manufacturing",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "synthetic flag, ERP/MES work_order, customer, preferences, normalized-unit products, sensor_specs, embedded time-series telemetry_csv, quality_inspections, invented maintenance_logs, routing",
+    "output": "schema_version, status, stage, normalized context, cumulative stages",
+    "validation": "validate_input normalizes and validates shared entities; validate_output revalidates context and recomputes cumulative deterministic stage contracts at every boundary; errors produce one JSON object and exit 2",
+    "units": {
+      "temperature": "C",
+      "vibration": "mm/s",
+      "inspection": "mm",
+      "price": "USD",
+      "lead_time": "h (day alias converted)",
+      "reduction": "% (fraction alias converted)"
+    }
+  },
+  "cross_stage_handoffs": {
+    "compare -> triage": "Validated selected product and work-order identity create an accountable ticket with inspection evidence and telemetry alerts",
+    "triage -> basic:onboard": "Ticket identity, owner, selection and safety/quality hold determine the personalized next step",
+    "basic:onboard -> interests": "Validated discovery permission, customer interests and next step govern recommendation ranking and grounded explanations"
+  },
+  "behavior": {
+    "comparison": "Attribute normalization, side-by-side rows, weighted min-max utilities and stable product-ID tie breaks. Budget, asset compatibility and explicit ID/tag exclusions enforced before ranking. Equal metrics give all candidates full utility. Weights normalized by their sum.",
+    "triage": "Configurable category priority and accountable owner; highest configured priority wins with quality/telemetry/procurement tie order; safety always overrides and requires critical human routing. All detections and original quality records retained.",
+    "onboarding": "General-purpose profile, work-order and selection review progression personalized by name, experience and completed steps; safety/quality review blockers; no automated work authorization.",
+    "interests": "70% comparison score + 30% proportion of matching interests; rechecks exclusions, budget and asset; no recommendations during safety/quality hold; explanations contain only supplied attributes, matched interests and propagated next step.",
+    "industry_rules": "Demonstrative ISO 9001-style quality-decision traceability only; required inspector/reason/timestamp/work-order/asset links, accepted measurements within tolerance, validated units and finite physical ranges, monotonic timezone-aware sensor readings. Not certification or operational safety guidance.",
+    "fixtures": "Explicitly synthetic; telemetry drawn from bounded physically plausible ranges with random.Random(111); all IDs and maintenance logs invented."
+  },
+  "scope": {
+    "included": [
+      "one integrated deterministic pipeline",
+      "shared input/output validation",
+      "configurable routing and preferences",
+      "quality trace and human safety escalation",
+      "synthetic ERP/MES JSON and embedded sensor CSV",
+      "CLI and unittest coverage"
+    ],
+    "excluded": [
+      "live model providers",
+      "networks",
+      "external dependencies",
+      "production ERP/MES integration",
+      "certification",
+      "real safety control",
+      "persistence service",
+      "automated manufacturing authorization"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 42,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "cli": {
+      "exit_code": 0,
+      "stdout": "one validated JSON object with status ok and final stage interests",
+      "stderr_empty": true
+    },
+    "deliverable_check": "Exactly the four requested files; no cache or scratch files",
+    "coverage": [
+      "all four stages and cross-stage propagation",
+      "deterministic normalization, weighted ranking and stable ties",
+      "configurable accountable routing and tolerance alerts",
+      "human safety escalation at inclusive safety threshold",
+      "quality-decision traceability and review holds",
+      "personalized onboarding and completed-step handling",
+      "grounded interest ranking and exclusions",
+      "empty candidates, interests, incompatibility and limits",
+      "invalid units, tolerance, traceability, CSV and nonfinite values",
+      "tamper rejection at each handoff and wrong-stage rejection",
+      "CLI success, missing files, invalid schema, malformed JSON and usage errors",
+      "seeded fixture reproducibility and input immutability"
+    ]
+  }
+}

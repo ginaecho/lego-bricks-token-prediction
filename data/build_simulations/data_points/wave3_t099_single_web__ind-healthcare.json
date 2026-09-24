@@ -97,7 +97,7 @@
   "split_group": "7765637bb30e14f78d0a1fb14e23e183c163270ef19ba2484e945cee6276892f",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "44e4223f56a4a607ff79448f5eedda4b751af50b03cc508496a1a5292751debd",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t099_single_web__ind-healthcare",
   "membership_point_id": "single_web__ind-healthcare",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "70f38f5b2262a861124560d197aef1cb43b628f2bf76807f5d8cc490f45fdc97",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "06ee758c-d40c-47c2-847c-aca06d36dd12",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 128738,
+    "output_tokens": 8153,
+    "cache_read_tokens": 117479,
+    "cache_write_tokens": 11241,
+    "total_tokens": 136891,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37351,
+        "agent_id": "06ee758c-d40c-47c2-847c-aca06d36dd12",
+        "model": "gpt-6-astra",
+        "input_tokens": 14970,
+        "output_tokens": 686,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 845,
+        "reasoning_tokens": 516,
+        "duration_ms": 19295,
+        "created_at": "2026-09-24T10:59:52.942Z"
+      },
+      {
+        "id": 37453,
+        "agent_id": "06ee758c-d40c-47c2-847c-aca06d36dd12",
+        "model": "gpt-6-astra",
+        "input_tokens": 15682,
+        "output_tokens": 6779,
+        "cache_read_tokens": 14967,
+        "cache_write_tokens": 712,
+        "reasoning_tokens": 389,
+        "duration_ms": 95260,
+        "created_at": "2026-09-24T11:17:56.029Z"
+      },
+      {
+        "id": 37456,
+        "agent_id": "06ee758c-d40c-47c2-847c-aca06d36dd12",
+        "model": "gpt-6-astra",
+        "input_tokens": 22777,
+        "output_tokens": 137,
+        "cache_read_tokens": 15679,
+        "cache_write_tokens": 7095,
+        "reasoning_tokens": 0,
+        "duration_ms": 2817,
+        "created_at": "2026-09-24T11:18:09.744Z"
+      },
+      {
+        "id": 37460,
+        "agent_id": "06ee758c-d40c-47c2-847c-aca06d36dd12",
+        "model": "gpt-6-astra",
+        "input_tokens": 24793,
+        "output_tokens": 266,
+        "cache_read_tokens": 22774,
+        "cache_write_tokens": 2016,
+        "reasoning_tokens": 74,
+        "duration_ms": 5983,
+        "created_at": "2026-09-24T11:19:17.946Z"
+      },
+      {
+        "id": 37465,
+        "agent_id": "06ee758c-d40c-47c2-847c-aca06d36dd12",
+        "model": "gpt-6-astra",
+        "input_tokens": 25150,
+        "output_tokens": 181,
+        "cache_read_tokens": 24790,
+        "cache_write_tokens": 357,
+        "reasoning_tokens": 0,
+        "duration_ms": 3656,
+        "created_at": "2026-09-24T11:20:14.512Z"
+      },
+      {
+        "id": 37467,
+        "agent_id": "06ee758c-d40c-47c2-847c-aca06d36dd12",
+        "model": "gpt-6-astra",
+        "input_tokens": 25366,
+        "output_tokens": 104,
+        "cache_read_tokens": 25147,
+        "cache_write_tokens": 216,
+        "reasoning_tokens": 0,
+        "duration_ms": 4238,
+        "created_at": "2026-09-24T11:20:48.552Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.44414,
+      "observed_cache_profile_estimate_usd": 0.17981224999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.32968,
+      "observed_cache_profile_estimate_usd": 5.32968,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,284 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.713s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "audit": [
+        {
+          "action": "add-human-review-flags",
+          "actor": "deterministic-reference",
+          "after": {
+            "ageBand": "adult",
+            "diagnosisCodes": [
+              "E11.9"
+            ],
+            "extension": [
+              {
+                "url": "urn:demo:human-review-required",
+                "valueBoolean": true
+              },
+              {
+                "url": "urn:demo:clinical-decision",
+                "valueCode": "not-performed"
+              }
+            ],
+            "id": "patient-synthetic-001",
+            "labs": [
+              {
+                "code": "2345-7",
+                "unit": "mg/dL",
+                "value": 105
+              }
+            ],
+            "resourceType": "Patient",
+            "synthetic": true
+          },
+          "after_sha256": "e72bd962856a30b5166bbf5d1f4433e1aab73cf3ab14976e5dfe696644eb2149",
+          "before": {
+            "ageBand": "adult",
+            "diagnosisCodes": [
+              "E11.9"
+            ],
+            "id": "patient-synthetic-001",
+            "labs": [
+              {
+                "code": "2345-7",
+                "unit": "mg/dL",
+                "value": 105
+              }
+            ],
+            "resourceType": "Patient",
+            "synthetic": true
+          },
+          "before_sha256": "029bff746c18c0e64211e2a69ea31bb1276c8284b914b57bedc267d2f471c7bb",
+          "changed_fields": [
+            "extension"
+          ],
+          "resource_id": "patient-synthetic-001",
+          "sequence": 1
+        },
+        {
+          "action": "add-human-review-flags",
+          "actor": "deterministic-reference",
+          "after": {
+            "extension": [
+              {
+                "url": "urn:demo:human-review-required",
+                "valueBoolean": true
+              },
+              {
+                "url": "urn:demo:clinical-decision",
+                "valueCode": "not-performed"
+              }
+            ],
+            "id": "note-synthetic-001",
+            "resourceType": "DocumentReference",
+            "subject": {
+              "reference": "Patient/patient-synthetic-001"
+            },
+            "synthetic": true,
+            "text": "SYNTHETIC: Lab results recorded. Human clinician review required."
+          },
+          "after_sha256": "4c9bdd7054e7c6eedbe2def7526fea15fd7f4fd9985802dc659bd89a1819a2d1",
+          "before": {
+            "id": "note-synthetic-001",
+            "resourceType": "DocumentReference",
+            "subject": {
+              "reference": "Patient/patient-synthetic-001"
+            },
+            "synthetic": true,
+            "text": "SYNTHETIC: Lab results recorded. Human clinician review required."
+          },
+          "before_sha256": "94c9f7016a585fa9d4b6a67f18b7185d07363ee2aebafee0cbdaa9d755344459",
+          "changed_fields": [
+            "extension"
+          ],
+          "resource_id": "note-synthetic-001",
+          "sequence": 2
+        },
+        {
+          "action": "add-human-review-flags",
+          "actor": "deterministic-reference",
+          "after": {
+            "extension": [
+              {
+                "url": "urn:demo:human-review-required",
+                "valueBoolean": true
+              },
+              {
+                "url": "urn:demo:clinical-decision",
+                "valueCode": "not-performed"
+              }
+            ],
+            "id": "auth-synthetic-001",
+            "patient": {
+              "reference": "Patient/patient-synthetic-001"
+            },
+            "resourceType": "Claim",
+            "serviceCode": "DEMO-LAB",
+            "status": "draft",
+            "synthetic": true,
+            "use": "preauthorization"
+          },
+          "after_sha256": "dad448d12bbcc07e3a8a9b566d2aec2863d7418cbb9a3f473a7ada5146e6ce02",
+          "before": {
+            "id": "auth-synthetic-001",
+            "patient": {
+              "reference": "Patient/patient-synthetic-001"
+            },
+            "resourceType": "Claim",
+            "serviceCode": "DEMO-LAB",
+            "status": "draft",
+            "synthetic": true,
+            "use": "preauthorization"
+          },
+          "before_sha256": "0e43241e4117b477b1b2520d44de227dfe8eb56cdebdc891dc631f010bee71ba",
+          "changed_fields": [
+            "extension"
+          ],
+          "resource_id": "auth-synthetic-001",
+          "sequence": 3
+        }
+      ],
+      "clinical_decision": "not-performed",
+      "findings": [
+        {
+          "body_sha256": "7bf3f959440e570443a852be9d0633d37897f952d080565677581f4ab27ad00f",
+          "clinical_decision": "not-performed",
+          "end_character": 51,
+          "human_review_required": true,
+          "id": "finding-1",
+          "kind": "uninterpreted-source-excerpt",
+          "quote": "SYNTHETIC educational material; not medical advice.",
+          "source_id": "source-1",
+          "start_character": 0,
+          "url": "https://guidance.synthetic.example/research/documentation.txt"
+        },
+        {
+          "body_sha256": "7bf3f959440e570443a852be9d0633d37897f952d080565677581f4ab27ad00f",
+          "clinical_decision": "not-performed",
+          "end_character": 129,
+          "human_review_required": true,
+          "id": "finding-2",
+          "kind": "uninterpreted-source-excerpt",
+          "quote": "Prior authorization documentation may include a clinical note and lab record.",
+          "source_id": "source-1",
+          "start_character": 52,
+          "url": "https://guidance.synthetic.example/research/documentation.txt"
+        },
+        {
+          "body_sha256": "7bf3f959440e570443a852be9d0633d37897f952d080565677581f4ab27ad00f",
+          "clinical_decision": "not-performed",
+          "end_character": 215,
+          "human_review_required": true,
+          "id": "finding-3",
+          "kind": "uninterpreted-source-excerpt",
+          "quote": "A human reviewer must assess all documentation; this fixture grants no authorization.",
+          "source_id": "source-1",
+          "start_character": 130,
+          "url": "https://guidance.synthetic.example/research/documentation.txt"
+        }
+      ],
+      "human_review_required": true,
+      "records": [
+        {
+          "ageBand": "adult",
+          "diagnosisCodes": [
+            "E11.9"
+          ],
+          "extension": [
+            {
+              "url": "urn:demo:human-review-required",
+              "valueBoolean": true
+            },
+            {
+              "url": "urn:demo:clinical-decision",
+              "valueCode": "not-performed"
+            }
+          ],
+          "id": "patient-synthetic-001",
+          "labs": [
+            {
+              "code": "2345-7",
+              "unit": "mg/dL",
+              "value": 105
+            }
+          ],
+          "resourceType": "Patient",
+          "synthetic": true
+        },
+        {
+          "extension": [
+            {
+              "url": "urn:demo:human-review-required",
+              "valueBoolean": true
+            },
+            {
+              "url": "urn:demo:clinical-decision",
+              "valueCode": "not-performed"
+            }
+          ],
+          "id": "note-synthetic-001",
+          "resourceType": "DocumentReference",
+          "subject": {
+            "reference": "Patient/patient-synthetic-001"
+          },
+          "synthetic": true,
+          "text": "SYNTHETIC: Lab results recorded. Human clinician review required."
+        },
+        {
+          "extension": [
+            {
+              "url": "urn:demo:human-review-required",
+              "valueBoolean": true
+            },
+            {
+              "url": "urn:demo:clinical-decision",
+              "valueCode": "not-performed"
+            }
+          ],
+          "id": "auth-synthetic-001",
+          "patient": {
+            "reference": "Patient/patient-synthetic-001"
+          },
+          "resourceType": "Claim",
+          "serviceCode": "DEMO-LAB",
+          "status": "draft",
+          "synthetic": true,
+          "use": "preauthorization"
+        }
+      ],
+      "schema_version": "1.0",
+      "sources": [
+        {
+          "body": "SYNTHETIC educational material; not medical advice.\nPrior authorization documentation may include a clinical note and lab record.\nA human reviewer must assess all documentation; this fixture grants no authorization.",
+          "body_sha256": "7bf3f959440e570443a852be9d0633d37897f952d080565677581f4ab27ad00f",
+          "content_type": "text/plain",
+          "id": "source-1",
+          "requested_url": "https://guidance.synthetic.example/research/documentation.txt",
+          "resolved_url": "https://guidance.synthetic.example/research/documentation.txt",
+          "retrieval_mode": "offline-fixture",
+          "source_label": "SYNTHETIC educational fixture"
+        }
+      ],
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t099_single_web__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "a3148ddac27e788da57033fc8e76e543f9453a8a9a6808378e35a472e3fd967a",
+      "test_implementation.py": "90ea0af752873013d3dc3a0099e26a6891e4474cd8417548daab864cd45f9e72",
+      "example_input.json": "e9586966051c82eec6b10c510f38159b01712de2e8e6a7d9f28a66de95f6fd46",
+      "build_manifest.json": "c0a0e1f86445ecbc89e1245a8fd92f0babfc71674aaf549100c52d43a453d3c6"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

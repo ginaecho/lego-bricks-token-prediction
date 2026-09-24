@@ -1,0 +1,60 @@
+{
+  "build_id": "wave3_t109_combo4_basic-research_basic-search_basic-documents_basic-insights__ind-energy",
+  "composition_label": "basic:research -> basic:search -> basic:documents -> basic:insights",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original standalone implementation created for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "synthetic=true, question, sources[{id,text,optional emissions}], products[{id,name,description,tags,asset_kinds,priorities}], meter_csv, telemetry{assets,samples}, outages, feedback",
+    "envelope": "schema_version, stage, data{synthetic,question,sources,products,assets,samples,meter_readings,outages,feedback}, results{research,search,documents,insights}; results accumulate in order",
+    "output": "status=ok plus final envelope; errors: status=error,message with process exit 2",
+    "meter_interval_csv": "Exact headers timestamp,meter_id,asset_id,kwh. Nonnegative kWh; timezone-aware interval start; duplicate meter/time instants rejected. Synthetic example uses half-hour winter intervals and a summer comparison interval.",
+    "scada_json": "assets[{asset_id,parent_id,kind,critical}], samples[{timestamp,asset_id,voltage_v,load_kw,emissions:{value,unit,source}}]",
+    "outage": "id,asset_id,description,life_safety:boolean,critical_service:boolean,customers_affected:nonnegative integer,declared_priority:P1|P2|P3",
+    "feedback": "id,text,outage_id (null or existing outage id)",
+    "validation": "One shared validation layer used at every stage input and output; source citations, product compatibility, recommendation lineage, meter totals, telemetry provenance, CSV and insight lineage checked"
+  },
+  "cross_stage_handoffs": [
+    {"from": "research", "to": "search", "data": "Validated query expanded from ranked exact source excerpts and stable citation IDs"},
+    {"from": "search", "to": "documents", "data": "Validated ranked products with evidence IDs and compatible outage IDs determine per-outage recommendations"},
+    {"from": "documents", "to": "insights", "data": "Validated outage rows determine feedback theme priority and recommended product associations"}
+  ],
+  "behavior": {
+    "research": "General-purpose deterministic lexical evidence ranking with quoted excerpts, citations and explicit insufficient-evidence status; no invented factual answer",
+    "search": "General-purpose token matching with fixed synonym groups, deterministic ranking and energy asset-kind/safety capability filters",
+    "documents": "Parse interval CSV and telemetry JSON, aggregate consumption, preserve emissions provenance, generate formula-safe outage CSV and structured rows",
+    "insights": "Multi-label keyword themes, sentiment counts, feedback evidence IDs, document-linked products and safety-prioritized actions",
+    "protection": "NERC CIP-style demonstrative minimization: all grid asset and meter IDs replaced by deterministic per-input aliases, including free-text occurrences, before stage processing. No reverse mapping emitted. Errors never echo rejected payloads or paths.",
+    "safety_rules": "P1 for life_safety; otherwise P2 for critical_service or customers_affected >=100; otherwise P3. Conflicting declared priorities rejected. Feedback cannot override outage priorities.",
+    "emissions_rules": "Every emissions figure requires finite nonnegative value, supported unit kgCO2e or tCO2e, and nonblank source. Figures are preserved, not mixed or converted.",
+    "empty_cases": "Empty sources, products, readings, samples, outages and feedback supported; topology and question required",
+    "determinism": "Stable sorting; no random values, clocks, network access, providers or injected model steps"
+  },
+  "scope": {
+    "included": ["Synthetic grid topology", "Fictitious substation and device IDs", "Seasonal consumption", "Four integrated stages", "Shared validation", "CLI JSON errors", "Unit and subprocess tests"],
+    "excluded": ["Production security or access control", "Compliance certification", "Live grid controls", "Live data collection", "External model providers", "Semantic factual verification", "Advanced sentiment negation handling", "Enterprise deployment", "Emissions conversion", "Persistence beyond four deliverables"],
+    "limitations": ["Aliasing is demonstrative minimization, not encryption or a security boundary; source input still contains fictitious identifiers.", "Product priorities are fixture declarations, not independently certified capabilities.", "Theme counts can overlap; sentiment uses a bounded keyword lexicon.", "Meter totals cover supplied intervals, not an inferred continuous season."]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "unittest",
+    "tests": 35,
+    "failures": 0,
+    "errors": 0,
+    "cli": "passed: example input printed one JSON object with status ok and exit 0",
+    "error_cli": "Validated exit 2 and JSON status error for missing file, malformed JSON, invalid schema and usage",
+    "coverage": ["All four stages", "Cross-stage evidence and recommendation propagation", "Stage tampering", "Determinism and nonmutation", "Empty datasets", "No matches", "Critical identifier protection", "Safety priority rules", "Emissions provenance", "CSV injection defense", "Duplicate intervals", "Topology cycles", "Timezone validation", "CLI subprocess behavior"]
+  }
+}

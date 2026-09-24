@@ -129,7 +129,7 @@
   "split_group": "a35d9e2e5db56d32673d1fc23ce55bdb36b520049f805798c39b1668b4e97e73",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "3fe58e235f2b95ec6788c609b8bf829f8c75c5450a9299ee8ef26fd7774a3856",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t109_combo4_basic-research_basic-search_basic-documents_basic-insights__ind-energy",
   "membership_point_id": "combo4_basic-research_basic-search_basic-documents_basic-insights__ind-energy",
@@ -137,8 +137,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "d8423cb2582946b9b117382097179bb09433c33cf02810f5376aaaa0831d8707",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "624db95e-cd39-4098-afe5-5b9bcb8dd2b6",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 145574,
+    "output_tokens": 12133,
+    "cache_read_tokens": 129978,
+    "cache_write_tokens": 15578,
+    "total_tokens": 157707,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37512,
+        "agent_id": "624db95e-cd39-4098-afe5-5b9bcb8dd2b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 15160,
+        "output_tokens": 365,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 1035,
+        "reasoning_tokens": 171,
+        "duration_ms": 7879,
+        "created_at": "2026-09-24T11:27:09.884Z"
+      },
+      {
+        "id": 37528,
+        "agent_id": "624db95e-cd39-4098-afe5-5b9bcb8dd2b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 15556,
+        "output_tokens": 10863,
+        "cache_read_tokens": 15157,
+        "cache_write_tokens": 396,
+        "reasoning_tokens": 516,
+        "duration_ms": 136191,
+        "created_at": "2026-09-24T11:29:24.434Z"
+      },
+      {
+        "id": 37529,
+        "agent_id": "624db95e-cd39-4098-afe5-5b9bcb8dd2b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 26775,
+        "output_tokens": 173,
+        "cache_read_tokens": 15553,
+        "cache_write_tokens": 11219,
+        "reasoning_tokens": 8,
+        "duration_ms": 4480,
+        "created_at": "2026-09-24T11:29:30.144Z"
+      },
+      {
+        "id": 37530,
+        "agent_id": "624db95e-cd39-4098-afe5-5b9bcb8dd2b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 28935,
+        "output_tokens": 409,
+        "cache_read_tokens": 26772,
+        "cache_write_tokens": 2160,
+        "reasoning_tokens": 87,
+        "duration_ms": 8302,
+        "created_at": "2026-09-24T11:29:40.999Z"
+      },
+      {
+        "id": 37531,
+        "agent_id": "624db95e-cd39-4098-afe5-5b9bcb8dd2b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 29445,
+        "output_tokens": 218,
+        "cache_read_tokens": 28932,
+        "cache_write_tokens": 510,
+        "reasoning_tokens": 0,
+        "duration_ms": 3514,
+        "created_at": "2026-09-24T11:29:45.544Z"
+      },
+      {
+        "id": 37532,
+        "agent_id": "624db95e-cd39-4098-afe5-5b9bcb8dd2b6",
+        "model": "gpt-6-astra",
+        "input_tokens": 29703,
+        "output_tokens": 105,
+        "cache_read_tokens": 29442,
+        "cache_write_tokens": 258,
+        "reasoning_tokens": 0,
+        "duration_ms": 2769,
+        "created_at": "2026-09-24T11:29:55.398Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.54593,
+      "observed_cache_profile_estimate_usd": 0.2534795,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.55116,
+      "observed_cache_profile_estimate_usd": 6.55116,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -169,5 +294,389 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................................\n----------------------------------------------------------------------\nRan 35 tests in 0.695s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "assets": [
+          {
+            "asset_id": "ASSET-0002",
+            "critical": true,
+            "kind": "substation",
+            "parent_id": null
+          },
+          {
+            "asset_id": "ASSET-0001",
+            "critical": false,
+            "kind": "feeder",
+            "parent_id": "ASSET-0002"
+          }
+        ],
+        "feedback": [
+          {
+            "id": "feedback-1",
+            "outage_id": "outage-1",
+            "text": "Unsafe enclosure at ASSET-0002 and poor outage updates"
+          },
+          {
+            "id": "feedback-2",
+            "outage_id": "outage-2",
+            "text": "Thanks for fast restoration, but the winter bill is expensive"
+          },
+          {
+            "id": "feedback-3",
+            "outage_id": null,
+            "text": "Great helpful meter information"
+          }
+        ],
+        "meter_readings": [
+          {
+            "asset_id": "ASSET-0001",
+            "kwh": 2.4,
+            "meter_id": "METER-0001",
+            "timestamp": "2026-01-15T18:00:00Z"
+          },
+          {
+            "asset_id": "ASSET-0001",
+            "kwh": 2.8,
+            "meter_id": "METER-0001",
+            "timestamp": "2026-01-15T18:30:00Z"
+          },
+          {
+            "asset_id": "ASSET-0001",
+            "kwh": 1.2,
+            "meter_id": "METER-0001",
+            "timestamp": "2026-07-15T18:00:00Z"
+          }
+        ],
+        "outages": [
+          {
+            "asset_id": "ASSET-0002",
+            "critical_service": false,
+            "customers_affected": 80,
+            "declared_priority": "P1",
+            "description": "SYNTHETIC damaged enclosure near public access",
+            "id": "outage-1",
+            "life_safety": true
+          },
+          {
+            "asset_id": "ASSET-0001",
+            "critical_service": true,
+            "customers_affected": 120,
+            "declared_priority": "P2",
+            "description": "SYNTHETIC winter feeder interruption",
+            "id": "outage-2",
+            "life_safety": false
+          }
+        ],
+        "products": [
+          {
+            "asset_kinds": [
+              "substation",
+              "feeder"
+            ],
+            "description": "Power outage restoration and meter consumption monitoring",
+            "id": "recovery-kit",
+            "name": "Grid recovery and metering kit",
+            "priorities": [
+              "P1",
+              "P2",
+              "P3"
+            ],
+            "tags": [
+              "electricity",
+              "repair",
+              "winter"
+            ]
+          },
+          {
+            "asset_kinds": [
+              "feeder"
+            ],
+            "description": "Consumption and energy analysis",
+            "id": "meter-monitor",
+            "name": "Meter demand monitor",
+            "priorities": [
+              "P2",
+              "P3"
+            ],
+            "tags": [
+              "metering"
+            ]
+          }
+        ],
+        "question": "How can we restore power after an outage and monitor winter meter consumption?",
+        "samples": [
+          {
+            "asset_id": "ASSET-0002",
+            "emissions": {
+              "source": "synthetic SCADA emissions estimate",
+              "unit": "kgCO2e",
+              "value": 35.2
+            },
+            "load_kw": 725,
+            "timestamp": "2026-01-15T18:00:00Z",
+            "voltage_v": 11000
+          }
+        ],
+        "sources": [
+          {
+            "emissions": {
+              "source": "synthetic seasonal model",
+              "unit": "kgCO2e",
+              "value": 4.5
+            },
+            "id": "source-winter",
+            "text": "SYNTHETIC winter analysis: electricity consumption increases during cold evenings. Meter monitoring helps identify demand at ASSET-0002."
+          },
+          {
+            "id": "source-response",
+            "text": "SYNTHETIC response guide: restore power using compatible grid recovery equipment. Outage communication and safety checks precede restoration."
+          }
+        ],
+        "synthetic": true
+      },
+      "results": {
+        "documents": {
+          "meter_totals": [
+            {
+              "asset_id": "ASSET-0001",
+              "intervals": 3,
+              "meter_id": "METER-0001",
+              "unit": "kWh",
+              "value": 6.4
+            }
+          ],
+          "outage_csv": "outage_id,asset_id,priority,recommended_product_id\noutage-1,ASSET-0002,P1,recovery-kit\noutage-2,ASSET-0001,P2,recovery-kit\n",
+          "outage_rows": [
+            {
+              "asset_id": "ASSET-0002",
+              "outage_id": "outage-1",
+              "priority": "P1",
+              "recommended_product_id": "recovery-kit"
+            },
+            {
+              "asset_id": "ASSET-0001",
+              "outage_id": "outage-2",
+              "priority": "P2",
+              "recommended_product_id": "recovery-kit"
+            }
+          ],
+          "telemetry": [
+            {
+              "asset_id": "ASSET-0002",
+              "emissions": {
+                "source": "synthetic SCADA emissions estimate",
+                "unit": "kgCO2e",
+                "value": 35.2
+              },
+              "load_kw": 725,
+              "timestamp": "2026-01-15T18:00:00Z",
+              "voltage_v": 11000
+            }
+          ]
+        },
+        "insights": {
+          "feedback_count": 3,
+          "limitation": "Deterministic keyword themes; sentiment does not understand negation. Feedback may occur in multiple themes; feedback never changes outage priority.",
+          "themes": [
+            {
+              "action": "Improve outage updates",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-1"
+              ],
+              "outage_ids": [
+                "outage-1"
+              ],
+              "priority": "P1",
+              "product_ids": [
+                "recovery-kit"
+              ],
+              "sentiment_counts": {
+                "negative": 1,
+                "neutral": 0,
+                "positive": 0
+              },
+              "theme": "communication"
+            },
+            {
+              "action": "Review restoration and reliability",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-1"
+              ],
+              "outage_ids": [
+                "outage-1"
+              ],
+              "priority": "P1",
+              "product_ids": [
+                "recovery-kit"
+              ],
+              "sentiment_counts": {
+                "negative": 1,
+                "neutral": 0,
+                "positive": 0
+              },
+              "theme": "reliability"
+            },
+            {
+              "action": "Escalate to safety response team",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-1"
+              ],
+              "outage_ids": [
+                "outage-1"
+              ],
+              "priority": "P1",
+              "product_ids": [
+                "recovery-kit"
+              ],
+              "sentiment_counts": {
+                "negative": 1,
+                "neutral": 0,
+                "positive": 0
+              },
+              "theme": "safety"
+            },
+            {
+              "action": "Review billing and meter intervals",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-2"
+              ],
+              "outage_ids": [
+                "outage-2"
+              ],
+              "priority": "P2",
+              "product_ids": [
+                "recovery-kit"
+              ],
+              "sentiment_counts": {
+                "negative": 1,
+                "neutral": 0,
+                "positive": 0
+              },
+              "theme": "billing"
+            },
+            {
+              "action": "Review uncategorized feedback",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-3"
+              ],
+              "outage_ids": [],
+              "priority": "P3",
+              "product_ids": [],
+              "sentiment_counts": {
+                "negative": 0,
+                "neutral": 0,
+                "positive": 1
+              },
+              "theme": "other"
+            }
+          ]
+        },
+        "research": {
+          "decision_note": "Review cited excerpts; lexical relevance is not factual verification.",
+          "evidence": [
+            {
+              "excerpt": "SYNTHETIC response guide: restore power using compatible grid recovery equipment. Outage communication and safety checks precede restoration.",
+              "score": 11,
+              "source_id": "source-response"
+            },
+            {
+              "excerpt": "SYNTHETIC winter analysis: electricity consumption increases during cold evenings. Meter monitoring helps identify demand at ASSET-0002.",
+              "score": 10,
+              "source_id": "source-winter"
+            }
+          ],
+          "evidence_status": "supported",
+          "query": "How can we restore power after an outage and monitor winter meter consumption? SYNTHETIC response guide: restore power using compatible grid recovery equipment. Outage communication and safety checks precede restoration. SYNTHETIC winter analysis: electricity consumption increases during cold evenings. Meter monitoring helps identify demand at ASSET-0002."
+        },
+        "search": {
+          "matches": [
+            {
+              "evidence_ids": [
+                "source-response",
+                "source-winter"
+              ],
+              "matched_terms": [
+                "blackout",
+                "consumption",
+                "demand",
+                "electricity",
+                "energy",
+                "grid",
+                "interruption",
+                "meter",
+                "metering",
+                "meters",
+                "monitoring",
+                "outage",
+                "outages",
+                "power",
+                "recovery",
+                "repair",
+                "restoration",
+                "restore",
+                "usage",
+                "winter"
+              ],
+              "outage_ids": [
+                "outage-1",
+                "outage-2"
+              ],
+              "product_id": "recovery-kit",
+              "score": 20
+            },
+            {
+              "evidence_ids": [
+                "source-response",
+                "source-winter"
+              ],
+              "matched_terms": [
+                "analysis",
+                "consumption",
+                "demand",
+                "electricity",
+                "energy",
+                "meter",
+                "metering",
+                "meters",
+                "monitor",
+                "power",
+                "usage"
+              ],
+              "outage_ids": [
+                "outage-2"
+              ],
+              "product_id": "meter-monitor",
+              "score": 11
+            }
+          ],
+          "status": "matched"
+        }
+      },
+      "schema_version": "1.0",
+      "stage": "insights",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t109_combo4_basic-research_basic-search_basic-documents_basic-insights__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "d945d36cb9c9ce63468475b0bca33b0f94f25f387f101c3efa674eefe7367a6f",
+      "test_implementation.py": "3b3e17eca6b36bba5cffdc254830c19a9a7117a32812e5df96fbe9b64befee97",
+      "example_input.json": "20173e3fb105ec74c06fa064abee5afff06e732279c75bcb3af2a42bdffd9e5f",
+      "build_manifest.json": "d1025eef77b8623f97a1177d169d37899ec3ac2b4b3157b6b37ef8c6db4e5d5b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

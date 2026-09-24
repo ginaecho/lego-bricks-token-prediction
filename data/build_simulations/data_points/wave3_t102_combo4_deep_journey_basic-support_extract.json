@@ -133,7 +133,7 @@
   "split_group": "0bf6788f5a64820e4b1bd4cde4c6458073b6dfae1d33d8dd207664d855609316",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "1c1ae58591f920693a00ebff362dd2cbb6730912ce81d0f0e5610c57fad4fcdf",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t102_combo4_deep_journey_basic-support_extract",
   "membership_point_id": "combo4_deep_journey_basic-support_extract",
@@ -141,8 +141,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "ba3edcc8e6666b559bf55ecf024fd8f1f64679abc7a7190360bc93cf14aaf402",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "f2120626-e3b5-44d7-ae31-504d16b3f9f1",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 135847,
+    "output_tokens": 9475,
+    "cache_read_tokens": 121948,
+    "cache_write_tokens": 13881,
+    "total_tokens": 145322,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37419,
+        "agent_id": "f2120626-e3b5-44d7-ae31-504d16b3f9f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 15001,
+        "output_tokens": 524,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 876,
+        "reasoning_tokens": 341,
+        "duration_ms": 13780,
+        "created_at": "2026-09-24T11:08:41.250Z"
+      },
+      {
+        "id": 37476,
+        "agent_id": "f2120626-e3b5-44d7-ae31-504d16b3f9f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 15556,
+        "output_tokens": 7275,
+        "cache_read_tokens": 14998,
+        "cache_write_tokens": 555,
+        "reasoning_tokens": 0,
+        "duration_ms": 99219,
+        "created_at": "2026-09-24T11:23:06.589Z"
+      },
+      {
+        "id": 37477,
+        "agent_id": "f2120626-e3b5-44d7-ae31-504d16b3f9f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 23159,
+        "output_tokens": 360,
+        "cache_read_tokens": 15553,
+        "cache_write_tokens": 7603,
+        "reasoning_tokens": 202,
+        "duration_ms": 8254,
+        "created_at": "2026-09-24T11:23:12.913Z"
+      },
+      {
+        "id": 37478,
+        "agent_id": "f2120626-e3b5-44d7-ae31-504d16b3f9f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 26460,
+        "output_tokens": 955,
+        "cache_read_tokens": 23156,
+        "cache_write_tokens": 3301,
+        "reasoning_tokens": 50,
+        "duration_ms": 13571,
+        "created_at": "2026-09-24T11:23:42.753Z"
+      },
+      {
+        "id": 37480,
+        "agent_id": "f2120626-e3b5-44d7-ae31-504d16b3f9f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 27665,
+        "output_tokens": 269,
+        "cache_read_tokens": 26457,
+        "cache_write_tokens": 1205,
+        "reasoning_tokens": 0,
+        "duration_ms": 4612,
+        "created_at": "2026-09-24T11:23:56.838Z"
+      },
+      {
+        "id": 37481,
+        "agent_id": "f2120626-e3b5-44d7-ae31-504d16b3f9f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 28006,
+        "output_tokens": 92,
+        "cache_read_tokens": 27662,
+        "cache_write_tokens": 341,
+        "reasoning_tokens": 0,
+        "duration_ms": 2704,
+        "created_at": "2026-09-24T11:24:12.075Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.48174249999999996,
+      "observed_cache_profile_estimate_usd": 0.2073595,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.78091,
+      "observed_cache_profile_estimate_usd": 5.78091,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -173,5 +298,639 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................................\n----------------------------------------------------------------------\nRan 36 tests in 0.778s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "synthetic": true,
+      "status": "ok",
+      "deep": {
+        "schema_version": "1.0",
+        "stage": "deep",
+        "findings": [
+          {
+            "topic": "contact",
+            "status": "agreed",
+            "value": "help@example.invalid",
+            "alternatives": [
+              "help@example.invalid"
+            ],
+            "evidence": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 46,
+                "end": 76,
+                "quote": "Contact: help@example.invalid.",
+                "value": "help@example.invalid"
+              }
+            ],
+            "document_count": 1
+          },
+          {
+            "topic": "receipt_needed",
+            "status": "agreed",
+            "value": "true",
+            "alternatives": [
+              "true"
+            ],
+            "evidence": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 24,
+                "end": 45,
+                "quote": "Receipt needed: true.",
+                "value": "true"
+              }
+            ],
+            "document_count": 1
+          },
+          {
+            "topic": "return_days",
+            "status": "agreed",
+            "value": "30",
+            "alternatives": [
+              "30"
+            ],
+            "evidence": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 0,
+                "end": 23,
+                "quote": "Return window days: 30.",
+                "value": "30"
+              },
+              {
+                "document_id": "synthetic-policy-b",
+                "start": 0,
+                "end": 23,
+                "quote": "Return window days: 30.",
+                "value": "30"
+              }
+            ],
+            "document_count": 2
+          },
+          {
+            "topic": "shipping_days",
+            "status": "disputed",
+            "value": null,
+            "alternatives": [
+              "3",
+              "5"
+            ],
+            "evidence": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 77,
+                "end": 94,
+                "quote": "Shipping days: 3.",
+                "value": "3"
+              },
+              {
+                "document_id": "synthetic-policy-b",
+                "start": 24,
+                "end": 41,
+                "quote": "Shipping days: 5.",
+                "value": "5"
+              }
+            ],
+            "document_count": 2
+          }
+        ],
+        "unresolved_questions": [
+          "Does the return window differ for international orders?",
+          "Which documented value is current for shipping_days?",
+          "No evidence is available for refund_days."
+        ]
+      },
+      "journey": {
+        "schema_version": "1.0",
+        "stage": "journey",
+        "status": "ready",
+        "steps": [
+          {
+            "id": "gather",
+            "title": "Gather your receipt and check the return window",
+            "requires_topics": [
+              "receipt_needed",
+              "return_days"
+            ],
+            "prerequisites": [],
+            "evidence": {
+              "receipt_needed": [
+                {
+                  "document_id": "synthetic-policy-a",
+                  "start": 24,
+                  "end": 45,
+                  "quote": "Receipt needed: true.",
+                  "value": "true"
+                }
+              ],
+              "return_days": [
+                {
+                  "document_id": "synthetic-policy-a",
+                  "start": 0,
+                  "end": 23,
+                  "quote": "Return window days: 30.",
+                  "value": "30"
+                },
+                {
+                  "document_id": "synthetic-policy-b",
+                  "start": 0,
+                  "end": 23,
+                  "quote": "Return window days: 30.",
+                  "value": "30"
+                }
+              ]
+            }
+          },
+          {
+            "id": "contact",
+            "title": "Contact the documented support address with your receipt",
+            "requires_topics": [
+              "contact"
+            ],
+            "prerequisites": [
+              "gather"
+            ],
+            "evidence": {
+              "contact": [
+                {
+                  "document_id": "synthetic-policy-a",
+                  "start": 46,
+                  "end": 76,
+                  "quote": "Contact: help@example.invalid.",
+                  "value": "help@example.invalid"
+                }
+              ]
+            }
+          }
+        ],
+        "blocked_actions": [
+          {
+            "action_id": "shipping",
+            "unresolved_topics": [
+              "shipping_days"
+            ],
+            "pending_prerequisites": []
+          },
+          {
+            "action_id": "contact",
+            "unresolved_topics": [],
+            "pending_prerequisites": [
+              "gather"
+            ]
+          }
+        ],
+        "research": {
+          "schema_version": "1.0",
+          "stage": "deep",
+          "findings": [
+            {
+              "topic": "contact",
+              "status": "agreed",
+              "value": "help@example.invalid",
+              "alternatives": [
+                "help@example.invalid"
+              ],
+              "evidence": [
+                {
+                  "document_id": "synthetic-policy-a",
+                  "start": 46,
+                  "end": 76,
+                  "quote": "Contact: help@example.invalid.",
+                  "value": "help@example.invalid"
+                }
+              ],
+              "document_count": 1
+            },
+            {
+              "topic": "receipt_needed",
+              "status": "agreed",
+              "value": "true",
+              "alternatives": [
+                "true"
+              ],
+              "evidence": [
+                {
+                  "document_id": "synthetic-policy-a",
+                  "start": 24,
+                  "end": 45,
+                  "quote": "Receipt needed: true.",
+                  "value": "true"
+                }
+              ],
+              "document_count": 1
+            },
+            {
+              "topic": "return_days",
+              "status": "agreed",
+              "value": "30",
+              "alternatives": [
+                "30"
+              ],
+              "evidence": [
+                {
+                  "document_id": "synthetic-policy-a",
+                  "start": 0,
+                  "end": 23,
+                  "quote": "Return window days: 30.",
+                  "value": "30"
+                },
+                {
+                  "document_id": "synthetic-policy-b",
+                  "start": 0,
+                  "end": 23,
+                  "quote": "Return window days: 30.",
+                  "value": "30"
+                }
+              ],
+              "document_count": 2
+            },
+            {
+              "topic": "shipping_days",
+              "status": "disputed",
+              "value": null,
+              "alternatives": [
+                "3",
+                "5"
+              ],
+              "evidence": [
+                {
+                  "document_id": "synthetic-policy-a",
+                  "start": 77,
+                  "end": 94,
+                  "quote": "Shipping days: 3.",
+                  "value": "3"
+                },
+                {
+                  "document_id": "synthetic-policy-b",
+                  "start": 24,
+                  "end": 41,
+                  "quote": "Shipping days: 5.",
+                  "value": "5"
+                }
+              ],
+              "document_count": 2
+            }
+          ],
+          "unresolved_questions": [
+            "Does the return window differ for international orders?",
+            "Which documented value is current for shipping_days?",
+            "No evidence is available for refund_days."
+          ]
+        },
+        "reason": null
+      },
+      "support": {
+        "schema_version": "1.0",
+        "stage": "support",
+        "answer": "Synthetic reference support response.\nreturn_days: 30.\nreceipt_needed: true.\nshipping_days: I cannot confirm this because documents conflict.\nrefund_days: I cannot confirm this because there is no documented evidence.\ncontact: help@example.invalid.\nRecommended next actions (not executed):\n1. Gather your receipt and check the return window\n2. Contact the documented support address with your receipt\nThe team is offline. Save your question for support; no ticket has been created and no response time is promised.",
+        "facts": [
+          {
+            "topic": "return_days",
+            "value": "30",
+            "start": 51,
+            "end": 53,
+            "citations": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 0,
+                "end": 23,
+                "quote": "Return window days: 30.",
+                "value": "30"
+              },
+              {
+                "document_id": "synthetic-policy-b",
+                "start": 0,
+                "end": 23,
+                "quote": "Return window days: 30.",
+                "value": "30"
+              }
+            ]
+          },
+          {
+            "topic": "receipt_needed",
+            "value": "true",
+            "start": 71,
+            "end": 75,
+            "citations": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 24,
+                "end": 45,
+                "quote": "Receipt needed: true.",
+                "value": "true"
+              }
+            ]
+          },
+          {
+            "topic": "contact",
+            "value": "help@example.invalid",
+            "start": 227,
+            "end": 247,
+            "citations": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 46,
+                "end": 76,
+                "quote": "Contact: help@example.invalid.",
+                "value": "help@example.invalid"
+              }
+            ]
+          }
+        ],
+        "unresolved_topics": [
+          "shipping_days",
+          "refund_days"
+        ],
+        "team_online": false,
+        "escalation_needed": true,
+        "query": "How do I start a return, and how long does shipping take?",
+        "journey": {
+          "schema_version": "1.0",
+          "stage": "journey",
+          "status": "ready",
+          "steps": [
+            {
+              "id": "gather",
+              "title": "Gather your receipt and check the return window",
+              "requires_topics": [
+                "receipt_needed",
+                "return_days"
+              ],
+              "prerequisites": [],
+              "evidence": {
+                "receipt_needed": [
+                  {
+                    "document_id": "synthetic-policy-a",
+                    "start": 24,
+                    "end": 45,
+                    "quote": "Receipt needed: true.",
+                    "value": "true"
+                  }
+                ],
+                "return_days": [
+                  {
+                    "document_id": "synthetic-policy-a",
+                    "start": 0,
+                    "end": 23,
+                    "quote": "Return window days: 30.",
+                    "value": "30"
+                  },
+                  {
+                    "document_id": "synthetic-policy-b",
+                    "start": 0,
+                    "end": 23,
+                    "quote": "Return window days: 30.",
+                    "value": "30"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contact",
+              "title": "Contact the documented support address with your receipt",
+              "requires_topics": [
+                "contact"
+              ],
+              "prerequisites": [
+                "gather"
+              ],
+              "evidence": {
+                "contact": [
+                  {
+                    "document_id": "synthetic-policy-a",
+                    "start": 46,
+                    "end": 76,
+                    "quote": "Contact: help@example.invalid.",
+                    "value": "help@example.invalid"
+                  }
+                ]
+              }
+            }
+          ],
+          "blocked_actions": [
+            {
+              "action_id": "shipping",
+              "unresolved_topics": [
+                "shipping_days"
+              ],
+              "pending_prerequisites": []
+            },
+            {
+              "action_id": "contact",
+              "unresolved_topics": [],
+              "pending_prerequisites": [
+                "gather"
+              ]
+            }
+          ],
+          "research": {
+            "schema_version": "1.0",
+            "stage": "deep",
+            "findings": [
+              {
+                "topic": "contact",
+                "status": "agreed",
+                "value": "help@example.invalid",
+                "alternatives": [
+                  "help@example.invalid"
+                ],
+                "evidence": [
+                  {
+                    "document_id": "synthetic-policy-a",
+                    "start": 46,
+                    "end": 76,
+                    "quote": "Contact: help@example.invalid.",
+                    "value": "help@example.invalid"
+                  }
+                ],
+                "document_count": 1
+              },
+              {
+                "topic": "receipt_needed",
+                "status": "agreed",
+                "value": "true",
+                "alternatives": [
+                  "true"
+                ],
+                "evidence": [
+                  {
+                    "document_id": "synthetic-policy-a",
+                    "start": 24,
+                    "end": 45,
+                    "quote": "Receipt needed: true.",
+                    "value": "true"
+                  }
+                ],
+                "document_count": 1
+              },
+              {
+                "topic": "return_days",
+                "status": "agreed",
+                "value": "30",
+                "alternatives": [
+                  "30"
+                ],
+                "evidence": [
+                  {
+                    "document_id": "synthetic-policy-a",
+                    "start": 0,
+                    "end": 23,
+                    "quote": "Return window days: 30.",
+                    "value": "30"
+                  },
+                  {
+                    "document_id": "synthetic-policy-b",
+                    "start": 0,
+                    "end": 23,
+                    "quote": "Return window days: 30.",
+                    "value": "30"
+                  }
+                ],
+                "document_count": 2
+              },
+              {
+                "topic": "shipping_days",
+                "status": "disputed",
+                "value": null,
+                "alternatives": [
+                  "3",
+                  "5"
+                ],
+                "evidence": [
+                  {
+                    "document_id": "synthetic-policy-a",
+                    "start": 77,
+                    "end": 94,
+                    "quote": "Shipping days: 3.",
+                    "value": "3"
+                  },
+                  {
+                    "document_id": "synthetic-policy-b",
+                    "start": 24,
+                    "end": 41,
+                    "quote": "Shipping days: 5.",
+                    "value": "5"
+                  }
+                ],
+                "document_count": 2
+              }
+            ],
+            "unresolved_questions": [
+              "Does the return window differ for international orders?",
+              "Which documented value is current for shipping_days?",
+              "No evidence is available for refund_days."
+            ]
+          },
+          "reason": null
+        }
+      },
+      "extract": {
+        "schema_version": "1.0",
+        "stage": "extract",
+        "fields": {
+          "return_window": {
+            "value": 30,
+            "source_span": {
+              "source": "support.answer",
+              "start": 51,
+              "end": 53,
+              "text": "30"
+            },
+            "citations": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 0,
+                "end": 23,
+                "quote": "Return window days: 30.",
+                "value": "30"
+              },
+              {
+                "document_id": "synthetic-policy-b",
+                "start": 0,
+                "end": 23,
+                "quote": "Return window days: 30.",
+                "value": "30"
+              }
+            ]
+          },
+          "needs_receipt": {
+            "value": true,
+            "source_span": {
+              "source": "support.answer",
+              "start": 71,
+              "end": 75,
+              "text": "true"
+            },
+            "citations": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 24,
+                "end": 45,
+                "quote": "Receipt needed: true.",
+                "value": "true"
+              }
+            ]
+          },
+          "support_address": {
+            "value": "help@example.invalid",
+            "source_span": {
+              "source": "support.answer",
+              "start": 227,
+              "end": 247,
+              "text": "help@example.invalid"
+            },
+            "citations": [
+              {
+                "document_id": "synthetic-policy-a",
+                "start": 46,
+                "end": 76,
+                "quote": "Contact: help@example.invalid.",
+                "value": "help@example.invalid"
+              }
+            ]
+          },
+          "shipping_estimate": {
+            "value": null,
+            "source_span": null,
+            "citations": []
+          },
+          "refund_estimate": {
+            "value": null,
+            "source_span": null,
+            "citations": []
+          }
+        },
+        "missing_fields": [
+          {
+            "name": "shipping_estimate",
+            "required": false,
+            "reason": "No agreed, support-grounded value for topic."
+          },
+          {
+            "name": "refund_estimate",
+            "required": true,
+            "reason": "No agreed, support-grounded value for topic."
+          }
+        ],
+        "status": "incomplete"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t102_combo4_deep_journey_basic-support_extract",
+    "artifact_sha256": {
+      "implementation.py": "c44be8d187d4a1505bd5cae96c18a3391365b37b68fe6fdcf1a37cbd366bc5b0",
+      "test_implementation.py": "310683d2a4d46cdee5abe846b7a814bef0525bb5ed1b69abd6fe6f804a270df8",
+      "example_input.json": "e3b8b5f48d9c6103f330e4d75610c1beccb25d56768490a4149ca2133782d7fc",
+      "build_manifest.json": "eb599312527595f7fcd2c73b61ef7e0ddff9414208161ed9e81419684ea2913b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

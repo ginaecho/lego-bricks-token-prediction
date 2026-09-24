@@ -129,7 +129,7 @@
   "split_group": "5fd27c9d8557835f78c8f520f009e98ecce2a346467c2c92b5717b42dfa6ad63",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "c968a585d31400f1736615d298098d44e41824aec33399428695e78abd6b2cef",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t108_combo4_basic-research_basic-onboard_basic-insights_basic-support",
   "membership_point_id": "combo4_basic-research_basic-onboard_basic-insights_basic-support",
@@ -137,8 +137,145 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "072faf24122e27980ed37d4426a24c6a469161f9f747d22c3b052d0a5cdd605b",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "06134a97-9376-4ba8-a703-7a76bf0c1ab9",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 165048,
+    "output_tokens": 11466,
+    "cache_read_tokens": 150916,
+    "cache_write_tokens": 14111,
+    "total_tokens": 176514,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37506,
+        "agent_id": "06134a97-9376-4ba8-a703-7a76bf0c1ab9",
+        "model": "gpt-6-astra",
+        "input_tokens": 15051,
+        "output_tokens": 323,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 926,
+        "reasoning_tokens": 162,
+        "duration_ms": 8169,
+        "created_at": "2026-09-24T11:26:08.471Z"
+      },
+      {
+        "id": 37515,
+        "agent_id": "06134a97-9376-4ba8-a703-7a76bf0c1ab9",
+        "model": "gpt-6-astra",
+        "input_tokens": 15401,
+        "output_tokens": 8964,
+        "cache_read_tokens": 15048,
+        "cache_write_tokens": 350,
+        "reasoning_tokens": 510,
+        "duration_ms": 104555,
+        "created_at": "2026-09-24T11:27:54.261Z"
+      },
+      {
+        "id": 37517,
+        "agent_id": "06134a97-9376-4ba8-a703-7a76bf0c1ab9",
+        "model": "gpt-6-astra",
+        "input_tokens": 24709,
+        "output_tokens": 426,
+        "cache_read_tokens": 15398,
+        "cache_write_tokens": 9308,
+        "reasoning_tokens": 264,
+        "duration_ms": 11027,
+        "created_at": "2026-09-24T11:28:08.307Z"
+      },
+      {
+        "id": 37521,
+        "agent_id": "06134a97-9376-4ba8-a703-7a76bf0c1ab9",
+        "model": "gpt-6-astra",
+        "input_tokens": 26160,
+        "output_tokens": 1158,
+        "cache_read_tokens": 24706,
+        "cache_write_tokens": 1451,
+        "reasoning_tokens": 17,
+        "duration_ms": 12788,
+        "created_at": "2026-09-24T11:28:34.629Z"
+      },
+      {
+        "id": 37523,
+        "agent_id": "06134a97-9376-4ba8-a703-7a76bf0c1ab9",
+        "model": "gpt-6-astra",
+        "input_tokens": 27580,
+        "output_tokens": 259,
+        "cache_read_tokens": 26157,
+        "cache_write_tokens": 1420,
+        "reasoning_tokens": 18,
+        "duration_ms": 4124,
+        "created_at": "2026-09-24T11:28:42.359Z"
+      },
+      {
+        "id": 37525,
+        "agent_id": "06134a97-9376-4ba8-a703-7a76bf0c1ab9",
+        "model": "gpt-6-astra",
+        "input_tokens": 27911,
+        "output_tokens": 227,
+        "cache_read_tokens": 27577,
+        "cache_write_tokens": 331,
+        "reasoning_tokens": 0,
+        "duration_ms": 3460,
+        "created_at": "2026-09-24T11:28:54.281Z"
+      },
+      {
+        "id": 37527,
+        "agent_id": "06134a97-9376-4ba8-a703-7a76bf0c1ab9",
+        "model": "gpt-6-astra",
+        "input_tokens": 28236,
+        "output_tokens": 109,
+        "cache_read_tokens": 27908,
+        "cache_write_tokens": 325,
+        "reasoning_tokens": 0,
+        "duration_ms": 2625,
+        "created_at": "2026-09-24T11:29:07.405Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.58461,
+      "observed_cache_profile_estimate_usd": 0.245049,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.015319999999999,
+      "observed_cache_profile_estimate_usd": 7.015319999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -169,5 +306,204 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................................\n----------------------------------------------------------------------\nRan 34 tests in 0.553s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "input": {
+        "customer": {
+          "experience": "new",
+          "goal": "Complete workspace setup",
+          "id": "synthetic-customer-1",
+          "name": "Synthetic Casey"
+        },
+        "feedback": [
+          {
+            "customer_id": "synthetic-customer-1",
+            "id": "f-1",
+            "text": "Workspace setup is confusing."
+          },
+          {
+            "customer_id": "synthetic-customer-1",
+            "id": "f-2",
+            "text": "The refund price explanation is difficult."
+          },
+          {
+            "customer_id": "synthetic-customer-1",
+            "id": "f-3",
+            "text": "Setup instructions helped me start."
+          }
+        ],
+        "questions": [
+          {
+            "id": "q-setup",
+            "text": "How does workspace setup work?"
+          },
+          {
+            "id": "q-billing",
+            "text": "What is the refund policy?"
+          }
+        ],
+        "sources": [
+          {
+            "content": "For workspace setup, create a workspace, invite one teammate, and run a sample task.",
+            "id": "s-setup",
+            "title": "Synthetic workspace setup guide"
+          },
+          {
+            "content": "A refund request can be submitted to the billing team within fourteen days of purchase.",
+            "id": "s-refund",
+            "title": "Synthetic refund policy"
+          }
+        ],
+        "tickets": [
+          {
+            "customer_id": "synthetic-customer-1",
+            "id": "t-1",
+            "question": "How do I start workspace setup?"
+          },
+          {
+            "customer_id": "synthetic-customer-1",
+            "id": "t-2",
+            "question": "Can I request a refund?"
+          },
+          {
+            "customer_id": "synthetic-customer-1",
+            "id": "t-3",
+            "question": "Is lunar teleportation available?"
+          }
+        ]
+      },
+      "schema_version": "1.0",
+      "stages": {
+        "insights": {
+          "customer_id": "synthetic-customer-1",
+          "feedback_count": 3,
+          "onboarding_next_step_id": "review",
+          "themes": [
+            {
+              "action": "Review billing feedback with the responsible team",
+              "count": 1,
+              "feedback_ids": [
+                "f-2"
+              ],
+              "name": "billing",
+              "negative_count": 1,
+              "onboarding_step_id": null
+            },
+            {
+              "action": "Clarify onboarding step review",
+              "count": 2,
+              "feedback_ids": [
+                "f-1",
+                "f-3"
+              ],
+              "name": "onboarding",
+              "negative_count": 1,
+              "onboarding_step_id": "review"
+            }
+          ]
+        },
+        "onboard": {
+          "customer_id": "synthetic-customer-1",
+          "goal": "Complete workspace setup",
+          "needs_assistance": true,
+          "next_step_id": "review",
+          "research_question_id": "q-setup",
+          "source_ids": [
+            "s-setup"
+          ],
+          "steps": [
+            {
+              "action": "Synthetic Casey: Review sources s-setup.",
+              "id": "review"
+            },
+            {
+              "action": "Try a small, reversible task toward: Complete workspace setup",
+              "id": "try"
+            }
+          ]
+        },
+        "research": {
+          "findings": [
+            {
+              "decision": "Review cited evidence before deciding.",
+              "evidence": [
+                {
+                  "excerpt": "For workspace setup, create a workspace, invite one teammate, and run a sample task.",
+                  "source_id": "s-setup"
+                }
+              ],
+              "question_id": "q-setup",
+              "status": "supported"
+            },
+            {
+              "decision": "Review cited evidence before deciding.",
+              "evidence": [
+                {
+                  "excerpt": "A refund request can be submitted to the billing team within fourteen days of purchase.",
+                  "source_id": "s-refund"
+                }
+              ],
+              "question_id": "q-billing",
+              "status": "supported"
+            }
+          ],
+          "source_count": 2
+        },
+        "support": {
+          "customer_id": "synthetic-customer-1",
+          "responses": [
+            {
+              "answer": "For workspace setup, create a workspace, invite one teammate, and run a sample task.",
+              "citations": [
+                "s-setup"
+              ],
+              "follow_up": "Clarify onboarding step review",
+              "next_step_id": "review",
+              "status": "answered",
+              "theme": "onboarding",
+              "ticket_id": "t-1"
+            },
+            {
+              "answer": "A refund request can be submitted to the billing team within fourteen days of purchase.",
+              "citations": [
+                "s-refund"
+              ],
+              "follow_up": "Review billing feedback with the responsible team",
+              "next_step_id": "review",
+              "status": "answered",
+              "theme": "billing",
+              "ticket_id": "t-2"
+            },
+            {
+              "answer": "I do not have evidence to answer this question. A human review is required.",
+              "citations": [],
+              "follow_up": "Continue onboarding step review",
+              "next_step_id": "review",
+              "status": "escalated",
+              "theme": null,
+              "ticket_id": "t-3"
+            }
+          ]
+        }
+      },
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t108_combo4_basic-research_basic-onboard_basic-insights_basic-support",
+    "artifact_sha256": {
+      "implementation.py": "fd3742fe84cec51320e2d2cfccaa7364919310fdb3f79931bd282a11c3aaae2d",
+      "test_implementation.py": "8a3b3173b18e5c58da64adf6f6230ac908e3b1c79ec64f8602f546b77f25c4da",
+      "example_input.json": "2f8d18291510d8addb61f0bb76f393d7ebb491ee50a0a0db337f027abd455252",
+      "build_manifest.json": "74f247e555282433c3412f628dc054574986597277cbb1f7c2db4df83f7aa48e"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

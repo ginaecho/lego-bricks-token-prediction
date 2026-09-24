@@ -1,0 +1,85 @@
+{
+  "build_id": "wave3_t107_single_journey__ind-insurance",
+  "composition_label": "Journey recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Required integer 1",
+      "synthetic": "Required literal true; all fixtures are invented",
+      "as_of": "YYYY-MM-DD deterministic evaluation date",
+      "goal": "auto, claim, underwriting or policy",
+      "policy": "id, policyholder_ref (invented pseudonymous alias), start_date, end_date",
+      "claim": "Object with id, policy_id, loss_date, loss_amount, evidence_ready, or strict claim-form text",
+      "underwriting_submission": "Object with id, policy_id, vin and factors, or ACORD-style XML"
+    },
+    "claim_form": "One field per line, exactly ClaimID, PolicyID, LossDate, LossAmount and Evidence (yes/no); no duplicate or unknown fields.",
+    "xml": "Bounded ACORDSubmission root containing SubmissionID, PolicyID, VIN and Factor elements. Factor attributes: name, value, disclosed (true/false). No namespaces, declarations, DTDs, entities or extra fields. This is an ACORD-inspired subset, not ACORD conformance.",
+    "factors": "One to three unique objects containing name, numeric value, disclosed=true. Allowed names: annual_mileage (0..200000), vehicle_age (0..100), prior_claim_count (0..100). No hidden, sensitive or unknown factors.",
+    "validation": "One shared layer normalizes JSON/XML/text; rejects unknown fields, personal contact fields, nonfinite numbers, invalid dates, future losses, mismatched references, non-boolean evidence and invalid planner output. Loss amounts 0.01..100000000 in demonstration currency units. Loss dates outside policy terms receive human referral, not denial.",
+    "output": "One JSON object: schema_version, status, synthetic, entity_refs, selected_goal, selection_reason, eligible recommendations, two-step journey, journey_validated, execution, claim_handling with reasons, underwriting_disclosure, data_minimization and limitations.",
+    "error": "One JSON object with schema_version=1, status=error and a non-sensitive message; exit 2.",
+    "privacy": "Only pseudonymous policyholder references and risk-relevant synthetic VINs are accepted. Direct names, email, birth dates and property addresses are not accepted. Output omits the alias, VIN and claim loss details. Input is not persisted by the program."
+  },
+  "cross_stage_handoffs": [
+    "A single integrated journey stage receives normalized policy, claim and submission entities.",
+    "Discovery selects an explicit goal or prioritizes the existing claim in auto mode.",
+    "Current-state prerequisite checks determine eligible recommendations.",
+    "The two-step validator simulates each action's effects and passes projected state to the next step; actual input is never modified.",
+    "Only validated plans are serialized; evidence collection and readiness completion are conditional future actions, not assertions that work has happened."
+  ],
+  "behavior": {
+    "claims_without_evidence": "Collect claim evidence, then check claim readiness.",
+    "claims_with_evidence": "Check claim readiness, then prepare claim submission.",
+    "underwriting": "Review disclosed factors, then prepare underwriting submission.",
+    "policy": "Review policy, then review renewal options.",
+    "fair_handling": "Readiness/referral decisions provide explicit evidence and policy-date reasons; they do not use policyholder identity, protected attributes, loss size or underwriting factors. No payment or denial determination is made.",
+    "optional_callable": "recommend(raw, planner=None) accepts a local Python callable receiving only goal, initial state and allowed action names. It must return exactly two distinct action IDs. Unknown actions, wrong goals, unsatisfied prerequisites and callable exceptions are rejected. No live model integration exists.",
+    "determinism": "No wall clock, network or runtime randomness in recommendation logic. Tests use random.Random(107) for clearly synthetic randomized loss dates and amounts.",
+    "fixtures": "Invented Robin Finch alias, fabricated VIN SYNTHET1C00000107, synthetic policy/submission/claim identifiers and invented losses. Seeded randomized fixture variations occur only in tests."
+  },
+  "scope": {
+    "included": [
+      "Prerequisite-aware personalized discovery",
+      "Validated two-step journeys",
+      "Policy, claim and underwriting submission schema",
+      "ACORD-style JSON/XML and claim-form text adapters",
+      "Demonstrative fair handling, minimization and disclosure checks",
+      "Local injectable planner with deterministic fixture validation",
+      "CLI errors and bounded input files"
+    ],
+    "excluded": [
+      "Enterprise production delivery and compliance certification",
+      "Actual claim adjudication, pricing, purchases or submission",
+      "Full ACORD standards compliance",
+      "Real policyholder data, unrestricted free text and property addresses",
+      "Live providers, networks, storage services and external packages"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "13 unittest cases including seeded fixture variations",
+    "tests_run": 13,
+    "failures": 0,
+    "errors": 0,
+    "cli": "Passed: example printed one JSON object with status=ok and exited 0; missing file, malformed JSON and missing argument cases printed status=error and exited 2."
+  }
+}

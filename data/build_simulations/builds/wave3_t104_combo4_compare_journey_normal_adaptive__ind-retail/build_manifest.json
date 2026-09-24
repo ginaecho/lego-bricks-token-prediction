@@ -1,0 +1,52 @@
+{
+  "build_id": "wave3_t104_combo4_compare_journey_normal_adaptive__ind-retail",
+  "composition_label": "compare_journey_normal_adaptive",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict synthetic JSON object with catalog product feed, consented customer profile and preferences, basket lines, ordered clickstream event log, and research query",
+    "output": "One JSON object: schema_version, status, synthetic, ordered stages, notice. Each stage has schema_version, stage, status, input_digest, data.",
+    "validation": "Shared Validation class rejects unknown/missing fields, invalid units and types, duplicate identifiers, missing consent, non-catalog basket data, stock overruns and unsupported evidence. Each deterministic stage output is validated before handoff.",
+    "prices": "Nonnegative integer USD cents; shown price and stock copied directly from catalog.",
+    "citations": "Selected SKU, globally unique source_id and zero-based Python Unicode character offsets [start,end); quote equals exact source substring.",
+    "errors": "Validation/file errors yield one stdout JSON object with status error and CLI exit 2."
+  },
+  "cross_stage_handoffs": [
+    {"from": "compare", "to": "journey", "fields": ["selected_sku", "comparison catalog offer"], "validation": "Validated comparison record and SHA-256 predecessor digest"},
+    {"from": "journey", "to": "normal", "fields": ["research_request", "offer", "actions"], "validation": "Validated two-step prerequisite plan; selected-SKU-only evidence retrieval"},
+    {"from": "normal", "to": "adaptive", "fields": ["findings", "sku", "offer", "journey_actions"], "validation": "Exact extractive source citations carried into onboarding"}
+  ],
+  "behavior": {
+    "compare": "Normalize kg/g and l/ml; side-by-side catalog offers; eligibility uses budget, capacity, waterproof preference and stock remaining after existing basket quantities. Rank by price/weight/capacity priority, then consented clickstream interest, then SKU.",
+    "journey": "Two planned next actions: inspect_specs then preview_basket; prerequisite availability is simulated and checked in order.",
+    "normal": "Deterministic case-insensitive word-overlap retrieval of up to three selected-product passages; full-passage extraction with exact citations; fail closed when no evidence matches.",
+    "adaptive": "Novice guided walkthrough or experienced quick check with preference explanations, followed by prerequisite-gated basket preview confirmation. Carries source evidence and journey forward; preview adds one selected unit without placing an order.",
+    "industry_constraints": "Explicit personalization consent checked before ranking; no review/endorsement schema accepted or generated; catalog price/stock are authoritative. Demonstrative GDPR/CCPA-style checks, not legal compliance certification.",
+    "fixture": "All SKUs, shopper identities, products, prices, stock and source passages are clearly labeled synthetic fiction."
+  },
+  "scope": {
+    "included": ["Integrated deterministic four-stage CLI", "One shared input/output contract and validator", "Synthetic retail catalog and clickstream", "Consent gate", "Stock-aware basket preview", "Exact extractive evidence", "Prerequisite-aware plans", "Unittest and CLI coverage"],
+    "excluded": ["Live providers and LLM calls", "Network access", "Real shoppers or reviews", "Checkout or payment", "Actual onboarding action execution", "Tax or shipping calculation", "Live stock synchronization", "Legal compliance certification", "Enterprise production delivery"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 33, "passed": 33, "failures": 0, "errors": 0},
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object with status ok and four validated stages",
+    "error_cli_verified": "Missing file, missing argument, malformed/duplicate JSON and invalid fixtures return JSON status error and exit 2",
+    "deliverable_count_verified": 4
+  }
+}

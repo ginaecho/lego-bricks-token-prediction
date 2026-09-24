@@ -1,0 +1,93 @@
+{
+  "build_id": "wave3_t101_combo4_basic-onboard_basic-support_basic-search_basic-recommend__ind-healthcare",
+  "composition_label": "basic:onboard -> basic:support -> basic:search -> basic:recommend; healthcare",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Newly authored isolated reference implementation; no existing implementation copied or inspected",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "envelope_fields": ["schema_version", "status", "synthetic", "human_review_required", "records", "customer", "request", "stages", "audit"],
+    "records": {
+      "patient": "FHIR-style Patient with synthetic alias, broad age band, fictitious coded diagnoses and numeric labs",
+      "clinical_note": "FHIR-style DocumentReference linking the patient to canonical synthetic clinical note text",
+      "prior_authorization_request": "FHIR-style draft Claim with preauthorization purpose, document checklist and administrative workflow fields"
+    },
+    "validation": "validate_envelope checks the same strict envelope at input and before/after every stage. It validates references, finite values, controlled text, stage prefix, deterministic grounded stage output and complete audit replay.",
+    "input_state": "status=ok, stages={}, audit=[], workflow_status=new, suggested_resource_ids=[]",
+    "output_state": "Same envelope with four validated stages, audit events and authorization workflow_status=awaiting-human-review",
+    "errors": "Single JSON object with status=error and exit 2; no rejected identifiers or paths echoed"
+  },
+  "cross_stage_handoffs": [
+    {"from": "input", "to": "onboarding", "data": "Patient age band, experience, goal, format preference and authorization document gaps"},
+    {"from": "onboarding", "to": "support", "data": "Validated next step and goal, used for contextual response and empty-question fallback"},
+    {"from": "support", "to": "search", "data": "Validated intent, evidence source and normalized query terms; clinical requests are redirected to records administration"},
+    {"from": "search", "to": "recommend", "data": "Validated administrative resource candidates and relevance scores; recommendations must be a subset of these candidates"}
+  ],
+  "behavior": {
+    "onboarding": "Personalized new/returning customer or caregiver next step and missing-document checklist",
+    "support": "Deterministic offline retrieval from seven fixed knowledge entries, source citations, uncertainty escalation and clinical refusal",
+    "search": "Bounded typo correction, synonym normalization, deterministic lexical ranking, language and accessibility filters",
+    "recommend": "Reranks only search results by stated interests and preferred format; bounded output and explicit human next step",
+    "optional_responder": "Injected Python callable receives only approved support evidence. Exact answer/source matching is mandatory; tested using local fixture callables only.",
+    "privacy": "Rejects direct identifier fields, exact dates, non-synthetic aliases, noncanonical notes and request text outside bounded synthetic vocabulary. No arbitrary real-patient ingestion or claim of HIPAA Safe Harbor certification.",
+    "clinical_safety": "No diagnosis, lab interpretation, treatment recommendation, authorization approval or submission. All records and stage outputs require human review.",
+    "audit": "Every changed record field receives ordered before/after evidence with stage, actor, record reference and human-review flag. Input is deep-copied; patient and clinical note remain immutable.",
+    "synthetic_fixture": "Hand-authored fictitious Synthea-style patient, diagnosis and lab values, explicitly tagged synthetic; no real names, MRNs or birth dates."
+  },
+  "scope": {
+    "included": [
+      "One executable integrated pipeline and shared validator",
+      "Three linked healthcare entities in a FHIR-style JSON envelope",
+      "Bounded English conversational vocabulary with synonyms and typo tolerance",
+      "English grounded support answers explicitly labeled en, and en/es catalog availability",
+      "Administrative-resource product catalog, explainable search and preference-based discovery",
+      "Deterministic audit replay and synthetic privacy rejection controls",
+      "Local injected-response fixtures and CLI error handling"
+    ],
+    "excluded": [
+      "Real patient information or general-purpose PHI sanitization",
+      "HIPAA compliance certification or full FHIR conformance",
+      "Clinical decisions, clinical product selection or interpretation of diagnosis/lab data",
+      "Live LLMs, network services, payer integrations or autonomous submissions",
+      "Authentication, persistent storage, production tamper-resistant logging",
+      "Arbitrary unrestricted clinical notes or unrestricted multilingual text"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 45,
+    "unittest_failures": 0,
+    "unittest_errors": 0,
+    "unittest_exit_code": 0,
+    "cli_example": "passed: one JSON object, status=ok, all four pipeline stages and five audited record changes",
+    "cli_example_exit_code": 0,
+    "cli_error_behavior": "Verified missing files, directories, invalid JSON, invalid schema, duplicate keys, non-finite JSON numbers, oversized input and invalid argument count produce status=error and exit 2",
+    "coverage": [
+      "Each stage and every cross-stage handoff",
+      "Personalization, synonyms, typos, empty context and no results",
+      "Language and accessibility filtering",
+      "Synthetic identifier, controlled note and human-review constraints",
+      "Clinical refusal and prevention of autonomous authorization approval",
+      "Determinism, immutable clinical records and full administrative audit replay",
+      "Tampered stage outputs and audit records",
+      "Accepted, ungrounded, mutating and failing injected responder fixtures",
+      "CLI success and validation/file errors"
+    ]
+  }
+}

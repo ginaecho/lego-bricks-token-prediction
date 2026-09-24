@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "fixture_metadata": {
+    "label": "SYNTHETIC: fictitious ERP/MES work order, randomized sensor telemetry and invented maintenance history",
+    "random_seed": 111
+  },
+  "work_order": {
+    "id": "SYN-WO-111",
+    "asset_id": "SYN-ASSET-111",
+    "operation": "Precision shaft machining",
+    "quantity": 24
+  },
+  "customer": {
+    "id": "SYN-CUSTOMER-11",
+    "name": "Fictitious Forge Works",
+    "experience": "new",
+    "completed_steps": [],
+    "interests": [
+      "reliability",
+      "efficient"
+    ]
+  },
+  "preferences": {
+    "weights": {
+      "price_usd": 0.4,
+      "lead_hours": 0.2,
+      "vibration_reduction_pct": 0.4
+    },
+    "excluded_product_ids": [],
+    "excluded_tags": [],
+    "budget_usd": 1000,
+    "recommendation_limit": 3
+  },
+  "sensor_specs": {
+    "temperature": {
+      "unit": "C",
+      "nominal": 60,
+      "tolerance": 5,
+      "safety_upper": 85
+    },
+    "vibration": {
+      "unit": "mm/s",
+      "nominal": 2,
+      "tolerance": 1,
+      "safety_upper": 8
+    }
+  },
+  "telemetry_csv": "timestamp,asset_id,temperature,temperature_unit,vibration,vibration_unit\n2026-09-24T08:00:00Z,SYN-ASSET-111,61.309,C,1.828,mm/s\n2026-09-24T08:01:00Z,SYN-ASSET-111,61.77,C,1.996,mm/s\n2026-09-24T08:02:00Z,SYN-ASSET-111,59.59,C,2.07,mm/s\n2026-09-24T08:03:00Z,SYN-ASSET-111,58.679,C,1.816,mm/s\n2026-09-24T08:04:00Z,SYN-ASSET-111,59.687,C,1.838,mm/s\n2026-09-24T08:05:00Z,SYN-ASSET-111,60.682,C,1.95,mm/s\n",
+  "quality_inspections": [
+    {
+      "id": "SYN-QI-111",
+      "work_order_id": "SYN-WO-111",
+      "asset_id": "SYN-ASSET-111",
+      "inspector": "SYN-INSPECTOR-7",
+      "timestamp": "2026-09-24T08:06:00Z",
+      "characteristic": "shaft diameter",
+      "unit": "mm",
+      "nominal": 20,
+      "tolerance": 0.05,
+      "measured": 20.02,
+      "decision": "accept",
+      "reason": "Synthetic calibrated gauge reading falls within the recorded diameter tolerance."
+    }
+  ],
+  "maintenance_logs": [
+    {
+      "asset_id": "SYN-ASSET-111",
+      "timestamp": "2026-09-23T09:00:00Z",
+      "note": "INVENTED maintenance log: inspected spindle bearing and renewed lubricant; no real asset or service event."
+    }
+  ],
+  "products": [
+    {
+      "id": "KIT-A",
+      "name": "Synthetic stability kit",
+      "tags": [
+        "reliability",
+        "efficient"
+      ],
+      "compatible_assets": [
+        "SYN-ASSET-111"
+      ],
+      "attributes": {
+        "cost_usd": {
+          "value": 400,
+          "unit": "USD"
+        },
+        "lead_days": {
+          "value": 2,
+          "unit": "day"
+        },
+        "reduction_fraction": {
+          "value": 0.6,
+          "unit": "fraction"
+        }
+      }
+    },
+    {
+      "id": "KIT-B",
+      "name": "Synthetic rapid-service kit",
+      "tags": [
+        "fast"
+      ],
+      "compatible_assets": [
+        "SYN-ASSET-111"
+      ],
+      "attributes": {
+        "price_usd": {
+          "value": 250,
+          "unit": "USD"
+        },
+        "lead_hours": {
+          "value": 24,
+          "unit": "h"
+        },
+        "vibration_reduction_pct": {
+          "value": 35,
+          "unit": "%"
+        }
+      }
+    }
+  ],
+  "routing": {
+    "safety": {
+      "owner": "Synthetic human safety desk",
+      "human": true,
+      "priority": "critical"
+    },
+    "quality": {
+      "owner": "Synthetic human quality reviewer",
+      "human": true,
+      "priority": "high"
+    },
+    "telemetry": {
+      "owner": "Synthetic maintenance coordinator",
+      "human": true,
+      "priority": "normal"
+    },
+    "procurement": {
+      "owner": "Synthetic purchasing owner",
+      "human": false,
+      "priority": "low"
+    }
+  }
+}

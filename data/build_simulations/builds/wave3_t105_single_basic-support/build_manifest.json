@@ -1,0 +1,68 @@
+{
+  "build_id": "wave3_t105_single_basic-support",
+  "composition_label": "AI customer support",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch as an isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "question": "Nonblank string, maximum 2000 characters",
+      "team_online": "Required boolean; supplied availability is not independently verified",
+      "knowledge_base": "Required array, 0-100 articles; unique nonblank id and title (maximum 200 characters), body (maximum 4000 characters), optional keywords array (0-30 strings, maximum 100 characters each)"
+    },
+    "output": {
+      "status": "ok or error",
+      "success": "resolution (answered or escalated), answer, citations [{id,title,excerpt}], handoff {needed,reason,team_online,delivery,summary}",
+      "error": "error string; CLI exit code 2"
+    },
+    "validation": "Shared Validator validates requests and optional injected selector output. Unknown fields, duplicate IDs, invalid types and invalid lengths are rejected. CLI additionally rejects duplicate JSON keys, nonfinite JSON values, files larger than 1000000 bytes, malformed JSON and inaccessible files.",
+    "optional_callable": "support(payload, selector=None); selector receives question and retrieved candidates and returns only article_ids, a unique subset of retrieved IDs of length 0-3. Failures become ValidationError. Arbitrary generated answers are prohibited."
+  },
+  "cross_stage_handoffs": [
+    "Single integrated stage: validated request -> deterministic retrieval -> optional validated article selection -> cited answer or unsent human handoff suggestion."
+  ],
+  "behavior": [
+    "Synthetic example store data is explicitly labeled and is not a real commercial policy.",
+    "English ASCII-alphanumeric tokens, case-insensitive matching, fixed stopword removal, minimum 50 percent query-token overlap, maximum three articles, score then ID tie-breaking.",
+    "Answers copy article bodies verbatim and cite IDs and titles. No unsupported model-generated policy claims.",
+    "Explicit human/agent/representative/person requests override retrieval.",
+    "Unknown questions, empty knowledge and selector abstentions produce honest online/offline handoff suggestions without claiming a ticket was sent."
+  ],
+  "scope": {
+    "included": [
+      "General-purpose supplied-knowledge customer support",
+      "Deterministic grounded FAQ retrieval and extractive answers",
+      "Offline support, human-contact suggestions, bounded input validation",
+      "Optional fixture-tested Python callable",
+      "JSON CLI and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Live LLMs, network calls, provider integrations",
+      "Ticket delivery, state persistence, customer account actions",
+      "Enterprise authorization, multilingual semantic retrieval, policy conflict resolution",
+      "Verification of supplied knowledge accuracy; knowledge base must be trusted",
+      "Guaranteed relevance from lexical overlap, calibrated confidence or conversational memory"
+    ]
+  },
+  "test_outcomes": {
+    "state": "passed",
+    "unittest": {"tests_run": 14, "failures": 0, "errors": 0, "exit_code": 0},
+    "example_cli": {"status": "ok", "resolution": "answered", "exit_code": 0}
+  }
+}

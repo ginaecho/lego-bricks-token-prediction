@@ -97,7 +97,7 @@
   "split_group": "3d07c4ffddbad0a81e087a52ba3cc79db852cd52ca3f6056b194b1d745401b11",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "95e286940ffb09f685234375963bf9d6e86dd70d597a0738657b48b35bac844e",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t113_single_triage",
   "membership_point_id": "single_triage",
@@ -105,8 +105,133 @@
   "trial_category": "BT_single_repeat",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "773f678949f308f16a7e2d1fabd065e0752b4728461b55ad21f4bb1df9f88fd5",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "92f852a3-7e65-4a0f-a516-cdfb16142001",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 114797,
+    "output_tokens": 6045,
+    "cache_read_tokens": 107273,
+    "cache_write_tokens": 7506,
+    "total_tokens": 120842,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37544,
+        "agent_id": "92f852a3-7e65-4a0f-a516-cdfb16142001",
+        "model": "gpt-6-astra",
+        "input_tokens": 14857,
+        "output_tokens": 253,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 732,
+        "reasoning_tokens": 69,
+        "duration_ms": 5430,
+        "created_at": "2026-09-24T11:31:25.821Z"
+      },
+      {
+        "id": 37617,
+        "agent_id": "92f852a3-7e65-4a0f-a516-cdfb16142001",
+        "model": "gpt-6-astra",
+        "input_tokens": 15141,
+        "output_tokens": 5185,
+        "cache_read_tokens": 14854,
+        "cache_write_tokens": 284,
+        "reasoning_tokens": 245,
+        "duration_ms": 77139,
+        "created_at": "2026-09-24T11:38:03.992Z"
+      },
+      {
+        "id": 37619,
+        "agent_id": "92f852a3-7e65-4a0f-a516-cdfb16142001",
+        "model": "gpt-6-astra",
+        "input_tokens": 20630,
+        "output_tokens": 133,
+        "cache_read_tokens": 15138,
+        "cache_write_tokens": 5489,
+        "reasoning_tokens": 0,
+        "duration_ms": 4545,
+        "created_at": "2026-09-24T11:38:11.869Z"
+      },
+      {
+        "id": 37622,
+        "agent_id": "92f852a3-7e65-4a0f-a516-cdfb16142001",
+        "model": "gpt-6-astra",
+        "input_tokens": 21138,
+        "output_tokens": 174,
+        "cache_read_tokens": 20627,
+        "cache_write_tokens": 508,
+        "reasoning_tokens": 0,
+        "duration_ms": 9424,
+        "created_at": "2026-09-24T11:38:28.581Z"
+      },
+      {
+        "id": 37624,
+        "agent_id": "92f852a3-7e65-4a0f-a516-cdfb16142001",
+        "model": "gpt-6-astra",
+        "input_tokens": 21400,
+        "output_tokens": 193,
+        "cache_read_tokens": 21135,
+        "cache_write_tokens": 262,
+        "reasoning_tokens": 0,
+        "duration_ms": 11898,
+        "created_at": "2026-09-24T11:38:38.472Z"
+      },
+      {
+        "id": 37626,
+        "agent_id": "92f852a3-7e65-4a0f-a516-cdfb16142001",
+        "model": "gpt-6-astra",
+        "input_tokens": 21631,
+        "output_tokens": 107,
+        "cache_read_tokens": 21397,
+        "cache_write_tokens": 231,
+        "reasoning_tokens": 0,
+        "duration_ms": 3170,
+        "created_at": "2026-09-24T11:38:48.789Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.3776675,
+      "observed_cache_profile_estimate_usd": 0.13630325000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.53201,
+      "observed_cache_profile_estimate_usd": 4.53201,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,102 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............\n----------------------------------------------------------------------\nRan 14 tests in 0.504s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "dataset_label": "SYNTHETIC customer-support fixture; no real customers",
+      "results": [
+        {
+          "ticket_id": "SYN-001",
+          "category": "billing",
+          "priority": "normal",
+          "route": {
+            "team": "synthetic-finance",
+            "owner": "synthetic-billing-lead"
+          },
+          "reason": {
+            "category_selection": "keyword",
+            "category_keywords": [
+              "invoice"
+            ],
+            "base_priority": "normal",
+            "priority_rules": []
+          }
+        },
+        {
+          "ticket_id": "SYN-002",
+          "category": "technical",
+          "priority": "urgent",
+          "route": {
+            "team": "synthetic-engineering",
+            "owner": "synthetic-oncall"
+          },
+          "reason": {
+            "category_selection": "keyword",
+            "category_keywords": [
+              "outage"
+            ],
+            "base_priority": "high",
+            "priority_rules": [
+              {
+                "rule_index": 0,
+                "keywords": [
+                  "outage"
+                ],
+                "priority": "urgent"
+              },
+              {
+                "rule_index": 1,
+                "keywords": [
+                  "blocked"
+                ],
+                "priority": "high"
+              }
+            ]
+          }
+        },
+        {
+          "ticket_id": "SYN-003",
+          "category": "general",
+          "priority": "low",
+          "route": {
+            "team": "synthetic-support",
+            "owner": "synthetic-support-lead"
+          },
+          "reason": {
+            "category_selection": "fallback",
+            "category_keywords": [],
+            "base_priority": "low",
+            "priority_rules": []
+          }
+        }
+      ],
+      "summary": {
+        "total": 3,
+        "by_priority": {
+          "low": 1,
+          "normal": 1,
+          "high": 0,
+          "urgent": 1
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t113_single_triage",
+    "artifact_sha256": {
+      "implementation.py": "e0b2856347f331be88e852d15cd4135a6326e49f46bf8742563b968268cddf5f",
+      "test_implementation.py": "8380b17a4ba5390f9e5b76974a2355e3b08774dbe81b855c76ec2048fdbd4cb6",
+      "example_input.json": "32271407d27651c54600854af6dc9b837b50aa6f0f0aebf5903498a2b30d72e8",
+      "build_manifest.json": "5c3c193089fa13729794cd28d67c749a037f204c53d7d671aea3e1c093acce5c"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

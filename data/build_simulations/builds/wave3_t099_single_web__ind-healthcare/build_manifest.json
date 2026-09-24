@@ -1,0 +1,55 @@
+{
+  "build_id": "wave3_t099_single_web__ind-healthcare",
+  "composition_label": "single_web",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New independently authored reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Strict JSON envelope: schema_version, synthetic=true, records, research. Records contain exactly one Patient, DocumentReference clinical note and draft Claim preauthorization with consistent patient references. Research contains urls and an exact corresponding fixtures map.",
+    "output": "Versioned synthetic envelope with status, human_review_required=true, clinical_decision=not-performed, annotated records, source snapshots, quoted findings and record-change audit.",
+    "validation": "One shared module validates input, output, all resources, source provenance and audits. Unknown record fields, identifiers, birth dates, arbitrary clinical note text, nonfinite numbers and duplicate JSON keys are rejected.",
+    "fixtures": "Fictitious Synthea-style patient with ICD-style diagnosis and LOINC-style glucose lab; no real names, MRNs or birth dates. This is FHIR-style JSON, not conformant full HL7 FHIR.",
+    "deidentification": "Demonstrative identifier exclusion: narrow synthetic IDs, broad age bands, strict field whitelist and three identifier-free clinical note templates. No general free-text deidentifier or HIPAA certification is claimed."
+  },
+  "cross_stage_handoffs": [
+    "Shared validation accepts synthetic resources and canonical URLs.",
+    "Allowlist ingestion hands URLs to offline fixture retrieval.",
+    "Retrieval hands original source text, URL and SHA-256 to deterministic excerpt extraction.",
+    "Findings retain exact quotes and Unicode character offsets into stored source bodies.",
+    "Human-review annotation creates a before/after audit event for every changed record; final shared validation checks the entire result."
+  ],
+  "behavior": {
+    "allowlist": ["https://guidance.synthetic.example"],
+    "retrieval": "Local plain-text fixture retrieval only, no network, redirects, HTML execution or live provider.",
+    "limits": "1-5 unique canonical HTTPS URLs, 5000 characters and 20 lines per source, 100000-byte CLI input, exactly three clinical resources.",
+    "findings": "Every nonblank source line is an uninterpreted source excerpt, never a clinical recommendation. Retrieved text is untrusted source material, not an instruction.",
+    "clinical_safety": "No diagnosis, treatment, eligibility, approval or denial decisions. Claims remain draft and all outputs require human review.",
+    "audit": "Deterministic ordered events include full before/after resource snapshots and SHA-256 digests; every resource annotation is checked. Audit is per execution, not a durable cross-run ledger.",
+    "errors": "File, JSON and validation errors return one redacted JSON object with status error and exit code 2. Success returns one JSON object and exit code 0.",
+    "determinism": "No timestamps, randomness, external calls or LLM. Same input yields identical output and the caller's input is not mutated."
+  },
+  "scope": {
+    "included": ["Offline web-research simulation", "Allowlisted URL ingestion", "Provenance-preserving findings", "Synthetic healthcare resource validation", "Mandatory human review", "Per-change audit trail", "CLI and unittest coverage"],
+    "excluded": ["Live internet retrieval", "Real patient data", "Autonomous clinical decisions", "HIPAA compliance certification", "Full FHIR interoperability", "General-purpose free-text deidentification", "Persistent database", "Authentication", "Enterprise deployment", "LLM or provider integration"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 17,
+    "unittest_failures": 0,
+    "cli_example_exit_code": 0,
+    "cli_example_status": "ok",
+    "verified": "Both documented commands were executed successfully; CLI error behavior is covered by the test suite."
+  }
+}
