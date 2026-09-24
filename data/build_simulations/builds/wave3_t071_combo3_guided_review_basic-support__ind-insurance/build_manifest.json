@@ -1,0 +1,132 @@
+{
+  "build_id": "wave3_t071_combo3_guided_review_basic-support__ind-insurance",
+  "composition_label": "Guided setup -> Document review -> AI customer support (basic), Insurance",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New standalone implementation created in the isolated build directory; no existing source was read or copied.",
+    "runtime": "Python 3.9+ standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py",
+    "working_directory": "Run both commands from this build directory. -B prevents bytecode artifacts."
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input_required_fields": [
+      "schema_version",
+      "synthetic",
+      "as_of",
+      "policy",
+      "claim_form",
+      "submission",
+      "evidence",
+      "onboarding",
+      "support"
+    ],
+    "policy": {
+      "fields": ["policy_id", "policyholder_ref", "effective_date", "expiry_date", "coverage_limit", "currency", "asset"],
+      "policyholder_ref": "An invented pseudonymous reference prefixed SYN-, never an actual policyholder name.",
+      "asset": "type vehicle with fabricated 17-character VIN; or type property with reference prefixed SYNTHETIC.",
+      "currency": ["USD", "EUR", "GBP"]
+    },
+    "claim_form": "Plain key: value lines: claim_id, policy_id, loss_date, loss_amount, description. Duplicate or unknown fields rejected.",
+    "submission": {
+      "acord_json": "format acord_json; content.ACORD has submission_id, policy_id and nonempty factors.",
+      "acord_xml": "format acord_xml; content is ACORD XML containing SubmissionId, PolicyId, Factors, with Factor name/value/disclosed attributes. XML DTD and entity declarations rejected.",
+      "factors": "Each factor has name, value, disclosed=true; allowed names: vehicle_age, roof_age, use_type, deductible, prior_claims. These are disclosed input values, not a pricing model.",
+      "standard_claim": "ACORD-style demonstration subset only; not an official ACORD schema implementation."
+    },
+    "evidence": "List of evidence_id, kind, entity_id, text. Unique evidence IDs. Kinds: policy_schedule, claim_form, loss_evidence, underwriting_disclosure.",
+    "onboarding": "completed_steps must be an ordered prefix of confirm_synthetic_data, confirm_policy, confirm_claim, confirm_disclosures. These are caller confirmations after shared input validation.",
+    "support": "question nonempty text and team_online boolean.",
+    "normalized_case": "schema_version, synthetic, as_of, case_id, policy, claim, underwriting, evidence, completed_steps, support_request",
+    "output": "One JSON object with schema_version, synthetic, status, case_id, guided, review, support and disclaimer. Successful output includes one normalized case. Blocked output embeds the case in guided and sets downstream stages null. Errors contain status=error and error.",
+    "shared_validation": "validate_case calls shared object, text, identifier, numeric and date validators, then checks entity links, privacy guardrails and disclosure. validate_handoff checks stage, validated flag, schema, case identity and completion before each downstream stage.",
+    "limits": "At most 20 factors and 100 evidence entries; bounded text fields. Loss amounts positive and finite, dates ISO, loss no later than explicit as_of, policy date order valid. Unknown input fields rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "guided",
+      "to": "review",
+      "consumes": "Validated normalized case and completed prerequisite progress.",
+      "gate": "Incomplete setup yields status blocked and no review or support execution."
+    },
+    {
+      "from": "review",
+      "to": "basic:support",
+      "consumes": "Same case, requirement checks, entity-linked evidence references, traceable gaps and reasoned nonfinal claims action.",
+      "gate": "Only complete validated review results accepted; review gaps inform the answer and escalation recommendation."
+    }
+  ],
+  "behavior": {
+    "guided_setup": "Four prerequisite-driven confirmations with complete, ready and blocked states and numerical progress.",
+    "document_review": "Checks four evidence requirements. The validated input claim form satisfies its own requirement. Evidence metadata must match the required entity; underwriting disclosure text must name all supplied factors. Presence checks do not establish document authenticity or substantive sufficiency.",
+    "claims_handling": "Same rules for each case; unsupported protected factors rejected. Missing evidence produces request_information with reasons and a human-review dispute path. Otherwise human_review; policy-period and limit concerns get explicit reasons. Never issues final approval or denial.",
+    "privacy": "Strict field allowlists, synthetic pseudonymous identifiers and basic email/government-identifier text checks demonstrate minimization. Arbitrary text is not guaranteed anonymous. No application database is written; input files and stdout are caller-controlled.",
+    "support": "Deterministic grounded templates for claims, evidence gaps, policy limits, underwriting factors, privacy and unknown questions. Citations identify review decisions, requirement names, case fields or validation policy. Offline operation is explicit, with no fabricated ticket or response-time promise.",
+    "synthetic_fixtures": "Example has invented policyholder reference and fabricated VIN. Tests use random.Random(71) for reproducible randomized losses, loss dates and fabricated property addresses.",
+    "determinism": "Uses explicit as_of rather than current time. No live model, optional model step, network request or external provider is used.",
+    "cli": "Successful or prerequisite-blocked valid inputs exit 0. Validation, malformed JSON, encoding, argument and file errors print one JSON error object and exit 2. Errors avoid echoing file paths or payloads."
+  },
+  "scope": {
+    "included": [
+      "One integrated pipeline and shared validation boundary",
+      "ACORD-style JSON/XML subset and claim-form text",
+      "Synthetic policy, claim and underwriting entities",
+      "Traceable evidence gaps and explained human-review routing",
+      "Deterministic general support across several insurance service topics",
+      "CLI and standard-library unittest coverage"
+    ],
+    "excluded": [
+      "Production or enterprise deployment",
+      "Compliance certification, legal advice, GDPR guarantees or official ACORD conformance",
+      "Final claim adjudication, underwriting scoring or premium calculation",
+      "Document authenticity verification, OCR or semantic evidence assessment",
+      "Persistent customer storage, real ticket creation or external support integration",
+      "Live AI/model providers, broad open-domain knowledge or generated factual claims",
+      "Complete detection of personal data in arbitrary free text",
+      "Authentication, authorization and hostile-process handoff protection"
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 29,
+      "passed": 29,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "review_action": "request_information",
+      "expected_gap": "loss_evidence",
+      "offline_answer_verified": true
+    },
+    "coverage": [
+      "All three stages and prerequisite gating",
+      "Case identity and gap propagation across stages",
+      "XML/JSON normalized-output equivalence",
+      "Duplicate, invalid, nonfinite and future-date inputs",
+      "Disclosure, minimization and protected-factor rules",
+      "Reasoned nonfinal decisions for dates and limits",
+      "Offline and unknown-question support",
+      "Seeded synthetic randomized fixtures and input immutability",
+      "CLI success, missing file, usage, malformed JSON and validation failures"
+    ]
+  }
+}

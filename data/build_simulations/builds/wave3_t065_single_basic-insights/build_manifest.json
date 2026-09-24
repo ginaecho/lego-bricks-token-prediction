@@ -1,0 +1,55 @@
+{
+  "build_id": "wave3_t065_single_basic-insights",
+  "composition_label": "Customer insights (basic functionality, Intelligence)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "required": ["schema_version: integer 1", "dataset_label: nonempty string", "synthetic: boolean", "feedback: array"],
+      "feedback_item": "Unique id, nonempty text and source; optional integer rating 1..5",
+      "optional": "max_evidence: integer 1..20, default 3; theme_rules: 1..100 objects containing name, keywords, action",
+      "limits": "At most 10000 feedback items, text at most 10000 characters; unknown fields rejected",
+      "theme_rules": "Custom rules replace defaults. Names unique case-insensitively; uncategorized reserved. Keywords match whole words or phrases."
+    },
+    "output": {
+      "success": "status=ok, schema_version, dataset_label, synthetic, summary, themes, assignments, method",
+      "theme": "name, feedback_count, share_of_feedback, sentiment_counts, source_counts, priority_score, recommended_action, feedback_ids, evidence",
+      "error": "status=error, error: diagnostic string; exit code 2"
+    },
+    "validation": "One validate entry point used by analyze and CLI; strict JSON rejects duplicate fields and non-finite constants."
+  },
+  "cross_stage_handoffs": "Single stage: validated feedback becomes deterministic assignments, then evidence-backed ranked themes in the same response. No external handoff.",
+  "behavior": [
+    "Default themes: usability, reliability, performance, pricing, support; configurable general-purpose rule vocabulary and actions.",
+    "Case-insensitive whitespace-normalized whole-word/phrase matching permits multiple themes; unmatched feedback remains uncategorized.",
+    "Ratings determine sentiment when supplied; otherwise unique lexicon word counts determine sentiment.",
+    "Rank by feedback_count + 2 * negative_count descending, then theme name; assignments and references sorted by id.",
+    "Evidence is verbatim, bounded by max_evidence, and negative-first; all matching ids remain available.",
+    "Empty feedback is valid; input order does not affect output; input is not mutated.",
+    "All fixture data is synthetic. CLI writes a single JSON object to stdout."
+  ],
+  "scope": {
+    "included": ["Feedback aggregation", "Configurable themes", "Sentiment heuristic", "Prioritization", "Traceable evidence", "Action recommendations", "Shared validation", "CLI"],
+    "excluded": ["Live providers or network", "LLM integration", "Semantic clustering", "Negation and sarcasm understanding", "Statistical claims", "Text deduplication across different ids", "Persistence", "Enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 12,
+    "unittest_passed": 12,
+    "unittest_exit_code": 0,
+    "cli": "passed: one JSON object with status ok and five feedback assignments",
+    "cli_exit_code": 0
+  }
+}

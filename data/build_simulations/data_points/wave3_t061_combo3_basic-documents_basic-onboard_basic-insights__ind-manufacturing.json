@@ -118,7 +118,7 @@
   "split_group": "34b3774202048ac2a5010a4b08a48de835cf5f8cd2511e6b1a35760d74f4e71e",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "27f7f2d1a00b3d608c80fb9220c8c5cb1327116eaafb14668eaad2ca2d950b45",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t061_combo3_basic-documents_basic-onboard_basic-insights__ind-manufacturing",
   "membership_point_id": "combo3_basic-documents_basic-onboard_basic-insights__ind-manufacturing",
@@ -126,8 +126,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "793b026f5e64b6d3bf60140610f9d0d011df8139b5e1aa3265cdee9221f08fae",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "fc6df610-8d6d-499c-a61b-41cb11af9c4d",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 148746,
+    "output_tokens": 14710,
+    "cache_read_tokens": 132515,
+    "cache_write_tokens": 16213,
+    "total_tokens": 163456,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36711,
+        "agent_id": "fc6df610-8d6d-499c-a61b-41cb11af9c4d",
+        "model": "gpt-6-astra",
+        "input_tokens": 15101,
+        "output_tokens": 743,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 997,
+        "reasoning_tokens": 516,
+        "duration_ms": 19014,
+        "created_at": "2026-09-24T09:28:14.710Z"
+      },
+      {
+        "id": 36735,
+        "agent_id": "fc6df610-8d6d-499c-a61b-41cb11af9c4d",
+        "model": "gpt-6-astra",
+        "input_tokens": 15876,
+        "output_tokens": 11996,
+        "cache_read_tokens": 15098,
+        "cache_write_tokens": 775,
+        "reasoning_tokens": 516,
+        "duration_ms": 148732,
+        "created_at": "2026-09-24T09:30:34.019Z"
+      },
+      {
+        "id": 36737,
+        "agent_id": "fc6df610-8d6d-499c-a61b-41cb11af9c4d",
+        "model": "gpt-6-astra",
+        "input_tokens": 28228,
+        "output_tokens": 888,
+        "cache_read_tokens": 15873,
+        "cache_write_tokens": 12352,
+        "reasoning_tokens": 357,
+        "duration_ms": 18474,
+        "created_at": "2026-09-24T09:30:48.829Z"
+      },
+      {
+        "id": 36747,
+        "agent_id": "fc6df610-8d6d-499c-a61b-41cb11af9c4d",
+        "model": "gpt-6-astra",
+        "input_tokens": 29197,
+        "output_tokens": 729,
+        "cache_read_tokens": 28225,
+        "cache_write_tokens": 969,
+        "reasoning_tokens": 237,
+        "duration_ms": 14975,
+        "created_at": "2026-09-24T09:31:54.457Z"
+      },
+      {
+        "id": 36750,
+        "agent_id": "fc6df610-8d6d-499c-a61b-41cb11af9c4d",
+        "model": "gpt-6-astra",
+        "input_tokens": 30027,
+        "output_tokens": 253,
+        "cache_read_tokens": 29194,
+        "cache_write_tokens": 830,
+        "reasoning_tokens": 0,
+        "duration_ms": 4958,
+        "created_at": "2026-09-24T09:32:14.131Z"
+      },
+      {
+        "id": 36752,
+        "agent_id": "fc6df610-8d6d-499c-a61b-41cb11af9c4d",
+        "model": "gpt-6-astra",
+        "input_tokens": 30317,
+        "output_tokens": 101,
+        "cache_read_tokens": 30024,
+        "cache_write_tokens": 290,
+        "reasoning_tokens": 0,
+        "duration_ms": 6725,
+        "created_at": "2026-09-24T09:32:29.963Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.592515,
+      "observed_cache_profile_estimate_usd": 0.29435625000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.11018,
+      "observed_cache_profile_estimate_usd": 7.11018,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -158,5 +283,598 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".......................................\n----------------------------------------------------------------------\nRan 39 tests in 1.267s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "fixture_label": "SYNTHETIC ONLY: fictitious customers, machines, lots, operators and maintenance logs; physically plausible seeded telemetry with injected demonstration anomalies.",
+      "industry": "Manufacturing",
+      "work_orders": [
+        {
+          "work_order_id": "SYN-WO-001",
+          "customer_id": "SYN-CUST-A",
+          "customer_name": "Invented Cedar Components",
+          "asset_id": "SYN-PRESS-17",
+          "lot_id": "SYN-LOT-A",
+          "product": "synthetic precision bushings",
+          "operator": "Fictitious Operator Nia",
+          "tolerances": {
+            "temperature": {
+              "unit": "C",
+              "min": 40,
+              "max": 75,
+              "safety_max": 90
+            },
+            "vibration": {
+              "unit": "mm/s",
+              "min": 0,
+              "max": 4.5,
+              "safety_max": 8
+            },
+            "diameter": {
+              "unit": "mm",
+              "min": 19.95,
+              "max": 20.05,
+              "safety_max": 21
+            }
+          }
+        },
+        {
+          "work_order_id": "SYN-WO-002",
+          "customer_id": "SYN-CUST-B",
+          "customer_name": "Invented Finch Fabrication",
+          "asset_id": "SYN-LATHE-24",
+          "lot_id": "SYN-LOT-B",
+          "product": "synthetic valve sleeves",
+          "operator": "Fictitious Operator Jules",
+          "tolerances": {
+            "temperature": {
+              "unit": "C",
+              "min": 40,
+              "max": 75,
+              "safety_max": 90
+            },
+            "vibration": {
+              "unit": "mm/s",
+              "min": 0,
+              "max": 4.5,
+              "safety_max": 8
+            },
+            "diameter": {
+              "unit": "mm",
+              "min": 29.95,
+              "max": 30.05,
+              "safety_max": 31
+            }
+          }
+        }
+      ],
+      "quality_inspections": [
+        {
+          "inspection_id": "SYN-QI-001",
+          "work_order_id": "SYN-WO-001",
+          "lot_id": "SYN-LOT-A",
+          "measurement": {
+            "metric": "diameter",
+            "value": 20.08,
+            "unit": "mm"
+          },
+          "decision": "reject",
+          "decision_by": "Fictitious Inspector Ada",
+          "decided_at": "2026-09-24T08:05:00Z",
+          "rationale": "Synthetic sample exceeds the 20.05 mm upper drawing tolerance; hold lot for human review."
+        },
+        {
+          "inspection_id": "SYN-QI-002",
+          "work_order_id": "SYN-WO-002",
+          "lot_id": "SYN-LOT-B",
+          "measurement": {
+            "metric": "diameter",
+            "value": 30.01,
+            "unit": "mm"
+          },
+          "decision": "accept",
+          "decision_by": "Fictitious Inspector Ren",
+          "decided_at": "2026-09-24T08:06:00Z",
+          "rationale": "Synthetic sample is within the recorded dimensional limits."
+        }
+      ],
+      "maintenance_logs": [
+        {
+          "log_id": "SYN-MAINT-001",
+          "work_order_id": "SYN-WO-001",
+          "asset_id": "SYN-PRESS-17",
+          "timestamp": "2026-09-24T08:03:00Z",
+          "text": "INVENTED LOG: guard interlock intermittently fails its diagnostic check; human safety inspection requested.",
+          "safety_critical": true,
+          "status": "open"
+        },
+        {
+          "log_id": "SYN-MAINT-002",
+          "work_order_id": "SYN-WO-002",
+          "asset_id": "SYN-LATHE-24",
+          "timestamp": "2026-09-24T07:00:00Z",
+          "text": "INVENTED LOG: scheduled lubrication completed by a fictitious technician.",
+          "safety_critical": false,
+          "status": "resolved"
+        }
+      ],
+      "feedback": [
+        {
+          "feedback_id": "SYN-FB-001",
+          "work_order_id": "SYN-WO-001",
+          "timestamp": "2026-09-24T09:00:00Z",
+          "text": "SYNTHETIC FEEDBACK: quality rejects and vibration delay our first lot.",
+          "sentiment": "negative"
+        },
+        {
+          "feedback_id": "SYN-FB-002",
+          "work_order_id": "SYN-WO-001",
+          "timestamp": "2026-09-24T09:01:00Z",
+          "text": "SYNTHETIC FEEDBACK: please explain the safety guard review next step.",
+          "sentiment": "neutral"
+        },
+        {
+          "feedback_id": "SYN-FB-003",
+          "work_order_id": "SYN-WO-002",
+          "timestamp": "2026-09-24T09:02:00Z",
+          "text": "SYNTHETIC FEEDBACK: training and setup instructions were clear.",
+          "sentiment": "positive"
+        }
+      ],
+      "telemetry": [
+        {
+          "reading_id": "SYN-R-001",
+          "timestamp": "2026-09-24T08:00:00Z",
+          "work_order_id": "SYN-WO-001",
+          "asset_id": "SYN-PRESS-17",
+          "metric": "temperature",
+          "value": 58.94,
+          "unit": "C"
+        },
+        {
+          "reading_id": "SYN-R-002",
+          "timestamp": "2026-09-24T08:00:00Z",
+          "work_order_id": "SYN-WO-001",
+          "asset_id": "SYN-PRESS-17",
+          "metric": "vibration",
+          "value": 2.64,
+          "unit": "mm/s"
+        },
+        {
+          "reading_id": "SYN-R-003",
+          "timestamp": "2026-09-24T08:01:00Z",
+          "work_order_id": "SYN-WO-001",
+          "asset_id": "SYN-PRESS-17",
+          "metric": "temperature",
+          "value": 62.1,
+          "unit": "C"
+        },
+        {
+          "reading_id": "SYN-R-004",
+          "timestamp": "2026-09-24T08:01:00Z",
+          "work_order_id": "SYN-WO-001",
+          "asset_id": "SYN-PRESS-17",
+          "metric": "vibration",
+          "value": 5.4,
+          "unit": "mm/s"
+        },
+        {
+          "reading_id": "SYN-R-005",
+          "timestamp": "2026-09-24T08:02:00Z",
+          "work_order_id": "SYN-WO-001",
+          "asset_id": "SYN-PRESS-17",
+          "metric": "temperature",
+          "value": 96.2,
+          "unit": "C"
+        },
+        {
+          "reading_id": "SYN-R-006",
+          "timestamp": "2026-09-24T08:02:00Z",
+          "work_order_id": "SYN-WO-001",
+          "asset_id": "SYN-PRESS-17",
+          "metric": "vibration",
+          "value": 2.28,
+          "unit": "mm/s"
+        },
+        {
+          "reading_id": "SYN-R-007",
+          "timestamp": "2026-09-24T08:00:00Z",
+          "work_order_id": "SYN-WO-002",
+          "asset_id": "SYN-LATHE-24",
+          "metric": "temperature",
+          "value": 57.21,
+          "unit": "C"
+        },
+        {
+          "reading_id": "SYN-R-008",
+          "timestamp": "2026-09-24T08:00:00Z",
+          "work_order_id": "SYN-WO-002",
+          "asset_id": "SYN-LATHE-24",
+          "metric": "vibration",
+          "value": 2.84,
+          "unit": "mm/s"
+        }
+      ],
+      "stage": "insights",
+      "status": "ok",
+      "documents": {
+        "record_counts": {
+          "work_orders": 2,
+          "telemetry": 8,
+          "quality_inspections": 2,
+          "maintenance_logs": 2,
+          "feedback": 3
+        },
+        "quality_decisions": [
+          {
+            "inspection_id": "SYN-QI-001",
+            "work_order_id": "SYN-WO-001",
+            "lot_id": "SYN-LOT-A",
+            "measurement": {
+              "metric": "diameter",
+              "value": 20.08,
+              "unit": "mm"
+            },
+            "decision": "reject",
+            "decision_by": "Fictitious Inspector Ada",
+            "decided_at": "2026-09-24T08:05:00Z",
+            "rationale": "Synthetic sample exceeds the 20.05 mm upper drawing tolerance; hold lot for human review.",
+            "asset_id": "SYN-PRESS-17",
+            "customer_id": "SYN-CUST-A",
+            "tolerance": {
+              "unit": "mm",
+              "min": 19.95,
+              "max": 20.05,
+              "safety_max": 21
+            }
+          },
+          {
+            "inspection_id": "SYN-QI-002",
+            "work_order_id": "SYN-WO-002",
+            "lot_id": "SYN-LOT-B",
+            "measurement": {
+              "metric": "diameter",
+              "value": 30.01,
+              "unit": "mm"
+            },
+            "decision": "accept",
+            "decision_by": "Fictitious Inspector Ren",
+            "decided_at": "2026-09-24T08:06:00Z",
+            "rationale": "Synthetic sample is within the recorded dimensional limits.",
+            "asset_id": "SYN-LATHE-24",
+            "customer_id": "SYN-CUST-B",
+            "tolerance": {
+              "unit": "mm",
+              "min": 29.95,
+              "max": 30.05,
+              "safety_max": 31
+            }
+          }
+        ],
+        "alerts": [
+          {
+            "alert_id": "telemetry:SYN-R-004",
+            "source_type": "telemetry",
+            "source_id": "SYN-R-004",
+            "work_order_id": "SYN-WO-001",
+            "customer_id": "SYN-CUST-A",
+            "asset_id": "SYN-PRESS-17",
+            "lot_id": "SYN-LOT-A",
+            "severity": "warning",
+            "reason": "vibration outside tolerance",
+            "observed_at": "2026-09-24T08:01:00Z",
+            "evidence": {
+              "metric": "vibration",
+              "value": 5.4,
+              "unit": "mm/s",
+              "tolerance": {
+                "unit": "mm/s",
+                "min": 0,
+                "max": 4.5,
+                "safety_max": 8
+              }
+            },
+            "human_required": false
+          },
+          {
+            "alert_id": "telemetry:SYN-R-005",
+            "source_type": "telemetry",
+            "source_id": "SYN-R-005",
+            "work_order_id": "SYN-WO-001",
+            "customer_id": "SYN-CUST-A",
+            "asset_id": "SYN-PRESS-17",
+            "lot_id": "SYN-LOT-A",
+            "severity": "critical",
+            "reason": "temperature outside tolerance",
+            "observed_at": "2026-09-24T08:02:00Z",
+            "evidence": {
+              "metric": "temperature",
+              "value": 96.2,
+              "unit": "C",
+              "tolerance": {
+                "unit": "C",
+                "min": 40,
+                "max": 75,
+                "safety_max": 90
+              }
+            },
+            "human_required": true
+          },
+          {
+            "alert_id": "inspection:SYN-QI-001",
+            "source_type": "inspection",
+            "source_id": "SYN-QI-001",
+            "work_order_id": "SYN-WO-001",
+            "customer_id": "SYN-CUST-A",
+            "asset_id": "SYN-PRESS-17",
+            "lot_id": "SYN-LOT-A",
+            "severity": "high",
+            "reason": "quality inspection rejected",
+            "observed_at": "2026-09-24T08:05:00Z",
+            "evidence": {
+              "inspection_id": "SYN-QI-001",
+              "work_order_id": "SYN-WO-001",
+              "lot_id": "SYN-LOT-A",
+              "measurement": {
+                "metric": "diameter",
+                "value": 20.08,
+                "unit": "mm"
+              },
+              "decision": "reject",
+              "decision_by": "Fictitious Inspector Ada",
+              "decided_at": "2026-09-24T08:05:00Z",
+              "rationale": "Synthetic sample exceeds the 20.05 mm upper drawing tolerance; hold lot for human review.",
+              "asset_id": "SYN-PRESS-17",
+              "customer_id": "SYN-CUST-A",
+              "tolerance": {
+                "unit": "mm",
+                "min": 19.95,
+                "max": 20.05,
+                "safety_max": 21
+              }
+            },
+            "human_required": false
+          },
+          {
+            "alert_id": "maintenance:SYN-MAINT-001",
+            "source_type": "maintenance",
+            "source_id": "SYN-MAINT-001",
+            "work_order_id": "SYN-WO-001",
+            "customer_id": "SYN-CUST-A",
+            "asset_id": "SYN-PRESS-17",
+            "lot_id": "SYN-LOT-A",
+            "severity": "critical",
+            "reason": "INVENTED LOG: guard interlock intermittently fails its diagnostic check; human safety inspection requested.",
+            "observed_at": "2026-09-24T08:03:00Z",
+            "evidence": {
+              "log_id": "SYN-MAINT-001",
+              "work_order_id": "SYN-WO-001",
+              "asset_id": "SYN-PRESS-17",
+              "timestamp": "2026-09-24T08:03:00Z",
+              "text": "INVENTED LOG: guard interlock intermittently fails its diagnostic check; human safety inspection requested.",
+              "safety_critical": true,
+              "status": "open"
+            },
+            "human_required": true
+          }
+        ],
+        "notice": "Demonstrative ISO 9001-style decision traceability; not compliance certification."
+      },
+      "onboarding": {
+        "customers": [
+          {
+            "customer_id": "SYN-CUST-A",
+            "customer_name": "Invented Cedar Components",
+            "status": "blocked_pending_human",
+            "next_step_id": "review:maintenance:SYN-MAINT-001",
+            "task_ids": [
+              "review:maintenance:SYN-MAINT-001",
+              "review:telemetry:SYN-R-005",
+              "review:inspection:SYN-QI-001",
+              "review:telemetry:SYN-R-004",
+              "orientation:SYN-WO-001"
+            ]
+          },
+          {
+            "customer_id": "SYN-CUST-B",
+            "customer_name": "Invented Finch Fabrication",
+            "status": "ready_for_guided_setup",
+            "next_step_id": "orientation:SYN-WO-002",
+            "task_ids": [
+              "orientation:SYN-WO-002"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "review:maintenance:SYN-MAINT-001",
+            "customer_id": "SYN-CUST-A",
+            "work_order_id": "SYN-WO-001",
+            "asset_id": "SYN-PRESS-17",
+            "source_alert_id": "maintenance:SYN-MAINT-001",
+            "priority": "critical",
+            "category": "safety",
+            "assignee_role": "human_safety_lead",
+            "status": "awaiting_human",
+            "blocks_onboarding": true,
+            "instruction": "Escalate to the human safety lead; do not authorize production or restart. Invented Cedar Components: INVENTED LOG: guard interlock intermittently fails its diagnostic check; human safety inspection requested."
+          },
+          {
+            "task_id": "review:telemetry:SYN-R-005",
+            "customer_id": "SYN-CUST-A",
+            "work_order_id": "SYN-WO-001",
+            "asset_id": "SYN-PRESS-17",
+            "source_alert_id": "telemetry:SYN-R-005",
+            "priority": "critical",
+            "category": "safety",
+            "assignee_role": "human_safety_lead",
+            "status": "awaiting_human",
+            "blocks_onboarding": true,
+            "instruction": "Escalate to the human safety lead; do not authorize production or restart. Invented Cedar Components: temperature outside tolerance"
+          },
+          {
+            "task_id": "review:inspection:SYN-QI-001",
+            "customer_id": "SYN-CUST-A",
+            "work_order_id": "SYN-WO-001",
+            "asset_id": "SYN-PRESS-17",
+            "source_alert_id": "inspection:SYN-QI-001",
+            "priority": "high",
+            "category": "quality",
+            "assignee_role": "human_operations_lead",
+            "status": "pending",
+            "blocks_onboarding": true,
+            "instruction": "Have the operations lead review the evidence. Invented Cedar Components: quality inspection rejected"
+          },
+          {
+            "task_id": "review:telemetry:SYN-R-004",
+            "customer_id": "SYN-CUST-A",
+            "work_order_id": "SYN-WO-001",
+            "asset_id": "SYN-PRESS-17",
+            "source_alert_id": "telemetry:SYN-R-004",
+            "priority": "warning",
+            "category": "maintenance",
+            "assignee_role": "human_operations_lead",
+            "status": "pending",
+            "blocks_onboarding": false,
+            "instruction": "Have the operations lead review the evidence. Invented Cedar Components: vibration outside tolerance"
+          },
+          {
+            "task_id": "orientation:SYN-WO-001",
+            "customer_id": "SYN-CUST-A",
+            "work_order_id": "SYN-WO-001",
+            "asset_id": "SYN-PRESS-17",
+            "source_alert_id": null,
+            "priority": "info",
+            "category": "training",
+            "assignee_role": "customer_operator",
+            "status": "pending",
+            "blocks_onboarding": false,
+            "instruction": "Invented Cedar Components: confirm operator Fictitious Operator Nia understands SYN-PRESS-17 work-order tolerances and lot SYN-LOT-A quality records before starting synthetic precision bushings."
+          },
+          {
+            "task_id": "orientation:SYN-WO-002",
+            "customer_id": "SYN-CUST-B",
+            "work_order_id": "SYN-WO-002",
+            "asset_id": "SYN-LATHE-24",
+            "source_alert_id": null,
+            "priority": "info",
+            "category": "training",
+            "assignee_role": "customer_operator",
+            "status": "pending",
+            "blocks_onboarding": false,
+            "instruction": "Invented Finch Fabrication: confirm operator Fictitious Operator Jules understands SYN-LATHE-24 work-order tolerances and lot SYN-LOT-B quality records before starting synthetic valve sleeves."
+          }
+        ],
+        "automatic_machine_actions": []
+      },
+      "insights": {
+        "themes": [
+          {
+            "theme": "maintenance",
+            "feedback_ids": [
+              "SYN-FB-001"
+            ],
+            "task_ids": [
+              "review:telemetry:SYN-R-004"
+            ],
+            "work_order_ids": [
+              "SYN-WO-001"
+            ],
+            "customer_ids": [
+              "SYN-CUST-A"
+            ],
+            "negative_feedback_count": 1,
+            "feedback_count": 1,
+            "recommended_action": "Maintenance lead should inspect affected assets and plan follow-up.",
+            "human_review_required": false
+          },
+          {
+            "theme": "quality",
+            "feedback_ids": [
+              "SYN-FB-001"
+            ],
+            "task_ids": [
+              "review:inspection:SYN-QI-001"
+            ],
+            "work_order_ids": [
+              "SYN-WO-001"
+            ],
+            "customer_ids": [
+              "SYN-CUST-A"
+            ],
+            "negative_feedback_count": 1,
+            "feedback_count": 1,
+            "recommended_action": "Quality lead should review lot decisions and investigate recurring defects.",
+            "human_review_required": false
+          },
+          {
+            "theme": "safety",
+            "feedback_ids": [
+              "SYN-FB-002"
+            ],
+            "task_ids": [
+              "review:maintenance:SYN-MAINT-001",
+              "review:telemetry:SYN-R-005"
+            ],
+            "work_order_ids": [
+              "SYN-WO-001"
+            ],
+            "customer_ids": [
+              "SYN-CUST-A"
+            ],
+            "negative_feedback_count": 0,
+            "feedback_count": 1,
+            "recommended_action": "Human safety lead must triage safety evidence; no automatic clearance.",
+            "human_review_required": true
+          },
+          {
+            "theme": "training",
+            "feedback_ids": [
+              "SYN-FB-003"
+            ],
+            "task_ids": [
+              "orientation:SYN-WO-001",
+              "orientation:SYN-WO-002"
+            ],
+            "work_order_ids": [
+              "SYN-WO-001",
+              "SYN-WO-002"
+            ],
+            "customer_ids": [
+              "SYN-CUST-A",
+              "SYN-CUST-B"
+            ],
+            "negative_feedback_count": 0,
+            "feedback_count": 1,
+            "recommended_action": "Onboarding lead should clarify instructions and confirm operator readiness.",
+            "human_review_required": false
+          }
+        ],
+        "summary": {
+          "unique_feedback_count": 3,
+          "theme_count": 4,
+          "blocked_customer_count": 1,
+          "human_safety_escalations": 2
+        },
+        "method": "Deterministic multi-label keyword themes plus validated onboarding tasks; counts are descriptive, not statistical or causal claims."
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t061_combo3_basic-documents_basic-onboard_basic-insights__ind-manufacturing",
+    "artifact_sha256": {
+      "implementation.py": "738c003b3727fc62365ea872bc0b14fa95c5f7cf7328b7858eecd941848b0171",
+      "test_implementation.py": "376cca22d5292bc000fa19d70d7ba2d3c5cbb8c2828f3af8bea8c099673872d5",
+      "example_input.json": "7960db1e100e49aab69edc5733cc47cce0ce509a617ebc58c6a0057705983d88",
+      "build_manifest.json": "f32246db603bbab50b24101f5033c68d037a33e50893ed85abf6759b9bbcf8f0"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

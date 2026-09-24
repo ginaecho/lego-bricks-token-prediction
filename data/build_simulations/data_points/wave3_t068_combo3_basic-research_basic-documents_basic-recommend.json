@@ -118,7 +118,7 @@
   "split_group": "1d609cb98d386c8c43f8bb49048afad7ea5267eb8be3ea4c07e7090a4b291121",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "2dd34056035f7d5ac0c6c391241cba110a8bb109fcc8fbdc548ccb80c4a7b8aa",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t068_combo3_basic-research_basic-documents_basic-recommend",
   "membership_point_id": "combo3_basic-research_basic-documents_basic-recommend",
@@ -126,8 +126,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "4fc2303b4cd7fb6bebfd8866bd01dd11515024bf075704ef54e56633823cfb46",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "131690c5-89b7-4d0e-b503-9c764ad30829",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 130606,
+    "output_tokens": 8756,
+    "cache_read_tokens": 118755,
+    "cache_write_tokens": 11833,
+    "total_tokens": 139362,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36774,
+        "agent_id": "131690c5-89b7-4d0e-b503-9c764ad30829",
+        "model": "gpt-6-astra",
+        "input_tokens": 14980,
+        "output_tokens": 326,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 876,
+        "reasoning_tokens": 150,
+        "duration_ms": 7885,
+        "created_at": "2026-09-24T09:35:30.477Z"
+      },
+      {
+        "id": 36797,
+        "agent_id": "131690c5-89b7-4d0e-b503-9c764ad30829",
+        "model": "gpt-6-astra",
+        "input_tokens": 15332,
+        "output_tokens": 7685,
+        "cache_read_tokens": 14977,
+        "cache_write_tokens": 352,
+        "reasoning_tokens": 516,
+        "duration_ms": 103089,
+        "created_at": "2026-09-24T09:42:14.188Z"
+      },
+      {
+        "id": 36798,
+        "agent_id": "131690c5-89b7-4d0e-b503-9c764ad30829",
+        "model": "gpt-6-astra",
+        "input_tokens": 23353,
+        "output_tokens": 142,
+        "cache_read_tokens": 15329,
+        "cache_write_tokens": 8021,
+        "reasoning_tokens": 0,
+        "duration_ms": 3789,
+        "created_at": "2026-09-24T09:42:24.335Z"
+      },
+      {
+        "id": 36801,
+        "agent_id": "131690c5-89b7-4d0e-b503-9c764ad30829",
+        "model": "gpt-6-astra",
+        "input_tokens": 25301,
+        "output_tokens": 306,
+        "cache_read_tokens": 23350,
+        "cache_write_tokens": 1948,
+        "reasoning_tokens": 44,
+        "duration_ms": 6180,
+        "created_at": "2026-09-24T09:43:06.500Z"
+      },
+      {
+        "id": 36805,
+        "agent_id": "131690c5-89b7-4d0e-b503-9c764ad30829",
+        "model": "gpt-6-astra",
+        "input_tokens": 25703,
+        "output_tokens": 200,
+        "cache_read_tokens": 25298,
+        "cache_write_tokens": 402,
+        "reasoning_tokens": 0,
+        "duration_ms": 3827,
+        "created_at": "2026-09-24T09:43:21.629Z"
+      },
+      {
+        "id": 36806,
+        "agent_id": "131690c5-89b7-4d0e-b503-9c764ad30829",
+        "model": "gpt-6-astra",
+        "input_tokens": 25937,
+        "output_tokens": 97,
+        "cache_read_tokens": 25700,
+        "cache_write_tokens": 234,
+        "reasoning_tokens": 0,
+        "duration_ms": 6757,
+        "created_at": "2026-09-24T09:43:44.442Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.457855,
+      "observed_cache_profile_estimate_usd": 0.19065625,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.49426,
+      "observed_cache_profile_estimate_usd": 5.49426,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -158,5 +283,383 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...........................\n----------------------------------------------------------------------\nRan 27 tests in 1.457s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "documents": {
+          "checks": {
+            "accepted_rows": 4,
+            "questions_without_usable_evidence": 0,
+            "rejected_rows": 1
+          },
+          "discovery_terms": [
+            {
+              "term": "backpack",
+              "weight": 0.72
+            },
+            {
+              "term": "durable",
+              "weight": 0.72
+            },
+            {
+              "term": "equipment",
+              "weight": 0.45
+            },
+            {
+              "term": "lightweight",
+              "weight": 0.72
+            },
+            {
+              "term": "travel",
+              "weight": 0.72
+            },
+            {
+              "term": "waterproof",
+              "weight": 0.45
+            }
+          ],
+          "dropped_evidence": [
+            {
+              "question_id": "q-weather",
+              "reason": "below_minimum_reliability",
+              "source_id": "synthetic-rumor"
+            }
+          ],
+          "question_summary": [
+            {
+              "best_evidence_strength": 0.72,
+              "evidence_count": 2,
+              "question": "Which lightweight durable backpack suits travel?",
+              "question_id": "q-travel",
+              "status": "evidence_available"
+            },
+            {
+              "best_evidence_strength": 0.45,
+              "evidence_count": 2,
+              "question": "What waterproof features protect equipment?",
+              "question_id": "q-weather",
+              "status": "evidence_available"
+            }
+          ],
+          "rows": [
+            {
+              "matched_terms": [
+                "backpack",
+                "durable",
+                "lightweight",
+                "travel"
+              ],
+              "question_id": "q-travel",
+              "reliability": 0.9,
+              "source_id": "synthetic-lab",
+              "strength": 0.72,
+              "text": "A lightweight durable backpack supports travel. Waterproof fabric protects equipment."
+            },
+            {
+              "matched_terms": [
+                "backpack",
+                "lightweight",
+                "travel"
+              ],
+              "question_id": "q-travel",
+              "reliability": 0.75,
+              "source_id": "synthetic-catalog",
+              "strength": 0.45,
+              "text": "A lightweight backpack uses waterproof fabric for travel."
+            },
+            {
+              "matched_terms": [
+                "equipment",
+                "waterproof"
+              ],
+              "question_id": "q-weather",
+              "reliability": 0.9,
+              "source_id": "synthetic-lab",
+              "strength": 0.45,
+              "text": "A lightweight durable backpack supports travel. Waterproof fabric protects equipment."
+            },
+            {
+              "matched_terms": [
+                "waterproof"
+              ],
+              "question_id": "q-weather",
+              "reliability": 0.75,
+              "source_id": "synthetic-catalog",
+              "strength": 0.1875,
+              "text": "A lightweight backpack uses waterproof fabric for travel."
+            }
+          ]
+        },
+        "recommend": {
+          "eligible_count": 2,
+          "excluded": [
+            {
+              "product_id": "p-leather",
+              "reasons": [
+                "excluded_tag"
+              ]
+            },
+            {
+              "product_id": "p-premium",
+              "reasons": [
+                "over_budget"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "matched_interests": [
+                "compact",
+                "travel"
+              ],
+              "matched_research_terms": [
+                "backpack",
+                "durable",
+                "equipment",
+                "lightweight",
+                "travel",
+                "waterproof"
+              ],
+              "name": "Synthetic lightweight backpack",
+              "price": 80,
+              "product_id": "p-pack",
+              "reason": "matched_preferences_or_evidence",
+              "score": 7.78,
+              "score_components": {
+                "profile": 4,
+                "research": 3.78
+              },
+              "supporting_evidence": [
+                {
+                  "question_id": "q-travel",
+                  "source_id": "synthetic-catalog"
+                },
+                {
+                  "question_id": "q-travel",
+                  "source_id": "synthetic-lab"
+                },
+                {
+                  "question_id": "q-weather",
+                  "source_id": "synthetic-catalog"
+                },
+                {
+                  "question_id": "q-weather",
+                  "source_id": "synthetic-lab"
+                }
+              ]
+            },
+            {
+              "matched_interests": [
+                "compact"
+              ],
+              "matched_research_terms": [
+                "equipment",
+                "waterproof"
+              ],
+              "name": "Synthetic equipment pouch",
+              "price": 25,
+              "product_id": "p-pouch",
+              "reason": "matched_preferences_or_evidence",
+              "score": 2.9,
+              "score_components": {
+                "profile": 2,
+                "research": 0.9
+              },
+              "supporting_evidence": [
+                {
+                  "question_id": "q-weather",
+                  "source_id": "synthetic-catalog"
+                },
+                {
+                  "question_id": "q-weather",
+                  "source_id": "synthetic-lab"
+                }
+              ]
+            }
+          ],
+          "ranking_policy": "2 per matched profile token + sum of evidence term weights; ties: price, id"
+        },
+        "request": {
+          "document_options": {
+            "minimum_reliability": 0.6
+          },
+          "products": [
+            {
+              "description": "Durable waterproof travel backpack for equipment.",
+              "id": "p-pack",
+              "name": "Synthetic lightweight backpack",
+              "price": 80,
+              "tags": [
+                "travel",
+                "compact"
+              ]
+            },
+            {
+              "description": "Waterproof compact storage.",
+              "id": "p-pouch",
+              "name": "Synthetic equipment pouch",
+              "price": 25,
+              "tags": [
+                "compact"
+              ]
+            },
+            {
+              "description": "Lightweight travel backpack.",
+              "id": "p-premium",
+              "name": "Synthetic premium pack",
+              "price": 150,
+              "tags": [
+                "travel"
+              ]
+            },
+            {
+              "description": "Durable travel equipment bag.",
+              "id": "p-leather",
+              "name": "Synthetic leather satchel",
+              "price": 65,
+              "tags": [
+                "leather"
+              ]
+            }
+          ],
+          "profile": {
+            "budget": 100,
+            "excluded_tags": [
+              "leather"
+            ],
+            "interests": [
+              "travel",
+              "compact"
+            ],
+            "limit": 3
+          },
+          "questions": [
+            {
+              "id": "q-travel",
+              "text": "Which lightweight durable backpack suits travel?"
+            },
+            {
+              "id": "q-weather",
+              "text": "What waterproof features protect equipment?"
+            }
+          ],
+          "sources": [
+            {
+              "id": "synthetic-lab",
+              "reliability": 0.9,
+              "text": "A lightweight durable backpack supports travel.  Waterproof fabric protects equipment.",
+              "title": "Synthetic travel materials assessment"
+            },
+            {
+              "id": "synthetic-catalog",
+              "reliability": 0.75,
+              "text": "A lightweight backpack uses waterproof fabric for travel.",
+              "title": "Synthetic backpack catalog"
+            },
+            {
+              "id": "synthetic-rumor",
+              "reliability": 0.2,
+              "text": "Waterproof features protect equipment.",
+              "title": "Synthetic unverified note"
+            }
+          ]
+        },
+        "research": {
+          "evidence": [
+            {
+              "excerpt": "A lightweight durable backpack supports travel.  Waterproof fabric protects equipment.",
+              "matched_terms": [
+                "backpack",
+                "durable",
+                "lightweight",
+                "travel"
+              ],
+              "question_id": "q-travel",
+              "relevance": 0.8,
+              "reliability": 0.9,
+              "source_id": "synthetic-lab",
+              "source_title": "Synthetic travel materials assessment",
+              "strength": 0.72
+            },
+            {
+              "excerpt": "A lightweight backpack uses waterproof fabric for travel.",
+              "matched_terms": [
+                "backpack",
+                "lightweight",
+                "travel"
+              ],
+              "question_id": "q-travel",
+              "relevance": 0.6,
+              "reliability": 0.75,
+              "source_id": "synthetic-catalog",
+              "source_title": "Synthetic backpack catalog",
+              "strength": 0.45
+            },
+            {
+              "excerpt": "A lightweight durable backpack supports travel.  Waterproof fabric protects equipment.",
+              "matched_terms": [
+                "equipment",
+                "waterproof"
+              ],
+              "question_id": "q-weather",
+              "relevance": 0.5,
+              "reliability": 0.9,
+              "source_id": "synthetic-lab",
+              "source_title": "Synthetic travel materials assessment",
+              "strength": 0.45
+            },
+            {
+              "excerpt": "Waterproof features protect equipment.",
+              "matched_terms": [
+                "equipment",
+                "features",
+                "protect",
+                "waterproof"
+              ],
+              "question_id": "q-weather",
+              "relevance": 1.0,
+              "reliability": 0.2,
+              "source_id": "synthetic-rumor",
+              "source_title": "Synthetic unverified note",
+              "strength": 0.2
+            },
+            {
+              "excerpt": "A lightweight backpack uses waterproof fabric for travel.",
+              "matched_terms": [
+                "waterproof"
+              ],
+              "question_id": "q-weather",
+              "relevance": 0.25,
+              "reliability": 0.75,
+              "source_id": "synthetic-catalog",
+              "source_title": "Synthetic backpack catalog",
+              "strength": 0.1875
+            }
+          ],
+          "method": "casefolded exact token overlap; source reliability is supplied, not verified",
+          "unanswered_question_ids": []
+        }
+      },
+      "schema_version": 1,
+      "stage": "recommend",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t068_combo3_basic-research_basic-documents_basic-recommend",
+    "artifact_sha256": {
+      "implementation.py": "5cb2e082b87c760cfb50d97bd04437b1522926ecbbd3be5f16d0b1d83e2094e6",
+      "test_implementation.py": "2ccacc6a4ab9ce4ffc5ee5df8a30eb7e350fdb38bd57381b9b14a3195c9d81c7",
+      "example_input.json": "bb73586ace302d25cd99ffd434131926f52d2f13e895e2f70e2cb40175ce81af",
+      "build_manifest.json": "4eeb51e327e9ea19c451bc4d8e9ad9ab268684db976f4f5751a7f7138f1b5c69"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

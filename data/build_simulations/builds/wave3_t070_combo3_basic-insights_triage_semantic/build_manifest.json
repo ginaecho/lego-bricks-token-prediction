@@ -1,0 +1,74 @@
+{
+  "build_id": "wave3_t070_combo3_basic-insights_triage_semantic",
+  "composition_label": "Customer insights -> Ticket triage & routing -> Semantic search",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored for this build; no other builds read or copied",
+    "runtime": "Python 3.9+ standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Object: schema_version=1, fixture_label (nonblank provenance label), feedback list of {id, customer_id, source, text}; optional queries list of {text, limit=5}; optional config object",
+    "output": "Validated shared envelope preserving input with normalized config/queries, status=ok, stage=semantic, insights, triage and semantic results",
+    "validation": "One shared validation layer checks schema, nonblank text, unique identities, routes, configuration, referential integrity, stage ordering, theme evidence, ticket propagation and indexed/ranked result references. Unknown fields are rejected.",
+    "error": "CLI file, JSON and validation errors produce one JSON object with status=error, error message, and exit code 2"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "basic:insights",
+      "to": "triage",
+      "data": "Validated per-feedback theme IDs, sentiment and evidence-backed theme actions; triage preserves customer, source and original text"
+    },
+    {
+      "from": "triage",
+      "to": "semantic",
+      "data": "Validated accountable tickets become indexed documents; searchable text includes original feedback, category, priority, team, owner, theme labels and recommended actions. Hits preserve ticket metadata."
+    }
+  ],
+  "behavior": {
+    "insights": "Configurable multi-label phrase matching with synonym normalization; unmatched feedback grouped by corpus document-frequency topic token, excluding stopwords and sentiment words, with deterministic alphabetical tie-break or other fallback. Themes include unique customer evidence, feedback counts, heuristic sentiment and actions.",
+    "triage": "One ticket per feedback item. First category rule matching any theme ID or keyword phrase wins; otherwise default route. Priority rules can escalate but never downgrade route priority. Every route requires accountable team and owner.",
+    "semantic": "In-memory inverted index with synonym-expanded normalized tokens and log-TF/IDF cosine ranking. Positive scores only, rounded to 8 decimals; ties by ticket ID. Unknown lexical queries return no hits. Per-query limit 1..100.",
+    "embedding_interface": "Library run(payload, embedder=callable) optionally accepts embedder(text)->nonempty finite nonzero numeric list, fixed dimensions across documents and queries. Hybrid score is 65% lexical plus 35% nonnegative cosine. Synthetic callable tests only; no live embeddings or LLM.",
+    "configuration": "Provided config keys replace the corresponding default section, not individual rules. Keys: theme_rules, category_rules, priority_rules, default_route, synonyms. Custom theme IDs must not start with inferred:. Changing themes requires matching category theme references.",
+    "determinism": "No clocks, randomness, external calls or mutable global state; injected callable is expected to be deterministic. Input is deep-copied. Empty feedback and empty query lists are valid."
+  },
+  "scope": {
+    "included": [
+      "Integrated bounded pipeline and JSON CLI",
+      "General-purpose configurable feedback themes",
+      "Configurable accountable ticket triage",
+      "Local semantic approximation via synonyms with optional injected dense embeddings",
+      "Synthetic fixtures and unittest coverage"
+    ],
+    "excluded": [
+      "Live model providers, networks and external dependencies",
+      "Learned sentiment or clustering models",
+      "Persistence, external ticket creation and product catalog ingestion",
+      "Authentication, enterprise deployment, monitoring and large-scale indexing",
+      "LLM generation or automatic action execution"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "unittest",
+    "tests_passed": 27,
+    "cli_example_exit_code": 0,
+    "cli_stdout": "Exactly one valid JSON object; status=ok; stage=semantic",
+    "coverage": "Each stage, cross-stage metadata/actions, custom rules, evidence integrity, priority escalation, unknown topics, empty input, synonym relevance, score ties, optional synthetic embeddings, invalid embeddings, malformed schemas, invalid configuration and CLI success/error behavior"
+  }
+}

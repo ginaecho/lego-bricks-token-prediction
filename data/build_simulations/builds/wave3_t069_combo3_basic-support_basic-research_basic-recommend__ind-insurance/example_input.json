@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "policyholder": {
+    "synthetic_id": "SYN-HOLDER-069",
+    "name": "Elara Fictionwell",
+    "vin": "SYNTHETICVIN000069",
+    "property_address": "69 Imaginary Lane, Exampletown, ZZ 00000"
+  },
+  "policy": {
+    "id": "POL-SYN-069",
+    "type": "auto",
+    "covered_perils": ["collision", "theft"],
+    "deductible": 500,
+    "limit": 25000,
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31"
+  },
+  "claim": "ClaimID: CLM-SYN-069\nPolicyID: POL-SYN-069\nLossType: collision\nLossAmount: 6843.27\nLossDate: 2025-06-17",
+  "submission": {
+    "ACORD": {
+      "SubmissionID": "SUB-SYN-069",
+      "PolicyID": "POL-SYN-069",
+      "Factors": [
+        {"name": "annual_mileage", "value": 9200, "disclosed": true},
+        {"name": "prior_claims", "value": 1, "disclosed": true}
+      ]
+    }
+  },
+  "question": "What does my policy cover for this collision, and what should I do next?",
+  "sources": [
+    {
+      "id": "SRC-CLAIMS",
+      "topic": "claims",
+      "text": "Synthetic claims guide: retain dated loss evidence and request a written explanation of the assessment."
+    },
+    {
+      "id": "SRC-COVER",
+      "topic": "coverage",
+      "text": "Synthetic policy guide: verify listed perils, deductibles, limits and endorsements before relying on an estimate."
+    },
+    {
+      "id": "SRC-FACTORS",
+      "topic": "underwriting",
+      "text": "Synthetic underwriting guide: vehicle usage and prior claims are disclosed submission factors, not grounds for automatically denying a loss."
+    }
+  ],
+  "preferences": {
+    "max_monthly_premium": 100,
+    "desired_perils": ["collision", "theft", "fire"]
+  },
+  "catalog": [
+    {
+      "id": "PROD-EXTENDED",
+      "name": "Synthetic Extended Auto",
+      "policy_type": "auto",
+      "perils": ["collision", "theft", "fire"],
+      "monthly_premium": 88,
+      "underwriting_factors": ["annual_mileage", "prior_claims"]
+    },
+    {
+      "id": "PROD-ESSENTIAL",
+      "name": "Synthetic Essential Auto",
+      "policy_type": "auto",
+      "perils": ["collision", "theft"],
+      "monthly_premium": 62,
+      "underwriting_factors": ["annual_mileage"]
+    },
+    {
+      "id": "PROD-PROPERTY",
+      "name": "Synthetic Property Cover",
+      "policy_type": "property",
+      "perils": ["fire", "water"],
+      "monthly_premium": 77,
+      "underwriting_factors": ["property_age"]
+    }
+  ]
+}

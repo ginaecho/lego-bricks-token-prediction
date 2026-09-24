@@ -118,7 +118,7 @@
   "split_group": "381aff590105066b739cd0340d7ea990703679adfa0dae7a92011431b9efc7bc",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "337a26c6a17d8c18180b729e078ddd1a595c4c04548733c820b5d080f6b27b6d",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t076_combo3_basic-search_basic-support_basic-insights",
   "membership_point_id": "combo3_basic-search_basic-support_basic-insights",
@@ -126,8 +126,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "bcf49f44d710177a81f63299eec8482b9e46ac9d367171c937275e9411adf5b4",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "02163b03-a111-4714-a6d5-ac097d354b15",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 121735,
+    "output_tokens": 7495,
+    "cache_read_tokens": 112224,
+    "cache_write_tokens": 9493,
+    "total_tokens": 129230,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36857,
+        "agent_id": "02163b03-a111-4714-a6d5-ac097d354b15",
+        "model": "gpt-6-astra",
+        "input_tokens": 14986,
+        "output_tokens": 270,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 882,
+        "reasoning_tokens": 96,
+        "duration_ms": 6353,
+        "created_at": "2026-09-24T10:01:29.333Z"
+      },
+      {
+        "id": 36899,
+        "agent_id": "02163b03-a111-4714-a6d5-ac097d354b15",
+        "model": "gpt-6-astra",
+        "input_tokens": 15286,
+        "output_tokens": 6299,
+        "cache_read_tokens": 14983,
+        "cache_write_tokens": 300,
+        "reasoning_tokens": 0,
+        "duration_ms": 95826,
+        "created_at": "2026-09-24T10:13:03.433Z"
+      },
+      {
+        "id": 36901,
+        "agent_id": "02163b03-a111-4714-a6d5-ac097d354b15",
+        "model": "gpt-6-astra",
+        "input_tokens": 21913,
+        "output_tokens": 154,
+        "cache_read_tokens": 15283,
+        "cache_write_tokens": 6627,
+        "reasoning_tokens": 0,
+        "duration_ms": 3274,
+        "created_at": "2026-09-24T10:13:10.331Z"
+      },
+      {
+        "id": 36908,
+        "agent_id": "02163b03-a111-4714-a6d5-ac097d354b15",
+        "model": "gpt-6-astra",
+        "input_tokens": 22686,
+        "output_tokens": 410,
+        "cache_read_tokens": 21910,
+        "cache_write_tokens": 773,
+        "reasoning_tokens": 101,
+        "duration_ms": 8257,
+        "created_at": "2026-09-24T10:14:39.579Z"
+      },
+      {
+        "id": 36915,
+        "agent_id": "02163b03-a111-4714-a6d5-ac097d354b15",
+        "model": "gpt-6-astra",
+        "input_tokens": 23267,
+        "output_tokens": 278,
+        "cache_read_tokens": 22683,
+        "cache_write_tokens": 581,
+        "reasoning_tokens": 0,
+        "duration_ms": 6327,
+        "created_at": "2026-09-24T10:15:34.677Z"
+      },
+      {
+        "id": 36920,
+        "agent_id": "02163b03-a111-4714-a6d5-ac097d354b15",
+        "model": "gpt-6-astra",
+        "input_tokens": 23597,
+        "output_tokens": 84,
+        "cache_read_tokens": 23264,
+        "cache_write_tokens": 330,
+        "reasoning_tokens": 0,
+        "duration_ms": 2763,
+        "created_at": "2026-09-24T10:15:59.855Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4167625,
+      "observed_cache_profile_estimate_usd": 0.16425850000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.00115,
+      "observed_cache_profile_estimate_usd": 5.00115,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -158,5 +283,153 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................\n----------------------------------------------------------------------\nRan 20 tests in 2.503s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "status": "ok",
+      "search": {
+        "query": "wireless headphones",
+        "normalized_terms": [
+          "bluetooth",
+          "headphone"
+        ],
+        "matches": [
+          {
+            "product": {
+              "id": "demo-a",
+              "name": "Synthetic Bluetooth Earbuds",
+              "description": "Compact audio headphones.",
+              "tags": [
+                "wireless",
+                "audio"
+              ],
+              "price": 39.5,
+              "in_stock": true
+            },
+            "score": 1.0,
+            "matched_terms": [
+              "bluetooth",
+              "headphone"
+            ]
+          }
+        ]
+      },
+      "support": {
+        "search": {
+          "query": "wireless headphones",
+          "normalized_terms": [
+            "bluetooth",
+            "headphone"
+          ],
+          "matches": [
+            {
+              "product": {
+                "id": "demo-a",
+                "name": "Synthetic Bluetooth Earbuds",
+                "description": "Compact audio headphones.",
+                "tags": [
+                  "wireless",
+                  "audio"
+                ],
+                "price": 39.5,
+                "in_stock": true
+              },
+              "score": 1.0,
+              "matched_terms": [
+                "bluetooth",
+                "headphone"
+              ]
+            }
+          ]
+        },
+        "question": "What is the price and return policy?",
+        "answer": "Synthetic store policy: unused items may be returned within 30 days.\nSynthetic Bluetooth Earbuds: Compact audio headphones. Price: 39.50. In stock: yes.",
+        "citations": [
+          {
+            "source": "policy:demo-returns",
+            "text": "Synthetic store policy: unused items may be returned within 30 days."
+          },
+          {
+            "source": "product:demo-a",
+            "text": "Synthetic Bluetooth Earbuds: Compact audio headphones. Price: 39.50. In stock: yes."
+          }
+        ],
+        "resolved": true,
+        "feedback": [
+          {
+            "id": "feedback-a",
+            "text": "Great audio quality but delivery was late.",
+            "product_id": "demo-a"
+          },
+          {
+            "id": "feedback-b",
+            "text": "The instructions are confusing.",
+            "product_id": null
+          },
+          {
+            "id": "feedback-c",
+            "text": "Good running shoes.",
+            "product_id": "demo-b"
+          }
+        ]
+      },
+      "insights": {
+        "matched_product_ids": [
+          "demo-a"
+        ],
+        "feedback_count": 2,
+        "excluded_feedback_count": 1,
+        "sentiment": {
+          "positive": 0,
+          "negative": 1,
+          "mixed": 1,
+          "neutral": 0
+        },
+        "themes": [
+          {
+            "theme": "delivery",
+            "count": 1,
+            "feedback_ids": [
+              "feedback-a"
+            ],
+            "action": "Review delivery expectations and delays."
+          },
+          {
+            "theme": "quality",
+            "count": 1,
+            "feedback_ids": [
+              "feedback-a"
+            ],
+            "action": "Review product quality reports."
+          },
+          {
+            "theme": "usability",
+            "count": 1,
+            "feedback_ids": [
+              "feedback-b"
+            ],
+            "action": "Improve product instructions."
+          }
+        ],
+        "support_gap": null
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t076_combo3_basic-search_basic-support_basic-insights",
+    "artifact_sha256": {
+      "implementation.py": "3715e4cc1f928d47f126d5f92d30a18c30405acad7db9c446b4fae2c5e733ffe",
+      "test_implementation.py": "7a83e1112ade4eb8f6d8417940629b9bf85785ead8469e1f93ff5a9cf89fc77d",
+      "example_input.json": "31a460061bf13bfcc35c47deea6314e1481192e5b132dc73cc82e0c29328d67a",
+      "build_manifest.json": "dffe5f997065b4db985b8ed3f7794d5a36b3ed6ee0ba05b60b966099217a9e7b"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

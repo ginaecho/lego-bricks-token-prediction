@@ -122,7 +122,7 @@
   "split_group": "3ee494508ae78d4e7f671acca12e293781f54f5e3fed2a1b175a19c14052caba",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "73fa334c0f23dacd2419ed50b98e52447840c4eae5faebe59ebc831c8e27c0b8",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t064_combo3_review_triage_sentiment__ind-healthcare",
   "membership_point_id": "combo3_review_triage_sentiment__ind-healthcare",
@@ -130,8 +130,133 @@
   "trial_category": "combo_BTI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "49f411d3c4d192badd3dc082d303d9ca8f37a7580c98404aa0252d1c076cfcf5",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "11acd5ca-eb3e-464f-8662-8e4ceea326d2",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 131141,
+    "output_tokens": 10225,
+    "cache_read_tokens": 119507,
+    "cache_write_tokens": 11616,
+    "total_tokens": 141366,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36743,
+        "agent_id": "11acd5ca-eb3e-464f-8662-8e4ceea326d2",
+        "model": "gpt-6-astra",
+        "input_tokens": 15058,
+        "output_tokens": 697,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 954,
+        "reasoning_tokens": 516,
+        "duration_ms": 20184,
+        "created_at": "2026-09-24T09:31:25.931Z"
+      },
+      {
+        "id": 36761,
+        "agent_id": "11acd5ca-eb3e-464f-8662-8e4ceea326d2",
+        "model": "gpt-6-astra",
+        "input_tokens": 15785,
+        "output_tokens": 8239,
+        "cache_read_tokens": 15055,
+        "cache_write_tokens": 727,
+        "reasoning_tokens": 0,
+        "duration_ms": 101708,
+        "created_at": "2026-09-24T09:33:26.381Z"
+      },
+      {
+        "id": 36762,
+        "agent_id": "11acd5ca-eb3e-464f-8662-8e4ceea326d2",
+        "model": "gpt-6-astra",
+        "input_tokens": 24360,
+        "output_tokens": 305,
+        "cache_read_tokens": 15782,
+        "cache_write_tokens": 8575,
+        "reasoning_tokens": 54,
+        "duration_ms": 7082,
+        "created_at": "2026-09-24T09:33:41.798Z"
+      },
+      {
+        "id": 36766,
+        "agent_id": "11acd5ca-eb3e-464f-8662-8e4ceea326d2",
+        "model": "gpt-6-astra",
+        "input_tokens": 24724,
+        "output_tokens": 674,
+        "cache_read_tokens": 24357,
+        "cache_write_tokens": 364,
+        "reasoning_tokens": 341,
+        "duration_ms": 15613,
+        "created_at": "2026-09-24T09:34:08.323Z"
+      },
+      {
+        "id": 36767,
+        "agent_id": "11acd5ca-eb3e-464f-8662-8e4ceea326d2",
+        "model": "gpt-6-astra",
+        "input_tokens": 25494,
+        "output_tokens": 190,
+        "cache_read_tokens": 24721,
+        "cache_write_tokens": 770,
+        "reasoning_tokens": 0,
+        "duration_ms": 4519,
+        "created_at": "2026-09-24T09:34:27.110Z"
+      },
+      {
+        "id": 36769,
+        "agent_id": "11acd5ca-eb3e-464f-8662-8e4ceea326d2",
+        "model": "gpt-6-astra",
+        "input_tokens": 25720,
+        "output_tokens": 120,
+        "cache_read_tokens": 25491,
+        "cache_write_tokens": 226,
+        "reasoning_tokens": 0,
+        "duration_ms": 3593,
+        "created_at": "2026-09-24T09:34:49.623Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.4812275,
+      "observed_cache_profile_estimate_usd": 0.21233675000000002,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.774729999999999,
+      "observed_cache_profile_estimate_usd": 5.774729999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -162,5 +287,279 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................................\n----------------------------------------------------------------------\nRan 32 tests in 1.617s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "synthetic": true,
+      "settings": {
+        "requirements": [
+          {
+            "id": "diagnosis",
+            "description": "Document diagnosis evidence",
+            "evidence_terms": [
+              "E11.9"
+            ]
+          },
+          {
+            "id": "lab",
+            "description": "Document lab evidence",
+            "evidence_terms": [
+              "A1c"
+            ]
+          },
+          {
+            "id": "referral",
+            "description": "Prior authorization requires referral evidence",
+            "evidence_terms": [
+              "referral attached"
+            ]
+          }
+        ],
+        "routing": {
+          "rules": [
+            {
+              "category": "authorization",
+              "owner": "authorization-review-team",
+              "keywords": [
+                "authorization",
+                "referral"
+              ]
+            },
+            {
+              "category": "documentation",
+              "owner": "records-review-team",
+              "keywords": [
+                "document"
+              ]
+            }
+          ],
+          "fallback": {
+            "category": "general",
+            "owner": "intake-review-team"
+          },
+          "urgent_keywords": [
+            "deadline",
+            "expedited"
+          ]
+        }
+      },
+      "records": [
+        {
+          "payload": {
+            "id": "record-one",
+            "patient": {
+              "resourceType": "Patient",
+              "id": "syn-patient-1001",
+              "synthetic": true,
+              "diagnoses": [
+                {
+                  "code": "E11.9",
+                  "label": "Synthetic type two diabetes fixture"
+                }
+              ],
+              "labs": [
+                {
+                  "code": "A1c",
+                  "value": 7.2,
+                  "unit": "percent"
+                }
+              ]
+            },
+            "clinical_note": {
+              "resourceType": "DocumentReference",
+              "id": "note-one",
+              "synthetic": true,
+              "text": "SYNTHETIC Synthea-style fixture. Authorization delayed; frustrated with confusing paperwork. Expedited administrative deadline. Staff were helpful."
+            },
+            "prior_authorization": {
+              "resourceType": "Claim",
+              "id": "request-one",
+              "status": "draft",
+              "procedure_code": "synthetic-procedure",
+              "evidence": [
+                "Synthetic supporting documentation attached"
+              ]
+            }
+          },
+          "safety": {
+            "human_review_required": true,
+            "autonomous_clinical_decision": false,
+            "deidentification": "synthetic_only_identifier_rejection_demo"
+          },
+          "stages": {
+            "review": {
+              "checks": [
+                {
+                  "requirement_id": "diagnosis",
+                  "description": "Document diagnosis evidence",
+                  "status": "evidence_found",
+                  "evidence": [
+                    {
+                      "term": "E11.9",
+                      "sources": [
+                        "patient.diagnoses[0]"
+                      ]
+                    }
+                  ],
+                  "missing_terms": []
+                },
+                {
+                  "requirement_id": "lab",
+                  "description": "Document lab evidence",
+                  "status": "evidence_found",
+                  "evidence": [
+                    {
+                      "term": "A1c",
+                      "sources": [
+                        "patient.labs[0]"
+                      ]
+                    }
+                  ],
+                  "missing_terms": []
+                },
+                {
+                  "requirement_id": "referral",
+                  "description": "Prior authorization requires referral evidence",
+                  "status": "gap",
+                  "evidence": [],
+                  "missing_terms": [
+                    "referral attached"
+                  ]
+                }
+              ],
+              "gap_ids": [
+                "referral"
+              ],
+              "assessment": "administrative_evidence_check_only"
+            },
+            "triage": {
+              "ticket_id": "ticket-record-one",
+              "category": "authorization",
+              "owner": "authorization-review-team",
+              "priority": "urgent",
+              "gap_ids": [
+                "referral"
+              ],
+              "matched_keywords": [
+                "authorization",
+                "referral"
+              ],
+              "urgent_keywords": [
+                "deadline",
+                "expedited"
+              ],
+              "routing_policy": "first_matching_rule_else_fallback",
+              "decision": "human_administrative_review_required"
+            },
+            "sentiment": {
+              "score": -0.5,
+              "label": "negative",
+              "contributions": [
+                {
+                  "token": "delayed",
+                  "token_index": 5,
+                  "negated": false,
+                  "weight": -1
+                },
+                {
+                  "token": "frustrated",
+                  "token_index": 6,
+                  "negated": false,
+                  "weight": -1
+                },
+                {
+                  "token": "confusing",
+                  "token_index": 8,
+                  "negated": false,
+                  "weight": -1
+                },
+                {
+                  "token": "helpful",
+                  "token_index": 15,
+                  "negated": false,
+                  "weight": 1
+                }
+              ],
+              "method": "fixed_lexicon_with_immediate_preceding_negation",
+              "administrative_severity": "urgent",
+              "priority_score": 87,
+              "priority_components": {
+                "severity_base": 80,
+                "gap_bonus": 2,
+                "negative_bonus": 5
+              },
+              "ticket_id": "ticket-record-one",
+              "owner": "authorization-review-team",
+              "gap_ids": [
+                "referral"
+              ]
+            }
+          },
+          "audit": [
+            {
+              "sequence": 0,
+              "actor": "deterministic-administrative-pipeline",
+              "action": "ingest",
+              "changed_paths": [
+                "payload",
+                "safety",
+                "stages"
+              ],
+              "before_sha256": null,
+              "after_sha256": "43091463e138f328c01d3e0627ca9c0f5eb55b2322e36cd6fc5e1a0cf8439cd8"
+            },
+            {
+              "sequence": 1,
+              "actor": "deterministic-administrative-pipeline",
+              "action": "review",
+              "changed_paths": [
+                "stages.review"
+              ],
+              "before_sha256": "43091463e138f328c01d3e0627ca9c0f5eb55b2322e36cd6fc5e1a0cf8439cd8",
+              "after_sha256": "914ca5affe93036a59d0bcf721fc37d329f69400fe2309355605462b164ad567"
+            },
+            {
+              "sequence": 2,
+              "actor": "deterministic-administrative-pipeline",
+              "action": "triage",
+              "changed_paths": [
+                "stages.triage"
+              ],
+              "before_sha256": "914ca5affe93036a59d0bcf721fc37d329f69400fe2309355605462b164ad567",
+              "after_sha256": "fdf4e5154be23be27a7d40772870f0437c3666529effed53dc252df8dfb0865a"
+            },
+            {
+              "sequence": 3,
+              "actor": "deterministic-administrative-pipeline",
+              "action": "sentiment",
+              "changed_paths": [
+                "stages.sentiment"
+              ],
+              "before_sha256": "fdf4e5154be23be27a7d40772870f0437c3666529effed53dc252df8dfb0865a",
+              "after_sha256": "78cdd49f7e3dd8aa42b73d8ea4e7b7df955c0a93a6fd5e6f67320dd1f81ea5db"
+            }
+          ]
+        }
+      ],
+      "phase": "sentiment",
+      "status": "ok",
+      "disclaimer": "SYNTHETIC demonstration only. FHIR-style, not FHIR conformance. Identifier rejection illustrates HIPAA-oriented de-identification safeguards; it is not a complete HIPAA de-identification process or compliance certification. Free text must already be synthetic and de-identified. No diagnosis, treatment, medical urgency assessment, or authorization approval is performed. Human review required."
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t064_combo3_review_triage_sentiment__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "4dd278ca94b638a20dc9be64d17e964177932c05b076ca7c7bbb04e26590f7bb",
+      "test_implementation.py": "287058d225c7ec97090865489e778625aa6b3bfab13cfa614e16d78030b0acf0",
+      "example_input.json": "cf0c8990423cfb5d9a7db9c2249034399f44360c6038cea27f8d8b90fe137cb0",
+      "build_manifest.json": "64c641f55e720bc952c0816f3a9cc4474e65ed0a67b42c8957809966de25f9c8"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

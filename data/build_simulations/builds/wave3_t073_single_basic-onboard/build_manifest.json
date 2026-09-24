@@ -1,0 +1,50 @@
+{
+  "build_id": "wave3_t073_single_basic-onboard",
+  "composition_label": "Guided onboarding (basic functionality, Operations)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1; booleans rejected",
+      "customer": "Required object: nonblank name, goal, experience (beginner or experienced)",
+      "fixture_label": "Optional nonblank source label; example explicitly labeled SYNTHETIC",
+      "steps": "Optional ordered list of 1-100 steps; omitted selects three general-purpose defaults. Each step requires unique id, title, instruction, requires (list of prerequisite IDs), completed (boolean). Text fields trim whitespace and are limited to 1000 characters."
+    },
+    "output": {
+      "success": "schema_version=1, status=ok, fixture_label, normalized customer, onboarding_status (in_progress or complete), progress (completed/total/percent), next_step (id/title/instruction/guidance/reason or null), personalized message",
+      "error": "schema_version=1, status=error, error (human-readable text); CLI exits 2"
+    },
+    "validation": "One validate function shared by Python API and CLI; strict object fields, types, prerequisite references, unique IDs/dependencies, acyclic graph, completed prerequisite consistency. JSON loader rejects duplicate keys and non-finite constants."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality: JSON decoding -> shared validation and normalization -> deterministic next-step selection -> shared output envelope. No external stages."
+  ],
+  "behavior": [
+    "Select the earliest unfinished step in supplied order whose prerequisites are complete; supplied order breaks ties.",
+    "Personalize the next action with customer name, goal, and experience-sensitive guidance.",
+    "All steps completed yields explicit completion, 100 percent progress and no next step.",
+    "No implicit progress mutation; callers supply updated completion state on each invocation.",
+    "Input objects remain unchanged. Identical inputs produce identical outputs."
+  ],
+  "scope": {
+    "included": ["General-purpose default onboarding", "Custom domain checklists", "Progress and next-action guidance", "Strict input validation", "JSON CLI and importable API", "Synthetic fixtures"],
+    "excluded": ["Persistent storage", "Authentication", "UI", "Live integrations", "LLM calls", "Scheduling", "Enterprise deployment", "Verification that real-world steps were actually performed"]
+  },
+  "test_outcomes": {
+    "status": "passed: unittest discovery exited 0; all 10 tests passed",
+    "unit_tests": 10,
+    "cli_example": "passed: exit 0, one JSON object with status ok and next step draft"
+  }
+}

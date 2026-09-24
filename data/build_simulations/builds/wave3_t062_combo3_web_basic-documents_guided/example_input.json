@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "research": {
+    "allowed_hosts": ["catalog.synthetic.example"],
+    "urls": ["https://catalog.synthetic.example/setup"],
+    "fixtures": {
+      "https://catalog.synthetic.example/setup": {
+        "content_type": "application/json",
+        "body": "[{\"organization\":\" Synthetic Brick Studio \",\"contact\":\" DEMO@SYNTHETIC.EXAMPLE \",\"seats\":\"8\",\"approved\":\"true\"},{\"organization\":\" Synthetic Tile Lab \",\"contact\":\" LAB@SYNTHETIC.EXAMPLE \",\"seats\":\"3\",\"approved\":\"true\"}]"
+      }
+    }
+  },
+  "documents": {
+    "fields": [
+      {"name": "organization", "source": "organization", "type": "string", "transforms": ["strip"]},
+      {"name": "email", "source": "contact", "type": "string", "transforms": ["strip", "lower"]},
+      {"name": "seats", "source": "seats", "type": "integer"},
+      {"name": "approved", "source": "approved", "type": "boolean"},
+      {"name": "region", "source": "region", "type": "string", "default": "synthetic"}
+    ],
+    "checks": [
+      {"field": "email", "op": "unique"},
+      {"field": "email", "op": "regex", "value": "[^@\\s]+@[^@\\s]+\\.[^@\\s]+"},
+      {"field": "seats", "op": "min", "value": 1},
+      {"field": "seats", "op": "max", "value": 50}
+    ]
+  },
+  "guided": {
+    "completed_steps": ["verify-contact"],
+    "steps": [
+      {"id": "verify-contact", "title": "Verify synthetic organization contacts", "requires": [], "checks": [{"field": "email", "op": "nonempty"}]},
+      {"id": "allocate", "title": "Allocate synthetic seats", "requires": ["verify-contact"], "checks": [{"field": "approved", "op": "equals", "value": true}]},
+      {"id": "launch", "title": "Launch synthetic workspace", "requires": ["allocate"], "checks": []}
+    ]
+  }
+}

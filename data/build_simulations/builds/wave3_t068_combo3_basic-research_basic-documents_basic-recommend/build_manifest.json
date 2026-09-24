@@ -1,0 +1,75 @@
+{
+  "build_id": "wave3_t068_combo3_basic-research_basic-documents_basic-recommend",
+  "composition_label": "basic:research -> basic:documents -> basic:recommend",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "envelope": ["schema_version", "synthetic", "status", "stage", "data"],
+    "input_stage": "input",
+    "input_data": {
+      "request": {
+        "questions": "Nonempty list of unique id/text objects with searchable terms",
+        "sources": "List of unique id/title/text/reliability objects; reliability in [0,1]",
+        "document_options": {"minimum_reliability": "Finite number in [0,1]"},
+        "profile": "interests and excluded_tags string lists, nonnegative budget, integer limit 1..100",
+        "products": "List of unique id/name/description/tags/price objects; nonnegative price"
+      }
+    },
+    "validation": "Strict keys, types, bounds, unique identifiers, finite numbers; booleans rejected as numeric inputs. Canonical deterministic output/provenance validation at every handoff. Duplicate JSON keys and nonstandard numeric constants rejected by CLI.",
+    "bounds": "Lists at most 1000 items, strings at most 20000 characters, price/budget at most 1 billion",
+    "output": "Same envelope with stage recommend and data containing preserved request plus research, documents, recommend",
+    "errors": "One JSON object with status error and error message; CLI exits 2"
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "documents",
+      "data": "Source-linked evidence with question ID, excerpt, matching terms, supplied reliability, relevance and evidence strength",
+      "validation": "Documents requires a research-stage envelope and verifies it before filtering or reshaping"
+    },
+    {
+      "from": "documents",
+      "to": "recommend",
+      "data": "Checked normalized evidence rows, per-question summaries and positively weighted discovery terms",
+      "validation": "Recommend requires a documents-stage envelope and verifies both upstream stages before ranking"
+    }
+  ],
+  "behavior": {
+    "research": "Casefolded Unicode exact-token overlap ranks supplied source material for arbitrary questions, records full excerpts and unmatched questions. Strength = question-token coverage times supplied reliability.",
+    "documents": "Filters below-threshold evidence, normalizes whitespace, reports counts/gaps/rejection reasons, derives a maximum strength per matched term to avoid duplicate-source inflation.",
+    "recommend": "Excludes over-budget or excluded-tag products; scores 2 points per matched profile token plus document evidence term weights. Exposes components and question/source provenance. Ties sort by price then ID; zero-score candidates explicitly labeled fallback.",
+    "determinism": "No random values, timestamps, external services, model calls or hidden state. Input objects are not mutated.",
+    "synthetic_data": "Example and all test fixtures are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["Integrated CLI", "Shared validation", "General-purpose supplied-source research", "Normalized document records and checks", "Preference- and evidence-based catalog discovery", "Provenance and ranking explanations", "Automated tests"],
+    "excluded": ["Network research", "LLM integration", "Truth verification", "Semantic entailment or contradiction detection", "PDF/OCR parsing", "Enterprise persistence or authentication", "Learned recommender models", "Production-scale performance guarantees"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "test_count": 27,
+    "test_command_exit_code": 0,
+    "cli_status": "passed",
+    "cli_exit_code": 0,
+    "cli_output": "One valid JSON object; status ok; stage recommend; 2 eligible recommendations",
+    "coverage": ["Research source provenance and matching", "Document normalization and reliability filtering", "Recommendation preferences and exclusions", "Cross-stage evidence propagation", "Tampered handoff rejection", "Empty sources and catalog", "Numeric and structural validation", "Stable ties and repeatability", "CLI success and JSON/file/usage errors"]
+  }
+}

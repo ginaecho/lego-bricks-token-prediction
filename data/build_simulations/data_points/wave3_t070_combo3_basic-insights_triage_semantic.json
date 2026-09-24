@@ -121,7 +121,7 @@
   "split_group": "2cdb79928fa042abbd9fcb05c865e6b430558e15bac326f9969804956f9fa66c",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "66186147407bedab7ddd375244a3ca2de22ba2a1c39d4c5604b484c06a3c5f0a",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t070_combo3_basic-insights_triage_semantic",
   "membership_point_id": "combo3_basic-insights_triage_semantic",
@@ -129,8 +129,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "41492b4261474f5ee8a906b371859d1a7f89c93ef7ed8dc6689fd5e3b45d9713",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "fd3b246c-c6e9-4da8-a07f-81d0eb5be54b",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 160347,
+    "output_tokens": 15753,
+    "cache_read_tokens": 125872,
+    "cache_write_tokens": 34457,
+    "total_tokens": 176100,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36828,
+        "agent_id": "fd3b246c-c6e9-4da8-a07f-81d0eb5be54b",
+        "model": "gpt-6-astra",
+        "input_tokens": 14956,
+        "output_tokens": 1411,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 14953,
+        "reasoning_tokens": 235,
+        "duration_ms": 22541,
+        "created_at": "2026-09-24T09:47:28.272Z"
+      },
+      {
+        "id": 36874,
+        "agent_id": "fd3b246c-c6e9-4da8-a07f-81d0eb5be54b",
+        "model": "gpt-6-astra",
+        "input_tokens": 16399,
+        "output_tokens": 11906,
+        "cache_read_tokens": 14953,
+        "cache_write_tokens": 1443,
+        "reasoning_tokens": 692,
+        "duration_ms": 177443,
+        "created_at": "2026-09-24T10:07:10.021Z"
+      },
+      {
+        "id": 36876,
+        "agent_id": "fd3b246c-c6e9-4da8-a07f-81d0eb5be54b",
+        "model": "gpt-6-astra",
+        "input_tokens": 28633,
+        "output_tokens": 163,
+        "cache_read_tokens": 16396,
+        "cache_write_tokens": 12234,
+        "reasoning_tokens": 8,
+        "duration_ms": 4569,
+        "created_at": "2026-09-24T10:07:23.904Z"
+      },
+      {
+        "id": 36910,
+        "agent_id": "fd3b246c-c6e9-4da8-a07f-81d0eb5be54b",
+        "model": "gpt-6-astra",
+        "input_tokens": 31949,
+        "output_tokens": 1751,
+        "cache_read_tokens": 28630,
+        "cache_write_tokens": 3316,
+        "reasoning_tokens": 516,
+        "duration_ms": 30404,
+        "created_at": "2026-09-24T10:14:51.565Z"
+      },
+      {
+        "id": 36923,
+        "agent_id": "fd3b246c-c6e9-4da8-a07f-81d0eb5be54b",
+        "model": "gpt-6-astra",
+        "input_tokens": 33950,
+        "output_tokens": 445,
+        "cache_read_tokens": 31946,
+        "cache_write_tokens": 2001,
+        "reasoning_tokens": 69,
+        "duration_ms": 9126,
+        "created_at": "2026-09-24T10:16:07.552Z"
+      },
+      {
+        "id": 36928,
+        "agent_id": "fd3b246c-c6e9-4da8-a07f-81d0eb5be54b",
+        "model": "gpt-6-astra",
+        "input_tokens": 34460,
+        "output_tokens": 77,
+        "cache_read_tokens": 33947,
+        "cache_write_tokens": 510,
+        "reasoning_tokens": 0,
+        "duration_ms": 2934,
+        "created_at": "2026-09-24T10:16:49.635Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.6371625,
+      "observed_cache_profile_estimate_usd": 0.3539505,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 7.645950000000001,
+      "observed_cache_profile_estimate_usd": 7.645950000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -161,5 +286,808 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...........................\n----------------------------------------------------------------------\nRan 27 tests in 4.967s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "config": {
+        "category_rules": [
+          {
+            "category": "account",
+            "keywords": [],
+            "owner": "account-duty",
+            "priority": "high",
+            "team": "Support",
+            "theme_ids": [
+              "access"
+            ]
+          },
+          {
+            "category": "payments",
+            "keywords": [],
+            "owner": "payments-duty",
+            "priority": "normal",
+            "team": "Finance",
+            "theme_ids": [
+              "billing"
+            ]
+          },
+          {
+            "category": "fulfillment",
+            "keywords": [],
+            "owner": "delivery-duty",
+            "priority": "normal",
+            "team": "Operations",
+            "theme_ids": [
+              "delivery"
+            ]
+          },
+          {
+            "category": "product",
+            "keywords": [],
+            "owner": "product-duty",
+            "priority": "low",
+            "team": "Product",
+            "theme_ids": [
+              "usability"
+            ]
+          }
+        ],
+        "default_route": {
+          "category": "general",
+          "owner": "support-duty",
+          "priority": "normal",
+          "team": "Support"
+        },
+        "priority_rules": [
+          {
+            "keywords": [
+              "outage",
+              "fraud",
+              "security"
+            ],
+            "priority": "urgent"
+          },
+          {
+            "keywords": [
+              "broken",
+              "failed",
+              "blocked"
+            ],
+            "priority": "high"
+          }
+        ],
+        "synonyms": {
+          "login": [
+            "signin",
+            "authentication"
+          ],
+          "payment": [
+            "billing",
+            "charge",
+            "charged"
+          ],
+          "refund": [
+            "reimbursement",
+            "reimburse"
+          ],
+          "shipping": [
+            "shipment"
+          ]
+        },
+        "theme_rules": [
+          {
+            "action": "Audit payment and refund failures with the affected customers.",
+            "id": "billing",
+            "keywords": [
+              "payment",
+              "refund"
+            ],
+            "label": "Billing"
+          },
+          {
+            "action": "Reproduce account access problems and improve recovery.",
+            "id": "access",
+            "keywords": [
+              "login",
+              "password"
+            ],
+            "label": "Account access"
+          },
+          {
+            "action": "Review delivery delays and provide tracking updates.",
+            "id": "delivery",
+            "keywords": [
+              "shipping",
+              "delivery"
+            ],
+            "label": "Delivery"
+          },
+          {
+            "action": "Review reported user journeys and test a clearer interface.",
+            "id": "usability",
+            "keywords": [
+              "confusing",
+              "navigation"
+            ],
+            "label": "Usability"
+          }
+        ]
+      },
+      "feedback": [
+        {
+          "customer_id": "synthetic-c01",
+          "id": "s01",
+          "source": "survey",
+          "text": "The payment failed and I need a refund."
+        },
+        {
+          "customer_id": "synthetic-c02",
+          "id": "s02",
+          "source": "support",
+          "text": "Login is blocked during an outage."
+        },
+        {
+          "customer_id": "synthetic-c03",
+          "id": "s03",
+          "source": "review",
+          "text": "Shipping is late and tracking is confusing."
+        },
+        {
+          "customer_id": "synthetic-c01",
+          "id": "s04",
+          "source": "chat",
+          "text": "The charged amount is wrong. Please reimburse the payment."
+        },
+        {
+          "customer_id": "synthetic-c04",
+          "id": "s05",
+          "source": "survey",
+          "text": "Love the excellent export tool."
+        }
+      ],
+      "fixture_label": "SYNTHETIC customer feedback; no real people or tickets",
+      "insights": {
+        "signals": [
+          {
+            "feedback_id": "s01",
+            "sentiment": "negative",
+            "theme_ids": [
+              "billing"
+            ]
+          },
+          {
+            "feedback_id": "s02",
+            "sentiment": "negative",
+            "theme_ids": [
+              "access"
+            ]
+          },
+          {
+            "feedback_id": "s03",
+            "sentiment": "negative",
+            "theme_ids": [
+              "delivery",
+              "usability"
+            ]
+          },
+          {
+            "feedback_id": "s04",
+            "sentiment": "neutral",
+            "theme_ids": [
+              "billing"
+            ]
+          },
+          {
+            "feedback_id": "s05",
+            "sentiment": "positive",
+            "theme_ids": [
+              "inferred:export"
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "action": "Audit payment and refund failures with the affected customers.",
+            "count": 2,
+            "customer_ids": [
+              "synthetic-c01"
+            ],
+            "feedback_ids": [
+              "s01",
+              "s04"
+            ],
+            "id": "billing",
+            "label": "Billing",
+            "sentiment_counts": {
+              "negative": 1,
+              "neutral": 1,
+              "positive": 0
+            }
+          },
+          {
+            "action": "Reproduce account access problems and improve recovery.",
+            "count": 1,
+            "customer_ids": [
+              "synthetic-c02"
+            ],
+            "feedback_ids": [
+              "s02"
+            ],
+            "id": "access",
+            "label": "Account access",
+            "sentiment_counts": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 0
+            }
+          },
+          {
+            "action": "Review delivery delays and provide tracking updates.",
+            "count": 1,
+            "customer_ids": [
+              "synthetic-c03"
+            ],
+            "feedback_ids": [
+              "s03"
+            ],
+            "id": "delivery",
+            "label": "Delivery",
+            "sentiment_counts": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 0
+            }
+          },
+          {
+            "action": "Review feedback about export and select an improvement.",
+            "count": 1,
+            "customer_ids": [
+              "synthetic-c04"
+            ],
+            "feedback_ids": [
+              "s05"
+            ],
+            "id": "inferred:export",
+            "label": "Emerging theme: export",
+            "sentiment_counts": {
+              "negative": 0,
+              "neutral": 0,
+              "positive": 1
+            }
+          },
+          {
+            "action": "Review reported user journeys and test a clearer interface.",
+            "count": 1,
+            "customer_ids": [
+              "synthetic-c03"
+            ],
+            "feedback_ids": [
+              "s03"
+            ],
+            "id": "usability",
+            "label": "Usability",
+            "sentiment_counts": {
+              "negative": 1,
+              "neutral": 0,
+              "positive": 0
+            }
+          }
+        ]
+      },
+      "queries": [
+        {
+          "limit": 3,
+          "text": "billing reimbursement"
+        },
+        {
+          "limit": 2,
+          "text": "authentication outage"
+        },
+        {
+          "limit": 3,
+          "text": "shipping tracking"
+        }
+      ],
+      "schema_version": 1,
+      "semantic": {
+        "index": {
+          "documents": [
+            {
+              "id": "ticket:s01",
+              "terms": [
+                "payment",
+                "failed",
+                "need",
+                "refund",
+                "payments",
+                "high",
+                "finance",
+                "payments",
+                "duty",
+                "payment",
+                "audit",
+                "payment",
+                "refund",
+                "failures",
+                "affected",
+                "customers"
+              ],
+              "text": "The payment failed and I need a refund. payments high Finance payments-duty Billing Audit payment and refund failures with the affected customers."
+            },
+            {
+              "id": "ticket:s02",
+              "terms": [
+                "login",
+                "blocked",
+                "during",
+                "outage",
+                "account",
+                "urgent",
+                "support",
+                "account",
+                "duty",
+                "account",
+                "access",
+                "reproduce",
+                "account",
+                "access",
+                "problems",
+                "improve",
+                "recovery"
+              ],
+              "text": "Login is blocked during an outage. account urgent Support account-duty Account access Reproduce account access problems and improve recovery."
+            },
+            {
+              "id": "ticket:s03",
+              "terms": [
+                "shipping",
+                "late",
+                "tracking",
+                "confusing",
+                "fulfillment",
+                "normal",
+                "operations",
+                "delivery",
+                "duty",
+                "delivery",
+                "usability",
+                "review",
+                "delivery",
+                "delays",
+                "provide",
+                "tracking",
+                "updates",
+                "review",
+                "reported",
+                "user",
+                "journeys",
+                "test",
+                "clearer",
+                "interface"
+              ],
+              "text": "Shipping is late and tracking is confusing. fulfillment normal Operations delivery-duty Delivery Usability Review delivery delays and provide tracking updates. Review reported user journeys and test a clearer interface."
+            },
+            {
+              "id": "ticket:s04",
+              "terms": [
+                "payment",
+                "amount",
+                "wrong",
+                "refund",
+                "payment",
+                "payments",
+                "normal",
+                "finance",
+                "payments",
+                "duty",
+                "payment",
+                "audit",
+                "payment",
+                "refund",
+                "failures",
+                "affected",
+                "customers"
+              ],
+              "text": "The charged amount is wrong. Please reimburse the payment. payments normal Finance payments-duty Billing Audit payment and refund failures with the affected customers."
+            },
+            {
+              "id": "ticket:s05",
+              "terms": [
+                "love",
+                "excellent",
+                "export",
+                "tool",
+                "general",
+                "normal",
+                "support",
+                "support",
+                "duty",
+                "emerging",
+                "theme",
+                "export",
+                "review",
+                "feedback",
+                "about",
+                "export",
+                "select",
+                "improvement"
+              ],
+              "text": "Love the excellent export tool. general normal Support support-duty Emerging theme: export Review feedback about export and select an improvement."
+            }
+          ],
+          "postings": {
+            "about": [
+              "ticket:s05"
+            ],
+            "access": [
+              "ticket:s02"
+            ],
+            "account": [
+              "ticket:s02"
+            ],
+            "affected": [
+              "ticket:s01",
+              "ticket:s04"
+            ],
+            "amount": [
+              "ticket:s04"
+            ],
+            "audit": [
+              "ticket:s01",
+              "ticket:s04"
+            ],
+            "blocked": [
+              "ticket:s02"
+            ],
+            "clearer": [
+              "ticket:s03"
+            ],
+            "confusing": [
+              "ticket:s03"
+            ],
+            "customers": [
+              "ticket:s01",
+              "ticket:s04"
+            ],
+            "delays": [
+              "ticket:s03"
+            ],
+            "delivery": [
+              "ticket:s03"
+            ],
+            "during": [
+              "ticket:s02"
+            ],
+            "duty": [
+              "ticket:s01",
+              "ticket:s02",
+              "ticket:s03",
+              "ticket:s04",
+              "ticket:s05"
+            ],
+            "emerging": [
+              "ticket:s05"
+            ],
+            "excellent": [
+              "ticket:s05"
+            ],
+            "export": [
+              "ticket:s05"
+            ],
+            "failed": [
+              "ticket:s01"
+            ],
+            "failures": [
+              "ticket:s01",
+              "ticket:s04"
+            ],
+            "feedback": [
+              "ticket:s05"
+            ],
+            "finance": [
+              "ticket:s01",
+              "ticket:s04"
+            ],
+            "fulfillment": [
+              "ticket:s03"
+            ],
+            "general": [
+              "ticket:s05"
+            ],
+            "high": [
+              "ticket:s01"
+            ],
+            "improve": [
+              "ticket:s02"
+            ],
+            "improvement": [
+              "ticket:s05"
+            ],
+            "interface": [
+              "ticket:s03"
+            ],
+            "journeys": [
+              "ticket:s03"
+            ],
+            "late": [
+              "ticket:s03"
+            ],
+            "login": [
+              "ticket:s02"
+            ],
+            "love": [
+              "ticket:s05"
+            ],
+            "need": [
+              "ticket:s01"
+            ],
+            "normal": [
+              "ticket:s03",
+              "ticket:s04",
+              "ticket:s05"
+            ],
+            "operations": [
+              "ticket:s03"
+            ],
+            "outage": [
+              "ticket:s02"
+            ],
+            "payment": [
+              "ticket:s01",
+              "ticket:s04"
+            ],
+            "payments": [
+              "ticket:s01",
+              "ticket:s04"
+            ],
+            "problems": [
+              "ticket:s02"
+            ],
+            "provide": [
+              "ticket:s03"
+            ],
+            "recovery": [
+              "ticket:s02"
+            ],
+            "refund": [
+              "ticket:s01",
+              "ticket:s04"
+            ],
+            "reported": [
+              "ticket:s03"
+            ],
+            "reproduce": [
+              "ticket:s02"
+            ],
+            "review": [
+              "ticket:s03",
+              "ticket:s05"
+            ],
+            "select": [
+              "ticket:s05"
+            ],
+            "shipping": [
+              "ticket:s03"
+            ],
+            "support": [
+              "ticket:s02",
+              "ticket:s05"
+            ],
+            "test": [
+              "ticket:s03"
+            ],
+            "theme": [
+              "ticket:s05"
+            ],
+            "tool": [
+              "ticket:s05"
+            ],
+            "tracking": [
+              "ticket:s03"
+            ],
+            "updates": [
+              "ticket:s03"
+            ],
+            "urgent": [
+              "ticket:s02"
+            ],
+            "usability": [
+              "ticket:s03"
+            ],
+            "user": [
+              "ticket:s03"
+            ],
+            "wrong": [
+              "ticket:s04"
+            ]
+          }
+        },
+        "mode": "lexical_synonyms",
+        "results": [
+          {
+            "hits": [
+              {
+                "category": "payments",
+                "feedback_id": "s04",
+                "owner": "payments-duty",
+                "priority": "normal",
+                "score": 0.6365064,
+                "team": "Finance",
+                "theme_ids": [
+                  "billing"
+                ],
+                "ticket_id": "ticket:s04"
+              },
+              {
+                "category": "payments",
+                "feedback_id": "s01",
+                "owner": "payments-duty",
+                "priority": "high",
+                "score": 0.59810526,
+                "team": "Finance",
+                "theme_ids": [
+                  "billing"
+                ],
+                "ticket_id": "ticket:s01"
+              }
+            ],
+            "query": "billing reimbursement"
+          },
+          {
+            "hits": [
+              {
+                "category": "account",
+                "feedback_id": "s02",
+                "owner": "account-duty",
+                "priority": "urgent",
+                "score": 0.32934031,
+                "team": "Support",
+                "theme_ids": [
+                  "access"
+                ],
+                "ticket_id": "ticket:s02"
+              }
+            ],
+            "query": "authentication outage"
+          },
+          {
+            "hits": [
+              {
+                "category": "fulfillment",
+                "feedback_id": "s03",
+                "owner": "delivery-duty",
+                "priority": "normal",
+                "score": 0.38230484,
+                "team": "Operations",
+                "theme_ids": [
+                  "delivery",
+                  "usability"
+                ],
+                "ticket_id": "ticket:s03"
+              }
+            ],
+            "query": "shipping tracking"
+          }
+        ]
+      },
+      "stage": "semantic",
+      "status": "ok",
+      "triage": {
+        "tickets": [
+          {
+            "actions": [
+              "Audit payment and refund failures with the affected customers."
+            ],
+            "category": "payments",
+            "customer_id": "synthetic-c01",
+            "feedback_id": "s01",
+            "id": "ticket:s01",
+            "owner": "payments-duty",
+            "priority": "high",
+            "routing_reason": "category_rules[1]",
+            "sentiment": "negative",
+            "source": "survey",
+            "team": "Finance",
+            "text": "The payment failed and I need a refund.",
+            "theme_ids": [
+              "billing"
+            ]
+          },
+          {
+            "actions": [
+              "Reproduce account access problems and improve recovery."
+            ],
+            "category": "account",
+            "customer_id": "synthetic-c02",
+            "feedback_id": "s02",
+            "id": "ticket:s02",
+            "owner": "account-duty",
+            "priority": "urgent",
+            "routing_reason": "category_rules[0]",
+            "sentiment": "negative",
+            "source": "support",
+            "team": "Support",
+            "text": "Login is blocked during an outage.",
+            "theme_ids": [
+              "access"
+            ]
+          },
+          {
+            "actions": [
+              "Review delivery delays and provide tracking updates.",
+              "Review reported user journeys and test a clearer interface."
+            ],
+            "category": "fulfillment",
+            "customer_id": "synthetic-c03",
+            "feedback_id": "s03",
+            "id": "ticket:s03",
+            "owner": "delivery-duty",
+            "priority": "normal",
+            "routing_reason": "category_rules[2]",
+            "sentiment": "negative",
+            "source": "review",
+            "team": "Operations",
+            "text": "Shipping is late and tracking is confusing.",
+            "theme_ids": [
+              "delivery",
+              "usability"
+            ]
+          },
+          {
+            "actions": [
+              "Audit payment and refund failures with the affected customers."
+            ],
+            "category": "payments",
+            "customer_id": "synthetic-c01",
+            "feedback_id": "s04",
+            "id": "ticket:s04",
+            "owner": "payments-duty",
+            "priority": "normal",
+            "routing_reason": "category_rules[1]",
+            "sentiment": "neutral",
+            "source": "chat",
+            "team": "Finance",
+            "text": "The charged amount is wrong. Please reimburse the payment.",
+            "theme_ids": [
+              "billing"
+            ]
+          },
+          {
+            "actions": [
+              "Review feedback about export and select an improvement."
+            ],
+            "category": "general",
+            "customer_id": "synthetic-c04",
+            "feedback_id": "s05",
+            "id": "ticket:s05",
+            "owner": "support-duty",
+            "priority": "normal",
+            "routing_reason": "default_route",
+            "sentiment": "positive",
+            "source": "survey",
+            "team": "Support",
+            "text": "Love the excellent export tool.",
+            "theme_ids": [
+              "inferred:export"
+            ]
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t070_combo3_basic-insights_triage_semantic",
+    "artifact_sha256": {
+      "implementation.py": "0581e35e975ca2bfdf33e55c0f284ade4dbb944ecc6b26e95744d36850fe7624",
+      "test_implementation.py": "9cd1df1f48c7f53b19896d0dc0a7d705765e246217ad1d8dea23f3b9d176c6f4",
+      "example_input.json": "8e7cf243f6359a4db4c873094b941d20890606aec5df54bd902fc17b78cbc666",
+      "build_manifest.json": "e718a83cd83204c6980f174f4d4334b450108c728549e62cddd37a5bfa1993da"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

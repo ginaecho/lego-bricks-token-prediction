@@ -1,0 +1,102 @@
+{
+  "build_id": "wave3_t067_single_adaptive__ind-manufacturing",
+  "composition_label": "Adaptive onboarding (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation written for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "description": "One JSON envelope preserves core input entities in output. validate() validates the common fields before and after the onboarding transformation. Unknown envelope fields are preserved, while computed output fields are always regenerated.",
+    "required_fields": {
+      "schema_version": "Literal string 1.0",
+      "synthetic": "Literal true",
+      "profile": "experience: novice/intermediate/expert; preference: concise/detailed; completed_steps: unique prerequisite-closed list",
+      "work_order": "ERP/MES-style object: work_order_id, asset_id, product_id, positive integer quantity, status: planned/in_progress/hold/completed, timezone-aware created_at",
+      "telemetry_csv": "Nonempty embedded time-series CSV; exact columns: reading_id,timestamp,asset_id,metric,value,unit,tolerance_min,tolerance_max",
+      "quality_inspections": "List, possibly empty: inspection_id, work_order_id, asset_id, inspector, timestamp, characteristic=shaft_diameter, value, unit=mm, tolerance={min,max}, decision=pass/fail, rationale, evidence_reading_id",
+      "maintenance_logs": "List, possibly empty: log_id, asset_id, synthetic=true, timestamp, technician, action"
+    },
+    "output_extensions": {
+      "status": "ok for valid requests, including those with operational blockers",
+      "telemetry_readings": "Normalized typed sensor records with within_tolerance and safety_critical flags",
+      "quality_decisions": "Traceable quality decisions including source IDs, inspector, rationale, timestamp, measurement, tolerance and versioned rule",
+      "safety_alerts": "Pending human-safety-supervisor escalation records; automatic_clearance=false",
+      "onboarding": "Ordered steps with prerequisites, state, explanation and experience-specific guidance; blockers, next_step, complete, release_readiness and operational_authorization=false"
+    },
+    "error_schema": {"status": "error", "error": "Human-readable validation or file error"}
+  },
+  "cross_stage_handoffs": [
+    "One functionality only: shared validation produces normalized telemetry for adaptive onboarding; onboarding preserves the original work order, inspection and maintenance entities and returns guidance and decision traces."
+  ],
+  "behavior": {
+    "ordered_steps": ["safety", "units", "traceability", "inspection", "release"],
+    "prerequisites": "Each step requires every earlier step. Reported completed steps must be prerequisite-closed. Completion is client-supplied training state, not authenticated certification.",
+    "adaptation": "Novices receive worked examples, intermediates guided checklists, experts verification checklists. Explicit concise/detailed preference independently controls explanation length. Experience never bypasses prerequisites.",
+    "units_and_tolerances": "Strict C and mm/s sensor units; temperature physical range [-20,150], vibration [0,50]; shaft diameter in mm with value (0,1000]. Finite numbers and inclusive ordered tolerance bounds are required.",
+    "safety": "Temperature >=85 C or vibration >=12 mm/s always emits a pending human escalation, regardless of configurable tolerance. Alerts prevent release readiness, even when all steps were reported complete.",
+    "quality": "Decisions must agree with inclusive dimensional limits. Inspector, time, rationale, work order, matching asset and existing evidence reading are mandatory. Evidence cannot postdate inspection. This demonstrates ISO 9001-related traceability principles without claiming compliance or certification.",
+    "release_blockers": "Safety alerts, out-of-tolerance telemetry, missing inspection, failed inspection, or work order on hold. No real machine authorization occurs.",
+    "synthetic_fixtures": "All IDs and people are fictitious; maintenance logs are invented and labeled synthetic. synthetic_fixture(seed=67) produces reproducible physically plausible randomized temperature and vibration samples.",
+    "determinism": "No clock reads, external state, network calls or providers in application logic. Same input yields same output. Seeded fixture generation is reproducible.",
+    "cli": "Exactly one JSON object to stdout. Exit 0 for valid requests, exit 2 for validation, JSON, encoding, usage or file errors. No traceback for expected input errors."
+  },
+  "scope": {
+    "included": [
+      "Bounded manufacturing guided onboarding",
+      "One common envelope and validation layer",
+      "Strict entity relationships and chronological telemetry",
+      "Human escalation records and transparent quality traces",
+      "Standard-library unittest and subprocess CLI tests"
+    ],
+    "excluded": [
+      "Production deployment, certification or legal compliance guarantees",
+      "Real machine control, automatic release, or automatic safety clearance",
+      "Live ERP/MES integrations, external CSV files and network notification delivery",
+      "Persistent audit storage, authentication and signed training completion",
+      "LLMs, live model providers, and external dependencies"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "tests_run": 21,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "next_step": "safety"
+    },
+    "coverage": [
+      "Normal onboarding and shared input/output validation",
+      "Seeded randomized fixtures and deterministic results",
+      "Experience, explanation preference and prerequisite progression",
+      "Temperature and vibration human escalation",
+      "Safety thresholds independent of configurable tolerances",
+      "Units, finite values, physical bounds and inclusive tolerances",
+      "Traceability, entity links and chronological evidence",
+      "Failed or missing inspections and blocked release",
+      "CSV, malformed schema and synthetic maintenance validation",
+      "CLI success, missing file, usage, malformed JSON and duplicate keys"
+    ]
+  }
+}

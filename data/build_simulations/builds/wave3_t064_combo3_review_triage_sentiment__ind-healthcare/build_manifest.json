@@ -1,0 +1,53 @@
+{
+  "build_id": "wave3_t064_combo3_review_triage_sentiment__ind-healthcare",
+  "composition_label": "Document review -> Ticket triage & routing -> Sentiment & prioritization | Healthcare",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New deterministic reference implementation authored in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict fields: schema_version, synthetic, settings, records. Each record contains id, patient, clinical_note, prior_authorization.",
+    "entities": "Synthetic Patient with diagnosis and lab arrays; DocumentReference carrying clinical note text; draft Claim carrying prior authorization evidence. FHIR-style only.",
+    "output": "Same version, synthetic flag, settings, and records envelope plus phase/status/disclaimer. Each output record wraps the unchanged payload, safety flags, cumulative stages, and audit.",
+    "validation": "Shared validate function checks external input and each stage boundary, strict fields, bounded types, unique IDs, synthetic assertions, identifier patterns, safety flags, deterministic derived results and audit chain.",
+    "privacy": "Only pre-de-identified synthetic data accepted. Patient identifiers are allowlisted synthetic IDs; names, birth dates, identifier and address fields are forbidden. Free-text pattern rejection illustrates safeguards but cannot establish HIPAA Safe Harbor or Expert Determination."
+  },
+  "cross_stage_handoffs": [
+    "Review checks all requirement terms against traceable note, authorization evidence, diagnosis and lab source paths; missing terms become explicit gap IDs.",
+    "Triage validates review output, consumes gaps and gap descriptions, applies configured first-match category/owner routing, and assigns administrative priority.",
+    "Sentiment validates triage output, propagates ticket, owner and gaps, scores clinical-note wording and combines the administrative severity with bounded gap and negativity bonuses."
+  ],
+  "behavior": {
+    "review": "All evidence terms required; whole normalized token phrases; evidence_found is not proof of clinical truth, approval or certification.",
+    "routing": "First matching configured rule, otherwise accountable fallback; urgent keyword overrides high gap priority and normal no-gap priority.",
+    "sentiment": "Positive lexicon: helpful, clear, satisfied, excellent, thanks. Negative: delay, delayed, frustrated, confusing, denied, poor. Immediate not/no/never flips weight. Score is sum divided by matched token count, or zero.",
+    "prioritization": "Normal/high/urgent administrative severity bases 10/50/80 plus min(10, 2*gap_count) plus round(10*max(0,-sentiment)). Positive sentiment never reduces urgency. No medical severity inference.",
+    "audit": "Every immutable record construction or stage addition is logged, including changed paths and SHA-256 before/after snapshots. Sequence numbers replace wall-clock timestamps for reproducibility. Hashes support consistency checking, not cryptographic authenticity.",
+    "human_control": "Human review always true; autonomous clinical decision always false; draft authorization remains unchanged.",
+    "errors": "JSON error response and exit 2 for file/validation errors; no raw data or file paths reflected. Successful CLI prints one JSON object and exits 0."
+  },
+  "scope": {
+    "included": ["Synthetic Synthea-style fixtures", "Evidence-gap traceability", "Configurable accountable routing", "Deterministic transparent sentiment", "Sequential validated handoffs", "Per-record audit chain", "CLI and standard-library unittest tests"],
+    "excluded": ["Real patient data", "Complete HIPAA de-identification or compliance certification", "Clinical diagnosis, advice, treatment or medical urgency decisions", "Autonomous prior authorization approval", "Full HL7 FHIR validation", "Production security/authentication/storage", "External networks, dependencies, LLMs or providers", "Tamper-proof audit signing"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_run": 32,
+    "failures": 0,
+    "errors": 0,
+    "cli_example": {"exit_code": 0, "status": "ok", "phase": "sentiment", "records": 1},
+    "coverage": ["All three stages", "Cross-stage gap, owner and ticket propagation", "Stage ordering", "Configurable routing and fallback", "Missing evidence", "Word boundaries and negation", "Severity-aware prioritization", "Synthetic-only data and identifier rejection", "No autonomous clinical interpretation", "Audit continuity and tampering rejection", "Determinism and input immutability", "Multiple records", "Invalid inputs and CLI errors"]
+  }
+}

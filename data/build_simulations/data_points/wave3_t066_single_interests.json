@@ -97,7 +97,7 @@
   "split_group": "94fcdb07322666da997f553e417458975b688c194db0cf4394b23e81660c90d5",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "2eeafbaacd9f73dc908db56f553e27294df14f2b8fca824cb71f1e8c9d20fc0b",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t066_single_interests",
   "membership_point_id": "single_interests",
@@ -105,8 +105,133 @@
   "trial_category": "BT_single_repeat",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "89bd2f8f1c446b4c99e94a3df00b723bff6fe198374d1750543c7edbe5fcfed7",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "5d8ee12e-f1ab-43fe-b091-3fe10dee7ec9",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 113261,
+    "output_tokens": 5657,
+    "cache_read_tokens": 106113,
+    "cache_write_tokens": 7130,
+    "total_tokens": 118918,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36775,
+        "agent_id": "5d8ee12e-f1ab-43fe-b091-3fe10dee7ec9",
+        "model": "gpt-6-astra",
+        "input_tokens": 14832,
+        "output_tokens": 359,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 728,
+        "reasoning_tokens": 196,
+        "duration_ms": 12123,
+        "created_at": "2026-09-24T09:35:42.109Z"
+      },
+      {
+        "id": 36787,
+        "agent_id": "5d8ee12e-f1ab-43fe-b091-3fe10dee7ec9",
+        "model": "gpt-6-astra",
+        "input_tokens": 15217,
+        "output_tokens": 4693,
+        "cache_read_tokens": 14829,
+        "cache_write_tokens": 385,
+        "reasoning_tokens": 0,
+        "duration_ms": 57810,
+        "created_at": "2026-09-24T09:40:10.144Z"
+      },
+      {
+        "id": 36788,
+        "agent_id": "5d8ee12e-f1ab-43fe-b091-3fe10dee7ec9",
+        "model": "gpt-6-astra",
+        "input_tokens": 20214,
+        "output_tokens": 133,
+        "cache_read_tokens": 15214,
+        "cache_write_tokens": 4997,
+        "reasoning_tokens": 0,
+        "duration_ms": 4018,
+        "created_at": "2026-09-24T09:40:21.020Z"
+      },
+      {
+        "id": 36791,
+        "agent_id": "5d8ee12e-f1ab-43fe-b091-3fe10dee7ec9",
+        "model": "gpt-6-astra",
+        "input_tokens": 20738,
+        "output_tokens": 200,
+        "cache_read_tokens": 20211,
+        "cache_write_tokens": 524,
+        "reasoning_tokens": 34,
+        "duration_ms": 5546,
+        "created_at": "2026-09-24T09:41:12.403Z"
+      },
+      {
+        "id": 36792,
+        "agent_id": "5d8ee12e-f1ab-43fe-b091-3fe10dee7ec9",
+        "model": "gpt-6-astra",
+        "input_tokens": 21026,
+        "output_tokens": 175,
+        "cache_read_tokens": 20735,
+        "cache_write_tokens": 288,
+        "reasoning_tokens": 0,
+        "duration_ms": 3261,
+        "created_at": "2026-09-24T09:41:35.250Z"
+      },
+      {
+        "id": 36796,
+        "agent_id": "5d8ee12e-f1ab-43fe-b091-3fe10dee7ec9",
+        "model": "gpt-6-astra",
+        "input_tokens": 21234,
+        "output_tokens": 97,
+        "cache_read_tokens": 21023,
+        "cache_write_tokens": 208,
+        "reasoning_tokens": 0,
+        "duration_ms": 3285,
+        "created_at": "2026-09-24T09:42:06.612Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.3680075,
+      "observed_cache_profile_estimate_usd": 0.12925325,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.4160900000000005,
+      "observed_cache_profile_estimate_usd": 4.4160900000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,113 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...........\n----------------------------------------------------------------------\nRan 11 tests in 2.865s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "audit": {
+        "catalog_count": 6,
+        "eligible_count": 2,
+        "excluded": [
+          {
+            "item_id": "demo-3",
+            "reasons": [
+              {
+                "kind": "tag",
+                "value": "animal-products"
+              }
+            ]
+          },
+          {
+            "item_id": "demo-4",
+            "reasons": [
+              {
+                "kind": "item_id",
+                "value": "demo-4"
+              }
+            ]
+          },
+          {
+            "item_id": "demo-6",
+            "reasons": [
+              {
+                "kind": "category",
+                "value": "restricted"
+              }
+            ]
+          }
+        ],
+        "omitted_by_limit": 0,
+        "unmatched_item_ids": [
+          "demo-5"
+        ]
+      },
+      "fixture_label": "synthetic",
+      "mode": "personalized",
+      "recommendations": [
+        {
+          "explanation": {
+            "matched_interests": [
+              {
+                "interest": "outdoors",
+                "sources": [
+                  "tags"
+                ],
+                "weight": 3
+              },
+              {
+                "interest": "photography",
+                "sources": [
+                  "category",
+                  "tags"
+                ],
+                "weight": 2
+              }
+            ],
+            "popularity": 0.6,
+            "reason": "Ranked by weighted category/tag matches; popularity breaks ties."
+          },
+          "item_id": "demo-1",
+          "rank": 1,
+          "score": 1.0,
+          "title": "Synthetic trail camera"
+        },
+        {
+          "explanation": {
+            "matched_interests": [
+              {
+                "interest": "outdoors",
+                "sources": [
+                  "category"
+                ],
+                "weight": 3
+              }
+            ],
+            "popularity": 0.9,
+            "reason": "Ranked by weighted category/tag matches; popularity breaks ties."
+          },
+          "item_id": "demo-2",
+          "rank": 2,
+          "score": 0.6,
+          "title": "Synthetic trail map"
+        }
+      ],
+      "schema_version": 1,
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t066_single_interests",
+    "artifact_sha256": {
+      "implementation.py": "957405212731606b14ce151d2994253c6f590281cfd54c5858c33ae94bc2eb04",
+      "test_implementation.py": "f94948bacd6b321926df13cb19454765920ef18501c8eb53f3a65abd73a329ab",
+      "example_input.json": "abfc81cac59f133a0008015bbc22c6c5b510515814a8aa976d8b4ac499470101",
+      "build_manifest.json": "73c7292067e9aa1cfd79dc8be787815ad32d3885a34c4114b323d67de6136c57"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

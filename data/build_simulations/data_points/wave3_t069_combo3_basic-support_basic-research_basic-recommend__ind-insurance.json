@@ -118,7 +118,7 @@
   "split_group": "07654dc52317ebcdeadb51553c4e913dc9103a720b0feaf99c871a4b6ad9bae3",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "2172b216e19201bf250c299cbffcbe7833430efe0a26aa9ac5e1fe76df5f2c5c",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t069_combo3_basic-support_basic-research_basic-recommend__ind-insurance",
   "membership_point_id": "combo3_basic-support_basic-research_basic-recommend__ind-insurance",
@@ -126,8 +126,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "a87c3990708f6672680e5ba027e3399299affb0272e37bff83a33f34e98b687b",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "64e15100-65e1-404f-bff9-b189d403b544",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 148606,
+    "output_tokens": 13264,
+    "cache_read_tokens": 132168,
+    "cache_write_tokens": 16420,
+    "total_tokens": 161870,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36784,
+        "agent_id": "64e15100-65e1-404f-bff9-b189d403b544",
+        "model": "gpt-6-astra",
+        "input_tokens": 15091,
+        "output_tokens": 693,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 987,
+        "reasoning_tokens": 516,
+        "duration_ms": 25602,
+        "created_at": "2026-09-24T09:38:45.540Z"
+      },
+      {
+        "id": 36802,
+        "agent_id": "64e15100-65e1-404f-bff9-b189d403b544",
+        "model": "gpt-6-astra",
+        "input_tokens": 15810,
+        "output_tokens": 11419,
+        "cache_read_tokens": 15088,
+        "cache_write_tokens": 719,
+        "reasoning_tokens": 516,
+        "duration_ms": 148214,
+        "created_at": "2026-09-24T09:43:09.908Z"
+      },
+      {
+        "id": 36804,
+        "agent_id": "64e15100-65e1-404f-bff9-b189d403b544",
+        "model": "gpt-6-astra",
+        "input_tokens": 27577,
+        "output_tokens": 160,
+        "cache_read_tokens": 15807,
+        "cache_write_tokens": 11767,
+        "reasoning_tokens": 14,
+        "duration_ms": 4616,
+        "created_at": "2026-09-24T09:43:20.078Z"
+      },
+      {
+        "id": 36809,
+        "agent_id": "64e15100-65e1-404f-bff9-b189d403b544",
+        "model": "gpt-6-astra",
+        "input_tokens": 29474,
+        "output_tokens": 557,
+        "cache_read_tokens": 27574,
+        "cache_write_tokens": 1897,
+        "reasoning_tokens": 264,
+        "duration_ms": 12323,
+        "created_at": "2026-09-24T09:43:55.013Z"
+      },
+      {
+        "id": 36816,
+        "agent_id": "64e15100-65e1-404f-bff9-b189d403b544",
+        "model": "gpt-6-astra",
+        "input_tokens": 30130,
+        "output_tokens": 332,
+        "cache_read_tokens": 29471,
+        "cache_write_tokens": 656,
+        "reasoning_tokens": 33,
+        "duration_ms": 6958,
+        "created_at": "2026-09-24T09:45:02.843Z"
+      },
+      {
+        "id": 36819,
+        "agent_id": "64e15100-65e1-404f-bff9-b189d403b544",
+        "model": "gpt-6-astra",
+        "input_tokens": 30524,
+        "output_tokens": 103,
+        "cache_read_tokens": 30127,
+        "cache_write_tokens": 394,
+        "reasoning_tokens": 0,
+        "duration_ms": 3606,
+        "created_at": "2026-09-24T09:45:41.696Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.570475,
+      "observed_cache_profile_estimate_usd": 0.273097,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.8457,
+      "observed_cache_profile_estimate_usd": 6.8457,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -158,5 +283,337 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................................\n----------------------------------------------------------------------\nRan 34 tests in 1.608s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "context": {
+        "catalog": [
+          {
+            "id": "PROD-EXTENDED",
+            "monthly_premium": 88,
+            "name": "Synthetic Extended Auto",
+            "perils": [
+              "collision",
+              "theft",
+              "fire"
+            ],
+            "policy_type": "auto",
+            "underwriting_factors": [
+              "annual_mileage",
+              "prior_claims"
+            ]
+          },
+          {
+            "id": "PROD-ESSENTIAL",
+            "monthly_premium": 62,
+            "name": "Synthetic Essential Auto",
+            "perils": [
+              "collision",
+              "theft"
+            ],
+            "policy_type": "auto",
+            "underwriting_factors": [
+              "annual_mileage"
+            ]
+          },
+          {
+            "id": "PROD-PROPERTY",
+            "monthly_premium": 77,
+            "name": "Synthetic Property Cover",
+            "perils": [
+              "fire",
+              "water"
+            ],
+            "policy_type": "property",
+            "underwriting_factors": [
+              "property_age"
+            ]
+          }
+        ],
+        "claim": {
+          "id": "CLM-SYN-069",
+          "loss_amount": 6843.27,
+          "loss_date": "2025-06-17",
+          "loss_type": "collision",
+          "policy_id": "POL-SYN-069"
+        },
+        "intent": "coverage",
+        "policy": {
+          "covered_perils": [
+            "collision",
+            "theft"
+          ],
+          "deductible": 500,
+          "end_date": "2025-12-31",
+          "id": "POL-SYN-069",
+          "limit": 25000,
+          "start_date": "2025-01-01",
+          "type": "auto"
+        },
+        "preferences": {
+          "desired_perils": [
+            "collision",
+            "theft",
+            "fire"
+          ],
+          "max_monthly_premium": 100
+        },
+        "sources": [
+          {
+            "id": "SRC-CLAIMS",
+            "text": "Synthetic claims guide: retain dated loss evidence and request a written explanation of the assessment.",
+            "topic": "claims"
+          },
+          {
+            "id": "SRC-COVER",
+            "text": "Synthetic policy guide: verify listed perils, deductibles, limits and endorsements before relying on an estimate.",
+            "topic": "coverage"
+          },
+          {
+            "id": "SRC-FACTORS",
+            "text": "Synthetic underwriting guide: vehicle usage and prior claims are disclosed submission factors, not grounds for automatically denying a loss.",
+            "topic": "underwriting"
+          }
+        ],
+        "submission": {
+          "Factors": [
+            {
+              "disclosed": true,
+              "name": "annual_mileage",
+              "value": 9200
+            },
+            {
+              "disclosed": true,
+              "name": "prior_claims",
+              "value": 1
+            }
+          ],
+          "PolicyID": "POL-SYN-069",
+          "SubmissionID": "SUB-SYN-069"
+        },
+        "synthetic": true
+      },
+      "results": {
+        "recommend": {
+          "claim_id": "CLM-SYN-069",
+          "evidence_status": "unverified_sources_available",
+          "excluded": [
+            {
+              "product_id": "PROD-PROPERTY",
+              "reasons": [
+                "Product policy type does not match the current policy."
+              ]
+            }
+          ],
+          "notice": "Discovery is not a quote, underwriting decision, or promise to cover a past loss.",
+          "ranking_basis": [
+            "coverage gaps",
+            "matched perils",
+            "monthly premium",
+            "product ID tie-break"
+          ],
+          "recommendations": [
+            {
+              "evidence_source_ids": [
+                "SRC-CLAIMS",
+                "SRC-COVER",
+                "SRC-FACTORS"
+              ],
+              "gaps_addressed": [
+                "fire"
+              ],
+              "matched_perils": [
+                "collision",
+                "fire",
+                "theft"
+              ],
+              "monthly_premium": 88,
+              "name": "Synthetic Extended Auto",
+              "product_id": "PROD-EXTENDED",
+              "reasons": [
+                "Matches the current policy type and stated budget.",
+                "Ranked by 2 points per coverage gap addressed plus 1 per matched peril."
+              ],
+              "remaining_needs": [],
+              "score": 5,
+              "underwriting_disclosures": [
+                {
+                  "factor": "annual_mileage",
+                  "reason": "Disclosed vehicle usage; not used to rank products."
+                },
+                {
+                  "factor": "prior_claims",
+                  "reason": "Disclosed claims count; not used to decide this claim."
+                }
+              ]
+            },
+            {
+              "evidence_source_ids": [
+                "SRC-CLAIMS",
+                "SRC-COVER",
+                "SRC-FACTORS"
+              ],
+              "gaps_addressed": [],
+              "matched_perils": [
+                "collision",
+                "theft"
+              ],
+              "monthly_premium": 62,
+              "name": "Synthetic Essential Auto",
+              "product_id": "PROD-ESSENTIAL",
+              "reasons": [
+                "Matches the current policy type and stated budget.",
+                "Ranked by 2 points per coverage gap addressed plus 1 per matched peril."
+              ],
+              "remaining_needs": [
+                "fire"
+              ],
+              "score": 2,
+              "underwriting_disclosures": [
+                {
+                  "factor": "annual_mileage",
+                  "reason": "Disclosed vehicle usage; not used to rank products."
+                }
+              ]
+            }
+          ],
+          "status": "matches_found"
+        },
+        "research": {
+          "claim_id": "CLM-SYN-069",
+          "claim_reasons": [
+            "Loss date is within the stated policy period.",
+            "Reported peril is listed in policy coverage.",
+            "Illustrative amount applies the stated deductible, then the policy limit."
+          ],
+          "claim_status": "potentially_covered",
+          "evidence": [
+            {
+              "authority": "user_supplied_unverified",
+              "source_id": "SRC-CLAIMS",
+              "statement": "Synthetic claims guide: retain dated loss evidence and request a written explanation of the assessment.",
+              "topic": "claims",
+              "used_by_support": true
+            },
+            {
+              "authority": "user_supplied_unverified",
+              "source_id": "SRC-COVER",
+              "statement": "Synthetic policy guide: verify listed perils, deductibles, limits and endorsements before relying on an estimate.",
+              "topic": "coverage",
+              "used_by_support": true
+            },
+            {
+              "authority": "user_supplied_unverified",
+              "source_id": "SRC-FACTORS",
+              "statement": "Synthetic underwriting guide: vehicle usage and prior claims are disclosed submission factors, not grounds for automatically denying a loss.",
+              "topic": "underwriting",
+              "used_by_support": false
+            }
+          ],
+          "evidence_status": "unverified_sources_available",
+          "findings": [
+            {
+              "basis": "structured_policy_and_support_request",
+              "finding": "Current policy coverage compared with reported and requested perils.",
+              "missing_perils": [
+                "fire"
+              ],
+              "policy_id": "POL-SYN-069"
+            },
+            {
+              "basis": "validated_support_assessment",
+              "finding": "Claim assessment remains provisional and requires a human decision."
+            }
+          ],
+          "limitations": [
+            "Source statements are unverified, may conflict, and cannot override structured policy facts.",
+            "No independent investigation or legal interpretation has been performed."
+          ],
+          "recommendation_request": {
+            "budget": 100,
+            "coverage_gaps": [
+              "fire"
+            ],
+            "coverage_needs": [
+              "collision",
+              "fire",
+              "theft"
+            ],
+            "evidence_source_ids": [
+              "SRC-CLAIMS",
+              "SRC-COVER",
+              "SRC-FACTORS"
+            ],
+            "policy_type": "auto"
+          }
+        },
+        "support": {
+          "answer": "Coverage guidance uses only the supplied policy period, listed perils, deductible, and limit.",
+          "claim_id": "CLM-SYN-069",
+          "claim_status": "potentially_covered",
+          "human_review_required": true,
+          "illustrative_payment": 6343.27,
+          "intent": "coverage",
+          "next_steps": [
+            "Retain loss evidence and submit it through the insurer's secure channel.",
+            "Request a human explanation or challenge an assessment; this is not approval or denial."
+          ],
+          "reasons": [
+            "Loss date is within the stated policy period.",
+            "Reported peril is listed in policy coverage.",
+            "Illustrative amount applies the stated deductible, then the policy limit."
+          ],
+          "research_request": {
+            "coverage_needs": [
+              "collision",
+              "fire",
+              "theft"
+            ],
+            "questions": [
+              "Which requested perils are missing from the current policy?",
+              "Which source statements support next steps and need human verification?"
+            ],
+            "topics": [
+              "coverage",
+              "underwriting"
+            ]
+          },
+          "source_ids": [
+            "SRC-CLAIMS",
+            "SRC-COVER"
+          ],
+          "underwriting_disclosures": [
+            {
+              "factor": "annual_mileage",
+              "reason": "Disclosed vehicle usage; not used to rank products.",
+              "value": 9200
+            },
+            {
+              "factor": "prior_claims",
+              "reason": "Disclosed claims count; not used to decide this claim.",
+              "value": 1
+            }
+          ]
+        }
+      },
+      "schema_version": 1,
+      "stage": "recommend",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t069_combo3_basic-support_basic-research_basic-recommend__ind-insurance",
+    "artifact_sha256": {
+      "implementation.py": "eda9b294a3f084e3412b360b74cbdd874964a5800438b0e63845bdf314a5df5c",
+      "test_implementation.py": "97dbbf47780dc1082167dbb5ec0d57dc6f8212dc366f0befada982de5778f24a",
+      "example_input.json": "c29b6fc1adb1049ba8c0679a496099d88168be71c762955cec0f702fd26644ef",
+      "build_manifest.json": "234645125161caffb9b3cd39617d81823f5af9086b36fa7eefaac8ede911f499"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

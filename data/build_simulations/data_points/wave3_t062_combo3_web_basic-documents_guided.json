@@ -121,7 +121,7 @@
   "split_group": "8c5ba39fee76f8b593d33e49a67f249540d03328e4ef331752d50ac2b0fb130b",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "698d7cdccb120c7063e6c17ccceaf7915255a66ce961de39b6e67bed4670a0ee",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t062_combo3_web_basic-documents_guided",
   "membership_point_id": "combo3_web_basic-documents_guided",
@@ -129,8 +129,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "8d49f71d581f45424ec9131bb30555f5c5f788f94a42638d9d00c39def81bf4f",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "738ee550-94ed-4408-96c1-7acd65148cc6",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 134462,
+    "output_tokens": 10202,
+    "cache_read_tokens": 121667,
+    "cache_write_tokens": 12777,
+    "total_tokens": 144664,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36729,
+        "agent_id": "738ee550-94ed-4408-96c1-7acd65148cc6",
+        "model": "gpt-6-astra",
+        "input_tokens": 14948,
+        "output_tokens": 538,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 844,
+        "reasoning_tokens": 356,
+        "duration_ms": 14512,
+        "created_at": "2026-09-24T09:29:20.244Z"
+      },
+      {
+        "id": 36739,
+        "agent_id": "738ee550-94ed-4408-96c1-7acd65148cc6",
+        "model": "gpt-6-astra",
+        "input_tokens": 15517,
+        "output_tokens": 8525,
+        "cache_read_tokens": 14945,
+        "cache_write_tokens": 569,
+        "reasoning_tokens": 336,
+        "duration_ms": 105355,
+        "created_at": "2026-09-24T09:30:56.287Z"
+      },
+      {
+        "id": 36751,
+        "agent_id": "738ee550-94ed-4408-96c1-7acd65148cc6",
+        "model": "gpt-6-astra",
+        "input_tokens": 24366,
+        "output_tokens": 427,
+        "cache_read_tokens": 15514,
+        "cache_write_tokens": 8849,
+        "reasoning_tokens": 286,
+        "duration_ms": 14684,
+        "created_at": "2026-09-24T09:32:26.277Z"
+      },
+      {
+        "id": 36755,
+        "agent_id": "738ee550-94ed-4408-96c1-7acd65148cc6",
+        "model": "gpt-6-astra",
+        "input_tokens": 26147,
+        "output_tokens": 363,
+        "cache_read_tokens": 24363,
+        "cache_write_tokens": 1781,
+        "reasoning_tokens": 72,
+        "duration_ms": 8999,
+        "created_at": "2026-09-24T09:32:42.052Z"
+      },
+      {
+        "id": 36757,
+        "agent_id": "738ee550-94ed-4408-96c1-7acd65148cc6",
+        "model": "gpt-6-astra",
+        "input_tokens": 26603,
+        "output_tokens": 243,
+        "cache_read_tokens": 26144,
+        "cache_write_tokens": 456,
+        "reasoning_tokens": 0,
+        "duration_ms": 5135,
+        "created_at": "2026-09-24T09:32:46.119Z"
+      },
+      {
+        "id": 36758,
+        "agent_id": "738ee550-94ed-4408-96c1-7acd65148cc6",
+        "model": "gpt-6-astra",
+        "input_tokens": 26881,
+        "output_tokens": 106,
+        "cache_read_tokens": 26600,
+        "cache_write_tokens": 278,
+        "reasoning_tokens": 0,
+        "duration_ms": 3418,
+        "created_at": "2026-09-24T09:33:06.937Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.489185,
+      "observed_cache_profile_estimate_usd": 0.21543424999999997,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.87022,
+      "observed_cache_profile_estimate_usd": 5.87022,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -161,5 +286,203 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..........................\n----------------------------------------------------------------------\nRan 26 tests in 1.362s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "documents": {
+        "checks_passed": 4,
+        "fields": [
+          "organization",
+          "email",
+          "seats",
+          "approved",
+          "region"
+        ],
+        "rows": [
+          {
+            "data": {
+              "approved": true,
+              "email": "demo@synthetic.example",
+              "organization": "Synthetic Brick Studio",
+              "region": "synthetic",
+              "seats": 8
+            },
+            "id": "source_1_record_1",
+            "provenance": {
+              "record_index": 0,
+              "retrieval": "synthetic_fixture",
+              "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+              "url": "https://catalog.synthetic.example/setup"
+            }
+          },
+          {
+            "data": {
+              "approved": true,
+              "email": "lab@synthetic.example",
+              "organization": "Synthetic Tile Lab",
+              "region": "synthetic",
+              "seats": 3
+            },
+            "id": "source_1_record_2",
+            "provenance": {
+              "record_index": 1,
+              "retrieval": "synthetic_fixture",
+              "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+              "url": "https://catalog.synthetic.example/setup"
+            }
+          }
+        ]
+      },
+      "guided": {
+        "progress": {
+          "completed": 1,
+          "fraction": 0.3333333333333333,
+          "total": 3
+        },
+        "steps": [
+          {
+            "blockers": [],
+            "evidence": [
+              {
+                "provenance": {
+                  "record_index": 0,
+                  "retrieval": "synthetic_fixture",
+                  "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+                  "url": "https://catalog.synthetic.example/setup"
+                },
+                "record_id": "source_1_record_1"
+              },
+              {
+                "provenance": {
+                  "record_index": 1,
+                  "retrieval": "synthetic_fixture",
+                  "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+                  "url": "https://catalog.synthetic.example/setup"
+                },
+                "record_id": "source_1_record_2"
+              }
+            ],
+            "id": "verify-contact",
+            "status": "completed",
+            "title": "Verify synthetic organization contacts"
+          },
+          {
+            "blockers": [],
+            "evidence": [
+              {
+                "provenance": {
+                  "record_index": 0,
+                  "retrieval": "synthetic_fixture",
+                  "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+                  "url": "https://catalog.synthetic.example/setup"
+                },
+                "record_id": "source_1_record_1"
+              },
+              {
+                "provenance": {
+                  "record_index": 1,
+                  "retrieval": "synthetic_fixture",
+                  "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+                  "url": "https://catalog.synthetic.example/setup"
+                },
+                "record_id": "source_1_record_2"
+              }
+            ],
+            "id": "allocate",
+            "status": "ready",
+            "title": "Allocate synthetic seats"
+          },
+          {
+            "blockers": [
+              "prerequisite:allocate"
+            ],
+            "evidence": [
+              {
+                "provenance": {
+                  "record_index": 0,
+                  "retrieval": "synthetic_fixture",
+                  "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+                  "url": "https://catalog.synthetic.example/setup"
+                },
+                "record_id": "source_1_record_1"
+              },
+              {
+                "provenance": {
+                  "record_index": 1,
+                  "retrieval": "synthetic_fixture",
+                  "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+                  "url": "https://catalog.synthetic.example/setup"
+                },
+                "record_id": "source_1_record_2"
+              }
+            ],
+            "id": "launch",
+            "status": "blocked",
+            "title": "Launch synthetic workspace"
+          }
+        ]
+      },
+      "research": {
+        "findings": [
+          {
+            "data": {
+              "approved": "true",
+              "contact": " DEMO@SYNTHETIC.EXAMPLE ",
+              "organization": " Synthetic Brick Studio ",
+              "seats": "8"
+            },
+            "id": "source_1_record_1",
+            "provenance": {
+              "record_index": 0,
+              "retrieval": "synthetic_fixture",
+              "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+              "url": "https://catalog.synthetic.example/setup"
+            }
+          },
+          {
+            "data": {
+              "approved": "true",
+              "contact": " LAB@SYNTHETIC.EXAMPLE ",
+              "organization": " Synthetic Tile Lab ",
+              "seats": "3"
+            },
+            "id": "source_1_record_2",
+            "provenance": {
+              "record_index": 1,
+              "retrieval": "synthetic_fixture",
+              "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+              "url": "https://catalog.synthetic.example/setup"
+            }
+          }
+        ],
+        "sources": [
+          {
+            "content_type": "application/json",
+            "record_count": 2,
+            "retrieval": "synthetic_fixture",
+            "sha256": "7c6b7ecbc192b27657fb14c64209ee67dd9ff3d38b3dd78d4d2614e98efbf833",
+            "url": "https://catalog.synthetic.example/setup"
+          }
+        ]
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t062_combo3_web_basic-documents_guided",
+    "artifact_sha256": {
+      "implementation.py": "1b7ada6707dd090ca3fa7724746a633b7aa911390f60da10a0db86f7e76069aa",
+      "test_implementation.py": "d9905c3367ed0acd3e3a8efb1336e3aea3522d5ac403bd3fb179121e5854888c",
+      "example_input.json": "4c6e0c435fc52c09d690ebbd673fe62536a3c149aaa0c90493fb88fc6bed4564",
+      "build_manifest.json": "d0e4645d085a4f6396e6681a072d9054cc9614ff79d52f0c8a3404d1c2d41b65"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

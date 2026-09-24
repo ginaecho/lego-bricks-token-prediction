@@ -1,0 +1,52 @@
+{
+  "build_id": "wave3_t075_single_extract__ind-public_sector",
+  "composition_label": "single_extract",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Exact keys: schema_version=1, synthetic=true, purpose, document, fields. Document: id (SYN- identifier), entity, format, content. Field: name, source, type, required, pii.",
+    "entities": ["citizen_service_request", "benefits_application", "policy_document"],
+    "formats": {
+      "government_form_json": "Flat object of scalar strings, integers, booleans or null, for requests and applications.",
+      "policy_regulation_text": "Original policy text with one Label: value per extraction line, for policy documents."
+    },
+    "output": "schema_version, status (ok or incomplete), synthetic, document_id, entity, fields, missing_fields, source_span_convention, review. Fields contain name/type/required/pii/status/value/source_span/explanation.",
+    "errors": "One JSON object with schema_version, status=error and a safe plain-language message; exit 2.",
+    "validation": "One shared validate_input function validates all entity types before extraction. Field conversion enforces string/integer/boolean types without treating booleans as integers. No unknown schema keys or duplicate JSON keys."
+  },
+  "cross_stage_handoffs": [
+    "A single extraction stage receives the validated shared input. Deterministic source indexing and type checks produce a privacy-filtered shared output; there are no downstream decision stages."
+  ],
+  "behavior": {
+    "missing_fields": "All absent/null/blank requested values are reported. Missing required values yield incomplete; optional missing fields do not. Valid incomplete extraction exits 0.",
+    "spans": "Half-open Unicode code-point offsets. Form offsets refer to sorted JSON with two-space indentation and literal Unicode (scalar quotes included). Policy offsets refer to original text, excluding trailing whitespace. Source contents are never echoed.",
+    "privacy": "PII values are always redacted after type validation. Unrecognized field names and known sensitive source labels must be marked PII. Public strings are short upper-case codes only. Public field names use a narrow allowlist. Errors never echo source data or paths. Intended only for fabricated fixtures; classification does not guarantee PII discovery.",
+    "explainability": "Each field has a source span and plain-language explanation; output explicitly makes no eligibility or service decision and requires human review.",
+    "accessibility": "Plain-language structured JSON without color or visual-only meaning, inspired by Section 508; not an accessible user-interface certification.",
+    "synthetic_fixtures": "The example uses an invented case ID, explicitly fabricated persona and fictional non-traceable address. Tests include an invented policy and citizen request.",
+    "determinism": "No randomness, timestamps, live providers, or optional model calls."
+  },
+  "scope": {
+    "included": ["Schema-driven exact field extraction", "Source spans", "Missing-field reporting", "PII redaction and purpose validation", "Explainable human-review output", "Public-sector synthetic examples", "CLI and unit tests"],
+    "excluded": ["Real citizen data", "Compliance certification", "Automated benefit decisions", "OCR", "Semantic regulation interpretation", "Nested JSON and arrays", "Multiline policy fields", "Production storage, access control and audit infrastructure", "Comprehensive PII detection", "LLM integrations"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {"run": 17, "passed": 17, "failed": 0},
+    "cli": {"exit_code": 0, "stdout_json_objects": 1, "status": "ok"},
+    "error_cli": "Tests verified exit 2 and JSON error output for missing files, wrong argument counts and invalid content."
+  }
+}

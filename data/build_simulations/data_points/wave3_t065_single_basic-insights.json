@@ -95,7 +95,7 @@
   "split_group": "79903612248ff962e77e564d2349df78fc0e1711b7aa0b810c49f7f1133d2124",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "951634415ee2690d2aa3832918c11574b9d14774a2ce5a4c4dd8dcbdaaf798c9",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t065_single_basic-insights",
   "membership_point_id": "single_basic-insights",
@@ -103,8 +103,133 @@
   "trial_category": "B_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "ac74a797de6ab41543c61ce70df3207d607b83dffcb6d4c78316fa3e1aad0140",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "e494fb87-15a4-428f-8423-c0b1ed94daca",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 117323,
+    "output_tokens": 6161,
+    "cache_read_tokens": 109015,
+    "cache_write_tokens": 8290,
+    "total_tokens": 123484,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36740,
+        "agent_id": "e494fb87-15a4-428f-8423-c0b1ed94daca",
+        "model": "gpt-6-astra",
+        "input_tokens": 14846,
+        "output_tokens": 414,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 742,
+        "reasoning_tokens": 250,
+        "duration_ms": 11713,
+        "created_at": "2026-09-24T09:31:01.964Z"
+      },
+      {
+        "id": 36753,
+        "agent_id": "e494fb87-15a4-428f-8423-c0b1ed94daca",
+        "model": "gpt-6-astra",
+        "input_tokens": 15286,
+        "output_tokens": 5144,
+        "cache_read_tokens": 14843,
+        "cache_write_tokens": 440,
+        "reasoning_tokens": 0,
+        "duration_ms": 63830,
+        "created_at": "2026-09-24T09:32:39.666Z"
+      },
+      {
+        "id": 36754,
+        "agent_id": "e494fb87-15a4-428f-8423-c0b1ed94daca",
+        "model": "gpt-6-astra",
+        "input_tokens": 20738,
+        "output_tokens": 134,
+        "cache_read_tokens": 15283,
+        "cache_write_tokens": 5452,
+        "reasoning_tokens": 0,
+        "duration_ms": 2867,
+        "created_at": "2026-09-24T09:32:42.021Z"
+      },
+      {
+        "id": 36756,
+        "agent_id": "e494fb87-15a4-428f-8423-c0b1ed94daca",
+        "model": "gpt-6-astra",
+        "input_tokens": 21893,
+        "output_tokens": 184,
+        "cache_read_tokens": 20735,
+        "cache_write_tokens": 1155,
+        "reasoning_tokens": 0,
+        "duration_ms": 3479,
+        "created_at": "2026-09-24T09:32:44.772Z"
+      },
+      {
+        "id": 36759,
+        "agent_id": "e494fb87-15a4-428f-8423-c0b1ed94daca",
+        "model": "gpt-6-astra",
+        "input_tokens": 22166,
+        "output_tokens": 194,
+        "cache_read_tokens": 21890,
+        "cache_write_tokens": 273,
+        "reasoning_tokens": 0,
+        "duration_ms": 3557,
+        "created_at": "2026-09-24T09:33:09.349Z"
+      },
+      {
+        "id": 36760,
+        "agent_id": "e494fb87-15a4-428f-8423-c0b1ed94daca",
+        "model": "gpt-6-astra",
+        "input_tokens": 22394,
+        "output_tokens": 91,
+        "cache_read_tokens": 22163,
+        "cache_write_tokens": 228,
+        "reasoning_tokens": 0,
+        "duration_ms": 2931,
+        "created_at": "2026-09-24T09:33:23.633Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.3857225,
+      "observed_cache_profile_estimate_usd": 0.14043875,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.62867,
+      "observed_cache_profile_estimate_usd": 4.62867,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -135,5 +260,224 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "............\n----------------------------------------------------------------------\nRan 12 tests in 1.058s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "assignments": [
+        {
+          "feedback_id": "demo-001",
+          "sentiment": "negative",
+          "themes": [
+            "performance",
+            "usability"
+          ]
+        },
+        {
+          "feedback_id": "demo-002",
+          "sentiment": "positive",
+          "themes": [
+            "performance",
+            "support"
+          ]
+        },
+        {
+          "feedback_id": "demo-003",
+          "sentiment": "negative",
+          "themes": [
+            "pricing"
+          ]
+        },
+        {
+          "feedback_id": "demo-004",
+          "sentiment": "negative",
+          "themes": [
+            "performance"
+          ]
+        },
+        {
+          "feedback_id": "demo-005",
+          "sentiment": "neutral",
+          "themes": [
+            "uncategorized"
+          ]
+        }
+      ],
+      "dataset_label": "SYNTHETIC customer feedback for fictional Lantern Shop",
+      "method": {
+        "limitations": [
+          "No semantic inference, stemming, sarcasm or negation handling.",
+          "Themes can overlap; shares may sum above one.",
+          "Priority is a heuristic, not statistical evidence.",
+          "Repeated text with different ids counts separately."
+        ],
+        "priority": "feedback_count + 2 * negative_count",
+        "sentiment": "rating first; otherwise unique positive minus negative lexicon words",
+        "theme_detection": "case-insensitive whole-word/phrase rules; multiple themes allowed"
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "summary": {
+        "feedback_count": 5,
+        "sentiment_counts": {
+          "negative": 3,
+          "neutral": 1,
+          "positive": 1
+        },
+        "theme_count": 5,
+        "uncategorized_count": 1
+      },
+      "synthetic": true,
+      "themes": [
+        {
+          "evidence": [
+            {
+              "feedback_id": "demo-001",
+              "source": "survey",
+              "text": "Checkout is slow and navigation is confusing."
+            },
+            {
+              "feedback_id": "demo-004",
+              "source": "review",
+              "text": "The loading screen is slow."
+            }
+          ],
+          "feedback_count": 3,
+          "feedback_ids": [
+            "demo-001",
+            "demo-002",
+            "demo-004"
+          ],
+          "name": "performance",
+          "priority_score": 7,
+          "recommended_action": "Measure response times for cited workflows and remove bottlenecks.",
+          "sentiment_counts": {
+            "negative": 2,
+            "neutral": 0,
+            "positive": 1
+          },
+          "share_of_feedback": 0.6,
+          "source_counts": {
+            "email": 1,
+            "review": 1,
+            "survey": 1
+          }
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "demo-003",
+              "source": "review",
+              "text": "The price is expensive for our small team."
+            }
+          ],
+          "feedback_count": 1,
+          "feedback_ids": [
+            "demo-003"
+          ],
+          "name": "pricing",
+          "priority_score": 3,
+          "recommended_action": "Review perceived value and test clearer pricing communication.",
+          "sentiment_counts": {
+            "negative": 1,
+            "neutral": 0,
+            "positive": 0
+          },
+          "share_of_feedback": 0.2,
+          "source_counts": {
+            "review": 1
+          }
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "demo-001",
+              "source": "survey",
+              "text": "Checkout is slow and navigation is confusing."
+            }
+          ],
+          "feedback_count": 1,
+          "feedback_ids": [
+            "demo-001"
+          ],
+          "name": "usability",
+          "priority_score": 3,
+          "recommended_action": "Review the cited workflows and test a simpler customer journey.",
+          "sentiment_counts": {
+            "negative": 1,
+            "neutral": 0,
+            "positive": 0
+          },
+          "share_of_feedback": 0.2,
+          "source_counts": {
+            "survey": 1
+          }
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "demo-002",
+              "source": "email",
+              "text": "Support was helpful and the response was fast."
+            }
+          ],
+          "feedback_count": 1,
+          "feedback_ids": [
+            "demo-002"
+          ],
+          "name": "support",
+          "priority_score": 1,
+          "recommended_action": "Preserve strengths and validate opportunities: Review support examples and improve response quality and timeliness.",
+          "sentiment_counts": {
+            "negative": 0,
+            "neutral": 0,
+            "positive": 1
+          },
+          "share_of_feedback": 0.2,
+          "source_counts": {
+            "email": 1
+          }
+        },
+        {
+          "evidence": [
+            {
+              "feedback_id": "demo-005",
+              "source": "survey",
+              "text": "Please offer a purple color option."
+            }
+          ],
+          "feedback_count": 1,
+          "feedback_ids": [
+            "demo-005"
+          ],
+          "name": "uncategorized",
+          "priority_score": 1,
+          "recommended_action": "Read uncategorized feedback and add a theme rule if a pattern recurs.",
+          "sentiment_counts": {
+            "negative": 0,
+            "neutral": 1,
+            "positive": 0
+          },
+          "share_of_feedback": 0.2,
+          "source_counts": {
+            "survey": 1
+          }
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t065_single_basic-insights",
+    "artifact_sha256": {
+      "implementation.py": "cb811144eba2d6b85f4424e920e74a0211dc2ecf459de32dbfc4f625b10e6050",
+      "test_implementation.py": "851b127e620233ee02b71fcec8edc3d340894c56f814458dfd45498acb91e296",
+      "example_input.json": "7c5db12a2943af213b3eee26d0eee62ac090926662cc1d3ef25570c3cc61af74",
+      "build_manifest.json": "414c5badec1248b81ed0263f3d74b82f84c584233da09d1c03f7b626a89122ff"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

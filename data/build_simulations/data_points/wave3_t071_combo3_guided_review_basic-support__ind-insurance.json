@@ -121,7 +121,7 @@
   "split_group": "c44941dff164bd307a96140cf9e66efc60e3fca497dc5ad2a4a121ff69285e32",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "37c75df413bd4a026fb396148342dcc08cf6264eb2e0a5e76d2f38c2a647620d",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t071_combo3_guided_review_basic-support__ind-insurance",
   "membership_point_id": "combo3_guided_review_basic-support__ind-insurance",
@@ -129,8 +129,133 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "d160792e3ba954583887a5b846b2b1070004b4dc2dd72cb0121b662766acd628",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "bf878bcd-330d-4ca5-9589-d02fb0966136",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 134517,
+    "output_tokens": 10977,
+    "cache_read_tokens": 120983,
+    "cache_write_tokens": 13516,
+    "total_tokens": 145494,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36814,
+        "agent_id": "bf878bcd-330d-4ca5-9589-d02fb0966136",
+        "model": "gpt-6-astra",
+        "input_tokens": 15058,
+        "output_tokens": 611,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 954,
+        "reasoning_tokens": 428,
+        "duration_ms": 24769,
+        "created_at": "2026-09-24T09:44:54.442Z"
+      },
+      {
+        "id": 36830,
+        "agent_id": "bf878bcd-330d-4ca5-9589-d02fb0966136",
+        "model": "gpt-6-astra",
+        "input_tokens": 15701,
+        "output_tokens": 7668,
+        "cache_read_tokens": 15055,
+        "cache_write_tokens": 643,
+        "reasoning_tokens": 0,
+        "duration_ms": 89139,
+        "created_at": "2026-09-24T09:47:46.462Z"
+      },
+      {
+        "id": 36833,
+        "agent_id": "bf878bcd-330d-4ca5-9589-d02fb0966136",
+        "model": "gpt-6-astra",
+        "input_tokens": 23625,
+        "output_tokens": 257,
+        "cache_read_tokens": 15698,
+        "cache_write_tokens": 7924,
+        "reasoning_tokens": 97,
+        "duration_ms": 5987,
+        "created_at": "2026-09-24T09:48:21.193Z"
+      },
+      {
+        "id": 36835,
+        "agent_id": "bf878bcd-330d-4ca5-9589-d02fb0966136",
+        "model": "gpt-6-astra",
+        "input_tokens": 25139,
+        "output_tokens": 2139,
+        "cache_read_tokens": 23622,
+        "cache_write_tokens": 1514,
+        "reasoning_tokens": 127,
+        "duration_ms": 34439,
+        "created_at": "2026-09-24T09:49:16.045Z"
+      },
+      {
+        "id": 36836,
+        "agent_id": "bf878bcd-330d-4ca5-9589-d02fb0966136",
+        "model": "gpt-6-astra",
+        "input_tokens": 27374,
+        "output_tokens": 211,
+        "cache_read_tokens": 25136,
+        "cache_write_tokens": 2235,
+        "reasoning_tokens": 14,
+        "duration_ms": 3712,
+        "created_at": "2026-09-24T09:49:58.867Z"
+      },
+      {
+        "id": 36837,
+        "agent_id": "bf878bcd-330d-4ca5-9589-d02fb0966136",
+        "model": "gpt-6-astra",
+        "input_tokens": 27620,
+        "output_tokens": 91,
+        "cache_read_tokens": 27371,
+        "cache_write_tokens": 246,
+        "reasoning_tokens": 0,
+        "duration_ms": 13984,
+        "created_at": "2026-09-24T09:50:28.610Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5009475,
+      "observed_cache_profile_estimate_usd": 0.22873575000000004,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.011369999999999,
+      "observed_cache_profile_estimate_usd": 6.011369999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -161,5 +286,217 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".............................\n----------------------------------------------------------------------\nRan 29 tests in 1.071s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "synthetic": true,
+      "status": "ok",
+      "case_id": "CLM-SYN-071",
+      "case": {
+        "schema_version": "1.0",
+        "synthetic": true,
+        "as_of": "2026-09-24",
+        "case_id": "CLM-SYN-071",
+        "policy": {
+          "policy_id": "POL-SYN-071",
+          "policyholder_ref": "SYN-Invented-Juniper",
+          "effective_date": "2026-01-01",
+          "expiry_date": "2026-12-31",
+          "coverage_limit": 25000,
+          "currency": "EUR",
+          "asset": {
+            "type": "vehicle",
+            "reference": "SYN7F8A2B3C4D5E67"
+          }
+        },
+        "claim": {
+          "claim_id": "CLM-SYN-071",
+          "policy_id": "POL-SYN-071",
+          "loss_date": "2026-05-17",
+          "loss_amount": 7384.62,
+          "description": "SYNTHETIC invented wind damage to fabricated vehicle."
+        },
+        "underwriting": {
+          "submission_id": "SUB-SYN-071",
+          "policy_id": "POL-SYN-071",
+          "factors": [
+            {
+              "name": "vehicle_age",
+              "value": "4",
+              "disclosed": true
+            },
+            {
+              "name": "use_type",
+              "value": "private",
+              "disclosed": true
+            }
+          ]
+        },
+        "evidence": [
+          {
+            "evidence_id": "EV-SYN-1",
+            "kind": "policy_schedule",
+            "entity_id": "POL-SYN-071",
+            "text": "SYNTHETIC policy schedule reference; invented coverage limit EUR 25000."
+          },
+          {
+            "evidence_id": "EV-SYN-2",
+            "kind": "underwriting_disclosure",
+            "entity_id": "SUB-SYN-071",
+            "text": "SYNTHETIC disclosed factors: vehicle_age=4, use_type=private."
+          }
+        ],
+        "completed_steps": [
+          "confirm_synthetic_data",
+          "confirm_policy",
+          "confirm_claim",
+          "confirm_disclosures"
+        ],
+        "support_request": {
+          "question": "What is my claim status and what evidence is missing?",
+          "team_online": false
+        }
+      },
+      "guided": {
+        "stage": "guided",
+        "validated": true,
+        "case_id": "CLM-SYN-071",
+        "status": "complete",
+        "progress": {
+          "completed": 4,
+          "total": 4
+        },
+        "steps": [
+          {
+            "id": "confirm_synthetic_data",
+            "prerequisites": [],
+            "state": "complete"
+          },
+          {
+            "id": "confirm_policy",
+            "prerequisites": [
+              "confirm_synthetic_data"
+            ],
+            "state": "complete"
+          },
+          {
+            "id": "confirm_claim",
+            "prerequisites": [
+              "confirm_synthetic_data",
+              "confirm_policy"
+            ],
+            "state": "complete"
+          },
+          {
+            "id": "confirm_disclosures",
+            "prerequisites": [
+              "confirm_synthetic_data",
+              "confirm_policy",
+              "confirm_claim"
+            ],
+            "state": "complete"
+          }
+        ]
+      },
+      "review": {
+        "stage": "review",
+        "validated": true,
+        "case_id": "CLM-SYN-071",
+        "status": "complete",
+        "checks": [
+          {
+            "requirement": "policy_schedule",
+            "description": "Policy schedule identifying the policy",
+            "entity_id": "POL-SYN-071",
+            "status": "present",
+            "sources": [
+              "evidence.EV-SYN-1"
+            ],
+            "reason": "Evidence reference present; authenticity not verified."
+          },
+          {
+            "requirement": "claim_form",
+            "description": "Claim form identifying the claim",
+            "entity_id": "CLM-SYN-071",
+            "status": "present",
+            "sources": [
+              "input.claim_form"
+            ],
+            "reason": "Evidence reference present; authenticity not verified."
+          },
+          {
+            "requirement": "loss_evidence",
+            "description": "Loss evidence identifying the claim",
+            "entity_id": "CLM-SYN-071",
+            "status": "gap",
+            "sources": [],
+            "reason": "No matching evidence for this requirement and entity."
+          },
+          {
+            "requirement": "underwriting_disclosure",
+            "description": "Disclosure identifying every underwriting factor",
+            "entity_id": "SUB-SYN-071",
+            "status": "present",
+            "sources": [
+              "evidence.EV-SYN-2"
+            ],
+            "reason": "Evidence reference present; authenticity not verified."
+          }
+        ],
+        "gaps": [
+          {
+            "requirement": "loss_evidence",
+            "description": "Loss evidence identifying the claim",
+            "entity_id": "CLM-SYN-071",
+            "status": "gap",
+            "sources": [],
+            "reason": "No matching evidence for this requirement and entity."
+          }
+        ],
+        "decision": {
+          "action": "request_information",
+          "reasons": [
+            "Missing loss_evidence for CLM-SYN-071."
+          ],
+          "final_claim_decision": false,
+          "fair_handling": "Same evidence checks for every case; no protected attributes used.",
+          "next_step": "Provide missing evidence or request human review to dispute a gap."
+        },
+        "disclaimer": "Synthetic demonstration only; no compliance certification or claim approval."
+      },
+      "support": {
+        "stage": "support",
+        "validated": true,
+        "case_id": "CLM-SYN-071",
+        "status": "complete",
+        "topic": "claim_review",
+        "answer": "Claim review action: request_information. Missing loss_evidence for CLM-SYN-071. Provide missing evidence or request human review to dispute a gap.",
+        "citations": [
+          "review.decision",
+          "review.checks.loss_evidence"
+        ],
+        "availability": "Team marked offline; this grounded answer is available now. Contact the team when available; no ticket has been created and no response time is promised.",
+        "escalation_recommended": true,
+        "review_action": "request_information",
+        "disclaimer": "Synthetic demonstration only; no compliance certification or claim approval."
+      },
+      "disclaimer": "Synthetic demonstration only; no compliance certification or claim approval."
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t071_combo3_guided_review_basic-support__ind-insurance",
+    "artifact_sha256": {
+      "implementation.py": "f390912760f83ba41d0a97a21f354cc55f5d20787dfd307c539846be8cf02074",
+      "test_implementation.py": "14bb71b5c0d0a6258907b9016670edf073c370d123fad2203cefdd3a937ead76",
+      "example_input.json": "74ea4a018439416c6e15a42a2cc35fa24e43e620c34f3ffe88232303969e3e9b",
+      "build_manifest.json": "9fff4e0c74a4f41d85573d77e70ab36989d35cc41336c846297e7817aecd6b72"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }
