@@ -1,0 +1,60 @@
+{
+  "build_id": "wave3_t078_combo3_compare_basic-onboard_behavior",
+  "composition_label": "compare -> basic:onboard -> behavior",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation written in this isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": 0,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict object: schema_version=1, synthetic=true, timezone-aware as_of, nonempty products, preferences.weights, customer, events; optional positive half_life_days defaults to 30.",
+    "products": "Unique nonempty id and name, attributes comprising price_usd (alias price), weight_g (alias weight_kg), battery_hours (alias battery_minutes). Finite nonnegative numeric values only. Alias collisions and unknown fields rejected. Prices are synthetic USD only.",
+    "preferences": "Exactly three nonnegative weights: price_usd, weight_g, battery_hours. At least one positive; normalized to sum to one.",
+    "customer": "Nonempty name; goal explore/buy/learn; experience beginner/experienced; unique completed_steps from profile/learn/compare/select/checkout.",
+    "events": "List of product_id, kind browse/purchase, and timezone-aware ISO at <= as_of. Unknown product references rejected. Repeated events count as repeated interactions.",
+    "output": "One accumulated envelope retaining validated normalized input plus comparison, onboarding, behavior. Rankings contain each product once, rank, score; ties resolve by product ID.",
+    "validation": "Shared helpers and boundary validator used before and after each stage. Duplicate JSON keys, nonfinite numbers, malformed JSON and file/validation errors return status error and exit 2."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "comparison",
+      "to": "onboarding",
+      "contract": "Validated normalized catalog, side-by-side rows and preference ranking determine preferred_product_id, preserved comparison_order, and personalized next step."
+    },
+    {
+      "from": "onboarding",
+      "to": "behavior",
+      "contract": "Validated preferred_product_id supplies seed boost; exact next_step propagates into discovery output alongside prior comparison preference scores and event history."
+    }
+  ],
+  "behavior": {
+    "comparison": "Catalog min-max utilities: lower price/weight and higher battery are better. Constant attributes receive utility 1. Score is weighted sum.",
+    "onboarding": "General goal/experience/completed-step rules select one next action. Running comparison satisfies compare automatically. All customers confirm profile; beginners or learn-goal customers receive guidance; selection follows; only buy goal adds checkout. Completed sequences return done. No purchase or profile mutation occurs.",
+    "personalization": "Activity sums browse=1 and purchase=3 multiplied by 2^(-age_days/half_life_days), normalized by maximum activity. Score=0.6 preference+0.3 activity+0.1 onboarding seed. Empty or fully underflowed history uses cold-start score=0.9 preference+0.1 seed.",
+    "determinism": "Explicit as_of, no clock/random/network access, event accumulation sorted, ID tie-breaks, input not mutated.",
+    "fixtures": "All example products, customer and events are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["Three integrated pure-function stages", "Canonical attributes", "Shared validation", "Explainable score components", "General-purpose onboarding", "Recency and cold-start handling", "JSON CLI and unittest suite"],
+    "excluded": ["Live providers or LLM calls", "Persistence", "Currency conversion", "Real purchases", "Authentication", "Enterprise operations", "Learned recommendation models"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "test_count": 24,
+    "cli": "Verified exit 0, one JSON object, status ok; error-path tests verify exit 2 and JSON status error.",
+    "deliverable_check": "Verified directory contains exactly the four required files.",
+    "tests_passed": 24,
+    "tests_failed": 0
+  }
+}

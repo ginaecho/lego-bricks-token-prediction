@@ -1,0 +1,42 @@
+{
+  "build_id": "wave3_t083_single_semantic__ind-finance",
+  "composition_label": "single_semantic",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": "Object: schema_version=1, synthetic=true, nonempty query, records array, optional options {top_k:1..100, include_flagged:boolean}. Record: unique symbolic id, entity customer|transaction|loan_application, text, kyc_status verified|pending|rejected, aml_flags string array, data object.",
+    "entity_data": {
+      "customer": "full_name, account_id, iban strings and optional card_number string",
+      "transaction": "format json|csv|iso20022 and payload. JSON: amount, currency, customer_id, optional card_number. CSV: one header and one transaction row with these fields. ISO-style: Document.FIToFICstmrCdtTrf.CdtTrfTxInf containing PmtId.EndToEndId, IntrBkSttlmAmt.value/Ccy, Dbtr.Id and DbtrAcct.Id.IBAN.",
+      "loan_application": "positive finite amount, uppercase three-letter currency, customer_id, status submitted|review|approved|declined and optional card_number"
+    },
+    "output": "status=ok, schema_version, synthetic, masked query, results [{record, score, explanation}], summary {indexed, excluded_by_screening, matched}, notice. Errors: status=error and error; CLI exit 2.",
+    "validation": "One shared validation layer normalizes all entities and transaction formats before indexing. Monetary amounts must be positive finite numbers, never booleans. All records, even excluded ones, are validated. Records are not mutated."
+  },
+  "cross_stage_handoffs": ["Single functionality: validated and masked records -> synonym-normalized inverted index -> TF-IDF ranking -> explained output."],
+  "behavior": {
+    "ranking": "Deterministic synonym-normalized bag-of-words TF-IDF cosine; ties ordered by record ID; only positive scores returned. IDF population is eligible records. A bounded financial synonym dictionary supplies semantic expansion without a model.",
+    "optional_injection": "search(request, embed=callable); callable receives [masked query, masked eligible document texts] and returns same-size equal-dimensional finite nonzero vectors. Blends 0.65 lexical + 0.35 max(0, cosine). No live provider, no CLI provider loading. Injected callable determinism is caller responsibility.",
+    "explainability": "Every score exposes canonical matching-term contributions, component scores, blend weights, reconstruction formula and screening state. Scores measure relevance only, not financial risk.",
+    "screening": "Pending/rejected KYC or any AML flag excludes a record by default. Explicit include_flagged exposes it with review_required; no automatic AML inference, certification or authorization claims.",
+    "masking": "Structured card numbers retain only last four digits. Card-shaped 13..19 digit sequences in returned strings and embedding inputs are masked before indexing. Demonstrative PCI-oriented masking, not PCI DSS certification.",
+    "fixtures": "Clearly labeled fabricated customer Avery Example, deliberately fake account/ZZ IBAN, synthetic payment and loan records. Tests generate 25 randomized transactions with fixed seed 83."
+  },
+  "scope": {
+    "included": ["In-memory search index", "Relevance ranking", "Optional validated embedding callable", "JSON and one-row CSV transaction ledger adapters", "ISO 20022-style JSON payment adapter", "Shared validation", "Synthetic KYC/AML flags", "Card masking", "Score explanations"],
+    "excluded": ["Production compliance", "Full ISO 20022 XML or XSD validation", "Real KYC or AML screening", "Credit decisions", "Live models/providers", "Persistence", "Authentication", "Arbitrary-language semantic understanding", "Account/IBAN verification"]
+  },
+  "test_outcomes": {"status": "passed", "tests_passed": 17, "cli_exit_code": 0, "cli_output": "One JSON object with status ok; four eligible indexed records and one screened record excluded.", "coverage": ["Normal multi-format search", "Semantic synonyms", "Score reconstruction", "KYC/AML screening", "Card masking", "Empty and unmatched queries", "Stable ties and top-k", "Invalid schemas and records", "Invalid amounts and cards", "Malformed CSV and ISO-style inputs", "Injected embedding contracts", "Seeded randomized histories", "Nonmutation and repeatability", "CLI success, validation errors, file errors and usage"]}
+}

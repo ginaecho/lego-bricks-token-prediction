@@ -1,0 +1,51 @@
+{
+  "build_id": "wave3_t086_combo3_web_basic-documents_sentiment",
+  "composition_label": "web -> basic:documents -> sentiment",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New, isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "envelope": "All stage payloads use schema_version and synthetic=true, validated by validate(stage, payload).",
+    "input": "allowed_hosts, urls, fixture_pages keyed by exact URL, optional document_rules.field_mapping",
+    "source": "source_id, url, title, media_type, body, sha256",
+    "record": "issue_id, text, customer, severity, provenance(source_id,url,sha256,row)",
+    "output": "status, schema_version, synthetic, research, documents, sentiment",
+    "error": "One JSON object with status=error and error message; exit 2."
+  },
+  "cross_stage_handoffs": [
+    "Research validates allowlisted HTTPS URLs and retrieves exact fixture pages, preserving body, title, URL and SHA-256.",
+    "Documents validates research hashes and allowlist before parsing JSON arrays or CSV, mapping source fields into canonical records, trimming strings and checking required fields, severity and globally unique IDs.",
+    "Sentiment validates document records and their research provenance before scoring; original records and provenance persist in each issue. Final validation recomputes scores and verifies ordering."
+  ],
+  "behavior": {
+    "retrieval": "Offline fixture-backed retrieval only; fixtures are explicitly synthetic.",
+    "document_automation": "General configurable field extraction and reshaping from JSON/CSV customer document exports, not tied to a particular vendor.",
+    "sentiment": "Deterministic English lexicon; preceding three word negation with sentence punctuation reset; signed evidence, raw score and normalized score. Unmatched text is neutral.",
+    "priority": "Severity dominates: critical=P0, high=P1, medium=P2, low=P3; ties use ascending raw sentiment score then issue_id.",
+    "severity": "Conservative phrase escalation: security breach, data loss and injury to critical; outage to high. Mentions escalate even when negated; flags are review hints, not factual incident determinations.",
+    "limits": "50 URLs, 1,000,000 characters per source, 2,000,000 input characters, 10,000 canonical records.",
+    "duplicates": "Duplicate URLs, JSON keys, CSV headers and issue IDs are rejected rather than silently merged.",
+    "empty_documents": "Empty JSON arrays and header-only CSV are accepted with zero issues."
+  },
+  "scope": {
+    "included": ["Allowlisted offline retrieval", "Provenance preservation", "JSON/CSV extraction and reshaping", "Shared validation", "Transparent sentiment and severity prioritization", "CLI and unittest coverage"],
+    "excluded": ["Live HTTP", "Crawling", "HTML/PDF/OCR", "Live model providers", "Multilingual or learned sentiment", "Enterprise deployment", "Arbitrary output schemas", "Fact verification"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "27 unittest cases passed",
+    "cli": "Example command exited 0 and printed one JSON object with status=ok and three prioritized issues; file, usage and invalid-input errors verified with status=error and exit 2."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "query": "client payment mortgage",
+  "options": {"top_k": 10, "include_flagged": false},
+  "records": [
+    {
+      "id": "customer_demo",
+      "entity": "customer",
+      "text": "SYNTHETIC fabricated customer Avery Example identity verification",
+      "kyc_status": "verified",
+      "aml_flags": [],
+      "data": {"full_name": "Avery Example (SYNTHETIC)", "account_id": "FAKE-ACCT-A01", "iban": "ZZ00FAKE000000000001", "card_number": "4111 1111 1111 1111"}
+    },
+    {
+      "id": "transaction_json",
+      "entity": "transaction",
+      "text": "SYNTHETIC monthly mortgage payment",
+      "kyc_status": "verified",
+      "aml_flags": [],
+      "data": {"format": "json", "payload": {"amount": 742.19, "currency": "EUR", "customer_id": "customer_demo", "card_number": "4111111111111111"}}
+    },
+    {
+      "id": "transaction_csv",
+      "entity": "transaction",
+      "text": "SYNTHETIC household remittance",
+      "kyc_status": "verified",
+      "aml_flags": [],
+      "data": {"format": "csv", "payload": "amount,currency,customer_id\n183.42,EUR,customer_demo\n"}
+    },
+    {
+      "id": "transaction_iso",
+      "entity": "transaction",
+      "text": "SYNTHETIC bank transfer",
+      "kyc_status": "verified",
+      "aml_flags": [],
+      "data": {"format": "iso20022", "payload": {"Document": {"FIToFICstmrCdtTrf": {"CdtTrfTxInf": {"PmtId": {"EndToEndId": "SYNTHETIC-PAY-03"}, "IntrBkSttlmAmt": {"value": 95.83, "Ccy": "EUR"}, "Dbtr": {"Id": "customer_demo"}, "DbtrAcct": {"Id": {"IBAN": "ZZ00FAKE000000000001"}}}}}}}
+    },
+    {
+      "id": "loan_demo",
+      "entity": "loan_application",
+      "text": "SYNTHETIC home lending application",
+      "kyc_status": "pending",
+      "aml_flags": ["synthetic_manual_review"],
+      "data": {"amount": 125000, "currency": "EUR", "customer_id": "customer_demo", "status": "review"}
+    }
+  ]
+}

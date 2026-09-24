@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "work_order": {
+    "id": "SYN-WO-080",
+    "asset_id": "FICT-MILL-17",
+    "product": "Invented demonstration spindle sleeve",
+    "quantity": 24,
+    "status": "in_progress"
+  },
+  "sensor": {
+    "id": "FICT-TEMP-17",
+    "metric": "temperature",
+    "unit": "degC",
+    "tolerance_min": 55,
+    "tolerance_max": 75,
+    "safety_min": 0,
+    "safety_max": 95
+  },
+  "telemetry_csv": "timestamp,work_order_id,asset_id,sensor_id,value,unit\n2026-09-24T08:00:00Z,SYN-WO-080,FICT-MILL-17,FICT-TEMP-17,63.798,degC\n2026-09-24T08:01:00Z,SYN-WO-080,FICT-MILL-17,FICT-TEMP-17,65.486,degC\n2026-09-24T08:02:00Z,SYN-WO-080,FICT-MILL-17,FICT-TEMP-17,63.212,degC\n2026-09-24T08:03:00Z,SYN-WO-080,FICT-MILL-17,FICT-TEMP-17,61.076,degC\n2026-09-24T08:04:00Z,SYN-WO-080,FICT-MILL-17,FICT-TEMP-17,62.993,degC\n2026-09-24T08:05:00Z,SYN-WO-080,FICT-MILL-17,FICT-TEMP-17,65.085,degC\n",
+  "inspections": [
+    {
+      "id": "SYN-QI-080",
+      "work_order_id": "SYN-WO-080",
+      "asset_id": "FICT-MILL-17",
+      "characteristic": "diameter",
+      "unit": "mm",
+      "measured": 20.16,
+      "tolerance_min": 19.9,
+      "tolerance_max": 20.1,
+      "decision": "fail",
+      "decision_id": "SYN-DEC-080",
+      "inspector": "Invented Inspector Rowan",
+      "timestamp": "2026-09-24T08:06:00Z",
+      "rationale": "Synthetic defect: diameter exceeded upper tolerance; hold batch for human quality review."
+    }
+  ],
+  "completed_steps": ["verify_work_order"],
+  "maintenance_logs": [
+    {
+      "id": "SYN-LOG-080",
+      "work_order_id": "SYN-WO-080",
+      "asset_id": "FICT-MILL-17",
+      "timestamp": "2026-09-24T08:07:00Z",
+      "text": "Invented maintenance log: stable temperature after lubrication; vibration reported by operator.",
+      "severity": "medium",
+      "safety_critical": false
+    }
+  ]
+}

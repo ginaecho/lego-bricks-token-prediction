@@ -1,0 +1,79 @@
+{
+  "build_id": "wave3_t080_combo3_guided_journey_sentiment__ind-manufacturing",
+  "composition_label": "combo3_guided_journey_sentiment",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New isolated implementation built from the supplied specification.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict JSON object: schema_version, synthetic, work_order, sensor, telemetry_csv, inspections, completed_steps, maintenance_logs. Example is the complete reference shape.",
+    "work_order": "ERP/MES-style JSON containing fictitious order/asset/product, positive integer quantity and planned/in_progress status.",
+    "telemetry": "Embedded time-series CSV with exact timestamp,work_order_id,asset_id,sensor_id,value,unit header. Strict chronology, timezone-aware timestamps, finite measurements and consistent identifiers required.",
+    "units_and_tolerances": "Temperature degC or vibration mm/s; safety bounds enclose ordered operating tolerance bounds. Diameter inspection uses mm with positive ordered tolerances. Boundaries are inclusive.",
+    "quality_traceability": "Inspection and decision identifiers, inspector, timestamp, rationale, order and asset links required. Recorded pass/fail must match measured value and tolerance. Demonstrates ISO 9001-style traceability only; not certification.",
+    "output": "Versioned status=ok, synthetic=true envelope retains validated input and parsed telemetry, adding guided, journey and sentiment objects in sequence. Error output is status=error with error text.",
+    "validation_layer": "validate_input and validate_state are shared by all stages; boundary validation re-derives deterministic handoffs to reject stale, incomplete or altered outputs."
+  },
+  "cross_stage_handoffs": [
+    "Guided setup validates complete manufacturing context, tracks prerequisite-compliant completions and carries quality decision IDs.",
+    "Journey consumes validated guided state and uses actual progress to choose two sequentially feasible recommendations. It carries quality decision IDs, maintenance text, inspection failures and sensor excursions.",
+    "Sentiment consumes the validated journey signals and steps, preserving source IDs, decision IDs and order linkage while attaching explainable sentiment, severity priority and escalation routing."
+  ],
+  "behavior": {
+    "guided": "verify_work_order -> verify_telemetry -> review_inspections; duplicates, unknown or out-of-order completions rejected.",
+    "journey": "First two unmet prerequisite-satisfied actions from onboarding plus review_maintenance, request_human_release, monitor_next_cycle. The second recommendation is conditional on completing the first; recommendations never mark work done or authorize machine operation.",
+    "sentiment": "Exact case-insensitive alphabetic English token matching; (positive-negative)/max(1,total matches). Includes matched tokens and sorted lexicons.",
+    "prioritization": "Human escalation first; severity rank * 10 plus negative sentiment magnitude, descending; source-qualified ID is deterministic tie breaker. Positive wording never downgrades safety.",
+    "human_escalation": "Safety-critical logs, safety-bound excursions, and critical severity route to human_safety_review; no automatic release or machine control.",
+    "fixtures": "Explicitly synthetic. Six temperatures generated with random.Random(80), gauss(64,1.2), rounded to three decimals. Fictitious asset and sensor identifiers, invented maintenance log and quality inspection.",
+    "cli": "One JSON object to stdout; success exit 0, validation/file/JSON errors exit 2. No external calls or mutable global progress."
+  },
+  "scope": {
+    "included": [
+      "Integrated deterministic three-stage pipeline",
+      "Shared strict schema and boundary validation",
+      "Prerequisite-driven onboarding and conditional two-step discovery",
+      "Transparent lexicon sentiment and severity-aware prioritization",
+      "Demonstrative manufacturing traceability, units and safety escalation",
+      "Standard-library CLI and unittest tests"
+    ],
+    "excluded": [
+      "Live providers or optional LLM integration",
+      "Enterprise production delivery or certification",
+      "Actual human notification, machine control or automated quality release",
+      "Persistent external ERP/MES storage",
+      "Free-form unit conversion, negation or sarcasm inference"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "executed": 30,
+      "passed": 30,
+      "failed": 0,
+      "command_exit_code": 0,
+      "coverage": "All three stages, deterministic behavior, nonmutation, both cross-stage handoffs, tampering, prerequisites, traceability, tolerances, units, nonfinite values, chronological CSV, safety escalation, neutral and mixed sentiment, severity ranking, empty logs and CLI success/error paths."
+    },
+    "cli": {
+      "command_exit_code": 0,
+      "stdout": "One valid JSON object with status ok and guided, journey, sentiment outputs",
+      "error_paths": "Missing file, missing argument, malformed JSON, duplicate fields and invalid schema return status error with exit 2."
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "build_id": "wave3_t077_combo3_basic-insights_basic-search_basic-documents__ind-insurance",
+  "composition_label": "basic-insights -> basic-search -> basic-documents; insurance",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch within the isolated build directory",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "schema_version": 1,
+    "input": {
+      "required_fields": ["schema_version", "synthetic", "policies", "claim_forms", "submissions", "feedback", "queries"],
+      "policies": "Synthetic policy and holder IDs, catalog name/description, canonical perils, inclusive ISO coverage dates, numeric limit",
+      "claim_forms": "Colon-separated Claim-ID, Policy-ID, Loss-Date, Loss-Amount, Peril; unknown and repeated fields rejected",
+      "submissions": "Objects with format json or xml and data. JSON submission_id/policy_id/factors; XML ACORDSubmission with SubmissionID, PolicyID, Factor(name,disclosed). Optional fixture-only addresses/VINs discarded at ingestion.",
+      "feedback": "feedback_id, claim_id, text",
+      "queries": "Exactly one claim_id/text query per claim"
+    },
+    "envelope": ["schema_version", "synthetic", "stage", "policies", "claims", "submissions", "feedback", "queries", "insights", "search", "documents"],
+    "output": "Single JSON object: status ok with data envelope, or status error with error string",
+    "validation": "Shared validate() at ingestion and before/after each stage; exact fields, synthetic references, types, finite numeric ranges, calendar dates, foreign keys, uniqueness, disclosed factor allowlist, stage ordering, derived-output provenance recomputation",
+    "limits": "Maximum 1000 records per list, 4000 characters per text field, monetary amounts from zero through 1e9. Every policy has exactly one submission."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "normalized",
+      "to": "basic:insights",
+      "consumes": "Minimized feedback signals linked to validated claims",
+      "produces": "Per-claim themes, evidence IDs, counts and suggested actions"
+    },
+    {
+      "from": "basic:insights",
+      "to": "basic:search",
+      "consumes": "Validated themes plus minimized query terms and policy catalog",
+      "produces": "Expanded intent, ranked top-three policy matches with transparent matched-term reasons"
+    },
+    {
+      "from": "basic:search",
+      "to": "basic:documents",
+      "consumes": "Validated search suggestions and source themes, actual claim policy and disclosed submission",
+      "produces": "Structured claim-review documents with policy references, amounts, dates, reasons, themes, suggestions and disclosed factors"
+    }
+  ],
+  "behavior": {
+    "insights": "Deterministic lexicon themes including water, fire, theft, motor, speed and clarity. Unknown feedback creates no invented themes.",
+    "search": "Case-insensitive tokenization, synonym expansion, theme-assisted retrieval, unique matched-term scores and stable policy-ID tie breaking. No matches yields an empty list.",
+    "documents": "Extracts claim-form text and ACORD-style XML/JSON, reshapes into JSON review documents, checks peril, coverage period and limit. Search does not override the actual policy.",
+    "fair_claims_handling": "Preliminary match or human review only, always stated reasons and mandatory human decision. No final approval, denial, payout or automated adverse underwriting decision.",
+    "data_minimization": "Pseudonymous invented holder references; raw feedback and queries reduced to signals/catalog vocabulary; fabricated address and VIN stripped before the first handoff; unknown structured fields rejected. Synthetic-only demonstration, not a general-purpose PII detector.",
+    "underwriting_disclosure": "Only property_type, construction and year_built are accepted; each explicitly disclosed true and carried to documents. No hidden scoring.",
+    "fixtures": "Clearly synthetic holder aliases, fictional property address and fabricated VIN. Example dates and losses generated using random.Random(77), two dates via randrange(365) from 2025-01-01 and uniform amount ranges 1000..9000 and 16000..25000, rounded to two decimals. Runtime pipeline has no randomness.",
+    "errors": "Validation, JSON parsing and file errors produce one JSON status error on stdout and exit 2; success exits 0.",
+    "llm": "No LLM step or injected provider is used"
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic three-stage pipeline",
+      "Shared schema and validation for all handoffs",
+      "Synthetic insurance policies, claims and underwriting submissions",
+      "ACORD-style illustrative XML/JSON and claim-form text ingestion",
+      "Explainable insights, search and human-review document automation"
+    ],
+    "excluded": [
+      "Official ACORD schema compatibility or certification",
+      "GDPR or insurance compliance certification",
+      "Real policyholder data or unrestricted free-text PII classification",
+      "Final coverage determinations, claim denials, payouts or actuarial underwriting",
+      "Currency conversion, deductibles, exclusions and full policy interpretation",
+      "Production authentication, persistence, PDF/OCR, network services and model providers"
+    ]
+  },
+  "test_outcomes": {
+    "unittest": {"tests_run": 31, "failures": 0, "errors": 0, "result": "passed"},
+    "cli": {"exit_code": 0, "status": "ok", "output_objects": 1},
+    "coverage": [
+      "Every stage and cross-stage propagation",
+      "Mutation and provenance tampering",
+      "Synonyms and no-match behavior",
+      "Empty collections and malformed inputs",
+      "Fair review reasons and actual-policy anchoring",
+      "Data minimization and factor disclosures",
+      "XML safety and JSON/XML equivalence",
+      "Seeded randomized synthetic claim cases",
+      "CLI success, missing file, usage and validation errors"
+    ]
+  }
+}

@@ -121,7 +121,7 @@
   "split_group": "e74ab28c350db1c42f12d2e4702e5aaea409f609b75bc06a0362ba4728457c7c",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "52f8d3edb36806ffca42ccf1e9cf51839ea7ce4d326bb8391a16bd334f9abd22",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t078_combo3_compare_basic-onboard_behavior",
   "membership_point_id": "combo3_compare_basic-onboard_behavior",
@@ -129,8 +129,145 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "bb6779d3065c915ff89c55ee586a699458d21a51e1e3f9594da38be1158cdbca",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "5c2907fb-4644-4bd0-b37d-d73c3f9b2dff",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 157902,
+    "output_tokens": 10273,
+    "cache_read_tokens": 145121,
+    "cache_write_tokens": 12760,
+    "total_tokens": 168175,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36889,
+        "agent_id": "5c2907fb-4644-4bd0-b37d-d73c3f9b2dff",
+        "model": "gpt-6-astra",
+        "input_tokens": 14950,
+        "output_tokens": 452,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 846,
+        "reasoning_tokens": 273,
+        "duration_ms": 13341,
+        "created_at": "2026-09-24T10:11:35.663Z"
+      },
+      {
+        "id": 36990,
+        "agent_id": "5c2907fb-4644-4bd0-b37d-d73c3f9b2dff",
+        "model": "gpt-6-astra",
+        "input_tokens": 15434,
+        "output_tokens": 7520,
+        "cache_read_tokens": 14947,
+        "cache_write_tokens": 484,
+        "reasoning_tokens": 196,
+        "duration_ms": 108994,
+        "created_at": "2026-09-24T10:26:40.101Z"
+      },
+      {
+        "id": 36992,
+        "agent_id": "5c2907fb-4644-4bd0-b37d-d73c3f9b2dff",
+        "model": "gpt-6-astra",
+        "input_tokens": 23274,
+        "output_tokens": 279,
+        "cache_read_tokens": 15431,
+        "cache_write_tokens": 7840,
+        "reasoning_tokens": 105,
+        "duration_ms": 6806,
+        "created_at": "2026-09-24T10:26:43.929Z"
+      },
+      {
+        "id": 37026,
+        "agent_id": "5c2907fb-4644-4bd0-b37d-d73c3f9b2dff",
+        "model": "gpt-6-astra",
+        "input_tokens": 24540,
+        "output_tokens": 1479,
+        "cache_read_tokens": 23271,
+        "cache_write_tokens": 1266,
+        "reasoning_tokens": 175,
+        "duration_ms": 22381,
+        "created_at": "2026-09-24T10:29:38.552Z"
+      },
+      {
+        "id": 37030,
+        "agent_id": "5c2907fb-4644-4bd0-b37d-d73c3f9b2dff",
+        "model": "gpt-6-astra",
+        "input_tokens": 26263,
+        "output_tokens": 244,
+        "cache_read_tokens": 24537,
+        "cache_write_tokens": 1723,
+        "reasoning_tokens": 0,
+        "duration_ms": 6534,
+        "created_at": "2026-09-24T10:30:24.411Z"
+      },
+      {
+        "id": 37036,
+        "agent_id": "5c2907fb-4644-4bd0-b37d-d73c3f9b2dff",
+        "model": "gpt-6-astra",
+        "input_tokens": 26577,
+        "output_tokens": 195,
+        "cache_read_tokens": 26260,
+        "cache_write_tokens": 314,
+        "reasoning_tokens": 0,
+        "duration_ms": 7870,
+        "created_at": "2026-09-24T10:31:21.372Z"
+      },
+      {
+        "id": 37040,
+        "agent_id": "5c2907fb-4644-4bd0-b37d-d73c3f9b2dff",
+        "model": "gpt-6-astra",
+        "input_tokens": 26864,
+        "output_tokens": 104,
+        "cache_read_tokens": 26574,
+        "cache_write_tokens": 287,
+        "reasoning_tokens": 0,
+        "duration_ms": 4508,
+        "created_at": "2026-09-24T10:31:46.840Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5488500000000001,
+      "observed_cache_profile_estimate_usd": 0.22232775,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.5862,
+      "observed_cache_profile_estimate_usd": 6.5862,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -161,5 +298,201 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "........................\n----------------------------------------------------------------------\nRan 24 tests in 1.064s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "as_of": "2026-09-24T10:00:00Z",
+      "behavior": {
+        "cold_start": false,
+        "onboarding_step": {
+          "id": "learn",
+          "message": "Synthetic Alex, review the getting-started guide for Synthetic Pocket Speaker to support your buy goal."
+        },
+        "ranking": [
+          {
+            "activity_score": 0.0,
+            "onboarding_score": 1.0,
+            "preference_score": 0.8,
+            "product_id": "demo-a",
+            "rank": 1,
+            "score": 0.58
+          },
+          {
+            "activity_score": 1.0,
+            "onboarding_score": 0.0,
+            "preference_score": 0.2,
+            "product_id": "demo-b",
+            "rank": 2,
+            "score": 0.42
+          },
+          {
+            "activity_score": 0.17056231533279584,
+            "onboarding_score": 0.0,
+            "preference_score": 0.55,
+            "product_id": "demo-c",
+            "rank": 3,
+            "score": 0.38116869459983876
+          }
+        ],
+        "seed_product_id": "demo-a"
+      },
+      "catalog": [
+        {
+          "attributes": {
+            "battery_hours": 10.0,
+            "price_usd": 40.0,
+            "weight_g": 200.0
+          },
+          "id": "demo-a",
+          "name": "Synthetic Pocket Speaker"
+        },
+        {
+          "attributes": {
+            "battery_hours": 20.0,
+            "price_usd": 80.0,
+            "weight_g": 500.0
+          },
+          "id": "demo-b",
+          "name": "Synthetic Studio Speaker"
+        },
+        {
+          "attributes": {
+            "battery_hours": 15.0,
+            "price_usd": 60.0,
+            "weight_g": 300.0
+          },
+          "id": "demo-c",
+          "name": "Synthetic Travel Speaker"
+        }
+      ],
+      "comparison": {
+        "columns": [
+          "price_usd",
+          "weight_g",
+          "battery_hours"
+        ],
+        "ranking": [
+          {
+            "product_id": "demo-a",
+            "rank": 1,
+            "score": 0.8,
+            "utilities": {
+              "battery_hours": 0.0,
+              "price_usd": 1.0,
+              "weight_g": 1.0
+            }
+          },
+          {
+            "product_id": "demo-c",
+            "rank": 2,
+            "score": 0.55,
+            "utilities": {
+              "battery_hours": 0.5,
+              "price_usd": 0.5,
+              "weight_g": 0.6666666666666666
+            }
+          },
+          {
+            "product_id": "demo-b",
+            "rank": 3,
+            "score": 0.2,
+            "utilities": {
+              "battery_hours": 1.0,
+              "price_usd": 0.0,
+              "weight_g": 0.0
+            }
+          }
+        ],
+        "rows": [
+          {
+            "attributes": {
+              "battery_hours": 10.0,
+              "price_usd": 40.0,
+              "weight_g": 200.0
+            },
+            "id": "demo-a",
+            "name": "Synthetic Pocket Speaker"
+          },
+          {
+            "attributes": {
+              "battery_hours": 20.0,
+              "price_usd": 80.0,
+              "weight_g": 500.0
+            },
+            "id": "demo-b",
+            "name": "Synthetic Studio Speaker"
+          },
+          {
+            "attributes": {
+              "battery_hours": 15.0,
+              "price_usd": 60.0,
+              "weight_g": 300.0
+            },
+            "id": "demo-c",
+            "name": "Synthetic Travel Speaker"
+          }
+        ]
+      },
+      "customer": {
+        "completed_steps": [
+          "profile"
+        ],
+        "experience": "beginner",
+        "goal": "buy",
+        "name": "Synthetic Alex"
+      },
+      "events": [
+        {
+          "at": "2026-09-23T10:00:00Z",
+          "kind": "purchase",
+          "product_id": "demo-b"
+        },
+        {
+          "at": "2026-08-25T10:00:00Z",
+          "kind": "browse",
+          "product_id": "demo-c"
+        }
+      ],
+      "half_life_days": 30.0,
+      "onboarding": {
+        "comparison_order": [
+          "demo-a",
+          "demo-c",
+          "demo-b"
+        ],
+        "complete": false,
+        "goal": "buy",
+        "next_step": {
+          "id": "learn",
+          "message": "Synthetic Alex, review the getting-started guide for Synthetic Pocket Speaker to support your buy goal."
+        },
+        "preferred_product_id": "demo-a"
+      },
+      "preferences": {
+        "weights": {
+          "battery_hours": 0.2,
+          "price_usd": 0.5,
+          "weight_g": 0.3
+        }
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t078_combo3_compare_basic-onboard_behavior",
+    "artifact_sha256": {
+      "implementation.py": "c16fd7b379b97a90cf115f2a74b663116720392d183baa850d4e250eb487f733",
+      "test_implementation.py": "0f8b5d79f923b4116103fa237ecff6f828ef4de43a371fa1ca1172882e40f1b2",
+      "example_input.json": "6b079bc5b33329813284afb9bc2dd9c08bc621ad975268cde8e05d7eaa391a38",
+      "build_manifest.json": "8a95cb9e3b95f8d991a2d0adf00694486ff813e45952d96ab0420131192875be"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

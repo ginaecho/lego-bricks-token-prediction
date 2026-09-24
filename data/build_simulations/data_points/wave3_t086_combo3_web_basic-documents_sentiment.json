@@ -121,7 +121,7 @@
   "split_group": "21c59459939884054bc83d100bfe4c8cc3f6137dd0e665d29e7eed5c7489e473",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "5d9d76d892a29d044901840a4e5506335a54808fa267dafd28334060d3bddb31",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t086_combo3_web_basic-documents_sentiment",
   "membership_point_id": "combo3_web_basic-documents_sentiment",
@@ -129,8 +129,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "a77bbbf1de4c591171e4446b1e6bced33deaa3038e3913b6e490b81011419a78",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "fe7f0b15-9f0b-4806-b7d8-ee8b34deb8ad",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 129902,
+    "output_tokens": 8198,
+    "cache_read_tokens": 118070,
+    "cache_write_tokens": 11814,
+    "total_tokens": 138100,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37098,
+        "agent_id": "fe7f0b15-9f0b-4806-b7d8-ee8b34deb8ad",
+        "model": "gpt-6-astra",
+        "input_tokens": 14950,
+        "output_tokens": 156,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 846,
+        "reasoning_tokens": 0,
+        "duration_ms": 4276,
+        "created_at": "2026-09-24T10:38:51.391Z"
+      },
+      {
+        "id": 37129,
+        "agent_id": "fe7f0b15-9f0b-4806-b7d8-ee8b34deb8ad",
+        "model": "gpt-6-astra",
+        "input_tokens": 15132,
+        "output_tokens": 7358,
+        "cache_read_tokens": 14947,
+        "cache_write_tokens": 182,
+        "reasoning_tokens": 497,
+        "duration_ms": 112493,
+        "created_at": "2026-09-24T10:41:43.677Z"
+      },
+      {
+        "id": 37130,
+        "agent_id": "fe7f0b15-9f0b-4806-b7d8-ee8b34deb8ad",
+        "model": "gpt-6-astra",
+        "input_tokens": 22814,
+        "output_tokens": 152,
+        "cache_read_tokens": 15129,
+        "cache_write_tokens": 7682,
+        "reasoning_tokens": 0,
+        "duration_ms": 3397,
+        "created_at": "2026-09-24T10:41:47.244Z"
+      },
+      {
+        "id": 37132,
+        "agent_id": "fe7f0b15-9f0b-4806-b7d8-ee8b34deb8ad",
+        "model": "gpt-6-astra",
+        "input_tokens": 25377,
+        "output_tokens": 241,
+        "cache_read_tokens": 22811,
+        "cache_write_tokens": 2563,
+        "reasoning_tokens": 48,
+        "duration_ms": 5311,
+        "created_at": "2026-09-24T10:41:56.426Z"
+      },
+      {
+        "id": 37135,
+        "agent_id": "fe7f0b15-9f0b-4806-b7d8-ee8b34deb8ad",
+        "model": "gpt-6-astra",
+        "input_tokens": 25711,
+        "output_tokens": 175,
+        "cache_read_tokens": 25374,
+        "cache_write_tokens": 334,
+        "reasoning_tokens": 0,
+        "duration_ms": 3880,
+        "created_at": "2026-09-24T10:42:00.330Z"
+      },
+      {
+        "id": 37138,
+        "agent_id": "fe7f0b15-9f0b-4806-b7d8-ee8b34deb8ad",
+        "model": "gpt-6-astra",
+        "input_tokens": 25918,
+        "output_tokens": 116,
+        "cache_read_tokens": 25708,
+        "cache_write_tokens": 207,
+        "reasoning_tokens": 0,
+        "duration_ms": 3639,
+        "created_at": "2026-09-24T10:42:09.675Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.44772500000000004,
+      "observed_cache_profile_estimate_usd": 0.18206749999999997,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.3727,
+      "observed_cache_profile_estimate_usd": 5.3727,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -161,5 +286,290 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...........................\n----------------------------------------------------------------------\nRan 27 tests in 0.761s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true,
+      "research": {
+        "schema_version": "1.0",
+        "synthetic": true,
+        "allowed_hosts": [
+          "feedback.example"
+        ],
+        "findings": [
+          {
+            "source_id": "source-1",
+            "url": "https://feedback.example/tickets",
+            "title": "SYNTHETIC support ticket export",
+            "body": "[{\"id\":\"SYN-001\",\"message\":\"Great support but a security breach caused data loss.\",\"account\":\"Synthetic Acme\",\"urgency\":\"medium\"},{\"id\":\"SYN-002\",\"message\":\"The dashboard is slow and frustrating.\",\"account\":\"Synthetic Beta\",\"urgency\":\"high\"}]",
+            "media_type": "application/json",
+            "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a"
+          },
+          {
+            "source_id": "source-2",
+            "url": "https://feedback.example/survey",
+            "title": "SYNTHETIC customer survey",
+            "body": "id,message,account,urgency\nSYN-003,Not bad. Helpful team and resolved issue.,Synthetic Gamma,low\n",
+            "media_type": "text/csv",
+            "sha256": "f0b050ad3cd174021a1da8d3c9037253511da1c22370f57d9d0bcc72a54e464e"
+          }
+        ]
+      },
+      "documents": {
+        "schema_version": "1.0",
+        "synthetic": true,
+        "research": {
+          "schema_version": "1.0",
+          "synthetic": true,
+          "allowed_hosts": [
+            "feedback.example"
+          ],
+          "findings": [
+            {
+              "source_id": "source-1",
+              "url": "https://feedback.example/tickets",
+              "title": "SYNTHETIC support ticket export",
+              "body": "[{\"id\":\"SYN-001\",\"message\":\"Great support but a security breach caused data loss.\",\"account\":\"Synthetic Acme\",\"urgency\":\"medium\"},{\"id\":\"SYN-002\",\"message\":\"The dashboard is slow and frustrating.\",\"account\":\"Synthetic Beta\",\"urgency\":\"high\"}]",
+              "media_type": "application/json",
+              "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a"
+            },
+            {
+              "source_id": "source-2",
+              "url": "https://feedback.example/survey",
+              "title": "SYNTHETIC customer survey",
+              "body": "id,message,account,urgency\nSYN-003,Not bad. Helpful team and resolved issue.,Synthetic Gamma,low\n",
+              "media_type": "text/csv",
+              "sha256": "f0b050ad3cd174021a1da8d3c9037253511da1c22370f57d9d0bcc72a54e464e"
+            }
+          ]
+        },
+        "records": [
+          {
+            "issue_id": "SYN-001",
+            "text": "Great support but a security breach caused data loss.",
+            "customer": "Synthetic Acme",
+            "severity": "medium",
+            "provenance": {
+              "source_id": "source-1",
+              "url": "https://feedback.example/tickets",
+              "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a",
+              "row": 1
+            }
+          },
+          {
+            "issue_id": "SYN-002",
+            "text": "The dashboard is slow and frustrating.",
+            "customer": "Synthetic Beta",
+            "severity": "high",
+            "provenance": {
+              "source_id": "source-1",
+              "url": "https://feedback.example/tickets",
+              "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a",
+              "row": 2
+            }
+          },
+          {
+            "issue_id": "SYN-003",
+            "text": "Not bad. Helpful team and resolved issue.",
+            "customer": "Synthetic Gamma",
+            "severity": "low",
+            "provenance": {
+              "source_id": "source-2",
+              "url": "https://feedback.example/survey",
+              "sha256": "f0b050ad3cd174021a1da8d3c9037253511da1c22370f57d9d0bcc72a54e464e",
+              "row": 1
+            }
+          }
+        ]
+      },
+      "sentiment": {
+        "schema_version": "1.0",
+        "synthetic": true,
+        "research": {
+          "schema_version": "1.0",
+          "synthetic": true,
+          "allowed_hosts": [
+            "feedback.example"
+          ],
+          "findings": [
+            {
+              "source_id": "source-1",
+              "url": "https://feedback.example/tickets",
+              "title": "SYNTHETIC support ticket export",
+              "body": "[{\"id\":\"SYN-001\",\"message\":\"Great support but a security breach caused data loss.\",\"account\":\"Synthetic Acme\",\"urgency\":\"medium\"},{\"id\":\"SYN-002\",\"message\":\"The dashboard is slow and frustrating.\",\"account\":\"Synthetic Beta\",\"urgency\":\"high\"}]",
+              "media_type": "application/json",
+              "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a"
+            },
+            {
+              "source_id": "source-2",
+              "url": "https://feedback.example/survey",
+              "title": "SYNTHETIC customer survey",
+              "body": "id,message,account,urgency\nSYN-003,Not bad. Helpful team and resolved issue.,Synthetic Gamma,low\n",
+              "media_type": "text/csv",
+              "sha256": "f0b050ad3cd174021a1da8d3c9037253511da1c22370f57d9d0bcc72a54e464e"
+            }
+          ]
+        },
+        "records": [
+          {
+            "issue_id": "SYN-001",
+            "text": "Great support but a security breach caused data loss.",
+            "customer": "Synthetic Acme",
+            "severity": "medium",
+            "provenance": {
+              "source_id": "source-1",
+              "url": "https://feedback.example/tickets",
+              "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a",
+              "row": 1
+            }
+          },
+          {
+            "issue_id": "SYN-002",
+            "text": "The dashboard is slow and frustrating.",
+            "customer": "Synthetic Beta",
+            "severity": "high",
+            "provenance": {
+              "source_id": "source-1",
+              "url": "https://feedback.example/tickets",
+              "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a",
+              "row": 2
+            }
+          },
+          {
+            "issue_id": "SYN-003",
+            "text": "Not bad. Helpful team and resolved issue.",
+            "customer": "Synthetic Gamma",
+            "severity": "low",
+            "provenance": {
+              "source_id": "source-2",
+              "url": "https://feedback.example/survey",
+              "sha256": "f0b050ad3cd174021a1da8d3c9037253511da1c22370f57d9d0bcc72a54e464e",
+              "row": 1
+            }
+          }
+        ],
+        "issues": [
+          {
+            "issue_id": "SYN-001",
+            "text": "Great support but a security breach caused data loss.",
+            "customer": "Synthetic Acme",
+            "severity": "medium",
+            "provenance": {
+              "source_id": "source-1",
+              "url": "https://feedback.example/tickets",
+              "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a",
+              "row": 1
+            },
+            "sentiment": "positive",
+            "raw_score": 2,
+            "normalized_score": 1.0,
+            "evidence": [
+              {
+                "token": "great",
+                "token_index": 0,
+                "negated": false,
+                "contribution": 2
+              }
+            ],
+            "effective_severity": "critical",
+            "severity_triggers": [
+              "data loss",
+              "security breach"
+            ],
+            "priority": "P0",
+            "priority_reason": "Severity first; ascending sentiment score then issue_id."
+          },
+          {
+            "issue_id": "SYN-002",
+            "text": "The dashboard is slow and frustrating.",
+            "customer": "Synthetic Beta",
+            "severity": "high",
+            "provenance": {
+              "source_id": "source-1",
+              "url": "https://feedback.example/tickets",
+              "sha256": "7efb121adfbe86eccd49920bf69b0a31ef2b4e6a9ec6c5c3e92b34824cdeaa2a",
+              "row": 2
+            },
+            "sentiment": "negative",
+            "raw_score": -2,
+            "normalized_score": -1.0,
+            "evidence": [
+              {
+                "token": "slow",
+                "token_index": 3,
+                "negated": false,
+                "contribution": -1
+              },
+              {
+                "token": "frustrating",
+                "token_index": 5,
+                "negated": false,
+                "contribution": -1
+              }
+            ],
+            "effective_severity": "high",
+            "severity_triggers": [],
+            "priority": "P1",
+            "priority_reason": "Severity first; ascending sentiment score then issue_id."
+          },
+          {
+            "issue_id": "SYN-003",
+            "text": "Not bad. Helpful team and resolved issue.",
+            "customer": "Synthetic Gamma",
+            "severity": "low",
+            "provenance": {
+              "source_id": "source-2",
+              "url": "https://feedback.example/survey",
+              "sha256": "f0b050ad3cd174021a1da8d3c9037253511da1c22370f57d9d0bcc72a54e464e",
+              "row": 1
+            },
+            "sentiment": "positive",
+            "raw_score": 3,
+            "normalized_score": 1.0,
+            "evidence": [
+              {
+                "token": "bad",
+                "token_index": 1,
+                "negated": true,
+                "contribution": 1
+              },
+              {
+                "token": "helpful",
+                "token_index": 3,
+                "negated": false,
+                "contribution": 1
+              },
+              {
+                "token": "resolved",
+                "token_index": 6,
+                "negated": false,
+                "contribution": 1
+              }
+            ],
+            "effective_severity": "low",
+            "severity_triggers": [],
+            "priority": "P3",
+            "priority_reason": "Severity first; ascending sentiment score then issue_id."
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t086_combo3_web_basic-documents_sentiment",
+    "artifact_sha256": {
+      "implementation.py": "bc248f42dd14df207919ffb3ca7383760972d26cb8fdab2b2bf1367718a1cdfc",
+      "test_implementation.py": "a2f6df73fec30f60bc77a7143ce80a39fd71ece4be27af5f5878dd04deafb3a3",
+      "example_input.json": "b345f1edb72c1e40f89eb312a00e77d6d70716cb46abdd408dd898336e0ed923",
+      "build_manifest.json": "74539f41c67e24c438f1fae4a300573e00a7a24ec9217ac19f0b29fd737549fc"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

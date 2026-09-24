@@ -1,0 +1,82 @@
+{
+  "build_id": "wave3_t079_combo3_basic-insights_behavior_extract__ind-public_sector",
+  "composition_label": "Customer insights -> Behavioral personalization -> Structured extraction; public sector",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "fixture_label": "synthetic must be true; invented SYN identifiers, .invalid email domains, and SYNTHETIC address prefixes are required.",
+    "input": "Government form JSON: now, citizen_id, personas, service_requests, benefits_applications, policy_documents, events, extraction_schema.",
+    "output_envelope": ["schema_version", "synthetic", "status", "stage", "data", "notice"],
+    "validation": "validate() is the shared boundary for input and every stage; document and field definitions reuse common validators. Invalid CLI data and file errors produce one generic status:error JSON object and exit 2 without echoing personal data.",
+    "extraction_fields": "Each field has name, literal label, type (string/integer/date), and required boolean. Matching is case-insensitive on labeled policy-text lines.",
+    "source_spans": "Zero-based, half-open Python Unicode character offsets in the returned privacy-redacted source_text, not in the original private document."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "insights",
+      "to": "behavior",
+      "content": "Validated actionable themes with case evidence, sanitized policy documents, activity events, selected synthetic citizen, clock and extraction schema. Theme support counts directly affect ranking."
+    },
+    {
+      "from": "behavior",
+      "to": "extract",
+      "content": "Validated ranked document objects, score explanations, cold-start state, themes and extraction schema. Extraction processes all policies in the supplied ranking order; it never rereads the raw input."
+    }
+  ],
+  "behavior": {
+    "insights": "General-purpose deterministic keyword themes (waiting, access, paperwork), with other for unmatched feedback. A case contributes once per matching theme; actions and redacted evidence are retained.",
+    "personalization": "score = sum of matching theme support counts + sum of citizen event weights * 2^(-age_days/30). Browse weight 1; purchase weight 3. Scores rounded to 6 decimals; ties use policy ID. Other citizens' browsing is excluded.",
+    "purchase_semantics": "A synthetic purchase represents a fee-related service transaction signal, not purchase of benefits, protected status, or an eligibility decision.",
+    "cold_start": "Use community feedback matches when the selected citizen has no history; with no matches, ties use policy ID.",
+    "extraction": "Literal line-label extraction with typed conversion and exact source spans. Missing optional and required fields are reported separately from invalid or ambiguous values. Redacted values are never treated as valid extracted fields. No values are fabricated.",
+    "privacy": "Raw persona contact values are removed before the first handoff. Known fixture PII is scrubbed case-insensitively from feedback, titles and policies; additional email and common phone patterns are redacted. Each pipeline output is checked for registered PII. No persistence, telemetry or network calls.",
+    "explainability": "Case evidence, action suggestions, numerical score components, decay rules and tie rules support human open-records review. Evidence is synthetic and de-identified.",
+    "accessibility": "Text-only JSON, stable descriptive labels, plain-language actions and explanations, no color-only signals. This demonstrates Section 508 spirit but is not an accessibility certification."
+  },
+  "scope": {
+    "included": [
+      "One integrated CLI pipeline with shared validation",
+      "Synthetic citizen service requests, benefits applications and policy text",
+      "Deterministic theme aggregation and recency-weighted personalization",
+      "Schema-driven extraction, missing and invalid fields, source provenance",
+      "Demonstrative Privacy Act/GDPR data minimization and explainability rules",
+      "Standard-library unittest and subprocess CLI checks"
+    ],
+    "excluded": [
+      "Production or legal compliance certification",
+      "Real citizen data and actual benefit eligibility decisions",
+      "Universal PII detection: unknown names, addresses and indirect identifiers require human review",
+      "Authentication, authorization, consent lifecycle and records-retention infrastructure",
+      "OCR, PDF parsing, semantic NLP, learned models and live providers",
+      "Full accessibility interface audits",
+      "Arbitrary policy layouts: extraction requires Label: value lines"
+    ]
+  },
+  "test_outcomes": {
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "tests_passed": 36,
+    "tests_failed": 0,
+    "cli_command": "python -B implementation.py example_input.json",
+    "cli_exit_code": 0,
+    "cli_output": "One JSON object, status ok, final extract stage; two ranked policy documents and two extraction results.",
+    "coverage": "Each stage; shared validation and handoffs; private-data handling; synthetic-only guards; explanation rules; recency math; cold start; ties; other-citizen isolation; typed fields; missing, private and duplicate fields; Unicode source spans; empty documents; invalid inputs; CLI success and errors."
+  }
+}

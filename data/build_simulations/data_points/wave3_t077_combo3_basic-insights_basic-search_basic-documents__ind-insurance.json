@@ -118,7 +118,7 @@
   "split_group": "b0c71118fa6f829afffc1539a6eef663684331bdb1061da119f7396b05e15d55",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "5b3c0608e09a021801be2c0bbbbade10bb0b017fd6bd79169ecd524c50791369",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t077_combo3_basic-insights_basic-search_basic-documents__ind-insurance",
   "membership_point_id": "combo3_basic-insights_basic-search_basic-documents__ind-insurance",
@@ -126,8 +126,145 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "5fb1ac8340d5324a26f53fa048cba5fc0db73379e0296c22fdf545cf114e184d",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "8893de05-a78d-4606-a8a3-2400b123fff2",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 155125,
+    "output_tokens": 11285,
+    "cache_read_tokens": 140817,
+    "cache_write_tokens": 14287,
+    "total_tokens": 166410,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 36862,
+        "agent_id": "8893de05-a78d-4606-a8a3-2400b123fff2",
+        "model": "gpt-6-astra",
+        "input_tokens": 15095,
+        "output_tokens": 597,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 991,
+        "reasoning_tokens": 432,
+        "duration_ms": 16249,
+        "created_at": "2026-09-24T10:03:57.111Z"
+      },
+      {
+        "id": 36893,
+        "agent_id": "8893de05-a78d-4606-a8a3-2400b123fff2",
+        "model": "gpt-6-astra",
+        "input_tokens": 15718,
+        "output_tokens": 4966,
+        "cache_read_tokens": 15092,
+        "cache_write_tokens": 623,
+        "reasoning_tokens": 0,
+        "duration_ms": 73369,
+        "created_at": "2026-09-24T10:11:58.086Z"
+      },
+      {
+        "id": 36962,
+        "agent_id": "8893de05-a78d-4606-a8a3-2400b123fff2",
+        "model": "gpt-6-astra",
+        "input_tokens": 20865,
+        "output_tokens": 2992,
+        "cache_read_tokens": 15715,
+        "cache_write_tokens": 5147,
+        "reasoning_tokens": 190,
+        "duration_ms": 49198,
+        "created_at": "2026-09-24T10:21:45.874Z"
+      },
+      {
+        "id": 36963,
+        "agent_id": "8893de05-a78d-4606-a8a3-2400b123fff2",
+        "model": "gpt-6-astra",
+        "input_tokens": 24045,
+        "output_tokens": 228,
+        "cache_read_tokens": 20862,
+        "cache_write_tokens": 3180,
+        "reasoning_tokens": 24,
+        "duration_ms": 6038,
+        "created_at": "2026-09-24T10:22:22.648Z"
+      },
+      {
+        "id": 36974,
+        "agent_id": "8893de05-a78d-4606-a8a3-2400b123fff2",
+        "model": "gpt-6-astra",
+        "input_tokens": 24345,
+        "output_tokens": 2133,
+        "cache_read_tokens": 24042,
+        "cache_write_tokens": 300,
+        "reasoning_tokens": 125,
+        "duration_ms": 38230,
+        "created_at": "2026-09-24T10:24:57.527Z"
+      },
+      {
+        "id": 36976,
+        "agent_id": "8893de05-a78d-4606-a8a3-2400b123fff2",
+        "model": "gpt-6-astra",
+        "input_tokens": 26666,
+        "output_tokens": 259,
+        "cache_read_tokens": 24342,
+        "cache_write_tokens": 2321,
+        "reasoning_tokens": 0,
+        "duration_ms": 5749,
+        "created_at": "2026-09-24T10:25:26.199Z"
+      },
+      {
+        "id": 36984,
+        "agent_id": "8893de05-a78d-4606-a8a3-2400b123fff2",
+        "model": "gpt-6-astra",
+        "input_tokens": 28391,
+        "output_tokens": 110,
+        "cache_read_tokens": 26663,
+        "cache_write_tokens": 1725,
+        "reasoning_tokens": 0,
+        "duration_ms": 3264,
+        "created_at": "2026-09-24T10:26:00.543Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5570875,
+      "observed_cache_profile_estimate_usd": 0.24024925,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.68505,
+      "observed_cache_profile_estimate_usd": 6.68505,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -158,5 +295,328 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............................\n----------------------------------------------------------------------\nRan 31 tests in 3.615s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "data": {
+        "claims": [
+          {
+            "claim_id": "SYN-C01",
+            "loss_amount": 3607.25,
+            "loss_date": "2025-05-10",
+            "peril": "water",
+            "policy_id": "SYN-P01"
+          },
+          {
+            "claim_id": "SYN-C02",
+            "loss_amount": 17738.17,
+            "loss_date": "2025-05-04",
+            "peril": "theft",
+            "policy_id": "SYN-P02"
+          }
+        ],
+        "documents": [
+          {
+            "assessment": "preliminary_match",
+            "claim_id": "SYN-C01",
+            "customer_themes": [
+              "clarity",
+              "speed",
+              "water"
+            ],
+            "disclosed_underwriting_factors": [
+              {
+                "disclosed": true,
+                "name": "property_type",
+                "value": "detached dwelling"
+              },
+              {
+                "disclosed": true,
+                "name": "construction",
+                "value": "masonry"
+              }
+            ],
+            "document_id": "SYN-DOC-C01",
+            "holder_ref": "SYN-HOLDER-ALPHA",
+            "human_decision_required": true,
+            "loss_date": "2025-05-10",
+            "policy_id": "SYN-P01",
+            "reasons": [
+              "Reported peril, date and amount match the supplied policy terms; this is not approval."
+            ],
+            "reported_loss_amount": 3607.25,
+            "search_note": "Suggestions do not replace the actual policy or determine claim outcomes.",
+            "submission_id": "SYN-U01",
+            "suggested_policy_ids": [
+              "SYN-P01"
+            ]
+          },
+          {
+            "assessment": "human_review",
+            "claim_id": "SYN-C02",
+            "customer_themes": [
+              "clarity",
+              "motor",
+              "theft"
+            ],
+            "disclosed_underwriting_factors": [
+              {
+                "disclosed": true,
+                "name": "property_type",
+                "value": "synthetic private vehicle"
+              }
+            ],
+            "document_id": "SYN-DOC-C02",
+            "holder_ref": "SYN-HOLDER-BETA",
+            "human_decision_required": true,
+            "loss_date": "2025-05-04",
+            "policy_id": "SYN-P02",
+            "reasons": [
+              "Reported amount exceeds the supplied limit; human review is required."
+            ],
+            "reported_loss_amount": 17738.17,
+            "search_note": "Suggestions do not replace the actual policy or determine claim outcomes.",
+            "submission_id": "SYN-U02",
+            "suggested_policy_ids": [
+              "SYN-P02",
+              "SYN-P01"
+            ]
+          }
+        ],
+        "feedback": [
+          {
+            "claim_id": "SYN-C01",
+            "feedback_id": "SYN-F01",
+            "signals": [
+              "clarity",
+              "speed",
+              "water"
+            ]
+          },
+          {
+            "claim_id": "SYN-C02",
+            "feedback_id": "SYN-F02",
+            "signals": [
+              "clarity",
+              "motor",
+              "theft"
+            ]
+          }
+        ],
+        "insights": [
+          {
+            "claim_id": "SYN-C01",
+            "themes": [
+              {
+                "action": "Review clarity feedback and provide a clear response.",
+                "count": 1,
+                "evidence": [
+                  "SYN-F01"
+                ],
+                "theme": "clarity"
+              },
+              {
+                "action": "Review speed feedback and provide a clear response.",
+                "count": 1,
+                "evidence": [
+                  "SYN-F01"
+                ],
+                "theme": "speed"
+              },
+              {
+                "action": "Review water feedback and provide a clear response.",
+                "count": 1,
+                "evidence": [
+                  "SYN-F01"
+                ],
+                "theme": "water"
+              }
+            ]
+          },
+          {
+            "claim_id": "SYN-C02",
+            "themes": [
+              {
+                "action": "Review clarity feedback and provide a clear response.",
+                "count": 1,
+                "evidence": [
+                  "SYN-F02"
+                ],
+                "theme": "clarity"
+              },
+              {
+                "action": "Review motor feedback and provide a clear response.",
+                "count": 1,
+                "evidence": [
+                  "SYN-F02"
+                ],
+                "theme": "motor"
+              },
+              {
+                "action": "Review theft feedback and provide a clear response.",
+                "count": 1,
+                "evidence": [
+                  "SYN-F02"
+                ],
+                "theme": "theft"
+              }
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "description": "Water and fire protection with clear explanation and quick response",
+            "end_date": "2025-12-31",
+            "holder_ref": "SYN-HOLDER-ALPHA",
+            "limit": 25000,
+            "name": "Synthetic home water protection",
+            "perils": [
+              "water",
+              "fire"
+            ],
+            "policy_id": "SYN-P01",
+            "start_date": "2025-01-01"
+          },
+          {
+            "description": "Vehicle collision and theft protection",
+            "end_date": "2025-12-31",
+            "holder_ref": "SYN-HOLDER-BETA",
+            "limit": 15000,
+            "name": "Synthetic motor protection",
+            "perils": [
+              "motor",
+              "theft"
+            ],
+            "policy_id": "SYN-P02",
+            "start_date": "2025-01-01"
+          }
+        ],
+        "queries": [
+          {
+            "claim_id": "SYN-C01",
+            "terms": [
+              "home",
+              "water"
+            ]
+          },
+          {
+            "claim_id": "SYN-C02",
+            "terms": [
+              "motor",
+              "theft"
+            ]
+          }
+        ],
+        "schema_version": 1,
+        "search": [
+          {
+            "claim_id": "SYN-C01",
+            "insight_themes": [
+              "clarity",
+              "speed",
+              "water"
+            ],
+            "intent_terms": [
+              "clarity",
+              "home",
+              "speed",
+              "water"
+            ],
+            "matches": [
+              {
+                "matched_terms": [
+                  "clarity",
+                  "home",
+                  "speed",
+                  "water"
+                ],
+                "policy_id": "SYN-P01",
+                "reason": "Matches disclosed product terms: clarity, home, speed, water",
+                "score": 4
+              }
+            ]
+          },
+          {
+            "claim_id": "SYN-C02",
+            "insight_themes": [
+              "clarity",
+              "motor",
+              "theft"
+            ],
+            "intent_terms": [
+              "clarity",
+              "motor",
+              "theft"
+            ],
+            "matches": [
+              {
+                "matched_terms": [
+                  "motor",
+                  "theft"
+                ],
+                "policy_id": "SYN-P02",
+                "reason": "Matches disclosed product terms: motor, theft",
+                "score": 2
+              },
+              {
+                "matched_terms": [
+                  "clarity"
+                ],
+                "policy_id": "SYN-P01",
+                "reason": "Matches disclosed product terms: clarity",
+                "score": 1
+              }
+            ]
+          }
+        ],
+        "stage": "documents",
+        "submissions": [
+          {
+            "factors": [
+              {
+                "disclosed": true,
+                "name": "property_type",
+                "value": "detached dwelling"
+              },
+              {
+                "disclosed": true,
+                "name": "construction",
+                "value": "masonry"
+              }
+            ],
+            "policy_id": "SYN-P01",
+            "submission_id": "SYN-U01"
+          },
+          {
+            "factors": [
+              {
+                "disclosed": true,
+                "name": "property_type",
+                "value": "synthetic private vehicle"
+              }
+            ],
+            "policy_id": "SYN-P02",
+            "submission_id": "SYN-U02"
+          }
+        ],
+        "synthetic": true
+      },
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t077_combo3_basic-insights_basic-search_basic-documents__ind-insurance",
+    "artifact_sha256": {
+      "implementation.py": "e8ff92e760c8544c2c17c8df5a8c6a6ec26f2d46e60f20f0a4f3ce7d282ebbf8",
+      "test_implementation.py": "001fd3bf3bda6c811dddabe2afc0a807068f7a9496de7060cb16ba0df3658f1e",
+      "example_input.json": "a4b106de206b5084265a8b518ceb7dfe9a10e9245f823f4c1bcd298099f00c8c",
+      "build_manifest.json": "431464af42d93a41dae8ee7ae2ce851422ee57137efa2e4bf90b419ca04c4e44"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

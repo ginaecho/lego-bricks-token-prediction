@@ -118,7 +118,7 @@
   "split_group": "c3d2577394a608508be96f46b9167fad820c385fa2eedf33d52f9900ca837cff",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "5558ebcd6f29306e11f45f70b6be5349cd8f46b45d205a8f9d0d79452fb4c44f",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t084_combo3_basic-onboard_basic-recommend_basic-documents",
   "membership_point_id": "combo3_basic-onboard_basic-recommend_basic-documents",
@@ -126,8 +126,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "054bf9fe8f7774ce12c8c7f1bc4c664ce6e76f1810e57c3a02bcaa0ec87aced1",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b27a426d-3cb7-43da-8940-cff0625d6aae",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 123884,
+    "output_tokens": 8453,
+    "cache_read_tokens": 105237,
+    "cache_write_tokens": 18629,
+    "total_tokens": 132337,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37057,
+        "agent_id": "b27a426d-3cb7-43da-8940-cff0625d6aae",
+        "model": "gpt-6-astra",
+        "input_tokens": 14982,
+        "output_tokens": 290,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 878,
+        "reasoning_tokens": 122,
+        "duration_ms": 6779,
+        "created_at": "2026-09-24T10:34:18.256Z"
+      },
+      {
+        "id": 37075,
+        "agent_id": "b27a426d-3cb7-43da-8940-cff0625d6aae",
+        "model": "gpt-6-astra",
+        "input_tokens": 15302,
+        "output_tokens": 7317,
+        "cache_read_tokens": 14979,
+        "cache_write_tokens": 320,
+        "reasoning_tokens": 251,
+        "duration_ms": 78146,
+        "created_at": "2026-09-24T10:37:23.876Z"
+      },
+      {
+        "id": 37077,
+        "agent_id": "b27a426d-3cb7-43da-8940-cff0625d6aae",
+        "model": "gpt-6-astra",
+        "input_tokens": 22955,
+        "output_tokens": 150,
+        "cache_read_tokens": 15299,
+        "cache_write_tokens": 7653,
+        "reasoning_tokens": 9,
+        "duration_ms": 3296,
+        "created_at": "2026-09-24T10:37:41.806Z"
+      },
+      {
+        "id": 37082,
+        "agent_id": "b27a426d-3cb7-43da-8940-cff0625d6aae",
+        "model": "gpt-6-astra",
+        "input_tokens": 23146,
+        "output_tokens": 375,
+        "cache_read_tokens": 14101,
+        "cache_write_tokens": 9042,
+        "reasoning_tokens": 145,
+        "duration_ms": 8996,
+        "created_at": "2026-09-24T10:37:52.738Z"
+      },
+      {
+        "id": 37084,
+        "agent_id": "b27a426d-3cb7-43da-8940-cff0625d6aae",
+        "model": "gpt-6-astra",
+        "input_tokens": 23617,
+        "output_tokens": 230,
+        "cache_read_tokens": 23143,
+        "cache_write_tokens": 471,
+        "reasoning_tokens": 0,
+        "duration_ms": 6961,
+        "created_at": "2026-09-24T10:38:00.809Z"
+      },
+      {
+        "id": 37085,
+        "agent_id": "b27a426d-3cb7-43da-8940-cff0625d6aae",
+        "model": "gpt-6-astra",
+        "input_tokens": 23882,
+        "output_tokens": 91,
+        "cache_read_tokens": 23614,
+        "cache_write_tokens": 265,
+        "reasoning_tokens": 0,
+        "duration_ms": 3464,
+        "created_at": "2026-09-24T10:38:09.846Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.43650500000000003,
+      "observed_cache_profile_estimate_usd": 0.19972175,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.238060000000001,
+      "observed_cache_profile_estimate_usd": 5.238060000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -158,5 +283,97 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "......................\n----------------------------------------------------------------------\nRan 22 tests in 0.655s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "customer_id": "synthetic-customer-001",
+      "discovery": {
+        "budget": "100.00",
+        "customer_id": "synthetic-customer-001",
+        "items": [
+          {
+            "matched_interests": [
+              "creative",
+              "learning"
+            ],
+            "name": "Synthetic Creative Learning Kit",
+            "price": "25.50",
+            "product_id": "KIT-1",
+            "reason": "Matches: creative, learning",
+            "score": 2
+          },
+          {
+            "matched_interests": [
+              "learning"
+            ],
+            "name": "Synthetic Learning Book",
+            "price": "10.00",
+            "product_id": "BOOK-1",
+            "reason": "Matches: learning",
+            "score": 1
+          }
+        ],
+        "onboarding_step": "verification",
+        "reason": "Interest overlap, then price, then product ID"
+      },
+      "documents": {
+        "checks": [],
+        "customer_id": "synthetic-customer-001",
+        "onboarding_step": "verification",
+        "recommended_product_ids": [
+          "KIT-1",
+          "BOOK-1"
+        ],
+        "rows": [
+          {
+            "checks": [],
+            "line_total": "51.00",
+            "product_id": "KIT-1",
+            "quantity": 2,
+            "recommended": true,
+            "unit_price": "25.50"
+          },
+          {
+            "checks": [],
+            "line_total": "10.00",
+            "product_id": "BOOK-1",
+            "quantity": 1,
+            "recommended": true,
+            "unit_price": "10.00"
+          }
+        ],
+        "total": "61.00",
+        "valid": true
+      },
+      "fixture": "synthetic",
+      "onboarding": {
+        "budget": "100.00",
+        "customer_id": "synthetic-customer-001",
+        "greeting": "Welcome, Alex Example!",
+        "interests": [
+          "creative",
+          "learning"
+        ],
+        "message": "Verify your contact details before completing onboarding.",
+        "next_step": "verification"
+      },
+      "schema_version": 1,
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t084_combo3_basic-onboard_basic-recommend_basic-documents",
+    "artifact_sha256": {
+      "implementation.py": "e0d3d73158760d891bf3c34cbdbee3fbc79d33ce7b1bee8c85097a28b3e0ff1f",
+      "test_implementation.py": "bc9ce2dc5aca0a1da1fb25d8b04a7a3e7e69f54908f5696c73d062bf2f8c763d",
+      "example_input.json": "173dbe28facbd6b4697c2abaf5e7c1108cf8f98a14004a69d5ac5048e12d179d",
+      "build_manifest.json": "f0c70e7527c12bbc3da7fbd3026dc3539462f54f394890f6667412aa0ddffd8c"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }
