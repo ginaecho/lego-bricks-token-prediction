@@ -1,0 +1,46 @@
+{
+  "build_id": "wave3_t130_single_sentiment__ind-public_sector",
+  "composition_label": "Sentiment & prioritization (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored for this isolated build.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": "JSON object: schema_version=1, synthetic=true, records=[1..100 records].",
+    "record": "Exactly case_number (SYN-0000), entity (citizen_service_request, benefits_application, policy_document), persona (Synthetic resident A-Z), address (FICTIONAL ADDRESS - NOT DELIVERABLE), text (nonblank, at most 5000 characters), reported_severity (routine, urgent, critical). All fields are strings.",
+    "output": "JSON object: status, schema_version, synthetic, method, privacy, limitations, results. Each result has case_number, entity, sentiment, severity, priority_score, explanation, next_step, review_rank.",
+    "error": "JSON object with status=error and safe message; CLI exit code 2.",
+    "validation": "One shared validate function for CLI and library; strict keys/types, synthetic fixture rules, bounded records/text, duplicate case prevention and limited personal-identifier screening. JSON loader rejects duplicate keys."
+  },
+  "cross_stage_handoffs": [
+    "Single integrated stage: validated records feed lexical sentiment, then severity-aware priority and deterministic ranking."
+  ],
+  "behavior": {
+    "sentiment": "Case-insensitive ASCII word occurrences. Positive count minus negative count; zero is neutral. Matches are exposed for review.",
+    "severity": "Highest of caller-reported severity and keyword severity. Critical: unsafe, eviction, homeless. Urgent: urgent, denied, inaccessible.",
+    "priority": "routine=100, urgent=200, critical=300; add negative-score magnitude capped at 99. Sort descending priority, then ascending invented case number.",
+    "privacy": "Reject common email, phone, national-ID-like numbers, street addresses and explicit identity cues. Suppress original text, persona and address in output. These limited rules cannot detect all PII and do not make live citizen data safe.",
+    "review": "Expose score evidence, reported/inferred severity and fixed rules for open-records explainability. No legal or benefits determination.",
+    "accessibility": "Short plain-language explanations in structured JSON; no visual-only signals or certification claims.",
+    "fixtures": "Clearly synthetic personas, invented case numbers, non-deliverable address marker and invented policy text."
+  },
+  "scope": {
+    "included": ["Deterministic sentiment triage", "Severity-aware human review queue", "Shared validation", "CLI", "Public-sector synthetic fixtures", "Safe JSON errors"],
+    "excluded": ["Live citizen information", "Comprehensive PII detection", "Legal or benefits decisions", "FOIA disclosure authorization", "Compliance certification", "Providers or LLM calls", "Production deployment", "Semantic or multilingual sentiment", "Negation and sarcasm handling"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_test_count": 14,
+    "cli_example": "passed: exit 0, one JSON object with status=ok and three ranked results"
+  }
+}

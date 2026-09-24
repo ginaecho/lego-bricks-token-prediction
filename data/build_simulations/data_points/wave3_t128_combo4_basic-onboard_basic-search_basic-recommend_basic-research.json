@@ -129,7 +129,7 @@
   "split_group": "7f4604de487c73dd9a50e0675792af218c7fecd18be493ff93415838c9018a8c",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "86398f5d5999b098be4feb76b7843581259a794dd87b0cbc06ba44cdfca7e3c6",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t128_combo4_basic-onboard_basic-search_basic-recommend_basic-research",
   "membership_point_id": "combo4_basic-onboard_basic-search_basic-recommend_basic-research",
@@ -137,8 +137,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "96e1b6b51e3b20e965dbdeb1ba0d51fe8fbcccfa737d2a6535c52c3672c7b468",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "21c17a93-625e-49fb-a841-29221832c352",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 143676,
+    "output_tokens": 12639,
+    "cache_read_tokens": 128212,
+    "cache_write_tokens": 15446,
+    "total_tokens": 156315,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37757,
+        "agent_id": "21c17a93-625e-49fb-a841-29221832c352",
+        "model": "gpt-6-astra",
+        "input_tokens": 15050,
+        "output_tokens": 639,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 925,
+        "reasoning_tokens": 454,
+        "duration_ms": 18424,
+        "created_at": "2026-09-24T11:57:18.609Z"
+      },
+      {
+        "id": 37796,
+        "agent_id": "21c17a93-625e-49fb-a841-29221832c352",
+        "model": "gpt-6-astra",
+        "input_tokens": 15720,
+        "output_tokens": 10296,
+        "cache_read_tokens": 15047,
+        "cache_write_tokens": 670,
+        "reasoning_tokens": 0,
+        "duration_ms": 141825,
+        "created_at": "2026-09-24T12:02:27.518Z"
+      },
+      {
+        "id": 37797,
+        "agent_id": "21c17a93-625e-49fb-a841-29221832c352",
+        "model": "gpt-6-astra",
+        "input_tokens": 26360,
+        "output_tokens": 170,
+        "cache_read_tokens": 15717,
+        "cache_write_tokens": 10640,
+        "reasoning_tokens": 8,
+        "duration_ms": 3529,
+        "created_at": "2026-09-24T12:02:31.836Z"
+      },
+      {
+        "id": 37798,
+        "agent_id": "21c17a93-625e-49fb-a841-29221832c352",
+        "model": "gpt-6-astra",
+        "input_tokens": 27806,
+        "output_tokens": 1101,
+        "cache_read_tokens": 26357,
+        "cache_write_tokens": 1446,
+        "reasoning_tokens": 287,
+        "duration_ms": 18885,
+        "created_at": "2026-09-24T12:02:42.777Z"
+      },
+      {
+        "id": 37799,
+        "agent_id": "21c17a93-625e-49fb-a841-29221832c352",
+        "model": "gpt-6-astra",
+        "input_tokens": 29169,
+        "output_tokens": 337,
+        "cache_read_tokens": 27803,
+        "cache_write_tokens": 1363,
+        "reasoning_tokens": 0,
+        "duration_ms": 5388,
+        "created_at": "2026-09-24T12:02:48.484Z"
+      },
+      {
+        "id": 37800,
+        "agent_id": "21c17a93-625e-49fb-a841-29221832c352",
+        "model": "gpt-6-astra",
+        "input_tokens": 29571,
+        "output_tokens": 96,
+        "cache_read_tokens": 29166,
+        "cache_write_tokens": 402,
+        "reasoning_tokens": 0,
+        "duration_ms": 7605,
+        "created_at": "2026-09-24T12:02:55.598Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.548775,
+      "observed_cache_profile_estimate_usd": 0.260298,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.5853,
+      "observed_cache_profile_estimate_usd": 6.5853,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -169,5 +294,270 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................................\n----------------------------------------------------------------------\nRan 35 tests in 0.535s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "onboarding": {
+        "budget": 120,
+        "customer_id": "synthetic-customer-001",
+        "effective_query": "wireless headphons for commuting",
+        "greeting": "Welcome, Alex!",
+        "interests": [
+          "travel",
+          "quiet"
+        ],
+        "missing_fields": [],
+        "next_step": "Explore matches for wireless headphons for commuting within your budget."
+      },
+      "recommendations": {
+        "customer_id": "synthetic-customer-001",
+        "items": [
+          {
+            "product_id": "p1",
+            "reasons": [
+              "Search relevance: 15",
+              "Matches declared interests: quiet, travel",
+              "Within declared budget",
+              "Adds a category to this shortlist"
+            ],
+            "score": 23.258333
+          },
+          {
+            "product_id": "p3",
+            "reasons": [
+              "Search relevance: 6",
+              "Matches declared interests: quiet, travel",
+              "Within declared budget",
+              "Adds a category to this shortlist"
+            ],
+            "score": 14.833333
+          },
+          {
+            "product_id": "p2",
+            "reasons": [
+              "Search relevance: 9",
+              "Within declared budget",
+              "Repeated-category diversity penalty: 1"
+            ],
+            "score": 8.591667
+          }
+        ],
+        "message": "Ranked using explicit interests, search relevance, affordability and a small category-diversity penalty."
+      },
+      "request": {
+        "catalog": [
+          {
+            "category": "audio",
+            "currency": "USD",
+            "description": "Bluetooth headphones for travel with a folding case.",
+            "id": "p1",
+            "price": 89,
+            "tags": [
+              "quiet",
+              "travel",
+              "bluetooth"
+            ],
+            "title": "Quiet Travel Headphones"
+          },
+          {
+            "category": "audio",
+            "currency": "USD",
+            "description": "Compact bluetooth audio for everyday listening.",
+            "id": "p2",
+            "price": 49,
+            "tags": [
+              "bluetooth",
+              "budget"
+            ],
+            "title": "Everyday Earbuds"
+          },
+          {
+            "category": "accessories",
+            "currency": "USD",
+            "description": "A quiet fabric pouch for travel accessories.",
+            "id": "p3",
+            "price": 20,
+            "tags": [
+              "travel",
+              "quiet"
+            ],
+            "title": "Travel Organizer"
+          },
+          {
+            "category": "audio",
+            "currency": "USD",
+            "description": "Large studio headphones with a travel case.",
+            "id": "p4",
+            "price": 240,
+            "tags": [
+              "bluetooth",
+              "travel"
+            ],
+            "title": "Studio Bluetooth Headphones"
+          }
+        ],
+        "customer": {
+          "budget": 120,
+          "id": "synthetic-customer-001",
+          "interests": [
+            "travel",
+            "quiet"
+          ],
+          "name": "Alex"
+        },
+        "data_label": "synthetic",
+        "limits": {
+          "evidence": 5,
+          "recommendations": 3,
+          "search": 10
+        },
+        "query": "wireless headphons for commuting",
+        "research": {
+          "question": "What battery life is reported for travel?",
+          "sources": [
+            {
+              "id": "synthetic-lab-1",
+              "product_ids": [
+                "p1"
+              ],
+              "reliability": 0.9,
+              "text": "Battery life measured 28 hours in our synthetic travel test. The folding case fits a small bag.",
+              "title": "Synthetic Quiet Travel laboratory fixture"
+            },
+            {
+              "id": "synthetic-lab-2",
+              "product_ids": [
+                "p2"
+              ],
+              "reliability": 0.8,
+              "text": "Battery life measured 6 hours per charge in a synthetic test.",
+              "title": "Synthetic Everyday laboratory fixture"
+            },
+            {
+              "id": "synthetic-catalog-3",
+              "product_ids": [
+                "p3"
+              ],
+              "reliability": 0.5,
+              "text": "The organizer has two zipped pockets.",
+              "title": "Synthetic organizer description"
+            }
+          ]
+        }
+      },
+      "research": {
+        "coverage": {
+          "with_evidence": [
+            "p1",
+            "p2"
+          ],
+          "without_evidence": [
+            "p3"
+          ]
+        },
+        "decision": {
+          "next_step": "Review the cited excerpts for the highest-ranked covered product and verify claims before deciding.",
+          "product_id": "p1",
+          "source_ids": [
+            "synthetic-lab-1"
+          ],
+          "status": "evidence_available"
+        },
+        "evidence": [
+          {
+            "matched_terms": [
+              "battery",
+              "life",
+              "travel"
+            ],
+            "product_ids": [
+              "p1"
+            ],
+            "quote": "Battery life measured 28 hours in our synthetic travel test.",
+            "reliability": 0.9,
+            "source_id": "synthetic-lab-1",
+            "source_title": "Synthetic Quiet Travel laboratory fixture"
+          },
+          {
+            "matched_terms": [
+              "battery",
+              "life"
+            ],
+            "product_ids": [
+              "p2"
+            ],
+            "quote": "Battery life measured 6 hours per charge in a synthetic test.",
+            "reliability": 0.8,
+            "source_id": "synthetic-lab-2",
+            "source_title": "Synthetic Everyday laboratory fixture"
+          }
+        ],
+        "limitations": [
+          "Evidence is extracted from supplied sources only; no live verification.",
+          "Relevance is lexical; excerpts are not proof or a positive product endorsement.",
+          "Reliability values are supplied by the caller, not independently verified.",
+          "Conflicting excerpts are retained; factual conflicts are not automatically resolved.",
+          "Coverage refers only to returned evidence within the configured limit."
+        ],
+        "question": "What battery life is reported for travel?"
+      },
+      "schema_version": 1,
+      "search": {
+        "corrections": {
+          "headphons": "headphone"
+        },
+        "excluded_over_budget": 1,
+        "items": [
+          {
+            "matched_terms": [
+              "bluetooth",
+              "headphone",
+              "travel"
+            ],
+            "product_id": "p1",
+            "score": 15
+          },
+          {
+            "matched_terms": [
+              "bluetooth",
+              "headphone"
+            ],
+            "product_id": "p2",
+            "score": 9
+          },
+          {
+            "matched_terms": [
+              "travel"
+            ],
+            "product_id": "p3",
+            "score": 6
+          }
+        ],
+        "message": "Ranked lexical, synonym and typo matches.",
+        "query": "wireless headphons for commuting",
+        "query_tokens": [
+          "bluetooth",
+          "headphone",
+          "travel"
+        ]
+      },
+      "stage": "research",
+      "status": "ok"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t128_combo4_basic-onboard_basic-search_basic-recommend_basic-research",
+    "artifact_sha256": {
+      "implementation.py": "669c8bfed5778fcb138daeb30672dd5cfbcf785e1a2dad28ca2c7a114246eee2",
+      "test_implementation.py": "d3118f27a9fdb3f2ef3f118aed2efd8399a31459db924f8aaa53ca0b7f933e67",
+      "example_input.json": "20b90bc09fea3ee35f03ac2b88425fe0f6e5e05740b07160d7efc8fdb6d3e895",
+      "build_manifest.json": "2f2927b0dd4da2f372cfa9b85b877322d79073529e96af4439671f8a41e58030"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

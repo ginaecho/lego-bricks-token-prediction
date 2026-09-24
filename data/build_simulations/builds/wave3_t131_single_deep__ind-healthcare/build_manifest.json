@@ -1,0 +1,75 @@
+{
+  "build_id": "wave3_t131_single_deep__ind-healthcare",
+  "composition_label": "single_deep",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation created for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact-key JSON envelope: schema_version, synthetic=true, human_review_required=true, research_questions, records",
+    "record": "record_id, kind, resource, evidence; synthetic typed IDs only",
+    "entities": {
+      "patient_record": "FHIR-style Patient with synthetic diagnosis codes and finite bounded laboratory values",
+      "clinical_note": "FHIR-style DocumentReference with labeled synthetic clinical note text and patient reference",
+      "prior_authorization_request": "FHIR-style draft Claim with prior-authorization purpose and labeled synthetic request text"
+    },
+    "evidence": "question matching a declared research question, stance support/oppose/uncertain, exact source quote",
+    "output": "Input envelope preserved, plus status, synthesis, audit_trail, autonomous_clinical_decisions=false",
+    "errors": "One JSON object with status=error and a sanitized error message; CLI exits 2",
+    "validation": "validate_document is used at both input and output boundaries; rejects unknown fields, identifier patterns, missing synthetic/review flags, malformed references, ungrounded citations and inconsistent output"
+  },
+  "cross_stage_handoffs": [
+    "Single Research stage: validated immutable records -> question-specific evidence aggregation -> disagreements and unresolved questions -> audited, validated JSON output"
+  ],
+  "behavior": {
+    "determinism": "Stable input-order citations and sequence-numbered audits; no clocks, randomness, network or providers",
+    "synthesis": "Groups supplied evidence by declared question across documents; retains exact source quotes and record/evidence references",
+    "disagreement": "Both supporting and opposing stances explicitly flag conflict; no majority vote or clinical inference",
+    "unresolved": "Missing evidence, single-source evidence, explicit uncertainty and conflicts generate review issues",
+    "de_identification": "Rejects direct identifier fields and common free-text identifier patterns; accepts only synthetic typed IDs and explicitly labeled fixture text. No real names, birth dates or MRNs in fixtures",
+    "human_review": "Always required; no diagnosis, treatment, dose or authorization decisions generated",
+    "audit": "Every source registration and derived report creation has an ordered create event with SHA-256 content digest and null before-state; source records are never mutated",
+    "fixture": "Fictitious Synthea-style patient with diagnosis E11.9 and synthetic lab result; opposing documentation statements and an uncertain therapy-duration statement",
+    "limitations": "Constrained demonstrative HIPAA de-identification rules, not certification or exhaustive free-text PHI detection"
+  },
+  "scope": {
+    "included": [
+      "One offline deterministic deep-research synthesis stage",
+      "One patient per run with multiple linked documents",
+      "Exact citation grounding, explicit disagreements and unanswered questions",
+      "Shared schema and validation, mandatory human review and per-record audit",
+      "Bounded input sizes and JSON/file error handling"
+    ],
+    "excluded": [
+      "Live retrieval, model calls, optional LLM extension and external dependencies",
+      "Real patient data or production HIPAA compliance claims",
+      "Full FHIR conformance or Synthea file import",
+      "Autonomous clinical or authorization decisions",
+      "Automatic semantic stance extraction or verification of source truth",
+      "Persistent record updates, audit signatures, access control and enterprise deployment"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 18,
+    "unittest_exit_code": 0,
+    "cli_example": "passed: one JSON object, status ok",
+    "cli_exit_code": 0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "build_id": "wave3_t129_combo4_basic-research_basic-recommend_basic-insights_basic-support__ind-public_sector",
+  "composition_label": "basic:research -> basic:recommend -> basic:insights -> basic:support; public_sector",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "envelope": ["schema_version", "synthetic", "status", "stage", "context", "results", "audit"],
+    "input_stage": "input",
+    "final_stage": "support",
+    "context": "Government form JSON with citizen, service request, benefits application and preferences; policies with regulation text and service metadata; feedback; support question.",
+    "validation": "One shared validate_state layer checks exact fields, bounds, types, synthetic labeling, privacy, source references, stage order, deterministic stage results, and audit provenance. Application steps must occur in supplied policy text.",
+    "error_contract": "One JSON object with status=error, exit 2; errors do not echo source text or paths.",
+    "success_contract": "One JSON object with status=ok, exit 0; no files written by runtime."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "recommend",
+      "data": "Validated evidence-backed service catalog, question and policy identifiers."
+    },
+    {
+      "from": "recommend",
+      "to": "insights",
+      "data": "Validated ranked service IDs select feedback for theme extraction."
+    },
+    {
+      "from": "insights",
+      "to": "support",
+      "data": "Validated service-specific theme actions shape support alongside retained policy evidence and recommendations."
+    }
+  ],
+  "behavior": {
+    "research": "Deterministic word overlap selects supplied policies, evidence sentences and service catalog. Unmatched questions retain an explicit evidence gap.",
+    "recommend": "Three points per stated-interest word and one per request word. Zero-score services excluded; service-ID tie break. No benefit approval.",
+    "insights": "Visible keyword themes; selected-service feedback only; counts, ratings, feedback references, actions and small-sample caveat. Multiple themes can overlap.",
+    "support": "Matches the support question to recommended services. Returns short numbered policy steps, citations and feedback-informed assistance. No evidence means abstain. Eligibility, appeals and urgent matters require a human.",
+    "privacy": "Citizen contact fields and case/application identifiers are redacted across all strings before research. Other email addresses and phone-like digit strings are also redacted. Unknown form fields are rejected. No sensitive identifiers affect ranking. Only synthetic fixtures are accepted.",
+    "explainability": "Ordered audit trail, cited policy IDs, evidence excerpts, matched terms, transparent ranking and feedback IDs support open-records review of this synthetic demonstration.",
+    "accessibility": "English-only plain-language templates, short source steps, numbered lists and accessible-format guidance demonstrate Section 508 spirit; this is not an accessibility certification."
+  },
+  "scope": {
+    "included": [
+      "Synthetic citizen service requests, benefits applications and invented policy text",
+      "One integrated deterministic pipeline with immutable input and shared schema validation",
+      "Privacy Act/GDPR-inspired data minimization and output redaction demonstrations",
+      "FOIA/open-records-inspired explanations, traceable evidence and audit rules",
+      "CLI error handling and standard-library tests without persistent test artifacts"
+    ],
+    "excluded": [
+      "Real citizen data; free-text entity recognition is not a comprehensive PII detector",
+      "Production security, compliance certification, eligibility decisions or legal advice",
+      "Live government policy verification, external search, networking, models and providers",
+      "Translation, semantic reasoning, authentication, storage, web UI or case submission",
+      "Claim that synthetic source text is authoritative or immune to malicious content"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_run": 33,
+    "failures": 0,
+    "errors": 0,
+    "cli": {
+      "status": "passed",
+      "exit_code": 0,
+      "stdout": "One valid JSON object with status=ok and stage=support",
+      "validation_error_exit_code": 2,
+      "missing_file_exit_code": 2
+    }
+  }
+}

@@ -129,7 +129,7 @@
   "split_group": "b18683a7c2e47a599e5eb63538e936869f4fac1dd226643960b9697ea1c3309b",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "fb9742179a5f4eb6c045eb126ca3f4c5dee04d357ff358aec73d3e435b62ef9e",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t129_combo4_basic-research_basic-recommend_basic-insights_basic-support__ind-public_sector",
   "membership_point_id": "combo4_basic-research_basic-recommend_basic-insights_basic-support__ind-public_sector",
@@ -137,8 +137,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "d1d8cfa01bab31eb5f30d51bf61832fab15babad282cb85d1507642d0c00c22b",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "6ebe4e2d-ae69-4c1d-abd4-1d288beb3b06",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 144637,
+    "output_tokens": 12521,
+    "cache_read_tokens": 129091,
+    "cache_write_tokens": 15528,
+    "total_tokens": 157158,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37781,
+        "agent_id": "6ebe4e2d-ae69-4c1d-abd4-1d288beb3b06",
+        "model": "gpt-6-astra",
+        "input_tokens": 15166,
+        "output_tokens": 301,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 1041,
+        "reasoning_tokens": 112,
+        "duration_ms": 6862,
+        "created_at": "2026-09-24T12:00:47.461Z"
+      },
+      {
+        "id": 37817,
+        "agent_id": "6ebe4e2d-ae69-4c1d-abd4-1d288beb3b06",
+        "model": "gpt-6-astra",
+        "input_tokens": 15498,
+        "output_tokens": 10818,
+        "cache_read_tokens": 15163,
+        "cache_write_tokens": 332,
+        "reasoning_tokens": 934,
+        "duration_ms": 170366,
+        "created_at": "2026-09-24T12:04:59.622Z"
+      },
+      {
+        "id": 37818,
+        "agent_id": "6ebe4e2d-ae69-4c1d-abd4-1d288beb3b06",
+        "model": "gpt-6-astra",
+        "input_tokens": 26676,
+        "output_tokens": 174,
+        "cache_read_tokens": 15495,
+        "cache_write_tokens": 11178,
+        "reasoning_tokens": 8,
+        "duration_ms": 4390,
+        "created_at": "2026-09-24T12:05:02.790Z"
+      },
+      {
+        "id": 37820,
+        "agent_id": "6ebe4e2d-ae69-4c1d-abd4-1d288beb3b06",
+        "model": "gpt-6-astra",
+        "input_tokens": 28392,
+        "output_tokens": 758,
+        "cache_read_tokens": 26673,
+        "cache_write_tokens": 1716,
+        "reasoning_tokens": 516,
+        "duration_ms": 18282,
+        "created_at": "2026-09-24T12:05:18.600Z"
+      },
+      {
+        "id": 37822,
+        "agent_id": "6ebe4e2d-ae69-4c1d-abd4-1d288beb3b06",
+        "model": "gpt-6-astra",
+        "input_tokens": 29252,
+        "output_tokens": 356,
+        "cache_read_tokens": 28389,
+        "cache_write_tokens": 860,
+        "reasoning_tokens": 12,
+        "duration_ms": 6633,
+        "created_at": "2026-09-24T12:05:23.164Z"
+      },
+      {
+        "id": 37823,
+        "agent_id": "6ebe4e2d-ae69-4c1d-abd4-1d288beb3b06",
+        "model": "gpt-6-astra",
+        "input_tokens": 29653,
+        "output_tokens": 114,
+        "cache_read_tokens": 29249,
+        "cache_write_tokens": 401,
+        "reasoning_tokens": 0,
+        "duration_ms": 3832,
+        "created_at": "2026-09-24T12:05:33.682Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.5494074999999999,
+      "observed_cache_profile_estimate_usd": 0.25895275,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.592889999999999,
+      "observed_cache_profile_estimate_usd": 6.592889999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -169,5 +294,319 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................................\n----------------------------------------------------------------------\nRan 33 tests in 0.832s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "audit": [
+        {
+          "consumed_stage": "input",
+          "rule": "Match question and interest words to supplied policies.",
+          "source_policy_ids": [
+            "policy-housing"
+          ],
+          "stage": "research"
+        },
+        {
+          "consumed_stage": "research",
+          "rule": "Rank evidence-backed services using stated interests and request words.",
+          "source_policy_ids": [
+            "policy-housing"
+          ],
+          "stage": "recommend"
+        },
+        {
+          "consumed_stage": "recommend",
+          "rule": "Group feedback only for recommended services using visible keyword rules.",
+          "source_policy_ids": [
+            "policy-housing"
+          ],
+          "stage": "insights"
+        },
+        {
+          "consumed_stage": "insights",
+          "rule": "Use cited service steps and feedback actions; defer decisions to a human.",
+          "source_policy_ids": [
+            "policy-housing"
+          ],
+          "stage": "support"
+        }
+      ],
+      "context": {
+        "feedback": [
+          {
+            "feedback_id": "feedback-one",
+            "rating": 2,
+            "service_id": "housing-help",
+            "text": "The housing form is confusing with my screen reader."
+          },
+          {
+            "feedback_id": "feedback-two",
+            "rating": 3,
+            "service_id": "housing-help",
+            "text": "The wait was slow, but the team was helpful."
+          },
+          {
+            "feedback_id": "feedback-three",
+            "rating": 5,
+            "service_id": "library-card",
+            "text": "The library process was easy."
+          }
+        ],
+        "government_form": {
+          "benefits_application": {
+            "application_id": "[REDACTED]",
+            "program_interests": [
+              "housing"
+            ],
+            "status": "draft"
+          },
+          "citizen": {
+            "address": "[REDACTED]",
+            "email": "[REDACTED]",
+            "name": "[REDACTED]",
+            "phone": "[REDACTED]"
+          },
+          "preferences": {
+            "accessible_format": true,
+            "language": "en",
+            "max_results": 2,
+            "topics": [
+              "housing",
+              "accessible"
+            ]
+          },
+          "service_request": {
+            "case_number": "[REDACTED]",
+            "category": "benefits",
+            "question": "How do I apply for housing support?"
+          }
+        },
+        "policies": [
+          {
+            "policy_id": "policy-housing",
+            "services": [
+              {
+                "application_steps": [
+                  "Open the housing support form.",
+                  "Fill in the required fields.",
+                  "Ask the service team to review your application."
+                ],
+                "description": "Help with a housing benefits application and an accessible form.",
+                "eligibility_note": "Staff must check eligibility under the current rules.",
+                "name": "Synthetic Housing Support",
+                "service_id": "housing-help",
+                "topics": [
+                  "housing",
+                  "benefits",
+                  "accessible"
+                ]
+              }
+            ],
+            "text": "This invented policy describes housing support. Open the housing support form. Fill in the required fields. Ask the service team to review your application. An accessible form is available on request. Staff check eligibility; a recommendation is not approval.",
+            "title": "Invented Housing Support Rule — synthetic fixture"
+          },
+          {
+            "policy_id": "policy-library",
+            "services": [
+              {
+                "application_steps": [
+                  "Open the library membership form."
+                ],
+                "description": "Borrow books from a public library.",
+                "eligibility_note": "Library staff check membership rules.",
+                "name": "Synthetic Library Card",
+                "service_id": "library-card",
+                "topics": [
+                  "library",
+                  "books"
+                ]
+              }
+            ],
+            "text": "The invented library service lends books. Open the library membership form.",
+            "title": "Invented Library Access Rule — synthetic fixture"
+          }
+        ],
+        "support_question": "How do I complete the housing support form?"
+      },
+      "results": {
+        "insights": {
+          "feedback_count": 2,
+          "limitations": "Small synthetic samples are not population estimates. Themes may overlap.",
+          "selected_service_ids": [
+            "housing-help"
+          ],
+          "themes": [
+            {
+              "action": "Offer an accessible form or help by phone.",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-one"
+              ],
+              "mean_rating": 2.0,
+              "service_ids": [
+                "housing-help"
+              ],
+              "theme": "accessibility"
+            },
+            {
+              "action": "Explain each form step in plain language.",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-one"
+              ],
+              "mean_rating": 2.0,
+              "service_ids": [
+                "housing-help"
+              ],
+              "theme": "clarity"
+            },
+            {
+              "action": "Ask the service team for a case update.",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-two"
+              ],
+              "mean_rating": 3.0,
+              "service_ids": [
+                "housing-help"
+              ],
+              "theme": "delays"
+            },
+            {
+              "action": "Keep the parts people find easy.",
+              "count": 1,
+              "feedback_ids": [
+                "feedback-two"
+              ],
+              "mean_rating": 3.0,
+              "service_ids": [
+                "housing-help"
+              ],
+              "theme": "positive"
+            }
+          ]
+        },
+        "recommend": {
+          "eligibility_decision": "not_made",
+          "excluded_factors": [
+            "name",
+            "email",
+            "phone",
+            "address",
+            "case_number",
+            "application_id"
+          ],
+          "items": [
+            {
+              "interest_matches": [
+                "accessible",
+                "housing"
+              ],
+              "name": "Synthetic Housing Support",
+              "policy_id": "policy-housing",
+              "question_matches": [
+                "housing",
+                "support"
+              ],
+              "reason": "Matched stated interests and request words; this is not an eligibility decision.",
+              "score": 8,
+              "service_id": "housing-help"
+            }
+          ],
+          "ranking_rule": "3 points per interest word and 1 per request word; ties use service ID."
+        },
+        "research": {
+          "catalog": [
+            {
+              "application_steps": [
+                "Open the housing support form.",
+                "Fill in the required fields.",
+                "Ask the service team to review your application."
+              ],
+              "description": "Help with a housing benefits application and an accessible form.",
+              "eligibility_note": "Staff must check eligibility under the current rules.",
+              "name": "Synthetic Housing Support",
+              "policy_id": "policy-housing",
+              "service_id": "housing-help",
+              "topics": [
+                "housing",
+                "benefits",
+                "accessible"
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "excerpt": "This invented policy describes housing support.",
+              "matched_terms": [
+                "accessible",
+                "housing",
+                "support"
+              ],
+              "policy_id": "policy-housing"
+            }
+          ],
+          "limitations": [
+            "Only supplied synthetic policy text was checked.",
+            "A service team must confirm current rules and eligibility."
+          ],
+          "question": "How do I apply for housing support?",
+          "unanswered": []
+        },
+        "support": {
+          "answer": "Here are the next steps from the supplied policy. The service team must confirm your eligibility.",
+          "citations": [
+            {
+              "policy_id": "policy-housing",
+              "section": "supplied policy text"
+            }
+          ],
+          "eligibility_decision": "not_made",
+          "format": "plain_language_numbered_steps",
+          "handoff_required": false,
+          "insight_actions": [
+            "Offer an accessible form or help by phone.",
+            "Explain each form step in plain language.",
+            "Ask the service team for a case update.",
+            "Ask for an accessible format if you need one."
+          ],
+          "reason": "Steps are quoted from the cited policy.",
+          "service_id": "housing-help",
+          "steps": [
+            {
+              "number": 1,
+              "text": "Open the housing support form."
+            },
+            {
+              "number": 2,
+              "text": "Fill in the required fields."
+            },
+            {
+              "number": 3,
+              "text": "Ask the service team to review your application."
+            }
+          ]
+        }
+      },
+      "schema_version": "1.0",
+      "stage": "support",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t129_combo4_basic-research_basic-recommend_basic-insights_basic-support__ind-public_sector",
+    "artifact_sha256": {
+      "implementation.py": "32002664bbe2a84a7738672dd7faf276f911f499185f48a1a26b4b02acf00c5a",
+      "test_implementation.py": "5b624257ab9585d88c403488a02fbdcf4f466a21d78b3b87d5d613b043c2d752",
+      "example_input.json": "0736c5b2933322d93278765bfb7db1baf2f38fbc043b440bb0afc2409720e0dd",
+      "build_manifest.json": "73fc3d4b08aeaef1d2c8839a1b899e198884eb2ee3eabc2ecd4d1d8aa9717d8f"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

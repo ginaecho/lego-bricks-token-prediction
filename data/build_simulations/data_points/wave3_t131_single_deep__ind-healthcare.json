@@ -97,7 +97,7 @@
   "split_group": "9dbf1752030ec7bc186a1d575afe6e19cc7f441ae0b2097e861bd57d21918002",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "c5655ec2dc98de3ad11609f3d9c2b6a6a20c2ce2c4a643a7561e8dfe2e51d53b",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t131_single_deep__ind-healthcare",
   "membership_point_id": "single_deep__ind-healthcare",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "2191af4f3a56cdac2055543c801e7b416489d3b3c3bd7e7255adcbe73680ee43",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "60af7005-596a-4193-aaf6-a8287b0646f5",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 131124,
+    "output_tokens": 9596,
+    "cache_read_tokens": 119056,
+    "cache_write_tokens": 12050,
+    "total_tokens": 140720,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37795,
+        "agent_id": "60af7005-596a-4193-aaf6-a8287b0646f5",
+        "model": "gpt-6-astra",
+        "input_tokens": 14970,
+        "output_tokens": 698,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 845,
+        "reasoning_tokens": 516,
+        "duration_ms": 21487,
+        "created_at": "2026-09-24T12:02:20.553Z"
+      },
+      {
+        "id": 37809,
+        "agent_id": "60af7005-596a-4193-aaf6-a8287b0646f5",
+        "model": "gpt-6-astra",
+        "input_tokens": 15699,
+        "output_tokens": 7625,
+        "cache_read_tokens": 14967,
+        "cache_write_tokens": 729,
+        "reasoning_tokens": 516,
+        "duration_ms": 106649,
+        "created_at": "2026-09-24T12:04:11.662Z"
+      },
+      {
+        "id": 37812,
+        "agent_id": "60af7005-596a-4193-aaf6-a8287b0646f5",
+        "model": "gpt-6-astra",
+        "input_tokens": 23644,
+        "output_tokens": 158,
+        "cache_read_tokens": 15696,
+        "cache_write_tokens": 7945,
+        "reasoning_tokens": 19,
+        "duration_ms": 3211,
+        "created_at": "2026-09-24T12:04:20.558Z"
+      },
+      {
+        "id": 37814,
+        "agent_id": "60af7005-596a-4193-aaf6-a8287b0646f5",
+        "model": "gpt-6-astra",
+        "input_tokens": 24850,
+        "output_tokens": 692,
+        "cache_read_tokens": 23641,
+        "cache_write_tokens": 1206,
+        "reasoning_tokens": 121,
+        "duration_ms": 9338,
+        "created_at": "2026-09-24T12:04:32.773Z"
+      },
+      {
+        "id": 37815,
+        "agent_id": "60af7005-596a-4193-aaf6-a8287b0646f5",
+        "model": "gpt-6-astra",
+        "input_tokens": 25786,
+        "output_tokens": 316,
+        "cache_read_tokens": 24847,
+        "cache_write_tokens": 936,
+        "reasoning_tokens": 0,
+        "duration_ms": 4975,
+        "created_at": "2026-09-24T12:04:35.966Z"
+      },
+      {
+        "id": 37816,
+        "agent_id": "60af7005-596a-4193-aaf6-a8287b0646f5",
+        "model": "gpt-6-astra",
+        "input_tokens": 26175,
+        "output_tokens": 107,
+        "cache_read_tokens": 25783,
+        "cache_write_tokens": 389,
+        "reasoning_tokens": 0,
+        "duration_ms": 4636,
+        "created_at": "2026-09-24T12:04:46.187Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.47175,
+      "observed_cache_profile_estimate_usd": 0.203874,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.660999999999999,
+      "observed_cache_profile_estimate_usd": 5.660999999999999,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,193 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..................\n----------------------------------------------------------------------\nRan 18 tests in 0.585s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "audit_trail": [
+        {
+          "actor": "offline-reference-builder",
+          "after_sha256": "d0c657a486d39ee452544e725b107a093848e5a8af247c030f0ce137f3ad213d",
+          "before_sha256": null,
+          "human_review_required": true,
+          "operation": "create",
+          "reason": "Register immutable validated synthetic source in this run.",
+          "record_id": "synthetic-patient-001",
+          "sequence": 1
+        },
+        {
+          "actor": "offline-reference-builder",
+          "after_sha256": "9d745db8da1d212644d41509c5f75ba0f0727430633b516eb336f65514915420",
+          "before_sha256": null,
+          "human_review_required": true,
+          "operation": "create",
+          "reason": "Register immutable validated synthetic source in this run.",
+          "record_id": "synthetic-note-001",
+          "sequence": 2
+        },
+        {
+          "actor": "offline-reference-builder",
+          "after_sha256": "9aa9c527735fd4dcfbba197376aaa7fefbd3ae7a10537637e1c31b712284a6a5",
+          "before_sha256": null,
+          "human_review_required": true,
+          "operation": "create",
+          "reason": "Register immutable validated synthetic source in this run.",
+          "record_id": "synthetic-auth-001",
+          "sequence": 3
+        },
+        {
+          "actor": "offline-reference-builder",
+          "after_sha256": "d00daa7a91d47f1859ba1c6e52dcfac84b5ec472137317ae99a1b51e844e8076",
+          "before_sha256": null,
+          "human_review_required": true,
+          "operation": "create",
+          "reason": "Create evidence synthesis without changing source records.",
+          "record_id": "synthetic-research-report",
+          "sequence": 4
+        }
+      ],
+      "autonomous_clinical_decisions": false,
+      "human_review_required": true,
+      "records": [
+        {
+          "evidence": [],
+          "kind": "patient_record",
+          "record_id": "synthetic-patient-001",
+          "resource": {
+            "diagnoses": [
+              "E11.9"
+            ],
+            "id": "synthetic-patient-001",
+            "labs": [
+              {
+                "code": "4548-4",
+                "unit": "%",
+                "value": 7.2
+              }
+            ],
+            "resourceType": "Patient",
+            "synthetic": true
+          }
+        },
+        {
+          "evidence": [
+            {
+              "question": "Does the supplied packet contain the requested lab documentation?",
+              "quote": "The requested lab documentation is attached.",
+              "stance": "support"
+            },
+            {
+              "question": "Is the duration of prior therapy documented?",
+              "quote": "The duration of prior therapy is not established.",
+              "stance": "uncertain"
+            }
+          ],
+          "kind": "clinical_note",
+          "record_id": "synthetic-note-001",
+          "resource": {
+            "id": "synthetic-note-001",
+            "resourceType": "DocumentReference",
+            "subject": {
+              "reference": "Patient/synthetic-patient-001"
+            },
+            "synthetic": true,
+            "text": "SYNTHETIC FIXTURE: Fictitious Synthea-style clinical note. The requested lab documentation is attached. The duration of prior therapy is not established."
+          }
+        },
+        {
+          "evidence": [
+            {
+              "question": "Does the supplied packet contain the requested lab documentation?",
+              "quote": "The requested lab documentation is missing.",
+              "stance": "oppose"
+            }
+          ],
+          "kind": "prior_authorization_request",
+          "record_id": "synthetic-auth-001",
+          "resource": {
+            "id": "synthetic-auth-001",
+            "patient": {
+              "reference": "Patient/synthetic-patient-001"
+            },
+            "purpose": "prior-authorization",
+            "request_text": "SYNTHETIC FIXTURE: Fictitious documentation packet. The requested lab documentation is missing. Route the conflicting source statements to a human reviewer.",
+            "resourceType": "Claim",
+            "status": "draft",
+            "synthetic": true
+          }
+        }
+      ],
+      "research_questions": [
+        "Does the supplied packet contain the requested lab documentation?",
+        "Is the duration of prior therapy documented?"
+      ],
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthesis": {
+        "clinical_decision": null,
+        "notice": "Synthetic evidence review only; not a diagnosis, treatment recommendation, or authorization decision. Human review is required. Identifier screening is demonstrative and is not HIPAA certification.",
+        "questions": [
+          {
+            "citations": [
+              {
+                "evidence_index": 0,
+                "quote": "The requested lab documentation is attached.",
+                "record_id": "synthetic-note-001",
+                "stance": "support"
+              },
+              {
+                "evidence_index": 0,
+                "quote": "The requested lab documentation is missing.",
+                "record_id": "synthetic-auth-001",
+                "stance": "oppose"
+              }
+            ],
+            "disagreement": true,
+            "finding": "conflicting_evidence",
+            "human_review_required": true,
+            "question": "Does the supplied packet contain the requested lab documentation?",
+            "source_count": 2,
+            "unresolved_questions": [
+              "Supporting and opposing evidence require human reconciliation."
+            ]
+          },
+          {
+            "citations": [
+              {
+                "evidence_index": 1,
+                "quote": "The duration of prior therapy is not established.",
+                "record_id": "synthetic-note-001",
+                "stance": "uncertain"
+              }
+            ],
+            "disagreement": false,
+            "finding": "uncertain_evidence",
+            "human_review_required": true,
+            "question": "Is the duration of prior therapy documented?",
+            "source_count": 1,
+            "unresolved_questions": [
+              "At least one source explicitly leaves the question uncertain.",
+              "Only one source document supplies evidence."
+            ]
+          }
+        ]
+      },
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t131_single_deep__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "02dc2b20fa4a539671caf46f3fb67b1a0c06f73cf95a19423d90f5602748952f",
+      "test_implementation.py": "3dc536417162f9bc65c1d8b01901b1586a2d1cffc97c1be5a1135ad30772184b",
+      "example_input.json": "cd35a2ef390b123987857207108066f7db7b2dcb41b494b4e6d92691bd5ebdf7",
+      "build_manifest.json": "6b6c7352e95314917ad86b97d484e33ab864ae7ed0a39b3358be2dd33436bdf5"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

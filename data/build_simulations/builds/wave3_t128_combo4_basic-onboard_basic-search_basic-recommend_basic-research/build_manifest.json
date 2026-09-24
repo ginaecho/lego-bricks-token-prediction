@@ -1,0 +1,89 @@
+{
+  "build_id": "wave3_t128_combo4_basic-onboard_basic-search_basic-recommend_basic-research",
+  "composition_label": "basic:onboard -> basic:search -> basic:recommend -> basic:research",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "data_label": "synthetic or user_provided",
+      "customer": "id required; name, interests, nonnegative budget optional; omitted budget means unconstrained",
+      "query": "string; blank query falls back to interests, then browsing",
+      "catalog": "up to 1000 unique products: id, title, description, category, price, currency, tags",
+      "research": "question and up to 500 sources with id, title, text, product_ids and reliability in [0,1]",
+      "limits": "optional search, recommendations and evidence integer limits in [1,50]"
+    },
+    "output": "status, schema_version, stage, normalized request and accumulated onboarding/search/recommendations/research payloads",
+    "validation": "Shared validate_request and validate_state gates enforce every handoff, stage order, identity, candidate membership, budget, exact citations and coverage consistency.",
+    "errors": "Validation, decoding and file errors print a single JSON object with status error and exit 2; success prints a single JSON object and exits 0.",
+    "currency": "Single caller-supplied catalog currency; budget is denominated in that currency. No conversion."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "onboarding",
+      "to": "search",
+      "consumed": "Validated effective query, explicit interests and budget."
+    },
+    {
+      "from": "search",
+      "to": "recommendations",
+      "consumed": "Validated budget-eligible search candidate identifiers and relevance scores; retained onboarding preferences."
+    },
+    {
+      "from": "recommendations",
+      "to": "research",
+      "consumed": "Validated ordered shortlist; only supplied sources linked to shortlisted products may produce evidence."
+    }
+  ],
+  "behavior": {
+    "onboarding": "Personalized greeting, missing preference detection, clear next action, interest-based query fallback.",
+    "search": "Unicode normalization, small explicit synonym dictionary, conservative deterministic typo correction, weighted token overlap, budget filtering, stable identifier tie-break.",
+    "recommendations": "Search score plus four points per declared-interest match plus fractional affordability; one-point repeated-category diversity penalty, floored at zero. No implicit sensitive profiling.",
+    "research": "Extract verbatim question-relevant sentences, rank supplied evidence by caller reliability and overlap, cite source IDs, report coverage gaps. Select the highest-ranked covered recommendation for review, not as factual endorsement.",
+    "empty_results": "No search candidates produces no recommendations and no_candidates research decision; missing relevant sources produces insufficient_evidence.",
+    "determinism": "No randomness, clocks, external calls or LLMs; deterministic tie breaks; inputs are not mutated.",
+    "fixtures": "All example customer, catalog, source and claim data are explicitly synthetic."
+  },
+  "scope": {
+    "included": [
+      "One integrated offline CLI pipeline",
+      "Shared validation and state envelope",
+      "General-purpose explicit-preference onboarding, lexical discovery and extractive evidence",
+      "Unit and subprocess CLI tests"
+    ],
+    "excluded": [
+      "Networks, live providers and model calls",
+      "Semantic embeddings or universal intent understanding",
+      "Independent source authentication or automatic factual contradiction resolution",
+      "Purchases, account persistence, authentication and production service infrastructure",
+      "Currency conversion"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_run": 35,
+    "failures": 0,
+    "errors": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "verified_error_exit_code": 2,
+    "coverage": "All four stages, all handoffs, personalized ranking, synonyms, typos, exact citations, deterministic nonmutation, empty and invalid input, tampering, limits and real CLI subprocess behavior."
+  }
+}

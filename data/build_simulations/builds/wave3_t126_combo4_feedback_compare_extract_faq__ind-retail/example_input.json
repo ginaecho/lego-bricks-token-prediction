@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "catalog": [
+    {"sku": "SYN-BOTTLE-A", "name": "Synthetic Day Bottle", "price": 18.5, "stock": 12, "currency": "EUR", "attributes": {"capacity": "0.5 L", "color": "Grey", "material": "Steel"}},
+    {"sku": "SYN-BOTTLE-B", "name": "Synthetic Trail Bottle", "price": 26, "stock": 4, "currency": "EUR", "attributes": {"capacity": "750 ml", "color": "Blue", "material": "Steel"}},
+    {"sku": "SYN-BOTTLE-C", "name": "Synthetic Mini Bottle", "price": 12, "stock": 0, "currency": "EUR", "attributes": {"capacity": "300 ml", "color": "Red", "material": "Plastic"}}
+  ],
+  "customer": {"id": "SYN-SHOPPER-1", "persona": "Synthetic budget-conscious commuter, not a real person", "consent": {"gdpr": true, "ccpa": true}},
+  "basket": {"order_id": "SYN-ORDER-1", "customer_id": "SYN-SHOPPER-1", "items": [{"sku": "SYN-BOTTLE-A", "quantity": 1}]},
+  "feedback": [
+    {"id": "SYN-F1", "sku": "SYN-BOTTLE-A", "text": "Affordable price and durable quality.", "synthetic": true},
+    {"id": "SYN-F2", "sku": "SYN-BOTTLE-A", "text": "  affordable PRICE and durable quality! ", "synthetic": true},
+    {"id": "SYN-F3", "sku": "SYN-BOTTLE-B", "text": "Large capacity, but delivery was late.", "synthetic": true}
+  ],
+  "clickstream": [
+    {"customer_id": "SYN-SHOPPER-1", "sku": "SYN-BOTTLE-A", "event": "view"},
+    {"customer_id": "SYN-SHOPPER-1", "sku": "SYN-BOTTLE-A", "event": "add_to_basket"}
+  ],
+  "preferences": {"max_price": 20, "in_stock": true, "attributes": {"color": "gray", "capacity": "500 ml"}},
+  "documents": [
+    {"sku": "SYN-BOTTLE-A", "text": "Synthetic product/order card\nSKU: SYN-BOTTLE-A\nPrice: 18.50\nStock: 12\nOrder: SYN-ORDER-1\nCustomer: SYN-SHOPPER-1\nMaterial: Steel\n"},
+    {"sku": "SYN-BOTTLE-B", "text": "Synthetic product/order card\nSKU: SYN-BOTTLE-B\nPrice: 26.00\nStock: 4\nOrder: SYN-ORDER-1\nCustomer: SYN-SHOPPER-1\nMaterial: Steel\n"},
+    {"sku": "SYN-BOTTLE-C", "text": "Synthetic product/order card\nSKU: SYN-BOTTLE-C\nPrice: 12.00\nStock: 0\nOrder: SYN-ORDER-1\nCustomer: SYN-SHOPPER-1\nMaterial: Plastic\n"}
+  ],
+  "extraction_schema": [
+    {"name": "sku", "label": "SKU", "type": "string", "required": true},
+    {"name": "price", "label": "Price", "type": "number", "required": true},
+    {"name": "stock", "label": "Stock", "type": "integer", "required": true},
+    {"name": "order_id", "label": "Order", "type": "string", "required": true},
+    {"name": "customer_id", "label": "Customer", "type": "string", "required": true},
+    {"name": "material", "label": "Material", "type": "string", "required": false},
+    {"name": "warranty", "label": "Warranty", "type": "string", "required": false}
+  ],
+  "knowledge_base": [
+    {"id": "SYN-KB-CARE-A", "sku": "SYN-BOTTLE-A", "text": "Synthetic care policy: hand wash this bottle with mild soap. The lid is not dishwasher safe.", "claims": {"price": 18.5, "stock": 12}},
+    {"id": "SYN-KB-CARE-B", "sku": "SYN-BOTTLE-B", "text": "Synthetic care policy: the trail bottle is dishwasher safe on the upper rack.", "claims": {"price": 26, "stock": 4}},
+    {"id": "SYN-KB-RETURNS", "sku": null, "text": "Synthetic returns policy: unused items may be returned within thirty days with an order receipt.", "claims": {}}
+  ],
+  "question": "How do I wash this bottle?"
+}
