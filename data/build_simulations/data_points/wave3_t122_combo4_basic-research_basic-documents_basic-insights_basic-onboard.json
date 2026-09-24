@@ -129,7 +129,7 @@
   "split_group": "24de5c91ede10c4a5a099921a3979cef7cd851fd0c1a17db4764689b268f12d4",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "0f3a1dee94df25f0a07a4c7e86e76e2293a628ae500a6e45fecd483d7e8c71f1",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t122_combo4_basic-research_basic-documents_basic-insights_basic-onboard",
   "membership_point_id": "combo4_basic-research_basic-documents_basic-insights_basic-onboard",
@@ -137,8 +137,133 @@
   "trial_category": "combo_B",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "880b6774d4d82a633105e597b6803851a4300ce6fda6bc2e23ab70b36babd5a5",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "982f6d85-8646-40a8-80a0-50a85a3ea5a5",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 132498,
+    "output_tokens": 11178,
+    "cache_read_tokens": 119517,
+    "cache_write_tokens": 12963,
+    "total_tokens": 143676,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37697,
+        "agent_id": "982f6d85-8646-40a8-80a0-50a85a3ea5a5",
+        "model": "gpt-6-astra",
+        "input_tokens": 15050,
+        "output_tokens": 335,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 925,
+        "reasoning_tokens": 150,
+        "duration_ms": 11374,
+        "created_at": "2026-09-24T11:49:18.192Z"
+      },
+      {
+        "id": 37703,
+        "agent_id": "982f6d85-8646-40a8-80a0-50a85a3ea5a5",
+        "model": "gpt-6-astra",
+        "input_tokens": 15416,
+        "output_tokens": 8088,
+        "cache_read_tokens": 15047,
+        "cache_write_tokens": 366,
+        "reasoning_tokens": 516,
+        "duration_ms": 94332,
+        "created_at": "2026-09-24T11:50:51.770Z"
+      },
+      {
+        "id": 37704,
+        "agent_id": "982f6d85-8646-40a8-80a0-50a85a3ea5a5",
+        "model": "gpt-6-astra",
+        "input_tokens": 23769,
+        "output_tokens": 352,
+        "cache_read_tokens": 15413,
+        "cache_write_tokens": 8353,
+        "reasoning_tokens": 107,
+        "duration_ms": 6440,
+        "created_at": "2026-09-24T11:50:58.540Z"
+      },
+      {
+        "id": 37710,
+        "agent_id": "982f6d85-8646-40a8-80a0-50a85a3ea5a5",
+        "model": "gpt-6-astra",
+        "input_tokens": 24523,
+        "output_tokens": 1942,
+        "cache_read_tokens": 23766,
+        "cache_write_tokens": 754,
+        "reasoning_tokens": 140,
+        "duration_ms": 29728,
+        "created_at": "2026-09-24T11:51:35.907Z"
+      },
+      {
+        "id": 37711,
+        "agent_id": "982f6d85-8646-40a8-80a0-50a85a3ea5a5",
+        "model": "gpt-6-astra",
+        "input_tokens": 26652,
+        "output_tokens": 357,
+        "cache_read_tokens": 24520,
+        "cache_write_tokens": 2129,
+        "reasoning_tokens": 0,
+        "duration_ms": 5579,
+        "created_at": "2026-09-24T11:51:54.797Z"
+      },
+      {
+        "id": 37716,
+        "agent_id": "982f6d85-8646-40a8-80a0-50a85a3ea5a5",
+        "model": "gpt-6-astra",
+        "input_tokens": 27088,
+        "output_tokens": 104,
+        "cache_read_tokens": 26649,
+        "cache_write_tokens": 436,
+        "reasoning_tokens": 0,
+        "duration_ms": 3024,
+        "created_at": "2026-09-24T11:52:13.696Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.498915,
+      "observed_cache_profile_estimate_usd": 0.23000175,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.986980000000001,
+      "observed_cache_profile_estimate_usd": 5.986980000000001,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -169,5 +294,445 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 0.584s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "data": {
+        "schema_version": 1,
+        "fixture_label": "SYNTHETIC customer adoption study; no real customer data",
+        "stage": "onboard",
+        "results": {
+          "research": {
+            "evidence": [
+              {
+                "id": "e1",
+                "question_id": "q-adoption",
+                "source_id": "s-guide",
+                "quote": "Setup requires a workspace and a first workflow.",
+                "matched_terms": [
+                  "setup",
+                  "workflow"
+                ]
+              },
+              {
+                "id": "e2",
+                "question_id": "q-adoption",
+                "source_id": "s-alex",
+                "quote": "Setup is confusing and difficult.",
+                "matched_terms": [
+                  "setup"
+                ]
+              },
+              {
+                "id": "e3",
+                "question_id": "q-adoption",
+                "source_id": "s-alex",
+                "quote": "Support is helpful and fast.",
+                "matched_terms": [
+                  "support"
+                ]
+              },
+              {
+                "id": "e4",
+                "question_id": "q-adoption",
+                "source_id": "s-jules",
+                "quote": "Pricing is expensive.",
+                "matched_terms": [
+                  "pricing"
+                ]
+              },
+              {
+                "id": "e5",
+                "question_id": "q-adoption",
+                "source_id": "s-jules",
+                "quote": "The interface is easy.",
+                "matched_terms": [
+                  "interface"
+                ]
+              },
+              {
+                "id": "e6",
+                "question_id": "q-adoption",
+                "source_id": "s-anon",
+                "quote": "The workflow is great.",
+                "matched_terms": [
+                  "workflow"
+                ]
+              },
+              {
+                "id": "e7",
+                "question_id": "q-setup",
+                "source_id": "s-guide",
+                "quote": "Setup requires a workspace and a first workflow.",
+                "matched_terms": [
+                  "setup"
+                ]
+              },
+              {
+                "id": "e8",
+                "question_id": "q-setup",
+                "source_id": "s-alex",
+                "quote": "Setup is confusing and difficult.",
+                "matched_terms": [
+                  "setup"
+                ]
+              }
+            ],
+            "unanswered_question_ids": [
+              "q-security"
+            ]
+          },
+          "documents": {
+            "rows": [
+              {
+                "id": "r1",
+                "source_id": "s-guide",
+                "source_title": "Synthetic quick-start guide",
+                "kind": "reference",
+                "customer_id": null,
+                "text": "Setup requires a workspace and a first workflow.",
+                "word_count": 8,
+                "evidence_ids": [
+                  "e1",
+                  "e7"
+                ],
+                "question_ids": [
+                  "q-adoption",
+                  "q-setup"
+                ]
+              },
+              {
+                "id": "r2",
+                "source_id": "s-alex",
+                "source_title": "Synthetic interview Alex",
+                "kind": "feedback",
+                "customer_id": "c-alex",
+                "text": "Setup is confusing and difficult.",
+                "word_count": 5,
+                "evidence_ids": [
+                  "e2",
+                  "e8"
+                ],
+                "question_ids": [
+                  "q-adoption",
+                  "q-setup"
+                ]
+              },
+              {
+                "id": "r3",
+                "source_id": "s-alex",
+                "source_title": "Synthetic interview Alex",
+                "kind": "feedback",
+                "customer_id": "c-alex",
+                "text": "Support is helpful and fast.",
+                "word_count": 5,
+                "evidence_ids": [
+                  "e3"
+                ],
+                "question_ids": [
+                  "q-adoption"
+                ]
+              },
+              {
+                "id": "r4",
+                "source_id": "s-jules",
+                "source_title": "Synthetic interview Jules",
+                "kind": "feedback",
+                "customer_id": "c-jules",
+                "text": "Pricing is expensive.",
+                "word_count": 3,
+                "evidence_ids": [
+                  "e4"
+                ],
+                "question_ids": [
+                  "q-adoption"
+                ]
+              },
+              {
+                "id": "r5",
+                "source_id": "s-jules",
+                "source_title": "Synthetic interview Jules",
+                "kind": "feedback",
+                "customer_id": "c-jules",
+                "text": "The interface is easy.",
+                "word_count": 4,
+                "evidence_ids": [
+                  "e5"
+                ],
+                "question_ids": [
+                  "q-adoption"
+                ]
+              },
+              {
+                "id": "r6",
+                "source_id": "s-anon",
+                "source_title": "Synthetic anonymous survey",
+                "kind": "feedback",
+                "customer_id": null,
+                "text": "The workflow is great.",
+                "word_count": 4,
+                "evidence_ids": [
+                  "e6"
+                ],
+                "question_ids": [
+                  "q-adoption"
+                ]
+              }
+            ],
+            "checks": {
+              "evidence_count": 8,
+              "row_count": 6,
+              "duplicates_collapsed": 2
+            }
+          },
+          "insights": {
+            "themes": [
+              {
+                "id": "pricing",
+                "row_ids": [
+                  "r4"
+                ],
+                "customer_ids": [
+                  "c-jules"
+                ],
+                "sentiment_counts": {
+                  "positive": 0,
+                  "negative": 1,
+                  "mixed": 0,
+                  "neutral": 0
+                },
+                "recommendation": "Review the plan, expected usage, and billing options."
+              },
+              {
+                "id": "setup",
+                "row_ids": [
+                  "r2"
+                ],
+                "customer_ids": [
+                  "c-alex"
+                ],
+                "sentiment_counts": {
+                  "positive": 0,
+                  "negative": 1,
+                  "mixed": 0,
+                  "neutral": 0
+                },
+                "recommendation": "Complete a guided setup checklist and verify the first successful run."
+              },
+              {
+                "id": "other",
+                "row_ids": [
+                  "r6"
+                ],
+                "customer_ids": [],
+                "sentiment_counts": {
+                  "positive": 1,
+                  "negative": 0,
+                  "mixed": 0,
+                  "neutral": 0
+                },
+                "recommendation": "Ask a focused follow-up question and agree on one measurable outcome."
+              },
+              {
+                "id": "support",
+                "row_ids": [
+                  "r3"
+                ],
+                "customer_ids": [
+                  "c-alex"
+                ],
+                "sentiment_counts": {
+                  "positive": 1,
+                  "negative": 0,
+                  "mixed": 0,
+                  "neutral": 0
+                },
+                "recommendation": "Introduce the support channel and agree on the next follow-up."
+              },
+              {
+                "id": "usability",
+                "row_ids": [
+                  "r5"
+                ],
+                "customer_ids": [
+                  "c-jules"
+                ],
+                "sentiment_counts": {
+                  "positive": 1,
+                  "negative": 0,
+                  "mixed": 0,
+                  "neutral": 0
+                },
+                "recommendation": "Walk through the core workflow with a worked example."
+              }
+            ],
+            "feedback_row_count": 5
+          },
+          "onboard": {
+            "plans": [
+              {
+                "id": "p1",
+                "customer_id": "c-alex",
+                "customer_name": "Synthetic Alex",
+                "goal": "complete a first workspace",
+                "experience": "beginner",
+                "basis": "personal_feedback",
+                "theme_ids": [
+                  "setup",
+                  "support"
+                ],
+                "evidence_row_ids": [
+                  "r2",
+                  "r3"
+                ],
+                "next_steps": [
+                  "Start with a guided introduction for Synthetic Alex; target outcome: complete a first workspace.",
+                  "Complete a guided setup checklist and verify the first successful run.",
+                  "Introduce the support channel and agree on the next follow-up.",
+                  "Confirm the first milestone and schedule a progress check."
+                ]
+              },
+              {
+                "id": "p2",
+                "customer_id": "c-jules",
+                "customer_name": "Synthetic Jules",
+                "goal": "assess a team rollout",
+                "experience": "experienced",
+                "basis": "personal_feedback",
+                "theme_ids": [
+                  "pricing",
+                  "usability"
+                ],
+                "evidence_row_ids": [
+                  "r4",
+                  "r5"
+                ],
+                "next_steps": [
+                  "Configure a focused pilot for Synthetic Jules; target outcome: assess a team rollout.",
+                  "Review the plan, expected usage, and billing options.",
+                  "Walk through the core workflow with a worked example.",
+                  "Confirm the first milestone and schedule a progress check."
+                ]
+              },
+              {
+                "id": "p3",
+                "customer_id": "c-sam",
+                "customer_name": "Synthetic Sam",
+                "goal": "evaluate the core workflow",
+                "experience": "beginner",
+                "basis": "shared_feedback",
+                "theme_ids": [
+                  "pricing",
+                  "setup"
+                ],
+                "evidence_row_ids": [
+                  "r2",
+                  "r4"
+                ],
+                "next_steps": [
+                  "Start with a guided introduction for Synthetic Sam; target outcome: evaluate the core workflow.",
+                  "Review the plan, expected usage, and billing options.",
+                  "Complete a guided setup checklist and verify the first successful run.",
+                  "Confirm the first milestone and schedule a progress check."
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "q-adoption",
+            "text": "What affects customer adoption?",
+            "keywords": [
+              "setup",
+              "interface",
+              "pricing",
+              "support",
+              "workflow"
+            ]
+          },
+          {
+            "id": "q-setup",
+            "text": "What setup evidence should guide onboarding?",
+            "keywords": [
+              "setup"
+            ]
+          },
+          {
+            "id": "q-security",
+            "text": "What evidence addresses encryption?",
+            "keywords": [
+              "encryption"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "id": "s-guide",
+            "title": "Synthetic quick-start guide",
+            "text": "Setup requires a workspace and a first workflow.",
+            "kind": "reference",
+            "customer_id": null
+          },
+          {
+            "id": "s-alex",
+            "title": "Synthetic interview Alex",
+            "text": "Setup is confusing and difficult. Support is helpful and fast.",
+            "kind": "feedback",
+            "customer_id": "c-alex"
+          },
+          {
+            "id": "s-jules",
+            "title": "Synthetic interview Jules",
+            "text": "Pricing is expensive. The interface is easy.",
+            "kind": "feedback",
+            "customer_id": "c-jules"
+          },
+          {
+            "id": "s-anon",
+            "title": "Synthetic anonymous survey",
+            "text": "The workflow is great.",
+            "kind": "feedback",
+            "customer_id": null
+          }
+        ],
+        "customers": [
+          {
+            "id": "c-alex",
+            "name": "Synthetic Alex",
+            "goal": "complete a first workspace",
+            "experience": "beginner"
+          },
+          {
+            "id": "c-jules",
+            "name": "Synthetic Jules",
+            "goal": "assess a team rollout",
+            "experience": "experienced"
+          },
+          {
+            "id": "c-sam",
+            "name": "Synthetic Sam",
+            "goal": "evaluate the core workflow",
+            "experience": "beginner"
+          }
+        ]
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t122_combo4_basic-research_basic-documents_basic-insights_basic-onboard",
+    "artifact_sha256": {
+      "implementation.py": "c64622c21044c537b9ac36c1874d13eca739419c13d3cf9699e0dd5ce791c212",
+      "test_implementation.py": "9fbf82c3b99d216c2bd12d27d7d15cdf7636be8b43e7835d022170438b4b0db9",
+      "example_input.json": "df7fe34e308692a6ca2ee9b2773f6f2b65068459998a173ab3f0782986c68ca3",
+      "build_manifest.json": "9bb619a0ee8892d47f2893fe50db2d93f9ba1c19af135120a91f4a320a4ff9f0"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

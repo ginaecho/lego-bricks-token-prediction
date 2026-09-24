@@ -97,7 +97,7 @@
   "split_group": "9f87f2f2865054206fed1781ec96294b5bd52aa492028d7571867ba32ba7092c",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "db9fbacb7d5fe46937f552281780906771e8d3d5572a4a210ef13ac2e7d68fc7",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t121_single_guided__ind-energy",
   "membership_point_id": "single_guided__ind-energy",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "946a8407f138fd48a25f5453c5c526d5249b8a1dd61ee04b41aeefc174d1f0ca",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "1cbe6a90-aa4a-4f77-9ea6-8b029043aa7d",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 123726,
+    "output_tokens": 7809,
+    "cache_read_tokens": 113899,
+    "cache_write_tokens": 9809,
+    "total_tokens": 131535,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37690,
+        "agent_id": "1cbe6a90-aa4a-4f77-9ea6-8b029043aa7d",
+        "model": "gpt-6-astra",
+        "input_tokens": 14962,
+        "output_tokens": 285,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 837,
+        "reasoning_tokens": 107,
+        "duration_ms": 6005,
+        "created_at": "2026-09-24T11:47:38.194Z"
+      },
+      {
+        "id": 37714,
+        "agent_id": "1cbe6a90-aa4a-4f77-9ea6-8b029043aa7d",
+        "model": "gpt-6-astra",
+        "input_tokens": 15278,
+        "output_tokens": 6809,
+        "cache_read_tokens": 14959,
+        "cache_write_tokens": 316,
+        "reasoning_tokens": 256,
+        "duration_ms": 95557,
+        "created_at": "2026-09-24T11:52:09.029Z"
+      },
+      {
+        "id": 37718,
+        "agent_id": "1cbe6a90-aa4a-4f77-9ea6-8b029043aa7d",
+        "model": "gpt-6-astra",
+        "input_tokens": 22403,
+        "output_tokens": 232,
+        "cache_read_tokens": 15275,
+        "cache_write_tokens": 7125,
+        "reasoning_tokens": 71,
+        "duration_ms": 5616,
+        "created_at": "2026-09-24T11:52:29.947Z"
+      },
+      {
+        "id": 37722,
+        "agent_id": "1cbe6a90-aa4a-4f77-9ea6-8b029043aa7d",
+        "model": "gpt-6-astra",
+        "input_tokens": 23432,
+        "output_tokens": 194,
+        "cache_read_tokens": 22400,
+        "cache_write_tokens": 1029,
+        "reasoning_tokens": 16,
+        "duration_ms": 3792,
+        "created_at": "2026-09-24T11:52:54.270Z"
+      },
+      {
+        "id": 37723,
+        "agent_id": "1cbe6a90-aa4a-4f77-9ea6-8b029043aa7d",
+        "model": "gpt-6-astra",
+        "input_tokens": 23717,
+        "output_tokens": 180,
+        "cache_read_tokens": 23429,
+        "cache_write_tokens": 285,
+        "reasoning_tokens": 0,
+        "duration_ms": 5331,
+        "created_at": "2026-09-24T11:52:57.951Z"
+      },
+      {
+        "id": 37725,
+        "agent_id": "1cbe6a90-aa4a-4f77-9ea6-8b029043aa7d",
+        "model": "gpt-6-astra",
+        "input_tokens": 23934,
+        "output_tokens": 109,
+        "cache_read_tokens": 23714,
+        "cache_write_tokens": 217,
+        "reasoning_tokens": 0,
+        "duration_ms": 3151,
+        "created_at": "2026-09-24T11:53:10.641Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.42645,
+      "observed_cache_profile_estimate_usd": 0.17017725,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.1174,
+      "observed_cache_profile_estimate_usd": 5.1174,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,183 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................\n----------------------------------------------------------------------\nRan 19 tests in 1.006s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "entities": {
+        "grid_assets": [
+          {
+            "asset_id": "asset_001",
+            "critical": false,
+            "kind": "device",
+            "parent_id": "asset_002"
+          },
+          {
+            "asset_id": "asset_002",
+            "critical": true,
+            "kind": "substation",
+            "parent_id": null
+          }
+        ],
+        "meter_readings": [
+          {
+            "asset_id": "asset_001",
+            "energy_kwh": 2.4,
+            "interval_minutes": 30,
+            "meter_id": "meter_001",
+            "timestamp": "2026-01-15T18:00:00+00:00"
+          },
+          {
+            "asset_id": "asset_001",
+            "energy_kwh": 1.2,
+            "interval_minutes": 30,
+            "meter_id": "meter_001",
+            "timestamp": "2026-07-15T18:00:00+00:00"
+          }
+        ],
+        "outage_reports": [
+          {
+            "asset_id": "asset_001",
+            "danger_to_life": true,
+            "essential_service": true,
+            "priority": "critical",
+            "report_id": "OUT-SYN-001",
+            "safety_reason": "danger_to_life"
+          }
+        ],
+        "telemetry": [
+          {
+            "asset_id": "asset_002",
+            "emissions": {
+              "source": "synthetic-seasonal-model",
+              "unit": "kgCO2e",
+              "value": 0.84
+            },
+            "timestamp": "2026-01-15T18:00:00Z",
+            "voltage_kv": 110.2
+          }
+        ]
+      },
+      "notice": "Synthetic demonstration; not NERC CIP certification. Aliases are output minimization, not encryption or access control.",
+      "progress": {
+        "completed_count": 6,
+        "completed_steps": [
+          "protect_identifiers",
+          "register_grid",
+          "import_meter_readings",
+          "import_telemetry",
+          "review_outages",
+          "finish"
+        ],
+        "next_step": null,
+        "next_step_ready": false,
+        "percent": 100.0,
+        "steps": [
+          {
+            "prerequisites": [],
+            "state": "completed",
+            "step": "protect_identifiers"
+          },
+          {
+            "prerequisites": [
+              "protect_identifiers"
+            ],
+            "state": "completed",
+            "step": "register_grid"
+          },
+          {
+            "prerequisites": [
+              "protect_identifiers",
+              "register_grid"
+            ],
+            "state": "completed",
+            "step": "import_meter_readings"
+          },
+          {
+            "prerequisites": [
+              "protect_identifiers",
+              "register_grid",
+              "import_meter_readings"
+            ],
+            "state": "completed",
+            "step": "import_telemetry"
+          },
+          {
+            "prerequisites": [
+              "protect_identifiers",
+              "register_grid",
+              "import_meter_readings",
+              "import_telemetry"
+            ],
+            "state": "completed",
+            "step": "review_outages"
+          },
+          {
+            "prerequisites": [
+              "protect_identifiers",
+              "register_grid",
+              "import_meter_readings",
+              "import_telemetry",
+              "review_outages"
+            ],
+            "state": "completed",
+            "step": "finish"
+          }
+        ],
+        "total_steps": 6,
+        "transitions": [
+          {
+            "state": "completed",
+            "step": "protect_identifiers"
+          },
+          {
+            "state": "completed",
+            "step": "register_grid"
+          },
+          {
+            "state": "completed",
+            "step": "import_meter_readings"
+          },
+          {
+            "state": "completed",
+            "step": "import_telemetry"
+          },
+          {
+            "state": "completed",
+            "step": "review_outages"
+          },
+          {
+            "state": "completed",
+            "step": "finish"
+          }
+        ]
+      },
+      "protection": {
+        "critical_identifier_policy": "pseudonymize"
+      },
+      "safety_rules": {
+        "danger_to_life": "critical",
+        "essential_service": "high",
+        "ordinary_interruption": "normal"
+      },
+      "schema_version": 1,
+      "status": "complete",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t121_single_guided__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "ada55abbc8fdb00cb70edb323170ec7b8696be17bcc09b4364c548b2497d1941",
+      "test_implementation.py": "6c5cedd3473cf4689dcd2a521be7d08357741362dcceb2fc590f2d7f68882578",
+      "example_input.json": "4e9943811928b3cc3c1d10ea683c3d4bedc69a9a6eb0297c263cd5b140c006a5",
+      "build_manifest.json": "d7959fb2bbf64be94fabfdf7cbb6a620aafff08226684e3c15ede3b208d21ccd"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

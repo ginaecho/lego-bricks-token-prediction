@@ -1,0 +1,107 @@
+{
+  "build_id": "wave3_t125_combo4_deep_extract_basic-support_sentiment__ind-healthcare",
+  "composition_label": "deep -> extract -> basic:support -> sentiment | healthcare",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact-key JSON object: schema_version, synthetic=true, Patient, documents, field_schema, request. One synthetic patient per case; no real patient data.",
+    "patient": "FHIR-style Patient with a synthetic-patient-* ID and optional gender. Optional direct-identifier keys are removed; their known string values are redacted from document and request contents.",
+    "documents": "1-50 synthetic-source-* documents. Clinical notes contain labeled lines; FHIR-style Condition, Observation and Claim resources use an explicitly bounded set of scalar properties and matching patient references. Claim use=preauthorization models prior authorization requests.",
+    "field_schema": "1-30 unique fields: name, type (string/number/boolean), required, sources. Selectors identify note labels or resource_type/path. Configure distinct fields for different concepts; selectors do not infer medical semantics.",
+    "request": "message and boolean team_online; used for general record and administrative support with clinical boundaries.",
+    "output": "Shared envelope: schema_version, status, stage, patient, documents, field_schema, request, policy, audit, payload. Final payload retains deep, extract, support and sentiment results.",
+    "validation": "intake plus one shared validate gate at every handoff. Gates validate shape, policy, references, sanitized resources, full deterministic result/provenance equality and the ordered audit trail. Earlier envelopes are not mutated.",
+    "source_spans": "Zero-based, end-exclusive Unicode character offsets into sanitized documents[].text, not the original input bytes. FHIR-style resources render as ordered path: JSON-scalar lines. Every evidence quote equals its rendered source span.",
+    "errors": "CLI validation/file errors produce one JSON object with status=error, exit 2, and no input data or paths. Duplicate JSON keys, non-finite numeric JSON, inputs over 1 MB and unsupported properties are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "deep",
+      "to": "extract",
+      "data": "Validated evidence, source spans, typed candidate groupings, disagreements and unresolved questions."
+    },
+    {
+      "from": "extract",
+      "to": "basic:support",
+      "data": "Validated typed values, evidence references, missing required fields, conflict/invalid statuses and human-review flag."
+    },
+    {
+      "from": "basic:support",
+      "to": "sentiment",
+      "data": "Validated redacted customer message, unresolved record issues and potential emergency signals. Scores customer text, not assistant prose."
+    }
+  ],
+  "behavior": {
+    "research": "Deterministic multi-document synthesis across configured concepts. Case-insensitive string agreement and typed numeric agreement; no majority vote or fabricated resolution. All contradictory and malformed evidence remains visible.",
+    "extraction": "Schema-driven conversion with present/missing/conflict/invalid states. Conflicts and invalid evidence suppress definitive values; missing_required is explicit.",
+    "support": "Grounded, evidence-linked records and administrative guidance, online or offline. No automatic ticket, approval, diagnosis, medical necessity determination or treatment change. Emergency-language safety notice is conditional and not a clinical diagnosis.",
+    "sentiment": "Transparent lexicon weights, offsets, bounded negation, raw and clamped scores. P1 potential emergencies override sentiment; P2 deadlines, unresolved record issues or strongly negative sentiment; P3 routine. Phrase detection is conservative and may overflag negated emergency mentions.",
+    "healthcare_rules": "Synthetic-only declaration and ID patterns; removal of Patient direct identifier keys, replacement of patient/source IDs and references, known-token redaction and residual identifier pattern rejection. All outputs require human review and forbid autonomous clinical decisions. These are demonstrative safeguards, not comprehensive HIPAA de-identification or compliance certification.",
+    "audit": "Ordered deterministic events for each sanitized patient, document, request, schema and stage payload change; no original identifiers in audit records. This in-memory audit is serialized in output, not an external durable or tamper-proof audit service.",
+    "fixtures": "Clearly labeled fictitious Synthea-style patient, diagnosis, HbA1c lab and preauthorization Claim. No real MRNs, names or birth dates."
+  },
+  "scope": {
+    "included": [
+      "One integrated deterministic offline CLI pipeline",
+      "Single-case shared schema and validation",
+      "Evidence provenance and human-review safeguards",
+      "Synthetic healthcare examples and unittest coverage"
+    ],
+    "excluded": [
+      "Live LLM calls, networks or external dependencies",
+      "Full HL7 FHIR validation, terminology resolution or arbitrary resources",
+      "Real PHI ingestion, comprehensive natural-language identifier detection or HIPAA certification",
+      "Autonomous clinical decisions or medical advice",
+      "Actual ticketing, record mutation, insurer submission or authorization decisions",
+      "Production access controls, storage and immutable audit infrastructure"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest": {
+      "command": "python -B -m unittest discover -s . -p test_implementation.py",
+      "tests_run": 43,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0
+    },
+    "example_cli": {
+      "command": "python -B implementation.py example_input.json",
+      "exit_code": 0,
+      "stdout_json_objects": 1,
+      "status": "ok",
+      "final_stage": "sentiment",
+      "priority": "P2"
+    },
+    "coverage": [
+      "All four stages and each validated handoff",
+      "Agreement, disagreement, missing and malformed evidence",
+      "Exact Unicode source spans and evidence citations",
+      "Boolean and numeric conversion, non-finite rejection",
+      "Synthetic-only policy, identifier removal and residual screening",
+      "No autonomous clinical decisions and mandatory human review",
+      "Audit completeness, provenance tampering and mutation isolation",
+      "Online/offline behavior, neutral and negated sentiment",
+      "Severity overrides, deadlines and score clamping",
+      "CLI success, malformed JSON, duplicate keys, invalid schema and file errors"
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "research": {
+    "questions": [
+      {"id": "q-access", "question": "What access does the synthetic pilot require?"},
+      {"id": "q-export", "question": "Is export enabled for the synthetic pilot?"}
+    ],
+    "sources": [
+      {
+        "id": "source-pilot",
+        "title": "Synthetic pilot notes, not real customer data",
+        "text": "The pilot requires an owner email. Export is enabled in the pilot.",
+        "evidence": [
+          {"question_id": "q-access", "quote": "The pilot requires an owner email.", "stance": "supports"},
+          {"question_id": "q-export", "quote": "Export is enabled in the pilot.", "stance": "supports"}
+        ]
+      }
+    ]
+  },
+  "guided": {
+    "fields": {"owner_email": "synthetic-owner@example.invalid", "export_acknowledged": "yes"},
+    "steps": [
+      {"id": "account", "title": "Record pilot owner", "depends_on": [], "question_ids": ["q-access"], "required_fields": ["owner_email"]},
+      {"id": "export", "title": "Acknowledge export setup", "depends_on": ["account"], "question_ids": ["q-export"], "required_fields": ["export_acknowledged"]}
+    ]
+  },
+  "feedback": {
+    "themes": [
+      {"id": "usability", "label": "Synthetic usability observations", "keywords": ["clear", "confusing"]},
+      {"id": "speed", "label": "Synthetic speed observations", "keywords": ["slow", "fast"]}
+    ],
+    "items": [
+      {"id": "f1", "step_id": "account", "text": "The instructions are clear."},
+      {"id": "f2", "step_id": "account", "text": "  THE instructions are clear.  "},
+      {"id": "f3", "step_id": "export", "text": "The export is slow."},
+      {"id": "f4", "step_id": "export", "text": "Please add a purple icon."}
+    ]
+  },
+  "review": {
+    "document": {
+      "id": "synthetic-guide",
+      "text": "Synthetic pilot guide: record the owner email and acknowledge export setup. Clear instructions are provided."
+    },
+    "requirements": [
+      {"id": "r-owner", "description": "Owner onboarding has cited evidence and usability support.", "question_ids": ["q-access"], "step_ids": ["account"], "theme_ids": ["usability"], "required_terms": ["owner email"]},
+      {"id": "r-speed", "description": "Export performance guidance addresses observed feedback.", "question_ids": ["q-export"], "step_ids": ["export"], "theme_ids": ["speed"], "required_terms": ["performance budget"]}
+    ]
+  }
+}

@@ -133,7 +133,7 @@
   "split_group": "369c2da7ebabdb86b4071b7c8a953ec38aaec28cf8cd383bf58f210aaf9599d2",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "77089bb158d304a2f958d3773ac7035d71406f613a42829336ecb1ffb43e4882",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t124_combo4_triage_feedback_adaptive_basic-recommend",
   "membership_point_id": "combo4_triage_feedback_adaptive_basic-recommend",
@@ -141,8 +141,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "5363ebd68b57414a46f181619bf7f035c97bd05a5a5efb60e7a4ee8b79f43e2f",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "fb2f88ae-cd05-4808-9f65-396769ee9b02",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 129842,
+    "output_tokens": 8958,
+    "cache_read_tokens": 118324,
+    "cache_write_tokens": 11500,
+    "total_tokens": 138800,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37738,
+        "agent_id": "fb2f88ae-cd05-4808-9f65-396769ee9b02",
+        "model": "gpt-6-astra",
+        "input_tokens": 15002,
+        "output_tokens": 249,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 877,
+        "reasoning_tokens": 81,
+        "duration_ms": 5968,
+        "created_at": "2026-09-24T11:54:34.122Z"
+      },
+      {
+        "id": 37769,
+        "agent_id": "fb2f88ae-cd05-4808-9f65-396769ee9b02",
+        "model": "gpt-6-astra",
+        "input_tokens": 15282,
+        "output_tokens": 7937,
+        "cache_read_tokens": 14999,
+        "cache_write_tokens": 280,
+        "reasoning_tokens": 271,
+        "duration_ms": 116729,
+        "created_at": "2026-09-24T11:59:45.647Z"
+      },
+      {
+        "id": 37770,
+        "agent_id": "fb2f88ae-cd05-4808-9f65-396769ee9b02",
+        "model": "gpt-6-astra",
+        "input_tokens": 23551,
+        "output_tokens": 160,
+        "cache_read_tokens": 15279,
+        "cache_write_tokens": 8269,
+        "reasoning_tokens": 0,
+        "duration_ms": 4019,
+        "created_at": "2026-09-24T11:59:50.456Z"
+      },
+      {
+        "id": 37771,
+        "agent_id": "fb2f88ae-cd05-4808-9f65-396769ee9b02",
+        "model": "gpt-6-astra",
+        "input_tokens": 24988,
+        "output_tokens": 311,
+        "cache_read_tokens": 23548,
+        "cache_write_tokens": 1437,
+        "reasoning_tokens": 27,
+        "duration_ms": 5517,
+        "created_at": "2026-09-24T11:59:55.747Z"
+      },
+      {
+        "id": 37772,
+        "agent_id": "fb2f88ae-cd05-4808-9f65-396769ee9b02",
+        "model": "gpt-6-astra",
+        "input_tokens": 25394,
+        "output_tokens": 195,
+        "cache_read_tokens": 24985,
+        "cache_write_tokens": 406,
+        "reasoning_tokens": 0,
+        "duration_ms": 3687,
+        "created_at": "2026-09-24T11:59:59.369Z"
+      },
+      {
+        "id": 37773,
+        "agent_id": "fb2f88ae-cd05-4808-9f65-396769ee9b02",
+        "model": "gpt-6-astra",
+        "input_tokens": 25625,
+        "output_tokens": 106,
+        "cache_read_tokens": 25391,
+        "cache_write_tokens": 231,
+        "reasoning_tokens": 0,
+        "duration_ms": 3203,
+        "created_at": "2026-09-24T12:00:10.782Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.458975,
+      "observed_cache_profile_estimate_usd": 0.192746,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.5077,
+      "observed_cache_profile_estimate_usd": 5.5077,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -173,5 +298,363 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.560s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": 1,
+      "status": "ok",
+      "request": {
+        "schema_version": 1,
+        "fixture_label": "SYNTHETIC: fictional support tickets and product catalog",
+        "tickets": [
+          {
+            "id": "t1",
+            "text": "Urgent: export is broken!"
+          },
+          {
+            "id": "t2",
+            "text": "urgent export is broken"
+          },
+          {
+            "id": "t3",
+            "text": "I want a dashboard tutorial"
+          }
+        ],
+        "profile": {
+          "experience": "beginner",
+          "preferences": [
+            "analytics"
+          ],
+          "completed_steps": [],
+          "budget": 50,
+          "excluded_products": []
+        },
+        "catalog": [
+          {
+            "id": "starter",
+            "name": "Synthetic Insight Starter",
+            "tags": [
+              "analytics",
+              "dashboard"
+            ],
+            "price": 20,
+            "available": true,
+            "requires_steps": []
+          },
+          {
+            "id": "export-kit",
+            "name": "Synthetic Export Kit",
+            "tags": [
+              "export"
+            ],
+            "price": 15,
+            "available": true,
+            "requires_steps": [
+              "export-guide"
+            ]
+          },
+          {
+            "id": "premium",
+            "name": "Synthetic Premium Insights",
+            "tags": [
+              "analytics"
+            ],
+            "price": 90,
+            "available": true,
+            "requires_steps": []
+          },
+          {
+            "id": "notebook",
+            "name": "Synthetic Plain Notebook",
+            "tags": [],
+            "price": 5,
+            "available": true,
+            "requires_steps": []
+          }
+        ],
+        "config": {
+          "categories": {
+            "technical": {
+              "keywords": [
+                "broken",
+                "export"
+              ],
+              "owner": "support-engineering",
+              "priority": "high"
+            },
+            "education": {
+              "keywords": [
+                "tutorial",
+                "dashboard"
+              ],
+              "owner": "customer-education",
+              "priority": "normal"
+            },
+            "general": {
+              "keywords": [],
+              "owner": "support-desk",
+              "priority": "low"
+            }
+          },
+          "default_category": "general",
+          "priority_keywords": {
+            "low": [],
+            "normal": [],
+            "high": [
+              "blocked"
+            ],
+            "urgent": [
+              "urgent"
+            ]
+          },
+          "themes": {
+            "export": [
+              "export"
+            ],
+            "dashboard": [
+              "dashboard"
+            ],
+            "analytics": [
+              "analytics"
+            ]
+          },
+          "onboarding_steps": [
+            {
+              "id": "basics",
+              "title": "Synthetic account basics",
+              "experiences": [
+                "beginner"
+              ],
+              "tags": [],
+              "prerequisites": []
+            },
+            {
+              "id": "dashboard-guide",
+              "title": "Synthetic dashboard guide",
+              "experiences": [],
+              "tags": [
+                "dashboard",
+                "analytics"
+              ],
+              "prerequisites": [
+                "basics"
+              ]
+            },
+            {
+              "id": "export-guide",
+              "title": "Synthetic export guide",
+              "experiences": [],
+              "tags": [
+                "export"
+              ],
+              "prerequisites": [
+                "basics"
+              ]
+            }
+          ],
+          "recommendation_limit": 3
+        }
+      },
+      "stages": {
+        "triage": {
+          "tickets": [
+            {
+              "ticket_id": "t1",
+              "text": "Urgent: export is broken!",
+              "category": "technical",
+              "priority": "urgent",
+              "owner": "support-engineering",
+              "reason": "keyword matches: 2"
+            },
+            {
+              "ticket_id": "t2",
+              "text": "urgent export is broken",
+              "category": "technical",
+              "priority": "urgent",
+              "owner": "support-engineering",
+              "reason": "keyword matches: 2"
+            },
+            {
+              "ticket_id": "t3",
+              "text": "I want a dashboard tutorial",
+              "category": "education",
+              "priority": "normal",
+              "owner": "customer-education",
+              "reason": "keyword matches: 2"
+            }
+          ]
+        },
+        "feedback": {
+          "entries": [
+            {
+              "id": "feedback-1",
+              "themes": [
+                "dashboard"
+              ],
+              "ticket_ids": [
+                "t3"
+              ],
+              "owners": [
+                "customer-education"
+              ],
+              "priority": "normal",
+              "excerpts": [
+                {
+                  "ticket_id": "t3",
+                  "text": "I want a dashboard tutorial"
+                }
+              ]
+            },
+            {
+              "id": "feedback-2",
+              "themes": [
+                "export"
+              ],
+              "ticket_ids": [
+                "t1",
+                "t2"
+              ],
+              "owners": [
+                "support-engineering"
+              ],
+              "priority": "urgent",
+              "excerpts": [
+                {
+                  "ticket_id": "t1",
+                  "text": "Urgent: export is broken!"
+                },
+                {
+                  "ticket_id": "t2",
+                  "text": "urgent export is broken"
+                }
+              ]
+            }
+          ],
+          "themes": [
+            {
+              "name": "dashboard",
+              "unique_feedback_count": 1,
+              "feedback_ids": [
+                "feedback-1"
+              ]
+            },
+            {
+              "name": "export",
+              "unique_feedback_count": 1,
+              "feedback_ids": [
+                "feedback-2"
+              ]
+            }
+          ]
+        },
+        "adaptive": {
+          "plan": [
+            {
+              "step_id": "basics",
+              "title": "Synthetic account basics",
+              "prerequisites": [],
+              "reasons": [
+                "experience: beginner"
+              ]
+            },
+            {
+              "step_id": "dashboard-guide",
+              "title": "Synthetic dashboard guide",
+              "prerequisites": [
+                "basics"
+              ],
+              "reasons": [
+                "preference: analytics",
+                "feedback theme: dashboard"
+              ]
+            },
+            {
+              "step_id": "export-guide",
+              "title": "Synthetic export guide",
+              "prerequisites": [
+                "basics"
+              ],
+              "reasons": [
+                "feedback theme: export"
+              ]
+            }
+          ],
+          "interests": [
+            "analytics",
+            "dashboard",
+            "export"
+          ],
+          "completed_steps": [],
+          "feedback_ids": [
+            "feedback-1",
+            "feedback-2"
+          ],
+          "budget": 50,
+          "excluded_products": []
+        },
+        "recommend": {
+          "products": [
+            {
+              "product_id": "starter",
+              "name": "Synthetic Insight Starter",
+              "price": 20,
+              "score": 3,
+              "matched_interests": [
+                "analytics",
+                "dashboard"
+              ],
+              "reasons": [
+                "matches interest: analytics",
+                "matches interest: dashboard"
+              ],
+              "feedback_ids": [
+                "feedback-1"
+              ]
+            },
+            {
+              "product_id": "notebook",
+              "name": "Synthetic Plain Notebook",
+              "price": 5,
+              "score": 0,
+              "matched_interests": [],
+              "reasons": [
+                "budget-safe general discovery"
+              ],
+              "feedback_ids": []
+            }
+          ],
+          "excluded": [
+            {
+              "product_id": "export-kit",
+              "reasons": [
+                "onboarding prerequisites not completed"
+              ]
+            },
+            {
+              "product_id": "premium",
+              "reasons": [
+                "over budget"
+              ]
+            }
+          ],
+          "strategy": "interest overlap, then lower price, then product ID"
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t124_combo4_triage_feedback_adaptive_basic-recommend",
+    "artifact_sha256": {
+      "implementation.py": "09f0145f2f8103e4398af06631be8a8125207a39bdec7edf0a041e505af08f07",
+      "test_implementation.py": "0180a4d48b08542acb22b265ff60c4bf69b8c8591bd8f568ec1829e70b61e089",
+      "example_input.json": "a79352a54789a1f39350bd01205cf69552181cc91c4c73bb9c6a2f08f25fe954",
+      "build_manifest.json": "693a7e67ae7dd9a5b75b8b5090fc64027c6551016525ed2a27d3d3edc7814f87"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

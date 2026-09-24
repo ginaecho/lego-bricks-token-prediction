@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "fixture_label": "SYNTHETIC: fictional support tickets and product catalog",
+  "tickets": [
+    {"id": "t1", "text": "Urgent: export is broken!"},
+    {"id": "t2", "text": "urgent export is broken"},
+    {"id": "t3", "text": "I want a dashboard tutorial"}
+  ],
+  "profile": {
+    "experience": "beginner",
+    "preferences": ["analytics"],
+    "completed_steps": [],
+    "budget": 50,
+    "excluded_products": []
+  },
+  "catalog": [
+    {"id": "starter", "name": "Synthetic Insight Starter", "tags": ["analytics", "dashboard"], "price": 20, "available": true, "requires_steps": []},
+    {"id": "export-kit", "name": "Synthetic Export Kit", "tags": ["export"], "price": 15, "available": true, "requires_steps": ["export-guide"]},
+    {"id": "premium", "name": "Synthetic Premium Insights", "tags": ["analytics"], "price": 90, "available": true, "requires_steps": []},
+    {"id": "notebook", "name": "Synthetic Plain Notebook", "tags": [], "price": 5, "available": true, "requires_steps": []}
+  ],
+  "config": {
+    "categories": {
+      "technical": {"keywords": ["broken", "export"], "owner": "support-engineering", "priority": "high"},
+      "education": {"keywords": ["tutorial", "dashboard"], "owner": "customer-education", "priority": "normal"},
+      "general": {"keywords": [], "owner": "support-desk", "priority": "low"}
+    },
+    "default_category": "general",
+    "priority_keywords": {"low": [], "normal": [], "high": ["blocked"], "urgent": ["urgent"]},
+    "themes": {"export": ["export"], "dashboard": ["dashboard"], "analytics": ["analytics"]},
+    "onboarding_steps": [
+      {"id": "basics", "title": "Synthetic account basics", "experiences": ["beginner"], "tags": [], "prerequisites": []},
+      {"id": "dashboard-guide", "title": "Synthetic dashboard guide", "experiences": [], "tags": ["dashboard", "analytics"], "prerequisites": ["basics"]},
+      {"id": "export-guide", "title": "Synthetic export guide", "experiences": [], "tags": ["export"], "prerequisites": ["basics"]}
+    ],
+    "recommendation_limit": 3
+  }
+}

@@ -129,7 +129,7 @@
   "split_group": "b6400a9d8deadd9b5f26c205f726ac4c50c147b37d1dc22b6cbbe4c4315529de",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "9e0f49d5a6a61373aaf437ac111855ddd63cae56ebe1c0214c15254fff1d91ae",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t123_combo4_basic-documents_basic-insights_basic-search_basic-onboard__ind-manufacturing",
   "membership_point_id": "combo4_basic-documents_basic-insights_basic-search_basic-onboard__ind-manufacturing",
@@ -137,8 +137,121 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "4384016ceecb3286b4295dd4f2370cd8cd9a02c83ac9557a4f658591d485ea3e",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "a67974a1-2e60-4fa3-890a-67a9a7bc646b",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 5,
+    "input_tokens": 101543,
+    "output_tokens": 9235,
+    "cache_read_tokens": 91004,
+    "cache_write_tokens": 10524,
+    "total_tokens": 110778,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37720,
+        "agent_id": "a67974a1-2e60-4fa3-890a-67a9a7bc646b",
+        "model": "gpt-6-astra",
+        "input_tokens": 15172,
+        "output_tokens": 537,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 1047,
+        "reasoning_tokens": 362,
+        "duration_ms": 15408,
+        "created_at": "2026-09-24T11:52:49.725Z"
+      },
+      {
+        "id": 37733,
+        "agent_id": "a67974a1-2e60-4fa3-890a-67a9a7bc646b",
+        "model": "gpt-6-astra",
+        "input_tokens": 15740,
+        "output_tokens": 6136,
+        "cache_read_tokens": 15169,
+        "cache_write_tokens": 568,
+        "reasoning_tokens": 0,
+        "duration_ms": 89303,
+        "created_at": "2026-09-24T11:54:03.566Z"
+      },
+      {
+        "id": 37736,
+        "agent_id": "a67974a1-2e60-4fa3-890a-67a9a7bc646b",
+        "model": "gpt-6-astra",
+        "input_tokens": 22066,
+        "output_tokens": 1800,
+        "cache_read_tokens": 15737,
+        "cache_write_tokens": 6326,
+        "reasoning_tokens": 187,
+        "duration_ms": 33779,
+        "created_at": "2026-09-24T11:54:28.991Z"
+      },
+      {
+        "id": 37743,
+        "agent_id": "a67974a1-2e60-4fa3-890a-67a9a7bc646b",
+        "model": "gpt-6-astra",
+        "input_tokens": 23916,
+        "output_tokens": 662,
+        "cache_read_tokens": 22063,
+        "cache_write_tokens": 1850,
+        "reasoning_tokens": 205,
+        "duration_ms": 16566,
+        "created_at": "2026-09-24T11:55:11.953Z"
+      },
+      {
+        "id": 37745,
+        "agent_id": "a67974a1-2e60-4fa3-890a-67a9a7bc646b",
+        "model": "gpt-6-astra",
+        "input_tokens": 24649,
+        "output_tokens": 100,
+        "cache_read_tokens": 23913,
+        "cache_write_tokens": 733,
+        "reasoning_tokens": 0,
+        "duration_ms": 3146,
+        "created_at": "2026-09-24T11:55:23.663Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.39238249999999997,
+      "observed_cache_profile_estimate_usd": 0.1876235,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.70859,
+      "observed_cache_profile_estimate_usd": 4.70859,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -169,5 +282,384 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............................\n----------------------------------------------------------------------\nRan 31 tests in 0.360s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "alerts": [
+        {
+          "escalate_to": "human_safety_supervisor",
+          "id": "alert-telemetry-reading-11",
+          "metric": "temperature",
+          "severity": "safety-critical",
+          "source_id": "reading-11",
+          "source_type": "telemetry",
+          "status": "pending_human_review",
+          "work_order_id": "WO-SYN-101"
+        }
+      ],
+      "onboarding": {
+        "customer_id": "C-SYN-1",
+        "customer_name": "Fictitious Bracket Works",
+        "next_step": {
+          "action": "Contact human safety supervisor before machine operation",
+          "owner": "human_safety_supervisor",
+          "references": [
+            "alert-telemetry-reading-11"
+          ]
+        },
+        "notice": "Demonstrative traceability only; not ISO 9001 certification or authorization to operate.",
+        "operational_status": "blocked_pending_human_review",
+        "recommended_product_id": "P-BEARING",
+        "steps": [
+          {
+            "action": "Contact human safety supervisor before machine operation",
+            "owner": "human_safety_supervisor",
+            "references": [
+              "alert-telemetry-reading-11"
+            ]
+          },
+          {
+            "action": "Obtain human quality disposition for failed inspections",
+            "owner": "quality_reviewer",
+            "references": [
+              "decision-QI-101"
+            ]
+          },
+          {
+            "action": "Complete operator orientation and unit/tolerance training",
+            "owner": "C-SYN-1",
+            "references": []
+          },
+          {
+            "action": "Review recommended product with an application specialist",
+            "owner": "C-SYN-1",
+            "references": [
+              "P-BEARING"
+            ]
+          }
+        ],
+        "work_order_id": "WO-SYN-101"
+      },
+      "quality_decisions": [
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "decision-QI-101",
+          "inspection_id": "QI-101",
+          "inspector": "Inspector Fictitious-7",
+          "metric": "temperature",
+          "outcome": "fail",
+          "rule": "inclusive-tolerance-v1",
+          "timestamp": "2026-09-24T10:04:00Z",
+          "tolerance": {
+            "max": 80,
+            "min": 40
+          },
+          "unit": "degC",
+          "value": 86,
+          "work_order_id": "WO-SYN-101"
+        }
+      ],
+      "readings": [
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-1",
+          "metric": "temperature",
+          "timestamp": "2026-09-24T10:00:00Z",
+          "unit": "degC",
+          "value": 65.81,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-2",
+          "metric": "vibration",
+          "timestamp": "2026-09-24T10:00:00Z",
+          "unit": "mm/s",
+          "value": 2.43,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-3",
+          "metric": "temperature",
+          "timestamp": "2026-09-24T10:01:00Z",
+          "unit": "degC",
+          "value": 64.2,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-4",
+          "metric": "vibration",
+          "timestamp": "2026-09-24T10:01:00Z",
+          "unit": "mm/s",
+          "value": 2.45,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-5",
+          "metric": "temperature",
+          "timestamp": "2026-09-24T10:02:00Z",
+          "unit": "degC",
+          "value": 65.45,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-6",
+          "metric": "vibration",
+          "timestamp": "2026-09-24T10:02:00Z",
+          "unit": "mm/s",
+          "value": 2.37,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-7",
+          "metric": "temperature",
+          "timestamp": "2026-09-24T10:03:00Z",
+          "unit": "degC",
+          "value": 63.25,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-8",
+          "metric": "vibration",
+          "timestamp": "2026-09-24T10:03:00Z",
+          "unit": "mm/s",
+          "value": 2.36,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-10",
+          "metric": "vibration",
+          "timestamp": "2026-09-24T10:04:00Z",
+          "unit": "mm/s",
+          "value": 2.31,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-9",
+          "metric": "temperature",
+          "timestamp": "2026-09-24T10:04:00Z",
+          "unit": "degC",
+          "value": 65.71,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-11",
+          "metric": "temperature",
+          "timestamp": "2026-09-24T10:05:00Z",
+          "unit": "degC",
+          "value": 98.0,
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "asset_id": "SYN-PRESS-17",
+          "id": "reading-12",
+          "metric": "vibration",
+          "timestamp": "2026-09-24T10:05:00Z",
+          "unit": "mm/s",
+          "value": 2.31,
+          "work_order_id": "WO-SYN-101"
+        }
+      ],
+      "schema_version": "1.0",
+      "search_results": [
+        {
+          "name": "Synthetic vibration assessment kit",
+          "product_id": "P-BEARING",
+          "query_matches": [
+            "bearing",
+            "maintenance",
+            "service",
+            "vibration"
+          ],
+          "score": 16,
+          "theme_ids": [
+            "theme-1",
+            "theme-2",
+            "theme-4"
+          ],
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "name": "Synthetic cooling review",
+          "product_id": "P-COOL",
+          "query_matches": [],
+          "score": 3,
+          "theme_ids": [
+            "theme-3"
+          ],
+          "work_order_id": "WO-SYN-101"
+        }
+      ],
+      "source": {
+        "customer": {
+          "experience": "new",
+          "id": "C-SYN-1",
+          "name": "Fictitious Bracket Works",
+          "query": "shaking bearing service",
+          "work_order_id": "WO-SYN-101"
+        },
+        "feedback": [
+          {
+            "id": "FB-1",
+            "source": "maintenance_log",
+            "text": "Invented log: maintenance operator reported shaking near the bearing; service review requested.",
+            "work_order_id": "WO-SYN-101"
+          },
+          {
+            "id": "FB-2",
+            "source": "customer",
+            "text": "Synthetic customer reported hot parts and quality defects.",
+            "work_order_id": "WO-SYN-101"
+          }
+        ],
+        "fixture_description": "Entirely invented manufacturing data; seeded randomized plausible telemetry with a deliberate overtemperature event. No real customer or asset records.",
+        "inspections": [
+          {
+            "id": "QI-101",
+            "inspector": "Inspector Fictitious-7",
+            "metric": "temperature",
+            "timestamp": "2026-09-24T10:04:00Z",
+            "unit": "degC",
+            "value": 86,
+            "work_order_id": "WO-SYN-101"
+          }
+        ],
+        "products": [
+          {
+            "compatible_assets": [
+              "SYN-PRESS-17"
+            ],
+            "description": "Bearing condition inspection and maintenance service",
+            "id": "P-BEARING",
+            "name": "Synthetic vibration assessment kit",
+            "tags": [
+              "vibration",
+              "maintenance"
+            ]
+          },
+          {
+            "compatible_assets": [
+              "SYN-PRESS-17"
+            ],
+            "description": "Temperature monitoring and cooling assessment",
+            "id": "P-COOL",
+            "name": "Synthetic cooling review",
+            "tags": [
+              "temperature"
+            ]
+          },
+          {
+            "compatible_assets": [
+              "SYN-MILL-99"
+            ],
+            "description": "Vibration maintenance service",
+            "id": "P-OTHER",
+            "name": "Synthetic vibration service for other asset",
+            "tags": [
+              "vibration"
+            ]
+          }
+        ],
+        "schema_version": "1.0",
+        "sensor_csv": "timestamp,asset_id,work_order_id,metric,value,unit\n2026-09-24T10:00:00Z,SYN-PRESS-17,WO-SYN-101,temperature,65.81,degC\n2026-09-24T10:00:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.43,mm/s\n2026-09-24T10:01:00Z,SYN-PRESS-17,WO-SYN-101,temperature,64.2,degC\n2026-09-24T10:01:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.45,mm/s\n2026-09-24T10:02:00Z,SYN-PRESS-17,WO-SYN-101,temperature,65.45,degC\n2026-09-24T10:02:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.37,mm/s\n2026-09-24T10:03:00Z,SYN-PRESS-17,WO-SYN-101,temperature,63.25,degC\n2026-09-24T10:03:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.36,mm/s\n2026-09-24T10:04:00Z,SYN-PRESS-17,WO-SYN-101,temperature,65.71,degC\n2026-09-24T10:04:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.31,mm/s\n2026-09-24T10:05:00Z,SYN-PRESS-17,WO-SYN-101,temperature,98.0,degC\n2026-09-24T10:05:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.31,mm/s\n",
+        "synthetic": true,
+        "work_orders": [
+          {
+            "asset_id": "SYN-PRESS-17",
+            "id": "WO-SYN-101",
+            "operation": "Form fictitious alloy brackets",
+            "specifications": {
+              "temperature": {
+                "max": 80,
+                "min": 40,
+                "safety_max": 95,
+                "safety_min": 0,
+                "unit": "degC"
+              },
+              "vibration": {
+                "max": 4.5,
+                "min": 0,
+                "safety_max": 7.1,
+                "safety_min": 0,
+                "unit": "mm/s"
+              }
+            },
+            "status": "running"
+          }
+        ]
+      },
+      "stage": "onboard",
+      "status": "ok",
+      "synthetic": true,
+      "themes": [
+        {
+          "action": "Review maintenance evidence with the responsible operator",
+          "count": 1,
+          "evidence": [
+            "feedback:FB-1"
+          ],
+          "id": "theme-1",
+          "theme": "maintenance",
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "action": "Review quality evidence with the responsible operator",
+          "count": 2,
+          "evidence": [
+            "decision-QI-101",
+            "feedback:FB-2"
+          ],
+          "id": "theme-2",
+          "theme": "quality",
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "action": "Review temperature evidence with the responsible operator",
+          "count": 3,
+          "evidence": [
+            "alert-telemetry-reading-11",
+            "feedback:FB-2",
+            "reading-11"
+          ],
+          "id": "theme-3",
+          "theme": "temperature",
+          "work_order_id": "WO-SYN-101"
+        },
+        {
+          "action": "Review vibration evidence with the responsible operator",
+          "count": 1,
+          "evidence": [
+            "feedback:FB-1"
+          ],
+          "id": "theme-4",
+          "theme": "vibration",
+          "work_order_id": "WO-SYN-101"
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t123_combo4_basic-documents_basic-insights_basic-search_basic-onboard__ind-manufacturing",
+    "artifact_sha256": {
+      "implementation.py": "41f405a13d1b440fc941626d04f056f9e5911791abc57d80212ab20716ef8522",
+      "test_implementation.py": "1f56d29466a5c95377703787082b9e3e3109f24f9cd18b59da2866887b9ebd80",
+      "example_input.json": "8e67fa6eee01992b96d65a533905ef48fed5a6f50bfdeb10b5258aa909e8ba98",
+      "build_manifest.json": "6232a76fbfcfd6f8dcf6f9edd22d5e2eb176d34d7eb7687c031444e8d60ebf21"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

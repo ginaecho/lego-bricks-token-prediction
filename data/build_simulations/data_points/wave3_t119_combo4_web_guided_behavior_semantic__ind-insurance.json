@@ -134,7 +134,7 @@
   "split_group": "70ee8e8ceb2dcb8119fbb81361b41a0de4ac926ccf4964f5bc0ab910ad93072d",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "d32306c06e23b66bed2f49f70b0ff39daf8ad3b1542ddfa28836bde5a6e6f665",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t119_combo4_web_guided_behavior_semantic__ind-insurance",
   "membership_point_id": "combo4_web_guided_behavior_semantic__ind-insurance",
@@ -142,8 +142,145 @@
   "trial_category": "combo_BTI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "4f864fcf253e7683d0f8f46c05fd28d35dac8624d2e9332598366620034d28c8",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "698784f1-11f5-4902-b85a-f52ec330c79f",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 203382,
+    "output_tokens": 20166,
+    "cache_read_tokens": 179557,
+    "cache_write_tokens": 23804,
+    "total_tokens": 223548,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37655,
+        "agent_id": "698784f1-11f5-4902-b85a-f52ec330c79f",
+        "model": "gpt-6-astra",
+        "input_tokens": 15092,
+        "output_tokens": 456,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 967,
+        "reasoning_tokens": 284,
+        "duration_ms": 10188,
+        "created_at": "2026-09-24T11:41:44.298Z"
+      },
+      {
+        "id": 37669,
+        "agent_id": "698784f1-11f5-4902-b85a-f52ec330c79f",
+        "model": "gpt-6-astra",
+        "input_tokens": 15581,
+        "output_tokens": 11089,
+        "cache_read_tokens": 15089,
+        "cache_write_tokens": 489,
+        "reasoning_tokens": 1552,
+        "duration_ms": 139164,
+        "created_at": "2026-09-24T11:44:02.901Z"
+      },
+      {
+        "id": 37678,
+        "agent_id": "698784f1-11f5-4902-b85a-f52ec330c79f",
+        "model": "gpt-6-astra",
+        "input_tokens": 26847,
+        "output_tokens": 7032,
+        "cache_read_tokens": 15578,
+        "cache_write_tokens": 11266,
+        "reasoning_tokens": 482,
+        "duration_ms": 89114,
+        "created_at": "2026-09-24T11:46:01.045Z"
+      },
+      {
+        "id": 37679,
+        "agent_id": "698784f1-11f5-4902-b85a-f52ec330c79f",
+        "model": "gpt-6-astra",
+        "input_tokens": 34144,
+        "output_tokens": 143,
+        "cache_read_tokens": 26844,
+        "cache_write_tokens": 7297,
+        "reasoning_tokens": 0,
+        "duration_ms": 3175,
+        "created_at": "2026-09-24T11:46:06.694Z"
+      },
+      {
+        "id": 37683,
+        "agent_id": "698784f1-11f5-4902-b85a-f52ec330c79f",
+        "model": "gpt-6-astra",
+        "input_tokens": 36271,
+        "output_tokens": 988,
+        "cache_read_tokens": 34141,
+        "cache_write_tokens": 2127,
+        "reasoning_tokens": 401,
+        "duration_ms": 17185,
+        "created_at": "2026-09-24T11:46:40.692Z"
+      },
+      {
+        "id": 37686,
+        "agent_id": "698784f1-11f5-4902-b85a-f52ec330c79f",
+        "model": "gpt-6-astra",
+        "input_tokens": 37518,
+        "output_tokens": 346,
+        "cache_read_tokens": 36268,
+        "cache_write_tokens": 1247,
+        "reasoning_tokens": 0,
+        "duration_ms": 4885,
+        "created_at": "2026-09-24T11:47:02.963Z"
+      },
+      {
+        "id": 37689,
+        "agent_id": "698784f1-11f5-4902-b85a-f52ec330c79f",
+        "model": "gpt-6-astra",
+        "input_tokens": 37929,
+        "output_tokens": 112,
+        "cache_read_tokens": 37515,
+        "cache_write_tokens": 411,
+        "reasoning_tokens": 0,
+        "duration_ms": 3234,
+        "created_at": "2026-09-24T11:47:24.894Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.810945,
+      "observed_cache_profile_estimate_usd": 0.40694175000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 9.73134,
+      "observed_cache_profile_estimate_usd": 9.73134,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -174,5 +311,313 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".........................................\n----------------------------------------------------------------------\nRan 41 tests in 0.810s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "as_of": "2026-09-24T12:00:00Z",
+      "behavior": {
+        "events_used": 3,
+        "half_life_days": 30,
+        "mode": "personalized",
+        "rankings": [
+          {
+            "policy_id": "POL-HOME",
+            "reasons": [
+              "Recency-weighted activity.",
+              "Matches explicitly selected coverage preferences."
+            ],
+            "score": 4.1699939257
+          },
+          {
+            "policy_id": "POL-AUTO",
+            "reasons": [
+              "Recency-weighted activity."
+            ],
+            "score": 0.070153878
+          }
+        ]
+      },
+      "findings": [
+        {
+          "coverage_limit": 250000,
+          "covered_perils": [
+            "flood",
+            "fire"
+          ],
+          "description": "Illustrative protection for a fabricated residence against flood and fire loss.",
+          "effective_date": "2026-01-01",
+          "entity_type": "policy",
+          "expiry_date": "2026-12-31",
+          "holder_ref": "HOLDER-001",
+          "id": "POL-HOME",
+          "provenance": {
+            "pointer": "/ACORD/Policy/0",
+            "sha256": "8107f6080bbb7d725f76e7fce1aeaa74152e97d869c3f3dc5e7df841ec971a99",
+            "url": "https://fixtures.insurance.example/policies"
+          },
+          "title": "Synthetic home flood and fire policy"
+        },
+        {
+          "coverage_limit": 45000,
+          "covered_perils": [
+            "collision"
+          ],
+          "description": "Illustrative collision coverage for a fabricated automobile.",
+          "effective_date": "2026-01-01",
+          "entity_type": "policy",
+          "expiry_date": "2026-12-31",
+          "holder_ref": "HOLDER-002",
+          "id": "POL-AUTO",
+          "provenance": {
+            "pointer": "/ACORD/Policy/1",
+            "sha256": "8107f6080bbb7d725f76e7fce1aeaa74152e97d869c3f3dc5e7df841ec971a99",
+            "url": "https://fixtures.insurance.example/policies"
+          },
+          "title": "Synthetic auto collision policy"
+        },
+        {
+          "disclosed_factors": [
+            "construction_year",
+            "property_type"
+          ],
+          "entity_type": "underwriting_submission",
+          "holder_ref": "HOLDER-001",
+          "id": "SUB-HOME",
+          "policy_id": "POL-HOME",
+          "provenance": {
+            "pointer": "/ACORD/UnderwritingSubmission/0",
+            "sha256": "84bb097b4d056d8da26d0c3ae2609ee4453cd8c0ab16131163c040f51d860f4d",
+            "url": "https://fixtures.insurance.example/submission"
+          },
+          "underwriting_factors": {
+            "construction_year": "2007",
+            "property_type": "synthetic detached residence"
+          }
+        },
+        {
+          "assessment": {
+            "decision": "eligible_for_review",
+            "human_review_required": true,
+            "reasons": [
+              "Reported peril, amount, and date meet stated coverage criteria."
+            ],
+            "rule_inputs": [
+              "covered_perils",
+              "coverage_limit",
+              "coverage_period",
+              "peril",
+              "loss_amount",
+              "loss_date"
+            ]
+          },
+          "entity_type": "claim",
+          "id": "CLM-HOME",
+          "loss_amount": 18342.71,
+          "loss_date": "2026-07-19",
+          "peril": "flood",
+          "policy_id": "POL-HOME",
+          "provenance": {
+            "pointer": "/ACORD/Claim/0",
+            "sha256": "fc2c0fd657c0d63c61b46e6eafa247df0e075010cded65844cfb717aa212cbc9",
+            "url": "https://fixtures.insurance.example/claim"
+          }
+        }
+      ],
+      "guided": {
+        "completed_steps": [
+          "review_minimization",
+          "review_disclosures",
+          "choose_preferences"
+        ],
+        "disclosed_factors": [
+          "construction_year",
+          "property_type"
+        ],
+        "eligible_policy_ids": [
+          "POL-AUTO",
+          "POL-HOME"
+        ],
+        "minimized_fields": [
+          "Name",
+          "Email",
+          "PropertyAddress",
+          "VIN"
+        ],
+        "next_step": null,
+        "preferred_perils": [
+          "flood"
+        ],
+        "progress": 1.0,
+        "ready": true
+      },
+      "schema_version": "1.0",
+      "semantic": {
+        "index": [
+          {
+            "entity_id": "CLM-HOME",
+            "terms": [
+              "claim",
+              "clm",
+              "eligible",
+              "flood",
+              "for",
+              "home",
+              "review"
+            ]
+          },
+          {
+            "entity_id": "POL-AUTO",
+            "terms": [
+              "a",
+              "auto",
+              "collision",
+              "coverage",
+              "fabricated",
+              "for",
+              "illustrative",
+              "pol",
+              "policy",
+              "synthetic"
+            ]
+          },
+          {
+            "entity_id": "POL-HOME",
+            "terms": [
+              "a",
+              "against",
+              "and",
+              "fabricated",
+              "fire",
+              "flood",
+              "for",
+              "home",
+              "illustrative",
+              "loss",
+              "pol",
+              "policy",
+              "protection",
+              "synthetic"
+            ]
+          },
+          {
+            "entity_id": "SUB-HOME",
+            "terms": [
+              "construction",
+              "home",
+              "property",
+              "sub",
+              "submission",
+              "type",
+              "underwriting",
+              "year"
+            ]
+          }
+        ],
+        "mode": "lexical",
+        "query": "house flooding coverage",
+        "results": [
+          {
+            "behavior_score": 1.0,
+            "entity_id": "POL-HOME",
+            "entity_type": "policy",
+            "policy_id": "POL-HOME",
+            "provenance": {
+              "pointer": "/ACORD/Policy/0",
+              "sha256": "8107f6080bbb7d725f76e7fce1aeaa74152e97d869c3f3dc5e7df841ec971a99",
+              "url": "https://fixtures.insurance.example/policies"
+            },
+            "relevance": 0.3875991535,
+            "score": 0.4875991535
+          },
+          {
+            "behavior_score": 1.0,
+            "entity_id": "CLM-HOME",
+            "entity_type": "claim",
+            "policy_id": "POL-HOME",
+            "provenance": {
+              "pointer": "/ACORD/Claim/0",
+              "sha256": "fc2c0fd657c0d63c61b46e6eafa247df0e075010cded65844cfb717aa212cbc9",
+              "url": "https://fixtures.insurance.example/claim"
+            },
+            "relevance": 0.3098268617,
+            "score": 0.4098268617
+          },
+          {
+            "behavior_score": 1.0,
+            "entity_id": "SUB-HOME",
+            "entity_type": "underwriting_submission",
+            "policy_id": "POL-HOME",
+            "provenance": {
+              "pointer": "/ACORD/UnderwritingSubmission/0",
+              "sha256": "84bb097b4d056d8da26d0c3ae2609ee4453cd8c0ab16131163c040f51d860f4d",
+              "url": "https://fixtures.insurance.example/submission"
+            },
+            "relevance": 0.1050890612,
+            "score": 0.2050890612
+          },
+          {
+            "behavior_score": 0.0168234964,
+            "entity_id": "POL-AUTO",
+            "entity_type": "policy",
+            "policy_id": "POL-AUTO",
+            "provenance": {
+              "pointer": "/ACORD/Policy/1",
+              "sha256": "8107f6080bbb7d725f76e7fce1aeaa74152e97d869c3f3dc5e7df841ec971a99",
+              "url": "https://fixtures.insurance.example/policies"
+            },
+            "relevance": 0.1404020656,
+            "score": 0.1420844153
+          }
+        ]
+      },
+      "sources": [
+        {
+          "format": "acord-json",
+          "record_ids": [
+            "POL-HOME",
+            "POL-AUTO"
+          ],
+          "retrieved_at": "2026-09-24T12:00:00Z",
+          "sha256": "8107f6080bbb7d725f76e7fce1aeaa74152e97d869c3f3dc5e7df841ec971a99",
+          "url": "https://fixtures.insurance.example/policies"
+        },
+        {
+          "format": "acord-xml",
+          "record_ids": [
+            "SUB-HOME"
+          ],
+          "retrieved_at": "2026-09-24T12:00:00Z",
+          "sha256": "84bb097b4d056d8da26d0c3ae2609ee4453cd8c0ab16131163c040f51d860f4d",
+          "url": "https://fixtures.insurance.example/submission"
+        },
+        {
+          "format": "claim-text",
+          "record_ids": [
+            "CLM-HOME"
+          ],
+          "retrieved_at": "2026-09-24T12:00:00Z",
+          "sha256": "fc2c0fd657c0d63c61b46e6eafa247df0e075010cded65844cfb717aa212cbc9",
+          "url": "https://fixtures.insurance.example/claim"
+        }
+      ],
+      "stage": "semantic",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t119_combo4_web_guided_behavior_semantic__ind-insurance",
+    "artifact_sha256": {
+      "implementation.py": "1b7cb0f2e2492520072677f060101a634a496ac5dfc93589c8480a1e1be55f0b",
+      "test_implementation.py": "4375fc28946be2902e950753b096b7383727a440ba7e6699a82716d60e3476c1",
+      "example_input.json": "11d2eadaa54bbfca7560f10bd6b222d12768bad1bfa223f3959976dcfce4a037",
+      "build_manifest.json": "3516bda21dd9497ee36793d4548ba63658b3337408043d876459cffdd7868c73"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

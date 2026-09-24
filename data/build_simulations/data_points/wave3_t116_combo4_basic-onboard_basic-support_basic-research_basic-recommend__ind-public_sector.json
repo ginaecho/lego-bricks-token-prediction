@@ -129,7 +129,7 @@
   "split_group": "f5412145a501ff6ea04a756097b6d43a170457fbce19115220d87f7a977845bf",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "988156317e5818184d39f4d7a3d4e1a9fe1e2e3fd8376e13367ba005e54bace5",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t116_combo4_basic-onboard_basic-support_basic-research_basic-recommend__ind-public_sector",
   "membership_point_id": "combo4_basic-onboard_basic-support_basic-research_basic-recommend__ind-public_sector",
@@ -137,8 +137,133 @@
   "trial_category": "combo_BI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "679327a285744c577dfa054e683d55823a5a63cb41688c41c1dfa771ccfdadd6",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "4d5e8081-09ce-45a8-bd76-37a6d83fee8e",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 133761,
+    "output_tokens": 10035,
+    "cache_read_tokens": 121413,
+    "cache_write_tokens": 12330,
+    "total_tokens": 143796,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37615,
+        "agent_id": "4d5e8081-09ce-45a8-bd76-37a6d83fee8e",
+        "model": "gpt-6-astra",
+        "input_tokens": 15164,
+        "output_tokens": 303,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 1039,
+        "reasoning_tokens": 115,
+        "duration_ms": 6471,
+        "created_at": "2026-09-24T11:37:58.730Z"
+      },
+      {
+        "id": 37661,
+        "agent_id": "4d5e8081-09ce-45a8-bd76-37a6d83fee8e",
+        "model": "gpt-6-astra",
+        "input_tokens": 15499,
+        "output_tokens": 8866,
+        "cache_read_tokens": 15161,
+        "cache_write_tokens": 335,
+        "reasoning_tokens": 791,
+        "duration_ms": 130370,
+        "created_at": "2026-09-24T11:43:22.018Z"
+      },
+      {
+        "id": 37663,
+        "agent_id": "4d5e8081-09ce-45a8-bd76-37a6d83fee8e",
+        "model": "gpt-6-astra",
+        "input_tokens": 24725,
+        "output_tokens": 159,
+        "cache_read_tokens": 15496,
+        "cache_write_tokens": 9226,
+        "reasoning_tokens": 0,
+        "duration_ms": 3469,
+        "created_at": "2026-09-24T11:43:37.806Z"
+      },
+      {
+        "id": 37671,
+        "agent_id": "4d5e8081-09ce-45a8-bd76-37a6d83fee8e",
+        "model": "gpt-6-astra",
+        "input_tokens": 25693,
+        "output_tokens": 430,
+        "cache_read_tokens": 24722,
+        "cache_write_tokens": 968,
+        "reasoning_tokens": 146,
+        "duration_ms": 7860,
+        "created_at": "2026-09-24T11:44:15.173Z"
+      },
+      {
+        "id": 37672,
+        "agent_id": "4d5e8081-09ce-45a8-bd76-37a6d83fee8e",
+        "model": "gpt-6-astra",
+        "input_tokens": 26225,
+        "output_tokens": 194,
+        "cache_read_tokens": 25690,
+        "cache_write_tokens": 532,
+        "reasoning_tokens": 0,
+        "duration_ms": 3902,
+        "created_at": "2026-09-24T11:44:40.356Z"
+      },
+      {
+        "id": 37673,
+        "agent_id": "4d5e8081-09ce-45a8-bd76-37a6d83fee8e",
+        "model": "gpt-6-astra",
+        "input_tokens": 26455,
+        "output_tokens": 83,
+        "cache_read_tokens": 26222,
+        "cache_write_tokens": 230,
+        "reasoning_tokens": 0,
+        "duration_ms": 2515,
+        "created_at": "2026-09-24T11:45:19.280Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.48492749999999996,
+      "observed_cache_profile_estimate_usd": 0.21174825000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.8191299999999995,
+      "observed_cache_profile_estimate_usd": 5.8191299999999995,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -169,5 +294,143 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "......................................\n----------------------------------------------------------------------\nRan 38 tests in 2.574s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "audit": [
+        {
+          "rule": "deterministic-onboard-v1",
+          "stage": "onboard"
+        },
+        {
+          "rule": "deterministic-support-v1",
+          "stage": "support"
+        },
+        {
+          "rule": "deterministic-research-v1",
+          "stage": "research"
+        },
+        {
+          "rule": "deterministic-recommend-v1",
+          "stage": "recommend"
+        }
+      ],
+      "context": {
+        "benefits_application": {
+          "application_id": "SYN-APP-116",
+          "status": "draft"
+        },
+        "policy_documents": [
+          {
+            "policy_id": "SYN-POL-HOUSING",
+            "program": {
+              "next_step": "Prepare proof of income before you apply.",
+              "program_id": "SYN-PROG-HOUSING",
+              "title": "Synthetic housing application help"
+            },
+            "service": "housing",
+            "text": "Housing help applications need proof of income. A service officer reviews each application. A submitted form does not guarantee benefits.",
+            "title": "Invented housing application guide"
+          },
+          {
+            "policy_id": "SYN-POL-TRANSPORT",
+            "program": {
+              "next_step": "Prepare a travel plan.",
+              "program_id": "SYN-PROG-TRANSPORT",
+              "title": "Synthetic travel support"
+            },
+            "service": "transport",
+            "text": "Travel support applications need a travel plan. A service officer reviews the plan.",
+            "title": "Invented travel support guide"
+          }
+        ],
+        "preferences": {
+          "accessibility_needs": [
+            "plain_text",
+            "screen_reader"
+          ],
+          "preferred_language": "en"
+        },
+        "service_request": {
+          "case_number": "SYN-2026-0116",
+          "question": "What documents should I prepare for housing help?",
+          "service": "housing"
+        }
+      },
+      "results": {
+        "onboard": {
+          "next_step": "Review the form and gather the documents listed in the policy.",
+          "reason": "Your benefits application status is draft."
+        },
+        "recommend": {
+          "fallback": null,
+          "items": [
+            {
+              "next_step": "Prepare proof of income before you apply.",
+              "program_id": "SYN-PROG-HOUSING",
+              "reason": "This service matches your request and has cited policy evidence.",
+              "source_ids": [
+                "SYN-POL-HOUSING"
+              ],
+              "title": "Synthetic housing application help"
+            }
+          ],
+          "next_step": "Review the form and gather the documents listed in the policy.",
+          "review_required": true
+        },
+        "research": {
+          "evidence": [
+            {
+              "policy_id": "SYN-POL-HOUSING",
+              "quote": "Housing help applications need proof of income."
+            }
+          ],
+          "finding": "Review these policy excerpts with a service officer.",
+          "limitations": [
+            "Keyword matches may not answer every part of the question.",
+            "Policies may be incomplete, outdated, or in conflict.",
+            "These excerpts do not establish benefit eligibility."
+          ],
+          "next_step": "Review the form and gather the documents listed in the policy."
+        },
+        "support": {
+          "answer": "Housing help applications need proof of income.",
+          "citations": [
+            {
+              "policy_id": "SYN-POL-HOUSING",
+              "quote": "Housing help applications need proof of income."
+            }
+          ],
+          "handoff_next_step": "Review the form and gather the documents listed in the policy.",
+          "unanswered_question": null
+        }
+      },
+      "safeguards": {
+        "accessibility": "Plain-text English; no color-only or image-only instructions.",
+        "decision": "Suggestions only. A service officer must decide benefit eligibility.",
+        "notice": "Synthetic demonstration; not a compliance certification.",
+        "privacy": "Citizen name, email, and address are not retained in outputs.",
+        "review": "Keep the source IDs and rule trail for open-records review."
+      },
+      "schema_version": "1.0",
+      "stage": "recommend",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t116_combo4_basic-onboard_basic-support_basic-research_basic-recommend__ind-public_sector",
+    "artifact_sha256": {
+      "implementation.py": "e25cc0a5ee265b21898c6dc3335a102a2037aa0256f5709e87ced8b1d79778ba",
+      "test_implementation.py": "faf3c3ba8b8d57ed4dc914fba133e2e55f4c5a1644cb97301603c81d4d0b2a33",
+      "example_input.json": "818180142abb439d56cf4ffc0f8bd0c4c6e1f029385287da0c809cbfa6cb27de",
+      "build_manifest.json": "8eef01047d3abd3e839cfd251e4b349b7f8c02385ce3f4822a884150e71dffd9"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

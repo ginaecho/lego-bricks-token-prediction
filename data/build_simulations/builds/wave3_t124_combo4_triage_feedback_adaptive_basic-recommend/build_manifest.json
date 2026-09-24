@@ -1,0 +1,58 @@
+{
+  "build_id": "wave3_t124_combo4_triage_feedback_adaptive_basic-recommend",
+  "composition_label": "triage -> feedback -> adaptive -> basic:recommend",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Newly authored isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": "schema_version, fixture_label, tickets[{id,text}], profile{experience,preferences,completed_steps,budget,excluded_products}, catalog[{id,name,tags,price,available,requires_steps}], config{categories,default_category,priority_keywords,themes,onboarding_steps,recommendation_limit}",
+    "output": "schema_version, status, request (unchanged validated input), stages{triage,feedback,adaptive,recommend}",
+    "validation": "Single shared request/state validation layer enforces exact fields, types, unique IDs, references, nonnegative finite prices/budget, prerequisite DAG and completed-step consistency. Each boundary recomputes prior deterministic stage outputs to validate structure, semantics and provenance. JSON duplicate keys rejected.",
+    "errors": "CLI emits one JSON object with status error and exits 2 for validation, usage, decoding or file failures; success exits 0."
+  },
+  "cross_stage_handoffs": [
+    {"from": "triage", "to": "feedback", "data": "Validated tickets with category, priority, accountable owner and original text"},
+    {"from": "feedback", "to": "adaptive", "data": "Deduplicated entries, unique-count themes, source ticket IDs, owner/priority provenance and exact prefix excerpts"},
+    {"from": "adaptive", "to": "basic:recommend", "data": "Validated inferred interests, completed prerequisites, budget, exclusions and feedback provenance; preserved feedback counts support ranking"}
+  ],
+  "behavior": {
+    "triage": "Whole normalized phrase keyword count; lexical category tie-break; configurable fallback, owner and minimum priority; priority keywords can only escalate.",
+    "feedback": "Case/punctuation/whitespace-normalized exact deduplication, preserving all ticket IDs and first 240 source characters. Themes count unique feedback, not duplicate tickets. Unmatched themes fall back to routed category.",
+    "adaptive": "Select steps by experience OR preference/feedback tag overlap, recursively include prerequisites, omit completed steps; deterministic topological plan with reasons. Prerequisites may be included regardless of experience.",
+    "recommend": "Filter availability, budget, explicit exclusions and uncompleted onboarding requirements. Planned steps never count as completed. Score = two per matching preference plus unique feedback count per matching theme; tie-break by price then ID; unmatched products provide budget-safe fallback.",
+    "tags": "Theme names, preferences and product/step tags use exact case-sensitive shared vocabulary; only free-text keyword matching is normalized.",
+    "fixtures": "All example customer text, product names, routing owners and onboarding instructions are explicitly synthetic."
+  },
+  "scope": {
+    "included": ["Integrated deterministic CLI pipeline", "Shared schemas and boundary validation", "Configurable rules", "Traceable explanations", "Unit and subprocess CLI tests"],
+    "excluded": ["Live providers or LLMs", "Network access", "Persistent customer storage", "Authentication", "Enterprise deployment", "Semantic fuzzy deduplication", "Implicit completion of onboarding", "Production-scale optimization"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 25,
+    "unittest_exit_code": 0,
+    "cli_exit_code": 0,
+    "cli_output_status": "ok",
+    "verified": [
+      "All four stages execute in order with validated handoffs",
+      "Cross-stage feedback provenance and recommendation scores",
+      "Deduplication and exact supporting excerpts",
+      "Prerequisite planning and completed-only recommendation gating",
+      "Configurable routing, priority and deterministic ties",
+      "Empty collections, invalid schemas, cycles and tampered stage output",
+      "CLI success, malformed JSON, invalid input, usage and missing-file errors"
+    ]
+  }
+}

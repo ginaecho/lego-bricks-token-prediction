@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "fixture_label": "SYNTHETIC: fictional catalog, customer preferences, and policies",
+  "documents": [
+    {
+      "id": "synthetic-json-catalog",
+      "format": "json",
+      "field_map": {"id": "sku", "name": "title", "price": "unit_price"},
+      "content": [
+        {"sku": "SYN-001", "title": "Trail Sneakers", "category": "Footwear", "description": "Lightweight shoes for outdoor walking.", "unit_price": "64.50", "stock": 8, "tags": ["outdoor", "lightweight"]},
+        {"sku": "SYN-002", "title": "City Sneakers", "category": "Footwear", "description": "Everyday shoes for city walks.", "unit_price": 49, "stock": 12, "tags": ["casual"]},
+        {"sku": "SYN-003", "title": "Summit Jacket", "category": "Outerwear", "description": "A warm outdoor jacket.", "unit_price": 110, "stock": 0, "tags": ["outdoor", "warm"]}
+      ]
+    },
+    {
+      "id": "synthetic-csv-catalog",
+      "format": "csv",
+      "content": "id,name,category,description,price,stock,tags\nSYN-004,Day Backpack,Bags,Lightweight outdoor backpack,39.00,6,outdoor|lightweight\nSYN-005,Work Laptop,Electronics,Portable computer for everyday work,650.00,4,portable\n"
+    }
+  ],
+  "customer": {
+    "liked_categories": ["footwear"],
+    "liked_tags": ["outdoor", "lightweight"],
+    "purchased_ids": [],
+    "budget": 80,
+    "limit": 3
+  },
+  "policies": {
+    "shipping": "Synthetic policy: standard delivery takes 3-5 business days.",
+    "returns": "Synthetic policy: unused products may be returned within 30 days."
+  },
+  "support": {"question": "What do you recommend, what is the price, and how does shipping work?"},
+  "search": {"query": "", "limit": 5, "in_stock_only": true}
+}

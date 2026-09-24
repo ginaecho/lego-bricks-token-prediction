@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "protection": {"critical_identifier_policy": "pseudonymize", "acknowledged": true},
+  "safety_rules": {"danger_to_life": "critical", "essential_service": "high", "ordinary_interruption": "normal"},
+  "grid_assets": [
+    {"asset_id": "SUB-SYN-001", "kind": "substation", "critical": true, "parent_id": null},
+    {"asset_id": "DEV-SYN-101", "kind": "device", "critical": false, "parent_id": "SUB-SYN-001"}
+  ],
+  "meter_interval_csv": "meter_id,asset_id,timestamp,interval_minutes,energy_kwh\nMTR-SYN-001,DEV-SYN-101,2026-01-15T18:00:00Z,30,2.4\nMTR-SYN-001,DEV-SYN-101,2026-07-15T18:00:00Z,30,1.2\n",
+  "telemetry": [
+    {"asset_id": "SUB-SYN-001", "timestamp": "2026-01-15T18:00:00Z", "voltage_kv": 110.2, "emissions": {"value": 0.84, "unit": "kgCO2e", "source": "synthetic-seasonal-model"}}
+  ],
+  "outage_reports": [
+    {"report_id": "OUT-SYN-001", "asset_id": "DEV-SYN-101", "danger_to_life": true, "essential_service": true, "priority": "critical"}
+  ],
+  "completed_steps": [],
+  "actions": ["protect_identifiers", "register_grid", "import_meter_readings", "import_telemetry", "review_outages", "finish"]
+}

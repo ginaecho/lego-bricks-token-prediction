@@ -133,7 +133,7 @@
   "split_group": "ef4d6fcd1826f5314d4fe0d21331fdbe50b33daf084df95cc8b74eb34f0a8b45",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "650fcfcddef21978596146d840824015b70ef8358f122ddb8aa81c8bddc8afe8",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t125_combo4_deep_extract_basic-support_sentiment__ind-healthcare",
   "membership_point_id": "combo4_deep_extract_basic-support_sentiment__ind-healthcare",
@@ -141,8 +141,145 @@
   "trial_category": "combo_mixedI",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "de4a913fd3a4fa3d895b5a863dca16c079d89ff347299aadf3ef9dce3869d06b",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "d37302e7-3445-418f-86f8-b6085dcf8179",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 7,
+    "input_tokens": 182028,
+    "output_tokens": 17122,
+    "cache_read_tokens": 163413,
+    "cache_write_tokens": 18594,
+    "total_tokens": 199150,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37740,
+        "agent_id": "d37302e7-3445-418f-86f8-b6085dcf8179",
+        "model": "gpt-6-astra",
+        "input_tokens": 15119,
+        "output_tokens": 741,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 994,
+        "reasoning_tokens": 516,
+        "duration_ms": 19068,
+        "created_at": "2026-09-24T11:54:49.547Z"
+      },
+      {
+        "id": 37750,
+        "agent_id": "d37302e7-3445-418f-86f8-b6085dcf8179",
+        "model": "gpt-6-astra",
+        "input_tokens": 15893,
+        "output_tokens": 8089,
+        "cache_read_tokens": 15116,
+        "cache_write_tokens": 774,
+        "reasoning_tokens": 898,
+        "duration_ms": 103399,
+        "created_at": "2026-09-24T11:56:28.876Z"
+      },
+      {
+        "id": 37760,
+        "agent_id": "d37302e7-3445-418f-86f8-b6085dcf8179",
+        "model": "gpt-6-astra",
+        "input_tokens": 24161,
+        "output_tokens": 6278,
+        "cache_read_tokens": 15890,
+        "cache_write_tokens": 8268,
+        "reasoning_tokens": 516,
+        "duration_ms": 83751,
+        "created_at": "2026-09-24T11:57:52.720Z"
+      },
+      {
+        "id": 37761,
+        "agent_id": "d37302e7-3445-418f-86f8-b6085dcf8179",
+        "model": "gpt-6-astra",
+        "input_tokens": 30620,
+        "output_tokens": 374,
+        "cache_read_tokens": 24158,
+        "cache_write_tokens": 6459,
+        "reasoning_tokens": 131,
+        "duration_ms": 7192,
+        "created_at": "2026-09-24T11:58:02.094Z"
+      },
+      {
+        "id": 37765,
+        "agent_id": "d37302e7-3445-418f-86f8-b6085dcf8179",
+        "model": "gpt-6-astra",
+        "input_tokens": 31057,
+        "output_tokens": 1304,
+        "cache_read_tokens": 30617,
+        "cache_write_tokens": 437,
+        "reasoning_tokens": 839,
+        "duration_ms": 30694,
+        "created_at": "2026-09-24T11:58:50.748Z"
+      },
+      {
+        "id": 37766,
+        "agent_id": "d37302e7-3445-418f-86f8-b6085dcf8179",
+        "model": "gpt-6-astra",
+        "input_tokens": 32459,
+        "output_tokens": 224,
+        "cache_read_tokens": 31054,
+        "cache_write_tokens": 1402,
+        "reasoning_tokens": 0,
+        "duration_ms": 3849,
+        "created_at": "2026-09-24T11:58:54.638Z"
+      },
+      {
+        "id": 37767,
+        "agent_id": "d37302e7-3445-418f-86f8-b6085dcf8179",
+        "model": "gpt-6-astra",
+        "input_tokens": 32719,
+        "output_tokens": 112,
+        "cache_read_tokens": 32456,
+        "cache_write_tokens": 260,
+        "reasoning_tokens": 0,
+        "duration_ms": 6044,
+        "created_at": "2026-09-24T11:59:02.408Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.7119,
+      "observed_cache_profile_estimate_usd": 0.34422074999999996,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 8.5428,
+      "observed_cache_profile_estimate_usd": 8.5428,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -173,5 +310,618 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...........................................\n----------------------------------------------------------------------\nRan 43 tests in 0.716s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "schema_version": "1.0",
+      "status": "ok",
+      "stage": "sentiment",
+      "patient": {
+        "resourceType": "Patient",
+        "id": "patient-001",
+        "gender": "unknown"
+      },
+      "documents": [
+        {
+          "id": "source-001",
+          "format": "fhir",
+          "resource": {
+            "resourceType": "Condition",
+            "id": "source-001",
+            "subject": {
+              "reference": "Patient/patient-001"
+            },
+            "code": {
+              "text": "Fictitious Synthea-style type 2 diabetes"
+            },
+            "clinicalStatus": {
+              "text": "active"
+            }
+          },
+          "text": "resourceType: \"Condition\"\nid: \"source-001\"\nsubject.reference: \"Patient/patient-001\"\ncode.text: \"Fictitious Synthea-style type 2 diabetes\"\nclinicalStatus.text: \"active\""
+        },
+        {
+          "id": "source-002",
+          "format": "fhir",
+          "resource": {
+            "resourceType": "Observation",
+            "id": "source-002",
+            "subject": {
+              "reference": "Patient/patient-001"
+            },
+            "code": {
+              "text": "Synthetic HbA1c"
+            },
+            "valueQuantity": {
+              "value": 8.2,
+              "unit": "%"
+            },
+            "status": "final"
+          },
+          "text": "resourceType: \"Observation\"\nid: \"source-002\"\nsubject.reference: \"Patient/patient-001\"\ncode.text: \"Synthetic HbA1c\"\nvalueQuantity.value: 8.2\nvalueQuantity.unit: \"%\"\nstatus: \"final\""
+        },
+        {
+          "id": "source-003",
+          "format": "fhir",
+          "resource": {
+            "resourceType": "Claim",
+            "id": "source-003",
+            "patient": {
+              "reference": "Patient/patient-001"
+            },
+            "status": "active",
+            "use": "preauthorization",
+            "type": {
+              "text": "Synthetic outpatient service"
+            },
+            "priority": {
+              "text": "normal"
+            }
+          },
+          "text": "resourceType: \"Claim\"\nid: \"source-003\"\npatient.reference: \"Patient/patient-001\"\nstatus: \"active\"\nuse: \"preauthorization\"\ntype.text: \"Synthetic outpatient service\"\npriority.text: \"normal\""
+        },
+        {
+          "id": "source-004",
+          "format": "clinical_note",
+          "text": "SYNTHETIC FIXTURE — not a real patient or clinical recommendation.\nDiagnosis: Fictitious Synthea-style type 2 diabetes\nHbA1c: 8.2\nAuthorization status: cancelled\nService: Synthetic outpatient service\nHuman review is required. No real names, birth dates, or medical identifiers."
+        }
+      ],
+      "field_schema": [
+        {
+          "name": "diagnosis",
+          "type": "string",
+          "required": true,
+          "sources": [
+            {
+              "resource_type": "Condition",
+              "path": "code.text"
+            },
+            {
+              "label": "Diagnosis"
+            }
+          ]
+        },
+        {
+          "name": "hba1c",
+          "type": "number",
+          "required": true,
+          "sources": [
+            {
+              "resource_type": "Observation",
+              "path": "valueQuantity.value"
+            },
+            {
+              "label": "HbA1c"
+            }
+          ]
+        },
+        {
+          "name": "authorization_status",
+          "type": "string",
+          "required": true,
+          "sources": [
+            {
+              "resource_type": "Claim",
+              "path": "status"
+            },
+            {
+              "label": "Authorization status"
+            }
+          ]
+        },
+        {
+          "name": "service",
+          "type": "string",
+          "required": true,
+          "sources": [
+            {
+              "resource_type": "Claim",
+              "path": "type.text"
+            },
+            {
+              "label": "Service"
+            }
+          ]
+        },
+        {
+          "name": "decision_reason",
+          "type": "string",
+          "required": true,
+          "sources": [
+            {
+              "label": "Decision reason"
+            }
+          ]
+        }
+      ],
+      "request": {
+        "message": "I am frustrated by this delay. Can you explain my prior authorization records? My appeal deadline is approaching.",
+        "team_online": false
+      },
+      "policy": {
+        "synthetic_only": true,
+        "human_review_required": true,
+        "autonomous_clinical_decisions": false,
+        "deidentification": "Direct identifiers removed; known values redacted; residual pattern screening.",
+        "limitation": "Demonstrative rules only; not HIPAA certification or comprehensive free-text PHI detection."
+      },
+      "audit": [
+        {
+          "event_id": 1,
+          "stage": "intake",
+          "record_id": "patient-001",
+          "action": "deidentify",
+          "changed_fields": [
+            "id",
+            "direct_identifiers"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 2,
+          "stage": "intake",
+          "record_id": "source-001",
+          "action": "deidentify",
+          "changed_fields": [
+            "id",
+            "content"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 3,
+          "stage": "intake",
+          "record_id": "source-002",
+          "action": "deidentify",
+          "changed_fields": [
+            "id",
+            "content"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 4,
+          "stage": "intake",
+          "record_id": "source-003",
+          "action": "deidentify",
+          "changed_fields": [
+            "id",
+            "content"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 5,
+          "stage": "intake",
+          "record_id": "source-004",
+          "action": "deidentify",
+          "changed_fields": [
+            "id",
+            "content"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 6,
+          "stage": "intake",
+          "record_id": "request",
+          "action": "deidentify",
+          "changed_fields": [
+            "message",
+            "team_online"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 7,
+          "stage": "intake",
+          "record_id": "field_schema",
+          "action": "validate",
+          "changed_fields": [
+            "definitions"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 8,
+          "stage": "deep",
+          "record_id": "pipeline",
+          "action": "derive",
+          "changed_fields": [
+            "stage",
+            "payload.deep"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 9,
+          "stage": "extract",
+          "record_id": "pipeline",
+          "action": "derive",
+          "changed_fields": [
+            "stage",
+            "payload.extract"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 10,
+          "stage": "support",
+          "record_id": "pipeline",
+          "action": "derive",
+          "changed_fields": [
+            "stage",
+            "payload.support"
+          ],
+          "human_review_required": true
+        },
+        {
+          "event_id": 11,
+          "stage": "sentiment",
+          "record_id": "pipeline",
+          "action": "derive",
+          "changed_fields": [
+            "stage",
+            "payload.sentiment"
+          ],
+          "human_review_required": true
+        }
+      ],
+      "payload": {
+        "deep": {
+          "evidence": [
+            {
+              "id": "e0001",
+              "field": "diagnosis",
+              "source_id": "source-001",
+              "span": {
+                "start": 95,
+                "end": 137
+              },
+              "quote": "\"Fictitious Synthea-style type 2 diabetes\"",
+              "value": "Fictitious Synthea-style type 2 diabetes"
+            },
+            {
+              "id": "e0002",
+              "field": "diagnosis",
+              "source_id": "source-004",
+              "span": {
+                "start": 78,
+                "end": 118
+              },
+              "quote": "Fictitious Synthea-style type 2 diabetes",
+              "value": "Fictitious Synthea-style type 2 diabetes"
+            },
+            {
+              "id": "e0003",
+              "field": "hba1c",
+              "source_id": "source-002",
+              "span": {
+                "start": 136,
+                "end": 139
+              },
+              "quote": "8.2",
+              "value": 8.2
+            },
+            {
+              "id": "e0004",
+              "field": "hba1c",
+              "source_id": "source-004",
+              "span": {
+                "start": 126,
+                "end": 129
+              },
+              "quote": "8.2",
+              "value": "8.2"
+            },
+            {
+              "id": "e0005",
+              "field": "authorization_status",
+              "source_id": "source-003",
+              "span": {
+                "start": 88,
+                "end": 96
+              },
+              "quote": "\"active\"",
+              "value": "active"
+            },
+            {
+              "id": "e0006",
+              "field": "authorization_status",
+              "source_id": "source-004",
+              "span": {
+                "start": 152,
+                "end": 161
+              },
+              "quote": "cancelled",
+              "value": "cancelled"
+            },
+            {
+              "id": "e0007",
+              "field": "service",
+              "source_id": "source-003",
+              "span": {
+                "start": 132,
+                "end": 162
+              },
+              "quote": "\"Synthetic outpatient service\"",
+              "value": "Synthetic outpatient service"
+            },
+            {
+              "id": "e0008",
+              "field": "service",
+              "source_id": "source-004",
+              "span": {
+                "start": 171,
+                "end": 199
+              },
+              "quote": "Synthetic outpatient service",
+              "value": "Synthetic outpatient service"
+            }
+          ],
+          "findings": [
+            {
+              "field": "diagnosis",
+              "values": [
+                "Fictitious Synthea-style type 2 diabetes"
+              ],
+              "evidence_ids": [
+                "e0001",
+                "e0002"
+              ],
+              "invalid_evidence_ids": []
+            },
+            {
+              "field": "hba1c",
+              "values": [
+                8.2
+              ],
+              "evidence_ids": [
+                "e0003",
+                "e0004"
+              ],
+              "invalid_evidence_ids": []
+            },
+            {
+              "field": "authorization_status",
+              "values": [
+                "active",
+                "cancelled"
+              ],
+              "evidence_ids": [
+                "e0005",
+                "e0006"
+              ],
+              "invalid_evidence_ids": []
+            },
+            {
+              "field": "service",
+              "values": [
+                "Synthetic outpatient service"
+              ],
+              "evidence_ids": [
+                "e0007",
+                "e0008"
+              ],
+              "invalid_evidence_ids": []
+            },
+            {
+              "field": "decision_reason",
+              "values": [],
+              "evidence_ids": [],
+              "invalid_evidence_ids": []
+            }
+          ],
+          "disagreements": [
+            {
+              "field": "authorization_status",
+              "values": [
+                "active",
+                "cancelled"
+              ],
+              "evidence_ids": [
+                "e0005",
+                "e0006"
+              ]
+            }
+          ],
+          "unresolved_questions": [
+            "Human review: reconcile conflicting authorization_status.",
+            "What is the missing decision_reason?"
+          ],
+          "sources_reviewed": [
+            "source-001",
+            "source-002",
+            "source-003",
+            "source-004"
+          ]
+        },
+        "extract": {
+          "fields": {
+            "diagnosis": {
+              "status": "present",
+              "type": "string",
+              "required": true,
+              "value": "Fictitious Synthea-style type 2 diabetes",
+              "candidates": [
+                "Fictitious Synthea-style type 2 diabetes"
+              ],
+              "evidence_ids": [
+                "e0001",
+                "e0002"
+              ]
+            },
+            "hba1c": {
+              "status": "present",
+              "type": "number",
+              "required": true,
+              "value": 8.2,
+              "candidates": [
+                8.2
+              ],
+              "evidence_ids": [
+                "e0003",
+                "e0004"
+              ]
+            },
+            "authorization_status": {
+              "status": "conflict",
+              "type": "string",
+              "required": true,
+              "value": null,
+              "candidates": [
+                "active",
+                "cancelled"
+              ],
+              "evidence_ids": [
+                "e0005",
+                "e0006"
+              ]
+            },
+            "service": {
+              "status": "present",
+              "type": "string",
+              "required": true,
+              "value": "Synthetic outpatient service",
+              "candidates": [
+                "Synthetic outpatient service"
+              ],
+              "evidence_ids": [
+                "e0007",
+                "e0008"
+              ]
+            },
+            "decision_reason": {
+              "status": "missing",
+              "type": "string",
+              "required": true,
+              "value": null,
+              "candidates": [],
+              "evidence_ids": []
+            }
+          },
+          "missing_required": [
+            "decision_reason"
+          ],
+          "unresolved_questions": [
+            "Human review: reconcile conflicting authorization_status.",
+            "What is the missing decision_reason?"
+          ],
+          "human_review_required": true
+        },
+        "support": {
+          "answer": "I can help with record information and administrative next steps. The team is offline. This response does not contact them or create a ticket. diagnosis: Fictitious Synthea-style type 2 diabetes (reported in the supplied synthetic records). hba1c: 8.2 (reported in the supplied synthetic records). authorization_status is conflict; a human must verify it. service: Synthetic outpatient service (reported in the supplied synthetic records). decision_reason is missing; a human must verify it. A human must review this response. Contact your care or authorization team through its established channel for corrections or authorization decisions; no approval is implied.",
+          "citations": [
+            {
+              "field": "diagnosis",
+              "evidence_ids": [
+                "e0001",
+                "e0002"
+              ]
+            },
+            {
+              "field": "hba1c",
+              "evidence_ids": [
+                "e0003",
+                "e0004"
+              ]
+            },
+            {
+              "field": "service",
+              "evidence_ids": [
+                "e0007",
+                "e0008"
+              ]
+            }
+          ],
+          "customer_message": "I am frustrated by this delay. Can you explain my prior authorization records? My appeal deadline is approaching.",
+          "team_online": false,
+          "issues": [
+            "authorization_status:conflict",
+            "decision_reason:missing"
+          ],
+          "urgent_signals": [],
+          "clinical_boundary_applied": false,
+          "human_review_required": true,
+          "action_taken": "none",
+          "escalation_recommended": true
+        },
+        "sentiment": {
+          "scored_text": "I am frustrated by this delay. Can you explain my prior authorization records? My appeal deadline is approaching.",
+          "score": -3,
+          "unclamped_score": -3,
+          "label": "negative",
+          "matches": [
+            {
+              "token": "frustrated",
+              "start": 5,
+              "end": 15,
+              "base_weight": -2,
+              "negated": false,
+              "weight": -2
+            },
+            {
+              "token": "delay",
+              "start": 24,
+              "end": 29,
+              "base_weight": -1,
+              "negated": false,
+              "weight": -1
+            }
+          ],
+          "severity": "time_sensitive_or_unresolved",
+          "priority": "P2",
+          "priority_reasons": [
+            "Time-sensitive language",
+            "Unresolved extracted record fields"
+          ],
+          "deadline_signals": [
+            "deadline"
+          ],
+          "urgent_signals": [],
+          "issues": [
+            "authorization_status:conflict",
+            "decision_reason:missing"
+          ],
+          "human_review_required": true,
+          "limitation": "Deterministic lexicon and conservative phrase rules; not clinical triage."
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t125_combo4_deep_extract_basic-support_sentiment__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "b9a8edf76f1b4291839de8c9a0c065d48fc397e856b3ba094318d6d5b738d9a2",
+      "test_implementation.py": "0fa78e0198818889a36dfe115ccb928c87e34e29f34cbc36f32e48da399d98f5",
+      "example_input.json": "da16bf4f943642fd7514ceb2644694e77113a7a3942eeb934ce1aa49c18a0eb1",
+      "build_manifest.json": "6eca6ea30bb651a279221b1ab5b62037117d229bff87e25d008ebfc10077af37"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

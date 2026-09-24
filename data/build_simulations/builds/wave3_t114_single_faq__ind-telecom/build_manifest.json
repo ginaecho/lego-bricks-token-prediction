@@ -1,0 +1,70 @@
+{
+  "build_id": "wave3_t114_single_faq__ind-telecom",
+  "composition_label": "single_faq",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch for this isolated build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": "Strict JSON object with synthetic=true, residency EU or US, authenticated_account_id, subscriber_account, network_fault_tickets, cdr_csv, support_chat_transcripts, knowledge_base and question.",
+    "records": "Every entity, nested adjustment, message, question and KB article requires matching residency and synthetic=true; CSV uses the literal true. Subscriber ownership must match.",
+    "cdr_columns": ["record_id", "account_id", "timestamp", "call_minutes", "data_mb", "phone_number", "imei", "residency", "synthetic"],
+    "output": "JSON envelope: status answered|abstained|error, build_id, synthetic, residency, answer, source_ids, reason, context_counts. Errors have no answer or sources and exit 2; successful answers and abstentions exit 0.",
+    "validation": "The validate function implements both input record validation and output envelope validation."
+  },
+  "cross_stage_handoffs": [
+    "One functionality only: shared validation -> deterministic lexical KB retrieval -> extractive grounded answer or explicit abstention -> shared output validation.",
+    "Optional injected answerer receives only a public candidate answer and source IDs; exact candidate equality is required."
+  ],
+  "behavior": [
+    "Requires at least two distinct non-stopword query tokens matched against KB title and keywords, covering at least half of query tokens.",
+    "Tied top scores and absent sufficient matches explicitly abstain.",
+    "Answers reproduce one public KB answer verbatim and cite its article ID; tickets and CDRs do not establish outage facts.",
+    "Demonstrates GDPR/CCPA-oriented data minimization, support processing permission and caller/account matching, not compliance certification.",
+    "Never exposes subscriber fields or transcript text to the injected callable; responses provide only public KB text and aggregate record counts.",
+    "Requires a stated billing adjustment reason; never executes credits.",
+    "Rejects mixed residency on all record types, nonfinite or negative usage, duplicate IDs, duplicate JSON keys and unlabeled real data.",
+    "Fictitious reserved phone numbers, zero-prefix synthetic IMEIs and invented tickets are clearly labeled; seeded tests randomize synthetic usage volumes."
+  ],
+  "scope": {
+    "included": [
+      "Bounded deterministic telecom FAQ reference",
+      "Call detail CSV parsing and support chat transcript validation",
+      "Grounded retrieval, abstention and injectable callable fixtures",
+      "CLI JSON success and error behavior"
+    ],
+    "excluded": [
+      "Live model providers, networks, databases or account changes",
+      "Real authentication: caller account ID is a trusted harness assertion",
+      "Legal compliance certification or comprehensive PII detection",
+      "Physical data residency enforcement, encryption, erasure and retention workflows",
+      "Production billing approval, outage diagnosis or arbitrary question reasoning"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unit_tests": {
+      "run": 19,
+      "passed": 19,
+      "failed": 0,
+      "coverage": "Normal, unknown/ambiguous queries, invalid schemas/CSV/JSON, residency at every record level, billing reasons, subscriber permission/ownership, synthetic labels, seeded randomized usage, transcript instruction isolation, private KB rejection, injected callable grounding/failure, output validation and CLI success/errors."
+    },
+    "cli_example_exit_code": 0,
+    "cli_example_status": "answered"
+  }
+}

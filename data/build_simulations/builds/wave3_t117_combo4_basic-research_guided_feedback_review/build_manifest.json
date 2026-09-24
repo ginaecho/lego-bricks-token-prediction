@@ -1,0 +1,100 @@
+{
+  "build_id": "wave3_t117_combo4_basic-research_guided_feedback_review",
+  "composition_label": "Research -> Guided setup -> Feedback analysis -> Document review",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Written from scratch in the isolated build directory.",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "run": "python -B implementation.py example_input.json",
+    "test": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "Integer 1, not a boolean.",
+      "synthetic": "Must be true; all fixtures are explicitly synthetic.",
+      "research": "questions[{id, question}], sources[{id, title, text, evidence[{question_id, quote, stance}]}]. Stance is supports, opposes, or context. Quotes must occur verbatim.",
+      "guided": "fields maps names to string values; steps[{id, title, depends_on[], question_ids[], required_fields[]}]. Dependencies must be acyclic.",
+      "feedback": "themes[{id, label, keywords[]}], items[{id, step_id, text}]. Theme id unclassified is reserved.",
+      "review": "document{id, text}, requirements[{id, description, question_ids[], step_ids[], theme_ids[], required_terms[]}]. Each requirement has at least one check."
+    },
+    "handoff": "Every stage receives/returns {schema_version, synthetic, stage, input, results}. Results accumulate in execution order. The CLI adds status: ok.",
+    "validation": "Exact object keys, unique ids and references, typed nonblank strings, prerequisite DAG, verbatim source quotes. Each boundary recomputes cumulative results from validated input and rejects stale or fabricated provenance. The caller's input and prior handoffs are not mutated.",
+    "errors": "Validation, file, decoding, JSON parsing, and excessive nesting errors yield one stdout JSON object with status error and exit 2. Duplicate JSON keys and non-finite JSON constants are rejected."
+  },
+  "cross_stage_handoffs": [
+    {
+      "from": "research",
+      "to": "guided",
+      "consumes": "Validated findings and source evidence.",
+      "effect": "Only answered findings satisfy question prerequisites; conflicts or context-only/missing evidence block setup."
+    },
+    {
+      "from": "guided",
+      "to": "feedback",
+      "consumes": "Validated completed/blocked step states.",
+      "effect": "Feedback attached to blocked steps is deferred, never counted as eligible supporting evidence."
+    },
+    {
+      "from": "feedback",
+      "to": "review",
+      "consumes": "Validated deduplicated groups, themes, original excerpts and accumulated research/setup results.",
+      "effect": "Requirements require eligible theme evidence, completed referenced steps, answered questions, and literal document terms; missing checks become traceable gaps."
+    }
+  ],
+  "behavior": {
+    "research": "Domain-neutral question/evidence matrix with opposing and supporting annotations, conflict detection, context-only gaps, citations, offsets, and recommended next actions. Answered means directional evidence exists, not that the proposition is approved or true.",
+    "guided": "Stable prerequisite traversal; completion requires answered research, completed dependencies, and nonblank required string fields. No email or domain-specific field semantics are asserted. Empty step lists are vacuously 100 percent complete.",
+    "feedback": "Deduplicates eligible items by Unicode casefold and whitespace normalization, preserving punctuation and all original excerpts. Themes use normalized literal keyword/phrase matches with word boundaries; groups may belong to multiple themes. Unmatched groups are unclassified.",
+    "review": "All selected checks are required. Literal document terms match case-insensitively and may occur within longer words. Matching terms are presence evidence, not semantic entailment. Excerpt offsets are zero-based, end-exclusive Python string indices. Only the first matching source quotation/document occurrence is reported.",
+    "determinism": "Preserves supplied ordering with stable dependency traversal; no randomness, timestamps, external calls, model calls, or hidden mutable state.",
+    "example": "Synthetic pilot yields two completed steps, four eligible feedback items, three unique groups, one duplicate, one met requirement and one requirement with a document-term gap."
+  },
+  "scope": {
+    "included": [
+      "One integrated synchronous Python CLI and reusable stage functions",
+      "Shared strict schema and provenance validation",
+      "Explicit question-to-source research evidence",
+      "Prerequisite-driven setup and progress",
+      "Deduplication, multi-label themes, original supporting excerpts",
+      "Document requirement/evidence checks and traceable gaps",
+      "Clearly labeled synthetic fixtures and standard-library unit/CLI tests"
+    ],
+    "excluded": [
+      "External retrieval, network access, live models or optional model hooks",
+      "Source truth verification or automated semantic reasoning",
+      "Certification, compliance guarantees, legal advice",
+      "Enterprise persistence, authentication, concurrency, production scaling",
+      "Approximate semantic deduplication or machine-learned themes",
+      "Interactive prompting or domain-specific field validation"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 36,
+    "unittest_failures": 0,
+    "unittest_errors": 0,
+    "cli_exit_code": 0,
+    "cli_status": "ok",
+    "verified_example": {
+      "completed_steps": 2,
+      "eligible_feedback_items": 4,
+      "unique_feedback_groups": 3,
+      "duplicate_feedback_items": 1,
+      "met_requirements": 1,
+      "requirements_with_gaps": 1
+    }
+  }
+}

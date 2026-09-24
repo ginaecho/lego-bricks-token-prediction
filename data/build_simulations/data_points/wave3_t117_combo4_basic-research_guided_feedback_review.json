@@ -133,7 +133,7 @@
   "split_group": "07dfea471f92573f3a988e9ac5dc154c0c28e0d97ee21932b7e2b77a1016fb14",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "e988757dc469095050ebd848b03a04fdb8d18781bd5f91c0ec446f73ca0ccd7a",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t117_combo4_basic-research_guided_feedback_review",
   "membership_point_id": "combo4_basic-research_guided_feedback_review",
@@ -141,8 +141,133 @@
   "trial_category": "combo_mixed",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "cf3738ab72bc1d294291fe2bccf8049f56e38e04461e98a7e63ca6f05269d508",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "e36c884c-19ef-406b-a77f-4161d7a8aac0",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 140416,
+    "output_tokens": 11248,
+    "cache_read_tokens": 126048,
+    "cache_write_tokens": 14350,
+    "total_tokens": 151664,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37634,
+        "agent_id": "e36c884c-19ef-406b-a77f-4161d7a8aac0",
+        "model": "gpt-6-astra",
+        "input_tokens": 14994,
+        "output_tokens": 356,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 869,
+        "reasoning_tokens": 187,
+        "duration_ms": 11411,
+        "created_at": "2026-09-24T11:39:31.282Z"
+      },
+      {
+        "id": 37651,
+        "agent_id": "e36c884c-19ef-406b-a77f-4161d7a8aac0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15381,
+        "output_tokens": 9941,
+        "cache_read_tokens": 14991,
+        "cache_write_tokens": 387,
+        "reasoning_tokens": 410,
+        "duration_ms": 120219,
+        "created_at": "2026-09-24T11:41:27.821Z"
+      },
+      {
+        "id": 37653,
+        "agent_id": "e36c884c-19ef-406b-a77f-4161d7a8aac0",
+        "model": "gpt-6-astra",
+        "input_tokens": 25650,
+        "output_tokens": 239,
+        "cache_read_tokens": 15378,
+        "cache_write_tokens": 10269,
+        "reasoning_tokens": 101,
+        "duration_ms": 5701,
+        "created_at": "2026-09-24T11:41:36.921Z"
+      },
+      {
+        "id": 37656,
+        "agent_id": "e36c884c-19ef-406b-a77f-4161d7a8aac0",
+        "model": "gpt-6-astra",
+        "input_tokens": 27720,
+        "output_tokens": 382,
+        "cache_read_tokens": 25647,
+        "cache_write_tokens": 2070,
+        "reasoning_tokens": 123,
+        "duration_ms": 6691,
+        "created_at": "2026-09-24T11:41:48.448Z"
+      },
+      {
+        "id": 37657,
+        "agent_id": "e36c884c-19ef-406b-a77f-4161d7a8aac0",
+        "model": "gpt-6-astra",
+        "input_tokens": 28196,
+        "output_tokens": 242,
+        "cache_read_tokens": 27717,
+        "cache_write_tokens": 476,
+        "reasoning_tokens": 0,
+        "duration_ms": 3969,
+        "created_at": "2026-09-24T11:41:55.829Z"
+      },
+      {
+        "id": 37658,
+        "agent_id": "e36c884c-19ef-406b-a77f-4161d7a8aac0",
+        "model": "gpt-6-astra",
+        "input_tokens": 28475,
+        "output_tokens": 88,
+        "cache_read_tokens": 28193,
+        "cache_write_tokens": 279,
+        "reasoning_tokens": 0,
+        "duration_ms": 2704,
+        "created_at": "2026-09-24T11:42:09.012Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.51976,
+      "observed_cache_profile_estimate_usd": 0.23615199999999997,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 6.23712,
+      "observed_cache_profile_estimate_usd": 6.23712,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -173,5 +298,445 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "....................................\n----------------------------------------------------------------------\nRan 36 tests in 0.918s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "synthetic": true,
+      "stage": "review",
+      "input": {
+        "schema_version": 1,
+        "synthetic": true,
+        "research": {
+          "questions": [
+            {
+              "id": "q-access",
+              "question": "What access does the synthetic pilot require?"
+            },
+            {
+              "id": "q-export",
+              "question": "Is export enabled for the synthetic pilot?"
+            }
+          ],
+          "sources": [
+            {
+              "id": "source-pilot",
+              "title": "Synthetic pilot notes, not real customer data",
+              "text": "The pilot requires an owner email. Export is enabled in the pilot.",
+              "evidence": [
+                {
+                  "question_id": "q-access",
+                  "quote": "The pilot requires an owner email.",
+                  "stance": "supports"
+                },
+                {
+                  "question_id": "q-export",
+                  "quote": "Export is enabled in the pilot.",
+                  "stance": "supports"
+                }
+              ]
+            }
+          ]
+        },
+        "guided": {
+          "fields": {
+            "owner_email": "synthetic-owner@example.invalid",
+            "export_acknowledged": "yes"
+          },
+          "steps": [
+            {
+              "id": "account",
+              "title": "Record pilot owner",
+              "depends_on": [],
+              "question_ids": [
+                "q-access"
+              ],
+              "required_fields": [
+                "owner_email"
+              ]
+            },
+            {
+              "id": "export",
+              "title": "Acknowledge export setup",
+              "depends_on": [
+                "account"
+              ],
+              "question_ids": [
+                "q-export"
+              ],
+              "required_fields": [
+                "export_acknowledged"
+              ]
+            }
+          ]
+        },
+        "feedback": {
+          "themes": [
+            {
+              "id": "usability",
+              "label": "Synthetic usability observations",
+              "keywords": [
+                "clear",
+                "confusing"
+              ]
+            },
+            {
+              "id": "speed",
+              "label": "Synthetic speed observations",
+              "keywords": [
+                "slow",
+                "fast"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "f1",
+              "step_id": "account",
+              "text": "The instructions are clear."
+            },
+            {
+              "id": "f2",
+              "step_id": "account",
+              "text": "  THE instructions are clear.  "
+            },
+            {
+              "id": "f3",
+              "step_id": "export",
+              "text": "The export is slow."
+            },
+            {
+              "id": "f4",
+              "step_id": "export",
+              "text": "Please add a purple icon."
+            }
+          ]
+        },
+        "review": {
+          "document": {
+            "id": "synthetic-guide",
+            "text": "Synthetic pilot guide: record the owner email and acknowledge export setup. Clear instructions are provided."
+          },
+          "requirements": [
+            {
+              "id": "r-owner",
+              "description": "Owner onboarding has cited evidence and usability support.",
+              "question_ids": [
+                "q-access"
+              ],
+              "step_ids": [
+                "account"
+              ],
+              "theme_ids": [
+                "usability"
+              ],
+              "required_terms": [
+                "owner email"
+              ]
+            },
+            {
+              "id": "r-speed",
+              "description": "Export performance guidance addresses observed feedback.",
+              "question_ids": [
+                "q-export"
+              ],
+              "step_ids": [
+                "export"
+              ],
+              "theme_ids": [
+                "speed"
+              ],
+              "required_terms": [
+                "performance budget"
+              ]
+            }
+          ]
+        }
+      },
+      "results": {
+        "research": {
+          "findings": [
+            {
+              "id": "q-access",
+              "question": "What access does the synthetic pilot require?",
+              "status": "answered",
+              "evidence": [
+                {
+                  "source_id": "source-pilot",
+                  "source_title": "Synthetic pilot notes, not real customer data",
+                  "quote": "The pilot requires an owner email.",
+                  "start": 0,
+                  "end": 34,
+                  "stance": "supports"
+                }
+              ],
+              "next_action": "Use cited evidence, subject to source verification."
+            },
+            {
+              "id": "q-export",
+              "question": "Is export enabled for the synthetic pilot?",
+              "status": "answered",
+              "evidence": [
+                {
+                  "source_id": "source-pilot",
+                  "source_title": "Synthetic pilot notes, not real customer data",
+                  "quote": "Export is enabled in the pilot.",
+                  "start": 35,
+                  "end": 66,
+                  "stance": "supports"
+                }
+              ],
+              "next_action": "Use cited evidence, subject to source verification."
+            }
+          ],
+          "limitations": "Source annotations are supplied, not independently verified."
+        },
+        "guided": {
+          "steps": [
+            {
+              "id": "account",
+              "title": "Record pilot owner",
+              "status": "completed",
+              "reasons": [],
+              "research_refs": [
+                "q-access"
+              ],
+              "dependency_refs": []
+            },
+            {
+              "id": "export",
+              "title": "Acknowledge export setup",
+              "status": "completed",
+              "reasons": [],
+              "research_refs": [
+                "q-export"
+              ],
+              "dependency_refs": [
+                "account"
+              ]
+            }
+          ],
+          "execution_order": [
+            "account",
+            "export"
+          ],
+          "progress": {
+            "completed": 2,
+            "total": 2,
+            "percent": 100.0
+          }
+        },
+        "feedback": {
+          "groups": [
+            {
+              "id": "f1",
+              "normalized_text": "the instructions are clear.",
+              "support": [
+                {
+                  "item_id": "f1",
+                  "step_id": "account",
+                  "quote": "The instructions are clear.",
+                  "start": 0,
+                  "end": 27
+                },
+                {
+                  "item_id": "f2",
+                  "step_id": "account",
+                  "quote": "  THE instructions are clear.  ",
+                  "start": 0,
+                  "end": 31
+                }
+              ]
+            },
+            {
+              "id": "f3",
+              "normalized_text": "the export is slow.",
+              "support": [
+                {
+                  "item_id": "f3",
+                  "step_id": "export",
+                  "quote": "The export is slow.",
+                  "start": 0,
+                  "end": 19
+                }
+              ]
+            },
+            {
+              "id": "f4",
+              "normalized_text": "please add a purple icon.",
+              "support": [
+                {
+                  "item_id": "f4",
+                  "step_id": "export",
+                  "quote": "Please add a purple icon.",
+                  "start": 0,
+                  "end": 25
+                }
+              ]
+            }
+          ],
+          "themes": [
+            {
+              "id": "usability",
+              "label": "Synthetic usability observations",
+              "group_ids": [
+                "f1"
+              ],
+              "unique_count": 1
+            },
+            {
+              "id": "speed",
+              "label": "Synthetic speed observations",
+              "group_ids": [
+                "f3"
+              ],
+              "unique_count": 1
+            },
+            {
+              "id": "unclassified",
+              "label": "Unclassified",
+              "group_ids": [
+                "f4"
+              ],
+              "unique_count": 1
+            }
+          ],
+          "deferred": [],
+          "counts": {
+            "received": 4,
+            "eligible": 4,
+            "unique": 3,
+            "duplicates": 1,
+            "deferred": 0
+          }
+        },
+        "review": {
+          "document_id": "synthetic-guide",
+          "requirements": [
+            {
+              "id": "r-owner",
+              "description": "Owner onboarding has cited evidence and usability support.",
+              "status": "met",
+              "gaps": [],
+              "evidence": [
+                {
+                  "kind": "research",
+                  "id": "q-access",
+                  "support": [
+                    {
+                      "source_id": "source-pilot",
+                      "source_title": "Synthetic pilot notes, not real customer data",
+                      "quote": "The pilot requires an owner email.",
+                      "start": 0,
+                      "end": 34,
+                      "stance": "supports"
+                    }
+                  ]
+                },
+                {
+                  "kind": "onboarding",
+                  "id": "account"
+                },
+                {
+                  "kind": "feedback",
+                  "id": "usability",
+                  "support": [
+                    {
+                      "item_id": "f1",
+                      "step_id": "account",
+                      "quote": "The instructions are clear.",
+                      "start": 0,
+                      "end": 27
+                    },
+                    {
+                      "item_id": "f2",
+                      "step_id": "account",
+                      "quote": "  THE instructions are clear.  ",
+                      "start": 0,
+                      "end": 31
+                    }
+                  ]
+                },
+                {
+                  "kind": "document",
+                  "id": "synthetic-guide",
+                  "term": "owner email",
+                  "quote": "owner email",
+                  "start": 34,
+                  "end": 45
+                }
+              ]
+            },
+            {
+              "id": "r-speed",
+              "description": "Export performance guidance addresses observed feedback.",
+              "status": "gap",
+              "gaps": [
+                {
+                  "kind": "document",
+                  "id": "synthetic-guide",
+                  "term": "performance budget",
+                  "reason": "literal_term_missing"
+                }
+              ],
+              "evidence": [
+                {
+                  "kind": "research",
+                  "id": "q-export",
+                  "support": [
+                    {
+                      "source_id": "source-pilot",
+                      "source_title": "Synthetic pilot notes, not real customer data",
+                      "quote": "Export is enabled in the pilot.",
+                      "start": 35,
+                      "end": 66,
+                      "stance": "supports"
+                    }
+                  ]
+                },
+                {
+                  "kind": "onboarding",
+                  "id": "export"
+                },
+                {
+                  "kind": "feedback",
+                  "id": "speed",
+                  "support": [
+                    {
+                      "item_id": "f3",
+                      "step_id": "export",
+                      "quote": "The export is slow.",
+                      "start": 0,
+                      "end": 19
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "summary": {
+            "met": 1,
+            "gaps": 1
+          },
+          "disclaimer": "Evidence and literal-term checks only; not certification, legal advice, or a truth assessment."
+        }
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t117_combo4_basic-research_guided_feedback_review",
+    "artifact_sha256": {
+      "implementation.py": "b0930234d9ad7fee181cb70e71569f8d7023a1e15413a0fe7a5091a00743d9f4",
+      "test_implementation.py": "c38e44b8afff02c8e224d6d9cfc7a654cd37393bb752e9ab166af2dae5948a9b",
+      "example_input.json": "8ca12c136e2ea34d9ebb2cd0bba5a71daef79f59bcb2a9952ef0558e35cfdfe0",
+      "build_manifest.json": "fd4b34a701222ca2851830327753966dea5f2750a2d0e9e5bfaec78df63f4e7f"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

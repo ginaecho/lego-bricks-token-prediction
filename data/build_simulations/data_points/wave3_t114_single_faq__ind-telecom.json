@@ -97,7 +97,7 @@
   "split_group": "601a3aacfaaa68f851b25ae017b93e76311678ab6a7cdc618012bed90f0a685c",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "19c5a991b18b95297663472c620d17057b24f89d64636546cb982962411dc2bf",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t114_single_faq__ind-telecom",
   "membership_point_id": "single_faq__ind-telecom",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "2cbed6e858797de7b3b9622dda703deb79288866dca03eb11a552c7f2dcec189",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "27c5be9b-2501-4470-825b-94babddbbf67",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 124834,
+    "output_tokens": 8622,
+    "cache_read_tokens": 114807,
+    "cache_write_tokens": 10009,
+    "total_tokens": 133456,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37543,
+        "agent_id": "27c5be9b-2501-4470-825b-94babddbbf67",
+        "model": "gpt-6-astra",
+        "input_tokens": 14970,
+        "output_tokens": 440,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 845,
+        "reasoning_tokens": 261,
+        "duration_ms": 9675,
+        "created_at": "2026-09-24T11:31:22.230Z"
+      },
+      {
+        "id": 37628,
+        "agent_id": "27c5be9b-2501-4470-825b-94babddbbf67",
+        "model": "gpt-6-astra",
+        "input_tokens": 15441,
+        "output_tokens": 7272,
+        "cache_read_tokens": 14967,
+        "cache_write_tokens": 471,
+        "reasoning_tokens": 516,
+        "duration_ms": 103122,
+        "created_at": "2026-09-24T11:39:06.728Z"
+      },
+      {
+        "id": 37630,
+        "agent_id": "27c5be9b-2501-4470-825b-94babddbbf67",
+        "model": "gpt-6-astra",
+        "input_tokens": 23037,
+        "output_tokens": 147,
+        "cache_read_tokens": 15438,
+        "cache_write_tokens": 7596,
+        "reasoning_tokens": 7,
+        "duration_ms": 2969,
+        "created_at": "2026-09-24T11:39:12.930Z"
+      },
+      {
+        "id": 37635,
+        "agent_id": "27c5be9b-2501-4470-825b-94babddbbf67",
+        "model": "gpt-6-astra",
+        "input_tokens": 23354,
+        "output_tokens": 451,
+        "cache_read_tokens": 23034,
+        "cache_write_tokens": 317,
+        "reasoning_tokens": 184,
+        "duration_ms": 10291,
+        "created_at": "2026-09-24T11:39:32.775Z"
+      },
+      {
+        "id": 37637,
+        "agent_id": "27c5be9b-2501-4470-825b-94babddbbf67",
+        "model": "gpt-6-astra",
+        "input_tokens": 23898,
+        "output_tokens": 200,
+        "cache_read_tokens": 23351,
+        "cache_write_tokens": 544,
+        "reasoning_tokens": 0,
+        "duration_ms": 3787,
+        "created_at": "2026-09-24T11:39:37.831Z"
+      },
+      {
+        "id": 37638,
+        "agent_id": "27c5be9b-2501-4470-825b-94babddbbf67",
+        "model": "gpt-6-astra",
+        "input_tokens": 24134,
+        "output_tokens": 112,
+        "cache_read_tokens": 23895,
+        "cache_write_tokens": 236,
+        "reasoning_tokens": 0,
+        "duration_ms": 3085,
+        "created_at": "2026-09-24T11:39:53.406Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.44141499999999995,
+      "observed_cache_profile_estimate_usd": 0.18309925,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.2969800000000005,
+      "observed_cache_profile_estimate_usd": 5.2969800000000005,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,38 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................\n----------------------------------------------------------------------\nRan 19 tests in 0.789s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "answered",
+      "build_id": "wave3_t114_single_faq__ind-telecom",
+      "synthetic": true,
+      "residency": "EU",
+      "answer": "For slow mobile data, toggle airplane mode, restart the device, and check the published network status page. If the issue persists, contact support. This guidance does not confirm an outage for your account.",
+      "source_ids": [
+        "KB-SLOW-DATA"
+      ],
+      "reason": null,
+      "context_counts": {
+        "usage_records": 2,
+        "network_fault_tickets": 1,
+        "support_chat_transcripts": 1
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t114_single_faq__ind-telecom",
+    "artifact_sha256": {
+      "implementation.py": "4717705037e5809b6f84b6dc038a8f3fff46d0b00bcfa6f435f28eb4c93b264e",
+      "test_implementation.py": "6e6a03e2720f20323b602c5b37f95e9cf8638f7d4c2f49ddd58366276a0df3e8",
+      "example_input.json": "d3f1ddbb05af60dfa2545fd3817f892790e7dd619e28d35dda6a47f355980906",
+      "build_manifest.json": "34657ed8e8fd4dfa363816f00992b99de26b7c66bc4521572b2f6031f605c01a"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

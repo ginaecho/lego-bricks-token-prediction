@@ -1,0 +1,59 @@
+{
+  "build_id": "wave3_t119_combo4_web_guided_behavior_semantic__ind-insurance",
+  "composition_label": "web_guided_behavior_semantic",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original implementation authored directly in the isolated build directory.",
+    "runtime": "Python 3 standard library; invoke with -B to suppress bytecode files.",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": {
+    "cli": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "version": "1.0",
+    "input": "schema_version, synthetic=true, fixed timezone-aware as_of, research, guided, behavior, semantic",
+    "output": "One JSON snapshot: schema_version, synthetic, status, stage, as_of, sources, findings, guided, behavior, semantic.",
+    "entities": ["policy", "claim", "underwriting_submission"],
+    "validation": "Shared structural and industry validation checks each stage boundary, identity links, provenance membership, minimized record fields, disclosures and uniform reasoned claims triage.",
+    "provenance": "Allowlisted source URL, source format, SHA-256 of canonical retrieved payload, deterministic retrieved_at from as_of, logical normalized record pointer, record membership.",
+    "error_contract": "CLI validation, decoding and file errors emit one JSON object with status=error and exit 2. Successful CLI emits one JSON object and exits 0."
+  },
+  "cross_stage_handoffs": [
+    {"from": "web", "to": "guided", "data": "Validated minimized findings, source hashes, linked policy identifiers, disclosed underwriting factors."},
+    {"from": "guided", "to": "behavior", "data": "Prerequisite-checked readiness, eligible policy identifiers and explicit coverage preferences."},
+    {"from": "behavior", "to": "semantic", "data": "Recency-weighted policy rankings provide a bounded relevance boost for indexed policies and their linked claims/submissions."}
+  ],
+  "behavior": {
+    "research": "Offline retrieval from inline synthetic fixtures; optional injected retriever(url) returns format-matching fixture data. Exact HTTPS allowlisted hosts; no credentials, query, fragments or redirects. No HTTP client or live retrieval is implemented.",
+    "formats": "Illustrative ACORD-style XML/JSON Policy, Claim and UnderwritingSubmission records, plus strict colon-delimited claim-form text. Not an official ACORD schema.",
+    "onboarding": "Ordered review_minimization -> review_disclosures -> choose_preferences. Partial progress is returned, with behavioral ranking and search blocked until completion.",
+    "ranking": "Browse weight 1, purchase weight 3, decayed by 2^(-age_days/half_life_days). Explicit peril preference adds 0.25. No activity uses deterministic cold-start ranking. Identifier tie-breaking.",
+    "search": "Deterministic synonym-normalized TF-IDF cosine index over all three entity types. Match relevance plus at most 0.1 normalized behavioral prior. Optional injected embedding(text) vectors are finite, nonzero and dimension-consistent; cosine is mixed equally with lexical relevance.",
+    "industry_rules": [
+      "Claims receive uniform coverage-based eligibility/manual-review triage and stated reasons; human review is always required, never automated denial, settlement or approval.",
+      "Raw invented policyholder names, email, fabricated VIN and address are discarded; only synthetic holder references propagate. Event fields are minimized. No compliance certification.",
+      "Every underwriting factor must be explicitly disclosed and acknowledged; unknown or sensitive factors are rejected."
+    ],
+    "synthetic_fixtures": "All policyholders and properties are invented, VINs fabricated. Tests use random.Random(119) for reproducible randomized loss amounts and dates. No live model, network or provider is used.",
+    "determinism": "Fixed as_of controls retrieval timestamps and event recency. Stable ordering, canonical hashes and fixed synonym vocabulary. Injected callables must themselves be deterministic."
+  },
+  "scope": {
+    "included": ["Integrated four-stage CLI", "Shared schema and validation", "Offline allowlisted retrieval and provenance", "Progress and prerequisite tracking", "Minimized behavioral discovery", "Lexical and injected-vector search", "Synthetic insurance triage", "Unit and CLI tests"],
+    "excluded": ["Live web calls or providers", "Production GDPR or insurance compliance certification", "Official ACORD compatibility", "Real policyholder data", "Persistent user databases", "Authentication and authorization", "Automated claims denial or underwriting pricing", "Enterprise deployment", "Training an embedding model"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "test_implementation.py",
+    "tests_passed": 41,
+    "cli_exit_code": 0,
+    "cli_output": "Exactly one JSON object with status=ok.",
+    "error_cli_exit_code": 2,
+    "validation": "All stage, handoff, privacy, disclosure, fair-triage, invalid-input, injected-callable and CLI tests passed."
+  }
+}

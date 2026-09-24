@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "fixture_description": "Entirely invented manufacturing data; seeded randomized plausible telemetry with a deliberate overtemperature event. No real customer or asset records.",
+  "work_orders": [
+    {
+      "id": "WO-SYN-101",
+      "asset_id": "SYN-PRESS-17",
+      "operation": "Form fictitious alloy brackets",
+      "status": "running",
+      "specifications": {
+        "temperature": {
+          "unit": "degC",
+          "min": 40,
+          "max": 80,
+          "safety_min": 0,
+          "safety_max": 95
+        },
+        "vibration": {
+          "unit": "mm/s",
+          "min": 0,
+          "max": 4.5,
+          "safety_min": 0,
+          "safety_max": 7.1
+        }
+      }
+    }
+  ],
+  "sensor_csv": "timestamp,asset_id,work_order_id,metric,value,unit\n2026-09-24T10:00:00Z,SYN-PRESS-17,WO-SYN-101,temperature,65.81,degC\n2026-09-24T10:00:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.43,mm/s\n2026-09-24T10:01:00Z,SYN-PRESS-17,WO-SYN-101,temperature,64.2,degC\n2026-09-24T10:01:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.45,mm/s\n2026-09-24T10:02:00Z,SYN-PRESS-17,WO-SYN-101,temperature,65.45,degC\n2026-09-24T10:02:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.37,mm/s\n2026-09-24T10:03:00Z,SYN-PRESS-17,WO-SYN-101,temperature,63.25,degC\n2026-09-24T10:03:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.36,mm/s\n2026-09-24T10:04:00Z,SYN-PRESS-17,WO-SYN-101,temperature,65.71,degC\n2026-09-24T10:04:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.31,mm/s\n2026-09-24T10:05:00Z,SYN-PRESS-17,WO-SYN-101,temperature,98.0,degC\n2026-09-24T10:05:00Z,SYN-PRESS-17,WO-SYN-101,vibration,2.31,mm/s\n",
+  "inspections": [
+    {
+      "id": "QI-101",
+      "work_order_id": "WO-SYN-101",
+      "metric": "temperature",
+      "value": 86,
+      "unit": "degC",
+      "inspector": "Inspector Fictitious-7",
+      "timestamp": "2026-09-24T10:04:00Z"
+    }
+  ],
+  "feedback": [
+    {
+      "id": "FB-1",
+      "work_order_id": "WO-SYN-101",
+      "source": "maintenance_log",
+      "text": "Invented log: maintenance operator reported shaking near the bearing; service review requested."
+    },
+    {
+      "id": "FB-2",
+      "work_order_id": "WO-SYN-101",
+      "source": "customer",
+      "text": "Synthetic customer reported hot parts and quality defects."
+    }
+  ],
+  "products": [
+    {
+      "id": "P-BEARING",
+      "name": "Synthetic vibration assessment kit",
+      "description": "Bearing condition inspection and maintenance service",
+      "tags": [
+        "vibration",
+        "maintenance"
+      ],
+      "compatible_assets": [
+        "SYN-PRESS-17"
+      ]
+    },
+    {
+      "id": "P-COOL",
+      "name": "Synthetic cooling review",
+      "description": "Temperature monitoring and cooling assessment",
+      "tags": [
+        "temperature"
+      ],
+      "compatible_assets": [
+        "SYN-PRESS-17"
+      ]
+    },
+    {
+      "id": "P-OTHER",
+      "name": "Synthetic vibration service for other asset",
+      "description": "Vibration maintenance service",
+      "tags": [
+        "vibration"
+      ],
+      "compatible_assets": [
+        "SYN-MILL-99"
+      ]
+    }
+  ],
+  "customer": {
+    "id": "C-SYN-1",
+    "name": "Fictitious Bracket Works",
+    "experience": "new",
+    "work_order_id": "WO-SYN-101",
+    "query": "shaking bearing service"
+  }
+}
