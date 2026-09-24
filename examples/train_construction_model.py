@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -34,14 +35,26 @@ def load(root: Path) -> list[dict]:
 
 
 def feature_names(points: list[dict]) -> list[str]:
-    sample = points[0]["input_features"]
-    return sorted(name for name, value in sample.items()
-                  if isinstance(value, (int, float)) and not isinstance(value, bool)
-                  and not name.startswith(EXCLUDED[0]) and name != EXCLUDED[1])
+    """Union over all points; wave-3 features (generic parts, industry) are 0 for earlier records."""
+    names = {name for point in points for name, value in point["input_features"].items()
+             if isinstance(value, (int, float)) and not isinstance(value, bool)
+             and not name.startswith(EXCLUDED[0]) and name != EXCLUDED[1]}
+    return sorted(names)
 
 
 def matrix(points: list[dict], names: list[str]) -> np.ndarray:
-    return np.array([[float(point["input_features"][name]) for name in names] for point in points])
+    return np.array([[float(point["input_features"].get(name, 0)) for name in names] for point in points])
+
+
+def level(point: dict) -> str:
+    return point["input_features"].get("composition_level", "BT")
+
+
+def breakdown(points: list[dict], actual, predicted, key) -> dict:
+    labels = [key(point) for point in points]
+    return {str(label): metrics(actual[mask], predicted[mask])
+            for label in sorted(set(labels), key=str)
+            for mask in [np.array([item == label for item in labels])]}
 
 
 def targets(points: list[dict]) -> dict[str, np.ndarray]:
@@ -123,6 +136,7 @@ def run(root: Path, wave: str, evaluate_test: bool) -> dict:
         "candidate": metrics(val_total, val_pred_total),
         "training_mean_baseline": metrics(val_total, baseline_total),
         "per_target": {name: metrics(y_val[name], val_pred[name]) for name in TARGETS},
+        "by_level": breakdown(split["validation"], val_total, val_pred_total, level),
         "train_fit": metrics(train_total, train_fit["input_tokens"] + train_fit["output_tokens"]),
         "interval_coverage": coverage(val_pred_total, val_total, val_pred, bounds),
     }
@@ -154,13 +168,14 @@ def run(root: Path, wave: str, evaluate_test: bool) -> dict:
         predicted = predictions["input_tokens"] + predictions["output_tokens"]
         test = {"evaluated_once": True, **metrics(actual, predicted),
                 "interval_coverage": coverage(predicted, actual, predictions, bounds),
-                "by_size": {str(size): metrics(actual[mask], predicted[mask])
-                            for size in (1, 2, 3, 4)
-                            for mask in [np.array([p["input_features"]["functionality_count"] == size for p in split["test"]])]
-                            if mask.any()}}
+                "by_size": breakdown(split["test"], actual, predicted, lambda p: p["input_features"]["functionality_count"]),
+                "by_level": breakdown(split["test"], actual, predicted, level),
+                "by_industry": breakdown(split["test"], actual, predicted, lambda p: p["input_features"].get("industry") or "none"),
+                "by_wave": breakdown(split["test"], actual, predicted, lambda p: p.get("wave") or "wave1")}
     report = {
         "wave": wave, "model_fingerprint": artifact["fingerprint"], "promoted": passed,
         "counts": {key: len(value) for key, value in split.items()},
+        "counts_by_level": {key: dict(Counter(level(p) for p in value)) for key, value in split.items()},
         "groups": {key: len({p["split_group"] for p in value}) for key, value in split.items()},
         "alpha_search_grouped_cv_total_tokens": search, "selected_alpha": best,
         "validation": validation, "gates": rules, "gates_passed_on_validation": passed,

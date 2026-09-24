@@ -20,6 +20,7 @@ from token_yield.build_simulations import (
 from token_yield.build_waves import (
     BUILDER_TEMPLATE, BUILDER_TEMPLATE_VERSION, instructions, select_wave, trial_point,
 )
+from token_yield import build_waves_v3 as v3
 from token_yield.marketplace_agent_contracts import ATOMS, contracts
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -126,6 +127,85 @@ def wave_path(root: Path, wave: str) -> Path:
     return root / "waves" / f"{wave}.json"
 
 
+def wave_instructions(manifest: dict, trial: dict) -> str:
+    render = v3.instructions if manifest["builder_instructions_version"] == v3.BUILDER_TEMPLATE_VERSION else instructions
+    return render(trial, str(ROOT / trial["staging_directory"]))
+
+
+RESEARCH_NOTE = ("Reference-only industry AI use cases gathered from public sources to inform the curated industry "
+                 "profiles. They do not select or define any build composition; type mappings are post-hoc analyst "
+                 "hypotheses. Some pages were verified only through search snippets or secondary sources.")
+
+
+def write_wave3_references(root: Path, research: Path | None) -> None:
+    write_json(root / "basic_functionality_registry.json", [
+        {"part": f"basic:{family}", "basic_functionality_id": family, "basic_functionality": FAMILIES[family],
+         "category": item["category"], "studio_description": item["description"],
+         "planned_operations": v3.generic_atoms(family),
+         "planned_operations_rule": "Element-wise minimum of the family's catalog types (shared core operations).",
+         "types": [entry["id"] for entry in contracts() if entry["feature_id"] == family],
+         "origin": "marketplace-sales-demo.html Studio CATALOG"}
+        for family, item in v3.BASICS.items()])
+    write_json(root / "industry_profiles.json", {
+        "use": "Industry context injected into BTI builder instructions; independent of any single use case.",
+        "profiles": v3.INDUSTRIES})
+    if research is not None:
+        data = read(research)
+        write_json(root / "industry_use_cases.json", {
+            "status": "reference_only_no_build_measurement", "note": RESEARCH_NOTE,
+            "cases": [{**case, "mapping_status": "Post-hoc analyst hypothesis.", "catalog_design_dependency": False}
+                      for case in data["cases"]],
+            "industry_profiles_raw": data["industry_profiles"], "sources_checked": data.get("sources_checked", []),
+        })
+
+
+def plan_wave3(root: Path, wave: str, session_id: str, staging: str, model: str, seed: int,
+               research: Path | None) -> None:
+    target = wave_path(root, wave)
+    if target.exists():
+        raise ValueError(f"{target} is frozen; create a new wave instead of re-planning")
+    write_wave3_references(root, research)
+    measured_groups = {read(path)["split_group"] for path in sorted((root / "data_points").glob("*.json"))
+                       if read(path)["status"] == "measured_build_passed"}
+    trials = v3.select_wave3(measured_groups, seed, wave)
+    for trial in trials:
+        trial["staging_directory"] = f"{staging}/{trial['trial_id']}"
+        text = v3.instructions(trial, str(ROOT / trial["staging_directory"]))
+        trial["builder_instructions_sha256"] = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        point_path = root / "data_points" / (trial["trial_id"] + ".json")
+        if point_path.exists():
+            raise ValueError(f"Trial record already exists: {point_path.name}")
+        write_json(point_path, v3.trial_point(trial, wave, trial["builder_instructions_sha256"]))
+    previous = read(wave_path(root, "wave2"))["evaluation_rules"]
+    write_json(target, {
+        "protocol": "agent-software-build-v1", "wave": wave, "parent_session_id": session_id,
+        "status": "frozen_before_dispatch", "selection_seed": seed, "plan": v3.WAVE3_PLAN,
+        "split_share_for_new_groups": v3.SPLIT_SHARE, "spec_version": v3.SPEC_VERSION,
+        "levels": {"B": "generic Studio basic functionality, no variant prescribed",
+                   "BT": "basic functionality with a catalog type",
+                   "BI": "generic basic functionalities plus an industry context",
+                   "BTI": "parts including at least one catalog type, plus an industry context"},
+        "selection_inputs": "Catalog parts, curated industry profiles and existing split groups only; no token labels "
+                            "and no real-use-case records were read.",
+        "builder_model_requested": model, "concurrency_plan": 5,
+        "direct_paid_api_calls_authorized_for_this_wave": False,
+        "builder_instructions_version": v3.BUILDER_TEMPLATE_VERSION,
+        "builder_instructions_template": v3.BUILDER_TEMPLATE,
+        "builder_instructions_template_sha256": hashlib.sha256(v3.BUILDER_TEMPLATE.encode("utf-8")).hexdigest(),
+        "staging_root": staging,
+        "evaluation_rules": {**previous,
+                             "test_policy": "Wave-3 test groups are evaluated once with the frozen candidate; "
+                                            "wave-2 test groups stay in test."},
+        "trials": trials, "builders": {}, "failures": {},
+    })
+    print(json.dumps({"wave": wave, "trials": len(trials),
+                      "by_category": dict(Counter(t["category"] for t in trials)),
+                      "by_level": dict(Counter(t["level"] for t in trials)),
+                      "by_size": dict(Counter(len(t["parts"]) for t in trials)),
+                      "by_split": dict(Counter(t["split"] for t in trials)),
+                      "by_industry": dict(Counter(t["industry"] for t in trials))}))
+
+
 def plan_wave(root: Path, wave: str, session_id: str, staging: str, model: str, seed: int) -> None:
     target = wave_path(root, wave)
     if target.exists():
@@ -174,7 +254,7 @@ def plan_wave(root: Path, wave: str, session_id: str, staging: str, model: str, 
 def dispatch_text(root: Path, wave: str, trial_id: str) -> None:
     manifest = read(wave_path(root, wave))
     trial = next(item for item in manifest["trials"] if item["trial_id"] == trial_id)
-    text = instructions(trial, str(ROOT / trial["staging_directory"]))
+    text = wave_instructions(manifest, trial)
     if hashlib.sha256(text.encode("utf-8")).hexdigest() != trial["builder_instructions_sha256"]:
         raise ValueError("Instructions differ from the frozen fingerprint")
     print(text)
@@ -264,7 +344,10 @@ def summarize(root: Path) -> None:
             "id": point["id"], "origin": point["origin"], "status": point["status"],
             "split": point.get("split", "not_eligible"), "split_group": point.get("split_group"),
             "basic_functionalities": " + ".join(features["basic_functionalities"]),
-            "types": " + ".join(features["types"]), **{name: features.get(name) for name in STAFF},
+            "types": " + ".join(features["types"]),
+            "parts": " + ".join(features.get("parts", features["types"])),
+            "composition_level": features.get("composition_level", "BT" if point["origin"] == "catalog_designed_simulation" else None),
+            "industry": features.get("industry"), **{name: features.get(name) for name in STAFF},
             "estimated_months_to_finish": features.get("estimated_months_to_finish"),
             "input_tokens": usage.get("input_tokens"), "output_tokens": usage.get("output_tokens"),
             "total_tokens": usage.get("total_tokens"),
@@ -294,8 +377,12 @@ def summarize(root: Path) -> None:
                                   for split in ("train", "validation", "test")},
         "construction_route": "subscription_subagents",
         "direct_foundry_or_deepseek_calls_in_this_wave": 0,
-        "all_16_standalone_types_measured": len({tuple(point["input_features"]["types"]) for point in measured
-                                                 if point["input_features"]["functionality_count"] == 1}) == 16,
+        "all_16_standalone_types_measured": len({point["input_features"]["types"][0] for point in measured
+                                                 if point["input_features"]["functionality_count"] == 1
+                                                 and len(point["input_features"]["types"]) == 1}) == 16,
+        "measured_by_composition_level": dict(Counter(point["input_features"].get("composition_level", "BT")
+                                                      for point in measured)),
+        "measured_by_industry": dict(Counter(point["input_features"].get("industry") or "none" for point in measured)),
         "independent_combinatorial_design_points": len(combination_design()),
         "real_use_case_reference_points": sum(point["origin"] == "real_use_case_reference" for point in points),
         "unmeasured_combinations_are_not_predictions": True,
@@ -360,13 +447,18 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=20260923)
     parser.add_argument("--agent-id")
     parser.add_argument("--failed")
+    parser.add_argument("--design", choices=("wave2", "levels-v3"), default="wave2")
+    parser.add_argument("--research", type=Path, help="Industry research JSON copied into industry_use_cases.json")
     args = parser.parse_args()
     if args.action == "initialize":
         initialize(args.root)
     elif args.action == "plan-wave":
         if not (args.wave and args.session_id and args.staging):
             parser.error("plan-wave requires --wave, --session-id and --staging")
-        plan_wave(args.root, args.wave, args.session_id, args.staging, args.model, args.seed)
+        if args.design == "levels-v3":
+            plan_wave3(args.root, args.wave, args.session_id, args.staging, args.model, args.seed, args.research)
+        else:
+            plan_wave(args.root, args.wave, args.session_id, args.staging, args.model, args.seed)
     elif args.action == "instructions":
         dispatch_text(args.root, args.wave, args.ids[0])
     elif args.action == "register":

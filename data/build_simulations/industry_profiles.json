@@ -1,0 +1,149 @@
+{
+  "use": "Industry context injected into BTI builder instructions; independent of any single use case.",
+  "profiles": {
+    "finance": {
+      "name": "Financial services",
+      "entities": [
+        "customer/KYC profile",
+        "transaction",
+        "loan application"
+      ],
+      "constraints": [
+        "KYC/AML screening flags",
+        "PCI DSS masking of card numbers",
+        "model-risk explainability of every score"
+      ],
+      "formats": [
+        "JSON/CSV transaction ledgers",
+        "ISO 20022-style payment payloads"
+      ],
+      "guidance": "fabricated customers, fake account numbers/IBANs and randomized transaction histories"
+    },
+    "insurance": {
+      "name": "Insurance",
+      "entities": [
+        "policy",
+        "claim",
+        "underwriting submission"
+      ],
+      "constraints": [
+        "fair claims-handling decisions with stated reasons",
+        "GDPR minimization of policyholder data",
+        "underwriting factors must be disclosed, not hidden"
+      ],
+      "formats": [
+        "ACORD-style XML/JSON submissions",
+        "claim-form text"
+      ],
+      "guidance": "invented policyholders, fabricated VINs/property addresses and randomized loss amounts and dates"
+    },
+    "healthcare": {
+      "name": "Healthcare",
+      "entities": [
+        "patient record",
+        "clinical note",
+        "prior authorization request"
+      ],
+      "constraints": [
+        "HIPAA de-identification of patient identifiers",
+        "no autonomous clinical decisions; human review flag",
+        "audit trail for every record change"
+      ],
+      "formats": [
+        "HL7 FHIR-style JSON resources",
+        "clinical note text"
+      ],
+      "guidance": "fictitious Synthea-style patients, diagnoses and lab values with no real MRNs, names or birth dates"
+    },
+    "manufacturing": {
+      "name": "Manufacturing",
+      "entities": [
+        "work order",
+        "sensor/telemetry reading",
+        "quality inspection record"
+      ],
+      "constraints": [
+        "ISO 9001 traceability of quality decisions",
+        "safety-critical alerts escalate to a human",
+        "units and tolerances validated on input"
+      ],
+      "formats": [
+        "time-series sensor CSV",
+        "ERP/MES work-order JSON"
+      ],
+      "guidance": "physically plausible randomized telemetry, fictitious machine/asset IDs and invented maintenance logs"
+    },
+    "retail": {
+      "name": "Retail",
+      "entities": [
+        "product catalog SKU",
+        "customer profile",
+        "order/basket"
+      ],
+      "constraints": [
+        "GDPR/CCPA consent before personalization",
+        "no fabricated reviews or endorsements",
+        "price and stock shown must match the catalog"
+      ],
+      "formats": [
+        "product catalog JSON feed",
+        "clickstream event log"
+      ],
+      "guidance": "fictitious catalog with invented SKUs, prices and stock plus synthetic shopper personas"
+    },
+    "energy": {
+      "name": "Energy and utilities",
+      "entities": [
+        "meter reading",
+        "grid asset",
+        "outage report"
+      ],
+      "constraints": [
+        "NERC CIP-style protection of critical asset identifiers",
+        "outage priority must follow declared safety rules",
+        "emissions figures carry units and source"
+      ],
+      "formats": [
+        "smart-meter interval CSV",
+        "SCADA-style telemetry JSON"
+      ],
+      "guidance": "synthetic grid topology, fictitious substation/device IDs and plausible seasonal consumption"
+    },
+    "public_sector": {
+      "name": "Public sector",
+      "entities": [
+        "citizen service request",
+        "benefits application",
+        "policy document"
+      ],
+      "constraints": [
+        "Privacy Act/GDPR protection of citizen PII",
+        "decisions explainable for FOIA/open-records review",
+        "accessible plain-language outputs (Section 508 spirit)"
+      ],
+      "formats": [
+        "government form JSON",
+        "policy/regulation text"
+      ],
+      "guidance": "fabricated citizen personas, invented case numbers and non-traceable addresses"
+    },
+    "telecom": {
+      "name": "Telecommunications",
+      "entities": [
+        "subscriber account",
+        "network fault ticket",
+        "call/data usage record"
+      ],
+      "constraints": [
+        "GDPR/CCPA protection of subscriber data",
+        "data-residency tag respected on every record",
+        "billing adjustments require a stated reason"
+      ],
+      "formats": [
+        "call detail records (CSV)",
+        "support chat transcripts"
+      ],
+      "guidance": "fictitious phone numbers/IMEIs, randomized usage volumes and invented support tickets"
+    }
+  }
+}

@@ -144,8 +144,9 @@ def test_persisted_wave_has_traceable_separate_build_labels():
     measured = [point for point in points if point["status"] == "measured_build_passed"]
     sizes = Counter(point["input_features"]["functionality_count"] for point in measured)
     assert sizes[1] >= 16 and all(sizes[size] >= 1 for size in (2, 3, 4))
-    assert len({tuple(point["input_features"]["types"]) for point in measured
-                if point["input_features"]["functionality_count"] == 1}) == 16
+    assert len({point["input_features"]["types"][0] for point in measured
+                if point["input_features"]["functionality_count"] == 1
+                and len(point["input_features"]["types"]) == 1}) == 16
     assert len({point["build_token_usage"]["builder_agent_id"] for point in measured}) == len(measured)
     event_ids = []
     for point in points:
@@ -169,3 +170,44 @@ def test_persisted_wave_has_traceable_separate_build_labels():
         for filename, expected in evidence["artifact_sha256"].items():
             assert hashlib.sha256((directory / filename).read_bytes()).hexdigest() == expected
     assert len(set(event_ids)) == len(event_ids), "Do not reuse the same request as labels for multiple builds"
+
+
+def test_wave3_levels_features_and_split_groups():
+    from token_yield.build_waves_v3 import INDUSTRIES, build_spec_v3, generic_atoms, instructions
+    basic = build_spec_v3(["basic:research"], None)["input_features"]
+    assert basic["composition_level"] == "B" and basic["types"] == []
+    assert basic["has_generic_research"] == 1 and basic["industry_context"] == 0
+    assert basic["planned_operation_retrieve"] == generic_atoms("research")["retrieve"] == 1
+    typed = build_spec_v3(["deep", "extract"], None)
+    assert typed["input_features"]["composition_level"] == "BT"
+    assert typed["split_group"] == build_spec(["deep", "extract"])["split_group"]
+    industry = build_spec_v3(["extract", "basic:support"], "insurance")
+    reordered = build_spec_v3(["basic:support", "extract"], "insurance")
+    features = industry["input_features"]
+    assert features["composition_level"] == "BTI" and features["part_levels"] == ["BT", "B"]
+    assert features["industry_insurance"] == 1 and sum(features[f"industry_{n}"] for n in INDUSTRIES) == 1
+    assert features["planned_acceptance_case_count"] == 11
+    assert industry["split_group"] == reordered["split_group"] != build_spec_v3(["extract", "basic:support"], "retail")["split_group"]
+    assert build_spec_v3(["basic:support"], "retail")["input_features"]["composition_level"] == "BI"
+    assert not any("tokens" in name for name in features)
+    with pytest.raises(ValueError, match="distinct basic"):
+        build_spec_v3(["basic:documents", "extract"], None)
+    with pytest.raises(ValueError, match="Unknown"):
+        build_spec_v3(["basic:nothing"], None)
+    text = instructions({"trial_id": "t", "parts": ["extract", "basic:support"], "industry": "insurance"}, "C:\\x")
+    assert "Industry context: Insurance." in text and "no variant prescribed" in text
+    assert "industry-constraint" in text and "at least 11 test cases" in text
+    assert "Industry context" not in instructions({"trial_id": "t", "parts": ["deep"], "industry": None}, "C:\\x")
+
+
+def test_wave3_complete_point_checks_v3_fingerprint():
+    from token_yield.build_waves_v3 import trial_point
+    trial = {"trial_id": "wave3_tx", "parts": ["basic:onboard"], "industry": "telecom",
+             "membership_point_id": "m", "kind": "new_membership", "category": "BTI_single"}
+    point = trial_point(trial, "wave3", "sha")
+    evidence = {"tests_passed": True, "artifact_sha256": {"implementation.py": "mock-hash"}}
+    assert complete_point(point, [event()], "builder", [card()], evidence)["status"] == "measured_build_passed"
+    changed = copy.deepcopy(point)
+    changed["input_features"]["industry_constraint_count"] = 9
+    with pytest.raises(ValueError, match="record changed"):
+        complete_point(changed, [event()], "builder", [card()], evidence)

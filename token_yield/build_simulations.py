@@ -243,7 +243,12 @@ def planned_point(types: list[str]) -> dict:
 
 def complete_point(point: dict, rows: list[dict], agent_id: str, cards: list[dict],
                    evidence: dict) -> dict:
-    spec_keys = build_spec(point["input_features"]["types"]).keys()
+    if point.get("spec_version") == "composition-levels-v3":
+        from .build_waves_v3 import build_spec_v3
+        features = point["input_features"]
+        spec_keys = build_spec_v3(features["parts"], features["industry"]).keys()
+    else:
+        spec_keys = build_spec(point["input_features"]["types"]).keys()
     if fingerprint({key: point[key] for key in spec_keys}) != point["spec_sha256"]:
         raise ValueError("Build feature/specification record changed without a new version")
     if evidence.get("tests_passed") is not True or not evidence.get("artifact_sha256"):

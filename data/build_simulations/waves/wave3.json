@@ -1,0 +1,2770 @@
+{
+  "protocol": "agent-software-build-v1",
+  "wave": "wave3",
+  "parent_session_id": "3d54db02-1bce-4637-9621-8c312d0c0439",
+  "status": "frozen_before_dispatch",
+  "selection_seed": 20260924,
+  "plan": {
+    "B_single": 14,
+    "BT_single_repeat": 16,
+    "BTI_single": 48,
+    "combo_B": 17,
+    "combo_BI": 17,
+    "combo_mixed": 16,
+    "combo_mixedI": 16,
+    "combo_BTI": 16
+  },
+  "split_share_for_new_groups": {
+    "test": 0.2,
+    "validation": 0.15
+  },
+  "spec_version": "composition-levels-v3",
+  "levels": {
+    "B": "generic Studio basic functionality, no variant prescribed",
+    "BT": "basic functionality with a catalog type",
+    "BI": "generic basic functionalities plus an industry context",
+    "BTI": "parts including at least one catalog type, plus an industry context"
+  },
+  "selection_inputs": "Catalog parts, curated industry profiles and existing split groups only; no token labels and no real-use-case records were read.",
+  "builder_model_requested": "gpt-6-astra",
+  "concurrency_plan": 5,
+  "direct_paid_api_calls_authorized_for_this_wave": false,
+  "builder_instructions_version": "builder-instructions-v3",
+  "builder_instructions_template": "You are an isolated software builder for a token-measurement experiment.\nYour entire session is measured as ONE construction label, so work normally and completely,\nbut do not do unrelated exploration.\n\nBuild ID: {trial_id}\nWorking directory (create it if missing; write ONLY here): {directory}\n\nIsolation rules (mandatory):\n- Start from an empty directory. Do not read, list, search or copy any other file or folder\n  in the repository or on this machine. Do not look at other builds.\n- Do not spawn sub-agents, do not use git, do not call networks, web tools or model providers.\n- Use Python 3 standard library only.\n- Write no files other than the four deliverables below (no prompt logs, notes or docs folders),\n  and never write outside the working directory.\n\nBuild ONE integrated, runnable Python CLI reference implementation of this composition\n({count} basic functionalit{plural}, executed in this order):\n{steps}\n{integration}{industry}Scope: bounded reference implementation with one shared input/output schema and one shared\nvalidation layer; deterministic logic; any LLM step is an optional injected Python callable\nvalidated with test fixtures (never a live provider). Not enterprise production delivery.\nUse clearly labeled synthetic fixture data.\n\nDeliverables, exactly these four files in the working directory:\n1. implementation.py - `python -B implementation.py example_input.json` must print one JSON\n   object to stdout and exit 0. Validation/file errors print JSON with status \"error\", exit 2.\n2. test_implementation.py - unittest suite with at least {acceptance} test cases covering\n   {coverage}; `python -B -m unittest discover -s . -p test_implementation.py` must pass.\n3. example_input.json - synthetic example input accepted by the CLI.\n4. build_manifest.json - JSON with keys: build_id, composition_label, construction\n   (started_with_empty_directory, implementation_origin, runtime, external_dependencies,\n   networks_or_providers_called, agents_spawned, git_used), deliverables, commands,\n   shared_schema, cross_stage_handoffs, behavior, scope (included/excluded), test_outcomes.\n   Do not include token counts, cost, staffing or client scores.\n\nRun the tests and the CLI yourself and repair until both pass. Finish with a short report\n(under 120 words) stating the file list and test result.\n",
+  "builder_instructions_template_sha256": "f10de8673d713c31777752282d12484b50495540944a4e91b68248ed5ee7d825",
+  "staging_root": "runs/20260924_0900_wave3",
+  "evaluation_rules": {
+    "targets": "Fit input and output construction tokens separately; derive total and cost afterward.",
+    "features": "Pre-build input_features only; no observed sizes, test counts, usage, prices or pseudo outcomes.",
+    "baseline": "Training-mean per target; candidates are regularized linear models chosen by grouped CV on train+validation groups.",
+    "acceptance_gates": {
+      "validation_total_mape_max": 0.2,
+      "must_beat_baseline_mae_on_validation": true,
+      "interval_coverage_target": 0.8
+    },
+    "test_policy": "Wave-3 test groups are evaluated once with the frozen candidate; wave-2 test groups stay in test."
+  },
+  "trials": [
+    {
+      "parts": [
+        "basic:documents"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t001_single_basic-documents",
+      "membership_point_id": "single_basic-documents",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "a5b938876ac4c61d06812275680ec3e1f724bb97ea5886fcf2236b43f52169a8",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t001_single_basic-documents",
+      "builder_instructions_sha256": "e41d1c80a63a073a8da6dc4d2c500a36745869a5829cb38b53f6e178416fd5ac"
+    },
+    {
+      "parts": [
+        "adaptive"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t002_single_adaptive",
+      "membership_point_id": "single_adaptive",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "ffcc3ef5fe0b307894c624c8a5a0006350af75478bd69390708c41404dcfd5fc",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t002_single_adaptive",
+      "builder_instructions_sha256": "d48c942d3dd812c02cfc21c9622d3b2f6442b19b624cc5bfbf33abe25e32b352"
+    },
+    {
+      "parts": [
+        "faq"
+      ],
+      "industry": "energy",
+      "category": "BTI_single",
+      "trial_id": "wave3_t003_single_faq__ind-energy",
+      "membership_point_id": "single_faq__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "0373cd6a6a38a14a1e878c8cb69765ab894794d3db080c964b9fb264a7c29e1d",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t003_single_faq__ind-energy",
+      "builder_instructions_sha256": "79b6575f278ace584355fb2b3d952d3b123c1e2d6fe438838f59e0329b33ccc0"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "basic:support"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t004_combo2_basic-onboard_basic-support",
+      "membership_point_id": "combo2_basic-onboard_basic-support",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "253783407998e4bdd1f689ee3d0084ad5a19f82c3e2d57ced128a184fff65fb3",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t004_combo2_basic-onboard_basic-support",
+      "builder_instructions_sha256": "cb31b189c0e84d1ac84475cc321138876dce0b4b5e058388d88d49d152b0a552"
+    },
+    {
+      "parts": [
+        "basic:support",
+        "basic:search"
+      ],
+      "industry": "public_sector",
+      "category": "combo_BI",
+      "trial_id": "wave3_t005_combo2_basic-support_basic-search__ind-public_sector",
+      "membership_point_id": "combo2_basic-support_basic-search__ind-public_sector",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "593f5899961f44c1ae8d33f1144c49ae128f6348e777146ce6db999455397947",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t005_combo2_basic-support_basic-search__ind-public_sector",
+      "builder_instructions_sha256": "a59ee7c84f06c66e2287a46568c2bc0f4cd0216d028aaa10ccf15b78a1dfe6c9"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "faq"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t006_combo2_basic-onboard_faq",
+      "membership_point_id": "combo2_basic-onboard_faq",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "a759f84fe8cfe3cf7a3700aa0fa1a2106f06993c357e6ae0b73dac21636e6f22",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t006_combo2_basic-onboard_faq",
+      "builder_instructions_sha256": "e2f3065debbac10249f7365d755e418b344b81ff3320a7577b2969e6a8adcdc9"
+    },
+    {
+      "parts": [
+        "semantic",
+        "basic:onboard"
+      ],
+      "industry": "manufacturing",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t007_combo2_semantic_basic-onboard__ind-manufacturing",
+      "membership_point_id": "combo2_semantic_basic-onboard__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "00bb9fad85b0fc3b3f505aa7db13845becf422f046374914e7053f078d06987a",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t007_combo2_semantic_basic-onboard__ind-manufacturing",
+      "builder_instructions_sha256": "8cea47dd765289eb001fe2a99d9ba3566850544bfe4a66655651786c64638274"
+    },
+    {
+      "parts": [
+        "semantic",
+        "guided"
+      ],
+      "industry": "finance",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t008_combo2_semantic_guided__ind-finance",
+      "membership_point_id": "combo2_semantic_guided__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "ace89e30277b4d7d1a7c194c40fe5901f43b2b40b474c970bce810c8fa60e864",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t008_combo2_semantic_guided__ind-finance",
+      "builder_instructions_sha256": "6525ee72b97f646537753fda6bb56479e1d84af207a98b68d305e758f51d438e"
+    },
+    {
+      "parts": [
+        "basic:insights"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t009_single_basic-insights",
+      "membership_point_id": "single_basic-insights",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "79903612248ff962e77e564d2349df78fc0e1711b7aa0b810c49f7f1133d2124",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t009_single_basic-insights",
+      "builder_instructions_sha256": "8236ec459ff2cb5ff72dcc52fa5d0a6d1710ae4e6ad2ca0168cecc79977a90f6"
+    },
+    {
+      "parts": [
+        "behavior"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t010_single_behavior",
+      "membership_point_id": "single_behavior",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "test",
+      "split_group": "c0e904c3593c04756b65a134701eaa0774373dcdb60755313c29160ee626d347",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t010_single_behavior",
+      "builder_instructions_sha256": "127d31e406160c91306d1ac4dce16ca5f12e7905016e652d2a31db9686400c0b"
+    },
+    {
+      "parts": [
+        "sentiment"
+      ],
+      "industry": "insurance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t011_single_sentiment__ind-insurance",
+      "membership_point_id": "single_sentiment__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "d1b4dab5342a5137123e13f76ac84a2534d2113ed6908fc3be303a8042268fcb",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t011_single_sentiment__ind-insurance",
+      "builder_instructions_sha256": "f82ba796050ec5ff428baa247cf174fc4fdd4f655a1f3be7335e333d06f2e039"
+    },
+    {
+      "parts": [
+        "basic:insights",
+        "basic:documents"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t012_combo2_basic-insights_basic-documents",
+      "membership_point_id": "combo2_basic-insights_basic-documents",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "d93187eec6914da34b81d7852edaab806bb0f9a3bc356728234c1d5ccc479925",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t012_combo2_basic-insights_basic-documents",
+      "builder_instructions_sha256": "cd7cfda09da1481b88e40550827a1c0e2cd4982a5cd1358050d252babc0c2c64"
+    },
+    {
+      "parts": [
+        "basic:insights",
+        "basic:documents"
+      ],
+      "industry": "telecom",
+      "category": "combo_BI",
+      "trial_id": "wave3_t013_combo2_basic-insights_basic-documents__ind-telecom",
+      "membership_point_id": "combo2_basic-insights_basic-documents__ind-telecom",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "c41c52223752983f7c558a08f9e328a48898be9fc7eeb5258f57b8b00eeebc69",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t013_combo2_basic-insights_basic-documents__ind-telecom",
+      "builder_instructions_sha256": "05928c14bb2e2c3fbb468f83aea83610bfbee76a32edf958a8f6a62f599d6e27"
+    },
+    {
+      "parts": [
+        "extract",
+        "basic:search"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t014_combo2_extract_basic-search",
+      "membership_point_id": "combo2_extract_basic-search",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "10206f246676c08c0b8980a3de7ce6f74c0943536dc51c9499b90a761795a4b8",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t014_combo2_extract_basic-search",
+      "builder_instructions_sha256": "2f6c2841678a8a5ea2adcce3fa452d04d8ce78249f8fde6d341dcd67c04db9d8"
+    },
+    {
+      "parts": [
+        "basic:recommend",
+        "normal"
+      ],
+      "industry": "healthcare",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t015_combo2_basic-recommend_normal__ind-healthcare",
+      "membership_point_id": "combo2_basic-recommend_normal__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "8def70adf2d9c894c6aab20fcc280c034b4686b4ab80989262d6b83a629a3cfe",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t015_combo2_basic-recommend_normal__ind-healthcare",
+      "builder_instructions_sha256": "49d3abd5c6bb09173848024211bf2f7cd30037d68e118eea63be1e0f0eaade3b"
+    },
+    {
+      "parts": [
+        "feedback",
+        "behavior"
+      ],
+      "industry": "manufacturing",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t016_combo2_feedback_behavior__ind-manufacturing",
+      "membership_point_id": "combo2_feedback_behavior__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "c8291c92eb619b4ce7111bda2fc574bd66b491a6bd4f5b0259f6966d1139b61f",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t016_combo2_feedback_behavior__ind-manufacturing",
+      "builder_instructions_sha256": "3c3a9ba1a6c74ba0eaa85b7984d3de2852cf9129b4eccd60db4f06ae983e942e"
+    },
+    {
+      "parts": [
+        "basic:onboard"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t017_single_basic-onboard",
+      "membership_point_id": "single_basic-onboard",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "f78bcbaaa011a6822c857b60e586694725645d48cc0feb32039c0529bf2ecb34",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t017_single_basic-onboard",
+      "builder_instructions_sha256": "5ee8e10092b0498aa35a6c04bb91633ec2041f36ad0dd549b78fc1f9797c706d"
+    },
+    {
+      "parts": [
+        "compare"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t018_single_compare",
+      "membership_point_id": "single_compare",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "f9f25d7a558b5d49660cb080b8ea9f890d2fafe283e087f38483616355ee19b8",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t018_single_compare",
+      "builder_instructions_sha256": "37eaffbfff90ef41fa75713905f30a7cf9e652833df973b184b9b197906681e1"
+    },
+    {
+      "parts": [
+        "review"
+      ],
+      "industry": "telecom",
+      "category": "BTI_single",
+      "trial_id": "wave3_t019_single_review__ind-telecom",
+      "membership_point_id": "single_review__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "de198cd351ac2a185e233ac5345d53bb0d5247edf9a7b507b4b348dccad9a35d",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t019_single_review__ind-telecom",
+      "builder_instructions_sha256": "5ac7ce73c9c96ac770f062c1c2163db8b4be2d2ee30606355c06e384ee82fcb8"
+    },
+    {
+      "parts": [
+        "basic:search",
+        "basic:research"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t020_combo2_basic-search_basic-research",
+      "membership_point_id": "combo2_basic-search_basic-research",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "1d6a3b89d65d89b9079589b355b0b1d71d1d5ed343735fc48110c1598aabc350",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t020_combo2_basic-search_basic-research",
+      "builder_instructions_sha256": "41cfbdb1ae1381fd6a3b2223058c8fde2d61302e50547e264ea3eb85a2a9bebc"
+    },
+    {
+      "parts": [
+        "basic:support",
+        "basic:recommend"
+      ],
+      "industry": "retail",
+      "category": "combo_BI",
+      "trial_id": "wave3_t021_combo2_basic-support_basic-recommend__ind-retail",
+      "membership_point_id": "combo2_basic-support_basic-recommend__ind-retail",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "20355ce3338f10a5f29997568e6988cee2b55bfc800412341f61cc87280dd979",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t021_combo2_basic-support_basic-recommend__ind-retail",
+      "builder_instructions_sha256": "107fa4b5edc60b01f2a6a608ae3b721a16dd44940958c042f2fffb40f15a560a"
+    },
+    {
+      "parts": [
+        "deep",
+        "basic:recommend"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t022_combo2_deep_basic-recommend",
+      "membership_point_id": "combo2_deep_basic-recommend",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "9d1b1f46135f815485126318dc76cdd2a8267b91b69590b794bcb11324477883",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t022_combo2_deep_basic-recommend",
+      "builder_instructions_sha256": "7a63325613283f0e1faae51aaf1df3c1113e7bc7ce997bc828faf44deecdbc26"
+    },
+    {
+      "parts": [
+        "faq",
+        "basic:documents"
+      ],
+      "industry": "finance",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t023_combo2_faq_basic-documents__ind-finance",
+      "membership_point_id": "combo2_faq_basic-documents__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "12579fc87688bf031eca02b2e3e0cc3bfe02edb755818f2cfb163e6093885dc9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t023_combo2_faq_basic-documents__ind-finance",
+      "builder_instructions_sha256": "d528a4b05e2ea63f980e331aae1e58a8b2944ac7c837f437e3215c4bdb2cc15e"
+    },
+    {
+      "parts": [
+        "web",
+        "triage"
+      ],
+      "industry": "insurance",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t024_combo2_web_triage__ind-insurance",
+      "membership_point_id": "combo2_web_triage__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "fa13f5b2be6d5bb5f09ec8a13e96657007ef4b6500523f973652c44db9e4c050",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t024_combo2_web_triage__ind-insurance",
+      "builder_instructions_sha256": "ff73e97899b92574a45286799521276c2550cf0e405cd2d5eb7a2c190fe75533"
+    },
+    {
+      "parts": [
+        "basic:recommend"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t025_single_basic-recommend",
+      "membership_point_id": "single_basic-recommend",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "b747591407d3c8fe6714fe530cbd91f8d678093aa834998208ad8d895a37722a",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t025_single_basic-recommend",
+      "builder_instructions_sha256": "aeb79bd31c89453ed5d34d779a26cbef1b94588f5a2264e78d71700dc9a9bdd2"
+    },
+    {
+      "parts": [
+        "deep"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t026_single_deep",
+      "membership_point_id": "single_deep",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "3bcbdbfeabe66919ef169526ed028d2172dda37348ee1e2e7ea3a45e7727d1b3",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t026_single_deep",
+      "builder_instructions_sha256": "ff4fd8f09c57ffb5e1c51fe62fdfa1414cdd536d078072f4503e5c601af2d8b1"
+    },
+    {
+      "parts": [
+        "guided"
+      ],
+      "industry": "healthcare",
+      "category": "BTI_single",
+      "trial_id": "wave3_t027_single_guided__ind-healthcare",
+      "membership_point_id": "single_guided__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "e411a9cfa66a00df4bf4d22f307d482f3c810803bf816457c068c11a989f0a6f",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t027_single_guided__ind-healthcare",
+      "builder_instructions_sha256": "66171579e4324597e15157b6a7e94ad5da06abd652d890ba8e0f24820d653fdb"
+    },
+    {
+      "parts": [
+        "basic:recommend",
+        "basic:support"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t028_combo2_basic-recommend_basic-support",
+      "membership_point_id": "combo2_basic-recommend_basic-support",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "ec97a990a508ebb5fc1b1627164d5709333d247492485315ddc2078535951326",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t028_combo2_basic-recommend_basic-support",
+      "builder_instructions_sha256": "472c319246815baf07d03e9e4d68f182e1b285a05c97e3354a3e9e19d07fd572"
+    },
+    {
+      "parts": [
+        "basic:documents",
+        "basic:research"
+      ],
+      "industry": "healthcare",
+      "category": "combo_BI",
+      "trial_id": "wave3_t029_combo2_basic-documents_basic-research__ind-healthcare",
+      "membership_point_id": "combo2_basic-documents_basic-research__ind-healthcare",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "4f787132ef50df2811a20bb69d569bbf06f9a09525cff0ef3dc681bb068972d3",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t029_combo2_basic-documents_basic-research__ind-healthcare",
+      "builder_instructions_sha256": "45af4ee5024343e8b779d68f4223b848ecfe1adf2611bbca96ef96b0bd8e2d9a"
+    },
+    {
+      "parts": [
+        "basic:documents",
+        "interests"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t030_combo2_basic-documents_interests",
+      "membership_point_id": "combo2_basic-documents_interests",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "a333e3da212056d60f44e014c4498d26d7b487a5dc47eba975d5317dd90a0ed9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t030_combo2_basic-documents_interests",
+      "builder_instructions_sha256": "219ec05fc32748ae2c9f30b9d3efeabc42e6e807904148cf7517a8375dca6f43"
+    },
+    {
+      "parts": [
+        "sentiment",
+        "basic:search"
+      ],
+      "industry": "retail",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t031_combo2_sentiment_basic-search__ind-retail",
+      "membership_point_id": "combo2_sentiment_basic-search__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "2aa11b673b0b885a32b7b6f86529fbf937ac0603f64db5794c325e0ed7ffda32",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t031_combo2_sentiment_basic-search__ind-retail",
+      "builder_instructions_sha256": "be49b134e964436f09fd679351df997bfe316b5b476229f707dcbd55a5706a82"
+    },
+    {
+      "parts": [
+        "adaptive",
+        "normal"
+      ],
+      "industry": "energy",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t032_combo2_adaptive_normal__ind-energy",
+      "membership_point_id": "combo2_adaptive_normal__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "9fd1dd553998be8bfa0c93f9883193c7d925116e96a76e5dba644923fbdc4790",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t032_combo2_adaptive_normal__ind-energy",
+      "builder_instructions_sha256": "d92849934c52e6a31e73564d3e17221522708829a28bde283c6220f2913dca4d"
+    },
+    {
+      "parts": [
+        "basic:research"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t033_single_basic-research",
+      "membership_point_id": "single_basic-research",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "aff94acd492f7c6a5c8ed5e9d9f8619fb915bef0e1030782bdadb405eeaef542",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t033_single_basic-research",
+      "builder_instructions_sha256": "cf81d88500367f54e9bcbc144bf80f2e47fda10b460242587e537b20b081d861"
+    },
+    {
+      "parts": [
+        "extract"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t034_single_extract",
+      "membership_point_id": "single_extract",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "test",
+      "split_group": "c2a9fa14e70282f3a9365be8dd6fa818e75b0fe5c34aef60cb06c074738f84d0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t034_single_extract",
+      "builder_instructions_sha256": "c84769c3f22576ffc5718ba26f52abbf18ac27e14ed245aaeed16eda27fab8d1"
+    },
+    {
+      "parts": [
+        "compare"
+      ],
+      "industry": "public_sector",
+      "category": "BTI_single",
+      "trial_id": "wave3_t035_single_compare__ind-public_sector",
+      "membership_point_id": "single_compare__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "bff7d49317d7ba9f766b4276dcb9d5df088d5b5f20d1e08f1ed1f22ec73738e7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t035_single_compare__ind-public_sector",
+      "builder_instructions_sha256": "34818071509d4f47509f2d1a3e0024b959b7eb0395d109a470ba3acea79304f2"
+    },
+    {
+      "parts": [
+        "basic:support",
+        "basic:search"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t036_combo2_basic-support_basic-search",
+      "membership_point_id": "combo2_basic-support_basic-search",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "ca6acea47ccee9dec7e693a5217e7f21e6739ac4fbc1ccb9efa1f7e01d78b36c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t036_combo2_basic-support_basic-search",
+      "builder_instructions_sha256": "bfc3468d0667f090d90e2fb8029cfd7dab2ad4ad701b75abd756d04a2c241688"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "basic:insights"
+      ],
+      "industry": "finance",
+      "category": "combo_BI",
+      "trial_id": "wave3_t037_combo2_basic-onboard_basic-insights__ind-finance",
+      "membership_point_id": "combo2_basic-onboard_basic-insights__ind-finance",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "fcc201f19a16d2893a94eb4cecc1dc8836ad5551b52d5be8c313e40ca5ed5a81",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t037_combo2_basic-onboard_basic-insights__ind-finance",
+      "builder_instructions_sha256": "7370596aaed4459f17f0b7ace7baa1b130f5986939eecbff5f6c43a3b2daa4dc"
+    },
+    {
+      "parts": [
+        "feedback",
+        "basic:support"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t038_combo2_feedback_basic-support",
+      "membership_point_id": "combo2_feedback_basic-support",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "486de18f7e6d3508aaca14deb21aa6c39f52923cadc3dd42753b09296db3ec6d",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t038_combo2_feedback_basic-support",
+      "builder_instructions_sha256": "9fa425d5c2167c81d19d09fa64855c9aa9acf9a4c37bc4da22e2f2d6ed1dc803"
+    },
+    {
+      "parts": [
+        "extract",
+        "basic:insights"
+      ],
+      "industry": "telecom",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t039_combo2_extract_basic-insights__ind-telecom",
+      "membership_point_id": "combo2_extract_basic-insights__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "1ccdad1ba763964741d96d3b2bf8af2ad40af8f3530ffb4de08170a7c5716fe2",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t039_combo2_extract_basic-insights__ind-telecom",
+      "builder_instructions_sha256": "ef4c97b542583ae5076f98982a5dfbfed392ebb26109bfdbdf529862ec16a538"
+    },
+    {
+      "parts": [
+        "compare",
+        "interests"
+      ],
+      "industry": "telecom",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t040_combo2_compare_interests__ind-telecom",
+      "membership_point_id": "combo2_compare_interests__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "be6599518b4042f2951e9beff88da64b5f7a054cf41c6b2eccea90098d3be7f3",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t040_combo2_compare_interests__ind-telecom",
+      "builder_instructions_sha256": "8e989ec4792cd70df328672010f05a4f821afab9053ea683210b95bf226aade4"
+    },
+    {
+      "parts": [
+        "basic:search"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t041_single_basic-search",
+      "membership_point_id": "single_basic-search",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "450182d7ffc70da162a5169e56b8b17b01604623cd06a150f91b11ee5c77ce1e",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t041_single_basic-search",
+      "builder_instructions_sha256": "5dec2e2a5e0bd6471586264cd3dc794d5d4d61b65d2168d1eaed53a3bd983de8"
+    },
+    {
+      "parts": [
+        "faq"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t042_single_faq",
+      "membership_point_id": "single_faq",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "43ee353474691df1377a140188c922c5bd808df4fff6eb335c4abb90cb841ea1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t042_single_faq",
+      "builder_instructions_sha256": "6952d8efb77e66c62e7903f4a886e0936965e6965d62cd8de4e5814d7d756d2b"
+    },
+    {
+      "parts": [
+        "feedback"
+      ],
+      "industry": "retail",
+      "category": "BTI_single",
+      "trial_id": "wave3_t043_single_feedback__ind-retail",
+      "membership_point_id": "single_feedback__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "bc7dfd3ed55d3847bfd1129c5f1cc839db48e8d31266181f4b4c9a75245688f1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t043_single_feedback__ind-retail",
+      "builder_instructions_sha256": "99f2885fd8315855aff1bf3aadc60444b4c8a2a6692f222152481884a583f847"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "basic:recommend"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t044_combo2_basic-onboard_basic-recommend",
+      "membership_point_id": "combo2_basic-onboard_basic-recommend",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "4be21c8f0f74c4ea1e0b5dad49d9b3484bffa9f42ae14684311d4fbee4269ebb",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t044_combo2_basic-onboard_basic-recommend",
+      "builder_instructions_sha256": "8253a583da18c99feb690178817a5a1ae5ec2206c2cc2d66ab4f2ecd669e1b09"
+    },
+    {
+      "parts": [
+        "basic:recommend",
+        "basic:search"
+      ],
+      "industry": "finance",
+      "category": "combo_BI",
+      "trial_id": "wave3_t045_combo2_basic-recommend_basic-search__ind-finance",
+      "membership_point_id": "combo2_basic-recommend_basic-search__ind-finance",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "70522a5bb57420824547c66810a249208062c85c2af06d4fc05f01de6a9adb26",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t045_combo2_basic-recommend_basic-search__ind-finance",
+      "builder_instructions_sha256": "13f91c961807dd8f074cbec028f305c14207dc3397f377363ffcb23e26008553"
+    },
+    {
+      "parts": [
+        "basic:search",
+        "adaptive"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t046_combo2_basic-search_adaptive",
+      "membership_point_id": "combo2_basic-search_adaptive",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "7659d0394fcd52f45a63c74f52497ab14611c613b7d63edded0b3c0e31dff3cf",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t046_combo2_basic-search_adaptive",
+      "builder_instructions_sha256": "d23ad1c3f857017c7e566c56c607f72324dbdb9e4cf67b3224f542215f9f720b"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "compare"
+      ],
+      "industry": "insurance",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t047_combo2_basic-research_compare__ind-insurance",
+      "membership_point_id": "combo2_basic-research_compare__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "6c56884318915ce574ad65536c22273b65f13398c8f10c6e865b8167e414fd18",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t047_combo2_basic-research_compare__ind-insurance",
+      "builder_instructions_sha256": "b9219c6d0391916726c6d9c75610ced1fa591195e49eb715fe3595dcb4f70b40"
+    },
+    {
+      "parts": [
+        "feedback",
+        "extract"
+      ],
+      "industry": "public_sector",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t048_combo2_feedback_extract__ind-public_sector",
+      "membership_point_id": "combo2_feedback_extract__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "1b69095120943d9269f41e61626abd5f22eb708b96537b3cc46ea88b640265dc",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t048_combo2_feedback_extract__ind-public_sector",
+      "builder_instructions_sha256": "23e8bd6fca42215cb41026c21171bae4576382c9d850cb257e89aae5351dcb3a"
+    },
+    {
+      "parts": [
+        "basic:support"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t049_single_basic-support",
+      "membership_point_id": "single_basic-support",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "000057e8fdddf7db6636b8d158ad8acd1e065371e38f776ce0efd08fce33165d",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t049_single_basic-support",
+      "builder_instructions_sha256": "e4270ed6085f87cd3a618ec97c5527ac9dd698754936d426818fa184def3b507"
+    },
+    {
+      "parts": [
+        "feedback"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t050_single_feedback",
+      "membership_point_id": "single_feedback",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "8d372d111bab3e58274ee9b86f65e19d0d0206605074fc3365713e894c033ceb",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t050_single_feedback",
+      "builder_instructions_sha256": "98457256f25efb4da8904c3f0774ef12625e22ab3e9d539042e3c1860f0bad56"
+    },
+    {
+      "parts": [
+        "normal"
+      ],
+      "industry": "finance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t051_single_normal__ind-finance",
+      "membership_point_id": "single_normal__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "1746d2ed8cf49342080e0df5ab9b238050dedd838832021b238f6a5ba4755de1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t051_single_normal__ind-finance",
+      "builder_instructions_sha256": "ad1bc5ee1eb32a332e053f052e3e608e30370f314fe5dc4371ebd177d6f3c0eb"
+    },
+    {
+      "parts": [
+        "basic:insights",
+        "basic:documents",
+        "basic:research"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t052_combo3_basic-insights_basic-documents_basic-research",
+      "membership_point_id": "combo3_basic-insights_basic-documents_basic-research",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "4fd6515fcb34988989c55bdc99eb554a9ec1c52309adfd077dc7e18094d399fa",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t052_combo3_basic-insights_basic-documents_basic-research",
+      "builder_instructions_sha256": "229d8a8aebb37595947d1006b80109112ceeab2b9d838376a01f7e0c64d3f92b"
+    },
+    {
+      "parts": [
+        "basic:search",
+        "basic:support",
+        "basic:research"
+      ],
+      "industry": "energy",
+      "category": "combo_BI",
+      "trial_id": "wave3_t053_combo3_basic-search_basic-support_basic-research__ind-energy",
+      "membership_point_id": "combo3_basic-search_basic-support_basic-research__ind-energy",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "3340d1d6c3bc7979d3feb63b30bec2187b65e10c0c71922c93348bcee8b312d6",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t053_combo3_basic-search_basic-support_basic-research__ind-energy",
+      "builder_instructions_sha256": "145a61ff0a3921204d01889f11ee4f05816256f80caf01ad9a33c715f99b3478"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "journey",
+        "triage"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t054_combo3_basic-research_journey_triage",
+      "membership_point_id": "combo3_basic-research_journey_triage",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "3559fb9e326dedcd508732f3e8f104651eeee5c27134d7b3779b066d3fff2502",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t054_combo3_basic-research_journey_triage",
+      "builder_instructions_sha256": "e21e36b394ff38d9b75a787fefe77d8ca264ca1b0089b90e42f6a5c1bfea351e"
+    },
+    {
+      "parts": [
+        "basic:support",
+        "interests",
+        "web"
+      ],
+      "industry": "energy",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t055_combo3_basic-support_interests_web__ind-energy",
+      "membership_point_id": "combo3_basic-support_interests_web__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "f570193e484fb52a3e8a12fc65648dc1097f073541d973e7fed137dd37094ded",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t055_combo3_basic-support_interests_web__ind-energy",
+      "builder_instructions_sha256": "3d64db89f7d24c45417a16423f060b4eeabf6674d62ba4a850da721136353343"
+    },
+    {
+      "parts": [
+        "semantic",
+        "behavior",
+        "web"
+      ],
+      "industry": "retail",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t056_combo3_semantic_behavior_web__ind-retail",
+      "membership_point_id": "combo3_semantic_behavior_web__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "1d01ef59890ba7748f7edb2097c11b06a8d3e6ea8948854dfe55ef05f98d22da",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t056_combo3_semantic_behavior_web__ind-retail",
+      "builder_instructions_sha256": "760ed075efc9885bc234b47ce132383931f12c3cef1c847412cbad650ed94010"
+    },
+    {
+      "parts": [
+        "basic:documents"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t057_single_basic-documents",
+      "membership_point_id": "single_basic-documents",
+      "level": "B",
+      "kind": "repeat_within_wave",
+      "split": "train",
+      "split_group": "a5b938876ac4c61d06812275680ec3e1f724bb97ea5886fcf2236b43f52169a8",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t057_single_basic-documents",
+      "builder_instructions_sha256": "42fbe88a60717ae9ebe2812cffa1c24985758631eb6f05e92af6bbc3e647fd82"
+    },
+    {
+      "parts": [
+        "guided"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t058_single_guided",
+      "membership_point_id": "single_guided",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "b8584edfd6156d9f5889ba6ca821b0e860874a17ae3c1024b5f4cf50a44c0737",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t058_single_guided",
+      "builder_instructions_sha256": "ccfb5014d37dcab3c2478e914daba99540842e8e953e59095c82c24737356dd7"
+    },
+    {
+      "parts": [
+        "interests"
+      ],
+      "industry": "manufacturing",
+      "category": "BTI_single",
+      "trial_id": "wave3_t059_single_interests__ind-manufacturing",
+      "membership_point_id": "single_interests__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "087f41e1e66b46e756b76707fdf95322240176da1db42e590a18e4caa7f70346",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t059_single_interests__ind-manufacturing",
+      "builder_instructions_sha256": "b358d4a6796bbe974644623b6914025003e01d6d67cbff7eabe2a959454975a4"
+    },
+    {
+      "parts": [
+        "basic:insights",
+        "basic:search",
+        "basic:onboard"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t060_combo3_basic-insights_basic-search_basic-onboard",
+      "membership_point_id": "combo3_basic-insights_basic-search_basic-onboard",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "a96c0c2863845a71fcb2acb33ff120e940a0c014135aec90cc92bbd036c3d472",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t060_combo3_basic-insights_basic-search_basic-onboard",
+      "builder_instructions_sha256": "9e3c86f7c373a32b43b20de8fd383e56b1b274e11182c5811ad74ef1d9cad146"
+    },
+    {
+      "parts": [
+        "basic:documents",
+        "basic:onboard",
+        "basic:insights"
+      ],
+      "industry": "manufacturing",
+      "category": "combo_BI",
+      "trial_id": "wave3_t061_combo3_basic-documents_basic-onboard_basic-insights__ind-manufacturing",
+      "membership_point_id": "combo3_basic-documents_basic-onboard_basic-insights__ind-manufacturing",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "34b3774202048ac2a5010a4b08a48de835cf5f8cd2511e6b1a35760d74f4e71e",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t061_combo3_basic-documents_basic-onboard_basic-insights__ind-manufacturing",
+      "builder_instructions_sha256": "793b026f5e64b6d3bf60140610f9d0d011df8139b5e1aa3265cdee9221f08fae"
+    },
+    {
+      "parts": [
+        "web",
+        "basic:documents",
+        "guided"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t062_combo3_web_basic-documents_guided",
+      "membership_point_id": "combo3_web_basic-documents_guided",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "8c5ba39fee76f8b593d33e49a67f249540d03328e4ef331752d50ac2b0fb130b",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t062_combo3_web_basic-documents_guided",
+      "builder_instructions_sha256": "8d49f71d581f45424ec9131bb30555f5c5f788f94a42638d9d00c39def81bf4f"
+    },
+    {
+      "parts": [
+        "journey",
+        "basic:onboard",
+        "compare"
+      ],
+      "industry": "finance",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t063_combo3_journey_basic-onboard_compare__ind-finance",
+      "membership_point_id": "combo3_journey_basic-onboard_compare__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "bc83818e1092f136bdbf0eeee32596924002d7cf844430c8087440ad263cd921",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t063_combo3_journey_basic-onboard_compare__ind-finance",
+      "builder_instructions_sha256": "befb9c3c84bad1c7e5c5ccd3c0f995972fa8583f77b92d128b3511fbe90f5c90"
+    },
+    {
+      "parts": [
+        "review",
+        "triage",
+        "sentiment"
+      ],
+      "industry": "healthcare",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t064_combo3_review_triage_sentiment__ind-healthcare",
+      "membership_point_id": "combo3_review_triage_sentiment__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "3ee494508ae78d4e7f671acca12e293781f54f5e3fed2a1b175a19c14052caba",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t064_combo3_review_triage_sentiment__ind-healthcare",
+      "builder_instructions_sha256": "49f411d3c4d192badd3dc082d303d9ca8f37a7580c98404aa0252d1c076cfcf5"
+    },
+    {
+      "parts": [
+        "basic:insights"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t065_single_basic-insights",
+      "membership_point_id": "single_basic-insights",
+      "level": "B",
+      "kind": "repeat_within_wave",
+      "split": "train",
+      "split_group": "79903612248ff962e77e564d2349df78fc0e1711b7aa0b810c49f7f1133d2124",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t065_single_basic-insights",
+      "builder_instructions_sha256": "ac74a797de6ab41543c61ce70df3207d607b83dffcb6d4c78316fa3e1aad0140"
+    },
+    {
+      "parts": [
+        "interests"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t066_single_interests",
+      "membership_point_id": "single_interests",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "94fcdb07322666da997f553e417458975b688c194db0cf4394b23e81660c90d5",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t066_single_interests",
+      "builder_instructions_sha256": "89bd2f8f1c446b4c99e94a3df00b723bff6fe198374d1750543c7edbe5fcfed7"
+    },
+    {
+      "parts": [
+        "adaptive"
+      ],
+      "industry": "manufacturing",
+      "category": "BTI_single",
+      "trial_id": "wave3_t067_single_adaptive__ind-manufacturing",
+      "membership_point_id": "single_adaptive__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "0ab30cf90a7e332dd4745e2c43b48f3866e80285243640f3e17ae69f630d63e0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t067_single_adaptive__ind-manufacturing",
+      "builder_instructions_sha256": "97fcbffaaa3d0070c0be730ffb69cc9483f1c0945ae9a2cae08b73ccc665e093"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "basic:documents",
+        "basic:recommend"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t068_combo3_basic-research_basic-documents_basic-recommend",
+      "membership_point_id": "combo3_basic-research_basic-documents_basic-recommend",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "1d609cb98d386c8c43f8bb49048afad7ea5267eb8be3ea4c07e7090a4b291121",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t068_combo3_basic-research_basic-documents_basic-recommend",
+      "builder_instructions_sha256": "4fc2303b4cd7fb6bebfd8866bd01dd11515024bf075704ef54e56633823cfb46"
+    },
+    {
+      "parts": [
+        "basic:support",
+        "basic:research",
+        "basic:recommend"
+      ],
+      "industry": "insurance",
+      "category": "combo_BI",
+      "trial_id": "wave3_t069_combo3_basic-support_basic-research_basic-recommend__ind-insurance",
+      "membership_point_id": "combo3_basic-support_basic-research_basic-recommend__ind-insurance",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "07654dc52317ebcdeadb51553c4e913dc9103a720b0feaf99c871a4b6ad9bae3",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t069_combo3_basic-support_basic-research_basic-recommend__ind-insurance",
+      "builder_instructions_sha256": "a87c3990708f6672680e5ba027e3399299affb0272e37bff83a33f34e98b687b"
+    },
+    {
+      "parts": [
+        "basic:insights",
+        "triage",
+        "semantic"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t070_combo3_basic-insights_triage_semantic",
+      "membership_point_id": "combo3_basic-insights_triage_semantic",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "2cdb79928fa042abbd9fcb05c865e6b430558e15bac326f9969804956f9fa66c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t070_combo3_basic-insights_triage_semantic",
+      "builder_instructions_sha256": "41492b4261474f5ee8a906b371859d1a7f89c93ef7ed8dc6689fd5e3b45d9713"
+    },
+    {
+      "parts": [
+        "guided",
+        "review",
+        "basic:support"
+      ],
+      "industry": "insurance",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t071_combo3_guided_review_basic-support__ind-insurance",
+      "membership_point_id": "combo3_guided_review_basic-support__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "c44941dff164bd307a96140cf9e66efc60e3fca497dc5ad2a4a121ff69285e32",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t071_combo3_guided_review_basic-support__ind-insurance",
+      "builder_instructions_sha256": "d160792e3ba954583887a5b846b2b1070004b4dc2dd72cb0121b662766acd628"
+    },
+    {
+      "parts": [
+        "faq",
+        "guided",
+        "deep"
+      ],
+      "industry": "public_sector",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t072_combo3_faq_guided_deep__ind-public_sector",
+      "membership_point_id": "combo3_faq_guided_deep__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "c5e050935e3f4e736f102401dfe6d329fb595f23597f795328205d8fe1705cab",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t072_combo3_faq_guided_deep__ind-public_sector",
+      "builder_instructions_sha256": "32f5ac85ddbb31276c09b9d47be053e331e85f6108eb4a96061b71770eac6f43"
+    },
+    {
+      "parts": [
+        "basic:onboard"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t073_single_basic-onboard",
+      "membership_point_id": "single_basic-onboard",
+      "level": "B",
+      "kind": "repeat_within_wave",
+      "split": "train",
+      "split_group": "f78bcbaaa011a6822c857b60e586694725645d48cc0feb32039c0529bf2ecb34",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t073_single_basic-onboard",
+      "builder_instructions_sha256": "150f83716cfe2650b3efdbc2b1cf7e10ddab77da3779d76e9143a239195a482e"
+    },
+    {
+      "parts": [
+        "journey"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t074_single_journey",
+      "membership_point_id": "single_journey",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "aadb5d94f4cb1e6a0941c9f5064beb86cc0abdfc680e07998641d27115c795b7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t074_single_journey",
+      "builder_instructions_sha256": "22083aea4b677d472d589b86e68867053f185a4dd9379fc99c3b13f605305375"
+    },
+    {
+      "parts": [
+        "extract"
+      ],
+      "industry": "public_sector",
+      "category": "BTI_single",
+      "trial_id": "wave3_t075_single_extract__ind-public_sector",
+      "membership_point_id": "single_extract__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "a8ce839603279ed50ae1029070172b8d576413aa78122483e5bcd6013b94bcc4",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t075_single_extract__ind-public_sector",
+      "builder_instructions_sha256": "9e579223f9fe2b4eea41b426d476c799a93712616b309325d06a0a6a0cc7cfa0"
+    },
+    {
+      "parts": [
+        "basic:search",
+        "basic:support",
+        "basic:insights"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t076_combo3_basic-search_basic-support_basic-insights",
+      "membership_point_id": "combo3_basic-search_basic-support_basic-insights",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "381aff590105066b739cd0340d7ea990703679adfa0dae7a92011431b9efc7bc",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t076_combo3_basic-search_basic-support_basic-insights",
+      "builder_instructions_sha256": "bcf49f44d710177a81f63299eec8482b9e46ac9d367171c937275e9411adf5b4"
+    },
+    {
+      "parts": [
+        "basic:insights",
+        "basic:search",
+        "basic:documents"
+      ],
+      "industry": "insurance",
+      "category": "combo_BI",
+      "trial_id": "wave3_t077_combo3_basic-insights_basic-search_basic-documents__ind-insurance",
+      "membership_point_id": "combo3_basic-insights_basic-search_basic-documents__ind-insurance",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "b0c71118fa6f829afffc1539a6eef663684331bdb1061da119f7396b05e15d55",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t077_combo3_basic-insights_basic-search_basic-documents__ind-insurance",
+      "builder_instructions_sha256": "5fb1ac8340d5324a26f53fa048cba5fc0db73379e0296c22fdf545cf114e184d"
+    },
+    {
+      "parts": [
+        "compare",
+        "basic:onboard",
+        "behavior"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t078_combo3_compare_basic-onboard_behavior",
+      "membership_point_id": "combo3_compare_basic-onboard_behavior",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "e74ab28c350db1c42f12d2e4702e5aaea409f609b75bc06a0362ba4728457c7c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t078_combo3_compare_basic-onboard_behavior",
+      "builder_instructions_sha256": "bb6779d3065c915ff89c55ee586a699458d21a51e1e3f9594da38be1158cdbca"
+    },
+    {
+      "parts": [
+        "basic:insights",
+        "behavior",
+        "extract"
+      ],
+      "industry": "public_sector",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t079_combo3_basic-insights_behavior_extract__ind-public_sector",
+      "membership_point_id": "combo3_basic-insights_behavior_extract__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "bc62bfdf8368203ff698d1365df81dcf7532325a5037acdbf8c47be1b44c1130",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t079_combo3_basic-insights_behavior_extract__ind-public_sector",
+      "builder_instructions_sha256": "e3673c2ceedf15694a066174c61bfceccfac52f5986a5ac1d3c945a77b0e90a8"
+    },
+    {
+      "parts": [
+        "guided",
+        "journey",
+        "sentiment"
+      ],
+      "industry": "manufacturing",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t080_combo3_guided_journey_sentiment__ind-manufacturing",
+      "membership_point_id": "combo3_guided_journey_sentiment__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "d0b87329486b2b914048038cc80967e215845f68de7901c67e888eed7f116d2c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t080_combo3_guided_journey_sentiment__ind-manufacturing",
+      "builder_instructions_sha256": "defdc93a760d48a715fd16164f5563f77cb02c5a9ed254c5de668b66e21ba329"
+    },
+    {
+      "parts": [
+        "basic:recommend"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t081_single_basic-recommend",
+      "membership_point_id": "single_basic-recommend",
+      "level": "B",
+      "kind": "repeat_within_wave",
+      "split": "test",
+      "split_group": "b747591407d3c8fe6714fe530cbd91f8d678093aa834998208ad8d895a37722a",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t081_single_basic-recommend",
+      "builder_instructions_sha256": "1d253122330c6b6dae9c4b919465afffc85fb796b90745cafd036f9eb749c5cd"
+    },
+    {
+      "parts": [
+        "normal"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t082_single_normal",
+      "membership_point_id": "single_normal",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "794e0d6f28eea81700713b48bbe5cae57ea0a0be1f6da57811f457ad1bd86876",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t082_single_normal",
+      "builder_instructions_sha256": "8021f22b47fbaf5c7226d2d7632f51aa3f265f273ad2a7080b9a89b7c93cd57c"
+    },
+    {
+      "parts": [
+        "semantic"
+      ],
+      "industry": "finance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t083_single_semantic__ind-finance",
+      "membership_point_id": "single_semantic__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "013e75a75428fc19e7944318bc723377023ff2530769a8c345fba28aa6eb4787",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t083_single_semantic__ind-finance",
+      "builder_instructions_sha256": "b52db7278426f7c72215786220cb52d7b41e1fc35fd93dcd7181c14488b4f037"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "basic:recommend",
+        "basic:documents"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t084_combo3_basic-onboard_basic-recommend_basic-documents",
+      "membership_point_id": "combo3_basic-onboard_basic-recommend_basic-documents",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "c3d2577394a608508be96f46b9167fad820c385fa2eedf33d52f9900ca837cff",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t084_combo3_basic-onboard_basic-recommend_basic-documents",
+      "builder_instructions_sha256": "054bf9fe8f7774ce12c8c7f1bc4c664ce6e76f1810e57c3a02bcaa0ec87aced1"
+    },
+    {
+      "parts": [
+        "basic:support",
+        "basic:onboard",
+        "basic:recommend"
+      ],
+      "industry": "telecom",
+      "category": "combo_BI",
+      "trial_id": "wave3_t085_combo3_basic-support_basic-onboard_basic-recommend__ind-telecom",
+      "membership_point_id": "combo3_basic-support_basic-onboard_basic-recommend__ind-telecom",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "5f00e615b9d37dab2b914fb8f2ef5fe60ff192619bfae4526f06338c8ed62eae",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t085_combo3_basic-support_basic-onboard_basic-recommend__ind-telecom",
+      "builder_instructions_sha256": "0677ead1589cc17be0bd174b0e04d4769fa930628fa1c297f09c962c7acdbeb2"
+    },
+    {
+      "parts": [
+        "web",
+        "basic:documents",
+        "sentiment"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t086_combo3_web_basic-documents_sentiment",
+      "membership_point_id": "combo3_web_basic-documents_sentiment",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "21c59459939884054bc83d100bfe4c8cc3f6137dd0e665d29e7eed5c7489e473",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t086_combo3_web_basic-documents_sentiment",
+      "builder_instructions_sha256": "a77bbbf1de4c591171e4446b1e6bced33deaa3038e3913b6e490b81011419a78"
+    },
+    {
+      "parts": [
+        "sentiment",
+        "basic:search",
+        "normal"
+      ],
+      "industry": "healthcare",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t087_combo3_sentiment_basic-search_normal__ind-healthcare",
+      "membership_point_id": "combo3_sentiment_basic-search_normal__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "60408c6236c95c159f168de8d26851a16235cd1f2499fff4caf14d17d57877b0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t087_combo3_sentiment_basic-search_normal__ind-healthcare",
+      "builder_instructions_sha256": "21d7a5f868cb7ce291d295e10d75da8b3d985a56ebcfd6eac5d9e4eeb765567b"
+    },
+    {
+      "parts": [
+        "triage",
+        "review",
+        "semantic"
+      ],
+      "industry": "telecom",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t088_combo3_triage_review_semantic__ind-telecom",
+      "membership_point_id": "combo3_triage_review_semantic__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "6ec50ab9cb6baad2c9e9d6ae55062906e2b534377c3928987731d0b1a0f39fa4",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t088_combo3_triage_review_semantic__ind-telecom",
+      "builder_instructions_sha256": "82ec317eabfb35864868fa6e355927f801a0b1263a116e4a55e5ccf181cd0247"
+    },
+    {
+      "parts": [
+        "basic:research"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t089_single_basic-research",
+      "membership_point_id": "single_basic-research",
+      "level": "B",
+      "kind": "repeat_within_wave",
+      "split": "train",
+      "split_group": "aff94acd492f7c6a5c8ed5e9d9f8619fb915bef0e1030782bdadb405eeaef542",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t089_single_basic-research",
+      "builder_instructions_sha256": "2740418966ebb8e2c5cf7df29919ef84edac9c201eca55b5fca1cc87214d6aec"
+    },
+    {
+      "parts": [
+        "review"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t090_single_review",
+      "membership_point_id": "single_review",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "a96884a032c81cf1c81370de64f329159a5f5b2eaaccc5ae0df3ea1bec5d1cca",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t090_single_review",
+      "builder_instructions_sha256": "0f9278a9df5c796d73c016c3789735da34618ec71c9383022b60ebb5040b4489"
+    },
+    {
+      "parts": [
+        "triage"
+      ],
+      "industry": "retail",
+      "category": "BTI_single",
+      "trial_id": "wave3_t091_single_triage__ind-retail",
+      "membership_point_id": "single_triage__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "4d1f4642e096a800dd3bab8d20db9b19ddf8026bac14135ef455f163b4d9a265",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t091_single_triage__ind-retail",
+      "builder_instructions_sha256": "05b6de6255bf212393fd3178693b372d0f46750e3eec6079ec5ad2c1bfee1919"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "basic:search",
+        "basic:insights"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t092_combo3_basic-research_basic-search_basic-insights",
+      "membership_point_id": "combo3_basic-research_basic-search_basic-insights",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "e26bf6a0bc66a42dc07bb97847f279d28d39e25ac0a4f01ff43c129df3f0652b",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t092_combo3_basic-research_basic-search_basic-insights",
+      "builder_instructions_sha256": "4764d15bfff979db74d1b8971848ff2ff6f6472d5ae633f0eddf0c25ab1230a2"
+    },
+    {
+      "parts": [
+        "basic:documents",
+        "basic:insights",
+        "basic:research"
+      ],
+      "industry": "retail",
+      "category": "combo_BI",
+      "trial_id": "wave3_t093_combo3_basic-documents_basic-insights_basic-research__ind-retail",
+      "membership_point_id": "combo3_basic-documents_basic-insights_basic-research__ind-retail",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "91121507b031b787c31a95053de7e5bdda835115168060177415061a342bbc36",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t093_combo3_basic-documents_basic-insights_basic-research__ind-retail",
+      "builder_instructions_sha256": "b10db63ecd0f51a73c62f1dad8f34b683bc49d0a16f4b6ed3b1dda569fedc6e3"
+    },
+    {
+      "parts": [
+        "basic:insights",
+        "semantic",
+        "review",
+        "guided"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t094_combo4_basic-insights_semantic_review_guided",
+      "membership_point_id": "combo4_basic-insights_semantic_review_guided",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "aaa4171018058ea1bc2b47da39e1feab6e47af68079ae57c13def3589d213b08",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t094_combo4_basic-insights_semantic_review_guided",
+      "builder_instructions_sha256": "96cc62a8b6d84d091eba74b07fa7ea969c9a893c966f9766cfd8dc9536d14ba9"
+    },
+    {
+      "parts": [
+        "faq",
+        "adaptive",
+        "basic:recommend",
+        "deep"
+      ],
+      "industry": "retail",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t095_combo4_faq_adaptive_basic-recommend_deep__ind-retail",
+      "membership_point_id": "combo4_faq_adaptive_basic-recommend_deep__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "74c813769a8af410685e964928e4627dc9039e5896024de7a3793f04b0ad380a",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t095_combo4_faq_adaptive_basic-recommend_deep__ind-retail",
+      "builder_instructions_sha256": "444d5be3d70151b90512c284dc3cb13581309b13431fecaeadd93611d4735b01"
+    },
+    {
+      "parts": [
+        "deep",
+        "interests",
+        "feedback",
+        "extract"
+      ],
+      "industry": "energy",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t096_combo4_deep_interests_feedback_extract__ind-energy",
+      "membership_point_id": "combo4_deep_interests_feedback_extract__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "999a97449e15226b652273ff5e6f3deaf93db966204e3d8c4309a3c46ae7fdfa",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t096_combo4_deep_interests_feedback_extract__ind-energy",
+      "builder_instructions_sha256": "bc09c57f76fd02e2a3663eb89f04250711146b95179762920777f1a38f7c6ee7"
+    },
+    {
+      "parts": [
+        "basic:search"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t097_single_basic-search",
+      "membership_point_id": "single_basic-search",
+      "level": "B",
+      "kind": "repeat_within_wave",
+      "split": "train",
+      "split_group": "450182d7ffc70da162a5169e56b8b17b01604623cd06a150f91b11ee5c77ce1e",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t097_single_basic-search",
+      "builder_instructions_sha256": "19a012fdeab2a96890ebdf7ac705967a6a739a2f5505287ee44afa06e305cace"
+    },
+    {
+      "parts": [
+        "semantic"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t098_single_semantic",
+      "membership_point_id": "single_semantic",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "9e9e81cc52f490feb3a37a5937c72ead75f682a895f7ba2218431f4f2b1b4927",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t098_single_semantic",
+      "builder_instructions_sha256": "11d442966f2dc8727d1020d783a2f5b71f2faa5fa51899b64dae8b7a93d6d8a1"
+    },
+    {
+      "parts": [
+        "web"
+      ],
+      "industry": "healthcare",
+      "category": "BTI_single",
+      "trial_id": "wave3_t099_single_web__ind-healthcare",
+      "membership_point_id": "single_web__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "7765637bb30e14f78d0a1fb14e23e183c163270ef19ba2484e945cee6276892f",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t099_single_web__ind-healthcare",
+      "builder_instructions_sha256": "70f38f5b2262a861124560d197aef1cb43b628f2bf76807f5d8cc490f45fdc97"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "basic:support",
+        "basic:recommend",
+        "basic:documents"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t100_combo4_basic-onboard_basic-support_basic-recommend_basic-documents",
+      "membership_point_id": "combo4_basic-onboard_basic-support_basic-recommend_basic-documents",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "af29cb165f11d6c3dd2c3789dbf6b938612edf1b6ca8f759ff43d9cf29889707",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t100_combo4_basic-onboard_basic-support_basic-recommend_basic-documents",
+      "builder_instructions_sha256": "aa6d07cb866c59c3b287d0a96a6450567b7746801cf780b227f4d1661a01d843"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "basic:support",
+        "basic:search",
+        "basic:recommend"
+      ],
+      "industry": "healthcare",
+      "category": "combo_BI",
+      "trial_id": "wave3_t101_combo4_basic-onboard_basic-support_basic-search_basic-recommend__ind-healthcare",
+      "membership_point_id": "combo4_basic-onboard_basic-support_basic-search_basic-recommend__ind-healthcare",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "c8dc1992ea6b4362291a58e52455b1d00c343debfd2884442c6c7c3aadcee01a",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t101_combo4_basic-onboard_basic-support_basic-search_basic-recommend__ind-healthcare",
+      "builder_instructions_sha256": "c87ed51f318f132a4b48bc88560f9e0a62f4df34d9e076251132eb71e0dacceb"
+    },
+    {
+      "parts": [
+        "deep",
+        "journey",
+        "basic:support",
+        "extract"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t102_combo4_deep_journey_basic-support_extract",
+      "membership_point_id": "combo4_deep_journey_basic-support_extract",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "0bf6788f5a64820e4b1bd4cde4c6458073b6dfae1d33d8dd207664d855609316",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t102_combo4_deep_journey_basic-support_extract",
+      "builder_instructions_sha256": "ba3edcc8e6666b559bf55ecf024fd8f1f64679abc7a7190360bc93cf14aaf402"
+    },
+    {
+      "parts": [
+        "semantic",
+        "journey",
+        "basic:documents",
+        "feedback"
+      ],
+      "industry": "telecom",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t103_combo4_semantic_journey_basic-documents_feedback__ind-telecom",
+      "membership_point_id": "combo4_semantic_journey_basic-documents_feedback__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "8ddea1a11b7e7b96520b1a8acc508e9c49da074c5575299464d5e9e8bedd5d41",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t103_combo4_semantic_journey_basic-documents_feedback__ind-telecom",
+      "builder_instructions_sha256": "b3d1326d8d9150eebd19d5c2982ac75d89580b68490c41cc3313d2ab91467630"
+    },
+    {
+      "parts": [
+        "compare",
+        "journey",
+        "normal",
+        "adaptive"
+      ],
+      "industry": "retail",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t104_combo4_compare_journey_normal_adaptive__ind-retail",
+      "membership_point_id": "combo4_compare_journey_normal_adaptive__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "576451b55982d78ba4f5930511395a3caf05901c0537a94069a07bba161fed1b",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t104_combo4_compare_journey_normal_adaptive__ind-retail",
+      "builder_instructions_sha256": "2caa3e1e290074155eef9cace1efaf9698baa75fb34d5b24639031cfd52575c0"
+    },
+    {
+      "parts": [
+        "basic:support"
+      ],
+      "industry": null,
+      "category": "B_single",
+      "trial_id": "wave3_t105_single_basic-support",
+      "membership_point_id": "single_basic-support",
+      "level": "B",
+      "kind": "repeat_within_wave",
+      "split": "train",
+      "split_group": "000057e8fdddf7db6636b8d158ad8acd1e065371e38f776ce0efd08fce33165d",
+      "repeat_index_in_wave": 2,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t105_single_basic-support",
+      "builder_instructions_sha256": "c366fc3e62fcfdc742b02e49ea95039efeb652fe608d5b32a85e48ab164b2679"
+    },
+    {
+      "parts": [
+        "sentiment"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t106_single_sentiment",
+      "membership_point_id": "single_sentiment",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "f79ba67cb9b1aea28c16e543097153c76126e892d90dfdddf40bf8ff4509e034",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t106_single_sentiment",
+      "builder_instructions_sha256": "f81a1b95c3f21fcd8837f686f24ea097d579b9bda5ce397751ddb14d3f1fa261"
+    },
+    {
+      "parts": [
+        "journey"
+      ],
+      "industry": "insurance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t107_single_journey__ind-insurance",
+      "membership_point_id": "single_journey__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "c510ec8f854eb60d566afef61363509b487ae81eb9467b08d4f0de7ede0e7b3c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t107_single_journey__ind-insurance",
+      "builder_instructions_sha256": "ea5a182dc1ae4c08627638e03d27ab51c8efef7933d555a04eb20ea1fde93bb7"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "basic:onboard",
+        "basic:insights",
+        "basic:support"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t108_combo4_basic-research_basic-onboard_basic-insights_basic-support",
+      "membership_point_id": "combo4_basic-research_basic-onboard_basic-insights_basic-support",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "5fd27c9d8557835f78c8f520f009e98ecce2a346467c2c92b5717b42dfa6ad63",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t108_combo4_basic-research_basic-onboard_basic-insights_basic-support",
+      "builder_instructions_sha256": "072faf24122e27980ed37d4426a24c6a469161f9f747d22c3b052d0a5cdd605b"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "basic:search",
+        "basic:documents",
+        "basic:insights"
+      ],
+      "industry": "energy",
+      "category": "combo_BI",
+      "trial_id": "wave3_t109_combo4_basic-research_basic-search_basic-documents_basic-insights__ind-energy",
+      "membership_point_id": "combo4_basic-research_basic-search_basic-documents_basic-insights__ind-energy",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "a35d9e2e5db56d32673d1fc23ce55bdb36b520049f805798c39b1668b4e97e73",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t109_combo4_basic-research_basic-search_basic-documents_basic-insights__ind-energy",
+      "builder_instructions_sha256": "d8423cb2582946b9b117382097179bb09433c33cf02810f5376aaaa0831d8707"
+    },
+    {
+      "parts": [
+        "basic:search",
+        "interests",
+        "normal",
+        "faq"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t110_combo4_basic-search_interests_normal_faq",
+      "membership_point_id": "combo4_basic-search_interests_normal_faq",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "952a5d482b5dff7d6f6b46ea065e9540a566df8c7b93bf7d2f96fd828d9b7713",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t110_combo4_basic-search_interests_normal_faq",
+      "builder_instructions_sha256": "dd000727f23932756130d7f8418294385c42120c12cbab91abfba52c3a2dd6f2"
+    },
+    {
+      "parts": [
+        "compare",
+        "triage",
+        "basic:onboard",
+        "interests"
+      ],
+      "industry": "manufacturing",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t111_combo4_compare_triage_basic-onboard_interests__ind-manufacturing",
+      "membership_point_id": "combo4_compare_triage_basic-onboard_interests__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "efecce570ff7fb79f47f903904e29f8dc06652db8b7b28318c55a0625be54b89",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t111_combo4_compare_triage_basic-onboard_interests__ind-manufacturing",
+      "builder_instructions_sha256": "37e5469b4b7f3d81f853cfd5c668f6b8303fd22541f11ae3143f96b8eae2f008"
+    },
+    {
+      "parts": [
+        "sentiment",
+        "adaptive",
+        "review",
+        "faq"
+      ],
+      "industry": "finance",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t112_combo4_sentiment_adaptive_review_faq__ind-finance",
+      "membership_point_id": "combo4_sentiment_adaptive_review_faq__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "32575ac877fe267f273b44b731ca9fbf9f2932c21ba9871a63c556ab9968bbbb",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t112_combo4_sentiment_adaptive_review_faq__ind-finance",
+      "builder_instructions_sha256": "7133ac550a7a66dc1a1931364064820dbebd01cf3509bd325658dd79a3a8441b"
+    },
+    {
+      "parts": [
+        "triage"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t113_single_triage",
+      "membership_point_id": "single_triage",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "test",
+      "split_group": "3d07c4ffddbad0a81e087a52ba3cc79db852cd52ca3f6056b194b1d745401b11",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t113_single_triage",
+      "builder_instructions_sha256": "773f678949f308f16a7e2d1fabd065e0752b4728461b55ad21f4bb1df9f88fd5"
+    },
+    {
+      "parts": [
+        "faq"
+      ],
+      "industry": "telecom",
+      "category": "BTI_single",
+      "trial_id": "wave3_t114_single_faq__ind-telecom",
+      "membership_point_id": "single_faq__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "601a3aacfaaa68f851b25ae017b93e76311678ab6a7cdc618012bed90f0a685c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t114_single_faq__ind-telecom",
+      "builder_instructions_sha256": "2cbed6e858797de7b3b9622dda703deb79288866dca03eb11a552c7f2dcec189"
+    },
+    {
+      "parts": [
+        "basic:documents",
+        "basic:recommend",
+        "basic:support",
+        "basic:search"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t115_combo4_basic-documents_basic-recommend_basic-support_basic-search",
+      "membership_point_id": "combo4_basic-documents_basic-recommend_basic-support_basic-search",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "26d7097dfa288ad9872f047ebb2b15a4cc0f5b3e33c8030ab4ffa5900aeb8ce9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t115_combo4_basic-documents_basic-recommend_basic-support_basic-search",
+      "builder_instructions_sha256": "13549f43d7db7f98555e3c671981a8418c1da84222067fb39a84e3a8cb08894d"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "basic:support",
+        "basic:research",
+        "basic:recommend"
+      ],
+      "industry": "public_sector",
+      "category": "combo_BI",
+      "trial_id": "wave3_t116_combo4_basic-onboard_basic-support_basic-research_basic-recommend__ind-public_sector",
+      "membership_point_id": "combo4_basic-onboard_basic-support_basic-research_basic-recommend__ind-public_sector",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "f5412145a501ff6ea04a756097b6d43a170457fbce19115220d87f7a977845bf",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t116_combo4_basic-onboard_basic-support_basic-research_basic-recommend__ind-public_sector",
+      "builder_instructions_sha256": "679327a285744c577dfa054e683d55823a5a63cb41688c41c1dfa771ccfdadd6"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "guided",
+        "feedback",
+        "review"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t117_combo4_basic-research_guided_feedback_review",
+      "membership_point_id": "combo4_basic-research_guided_feedback_review",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "07dfea471f92573f3a988e9ac5dc154c0c28e0d97ee21932b7e2b77a1016fb14",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t117_combo4_basic-research_guided_feedback_review",
+      "builder_instructions_sha256": "cf3738ab72bc1d294291fe2bccf8049f56e38e04461e98a7e63ca6f05269d508"
+    },
+    {
+      "parts": [
+        "review",
+        "adaptive",
+        "basic:research",
+        "faq"
+      ],
+      "industry": "energy",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t118_combo4_review_adaptive_basic-research_faq__ind-energy",
+      "membership_point_id": "combo4_review_adaptive_basic-research_faq__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "0a4daec210c40d350dcc5fbf4b83e0fe6c4219be5507598206fbb3ac972e89c0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t118_combo4_review_adaptive_basic-research_faq__ind-energy",
+      "builder_instructions_sha256": "a9cc140e1382a9189ce64ed938187983b2a0eb86cc0e58c2bc0c4616f6f86573"
+    },
+    {
+      "parts": [
+        "web",
+        "guided",
+        "behavior",
+        "semantic"
+      ],
+      "industry": "insurance",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t119_combo4_web_guided_behavior_semantic__ind-insurance",
+      "membership_point_id": "combo4_web_guided_behavior_semantic__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "70ee8e8ceb2dcb8119fbb81361b41a0de4ac926ccf4964f5bc0ab910ad93072d",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t119_combo4_web_guided_behavior_semantic__ind-insurance",
+      "builder_instructions_sha256": "4f864fcf253e7683d0f8f46c05fd28d35dac8624d2e9332598366620034d28c8"
+    },
+    {
+      "parts": [
+        "web"
+      ],
+      "industry": null,
+      "category": "BT_single_repeat",
+      "trial_id": "wave3_t120_single_web",
+      "membership_point_id": "single_web",
+      "level": "BT",
+      "kind": "repeat_of_earlier_wave",
+      "split": "train",
+      "split_group": "2a0d5e566c38f5a1eb7d71dd391184dd8a95f48d3f2b99f7f78bfbf340d6bf25",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t120_single_web",
+      "builder_instructions_sha256": "23ba70d09b3510004d947751b3663978b8640dc231d4855adabb62e6db2138b0"
+    },
+    {
+      "parts": [
+        "guided"
+      ],
+      "industry": "energy",
+      "category": "BTI_single",
+      "trial_id": "wave3_t121_single_guided__ind-energy",
+      "membership_point_id": "single_guided__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "9f87f2f2865054206fed1781ec96294b5bd52aa492028d7571867ba32ba7092c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t121_single_guided__ind-energy",
+      "builder_instructions_sha256": "946a8407f138fd48a25f5453c5c526d5249b8a1dd61ee04b41aeefc174d1f0ca"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "basic:documents",
+        "basic:insights",
+        "basic:onboard"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t122_combo4_basic-research_basic-documents_basic-insights_basic-onboard",
+      "membership_point_id": "combo4_basic-research_basic-documents_basic-insights_basic-onboard",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "24de5c91ede10c4a5a099921a3979cef7cd851fd0c1a17db4764689b268f12d4",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t122_combo4_basic-research_basic-documents_basic-insights_basic-onboard",
+      "builder_instructions_sha256": "880b6774d4d82a633105e597b6803851a4300ce6fda6bc2e23ab70b36babd5a5"
+    },
+    {
+      "parts": [
+        "basic:documents",
+        "basic:insights",
+        "basic:search",
+        "basic:onboard"
+      ],
+      "industry": "manufacturing",
+      "category": "combo_BI",
+      "trial_id": "wave3_t123_combo4_basic-documents_basic-insights_basic-search_basic-onboard__ind-manufacturing",
+      "membership_point_id": "combo4_basic-documents_basic-insights_basic-search_basic-onboard__ind-manufacturing",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "b6400a9d8deadd9b5f26c205f726ac4c50c147b37d1dc22b6cbbe4c4315529de",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t123_combo4_basic-documents_basic-insights_basic-search_basic-onboard__ind-manufacturing",
+      "builder_instructions_sha256": "4384016ceecb3286b4295dd4f2370cd8cd9a02c83ac9557a4f658591d485ea3e"
+    },
+    {
+      "parts": [
+        "triage",
+        "feedback",
+        "adaptive",
+        "basic:recommend"
+      ],
+      "industry": null,
+      "category": "combo_mixed",
+      "trial_id": "wave3_t124_combo4_triage_feedback_adaptive_basic-recommend",
+      "membership_point_id": "combo4_triage_feedback_adaptive_basic-recommend",
+      "level": "BT",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "369c2da7ebabdb86b4071b7c8a953ec38aaec28cf8cd383bf58f210aaf9599d2",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t124_combo4_triage_feedback_adaptive_basic-recommend",
+      "builder_instructions_sha256": "5363ebd68b57414a46f181619bf7f035c97bd05a5a5efb60e7a4ee8b79f43e2f"
+    },
+    {
+      "parts": [
+        "deep",
+        "extract",
+        "basic:support",
+        "sentiment"
+      ],
+      "industry": "healthcare",
+      "category": "combo_mixedI",
+      "trial_id": "wave3_t125_combo4_deep_extract_basic-support_sentiment__ind-healthcare",
+      "membership_point_id": "combo4_deep_extract_basic-support_sentiment__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "ef4d6fcd1826f5314d4fe0d21331fdbe50b33daf084df95cc8b74eb34f0a8b45",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t125_combo4_deep_extract_basic-support_sentiment__ind-healthcare",
+      "builder_instructions_sha256": "de4a913fd3a4fa3d895b5a863dca16c079d89ff347299aadf3ef9dce3869d06b"
+    },
+    {
+      "parts": [
+        "feedback",
+        "compare",
+        "extract",
+        "faq"
+      ],
+      "industry": "retail",
+      "category": "combo_BTI",
+      "trial_id": "wave3_t126_combo4_feedback_compare_extract_faq__ind-retail",
+      "membership_point_id": "combo4_feedback_compare_extract_faq__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "f83ecb59729184be18ecb28558f18aed12fe4431af299b0b7cdb4a57683d93ef",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t126_combo4_feedback_compare_extract_faq__ind-retail",
+      "builder_instructions_sha256": "fa238b451c3e09c845fa0b34bdb5ef84f1ed4023ac4b071ddb6cc00c23a7e536"
+    },
+    {
+      "parts": [
+        "extract"
+      ],
+      "industry": "insurance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t127_single_extract__ind-insurance",
+      "membership_point_id": "single_extract__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "813fa9a7c53637d6a848defbcbc80420f144a029582e0ce6b44c76b5d18d863c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t127_single_extract__ind-insurance",
+      "builder_instructions_sha256": "5a5f47697b652c7cbf3840ed591659bf09d6c4cd7608a6b5c2df1f4a7501e743"
+    },
+    {
+      "parts": [
+        "basic:onboard",
+        "basic:search",
+        "basic:recommend",
+        "basic:research"
+      ],
+      "industry": null,
+      "category": "combo_B",
+      "trial_id": "wave3_t128_combo4_basic-onboard_basic-search_basic-recommend_basic-research",
+      "membership_point_id": "combo4_basic-onboard_basic-search_basic-recommend_basic-research",
+      "level": "B",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "7f4604de487c73dd9a50e0675792af218c7fecd18be493ff93415838c9018a8c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t128_combo4_basic-onboard_basic-search_basic-recommend_basic-research",
+      "builder_instructions_sha256": "96e1b6b51e3b20e965dbdeb1ba0d51fe8fbcccfa737d2a6535c52c3672c7b468"
+    },
+    {
+      "parts": [
+        "basic:research",
+        "basic:recommend",
+        "basic:insights",
+        "basic:support"
+      ],
+      "industry": "public_sector",
+      "category": "combo_BI",
+      "trial_id": "wave3_t129_combo4_basic-research_basic-recommend_basic-insights_basic-support__ind-public_sector",
+      "membership_point_id": "combo4_basic-research_basic-recommend_basic-insights_basic-support__ind-public_sector",
+      "level": "BI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "b18683a7c2e47a599e5eb63538e936869f4fac1dd226643960b9697ea1c3309b",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t129_combo4_basic-research_basic-recommend_basic-insights_basic-support__ind-public_sector",
+      "builder_instructions_sha256": "d1d8cfa01bab31eb5f30d51bf61832fab15babad282cb85d1507642d0c00c22b"
+    },
+    {
+      "parts": [
+        "sentiment"
+      ],
+      "industry": "public_sector",
+      "category": "BTI_single",
+      "trial_id": "wave3_t130_single_sentiment__ind-public_sector",
+      "membership_point_id": "single_sentiment__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "9dee095bcf1c1592a4ce96eadea3827080234961469aaae227bb0fb23f1713eb",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t130_single_sentiment__ind-public_sector",
+      "builder_instructions_sha256": "e4435d653b455d707dd155a30afdddcd91d5e9a55de958dd34403e5f316551c2"
+    },
+    {
+      "parts": [
+        "deep"
+      ],
+      "industry": "healthcare",
+      "category": "BTI_single",
+      "trial_id": "wave3_t131_single_deep__ind-healthcare",
+      "membership_point_id": "single_deep__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "9dbf1752030ec7bc186a1d575afe6e19cc7f441ae0b2097e861bd57d21918002",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t131_single_deep__ind-healthcare",
+      "builder_instructions_sha256": "2191af4f3a56cdac2055543c801e7b416489d3b3c3bd7e7255adcbe73680ee43"
+    },
+    {
+      "parts": [
+        "compare"
+      ],
+      "industry": "telecom",
+      "category": "BTI_single",
+      "trial_id": "wave3_t132_single_compare__ind-telecom",
+      "membership_point_id": "single_compare__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "67e10648c1e0b3eea3e716909038d5e3243fee8f9a2a2a126c427126c5c495e9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t132_single_compare__ind-telecom",
+      "builder_instructions_sha256": "f8bd7aec65782b6c7f998485c385bf5454d1fd71cc04ed12d1eebffeb6682c05"
+    },
+    {
+      "parts": [
+        "behavior"
+      ],
+      "industry": "manufacturing",
+      "category": "BTI_single",
+      "trial_id": "wave3_t133_single_behavior__ind-manufacturing",
+      "membership_point_id": "single_behavior__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "89038b973ec8a480152cbba066f5ee30027213c5f79221ddb7863d51a72b67f7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t133_single_behavior__ind-manufacturing",
+      "builder_instructions_sha256": "7c3a720704a889cbad59f2904c8ec6f2b43495b9e6a6849c4d2291814c499b74"
+    },
+    {
+      "parts": [
+        "review"
+      ],
+      "industry": "finance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t134_single_review__ind-finance",
+      "membership_point_id": "single_review__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "5dadece815471bd986cce56c23fa81bd3841f4b495ccd66055969bcca7e1abd7",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t134_single_review__ind-finance",
+      "builder_instructions_sha256": "2eb3a3040511b28ef3d2d2c43446a233e58ce5e7776c1196c641af5c9f6cf3b5"
+    },
+    {
+      "parts": [
+        "adaptive"
+      ],
+      "industry": "energy",
+      "category": "BTI_single",
+      "trial_id": "wave3_t135_single_adaptive__ind-energy",
+      "membership_point_id": "single_adaptive__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "f9cdbb7a23c703162246f5c3e4a5e46da9a9e088b1d5f80087bcc218d7f66b15",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t135_single_adaptive__ind-energy",
+      "builder_instructions_sha256": "eeed9d5b62959b31af60835df951c929d9d23319325c9712479f552f590aeb1e"
+    },
+    {
+      "parts": [
+        "semantic"
+      ],
+      "industry": "retail",
+      "category": "BTI_single",
+      "trial_id": "wave3_t136_single_semantic__ind-retail",
+      "membership_point_id": "single_semantic__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "468f22a41bd11c923d92ea91e06b636ee95e4e846d4e7dc31da42330fe7028bb",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t136_single_semantic__ind-retail",
+      "builder_instructions_sha256": "1056dae1ea7c425a076fc246d4808196c9b0b0cfc4eca54896d86b77233d3644"
+    },
+    {
+      "parts": [
+        "triage"
+      ],
+      "industry": "energy",
+      "category": "BTI_single",
+      "trial_id": "wave3_t137_single_triage__ind-energy",
+      "membership_point_id": "single_triage__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "4d5b364f8569e353de126ccd2029eeac6a5fe958459be0ff833ec1e8f1b819c0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t137_single_triage__ind-energy",
+      "builder_instructions_sha256": "a2f27cc236e3120b70fd39c16f315f573afcb8c062abb907b1188d1cf9954412"
+    },
+    {
+      "parts": [
+        "feedback"
+      ],
+      "industry": "public_sector",
+      "category": "BTI_single",
+      "trial_id": "wave3_t138_single_feedback__ind-public_sector",
+      "membership_point_id": "single_feedback__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "74a2c1d0154de252903fabf3cd7f7bfe8ba0a9c14fbd4e42127d686c08b1138c",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t138_single_feedback__ind-public_sector",
+      "builder_instructions_sha256": "4746c9fb6bddbefe51934c88c7213221ce114b859162b48c5b511260dc049f92"
+    },
+    {
+      "parts": [
+        "deep"
+      ],
+      "industry": "retail",
+      "category": "BTI_single",
+      "trial_id": "wave3_t139_single_deep__ind-retail",
+      "membership_point_id": "single_deep__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "db0617288d02f0c23f121af6461710b098b2dd3cb1d598db08c2a2aaab11aa38",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t139_single_deep__ind-retail",
+      "builder_instructions_sha256": "70e537f61c043a2cc0dcaa2c8c02d2722da230bf17fd1ff2d526381073430d25"
+    },
+    {
+      "parts": [
+        "interests"
+      ],
+      "industry": "telecom",
+      "category": "BTI_single",
+      "trial_id": "wave3_t140_single_interests__ind-telecom",
+      "membership_point_id": "single_interests__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "ab8c6a16d7af7848400a24295231e53eef6b52fba5cd16bb04551eb38a9d9819",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t140_single_interests__ind-telecom",
+      "builder_instructions_sha256": "797bdc1aa1a7396e2470cd578fee77151179a058e66b1e1dec9a79b41eff4bad"
+    },
+    {
+      "parts": [
+        "sentiment"
+      ],
+      "industry": "healthcare",
+      "category": "BTI_single",
+      "trial_id": "wave3_t141_single_sentiment__ind-healthcare",
+      "membership_point_id": "single_sentiment__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "35cf6af22f5cae2e6dde9586e923337afc1781674e55bccea9856fc6e736dbeb",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t141_single_sentiment__ind-healthcare",
+      "builder_instructions_sha256": "afa4a683634f73ac95e80fd6d9d1a91b0f35a19ae53c6c9587a833087ee0d70c"
+    },
+    {
+      "parts": [
+        "web"
+      ],
+      "industry": "finance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t142_single_web__ind-finance",
+      "membership_point_id": "single_web__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "0c427440f513a63ef0353ae5789e26be72aa6f9bd92f23e4f2bfdee067042ace",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t142_single_web__ind-finance",
+      "builder_instructions_sha256": "977d58235e5f628ab85556153b96dd7200e325238a8a5e94d515319f6978eefa"
+    },
+    {
+      "parts": [
+        "triage"
+      ],
+      "industry": "insurance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t143_single_triage__ind-insurance",
+      "membership_point_id": "single_triage__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "e97ca37f50ef72f9c0e0360895f4b810ae52579dad817b1a82a1d8df0c4c0f99",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t143_single_triage__ind-insurance",
+      "builder_instructions_sha256": "2c23cb290003b560ba049ac73318022d744efd1a1e4f497346738d2edc41621c"
+    },
+    {
+      "parts": [
+        "journey"
+      ],
+      "industry": "manufacturing",
+      "category": "BTI_single",
+      "trial_id": "wave3_t144_single_journey__ind-manufacturing",
+      "membership_point_id": "single_journey__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "06c7790ad9ec2bbf96dd16814b119498fcf48b366c8abbcbe42d022648a7a35e",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t144_single_journey__ind-manufacturing",
+      "builder_instructions_sha256": "c325696ef02a7524037cf2a39dd3e16e39a3eae4a056555cb77130d9b27169aa"
+    },
+    {
+      "parts": [
+        "adaptive"
+      ],
+      "industry": "finance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t145_single_adaptive__ind-finance",
+      "membership_point_id": "single_adaptive__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "5a26b8964be3874d4f47311e841fa317a5b9f312cf0b9cb4b27ee96c7b1260e1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t145_single_adaptive__ind-finance",
+      "builder_instructions_sha256": "5d6d7f9b9361db0b98f885620d9a5fdf172f5b4df21860ed59d2dd5c042fba7b"
+    },
+    {
+      "parts": [
+        "review"
+      ],
+      "industry": "healthcare",
+      "category": "BTI_single",
+      "trial_id": "wave3_t146_single_review__ind-healthcare",
+      "membership_point_id": "single_review__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "1dde0930278707a6536aef6e129cfccfa11c6cb60d1bb9d16a5ddb4bc7b105f0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t146_single_review__ind-healthcare",
+      "builder_instructions_sha256": "40eace9779c5a42fa219bbc0f905ad07fb3a404ce19016a0426255c7fffbf9f8"
+    },
+    {
+      "parts": [
+        "compare"
+      ],
+      "industry": "energy",
+      "category": "BTI_single",
+      "trial_id": "wave3_t147_single_compare__ind-energy",
+      "membership_point_id": "single_compare__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "dcd00b39387fc453b31982b7f03e4513c557b3ed96b2835333b8fff9aa9a5e91",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t147_single_compare__ind-energy",
+      "builder_instructions_sha256": "528e668e2d4ce4843d81702e04d2c4085a1e7e2b4ca482a610b42e18070c5c91"
+    },
+    {
+      "parts": [
+        "normal"
+      ],
+      "industry": "telecom",
+      "category": "BTI_single",
+      "trial_id": "wave3_t148_single_normal__ind-telecom",
+      "membership_point_id": "single_normal__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "68ce42c27d553a0d5f0b3b5a0cf17ddfc3617decb2c5d5035542e842c86a7621",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t148_single_normal__ind-telecom",
+      "builder_instructions_sha256": "318aa8a90d0f1882d252bf39b11b697f66c207bf5d3f8893f70240e29de0eabb"
+    },
+    {
+      "parts": [
+        "semantic"
+      ],
+      "industry": "manufacturing",
+      "category": "BTI_single",
+      "trial_id": "wave3_t149_single_semantic__ind-manufacturing",
+      "membership_point_id": "single_semantic__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "dd910a3645b29d0ec34fcb69e47936f92087c7ecf12a4112724a28a2fc8e120a",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t149_single_semantic__ind-manufacturing",
+      "builder_instructions_sha256": "d485e95a742a33aee8c4d13be105dbf681cfbc289e1a27214664ea70cdf511ee"
+    },
+    {
+      "parts": [
+        "guided"
+      ],
+      "industry": "insurance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t150_single_guided__ind-insurance",
+      "membership_point_id": "single_guided__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "fd10f91f67846d47b37e0fe091ef61bea0152155e61575c6198d6102fe96317f",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t150_single_guided__ind-insurance",
+      "builder_instructions_sha256": "746a2bc727169e7012a22c28f889d4bd14aba55e16b20c1a354028111e2aa789"
+    },
+    {
+      "parts": [
+        "behavior"
+      ],
+      "industry": "public_sector",
+      "category": "BTI_single",
+      "trial_id": "wave3_t151_single_behavior__ind-public_sector",
+      "membership_point_id": "single_behavior__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "8da539b005badbb838a00475f0c09ef2877460af6aba3d62c96bc50b68ce6165",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t151_single_behavior__ind-public_sector",
+      "builder_instructions_sha256": "abb3c2596f44f4e7713e5d978ad76396e0098539fee906c312a55e5c9bd69a1d"
+    },
+    {
+      "parts": [
+        "faq"
+      ],
+      "industry": "retail",
+      "category": "BTI_single",
+      "trial_id": "wave3_t152_single_faq__ind-retail",
+      "membership_point_id": "single_faq__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "029c35d605dbc703f0db11445b100d1106dcfcad09f48215b6c4546c5f3d3e81",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t152_single_faq__ind-retail",
+      "builder_instructions_sha256": "a5d942cfb2a1be66e9a564bbd1bc84bc45b341b9ba5c46f82201304a6b4f5322"
+    },
+    {
+      "parts": [
+        "extract"
+      ],
+      "industry": "manufacturing",
+      "category": "BTI_single",
+      "trial_id": "wave3_t153_single_extract__ind-manufacturing",
+      "membership_point_id": "single_extract__ind-manufacturing",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "b827db7d360a4e1385ffe898b67dadc615f294a5825637bdeeae5710120a107e",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t153_single_extract__ind-manufacturing",
+      "builder_instructions_sha256": "818eab6e2c37a6952ec6e4b16cbff17d6c37f7a8afe50f487554bebe061d7abe"
+    },
+    {
+      "parts": [
+        "feedback"
+      ],
+      "industry": "telecom",
+      "category": "BTI_single",
+      "trial_id": "wave3_t154_single_feedback__ind-telecom",
+      "membership_point_id": "single_feedback__ind-telecom",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "b68eac64c5538f0029b8057b8b4dd8eeca0dd48e46d2a3fafc95a68ad86b7856",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t154_single_feedback__ind-telecom",
+      "builder_instructions_sha256": "b7471b7e0da91098c28cf239a50063663cab8873bcc5a2b109a8c7b8e66a8df6"
+    },
+    {
+      "parts": [
+        "review"
+      ],
+      "industry": "public_sector",
+      "category": "BTI_single",
+      "trial_id": "wave3_t155_single_review__ind-public_sector",
+      "membership_point_id": "single_review__ind-public_sector",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "test",
+      "split_group": "b3962f7a3995a74a0c39e1ef66e1608d4583727dbd756a901963d915afa467f0",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t155_single_review__ind-public_sector",
+      "builder_instructions_sha256": "323e63b78c79247bff504e7c419d18d1ed40dccf8bb18334017e0dde8c94787a"
+    },
+    {
+      "parts": [
+        "behavior"
+      ],
+      "industry": "insurance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t156_single_behavior__ind-insurance",
+      "membership_point_id": "single_behavior__ind-insurance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "eb1d2f965fea5a17c395e06555f453cb17c4f626946214b733f829aea8068ced",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t156_single_behavior__ind-insurance",
+      "builder_instructions_sha256": "69ce9eb796704a8ecbe1fd7614cbcf1a7238b4c5c0d6b8c28407595992bfeaaa"
+    },
+    {
+      "parts": [
+        "compare"
+      ],
+      "industry": "finance",
+      "category": "BTI_single",
+      "trial_id": "wave3_t157_single_compare__ind-finance",
+      "membership_point_id": "single_compare__ind-finance",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "2986f977488337c3eb64c1c5eda2fa0ac02f9797e1bce4b40764f6ecca8c3295",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t157_single_compare__ind-finance",
+      "builder_instructions_sha256": "b3b91a6461f9cb3cf632469cb37791c683f0bc6863db9343949b693760f6a9b6"
+    },
+    {
+      "parts": [
+        "adaptive"
+      ],
+      "industry": "healthcare",
+      "category": "BTI_single",
+      "trial_id": "wave3_t158_single_adaptive__ind-healthcare",
+      "membership_point_id": "single_adaptive__ind-healthcare",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "c09171332903170ac6080a3274949e8c22a8c75b65db2d5cc3d6c7a7ec927ed1",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t158_single_adaptive__ind-healthcare",
+      "builder_instructions_sha256": "84bcbda25fc414db33fa3e726ddf326c8caa6943d5ce2d9fa5d3288997e7f59b"
+    },
+    {
+      "parts": [
+        "sentiment"
+      ],
+      "industry": "energy",
+      "category": "BTI_single",
+      "trial_id": "wave3_t159_single_sentiment__ind-energy",
+      "membership_point_id": "single_sentiment__ind-energy",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "validation",
+      "split_group": "e944d5d561a345d287c6e0e42413e1e03f332d6dd3d80043dcfce5459f1b2be9",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t159_single_sentiment__ind-energy",
+      "builder_instructions_sha256": "66bbeda1f8b61058a0034954795589c4e6eaad54de2b05fd285b37c65fdbb410"
+    },
+    {
+      "parts": [
+        "normal"
+      ],
+      "industry": "retail",
+      "category": "BTI_single",
+      "trial_id": "wave3_t160_single_normal__ind-retail",
+      "membership_point_id": "single_normal__ind-retail",
+      "level": "BTI",
+      "kind": "new_membership",
+      "split": "train",
+      "split_group": "1ccd3e0d2e2461e1a9676935b7dab67af74d39c5e15610cf0a769608636cbe20",
+      "repeat_index_in_wave": 1,
+      "staging_directory": "runs/20260924_0900_wave3/wave3_t160_single_normal__ind-retail",
+      "builder_instructions_sha256": "7d6f1d94908df50ce0b753d68a590c46dd50d88c337e18f86c31375e0b01e401"
+    }
+  ],
+  "builders": {},
+  "failures": {}
+}
