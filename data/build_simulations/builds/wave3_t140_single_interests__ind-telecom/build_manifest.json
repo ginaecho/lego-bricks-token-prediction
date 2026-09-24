@@ -1,0 +1,48 @@
+{
+  "build_id": "wave3_t140_single_interests__ind-telecom",
+  "composition_label": "Interest-based recommendations (Personalized discovery)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated standard-library implementation",
+    "runtime": "Python 3",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "JSON envelope: schema_version, synthetic=true, residency=EU|US, subscriber_account, call_detail_records_csv, network_fault_tickets, catalog, exclusions and top_k.",
+    "records": "Account, CDR, tickets and catalog use unique safe pseudonymous IDs, synthetic markers and residency tags. CDR/tickets link to the account. Chat messages carry their own residency and synthetic markers.",
+    "csv_columns": ["id", "subscriber_id", "residency", "synthetic", "phone", "imei", "data_mb", "call_minutes"],
+    "output": "Versioned JSON status envelope; success carries residency, synthetic marker, ranked recommendations with scores, source-ID explanations and policy metadata. Errors carry status=error and sanitized diagnostic.",
+    "validation": "One validate function validates all records before ranking, including excluded records. Unknown fields, invalid types, nonfinite/negative volumes, cross-subscriber links, duplicate IDs and residency mismatches are rejected."
+  },
+  "cross_stage_handoffs": ["Single stage: validated account, parsed usage and tickets feed deterministic interest ranking; no external handoffs."],
+  "behavior": {
+    "ranking": "Matched explicit preference weights (0..100), plus 2 data-interest points for aggregate data >=1000 MB, plus 3 reliability points for an open fault ticket; descending score then ascending ID. Only positive matches returned, bounded top_k 1..50.",
+    "exclusions": "IDs and any matching excluded tag remove candidates before ranking.",
+    "grounding": "Each score contribution references validated source record IDs and a fixed factual rule. Chat content is never executed or echoed.",
+    "privacy": "Demonstrative GDPR/CCPA-inspired gates require explicit personalization consent, permitted purpose, no sale/share opt-out and no deletion request. Raw phone/IMEI/chat/volumes are omitted from output. Not compliance certification.",
+    "residency": "Every source entity and nested chat record must match envelope residency; every output recommendation and evidence record is tagged. No network transfer or persistence of subscriber records.",
+    "billing": "Every adjustment candidate requires finite amount, supported currency and stated nonempty reason. Recommendations never execute billing changes.",
+    "fixtures": "Clearly marked fictional account, +000 phone and zero-prefix IMEI, invented fault ticket/chat, synthetic usage; tests use Random(140) for reproducible randomized volumes."
+  },
+  "scope": {
+    "included": ["One integrated CLI", "CSV parsing", "Structured support transcripts", "Shared strict validation", "Deterministic ranking", "Grounded explanations", "Privacy and residency demonstration gates"],
+    "excluded": ["Production deployment", "Legal certification", "Real subscriber data", "Live providers or LLM steps", "Actual billing changes", "Physical residency attestation", "Persistent account storage"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests": 17,
+    "test_command_exit_code": 0,
+    "cli": "passed; one JSON object with status ok and recommendation scores 10, 9, 4",
+    "cli_exit_code": 0,
+    "error_behavior": "Missing file, argument errors, invalid JSON and validation failures tested: JSON status error and exit code 2."
+  }
+}

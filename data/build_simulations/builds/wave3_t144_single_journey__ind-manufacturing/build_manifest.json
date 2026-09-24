@@ -1,0 +1,45 @@
+{
+  "build_id": "wave3_t144_single_journey__ind-manufacturing",
+  "composition_label": "single_journey",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": ["python -B implementation.py example_input.json", "python -B -m unittest discover -s . -p test_implementation.py"],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Exact-key JSON envelope: schema_version, synthetic_fixture=true, profile.priority (quality/maintenance/production), ERP/MES-style work_order, embedded time-series telemetry_csv, inspections, maintenance_logs.",
+    "work_order": "id, asset_id, product_id, state=awaiting_review, tolerance={characteristic=shaft_diameter,unit=mm,lower,upper}",
+    "telemetry": "CSV header asset_id,timestamp,metric,value,unit. Temperature degC and vibration mm/s both required. Per-metric timestamps strictly increasing and timezone-aware.",
+    "inspection": "id, work_order_id, asset_id, timestamp, inspector_id, characteristic, value, unit, decision, rationale. Chronological decisions must agree with inclusive tolerance bounds.",
+    "output": "schema_version, status, synthetic_fixture, work_order_id, asset_id, priority, initial_facts, recommendations, journey, human_escalation, evidence, limitations. Errors: schema_version, status=error, error; exit 2.",
+    "validation": "Shared validate gate checks identities, traceability, schema, finite values, units, tolerances, physical ranges and chronology. Shared validate_journey checks action prerequisites and exactly two steps."
+  },
+  "cross_stage_handoffs": [
+    "Validated work order, quality inspection records and normalized telemetry become prerequisite facts.",
+    "Priority-aware discovery selects one eligible first action; safety and quality gates override user preference.",
+    "Planner validates the two-step chain using explicitly planned effects; second step remains conditional on first-step completion.",
+    "Evidence retains quality decision provenance, tolerance, selected inspection ID, alert rows and invented maintenance logs."
+  ],
+  "behavior": {
+    "deterministic": true,
+    "synthetic_data": "Fictitious IDs, invented maintenance log, physically plausible sensor series. synthetic_fixture(seed) provides reproducible randomized telemetry.",
+    "safety": "Any critical reading (temperature >=85 degC or vibration >=12 mm/s) selects human escalation followed by safety-hold recommendation. Escalation is required but not delivered by this offline planner.",
+    "warning": "Temperature >=70 degC or vibration >=7 mm/s prioritizes maintenance when quality passes.",
+    "traceability": "Demonstrative ISO 9001-style traceability retains decision, actor, time, work-order/asset links, measurement, tolerance and rationale; no certification claim.",
+    "quality": "Missing inspection schedules inspection and reviewer assignment; failed latest inspection triggers nonconformance investigation and reinspection; passing inspection permits human release-review planning.",
+    "units": "Temperature range [-40,200] degC; vibration [0,100] mm/s; diameter (0,1000] mm. Invalid or nonfinite values rejected.",
+    "side_effects": "Plans only; never releases a work order, changes machinery, sends alerts or claims completion."
+  },
+  "scope": {
+    "included": ["Personalized prerequisite-aware next action", "Validated conditional two-step journey", "Shared schema and validation", "Synthetic manufacturing fixtures", "JSON CLI error handling", "Standard-library unittest suite"],
+    "excluded": ["Production integrations", "Live providers and LLM calls", "Physical machine controls", "Notification delivery", "Certification", "Persistent workflow execution", "Sensor calibration verification", "Live data freshness guarantees"]
+  },
+  "test_outcomes": {"status": "passed", "tests_passed": 19, "cli_exit_code": 0, "cli_output_status": "ok", "coverage": ["normal deterministic behavior", "seeded randomized fixtures", "personalization", "critical human escalation", "warning telemetry", "quality failure", "missing inspection", "tolerance boundaries", "invalid units and nonfinite values", "quality provenance", "CSV validation", "empty telemetry", "prerequisite ordering", "schema errors", "large numeric input", "malformed CSV header", "CLI success", "CLI file and usage errors", "CLI invalid JSON"]}
+}

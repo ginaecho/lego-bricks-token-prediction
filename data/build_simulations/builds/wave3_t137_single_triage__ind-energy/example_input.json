@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "season": "winter",
+  "assets": [
+    {"asset_id": "FICT-SUB-WINTER", "kind": "substation", "critical": true, "connected_to": ["FICT-FEEDER-01"]},
+    {"asset_id": "FICT-FEEDER-01", "kind": "feeder", "critical": false, "connected_to": ["FICT-SUB-WINTER"]}
+  ],
+  "meters": [
+    {"meter_id": "SYN-METER-01", "asset_id": "FICT-FEEDER-01"}
+  ],
+  "meter_readings_csv": "meter_id,timestamp,interval_minutes,consumption_kwh\nSYN-METER-01,2026-01-15T18:00:00Z,30,1.8\nSYN-METER-01,2026-01-15T18:30:00Z,30,2.1\n",
+  "telemetry": [
+    {"asset_id": "FICT-SUB-WINTER", "timestamp": "2026-01-15T18:45:00Z", "voltage_v": 0.0, "status": "offline"},
+    {"asset_id": "FICT-FEEDER-01", "timestamp": "2026-01-15T18:45:00Z", "voltage_v": 230.0, "status": "normal"}
+  ],
+  "emissions": [
+    {"asset_id": "FICT-FEEDER-01", "value": 0.78, "unit": "kgCO2e", "source": "Synthetic winter scenario factor, not an observed inventory"}
+  ],
+  "tickets": [
+    {
+      "ticket_id": "SYN-TICKET-01",
+      "text": "Synthetic outage at FICT-SUB-WINTER; downed line reported.",
+      "asset_ids": ["FICT-SUB-WINTER"],
+      "meter_ids": ["SYN-METER-01"],
+      "outage_report": {
+        "reported_at": "2026-01-15T18:46:00Z",
+        "affected_customers": 120,
+        "safety": {"life_threatening": false, "downed_line": true, "critical_service": false}
+      }
+    },
+    {
+      "ticket_id": "SYN-TICKET-02",
+      "text": "Synthetic meter bill enquiry about winter heating consumption.",
+      "asset_ids": [],
+      "meter_ids": ["SYN-METER-01"],
+      "outage_report": null
+    }
+  ],
+  "config": {
+    "keywords": {"outage": ["outage", "blackout"], "grid": ["voltage", "transformer"], "meter": ["meter", "bill"], "general": []},
+    "category_priority": {"outage": "P3", "grid": "P2", "meter": "P3", "general": "P4"},
+    "routes": {
+      "outage": {"team": "Synthetic dispatch", "accountable_owner": "Fictitious duty controller"},
+      "grid": {"team": "Synthetic grid operations", "accountable_owner": "Fictitious grid lead"},
+      "meter": {"team": "Synthetic metering", "accountable_owner": "Fictitious meter lead"},
+      "general": {"team": "Synthetic service desk", "accountable_owner": "Fictitious support lead"}
+    },
+    "safety_rules": {"life_threatening": "P1", "downed_line": "P1", "critical_service": "P2"}
+  }
+}

@@ -97,7 +97,7 @@
   "split_group": "ab8c6a16d7af7848400a24295231e53eef6b52fba5cd16bb04551eb38a9d9819",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "33575ed0b6d1f2ac64673917c0258d21344a7bd2e07edfa443796441b467ab3b",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t140_single_interests__ind-telecom",
   "membership_point_id": "single_interests__ind-telecom",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "797bdc1aa1a7396e2470cd578fee77151179a058e66b1e1dec9a79b41eff4bad",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "3b4b2af5-2f95-45e9-b845-4d4a455f7c7e",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 122619,
+    "output_tokens": 7940,
+    "cache_read_tokens": 98578,
+    "cache_write_tokens": 24023,
+    "total_tokens": 130559,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37884,
+        "agent_id": "3b4b2af5-2f95-45e9-b845-4d4a455f7c7e",
+        "model": "gpt-6-astra",
+        "input_tokens": 14989,
+        "output_tokens": 261,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 14986,
+        "reasoning_tokens": 81,
+        "duration_ms": 6376,
+        "created_at": "2026-09-24T12:21:18.213Z"
+      },
+      {
+        "id": 37941,
+        "agent_id": "3b4b2af5-2f95-45e9-b845-4d4a455f7c7e",
+        "model": "gpt-6-astra",
+        "input_tokens": 15281,
+        "output_tokens": 6296,
+        "cache_read_tokens": 14986,
+        "cache_write_tokens": 292,
+        "reasoning_tokens": 260,
+        "duration_ms": 105062,
+        "created_at": "2026-09-24T12:33:12.234Z"
+      },
+      {
+        "id": 37942,
+        "agent_id": "3b4b2af5-2f95-45e9-b845-4d4a455f7c7e",
+        "model": "gpt-6-astra",
+        "input_tokens": 21901,
+        "output_tokens": 289,
+        "cache_read_tokens": 15278,
+        "cache_write_tokens": 6620,
+        "reasoning_tokens": 132,
+        "duration_ms": 8118,
+        "created_at": "2026-09-24T12:33:20.147Z"
+      },
+      {
+        "id": 37943,
+        "agent_id": "3b4b2af5-2f95-45e9-b845-4d4a455f7c7e",
+        "model": "gpt-6-astra",
+        "input_tokens": 22724,
+        "output_tokens": 727,
+        "cache_read_tokens": 21898,
+        "cache_write_tokens": 823,
+        "reasoning_tokens": 155,
+        "duration_ms": 15257,
+        "created_at": "2026-09-24T12:33:40.790Z"
+      },
+      {
+        "id": 37944,
+        "agent_id": "3b4b2af5-2f95-45e9-b845-4d4a455f7c7e",
+        "model": "gpt-6-astra",
+        "input_tokens": 23698,
+        "output_tokens": 273,
+        "cache_read_tokens": 22721,
+        "cache_write_tokens": 974,
+        "reasoning_tokens": 0,
+        "duration_ms": 5454,
+        "created_at": "2026-09-24T12:33:51.138Z"
+      },
+      {
+        "id": 37945,
+        "agent_id": "3b4b2af5-2f95-45e9-b845-4d4a455f7c7e",
+        "model": "gpt-6-astra",
+        "input_tokens": 24026,
+        "output_tokens": 94,
+        "cache_read_tokens": 23695,
+        "cache_write_tokens": 328,
+        "reasoning_tokens": 0,
+        "duration_ms": 3005,
+        "created_at": "2026-09-24T12:34:09.709Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.42564749999999996,
+      "observed_cache_profile_estimate_usd": 0.20384700000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.10777,
+      "observed_cache_profile_estimate_usd": 5.10777,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,119 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.397s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "policy": {
+        "billing_adjustments_executed": false,
+        "data_minimized": true,
+        "demonstration_only": true,
+        "ranking": "sum of matched preference and grounded usage/ticket points; ID tie-break"
+      },
+      "recommendations": [
+        {
+          "explanations": [
+            {
+              "fact": "subscriber-assigned interest weight",
+              "points": 8,
+              "record_ids": [
+                "syn-account-001"
+              ],
+              "residency": "EU",
+              "source": "explicit_preference",
+              "synthetic": true,
+              "tag": "data"
+            },
+            {
+              "fact": "aggregate synthetic data usage is at least 1000 MB",
+              "points": 2,
+              "record_ids": [
+                "syn-cdr-001",
+                "syn-cdr-002"
+              ],
+              "residency": "EU",
+              "source": "usage_threshold",
+              "synthetic": true,
+              "tag": "data"
+            }
+          ],
+          "id": "syn-plan-data",
+          "kind": "plan",
+          "residency": "EU",
+          "score": 10,
+          "synthetic": true
+        },
+        {
+          "explanations": [
+            {
+              "fact": "subscriber-assigned interest weight",
+              "points": 6,
+              "record_ids": [
+                "syn-account-001"
+              ],
+              "residency": "EU",
+              "source": "explicit_preference",
+              "synthetic": true,
+              "tag": "reliability"
+            },
+            {
+              "fact": "subscriber has an unresolved synthetic network ticket",
+              "points": 3,
+              "record_ids": [
+                "syn-ticket-001"
+              ],
+              "residency": "EU",
+              "source": "open_network_fault",
+              "synthetic": true,
+              "tag": "reliability"
+            }
+          ],
+          "id": "syn-support-network",
+          "kind": "support",
+          "residency": "EU",
+          "score": 9,
+          "synthetic": true
+        },
+        {
+          "explanations": [
+            {
+              "fact": "subscriber-assigned interest weight",
+              "points": 4,
+              "record_ids": [
+                "syn-account-001"
+              ],
+              "residency": "EU",
+              "source": "explicit_preference",
+              "synthetic": true,
+              "tag": "budget"
+            }
+          ],
+          "id": "syn-credit-review",
+          "kind": "billing_adjustment",
+          "residency": "EU",
+          "score": 4,
+          "synthetic": true
+        }
+      ],
+      "residency": "EU",
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t140_single_interests__ind-telecom",
+    "artifact_sha256": {
+      "implementation.py": "6031af652c4aca11a73820e09a6d5bb7df81da2f891d96c4affe228380174453",
+      "test_implementation.py": "1b0038f84fd65595b2e84095e07010aa478bf39d4cfecf7a232eab5a5d1f9d69",
+      "example_input.json": "97f8dd476667b8957fe1e8eccd228da59066583d8a905e872b210e839eac0869",
+      "build_manifest.json": "ccc31383e6746787ae3b596923f24be99bb4c571697f4c16b2b0e9ce26accc43"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

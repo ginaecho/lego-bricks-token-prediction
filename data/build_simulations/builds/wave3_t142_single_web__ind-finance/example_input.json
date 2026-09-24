@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "customers": [
+    {"id": "cust-fake-1", "name": "SYNTHETIC Ada Sample", "iban": "ZZ00000000000000000001", "kyc_status": "pending", "aml_flag": false},
+    {"id": "cust-fake-2", "name": "SYNTHETIC Ben Example", "iban": "ZZ00000000000000000002", "kyc_status": "verified", "aml_flag": true}
+  ],
+  "ledger": {
+    "format": "json",
+    "data": [
+      {"id": "txn-1", "customer_id": "cust-fake-1", "amount": 12500, "currency": "USD", "card_number": "4111111111111111", "aml_flag": false},
+      {"id": "txn-2", "customer_id": "cust-fake-2", "amount": 78.53, "currency": "USD", "card_number": "5555555555554444", "aml_flag": true}
+    ]
+  },
+  "loan_applications": [
+    {"id": "loan-fake-1", "customer_id": "cust-fake-1", "amount": 180000, "annual_income": 60000}
+  ],
+  "payment_payloads": [
+    "<Document xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.001.001.09\"><CstmrCdtTrfInitn><PmtInf><CdtTrfTxInf><PmtId><EndToEndId>txn-1</EndToEndId></PmtId><Amt><InstdAmt Ccy=\"USD\">12500</InstdAmt></Amt><CdtrAcct><Id><IBAN>ZZ00000000000000000001</IBAN></Id></CdtrAcct></CdtTrfTxInf></PmtInf></CstmrCdtTrfInitn></Document>"
+  ],
+  "research": {
+    "allowlist": ["https://research.example.invalid/synthetic-finance"],
+    "keywords": ["KYC", "AML", "loan"],
+    "sources": [
+      {
+        "url": "https://research.example.invalid/synthetic-finance",
+        "title": "SYNTHETIC financial screening notes",
+        "retrieved_at": "2026-09-24T12:00:00Z",
+        "content": "SYNTHETIC FIXTURE: KYC pending profiles require manual review. AML flags are screening signals, not proof of wrongdoing. Every loan risk score must explain its contributing factors."
+      }
+    ]
+  }
+}

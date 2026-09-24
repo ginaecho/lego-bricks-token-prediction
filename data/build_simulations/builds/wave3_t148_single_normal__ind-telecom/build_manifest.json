@@ -1,0 +1,60 @@
+{
+  "build_id": "wave3_t148_single_normal__ind-telecom",
+  "composition_label": "Normal research (Research)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New standalone implementation written for this build",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": {
+    "example": "python -B implementation.py example_input.json",
+    "tests": "python -B -m unittest discover -s . -p test_implementation.py"
+  },
+  "shared_schema": {
+    "input": "schema_version=1, synthetic=true, policy, query, limit, records",
+    "policy": "EU or US residency, support_research purpose, consent or contract lawful_basis, researcher role",
+    "entities": {
+      "subscriber_account": "kind, id (acct-* pseudonym), residency, fictional phone, synthetic IMEI, processing_allowed=true",
+      "network_fault_ticket": "kind, id (ticket-* pseudonym), residency, account_id, support transcript",
+      "usage_record": "kind, id (usage-* pseudonym), residency, account_id, cdr_csv containing exactly one usage row"
+    },
+    "optional_entity_field": "billing_adjustment: finite amount, nonblank reason, matching residency",
+    "cdr_columns": ["id", "account_id", "residency", "phone", "imei", "service", "volume_mb", "duration_seconds", "note"],
+    "output": "status, schema_version, synthetic, residency, findings[{quote,citation,score,matched_terms}], matched_passages, outcome",
+    "errors": "One JSON object with status=error and a generic message; exit code 2, without input data or file path disclosure",
+    "validation": "One shared validate function checks all records, references, consent/access/purpose signals, residency, CDR fields and adjustments before retrieval"
+  },
+  "cross_stage_handoffs": [
+    "Single Research functionality: validate -> exact safe source passages -> deterministic lexical ranking -> extractive findings with citations"
+  ],
+  "behavior": {
+    "retrieval": "Unique lowercased alphanumeric query-token overlap; positive matches only; descending score then record ID then source offset; bounded limit",
+    "extraction": "Verbatim complete transcript lines or parsed CSV note cells; no generated factual claims",
+    "citations": "Chat record ID, field, 1-based line and 0-based half-open Unicode character offsets; CSV record ID, 1-based logical row (header=1), column name. Quotes remain exact even for quoted multiline CSV cells.",
+    "protection": "Raw phone/IMEI fields never returned. Known protected identifiers and bounded email/long-number/phone patterns in research text are rejected, not rewritten. Inputs and output are not persisted by the CLI.",
+    "residency": "All entities, CDR rows and optional adjustments must exactly match request residency; no transfers occur",
+    "synthetic_fixtures": "Explicitly synthetic input, fictional reserved-range phone, zero-prefix IMEI, invented network ticket; seeded randomized usage volumes exercised by tests",
+    "empty_results": "status=ok, outcome=no_matches and empty findings"
+  },
+  "scope": {
+    "included": ["CSV CDR parsing", "support chat retrieval", "subscriber linkage", "exact citations", "demonstrative GDPR/CCPA-oriented data minimization and processing controls", "billing reason checks"],
+    "excluded": ["Compliance certification", "General PII recognition", "Real subscriber data", "Authentication infrastructure", "Encryption or storage infrastructure", "Deletion or rights-request workflows", "Production data-residency guarantees", "Live model calls", "LLM processing", "External services"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 19,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_status": "passed: exit 0, one JSON object, status=ok, three exact cited findings",
+    "error_cli_status": "verified exit 2 and JSON status=error for missing file, absent argument, invalid JSON and invalid schema"
+  }
+}

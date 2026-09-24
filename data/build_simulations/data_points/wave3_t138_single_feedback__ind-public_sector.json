@@ -97,7 +97,7 @@
   "split_group": "74a2c1d0154de252903fabf3cd7f7bfe8ba0a9c14fbd4e42127d686c08b1138c",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "e5f324475016c28e2f3073c5d6901d1c03c3933bd6b0dd1e36b113a8dbe56cdb",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t138_single_feedback__ind-public_sector",
   "membership_point_id": "single_feedback__ind-public_sector",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "4746c9fb6bddbefe51934c88c7213221ce114b859162b48c5b511260dc049f92",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "9aa7096c-ff9e-4b54-a73b-ba464a5a78a0",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 119434,
+    "output_tokens": 6650,
+    "cache_read_tokens": 110663,
+    "cache_write_tokens": 8753,
+    "total_tokens": 126084,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37868,
+        "agent_id": "9aa7096c-ff9e-4b54-a73b-ba464a5a78a0",
+        "model": "gpt-6-astra",
+        "input_tokens": 14967,
+        "output_tokens": 282,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 842,
+        "reasoning_tokens": 112,
+        "duration_ms": 7254,
+        "created_at": "2026-09-24T12:16:29.454Z"
+      },
+      {
+        "id": 37902,
+        "agent_id": "9aa7096c-ff9e-4b54-a73b-ba464a5a78a0",
+        "model": "gpt-6-astra",
+        "input_tokens": 15276,
+        "output_tokens": 5704,
+        "cache_read_tokens": 14964,
+        "cache_write_tokens": 309,
+        "reasoning_tokens": 400,
+        "duration_ms": 96490,
+        "created_at": "2026-09-24T12:26:19.112Z"
+      },
+      {
+        "id": 37903,
+        "agent_id": "9aa7096c-ff9e-4b54-a73b-ba464a5a78a0",
+        "model": "gpt-6-astra",
+        "input_tokens": 21296,
+        "output_tokens": 188,
+        "cache_read_tokens": 15273,
+        "cache_write_tokens": 6020,
+        "reasoning_tokens": 25,
+        "duration_ms": 4675,
+        "created_at": "2026-09-24T12:26:27.623Z"
+      },
+      {
+        "id": 37904,
+        "agent_id": "9aa7096c-ff9e-4b54-a73b-ba464a5a78a0",
+        "model": "gpt-6-astra",
+        "input_tokens": 22368,
+        "output_tokens": 190,
+        "cache_read_tokens": 21293,
+        "cache_write_tokens": 1072,
+        "reasoning_tokens": 9,
+        "duration_ms": 4045,
+        "created_at": "2026-09-24T12:26:33.842Z"
+      },
+      {
+        "id": 37905,
+        "agent_id": "9aa7096c-ff9e-4b54-a73b-ba464a5a78a0",
+        "model": "gpt-6-astra",
+        "input_tokens": 22649,
+        "output_tokens": 194,
+        "cache_read_tokens": 22365,
+        "cache_write_tokens": 281,
+        "reasoning_tokens": 0,
+        "duration_ms": 3815,
+        "created_at": "2026-09-24T12:26:42.148Z"
+      },
+      {
+        "id": 37906,
+        "agent_id": "9aa7096c-ff9e-4b54-a73b-ba464a5a78a0",
+        "model": "gpt-6-astra",
+        "input_tokens": 22878,
+        "output_tokens": 92,
+        "cache_read_tokens": 22646,
+        "cache_write_tokens": 229,
+        "reasoning_tokens": 0,
+        "duration_ms": 2813,
+        "created_at": "2026-09-24T12:27:05.469Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.398335,
+      "observed_cache_profile_estimate_usd": 0.14934324999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.7800199999999995,
+      "observed_cache_profile_estimate_usd": 4.7800199999999995,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,183 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "..............\n----------------------------------------------------------------------\nRan 14 tests in 1.735s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "deduplication": [
+        {
+          "canonical_record_ref": "record_0001",
+          "reason": "Same words after private values, case, spacing, and punctuation are removed.",
+          "record_refs": [
+            "record_0001",
+            "record_0002"
+          ]
+        },
+        {
+          "canonical_record_ref": "record_0003",
+          "reason": "Same words after private values, case, spacing, and punctuation are removed.",
+          "record_refs": [
+            "record_0003"
+          ]
+        },
+        {
+          "canonical_record_ref": "record_0004",
+          "reason": "Same words after private values, case, spacing, and punctuation are removed.",
+          "record_refs": [
+            "record_0004"
+          ]
+        }
+      ],
+      "review": {
+        "deduplication_limit": "Repeated text can come from different people. Near-duplicates are not merged. Keep source input in controlled storage for review.",
+        "limits": "Synthetic demonstration, not compliance certification. A term match is not a sentiment or benefits decision. A person should review results.",
+        "method": "Count each unique feedback item once per matching theme.",
+        "privacy": "Only approved service-language excerpts leave this tool. Names, addresses, case numbers, and full text are not output.",
+        "rules": {
+          "access": [
+            "accessible",
+            "accessibility",
+            "screen reader",
+            "translation",
+            "language"
+          ],
+          "clarity": [
+            "unclear",
+            "confusing",
+            "plain language",
+            "explain",
+            "instructions"
+          ],
+          "delay": [
+            "wait",
+            "waiting",
+            "delay",
+            "delayed",
+            "slow"
+          ],
+          "positive": [
+            "helpful",
+            "easy",
+            "clear",
+            "quick"
+          ]
+        },
+        "trace": "Record numbers follow input order. Excerpt positions are zero-based; end is excluded."
+      },
+      "schema_version": 1,
+      "sources": [
+        {
+          "entity_type": "citizen_service_request",
+          "record_ref": "record_0001"
+        },
+        {
+          "entity_type": "citizen_service_request",
+          "record_ref": "record_0002"
+        },
+        {
+          "entity_type": "benefits_application",
+          "record_ref": "record_0003"
+        },
+        {
+          "entity_type": "policy_document",
+          "record_ref": "record_0004"
+        }
+      ],
+      "status": "ok",
+      "summary": {
+        "duplicate_records": 1,
+        "input_records": 4,
+        "unclassified_unique_feedback": 0,
+        "unique_feedback": 3
+      },
+      "synthetic": true,
+      "themes": [
+        {
+          "label": "Getting help",
+          "supporting_excerpts": [
+            {
+              "end": 26,
+              "excerpt": "accessible",
+              "reason": "The text contains a listed service-language term.",
+              "record_ref": "record_0003",
+              "start": 16
+            },
+            {
+              "end": 71,
+              "excerpt": "language",
+              "reason": "The text contains a listed service-language term.",
+              "record_ref": "record_0004",
+              "start": 63
+            }
+          ],
+          "theme_id": "access",
+          "unique_feedback_count": 2
+        },
+        {
+          "label": "Clear information",
+          "supporting_excerpts": [
+            {
+              "end": 60,
+              "excerpt": "instructions",
+              "reason": "The text contains a listed service-language term.",
+              "record_ref": "record_0001",
+              "start": 48
+            },
+            {
+              "end": 41,
+              "excerpt": "explain",
+              "reason": "The text contains a listed service-language term.",
+              "record_ref": "record_0004",
+              "start": 34
+            }
+          ],
+          "theme_id": "clarity",
+          "unique_feedback_count": 2
+        },
+        {
+          "label": "Waiting for a response",
+          "supporting_excerpts": [
+            {
+              "end": 33,
+              "excerpt": "slow",
+              "reason": "The text contains a listed service-language term.",
+              "record_ref": "record_0001",
+              "start": 29
+            }
+          ],
+          "theme_id": "delay",
+          "unique_feedback_count": 1
+        },
+        {
+          "label": "Helpful service",
+          "supporting_excerpts": [
+            {
+              "end": 67,
+              "excerpt": "helpful",
+              "reason": "The text contains a listed service-language term.",
+              "record_ref": "record_0003",
+              "start": 60
+            }
+          ],
+          "theme_id": "positive",
+          "unique_feedback_count": 1
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t138_single_feedback__ind-public_sector",
+    "artifact_sha256": {
+      "implementation.py": "937f0316da08de28d8f037e9565f1ad192f13545b293c47e59cfdcae983f791a",
+      "test_implementation.py": "5629b0064e688150078b8be3abc96fb043347c94e7cf77f251e11e2a73eda460",
+      "example_input.json": "84516e483010b239cded41e30cf997a44dd63e1e4ee5dbb5dd7f6a70551ea8e2",
+      "build_manifest.json": "379c53a1195613d5e61fc0f8800f5d15831346bc8f96b70cacde7d64c46c664a"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

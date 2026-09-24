@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "records": [
+    {
+      "id": "syn-patient-1",
+      "resourceType": "Patient",
+      "synthetic": true,
+      "version": 1,
+      "impact": "low",
+      "text": "Synthetic patient reports helpful staff and clear communication.",
+      "diagnoses": ["synthetic-diabetes"],
+      "labs": [{"code": "glucose", "value": 120, "unit": "mg/dL"}]
+    },
+    {
+      "id": "syn-note-1",
+      "resourceType": "DocumentReference",
+      "synthetic": true,
+      "version": 1,
+      "impact": "medium",
+      "text": "Synthetic clinical note: patient is not satisfied with delayed results.",
+      "patientRef": "syn-patient-1"
+    },
+    {
+      "id": "syn-auth-1",
+      "resourceType": "Claim",
+      "synthetic": true,
+      "version": 1,
+      "impact": "high",
+      "text": "Synthetic prior authorization request denied. Patient feels frustrated.",
+      "patientRef": "syn-patient-1",
+      "use": "preauthorization",
+      "status": "denied"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "build_id": "wave3_t135_single_adaptive__ind-energy",
+  "composition_label": "Adaptive onboarding (Guided onboarding)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Original isolated Python reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": {
+      "schema_version": "integer 1",
+      "synthetic": "true",
+      "profile": "experience: novice|intermediate|expert; preference: concise|detailed; completed: unique module-name list",
+      "meter_readings": "format, interval_minutes (15|30|60), csv with timestamp,meter_id,asset_id,consumption_kwh,season header",
+      "grid_assets": "SCADA-style telemetry JSON envelope with synthetic=true and assets: asset_id, critical, neighbors, timestamp, voltage_kv, emissions {value, unit, source}",
+      "outage_reports": "list of outage_id, asset_id, life_threat, critical_service, customers_affected, priority"
+    },
+    "output": "schema_version, status, synthetic, protection, onboarding {experience, preference, steps, next_module, ready}, entities {meter_readings, grid_assets, outage_reports}",
+    "error": "schema_version=1, status=error, message; CLI exit 2",
+    "validation": "One validate function used by run and CLI; exact object fields; duplicate JSON fields rejected; typed and finite quantities; identifiers match SYN-[A-Z][A-Z0-9-]*; valid references; reciprocal topology; UTC intervals; required emissions unit/source; mandatory safety priorities and onboarding prerequisite closure."
+  },
+  "cross_stage_handoffs": [
+    "Parse shared input -> validate all entities and profile -> build deterministic guided onboarding -> project protected entities into one output envelope"
+  ],
+  "behavior": {
+    "adaptive": "Novices receive prerequisite seasonal training. Intermediate and expert learners skip introductory seasonal training, never protection or safety. Detailed preference includes expanded explanations.",
+    "prerequisites": "protection -> seasonal_basics (novice) -> meter_readings; protection -> grid_assets and safety_rules; grid_assets + safety_rules -> outage_triage",
+    "progress": "completed is caller-supplied simulated progress, not authenticated certification. Steps are completed, available, or locked. next_module is the first available module; ready requires every selected module completed.",
+    "safety_rules": "P1 life threat; otherwise P2 critical service; otherwise P3 >=100 customers; otherwise P4. Contradictory supplied priorities are rejected.",
+    "protection": "All entity identifiers are deterministically pseudonymized using namespaced SHA-256 prefixes. Emissions provenance scrubs known identifiers. Error messages never interpolate submitted identifiers. Raw synthetic inputs remain local plaintext.",
+    "emissions": "Finite nonnegative quantity with kgCO2e or tCO2e and nonempty source; units preserved without aggregation.",
+    "fixtures": "Explicitly synthetic reciprocal substation/device topology, winter Northern Hemisphere household interval consumption, fictitious asset and meter IDs.",
+    "determinism": "No random, current-time-dependent, provider, network, or LLM operations."
+  },
+  "scope": {
+    "included": ["single CLI/API", "adaptive explanations", "prerequisite gating", "synthetic entity validation", "smart-meter CSV", "SCADA-style JSON", "demonstrative identifier protection", "safety-first outage validation"],
+    "excluded": ["production SCADA integration", "live infrastructure control", "NERC CIP certification", "encryption or access control", "authenticated training completion", "persistent user accounts", "live emissions measurement", "LLM providers", "enterprise deployment"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "unittest_cases": 16,
+    "cli_example": "passed: one JSON object, status ok, exit 0",
+    "cli_errors": "passed: file, usage, invalid JSON and validation errors produce status error and exit 2",
+    "coverage": ["normal", "deterministic", "adaptive experience", "preference explanations", "prerequisites", "completed edge", "empty outages", "synthetic IDs", "identifier protection", "safety precedence and threshold", "emissions", "topology", "malformed CSV", "invalid schema", "CLI"]
+  }
+}

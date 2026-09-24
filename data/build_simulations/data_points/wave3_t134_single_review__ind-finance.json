@@ -97,7 +97,7 @@
   "split_group": "5dadece815471bd986cce56c23fa81bd3841f4b495ccd66055969bcca7e1abd7",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "9ce56ae7f5fdd66071a73e6494037019419895fee98cf799effd1c3756e3c772",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t134_single_review__ind-finance",
   "membership_point_id": "single_review__ind-finance",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "2eb3a3040511b28ef3d2d2c43446a233e58ce5e7776c1196c641af5c9f6cf3b5",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "7b80439a-cbd3-4375-a679-9e0883ba81a8",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 130281,
+    "output_tokens": 8973,
+    "cache_read_tokens": 118491,
+    "cache_write_tokens": 11772,
+    "total_tokens": 139254,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37829,
+        "agent_id": "7b80439a-cbd3-4375-a679-9e0883ba81a8",
+        "model": "gpt-6-astra",
+        "input_tokens": 14965,
+        "output_tokens": 612,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 840,
+        "reasoning_tokens": 434,
+        "duration_ms": 17743,
+        "created_at": "2026-09-24T12:06:25.671Z"
+      },
+      {
+        "id": 37874,
+        "agent_id": "7b80439a-cbd3-4375-a679-9e0883ba81a8",
+        "model": "gpt-6-astra",
+        "input_tokens": 15608,
+        "output_tokens": 7274,
+        "cache_read_tokens": 14962,
+        "cache_write_tokens": 643,
+        "reasoning_tokens": 0,
+        "duration_ms": 109160,
+        "created_at": "2026-09-24T12:19:16.424Z"
+      },
+      {
+        "id": 37880,
+        "agent_id": "7b80439a-cbd3-4375-a679-9e0883ba81a8",
+        "model": "gpt-6-astra",
+        "input_tokens": 23198,
+        "output_tokens": 308,
+        "cache_read_tokens": 15605,
+        "cache_write_tokens": 7590,
+        "reasoning_tokens": 153,
+        "duration_ms": 8178,
+        "created_at": "2026-09-24T12:20:27.212Z"
+      },
+      {
+        "id": 37885,
+        "agent_id": "7b80439a-cbd3-4375-a679-9e0883ba81a8",
+        "model": "gpt-6-astra",
+        "input_tokens": 25002,
+        "output_tokens": 442,
+        "cache_read_tokens": 23195,
+        "cache_write_tokens": 1804,
+        "reasoning_tokens": 46,
+        "duration_ms": 9940,
+        "created_at": "2026-09-24T12:22:25.929Z"
+      },
+      {
+        "id": 37886,
+        "agent_id": "7b80439a-cbd3-4375-a679-9e0883ba81a8",
+        "model": "gpt-6-astra",
+        "input_tokens": 25611,
+        "output_tokens": 234,
+        "cache_read_tokens": 24999,
+        "cache_write_tokens": 609,
+        "reasoning_tokens": 0,
+        "duration_ms": 4720,
+        "created_at": "2026-09-24T12:22:46.268Z"
+      },
+      {
+        "id": 37887,
+        "agent_id": "7b80439a-cbd3-4375-a679-9e0883ba81a8",
+        "model": "gpt-6-astra",
+        "input_tokens": 25897,
+        "output_tokens": 103,
+        "cache_read_tokens": 25608,
+        "cache_write_tokens": 286,
+        "reasoning_tokens": 0,
+        "duration_ms": 4123,
+        "created_at": "2026-09-24T12:23:27.537Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.46029749999999997,
+      "observed_cache_profile_estimate_usd": 0.19369274999999997,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.52357,
+      "observed_cache_profile_estimate_usd": 5.52357,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,307 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.911s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "as_of": "2026-09-24",
+      "gaps": [
+        {
+          "action": "Provide verified, current address evidence",
+          "document_ids": [
+            "address_demo"
+          ],
+          "entity_id": "customer_demo",
+          "entity_type": "customer",
+          "id": "customer:customer_demo:address",
+          "reason": "no_valid_evidence",
+          "requirement": "address"
+        },
+        {
+          "action": "Provide verified, current aml_review evidence",
+          "document_ids": [],
+          "entity_id": "customer_demo",
+          "entity_type": "customer",
+          "id": "customer:customer_demo:aml_review",
+          "reason": "missing",
+          "requirement": "aml_review"
+        },
+        {
+          "action": "Provide verified, current payment_authorization evidence",
+          "document_ids": [],
+          "entity_id": "transaction_two",
+          "entity_type": "transaction",
+          "id": "transaction:transaction_two:payment_authorization",
+          "reason": "missing",
+          "requirement": "payment_authorization"
+        },
+        {
+          "action": "Provide verified, current income evidence",
+          "document_ids": [
+            "income_demo"
+          ],
+          "entity_id": "loan_demo",
+          "entity_type": "loan",
+          "id": "loan:loan_demo:income",
+          "reason": "no_valid_evidence",
+          "requirement": "income"
+        },
+        {
+          "action": "Provide verified, current affordability evidence",
+          "document_ids": [],
+          "entity_id": "loan_demo",
+          "entity_type": "loan",
+          "id": "loan:loan_demo:affordability",
+          "reason": "missing",
+          "requirement": "affordability"
+        }
+      ],
+      "notice": "Synthetic demonstration only. No compliance certification, AML clearance, or lending decision.",
+      "results": [
+        {
+          "checks": [
+            {
+              "evidence": [
+                {
+                  "accepted": true,
+                  "document_id": "identity_demo",
+                  "rejection_reasons": []
+                }
+              ],
+              "requirement": "identity",
+              "status": "satisfied"
+            },
+            {
+              "evidence": [
+                {
+                  "accepted": false,
+                  "document_id": "address_demo",
+                  "rejection_reasons": [
+                    "expired"
+                  ]
+                }
+              ],
+              "requirement": "address",
+              "status": "gap"
+            },
+            {
+              "evidence": [],
+              "requirement": "aml_review",
+              "status": "gap"
+            }
+          ],
+          "disposition": "manual_review",
+          "entity_id": "customer_demo",
+          "entity_type": "customer",
+          "risk_score": {
+            "contributions": [
+              {
+                "basis": "customer:customer_demo:address",
+                "points": 10,
+                "rule": "evidence_gap"
+              },
+              {
+                "basis": "customer:customer_demo:aml_review",
+                "points": 10,
+                "rule": "evidence_gap"
+              },
+              {
+                "basis": "customer:customer_demo:kyc_status",
+                "points": 20,
+                "rule": "kyc_incomplete"
+              },
+              {
+                "basis": "customer:customer_demo:screening.pep",
+                "points": 15,
+                "rule": "aml_pep"
+              }
+            ],
+            "formula": "min(100, sum(contribution.points)); baseline 0",
+            "interpretation": "Demonstrative review priority, not creditworthiness",
+            "raw_total": 55,
+            "value": 55
+          },
+          "screening_flags": [
+            "kyc_incomplete",
+            "aml_pep"
+          ]
+        },
+        {
+          "card_number": "************1234",
+          "checks": [
+            {
+              "evidence": [
+                {
+                  "accepted": true,
+                  "document_id": "authorization_demo",
+                  "rejection_reasons": []
+                }
+              ],
+              "requirement": "payment_authorization",
+              "status": "satisfied"
+            }
+          ],
+          "disposition": "manual_review",
+          "entity_id": "transaction_one",
+          "entity_type": "transaction",
+          "risk_score": {
+            "contributions": [
+              {
+                "basis": "customer:customer_demo:kyc_status",
+                "points": 20,
+                "rule": "kyc_incomplete"
+              },
+              {
+                "basis": "customer:customer_demo:screening.pep",
+                "points": 15,
+                "rule": "aml_pep"
+              },
+              {
+                "basis": "amount >= 10000 currency units",
+                "points": 15,
+                "rule": "aml_large_transaction"
+              }
+            ],
+            "formula": "min(100, sum(contribution.points)); baseline 0",
+            "interpretation": "Demonstrative review priority, not creditworthiness",
+            "raw_total": 50,
+            "value": 50
+          },
+          "screening_flags": [
+            "kyc_incomplete",
+            "aml_pep",
+            "aml_large_transaction"
+          ]
+        },
+        {
+          "card_number": "************5678",
+          "checks": [
+            {
+              "evidence": [],
+              "requirement": "payment_authorization",
+              "status": "gap"
+            }
+          ],
+          "disposition": "manual_review",
+          "entity_id": "transaction_two",
+          "entity_type": "transaction",
+          "risk_score": {
+            "contributions": [
+              {
+                "basis": "transaction:transaction_two:payment_authorization",
+                "points": 10,
+                "rule": "evidence_gap"
+              },
+              {
+                "basis": "customer:customer_demo:kyc_status",
+                "points": 20,
+                "rule": "kyc_incomplete"
+              },
+              {
+                "basis": "customer:customer_demo:screening.pep",
+                "points": 15,
+                "rule": "aml_pep"
+              },
+              {
+                "basis": "No linked ISO-style payment",
+                "points": 10,
+                "rule": "payment_payload_missing"
+              }
+            ],
+            "formula": "min(100, sum(contribution.points)); baseline 0",
+            "interpretation": "Demonstrative review priority, not creditworthiness",
+            "raw_total": 55,
+            "value": 55
+          },
+          "screening_flags": [
+            "kyc_incomplete",
+            "aml_pep",
+            "payment_payload_missing"
+          ]
+        },
+        {
+          "checks": [
+            {
+              "evidence": [
+                {
+                  "accepted": false,
+                  "document_id": "income_demo",
+                  "rejection_reasons": [
+                    "unverified"
+                  ]
+                }
+              ],
+              "requirement": "income",
+              "status": "gap"
+            },
+            {
+              "evidence": [],
+              "requirement": "affordability",
+              "status": "gap"
+            }
+          ],
+          "disposition": "manual_review",
+          "entity_id": "loan_demo",
+          "entity_type": "loan",
+          "risk_score": {
+            "contributions": [
+              {
+                "basis": "loan:loan_demo:income",
+                "points": 10,
+                "rule": "evidence_gap"
+              },
+              {
+                "basis": "loan:loan_demo:affordability",
+                "points": 10,
+                "rule": "evidence_gap"
+              },
+              {
+                "basis": "customer:customer_demo:kyc_status",
+                "points": 20,
+                "rule": "kyc_incomplete"
+              },
+              {
+                "basis": "customer:customer_demo:screening.pep",
+                "points": 15,
+                "rule": "aml_pep"
+              },
+              {
+                "basis": "income = 0 or monthly_payment > 40% of monthly_income",
+                "points": 25,
+                "rule": "affordability_review"
+              }
+            ],
+            "formula": "min(100, sum(contribution.points)); baseline 0",
+            "interpretation": "Demonstrative review priority, not creditworthiness",
+            "raw_total": 80,
+            "value": 80
+          },
+          "screening_flags": [
+            "kyc_incomplete",
+            "aml_pep",
+            "affordability_review"
+          ]
+        }
+      ],
+      "schema_version": "1.0",
+      "stage": "document_review",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t134_single_review__ind-finance",
+    "artifact_sha256": {
+      "implementation.py": "eee3e135e2829f62d341352df85942cb135b4efe38f85c81b6b1be9781b0bcc4",
+      "test_implementation.py": "5a70789268476dd609e294a10abf48b477198b58ac7ac25af5d9569728a90891",
+      "example_input.json": "5916c6d09864c2e42eb7fa83af0e20eed23efe63d4aa65a5d6400bebfbcbf4bf",
+      "build_manifest.json": "e0829ce04999e62bc793d99fe2289bab43b23c060a18f9ae345dff4b110ddc97"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

@@ -97,7 +97,7 @@
   "split_group": "68ce42c27d553a0d5f0b3b5a0cf17ddfc3617decb2c5d5035542e842c86a7621",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "a41d0c517b5f2fdb9864ea0de65bf445b3d66120032995df8615e2bbd22633e1",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t148_single_normal__ind-telecom",
   "membership_point_id": "single_normal__ind-telecom",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "318aa8a90d0f1882d252bf39b11b697f66c207bf5d3f8893f70240e29de0eabb",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "53e92421-f831-4cfb-9619-6b783be0c6f1",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 123851,
+    "output_tokens": 8293,
+    "cache_read_tokens": 99532,
+    "cache_write_tokens": 24301,
+    "total_tokens": 132144,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 38016,
+        "agent_id": "53e92421-f831-4cfb-9619-6b783be0c6f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 14986,
+        "output_tokens": 674,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 14983,
+        "reasoning_tokens": 516,
+        "duration_ms": 18477,
+        "created_at": "2026-09-24T12:43:18.611Z"
+      },
+      {
+        "id": 38024,
+        "agent_id": "53e92421-f831-4cfb-9619-6b783be0c6f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 15687,
+        "output_tokens": 6331,
+        "cache_read_tokens": 14983,
+        "cache_write_tokens": 701,
+        "reasoning_tokens": 429,
+        "duration_ms": 85761,
+        "created_at": "2026-09-24T12:45:18.200Z"
+      },
+      {
+        "id": 38028,
+        "agent_id": "53e92421-f831-4cfb-9619-6b783be0c6f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 22338,
+        "output_tokens": 154,
+        "cache_read_tokens": 15684,
+        "cache_write_tokens": 6651,
+        "reasoning_tokens": 0,
+        "duration_ms": 3565,
+        "created_at": "2026-09-24T12:46:00.088Z"
+      },
+      {
+        "id": 38030,
+        "agent_id": "53e92421-f831-4cfb-9619-6b783be0c6f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 22797,
+        "output_tokens": 773,
+        "cache_read_tokens": 22335,
+        "cache_write_tokens": 459,
+        "reasoning_tokens": 252,
+        "duration_ms": 16584,
+        "created_at": "2026-09-24T12:46:09.990Z"
+      },
+      {
+        "id": 38031,
+        "agent_id": "53e92421-f831-4cfb-9619-6b783be0c6f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 23739,
+        "output_tokens": 251,
+        "cache_read_tokens": 22794,
+        "cache_write_tokens": 942,
+        "reasoning_tokens": 0,
+        "duration_ms": 4265,
+        "created_at": "2026-09-24T12:46:15.056Z"
+      },
+      {
+        "id": 38032,
+        "agent_id": "53e92421-f831-4cfb-9619-6b783be0c6f1",
+        "model": "gpt-6-astra",
+        "input_tokens": 24304,
+        "output_tokens": 110,
+        "cache_read_tokens": 23736,
+        "cache_write_tokens": 565,
+        "reasoning_tokens": 0,
+        "duration_ms": 3672,
+        "created_at": "2026-09-24T12:46:29.642Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.43402250000000003,
+      "observed_cache_profile_estimate_usd": 0.21007550000000003,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.20827,
+      "observed_cache_profile_estimate_usd": 5.20827,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,80 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................\n----------------------------------------------------------------------\nRan 19 tests in 0.964s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": 1,
+      "synthetic": true,
+      "residency": "EU",
+      "findings": [
+        {
+          "quote": "Subscriber: The invented North Bay network has a data outage.",
+          "citation": {
+            "record_id": "ticket-demo",
+            "format": "support_chat",
+            "field": "transcript",
+            "line": 1,
+            "start": 0,
+            "end": 61
+          },
+          "matched_terms": [
+            "data",
+            "network",
+            "outage"
+          ],
+          "score": 3
+        },
+        {
+          "quote": "Synthetic data usage during the network outage",
+          "citation": {
+            "record_id": "usage-demo",
+            "format": "cdr_csv",
+            "row": 2,
+            "column": "note"
+          },
+          "matched_terms": [
+            "data",
+            "network",
+            "outage"
+          ],
+          "score": 3
+        },
+        {
+          "quote": "Agent: The network outage ended after the restart.",
+          "citation": {
+            "record_id": "ticket-demo",
+            "format": "support_chat",
+            "field": "transcript",
+            "line": 3,
+            "start": 123,
+            "end": 173
+          },
+          "matched_terms": [
+            "network",
+            "outage"
+          ],
+          "score": 2
+        }
+      ],
+      "matched_passages": 3,
+      "outcome": "findings"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t148_single_normal__ind-telecom",
+    "artifact_sha256": {
+      "implementation.py": "33ddd3c5a8bd6bad1c8008da01d0d5b4954c86a7668a37d219f8d578470baee6",
+      "test_implementation.py": "eccb39d8cab2d91f3dbcb2c480951913e7449668b4613987df72fd4a2c1cb3dd",
+      "example_input.json": "107ff8aea6cd7db72efc5beafdc8c3db22d67840ec970e2307cba1a44f9c0cef",
+      "build_manifest.json": "a67300d360337549ddee7cd0675256ec742ed2eadf7029803ae1cccf3119a95a"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

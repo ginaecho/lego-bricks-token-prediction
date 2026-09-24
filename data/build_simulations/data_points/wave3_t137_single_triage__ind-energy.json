@@ -97,7 +97,7 @@
   "split_group": "4d5b364f8569e353de126ccd2029eeac6a5fe958459be0ff833ec1e8f1b819c0",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "52dd3fe5e4a5f329df9676bf555b56475b9420c01440da7adb611210d772979b",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t137_single_triage__ind-energy",
   "membership_point_id": "single_triage__ind-energy",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "a2f27cc236e3120b70fd39c16f315f573afcb8c062abb907b1188d1cf9954412",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "c902590a-9db0-4097-9032-03cc9d9bb301",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 131515,
+    "output_tokens": 10297,
+    "cache_read_tokens": 118747,
+    "cache_write_tokens": 12750,
+    "total_tokens": 141812,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37850,
+        "agent_id": "c902590a-9db0-4097-9032-03cc9d9bb301",
+        "model": "gpt-6-astra",
+        "input_tokens": 14966,
+        "output_tokens": 254,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 841,
+        "reasoning_tokens": 97,
+        "duration_ms": 5592,
+        "created_at": "2026-09-24T12:13:08.965Z"
+      },
+      {
+        "id": 37891,
+        "agent_id": "c902590a-9db0-4097-9032-03cc9d9bb301",
+        "model": "gpt-6-astra",
+        "input_tokens": 15247,
+        "output_tokens": 8111,
+        "cache_read_tokens": 14963,
+        "cache_write_tokens": 281,
+        "reasoning_tokens": 462,
+        "duration_ms": 129603,
+        "created_at": "2026-09-24T12:24:32.661Z"
+      },
+      {
+        "id": 37892,
+        "agent_id": "c902590a-9db0-4097-9032-03cc9d9bb301",
+        "model": "gpt-6-astra",
+        "input_tokens": 23674,
+        "output_tokens": 441,
+        "cache_read_tokens": 15244,
+        "cache_write_tokens": 8427,
+        "reasoning_tokens": 306,
+        "duration_ms": 10458,
+        "created_at": "2026-09-24T12:24:36.678Z"
+      },
+      {
+        "id": 37894,
+        "agent_id": "c902590a-9db0-4097-9032-03cc9d9bb301",
+        "model": "gpt-6-astra",
+        "input_tokens": 24673,
+        "output_tokens": 1166,
+        "cache_read_tokens": 23671,
+        "cache_write_tokens": 999,
+        "reasoning_tokens": 139,
+        "duration_ms": 18566,
+        "created_at": "2026-09-24T12:25:09.398Z"
+      },
+      {
+        "id": 37897,
+        "agent_id": "c902590a-9db0-4097-9032-03cc9d9bb301",
+        "model": "gpt-6-astra",
+        "input_tokens": 26080,
+        "output_tokens": 228,
+        "cache_read_tokens": 24670,
+        "cache_write_tokens": 1407,
+        "reasoning_tokens": 0,
+        "duration_ms": 4269,
+        "created_at": "2026-09-24T12:25:26.092Z"
+      },
+      {
+        "id": 37899,
+        "agent_id": "c902590a-9db0-4097-9032-03cc9d9bb301",
+        "model": "gpt-6-astra",
+        "input_tokens": 26875,
+        "output_tokens": 97,
+        "cache_read_tokens": 26077,
+        "cache_write_tokens": 795,
+        "reasoning_tokens": 0,
+        "duration_ms": 4360,
+        "created_at": "2026-09-24T12:26:04.153Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.48324249999999996,
+      "observed_cache_profile_estimate_usd": 0.21606175,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.79891,
+      "observed_cache_profile_estimate_usd": 5.79891,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,128 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................\n----------------------------------------------------------------------\nRan 19 tests in 2.840s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "emissions": [
+        {
+          "asset_ref": "asset-002",
+          "source": "Synthetic winter scenario factor, not an observed inventory",
+          "unit": "kgCO2e",
+          "value": 0.78
+        }
+      ],
+      "grid_assets": [
+        {
+          "asset_ref": "asset-001",
+          "connected_to": [
+            "asset-002"
+          ],
+          "critical": true,
+          "kind": "substation"
+        },
+        {
+          "asset_ref": "asset-002",
+          "connected_to": [
+            "asset-001"
+          ],
+          "critical": false,
+          "kind": "feeder"
+        }
+      ],
+      "meter_readings": [
+        {
+          "asset_ref": "asset-002",
+          "consumption": {
+            "unit": "kWh",
+            "value": 3.9
+          },
+          "meter_ref": "meter-001"
+        }
+      ],
+      "protection": "Opaque per-envelope references; raw identifiers omitted.",
+      "schema_version": 1,
+      "season": "winter",
+      "status": "ok",
+      "synthetic": true,
+      "telemetry": [
+        {
+          "asset_ref": "asset-001",
+          "status": "offline",
+          "timestamp": "2026-01-15T18:45:00Z",
+          "voltage_v": 0.0
+        },
+        {
+          "asset_ref": "asset-002",
+          "status": "normal",
+          "timestamp": "2026-01-15T18:45:00Z",
+          "voltage_v": 230.0
+        }
+      ],
+      "tickets": [
+        {
+          "asset_refs": [
+            "asset-001",
+            "asset-002"
+          ],
+          "category": "outage",
+          "meter_refs": [
+            "meter-001"
+          ],
+          "outage_report": {
+            "affected_customers": 120,
+            "reported_at": "2026-01-15T18:46:00Z",
+            "safety": {
+              "critical_service": false,
+              "downed_line": true,
+              "life_threatening": false
+            }
+          },
+          "priority": "P1",
+          "reason": "structured_outage",
+          "routing": {
+            "accountable_owner": "Fictitious duty controller",
+            "team": "Synthetic dispatch"
+          },
+          "safety_rules_applied": [
+            "downed_line"
+          ],
+          "ticket_ref": "ticket-001"
+        },
+        {
+          "asset_refs": [
+            "asset-002"
+          ],
+          "category": "meter",
+          "meter_refs": [
+            "meter-001"
+          ],
+          "outage_report": null,
+          "priority": "P3",
+          "reason": "configured_keyword",
+          "routing": {
+            "accountable_owner": "Fictitious meter lead",
+            "team": "Synthetic metering"
+          },
+          "safety_rules_applied": [],
+          "ticket_ref": "ticket-002"
+        }
+      ]
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t137_single_triage__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "b3958c45a77eefbdc68bad8196c841258902047e3f7162dc22d09144f2149980",
+      "test_implementation.py": "99c107d9b17ad1c2beffa3d68fb7985618b86601484eaa818cebff7f28a0ed44",
+      "example_input.json": "7dfdb1f2a38ad975c53b7ae7a285da940a9d3de0643f280c4a4019d9d0dba6d9",
+      "build_manifest.json": "45ffc7adbc2404b05288b1cc88c52e5fa3a3aaf170e2a2d7206866689f00fbb2"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

@@ -97,7 +97,7 @@
   "split_group": "f9cdbb7a23c703162246f5c3e4a5e46da9a9e088b1d5f80087bcc218d7f66b15",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "b6e413651b2ba27860cc90579afe4847d90ce15a9cd0b9d3c9e27b1f1329342a",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t135_single_adaptive__ind-energy",
   "membership_point_id": "single_adaptive__ind-energy",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "eeed9d5b62959b31af60835df951c929d9d23319325c9712479f552f590aeb1e",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "4d97dc80-a0fb-4afb-8ed3-3f8c3c01722a",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 131096,
+    "output_tokens": 9953,
+    "cache_read_tokens": 118784,
+    "cache_write_tokens": 12294,
+    "total_tokens": 141049,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37827,
+        "agent_id": "4d97dc80-a0fb-4afb-8ed3-3f8c3c01722a",
+        "model": "gpt-6-astra",
+        "input_tokens": 14962,
+        "output_tokens": 530,
+        "cache_read_tokens": 14122,
+        "cache_write_tokens": 837,
+        "reasoning_tokens": 363,
+        "duration_ms": 14418,
+        "created_at": "2026-09-24T12:06:22.006Z"
+      },
+      {
+        "id": 37875,
+        "agent_id": "4d97dc80-a0fb-4afb-8ed3-3f8c3c01722a",
+        "model": "gpt-6-astra",
+        "input_tokens": 15523,
+        "output_tokens": 7676,
+        "cache_read_tokens": 14959,
+        "cache_write_tokens": 561,
+        "reasoning_tokens": 626,
+        "duration_ms": 124050,
+        "created_at": "2026-09-24T12:19:36.796Z"
+      },
+      {
+        "id": 37879,
+        "agent_id": "4d97dc80-a0fb-4afb-8ed3-3f8c3c01722a",
+        "model": "gpt-6-astra",
+        "input_tokens": 23515,
+        "output_tokens": 166,
+        "cache_read_tokens": 15520,
+        "cache_write_tokens": 7992,
+        "reasoning_tokens": 7,
+        "duration_ms": 5061,
+        "created_at": "2026-09-24T12:20:23.326Z"
+      },
+      {
+        "id": 37888,
+        "agent_id": "4d97dc80-a0fb-4afb-8ed3-3f8c3c01722a",
+        "model": "gpt-6-astra",
+        "input_tokens": 24636,
+        "output_tokens": 1164,
+        "cache_read_tokens": 23512,
+        "cache_write_tokens": 1121,
+        "reasoning_tokens": 273,
+        "duration_ms": 20389,
+        "created_at": "2026-09-24T12:23:31.803Z"
+      },
+      {
+        "id": 37889,
+        "agent_id": "4d97dc80-a0fb-4afb-8ed3-3f8c3c01722a",
+        "model": "gpt-6-astra",
+        "input_tokens": 26041,
+        "output_tokens": 318,
+        "cache_read_tokens": 24633,
+        "cache_write_tokens": 1405,
+        "reasoning_tokens": 16,
+        "duration_ms": 7059,
+        "created_at": "2026-09-24T12:23:45.528Z"
+      },
+      {
+        "id": 37890,
+        "agent_id": "4d97dc80-a0fb-4afb-8ed3-3f8c3c01722a",
+        "model": "gpt-6-astra",
+        "input_tokens": 26419,
+        "output_tokens": 99,
+        "cache_read_tokens": 26038,
+        "cache_write_tokens": 378,
+        "reasoning_tokens": 0,
+        "duration_ms": 3210,
+        "created_at": "2026-09-24T12:24:13.786Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.477035,
+      "observed_cache_profile_estimate_usd": 0.209771,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.72442,
+      "observed_cache_profile_estimate_usd": 5.72442,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,160 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "................\n----------------------------------------------------------------------\nRan 16 tests in 0.552s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "entities": {
+        "grid_assets": [
+          {
+            "asset_ref": "asset-25ab10b1245f30b4",
+            "critical": true,
+            "emissions": {
+              "source": "Synthetic seasonal generation model, not measured",
+              "unit": "tCO2e",
+              "value": 0.002
+            },
+            "neighbors": [
+              "asset-1c01e1adace5e133"
+            ],
+            "timestamp": "2026-01-15T08:15:00Z",
+            "voltage_kv": 110
+          },
+          {
+            "asset_ref": "asset-1c01e1adace5e133",
+            "critical": false,
+            "emissions": {
+              "source": "Synthetic illustrative interval factor",
+              "unit": "kgCO2e",
+              "value": 0.6
+            },
+            "neighbors": [
+              "asset-25ab10b1245f30b4"
+            ],
+            "timestamp": "2026-01-15T08:15:00Z",
+            "voltage_kv": 11
+          }
+        ],
+        "meter_readings": [
+          {
+            "asset_ref": "asset-1c01e1adace5e133",
+            "consumption": {
+              "unit": "kWh",
+              "value": 1.4
+            },
+            "interval_minutes": 15,
+            "meter_ref": "meter-36d3f7392863ddf3",
+            "season": "winter",
+            "timestamp": "2026-01-15T08:00:00Z"
+          },
+          {
+            "asset_ref": "asset-1c01e1adace5e133",
+            "consumption": {
+              "unit": "kWh",
+              "value": 1.6
+            },
+            "interval_minutes": 15,
+            "meter_ref": "meter-36d3f7392863ddf3",
+            "season": "winter",
+            "timestamp": "2026-01-15T08:15:00Z"
+          }
+        ],
+        "outage_reports": [
+          {
+            "asset_ref": "asset-1c01e1adace5e133",
+            "customers_affected": 25,
+            "outage_ref": "outage-3129b2be81d52edb",
+            "priority": "P2",
+            "safety_basis": "critical service"
+          }
+        ]
+      },
+      "onboarding": {
+        "experience": "novice",
+        "next_module": "seasonal_basics",
+        "preference": "detailed",
+        "ready": false,
+        "steps": [
+          {
+            "explanation": "Handle critical asset identifiers only in authorized systems. Identifiers are pseudonymized in this output; source fixtures still contain them.",
+            "module": "protection",
+            "prerequisites": [],
+            "status": "completed",
+            "unmet_prerequisites": []
+          },
+          {
+            "explanation": "Learn how seasons affect electricity consumption. Synthetic Northern Hemisphere data can peak during winter heating or summer cooling.",
+            "module": "seasonal_basics",
+            "prerequisites": [
+              "protection"
+            ],
+            "status": "available",
+            "unmet_prerequisites": []
+          },
+          {
+            "explanation": "Interpret interval energy readings. Consumption is energy in kWh for each declared interval, not instantaneous power.",
+            "module": "meter_readings",
+            "prerequisites": [
+              "protection",
+              "seasonal_basics"
+            ],
+            "status": "locked",
+            "unmet_prerequisites": [
+              "seasonal_basics"
+            ]
+          },
+          {
+            "explanation": "Inspect the synthetic grid topology. SCADA voltage uses kV; emissions require an explicit unit and traceable source.",
+            "module": "grid_assets",
+            "prerequisites": [
+              "protection"
+            ],
+            "status": "available",
+            "unmet_prerequisites": []
+          },
+          {
+            "explanation": "Learn the declared outage safety rules. P1: life threat; otherwise P2: critical service; otherwise P3: at least 100 customers; otherwise P4.",
+            "module": "safety_rules",
+            "prerequisites": [
+              "protection"
+            ],
+            "status": "available",
+            "unmet_prerequisites": []
+          },
+          {
+            "explanation": "Apply safety-first outage prioritization. Experience and presentation preferences never change priority or waive safety prerequisites.",
+            "module": "outage_triage",
+            "prerequisites": [
+              "grid_assets",
+              "safety_rules"
+            ],
+            "status": "locked",
+            "unmet_prerequisites": [
+              "grid_assets",
+              "safety_rules"
+            ]
+          }
+        ]
+      },
+      "protection": "Demonstrative pseudonymization only; not NERC CIP certification or encryption.",
+      "schema_version": 1,
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t135_single_adaptive__ind-energy",
+    "artifact_sha256": {
+      "implementation.py": "61f3f16a98a3ae040696e6f8817f0ac653fdfcc6906ed0eb7dc3e013205f5b18",
+      "test_implementation.py": "223c5ca2b28f63a5f014160871e59aa93914a92a73317d853973c8cdfb81a6ab",
+      "example_input.json": "d12f182f2e50b2acd3a35770f95909a6805ac5de26f3d323bdc883d370a06686",
+      "build_manifest.json": "b35b2d354c9c752548f5195784a6c42bddf8f1eef792fa2f86b833ca0e8a1d7c"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

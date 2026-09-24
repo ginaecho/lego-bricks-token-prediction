@@ -97,7 +97,7 @@
   "split_group": "35cf6af22f5cae2e6dde9586e923337afc1781674e55bccea9856fc6e736dbeb",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "771810f7df27f29e1c33b3da6c5a8d1c0d5a57e255c912ca9e31164ad7d88baa",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t141_single_sentiment__ind-healthcare",
   "membership_point_id": "single_sentiment__ind-healthcare",
@@ -105,8 +105,121 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "afa4a683634f73ac95e80fd6d9d1a91b0f35a19ae53c6c9587a833087ee0d70c",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "c0b1ff56-f899-4e8d-b32f-9d114eb67bfe",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 5,
+    "input_tokens": 97565,
+    "output_tokens": 6352,
+    "cache_read_tokens": 88573,
+    "cache_write_tokens": 8977,
+    "total_tokens": 103917,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37901,
+        "agent_id": "c0b1ff56-f899-4e8d-b32f-9d114eb67bfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 14995,
+        "output_tokens": 555,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 849,
+        "reasoning_tokens": 386,
+        "duration_ms": 18903,
+        "created_at": "2026-09-24T12:26:10.434Z"
+      },
+      {
+        "id": 37946,
+        "agent_id": "c0b1ff56-f899-4e8d-b32f-9d114eb67bfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 15577,
+        "output_tokens": 5228,
+        "cache_read_tokens": 14992,
+        "cache_write_tokens": 582,
+        "reasoning_tokens": 56,
+        "duration_ms": 89795,
+        "created_at": "2026-09-24T12:34:36.260Z"
+      },
+      {
+        "id": 37951,
+        "agent_id": "c0b1ff56-f899-4e8d-b32f-9d114eb67bfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 21125,
+        "output_tokens": 173,
+        "cache_read_tokens": 15574,
+        "cache_write_tokens": 5548,
+        "reasoning_tokens": 17,
+        "duration_ms": 3744,
+        "created_at": "2026-09-24T12:34:46.463Z"
+      },
+      {
+        "id": 37953,
+        "agent_id": "c0b1ff56-f899-4e8d-b32f-9d114eb67bfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 22745,
+        "output_tokens": 286,
+        "cache_read_tokens": 21122,
+        "cache_write_tokens": 1620,
+        "reasoning_tokens": 53,
+        "duration_ms": 6215,
+        "created_at": "2026-09-24T12:35:02.182Z"
+      },
+      {
+        "id": 37956,
+        "agent_id": "c0b1ff56-f899-4e8d-b32f-9d114eb67bfe",
+        "model": "gpt-6-astra",
+        "input_tokens": 23123,
+        "output_tokens": 110,
+        "cache_read_tokens": 22742,
+        "cache_write_tokens": 378,
+        "reasoning_tokens": 9,
+        "duration_ms": 3405,
+        "created_at": "2026-09-24T12:35:20.279Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.33919249999999995,
+      "observed_cache_profile_estimate_usd": 0.13990324999999998,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 4.07031,
+      "observed_cache_profile_estimate_usd": 4.07031,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +250,310 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 0.932s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "audit_trail": [
+        {
+          "actor": "deterministic-synthetic-triage",
+          "changes": [
+            {
+              "after": 2,
+              "before": 1,
+              "path": "version"
+            },
+            {
+              "after": {
+                "clinical_decision": null,
+                "human_review_required": true,
+                "priority_components": {
+                  "human_supplied_impact": 0,
+                  "negative_sentiment": 0
+                },
+                "priority_score": 0,
+                "recommended_action": "human_administrative_review",
+                "sentiment": {
+                  "evidence": [
+                    {
+                      "base": 2,
+                      "contribution": 2,
+                      "negated": false,
+                      "term": "helpful",
+                      "word_index": 3
+                    },
+                    {
+                      "base": 1,
+                      "contribution": 1,
+                      "negated": false,
+                      "term": "clear",
+                      "word_index": 6
+                    }
+                  ],
+                  "label": "positive",
+                  "score": 3
+                }
+              },
+              "before": null,
+              "path": "analysis"
+            }
+          ],
+          "event_id": "event-0001",
+          "operation": "annotate",
+          "reason": "sentiment and administrative prioritization",
+          "record_id": "syn-patient-1"
+        },
+        {
+          "actor": "deterministic-synthetic-triage",
+          "changes": [
+            {
+              "after": 2,
+              "before": 1,
+              "path": "version"
+            },
+            {
+              "after": {
+                "clinical_decision": null,
+                "human_review_required": true,
+                "priority_components": {
+                  "human_supplied_impact": 10,
+                  "negative_sentiment": 0
+                },
+                "priority_score": 10,
+                "recommended_action": "human_administrative_review",
+                "sentiment": {
+                  "evidence": [
+                    {
+                      "base": 2,
+                      "contribution": -2,
+                      "negated": true,
+                      "term": "satisfied",
+                      "word_index": 6
+                    },
+                    {
+                      "base": -2,
+                      "contribution": 2,
+                      "negated": true,
+                      "term": "delayed",
+                      "word_index": 8
+                    }
+                  ],
+                  "label": "neutral",
+                  "score": 0
+                }
+              },
+              "before": null,
+              "path": "analysis"
+            }
+          ],
+          "event_id": "event-0002",
+          "operation": "annotate",
+          "reason": "sentiment and administrative prioritization",
+          "record_id": "syn-note-1"
+        },
+        {
+          "actor": "deterministic-synthetic-triage",
+          "changes": [
+            {
+              "after": 2,
+              "before": 1,
+              "path": "version"
+            },
+            {
+              "after": {
+                "clinical_decision": null,
+                "human_review_required": true,
+                "priority_components": {
+                  "human_supplied_impact": 20,
+                  "negative_sentiment": 5
+                },
+                "priority_score": 25,
+                "recommended_action": "human_administrative_review",
+                "sentiment": {
+                  "evidence": [
+                    {
+                      "base": -3,
+                      "contribution": -3,
+                      "negated": false,
+                      "term": "denied",
+                      "word_index": 4
+                    },
+                    {
+                      "base": -2,
+                      "contribution": -2,
+                      "negated": false,
+                      "term": "frustrated",
+                      "word_index": 7
+                    }
+                  ],
+                  "label": "negative",
+                  "score": -5
+                }
+              },
+              "before": null,
+              "path": "analysis"
+            }
+          ],
+          "event_id": "event-0003",
+          "operation": "annotate",
+          "reason": "sentiment and administrative prioritization",
+          "record_id": "syn-auth-1"
+        }
+      ],
+      "human_review_required": true,
+      "notice": "Synthetic demonstration only; not HIPAA certification or clinical advice.",
+      "records": [
+        {
+          "analysis": {
+            "clinical_decision": null,
+            "human_review_required": true,
+            "priority_components": {
+              "human_supplied_impact": 0,
+              "negative_sentiment": 0
+            },
+            "priority_score": 0,
+            "recommended_action": "human_administrative_review",
+            "sentiment": {
+              "evidence": [
+                {
+                  "base": 2,
+                  "contribution": 2,
+                  "negated": false,
+                  "term": "helpful",
+                  "word_index": 3
+                },
+                {
+                  "base": 1,
+                  "contribution": 1,
+                  "negated": false,
+                  "term": "clear",
+                  "word_index": 6
+                }
+              ],
+              "label": "positive",
+              "score": 3
+            }
+          },
+          "diagnoses": [
+            "synthetic-diabetes"
+          ],
+          "id": "syn-patient-1",
+          "impact": "low",
+          "labs": [
+            {
+              "code": "glucose",
+              "unit": "mg/dL",
+              "value": 120
+            }
+          ],
+          "resourceType": "Patient",
+          "synthetic": true,
+          "text": "Synthetic patient reports helpful staff and clear communication.",
+          "version": 2
+        },
+        {
+          "analysis": {
+            "clinical_decision": null,
+            "human_review_required": true,
+            "priority_components": {
+              "human_supplied_impact": 10,
+              "negative_sentiment": 0
+            },
+            "priority_score": 10,
+            "recommended_action": "human_administrative_review",
+            "sentiment": {
+              "evidence": [
+                {
+                  "base": 2,
+                  "contribution": -2,
+                  "negated": true,
+                  "term": "satisfied",
+                  "word_index": 6
+                },
+                {
+                  "base": -2,
+                  "contribution": 2,
+                  "negated": true,
+                  "term": "delayed",
+                  "word_index": 8
+                }
+              ],
+              "label": "neutral",
+              "score": 0
+            }
+          },
+          "id": "syn-note-1",
+          "impact": "medium",
+          "patientRef": "syn-patient-1",
+          "resourceType": "DocumentReference",
+          "synthetic": true,
+          "text": "Synthetic clinical note: patient is not satisfied with delayed results.",
+          "version": 2
+        },
+        {
+          "analysis": {
+            "clinical_decision": null,
+            "human_review_required": true,
+            "priority_components": {
+              "human_supplied_impact": 20,
+              "negative_sentiment": 5
+            },
+            "priority_score": 25,
+            "recommended_action": "human_administrative_review",
+            "sentiment": {
+              "evidence": [
+                {
+                  "base": -3,
+                  "contribution": -3,
+                  "negated": false,
+                  "term": "denied",
+                  "word_index": 4
+                },
+                {
+                  "base": -2,
+                  "contribution": -2,
+                  "negated": false,
+                  "term": "frustrated",
+                  "word_index": 7
+                }
+              ],
+              "label": "negative",
+              "score": -5
+            }
+          },
+          "id": "syn-auth-1",
+          "impact": "high",
+          "patientRef": "syn-patient-1",
+          "resourceType": "Claim",
+          "status": "denied",
+          "synthetic": true,
+          "text": "Synthetic prior authorization request denied. Patient feels frustrated.",
+          "use": "preauthorization",
+          "version": 2
+        }
+      ],
+      "review_queue": [
+        "syn-auth-1",
+        "syn-note-1",
+        "syn-patient-1"
+      ],
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic": true
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t141_single_sentiment__ind-healthcare",
+    "artifact_sha256": {
+      "implementation.py": "74639e5ec56c500868886d0fb8939355b1a6ffbce56977293f3dbbe9b8c487ae",
+      "test_implementation.py": "952f7689eb0ec9b8ad77f5d53ce9cc07fe9d91134bf16fb78377713d3596de65",
+      "example_input.json": "f30cbe3d81035f5d24551fdadc10aa352defe6e2eb4090b2dc88cd62615eb440",
+      "build_manifest.json": "4f73bcdb4a5b18e13d55aaa3a40f045a809bd1d4d1079653adba38de700b81dc"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

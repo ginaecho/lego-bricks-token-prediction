@@ -97,7 +97,7 @@
   "split_group": "0c427440f513a63ef0353ae5789e26be72aa6f9bd92f23e4f2bfdee067042ace",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "e05057fe1a5cb103070216398b0a0b0ff42376092f79e0bc4de37afd247ec211",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t142_single_web__ind-finance",
   "membership_point_id": "single_web__ind-finance",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "977d58235e5f628ab85556153b96dd7200e325238a8a5e94d515319f6978eefa",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "b4d3ea5a-8cb4-4a37-8166-1a79e8c374cb",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 130603,
+    "output_tokens": 9278,
+    "cache_read_tokens": 118630,
+    "cache_write_tokens": 11955,
+    "total_tokens": 139881,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37900,
+        "agent_id": "b4d3ea5a-8cb4-4a37-8166-1a79e8c374cb",
+        "model": "gpt-6-astra",
+        "input_tokens": 14985,
+        "output_tokens": 538,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 839,
+        "reasoning_tokens": 372,
+        "duration_ms": 15383,
+        "created_at": "2026-09-24T12:26:07.952Z"
+      },
+      {
+        "id": 37968,
+        "agent_id": "b4d3ea5a-8cb4-4a37-8166-1a79e8c374cb",
+        "model": "gpt-6-astra",
+        "input_tokens": 15554,
+        "output_tokens": 7446,
+        "cache_read_tokens": 14982,
+        "cache_write_tokens": 569,
+        "reasoning_tokens": 0,
+        "duration_ms": 119801,
+        "created_at": "2026-09-24T12:36:29.265Z"
+      },
+      {
+        "id": 37976,
+        "agent_id": "b4d3ea5a-8cb4-4a37-8166-1a79e8c374cb",
+        "model": "gpt-6-astra",
+        "input_tokens": 23316,
+        "output_tokens": 241,
+        "cache_read_tokens": 15551,
+        "cache_write_tokens": 7762,
+        "reasoning_tokens": 78,
+        "duration_ms": 5421,
+        "created_at": "2026-09-24T12:37:04.464Z"
+      },
+      {
+        "id": 37983,
+        "agent_id": "b4d3ea5a-8cb4-4a37-8166-1a79e8c374cb",
+        "model": "gpt-6-astra",
+        "input_tokens": 24858,
+        "output_tokens": 690,
+        "cache_read_tokens": 23313,
+        "cache_write_tokens": 1542,
+        "reasoning_tokens": 154,
+        "duration_ms": 13177,
+        "created_at": "2026-09-24T12:37:33.942Z"
+      },
+      {
+        "id": 37988,
+        "agent_id": "b4d3ea5a-8cb4-4a37-8166-1a79e8c374cb",
+        "model": "gpt-6-astra",
+        "input_tokens": 25789,
+        "output_tokens": 239,
+        "cache_read_tokens": 24855,
+        "cache_write_tokens": 931,
+        "reasoning_tokens": 0,
+        "duration_ms": 4766,
+        "created_at": "2026-09-24T12:37:52.761Z"
+      },
+      {
+        "id": 37992,
+        "agent_id": "b4d3ea5a-8cb4-4a37-8166-1a79e8c374cb",
+        "model": "gpt-6-astra",
+        "input_tokens": 26101,
+        "output_tokens": 124,
+        "cache_read_tokens": 25786,
+        "cache_write_tokens": 312,
+        "reasoning_tokens": 0,
+        "duration_ms": 3140,
+        "created_at": "2026-09-24T12:38:31.670Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.46567749999999997,
+      "observed_cache_profile_estimate_usd": 0.19876,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.58813,
+      "observed_cache_profile_estimate_usd": 5.58813,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,217 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 1.591s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "status": "ok",
+      "schema_version": "1.0",
+      "synthetic": true,
+      "notice": "Demonstration only; no compliance certification or lending decisions. No live retrieval; source metadata is fixture-supplied, not independently verified.",
+      "customers": [
+        {
+          "id": "cust-fake-1",
+          "name": "SYNTHETIC Ada Sample",
+          "iban": "ZZ00000000000000000001",
+          "flags": [
+            "KYC_REVIEW"
+          ],
+          "score": {
+            "value": 40,
+            "scale": "0-100 risk",
+            "method": "synthetic_rules_v1",
+            "explanation": [
+              {
+                "reason": "KYC not verified",
+                "points": 40
+              },
+              {
+                "reason": "AML screening flag",
+                "points": 0
+              }
+            ],
+            "aggregation": "sum of contributions capped at 100"
+          }
+        },
+        {
+          "id": "cust-fake-2",
+          "name": "SYNTHETIC Ben Example",
+          "iban": "ZZ00000000000000000002",
+          "flags": [
+            "AML_REVIEW"
+          ],
+          "score": {
+            "value": 60,
+            "scale": "0-100 risk",
+            "method": "synthetic_rules_v1",
+            "explanation": [
+              {
+                "reason": "KYC not verified",
+                "points": 0
+              },
+              {
+                "reason": "AML screening flag",
+                "points": 60
+              }
+            ],
+            "aggregation": "sum of contributions capped at 100"
+          }
+        }
+      ],
+      "transactions": [
+        {
+          "id": "txn-1",
+          "customer_id": "cust-fake-1",
+          "amount": 12500,
+          "currency": "USD",
+          "card_number": "************1111",
+          "flags": [
+            "KYC_REVIEW",
+            "LARGE_TRANSACTION_REVIEW"
+          ],
+          "score": {
+            "value": 60,
+            "scale": "0-100 risk",
+            "method": "synthetic_rules_v1",
+            "explanation": [
+              {
+                "reason": "Customer screening requires review",
+                "points": 40
+              },
+              {
+                "reason": "Transaction AML flag",
+                "points": 0
+              },
+              {
+                "reason": "Amount at least 10000 currency units",
+                "points": 20
+              }
+            ],
+            "aggregation": "sum of contributions capped at 100"
+          }
+        },
+        {
+          "id": "txn-2",
+          "customer_id": "cust-fake-2",
+          "amount": 78.53,
+          "currency": "USD",
+          "card_number": "************4444",
+          "flags": [
+            "AML_REVIEW"
+          ],
+          "score": {
+            "value": 80,
+            "scale": "0-100 risk",
+            "method": "synthetic_rules_v1",
+            "explanation": [
+              {
+                "reason": "Customer screening requires review",
+                "points": 40
+              },
+              {
+                "reason": "Transaction AML flag",
+                "points": 40
+              },
+              {
+                "reason": "Amount at least 10000 currency units",
+                "points": 0
+              }
+            ],
+            "aggregation": "sum of contributions capped at 100"
+          }
+        }
+      ],
+      "loan_applications": [
+        {
+          "id": "loan-fake-1",
+          "customer_id": "cust-fake-1",
+          "flags": [
+            "KYC_REVIEW"
+          ],
+          "disposition": "manual_review_only",
+          "score": {
+            "value": 100,
+            "scale": "0-100 risk",
+            "method": "synthetic_rules_v1",
+            "explanation": [
+              {
+                "reason": "Loan/income ratio greater than 2",
+                "observed_ratio": 3.0,
+                "points": 50
+              },
+              {
+                "reason": "Customer screening requires review",
+                "points": 50
+              }
+            ],
+            "aggregation": "sum of contributions capped at 100"
+          }
+        }
+      ],
+      "payments": [
+        {
+          "transaction_id": "txn-1",
+          "amount": 12500.0,
+          "currency": "USD",
+          "iban": "ZZ00000000000000000001"
+        }
+      ],
+      "research": {
+        "sources": [
+          {
+            "url": "https://research.example.invalid/synthetic-finance",
+            "title": "SYNTHETIC financial screening notes",
+            "retrieved_at": "2026-09-24T12:00:00Z",
+            "sha256": "ae0b3a7920dc0a48a886ef0ae4de74061576a6f7958b34a7dfa497edc8e1bf5a",
+            "retrieval_mode": "supplied_offline_snapshot"
+          }
+        ],
+        "findings": [
+          {
+            "source_url": "https://research.example.invalid/synthetic-finance",
+            "source_sha256": "ae0b3a7920dc0a48a886ef0ae4de74061576a6f7958b34a7dfa497edc8e1bf5a",
+            "retrieved_at": "2026-09-24T12:00:00Z",
+            "start": 0,
+            "end": 62,
+            "quote": "SYNTHETIC FIXTURE: KYC pending profiles require manual review.",
+            "offset_basis": "original snapshot Unicode characters"
+          },
+          {
+            "source_url": "https://research.example.invalid/synthetic-finance",
+            "source_sha256": "ae0b3a7920dc0a48a886ef0ae4de74061576a6f7958b34a7dfa497edc8e1bf5a",
+            "retrieved_at": "2026-09-24T12:00:00Z",
+            "start": 62,
+            "end": 120,
+            "quote": " AML flags are screening signals, not proof of wrongdoing.",
+            "offset_basis": "original snapshot Unicode characters"
+          },
+          {
+            "source_url": "https://research.example.invalid/synthetic-finance",
+            "source_sha256": "ae0b3a7920dc0a48a886ef0ae4de74061576a6f7958b34a7dfa497edc8e1bf5a",
+            "retrieved_at": "2026-09-24T12:00:00Z",
+            "start": 120,
+            "end": 181,
+            "quote": " Every loan risk score must explain its contributing factors.",
+            "offset_basis": "original snapshot Unicode characters"
+          }
+        ],
+        "redaction": "PAN-like digits masked after original-snapshot evidence validation"
+      }
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t142_single_web__ind-finance",
+    "artifact_sha256": {
+      "implementation.py": "0830e2c6b29f81bf29f33bdbd3c7e0398c43ecfb793fb167594f957abc5abf47",
+      "test_implementation.py": "eb54ee1c7d43d668320423917ff32f9afcd64e67c0e430ed6068ca3cc1c32704",
+      "example_input.json": "52c58f5ddc803a9ea2490735784aa29ad98a21a8d3448c8fb33c4f917997956c",
+      "build_manifest.json": "a8700f23f86fe792b198ddfa257e35931cbdf513d769141779e631d96fcf2dfd"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }

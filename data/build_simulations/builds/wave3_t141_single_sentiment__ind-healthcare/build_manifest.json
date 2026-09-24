@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t141_single_sentiment__ind-healthcare",
+  "composition_label": "Sentiment & prioritization (Customer insights)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Newly authored isolated reference implementation",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": "1.0",
+    "input": "Closed envelope: schema_version, synthetic=true, records (1..1000). Shared resource fields: id, resourceType, synthetic, version, impact, text.",
+    "entities": {
+      "Patient": "Synthetic diagnoses and labs; no direct patient identifiers.",
+      "DocumentReference": "Controlled clinical note text plus resolvable patientRef.",
+      "Claim": "Prior authorization with patientRef, use=preauthorization, status=pending|approved|denied."
+    },
+    "output": "Same resource fields plus analysis and incremented version; envelope includes status, review_queue, audit_trail, human_review_required and notice.",
+    "validation": "One shared validator rejects unknown keys, identifiers, unsupported narrative vocabulary, invalid lab ranges/units, duplicate IDs and unresolved references. CLI rejects duplicate JSON keys and nonfinite numbers.",
+    "synthetic_identifiers": "Local syn-kind-number references only; no real MRNs, names, dates of birth or external identifiers."
+  },
+  "cross_stage_handoffs": [
+    "Single integrated stage: validated resource -> transparent lexicon scoring -> severity-aware administrative review queue and audited annotations."
+  ],
+  "behavior": {
+    "sentiment": "Case-insensitive lexicon sum. Evidence includes term, base weight, negation and contribution. Negators reverse matches within the next three words, bounded by punctuation or but.",
+    "priority": "Human-supplied impact base low=0, medium=10, high=20, critical=30 plus min(9,max(0,-sentiment)). Higher severity always dominates; ties sort by local resource ID.",
+    "safety": "All records require human administrative review. No diagnosis, lab interpretation, clinical action or authorization approval is generated.",
+    "audit": "Each annotation records actor, reason, deterministic sequence ID, record ID and before/after changes for analysis and version. Original input and clinical/workflow fields are unchanged.",
+    "deidentification": "Reject rather than redact identifier-bearing fields or unsupported free text. Closed synthetic vocabulary deliberately restricts names, locations and dates. Demonstrative safeguards, not HIPAA certification.",
+    "errors": "File, parsing and schema failures yield one non-echoing JSON error on stdout and exit 2."
+  },
+  "scope": {
+    "included": ["Fictitious Synthea-style fixtures", "FHIR-style resources, not full FHIR conformance", "Controlled clinical note text", "Deterministic scoring and audit trail", "CLI and unittest coverage"],
+    "excluded": ["Real patient data", "Unrestricted natural-language de-identification", "Clinical decisions", "Real prior authorization submission", "Production security and persistence", "HIPAA certification", "Live or injected LLM providers"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "unittest",
+    "tests_run": 15,
+    "failures": 0,
+    "errors": 0,
+    "cli": "passed: example input printed one JSON object with status ok and exit 0",
+    "error_cli": "Verified missing argument, missing file, malformed JSON and invalid schema return JSON status error and exit 2."
+  }
+}

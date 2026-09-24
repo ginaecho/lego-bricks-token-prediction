@@ -1,0 +1,54 @@
+{
+  "build_id": "wave3_t137_single_triage__ind-energy",
+  "composition_label": "Ticket triage & routing (AI customer support)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "Newly authored isolated deterministic Python reference",
+    "runtime": "Python 3 standard library",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": ["implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "version": 1,
+    "input": "Strict envelope: schema_version=1, synthetic=true, season, assets, meters, meter_readings_csv, telemetry, emissions, tickets, config. Unknown fields rejected.",
+    "assets": "Unique fictitious asset_id, kind substation/transformer/feeder, boolean critical, connected_to referencing declared assets; directed synthetic topology.",
+    "meters": "Unique meter_id with declared asset_id.",
+    "meter_readings_csv": "Exact header meter_id,timestamp,interval_minutes,consumption_kwh; aware ISO timestamps; 15/30/60 minute intervals; finite nonnegative consumption; unique meter/timestamp.",
+    "telemetry": "SCADA-style JSON records: asset_id, timestamp, voltage_v, status normal/alarm/offline.",
+    "emissions": "asset_id, finite nonnegative value, unit kgCO2e or tCO2e, nonempty source. Units and provenance retained; no conversion.",
+    "tickets": "Unique ticket_id, text, asset_ids, meter_ids, nullable outage_report. Report requires reported_at, nonnegative integer affected_customers and all three explicit boolean safety flags.",
+    "config": "Fixed categories outage/grid/meter/general with configurable keywords, category_priority P1-P4, team and accountable_owner routes, and safety_rules.",
+    "output": "One status=ok JSON envelope with schema_version, synthetic, season, triaged tickets, aggregate meter readings, opaque-reference grid topology, telemetry, emissions and protection notice. Input-order ticket/asset/meter references are local to the envelope. Errors: status=error and safe message.",
+    "validation": "One shared validate() layer called by triage() and CLI. CSV and JSON records checked before routing; bounded lists and input sizes; duplicate JSON keys rejected."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality only: validated normalized entities -> deterministic categorization -> safety-constrained priority -> configured accountable routing -> identifier-minimized result."
+  ],
+  "behavior": {
+    "category_precedence": "Structured outage, then configured outage keywords, then linked nonnormal telemetry, then case-insensitive whole-word configured keywords in grid/meter/general order, then general fallback.",
+    "safety": "P1 highest urgency. life_threatening and downed_line require P1; critical_service requires P2 or stronger. Config cannot weaken these floors. Free-text outage without structured safety assessment receives P1.",
+    "critical_identifier_protection": "All raw asset/meter/ticket identifiers omitted from output; critical IDs also scrubbed case-insensitively from display strings. No raw ticket text echoed, no raw input persisted. Per-envelope opaque references are not authentication or encryption.",
+    "synthetic_fixture": "Fictitious winter substation-feeder topology, offline substation, healthy feeder, winter evening 1.8 and 2.1 kWh half-hour heating consumption, synthetic emissions provenance.",
+    "determinism": "No clock, random numbers, provider calls or external services.",
+    "exit_codes": {"success": 0, "validation_or_file_error": 2}
+  },
+  "scope": {
+    "included": ["Single CLI and library entry point", "Configurable categorization and accountable routing", "Safety-rule priority floors", "Synthetic interval CSV and SCADA JSON", "Emissions units and source validation", "Demonstrative critical identifier minimization", "Standard-library unittest fixtures"],
+    "excluded": ["Compliance certification", "Live grid control or dispatch", "Authentication, authorization and encrypted storage", "Enterprise deployment", "Live model or optional model integration", "Real customer and grid data", "Automatic emissions calculation", "Physical grid simulation", "Interval overlap detection"]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "tests_passed": 19,
+    "tests_failed": 0,
+    "command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "cli_example": {"status": "ok", "exit_code": 0, "stdout": "One JSON object"},
+    "coverage": ["Normal synthetic entities", "Determinism and input immutability", "All safety floors", "Unsafe and stronger configuration", "Critical identifier redaction", "Emissions units/source/numeric constraints", "Invalid topology", "CSV and timestamp errors", "Missing safety flags", "Configurable routing", "SCADA categorization", "Unassessed outage precedence", "Empty input collections", "Word boundaries and fallback", "CLI success, file errors, usage errors and malformed JSON"]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "build_id": "wave3_t143_single_triage__ind-insurance",
+  "composition_label": "Ticket triage & routing (AI customer support)",
+  "construction": {
+    "started_with_empty_directory": true,
+    "implementation_origin": "New implementation authored in the isolated build directory; no copied source.",
+    "runtime": "Python 3.13.15; standard library only",
+    "external_dependencies": [],
+    "networks_or_providers_called": false,
+    "agents_spawned": false,
+    "git_used": false
+  },
+  "deliverables": [
+    "implementation.py",
+    "test_implementation.py",
+    "example_input.json",
+    "build_manifest.json"
+  ],
+  "commands": [
+    "python -B implementation.py example_input.json",
+    "python -B -m unittest discover -s . -p test_implementation.py"
+  ],
+  "shared_schema": {
+    "input": {
+      "schema_version": "Required integer 1.",
+      "synthetic": "Required boolean true; real-data inputs are outside scope.",
+      "format": "acord_json | acord_xml | claim_form",
+      "payload": "JSON: {ACORD:{Submission:{canonical fields}}}; XML: <ACORD><Submission>scalar canonical tags</Submission></ACORD>; text: one canonical key: value per line, claims only.",
+      "config": "Optional high_loss_amount positive finite threshold, entity-keyed categories, entity-keyed routes with required team and accountable owner role. Omitted entity overrides inherit defaults."
+    },
+    "canonical_fields": {
+      "required": ["entity", "reference", "summary"],
+      "entity": "policy | claim | underwriting_submission",
+      "reference": "Opaque SYN-[A-Z]{2,8}-[0-9]{3,12} identifier.",
+      "summary": "Nonempty bounded intake text, discarded before triage.",
+      "urgency": "normal (default) | urgent",
+      "loss_amount": "Claims only, required finite number in [0,1000000000], single deployment currency, not a payment decision.",
+      "loss_date": "Claims only, required real calendar date in YYYY-MM-DD format.",
+      "policyholder_vin_property_address": "Optional bounded synthetic strings; never echoed or used for routing.",
+      "underwriting_factors": "Required nonempty list for underwriting: {name,value,disclosed:true}. Allowed names: roof_age_years, vehicle_age_years, coverage_requested. Ages are whole years 0..200. XML uses <underwriting_factors><Factor><name>...</name><value>...</value><disclosed>true</disclosed></Factor></underwriting_factors>."
+    },
+    "output": "One JSON object: status, schema_version, synthetic, minimized ticket, triage(category, priority, route, reasons, decision, coverage_decision, applied_rules), privacy and limitations. Errors return status:error and a sanitized message with exit code 2.",
+    "validation": "One shared validate() layer handles every adapter, field allowlists, bounded values, required fields, disclosure, synthetic labeling and minimization. CLI additionally rejects duplicate JSON keys, nonfinite constants and oversized documents."
+  },
+  "cross_stage_handoffs": [
+    "Single functionality only: format adapter -> shared validation/minimization -> deterministic categorization, prioritization and accountable routing -> JSON serialization. No separate downstream stages."
+  ],
+  "behavior": {
+    "categorization": "Entity-driven categories with configurable operational category labels.",
+    "priority": "High when explicitly urgent or claim amount >= configured threshold; normal otherwise. Evaluation order is fixed and all matching reasons are stated.",
+    "routing": "Every entity maps to a team and accountable duty role; no external dispatch occurs.",
+    "claims_handling": "Queue decisions have explicit reasons and are invariant to policyholder identity, address, VIN and narrative. Coverage, settlement and denial decisions are not made; human review is always required.",
+    "minimization": "Raw personal fixture fields and narrative are discarded at normalization. Only an opaque reference and necessary domain fields appear in output. No persistence, logs or providers in the implementation.",
+    "underwriting": "Hidden, unknown, duplicate and sensitive factors are rejected. Accepted disclosed factors are enumerated in the output for human review, not automatically scored.",
+    "fixture_generation": "Synthetic example amount/date generated with random.Random(143): round(uniform(500,75000),2), then date(2025,1,1)+timedelta(days=randrange(600)). All people, VIN strings and addresses are invented."
+  },
+  "scope": {
+    "included": [
+      "Runnable deterministic CLI",
+      "Policy, claim and underwriting submission intake",
+      "Small ACORD-style JSON/XML imitation and claim-form text",
+      "Configurable categories, threshold priority and accountable role routing",
+      "Demonstrative fairness, minimization and factor-disclosure validation"
+    ],
+    "excluded": [
+      "Actual ACORD schema validation or certification",
+      "GDPR or insurance regulatory compliance certification",
+      "Real policyholder data",
+      "Coverage, liability, underwriting eligibility or payment decisions",
+      "Enterprise production controls, authentication, durable queues, SLA enforcement and delivery",
+      "LLM/provider integrations and live networks",
+      "Multi-currency conversion and full insurance policy semantics"
+    ]
+  },
+  "test_outcomes": {
+    "status": "passed",
+    "suite": "18 unittest test methods covering normal, edge, invalid-input, constraints, adapters, CLI behavior and determinism",
+    "tests_run": 18,
+    "failures": 0,
+    "errors": 0,
+    "cli": "Passed: exit 0, one valid JSON object, status ok, high-priority synthetic property claim routed to property_claims_duty_adjuster."
+  }
+}

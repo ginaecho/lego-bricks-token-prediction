@@ -97,7 +97,7 @@
   "split_group": "06c7790ad9ec2bbf96dd16814b119498fcf48b366c8abbcbe42d022648a7a35e",
   "split_rule": "Keep repeated/reordered builds of the same parts and industry in one partition.",
   "spec_sha256": "313969602dc55a299e01a4209bae8fb5b1b2d6c2685459c7350a4a261644b431",
-  "status": "planned_unmeasured",
+  "status": "measured_build_passed",
   "wave": "wave3",
   "trial_id": "wave3_t144_single_journey__ind-manufacturing",
   "membership_point_id": "single_journey__ind-manufacturing",
@@ -105,8 +105,133 @@
   "trial_category": "BTI_single",
   "builder_instructions_version": "builder-instructions-v3",
   "builder_instructions_sha256": "c325696ef02a7524037cf2a39dd3e16e39a3eae4a056555cb77130d9b27169aa",
-  "build_token_usage": null,
-  "azure_cost_scenarios": [],
+  "build_token_usage": {
+    "source": "copilot_runtime_assistant_usage_events",
+    "builder_agent_id": "0d7bb402-bfd6-499b-bef9-f09c8b81964b",
+    "builder_models": [
+      "gpt-6-astra"
+    ],
+    "provider_call_count": 6,
+    "input_tokens": 126773,
+    "output_tokens": 8993,
+    "cache_read_tokens": 115758,
+    "cache_write_tokens": 10997,
+    "total_tokens": 135766,
+    "input_includes_cache_read_and_write": true,
+    "reasoning_policy": "Reported separately as auxiliary detail; never added again to output tokens.",
+    "measurement_scope": "Entire isolated build-agent session, including prompts, tool context, implementation, tests, repairs and final report.",
+    "not_included": [
+      "parent orchestration",
+      "other agents",
+      "future deployed workload inference"
+    ],
+    "actual_billed_usd": null,
+    "billing_basis": "Authenticated Copilot subscription/quota; not an Azure invoice or a claim of free compute.",
+    "events": [
+      {
+        "id": 37922,
+        "agent_id": "0d7bb402-bfd6-499b-bef9-f09c8b81964b",
+        "model": "gpt-6-astra",
+        "input_tokens": 14995,
+        "output_tokens": 284,
+        "cache_read_tokens": 14143,
+        "cache_write_tokens": 849,
+        "reasoning_tokens": 105,
+        "duration_ms": 7355,
+        "created_at": "2026-09-24T12:31:04.304Z"
+      },
+      {
+        "id": 37978,
+        "agent_id": "0d7bb402-bfd6-499b-bef9-f09c8b81964b",
+        "model": "gpt-6-astra",
+        "input_tokens": 15310,
+        "output_tokens": 7167,
+        "cache_read_tokens": 14992,
+        "cache_write_tokens": 315,
+        "reasoning_tokens": 417,
+        "duration_ms": 117589,
+        "created_at": "2026-09-24T12:37:09.575Z"
+      },
+      {
+        "id": 37980,
+        "agent_id": "0d7bb402-bfd6-499b-bef9-f09c8b81964b",
+        "model": "gpt-6-astra",
+        "input_tokens": 22801,
+        "output_tokens": 355,
+        "cache_read_tokens": 15307,
+        "cache_write_tokens": 7491,
+        "reasoning_tokens": 198,
+        "duration_ms": 9805,
+        "created_at": "2026-09-24T12:37:14.467Z"
+      },
+      {
+        "id": 37994,
+        "agent_id": "0d7bb402-bfd6-499b-bef9-f09c8b81964b",
+        "model": "gpt-6-astra",
+        "input_tokens": 23751,
+        "output_tokens": 775,
+        "cache_read_tokens": 22798,
+        "cache_write_tokens": 950,
+        "reasoning_tokens": 12,
+        "duration_ms": 12970,
+        "created_at": "2026-09-24T12:38:42.733Z"
+      },
+      {
+        "id": 37995,
+        "agent_id": "0d7bb402-bfd6-499b-bef9-f09c8b81964b",
+        "model": "gpt-6-astra",
+        "input_tokens": 24773,
+        "output_tokens": 304,
+        "cache_read_tokens": 23748,
+        "cache_write_tokens": 1022,
+        "reasoning_tokens": 0,
+        "duration_ms": 5630,
+        "created_at": "2026-09-24T12:38:57.844Z"
+      },
+      {
+        "id": 38002,
+        "agent_id": "0d7bb402-bfd6-499b-bef9-f09c8b81964b",
+        "model": "gpt-6-astra",
+        "input_tokens": 25143,
+        "output_tokens": 108,
+        "cache_read_tokens": 24770,
+        "cache_write_tokens": 370,
+        "reasoning_tokens": 0,
+        "duration_ms": 3053,
+        "created_at": "2026-09-24T12:40:15.598Z"
+      }
+    ]
+  },
+  "azure_cost_scenarios": [
+    {
+      "target_model": "gpt-5.4",
+      "currency": "USD",
+      "no_cache_estimate_usd": 0.45182750000000005,
+      "observed_cache_profile_estimate_usd": 0.191372,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    },
+    {
+      "target_model": "gpt-5.4-pro",
+      "currency": "USD",
+      "no_cache_estimate_usd": 5.42193,
+      "observed_cache_profile_estimate_usd": 5.42193,
+      "rate_source": "https://learn.microsoft.com/en-us/answers/questions/5841927/pricing-for-gpt-5-4-5-4-mini-5-4-nano",
+      "rate_status": "published_reference_not_live_tenant_quote",
+      "basis": "Counterfactual price of the observed token volume, not an execution of the target model.",
+      "limitations": [
+        "Other models/tokenizers can require different tokens and tool iterations.",
+        "Azure cache eligibility may differ from observed Copilot cache usage.",
+        "Not a tenant quote, actual subscription charge, tax estimate, or total delivery cost."
+      ]
+    }
+  ],
   "pseudo_outcomes": {
     "source": "synthetic_client_feedback",
     "is_pseudo": true,
@@ -137,5 +262,111 @@
     "logged_action_propensity": null,
     "off_policy_evaluation_eligible": false
   },
-  "build_evidence": null
+  "build_evidence": {
+    "tests_passed": true,
+    "test_command": "python -B -m unittest discover -s . -p test_implementation.py",
+    "test_output": "...................\n----------------------------------------------------------------------\nRan 19 tests in 1.073s\n\nOK\n",
+    "cli_exit_code": 0,
+    "cli_arguments": [
+      "example_input.json"
+    ],
+    "cli_output": {
+      "asset_id": "SYN-MILL-044",
+      "evidence": {
+        "alerts": [],
+        "maintenance_logs": [
+          {
+            "asset_id": "SYN-MILL-044",
+            "id": "SYN-LOG-001",
+            "note": "Invented fixture: spindle lubrication checked; no abnormal wear observed.",
+            "technician_id": "SYN-TECH-2",
+            "timestamp": "2026-09-23T10:00:00Z"
+          }
+        ],
+        "quality_decisions": [
+          {
+            "asset_id": "SYN-MILL-044",
+            "characteristic": "shaft_diameter",
+            "decision": "pass",
+            "id": "SYN-QI-001",
+            "inspector_id": "SYN-INSPECTOR-7",
+            "rationale": "Synthetic calibrated-gauge reading within declared drawing tolerance.",
+            "timestamp": "2026-09-24T08:03:00Z",
+            "unit": "mm",
+            "value": 20.01,
+            "work_order_id": "SYN-WO-144"
+          }
+        ],
+        "selected_inspection_id": "SYN-QI-001",
+        "tolerance": {
+          "characteristic": "shaft_diameter",
+          "lower": 19.95,
+          "unit": "mm",
+          "upper": 20.05
+        }
+      },
+      "human_escalation": {
+        "delivery_status": "not_sent",
+        "recipient_role": null,
+        "required": false
+      },
+      "initial_facts": [
+        "no_safety_alert",
+        "quality_passed"
+      ],
+      "journey": {
+        "execution": "plan_only",
+        "prerequisite_semantics": "Step two is conditional on completing step one; planned effects are not observed facts.",
+        "steps": [
+          {
+            "action": "review_quality_traceability",
+            "depends_on_step": null,
+            "planned_effects": [
+              "trace_review_planned"
+            ],
+            "requires": [
+              "no_safety_alert",
+              "quality_passed"
+            ],
+            "step": 1
+          },
+          {
+            "action": "request_human_release_review",
+            "depends_on_step": 1,
+            "planned_effects": [
+              "release_review_requested"
+            ],
+            "requires": [
+              "trace_review_planned"
+            ],
+            "step": 2
+          }
+        ],
+        "validated": true
+      },
+      "limitations": "Demonstrative ISO 9001-style decision traceability, not certification. No MES writes, physical control, or notifications.",
+      "priority": "quality",
+      "recommendations": [
+        {
+          "action": "review_quality_traceability",
+          "eligible_now": true,
+          "rank": 1,
+          "reason": "Passing quality evidence permits a human release-review request, not automatic release."
+        }
+      ],
+      "schema_version": "1.0",
+      "status": "ok",
+      "synthetic_fixture": true,
+      "work_order_id": "SYN-WO-144"
+    },
+    "artifact_directory": "data\\build_simulations\\builds\\wave3_t144_single_journey__ind-manufacturing",
+    "artifact_sha256": {
+      "implementation.py": "442e715c717817828c0e7a743e0e1458a27188d823be3b0068e6843a9ac04afd",
+      "test_implementation.py": "93386bb5edea19ec0d3cd3923ed399485f383c8ecc6703b6886537a0a80b4be9",
+      "example_input.json": "dc869d844bc4406b350a127bb02845bde748d81fa6457cc5c91b2246a3677ac8",
+      "build_manifest.json": "9e3aec22cec93547017204acb2d49fada731bbbedd57894c0a3598fc150985a0"
+    },
+    "scope": "Runnable bounded implementation, not enterprise production delivery.",
+    "external_provider_calls_during_validation": 0
+  }
 }
