@@ -236,6 +236,7 @@ python -m project_yield batch examples/usecases    # 20 example use cases, ranke
 
 See [docs/product-prototype.md](docs/product-prototype.md) and
 [`examples/usecases/`](examples/usecases/).
+
 ## Evidence and implementation
 
 The core experiments use real instrumented agent runs rather than invented

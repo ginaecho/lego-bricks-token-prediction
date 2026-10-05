@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Token Yield | Cost intelligence prototype</title>
+  <style>
+    :root {
+      --ink: #17211b;
+      --muted: #66736a;
+      --line: #dce4dd;
+      --paper: #f7faf7;
+      --panel: #ffffff;
+      --green: #146c45;
+      --green-dark: #0d4d31;
+      --mint: #dff3e8;
+      --lime: #d8f36c;
+      --orange: #f5a65b;
+      --red: #c54b4b;
+      --shadow: 0 14px 40px rgba(29, 62, 42, .09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .app { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 244px; padding: 24px 16px; color: #e8f5ed; background: var(--green-dark);
+      display: flex; flex-direction: column; gap: 28px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; padding: 0 10px; font-weight: 800; letter-spacing: -.03em; font-size: 18px; }
+    .brand-mark { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; color: var(--green-dark); background: var(--lime); font-weight: 900; }
+    .eyebrow { text-transform: uppercase; letter-spacing: .13em; font-size: 10px; font-weight: 800; color: #92bfa5; }
+    nav { display: grid; gap: 5px; }
+    nav button { display: flex; align-items: center; gap: 11px; width: 100%; border: 0; border-radius: 9px; padding: 11px 12px; text-align: left; color: #b7d8c3; background: transparent; }
+    nav button:hover, nav button.active { color: #fff; background: rgba(255,255,255,.12); }
+    nav button.active { box-shadow: inset 3px 0 var(--lime); }
+    .nav-icon { display: grid; place-items: center; width: 20px; height: 20px; flex: 0 0 20px; color: currentColor; }
+    .nav-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+    .side-note { margin-top: auto; padding: 14px; border: 1px solid rgba(216,243,108,.2); border-radius: 12px; color: #b7d8c3; background: rgba(255,255,255,.06); font-size: 12px; }
+    .side-note strong { display: block; margin: 7px 0 3px; color: #fff; }
+    main { width: min(1320px, 100%); margin: 0 auto; padding: 30px 38px 54px; }
+    .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 28px; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(28px, 3vw, 42px); letter-spacing: -.055em; line-height: 1.05; }
+    h2 { font-size: 19px; letter-spacing: -.03em; }
+    h3 { font-size: 14px; }
+    .subtitle { max-width: 630px; margin-top: 10px; color: var(--muted); }
+    .badge { display: inline-flex; align-items: center; gap: 7px; border-radius: 99px; padding: 7px 10px; color: var(--green); background: var(--mint); font-size: 11px; font-weight: 800; }
+    .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #35a367; }
+    .grid { display: grid; gap: 18px; }
+    .hero-grid { grid-template-columns: minmax(0, 1.45fr) minmax(310px, .8fr); }
+    .lower-grid { grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); margin-top: 18px; }
+    .card { border: 1px solid var(--line); border-radius: 16px; padding: 22px; background: var(--panel); box-shadow: var(--shadow); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+    .card-header p { color: var(--muted); font-size: 12px; }
+    .request-box { min-height: 144px; width: 100%; resize: vertical; border: 1px solid #cbd9cf; border-radius: 11px; padding: 14px; color: var(--ink); background: #fbfdfb; outline: none; }
+    .request-box:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(20,108,69,.1); }
+    .form-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 14px; }
+    .hint { color: var(--muted); font-size: 12px; }
+    .primary, .secondary { border: 0; border-radius: 9px; padding: 10px 15px; font-weight: 800; }
+    .primary { color: #fff; background: var(--green); }
+    .primary:hover { background: #0f5a39; }
+    .secondary { border: 1px solid var(--line); color: var(--green); background: #fff; }
+    .secondary:hover { background: var(--mint); }
+    .estimate { border: 0; color: #fff; background: linear-gradient(135deg, #125b3b, #208253); }
+    .estimate .eyebrow { color: #a8d9b8; }
+    .estimate h2 { margin-top: 8px; font-size: 38px; letter-spacing: -.06em; }
+    .estimate .subtle { color: #bce0c8; }
+    .estimate-band { height: 8px; overflow: hidden; margin: 19px 0; border-radius: 9px; background: rgba(255,255,255,.16); }
+    .estimate-band span { display: block; width: 68%; height: 100%; border-radius: inherit; background: var(--lime); }
+    .estimate-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    .estimate-meta div { padding-top: 10px; border-top: 1px solid rgba(255,255,255,.16); }
+    .estimate-meta strong { display: block; color: #fff; font-size: 15px; }
+    .estimate-meta span { color: #bce0c8; font-size: 11px; }
+    .estimate .secondary { margin-top: 20px; color: var(--green-dark); background: var(--lime); border-color: var(--lime); }
+    .brick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .brick { min-height: 92px; padding: 12px; border: 1px solid var(--line); border-radius: 11px; background: #fbfdfb; }
+    .brick.primary-brick { border-color: #b9dfc7; background: #f0fbf4; }
+    .brick-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .brick-name { font-weight: 800; }
+    .brick-count { display: grid; place-items: center; min-width: 25px; height: 25px; border-radius: 7px; color: var(--green); background: var(--mint); font-weight: 900; }
+    .brick p { margin-top: 8px; color: var(--muted); font-size: 11px; }
+    .mini-tag { color: #8a6728; font-size: 10px; font-weight: 800; }
+    .meter-row { display: grid; grid-template-columns: 105px 1fr 54px; align-items: center; gap: 10px; margin: 13px 0; font-size: 12px; }
+    .meter { height: 8px; overflow: hidden; border-radius: 8px; background: #edf2ee; }
+    .meter span { display: block; height: 100%; border-radius: inherit; background: var(--green); }
+    .meter-row strong { text-align: right; font-size: 11px; }
+    .run-list { display: grid; gap: 9px; }
+    .run { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px; padding: 11px 0; border-bottom: 1px solid #edf1ed; }
+    .run:last-child { border-bottom: 0; }
+    .run strong { display: block; font-size: 12px; }
+    .run small { color: var(--muted); font-size: 11px; }
+    .status { padding: 4px 7px; border-radius: 5px; color: var(--green); background: var(--mint); font-size: 10px; font-weight: 800; }
+    .status.warn { color: #8a6728; background: #fff1d7; }
+    .verdict { display: flex; align-items: center; gap: 12px; padding: 15px; border-radius: 11px; background: #f2faef; }
+    .verdict-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: #fff; background: #4d9d5b; font-weight: 900; }
+    .verdict strong { display: block; color: #276936; }
+    .verdict span { color: var(--muted); font-size: 11px; }
+    .gate-list { display: grid; gap: 12px; margin-top: 18px; }
+    .gate { display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 9px; }
+    .gate-id { color: var(--muted); font-size: 11px; font-weight: 800; }
+    .gate-text strong { display: block; font-size: 12px; }
+    .gate-text span { color: var(--muted); font-size: 11px; }
+    .pass { color: #2d8b4c; font-size: 11px; font-weight: 900; }
+    .note { margin-top: 18px; padding: 11px 13px; border-left: 3px solid var(--orange); color: #785c29; background: #fff8ea; font-size: 11px; }
+    .footer-note { margin-top: 23px; color: var(--muted); text-align: right; font-size: 11px; }
+    .toast { position: fixed; right: 22px; bottom: 22px; padding: 12px 15px; border-radius: 9px; color: #fff; background: var(--ink); box-shadow: var(--shadow); transform: translateY(80px); opacity: 0; transition: .25s ease; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    @media (max-width: 900px) {
+      .sidebar { width: 74px; padding: 20px 10px; }
+      .brand span, nav button span, .side-note { display: none; }
+      nav button { text-align: center; font-size: 0; }
+      nav button::first-letter { font-size: 16px; }
+      main { padding: 24px 18px 40px; }
+      .hero-grid, .lower-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .topbar { display: block; }
+      .topbar .badge { margin-top: 16px; }
+      .brick-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row { align-items: flex-start; flex-direction: column; }
+      .form-row button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">TY</span><span>Token Yield</span></div>
+      <div>
+        <div class="eyebrow" style="padding: 0 10px 9px">Workspace</div>
+        <nav aria-label="Main navigation">
+          <button class="active" data-view="quote">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 7.5A2.5 2.5 0 0 1 7.5 5H19v14H7.5A2.5 2.5 0 0 1 5 16.5z"/><path d="M5 7.5v9M9 9h6M9 12h6M9 15h4"/></svg></span>
+            <span>Quote a request</span>
+          </button>
+          <button data-view="runs">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 12h8M8 15h5"/></svg></span>
+            <span>Runs & invoices</span>
+          </button>
+          <button data-view="rate">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 18 9 6l4 12 3-8 3 8"/><path d="M4 20h16"/></svg></span>
+            <span>Rate card</span>
+          </button>
+          <button data-view="gates">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4 21 20H3z"/><path d="M12 9v5M12 17h.01"/></svg></span>
+            <span>Evidence & gates</span>
+          </button>
+        </nav>
+      </div>
+      <div class="side-note">
+        <div class="eyebrow">Campaign 001</div>
+        <strong>Feasibility study</strong>
+        Frozen contract, sealed corpus, and auditable usage ledger.
+      </div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <div>
+          <div class="eyebrow" style="color: var(--green); margin-bottom: 9px">Cost intelligence for AI work</div>
+          <h1>Know the cost<br>before you run.</h1>
+          <p class="subtitle">Turn a plain-English request into measurable LEGO-like work blocks, a defensible quote, and an invoice that explains what happened.</p>
+        </div>
+        <span class="badge">Prototype mode &middot; offline data</span>
+      </header>
+
+      <section class="grid hero-grid" id="quote-view">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2>Quote a new request</h2>
+              <p>Describe the work as a user would. The encoder proposes the brick vector.</p>
+            </div>
+            <button class="secondary" id="demoBtn" type="button">Use demo request</button>
+          </div>
+          <textarea id="request" class="request-box" aria-label="Request to quote">Review the attached quarterly filings, extract the revenue guidance changes, reconcile them across companies, and draft a short risk memo.</textarea>
+          <div class="form-row">
+            <span class="hint" id="sourceHint">Source context: 3 documents &middot; 24.6 KB &middot; fresh session</span>
+            <button class="primary" id="quoteBtn">Generate quote &rarr;</button>
+          </div>
+        </article>
+        <article class="card estimate">
+          <div class="eyebrow">Pre-run estimate</div>
+          <h2 id="estimateUnits">42,780 units</h2>
+          <p class="subtle">Estimated billable usage</p>
+          <div class="estimate-band"><span></span></div>
+          <div class="estimate-meta">
+            <div><strong>$0.043</strong><span>illustrative cost</span></div>
+            <div><strong>90%</strong><span>confidence band</span></div>
+            <div><strong>36.2k</strong><span>lower bound</span></div>
+            <div><strong>51.8k</strong><span>upper bound</span></div>
+          </div>
+          <button class="secondary" id="runBtn">Run with this quote &rarr;</button>
+        </article>
+      </section>
+
+      <section class="grid lower-grid">
+        <div class="grid">
+          <article class="card">
+            <div class="card-header">
+              <div><h2>Request decomposition</h2><p>Targets requested, not documents or tool calls.</p></div>
+              <span class="eyebrow" style="color: var(--green)">Encoder output</span>
+            </div>
+            <div class="brick-grid">
+              <div class="brick primary-brick"><div class="brick-top"><span class="brick-name">Review</span><span class="brick-count">1</span></div><p>Judge a question over supplied documents.</p></div>
+              <div class="brick primary-brick"><div class="brick-top"><span class="brick-name">Extract</span><span class="brick-count">3</span></div><p>Pull named values or facts.</p></div>
+              <div class="brick primary-brick"><div class="brick-top"><span class="brick-name">Retrieve</span><span class="brick-count">1</span></div><p>Find relevant evidence in context.</p><span class="mini-tag">outlier risk</span></div>
+              <div class="brick primary-brick"><div class="brick-top"><span class="brick-name">Reconcile</span><span class="brick-count">1</span></div><p>Compare and resolve differences.</p></div>
+              <div class="brick"><div class="brick-top"><span class="brick-name">Draft</span><span class="brick-count">1</span></div><p>Produce a structured deliverable.</p></div>
+              <div class="brick"><div class="brick-top"><span class="brick-name">Validate</span><span class="brick-count">1</span></div><p>Check against rules or criteria.</p></div>
+              <div class="brick"><div class="brick-top"><span class="brick-name">Classify</span><span class="brick-count">0</span></div><p>Assign a category or label.</p></div>
+              <div class="brick"><div class="brick-top"><span class="brick-name">Report</span><span class="brick-count">0</span></div><p>Summarize results for a reader.</p></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-header"><div><h2>Where the quote comes from</h2><p>Illustrative rate card from the prototype campaign.</p></div><button class="secondary" id="invoiceBtn">Preview invoice</button></div>
+            <div class="meter-row"><span>Start-up toll</span><div class="meter"><span style="width: 72%"></span></div><strong>30,969</strong></div>
+            <div class="meter-row"><span>Context</span><div class="meter"><span style="width: 18%; background: #5da778"></span></div><strong>7,437</strong></div>
+            <div class="meter-row"><span>Brick work</span><div class="meter"><span style="width: 10%; background: var(--orange)"></span></div><strong>4,374</strong></div>
+            <div class="note"><strong>Honest signal:</strong> total error can look small while the variable portion is harder to explain. The invoice keeps both numbers visible.</div>
+          </article>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <div class="card-header"><div><h2>Latest run</h2><p>Quote to actual, with reconciliation.</p></div><span class="status">invoice ready</span></div>
+            <div class="run-list">
+              <div class="run"><div><strong>Revenue guidance risk memo</strong><small>just now &middot; composite</small></div><strong>43,612</strong><span class="status">+1.9%</span></div>
+              <div class="run"><div><strong>Find renewal clause</strong><small>yesterday &middot; Retrieve</small></div><strong>35,104</strong><span class="status">+3.2%</span></div>
+              <div class="run"><div><strong>Classify support tickets</strong><small>Sep 12 &middot; Classify</small></div><strong>31,880</strong><span class="status warn">Narrow</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-header"><div><h2>Evidence gates</h2><p>Mechanical verdict from frozen policy.</p></div></div>
+            <div class="verdict"><div class="verdict-mark">N</div><div><strong>Narrow</strong><span>Estimator is usable; per-brick pricing awaits stronger lift.</span></div></div>
+            <div class="gate-list">
+              <div class="gate"><span class="gate-id">G0</span><div class="gate-text"><strong>Runtime measurable</strong><span>Usage present, cache 0, model echoed</span></div><span class="pass">PASS</span></div>
+              <div class="gate"><span class="gate-id">G1</span><div class="gate-text"><strong>Decoder beats baseline</strong><span>Variable lift is not yet decisive</span></div><span class="pass" style="color:#a87527">NARROW</span></div>
+              <div class="gate"><span class="gate-id">G2</span><div class="gate-text"><strong>Encoder is quotable</strong><span>Gold-set agreement is in progress</span></div><span class="pass" style="color:#a87527">PENDING</span></div>
+              <div class="gate"><span class="gate-id">G4</span><div class="gate-text"><strong>Batching preserves quality</strong><span>Matched arm not yet tested</span></div><span class="pass" style="color:#a87527">PENDING</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+      <div class="footer-note">All values shown are illustrative prototype data. Evidence classes: pipeline_only.</div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script>
+    const toast = document.getElementById("toast");
+    let timer;
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(timer);
+      timer = setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+    document.getElementById("quoteBtn").addEventListener("click", () => {
+      const request = document.getElementById("request").value.trim();
+      if (!request) {
+        showToast("Add a request to generate a quote.");
+        return;
+      }
+      document.getElementById("estimateUnits").textContent = request.length > 150 ? "44,120 units" : "38,640 units";
+      showToast("Quote generated from the proposed brick vector.");
+    });
+    document.getElementById("demoBtn").addEventListener("click", () => {
+      document.getElementById("request").value = "Compare the latest sustainability reports from three suppliers, extract their Scope 1 emissions and renewable-energy targets, validate the figures against the reporting checklist, and draft a recommendation for procurement.";
+      document.getElementById("sourceHint").textContent = "Source context: 3 sustainability reports · 31.8 KB · fresh session";
+      showToast("Demo request loaded. Generate a quote to continue.");
+    });
+    document.getElementById("runBtn").addEventListener("click", () => showToast("Demo run queued. The quote is committed before dispatch."));
+    document.getElementById("invoiceBtn").addEventListener("click", () => showToast("Invoice preview: actual - predicted + reconciliation."));
+    document.querySelectorAll("nav button").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        showToast(button.querySelector("span").textContent + " view selected.");
+      });
+    });
+  </script>
+</body>
+</html>
