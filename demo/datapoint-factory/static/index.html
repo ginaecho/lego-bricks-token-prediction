@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Datapoint Factory · LEGO bricks token prediction</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">DPF</span>
+      <div><strong>Datapoint Factory</strong><small>LEGO bricks · construction-token learning</small></div>
+    </div>
+    <div class="top-right"><a id="studio-link" class="studio-link" target="_blank" hidden>Token Yield Studio ↗</a><div class="trust"><span></span><b id="provenance">loading…</b><em id="foundry"></em></div></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">ONE BUILD → ONE DATA POINT → ONE BETTER MODEL</div>
+        <h1>Pick a brick. Add requirements. <em>Watch an agent pay for it in tokens.</em></h1>
+        <p class="lede">A real LLM builder constructs and tests your composition. Every request's token usage is
+          measured; the composition becomes 46 engineered features; the ridge model learns from all data points.</p>
+      </div>
+      <div class="hero-stat"><span>MEASURED BUILDS</span><strong id="measured-count">–</strong><small>waves 1–3 on main</small></div>
+    </section>
+
+    <section class="panel compose">
+      <div class="step"><h2><i>1</i> Basic brick</h2><div id="bricks" class="bricks"></div><div id="variant-row" class="variants"></div></div>
+      <div class="intent-wide">
+        <div id="intent-card"></div>
+        <div class="prompt-box">
+          <div class="tabs"><button id="tab-brick" class="tab on">Brick prompt</button><button id="tab-composed" class="tab">Composed prompt (with additional requirements)</button></div>
+          <pre id="prompt" class="prompt"></pre>
+        </div>
+      </div>
+      <div class="row3">
+        <div class="step">
+          <h2><i>2</i> Additional requirements</h2>
+          <p class="hint">More bricks, executed in this order after the basic brick.</p>
+          <div id="extras" class="extras"></div>
+          <button id="add-extra" class="ghost">+ add another brick</button>
+        </div>
+        <div class="step">
+          <h2><i>2b</i> Industry context</h2>
+          <select id="industry"><option value="">None (generic)</option></select>
+          <div id="industry-detail" class="industry-detail"></div>
+        </div>
+        <div class="step">
+          <h2><i>3</i> Run the builder</h2>
+          <div id="composition" class="composition"></div>
+          <div class="controls">
+            <label>Builder
+              <select id="mode">
+                <option value="live">Live build on Azure Foundry</option>
+                <option value="replay">Replay a measured corpus build</option>
+              </select></label>
+            <label id="deployment-field">Deployment <select id="deployment"></select></label>
+            <label>Replay speed <select id="speed"><option value="0.5">Slow</option><option value="1" selected>Normal</option><option value="3">Fast</option></select></label>
+          </div>
+          <button id="run" class="primary">Build &amp; create data point ▸</button>
+          <div id="runs" class="runs"></div>
+          <p id="error" class="error"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel stage">
+      <div class="stage-head">
+        <h2>Agent interaction graph</h2>
+        <div class="meter">
+          <div><span>LLM REQUESTS</span><b id="meter-calls">0</b></div>
+          <div><span>TOKENS CONSUMED</span><b id="meter-tokens">0</b></div>
+          <div><span>MODEL FORECAST</span><b id="meter-forecast">–</b></div>
+        </div>
+      </div>
+      <svg id="graph" viewBox="0 0 1500 500" role="img" aria-label="Agent interaction graph"></svg>
+      <div class="legend">
+        <span class="lg human">human</span><span class="lg llm">LLM agent</span><span class="lg tool">tools</span>
+        <span class="lg code">deterministic code</span><span class="lg artifact">artifact</span>
+        <span class="lg nm">not yet measured</span><span class="hint">Click any node: its output and the code running it appear below.</span>
+      </div>
+    </section>
+
+    <section class="panel inspector" id="inspector">
+      <div class="placeholder">Run a composition, then click any node to inspect its output and the code running it.</div>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
