@@ -211,6 +211,31 @@ authorization, and budget approval. Follow the
 [real Foundry pilot instructions](docs/marketplace-prototype.md#real-foundry-agent-pilot);
 do not enable paid execution from the quick start.
 
+## Project Yield scoping prototype
+
+**Project Yield** (`project_yield/`) keeps the encoder and the brick vocabulary
+and points the same decode step at the rest of a scoping decision: contract
+value, success rate, working days, days per role and annual client impact. Each
+head selects its own functional form by leave-one-out cross-validation.
+
+* **The delivery roster is a file you edit.** `roles.json` lists the roles; each
+  gets a "needed at all" head and a "days if needed" head.
+* **What the client gets.** `impact.py` prices displaced handling time at the
+  client's loaded cost, less inference cost.
+* **Lineage is a feature.** Continuation use cases declare a parent and siblings;
+  reuse depth and inherited brick share enter the feature vector.
+* **The token head is measured; the value and impact heads are not.** They are
+  fitted on a synthetic corpus (`experiments/make_engagements.py`), and every
+  output says so.
+
+```powershell
+python -m examples.project_yield_demo              # tokens + value + impact
+python -m project_yield serve --open               # scoping prototype in a browser
+python -m project_yield batch examples/usecases    # 20 example use cases, ranked
+```
+
+See [docs/product-prototype.md](docs/product-prototype.md) and
+[`examples/usecases/`](examples/usecases/).
 ## Evidence and implementation
 
 The core experiments use real instrumented agent runs rather than invented

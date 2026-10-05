@@ -1,4 +1,4 @@
-.PHONY: help test demo prove l1 l2 l5 hook dashboard studio assay-audit assay-corpus clean
+.PHONY: help test demo prove l1 l2 l5 hook dashboard studio assay-audit assay-corpus scope serve cases corpus clean
 
 help:
 	@echo "OpenHarness — targets:"
@@ -15,6 +15,12 @@ help:
 	@echo "  make studio       run the visual demo in a browser"
 	@echo "  make assay-audit  replay the reference table beside its variable-portion rescore"
 	@echo "  make assay-corpus regenerate the demo corpus"
+	@echo ""
+	@echo "Project Yield:"
+	@echo "  make scope      Project Yield demo: tokens + value + impact"
+	@echo "  make serve      run the Project Yield web prototype"
+	@echo "  make cases      estimate the 20 example use case descriptions"
+	@echo "  make corpus     regenerate the synthetic engagement corpus"
 	@echo ""
 	@echo "  make clean      remove generated artifacts"
 
@@ -56,6 +62,22 @@ assay-audit:
 
 assay-corpus:
 	python -m demo.generate_corpus
+
+# Project Yield — the scoping prototype built on the token model.
+scope:
+	python -m examples.project_yield_demo
+
+serve:
+	python -m project_yield serve --open
+
+# The example descriptions in examples/usecases/, encoded and ranked.
+cases:
+	python -m project_yield batch examples/usecases
+
+# Deterministic and seeded: this must reproduce experiments/engagements.jsonl
+# byte for byte, and a test asserts that it does.
+corpus:
+	python -m experiments.make_engagements > experiments/engagements.jsonl
 
 clean:
 	rm -f dashboard.html session_dashboard.html
