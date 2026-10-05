@@ -19,7 +19,7 @@ relabeled as one another.
 | `combination_design.json` | 16 singles, 109 pairs, 410 triples and 920 four-function memberships; measured coverage is explicit |
 | `data_points/` | One JSON record per selected build or real-use-case reference |
 | `data_points.csv` | Readable overview: staffing, duration, measured tokens, estimated cost and pseudo scores |
-| `builds/<point>/` | Actual implementation, tests, example input and build manifest |
+| `builds/<point>/` | Actual implementation, tests, example input and build manifest (wave 3: `builds/<trial ID>/`) |
 | `campaign.json` | Exact builder agent IDs, measurement protocol and selected wave |
 | `waves/wave2.json` | Frozen wave-2 manifest: selected trials, instruction fingerprints, builders, failures, protocol deviations and evaluation gates |
 | `waves/wave3.json` | Frozen wave-3 manifest (composition levels B/BT/BI/BTI, industries, builders, protocol deviations) |
@@ -65,7 +65,8 @@ failed. They consumed **18,247,910 tokens** (mean 152,066 per build).
 Repeated memberships varied by a mean coefficient of variation of 5.6%. In 19
 trials the builder also wrote an auxiliary `docs\My_prompt.txt` in its staging
 directory; these are recorded under `protocol_deviations` and were not imported
-into `builds/`. Staging copies are kept in `runs/20260923_1100_wave2/`.
+into `builds/`. The staging copies were byte-identical to `builds/` and have been
+removed; Git history keeps them.
 
 `examples/train_construction_model.py` fits ridge regressions on log input and
 log output tokens from pre-build features only (staffing and months excluded),
@@ -119,7 +120,10 @@ the builder wrote an auxiliary `docs\My_prompt.txt` in its staging directory
 operator's external prompt log, apparently following an inherited global
 prompt-logging instruction; those entries were removed and no build artifact
 depended on them. Their small token cost remains in the labels. Staging copies
-are kept in `runs/20260924_0900_wave3/`.
+were byte-identical to `builds/` and have been removed; Git history keeps them.
+Wave-3 builds are stored under their short trial ID (for example
+`builds/wave3_t129/`) so Windows paths stay short; each record's
+`build_evidence.artifact_directory` points to its folder.
 
 The model was retrained with union features over waves 1-3 (299 measured
 records; 200 training, 42 validation, 57 test; membership groups never cross

@@ -7,6 +7,7 @@ import csv
 import hashlib
 import html
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -25,6 +26,12 @@ from token_yield.marketplace_agent_contracts import ATOMS, contracts
 
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "data" / "build_simulations"
+
+
+def build_folder(identifier: str) -> str:
+    """Wave 3+ builds are stored under their short trial ID to keep Windows paths short."""
+    match = re.match(r"^(wave(\d+)_t\d{3})_", identifier)
+    return match.group(1) if match and int(match.group(2)) >= 3 else identifier
 
 
 def read(path):
@@ -279,7 +286,7 @@ def import_build(root: Path, database: Path, identifier: str, wave: str | None =
         campaign = read(wave_path(root, wave))
         trial = next(item for item in campaign["trials"] if item["trial_id"] == identifier)
         staged = ROOT / trial["staging_directory"]
-        directory = root / "builds" / identifier
+        directory = root / "builds" / build_folder(identifier)
         directory.mkdir(parents=True, exist_ok=True)
         for name in ("implementation.py", "test_implementation.py", "example_input.json", "build_manifest.json"):
             if (staged / name).is_file():

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 
 def _read(path: Path):
@@ -45,7 +45,10 @@ class Corpus:
         return sorted(self.by_group.get(split_group, []), key=order)
 
     def build_files(self, point_id: str) -> dict:
-        directory = self.root / "builds" / point_id
+        """Files of a measured build, located through the record's artifact_directory."""
+        evidence = (self.by_id.get(point_id) or {}).get("build_evidence") or {}
+        folder = PureWindowsPath(evidence.get("artifact_directory", "")).name or point_id
+        directory = self.root / "builds" / folder
         if not directory.is_dir():
             return {}
         return {path.name: {"bytes": path.stat().st_size, "lines": path.read_text(encoding="utf-8").count("\n")}
